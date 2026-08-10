@@ -18,7 +18,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { subYears } from 'date-fns';
@@ -75,7 +75,7 @@ const MEDIUM_AGE_ADULT = 30;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslocoPipe,
+    TranslocoDirective,
     SharedUiFormFieldDirective,
     SharedUiFormAddressComponent,
     MatFormFieldModule,
@@ -102,7 +102,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   private store = inject(Store);
   private permissionStore = inject(PermissionStore);
   private einreichenStore = inject(EinreichenStore);
-  private appType = inject(SharedModelCompileTimeConfig).appType;
+  private appConfig = inject(SharedModelCompileTimeConfig).app;
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
 
@@ -192,7 +192,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
       const { permissions } = preparePermissions(
         trancheTyp,
         gesuch,
-        this.appType,
+        this.appConfig,
         rolesMap,
       );
       if (

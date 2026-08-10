@@ -20,7 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
-import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -69,7 +69,7 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
 export class SachbearbeitungAppFeatureInfosNotizenComponent {
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
-  private gesuchInfoStore = inject(GesuchInfoStore);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
   private config = inject(SharedModelCompileTimeConfig);
 
   @ViewChildren(SharedUiFocusableListItemDirective)
@@ -85,14 +85,14 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
 
   canCreateJurNotizSig = computed(() => {
     const gesuchStatus =
-      this.gesuchInfoStore.gesuchInfo().data?.state.gesuchStatus;
+      this.gesuchHeaderStore.header().data?.gesuchInfo.state.gesuchStatus;
     const rolesMap = this.permissionStore.rolesMapSig();
     if (!gesuchStatus) {
       return false;
     }
     const permissions = getGesuchPermissions(
       { gesuchStatus },
-      this.config.appType,
+      this.config.app,
       rolesMap,
     );
 
@@ -113,7 +113,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
       this.notizStore.loadNotizen$({
         gesuchId,
       });
-      this.gesuchInfoStore.loadGesuchInfo$({
+      this.gesuchHeaderStore.loadHeader$({
         gesuchId,
       });
     });
@@ -142,7 +142,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
             gesuchNotizCreate,
             onSuccess: () => {
               if (gesuchNotizCreate.notizTyp === 'JURISTISCHE_NOTIZ') {
-                this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
+                this.gesuchHeaderStore.loadHeader$({ gesuchId });
               }
             },
           });
@@ -177,11 +177,17 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
             return;
           case 'JURISTISCHE_NOTIZ':
             if (result.antwort) {
+              const gesuchId = this.gesuchIdSig();
               this.notizStore.answerJuristischeAbklaerungNotiz$({
-                gesuchId: this.gesuchIdSig(),
+                gesuchId,
                 notizId: notiz.id,
                 juristischeAbklaerungNotizAntwort: {
                   antwort: result.antwort,
+                },
+                onSuccess: () => {
+                  this.gesuchHeaderStore.loadHeader$({
+                    gesuchId,
+                  });
                 },
               });
             }

@@ -23,12 +23,12 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
-import ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -60,16 +60,18 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_GS;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_SB;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class DarlehenResourceImpl implements DarlehenResource {
 
     private final DarlehenService darlehenService;
     private final DokumentDownloadService dokumentDownloadService;
     private final BenutzerService benutzerService;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final JWTParser jwtPar;
     private final DarlehenAuthorizer darlehenAuthorizer;
 
@@ -90,9 +92,10 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(
-        GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,
         Integer page,
         Integer pageSize,
+        Boolean bearbeitbar,
+        Boolean zugewiesen,
         String fallNummer,
         String piaNachname,
         String piaVorname,
@@ -106,7 +109,8 @@ public class DarlehenResourceImpl implements DarlehenResource {
     ) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getFreiwilligDarlehenDashboardSb(
-            getFreiwilligDarlehenSbQueryType,
+            bearbeitbar,
+            zugewiesen,
             page,
             pageSize,
             fallNummer,
@@ -231,17 +235,10 @@ public class DarlehenResourceImpl implements DarlehenResource {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtPar,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DARLEHEN_ID_CLAIM
         );
         return darlehenService.getDokument(dokumentId);
-    }
-
-    @Override
-    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
-    public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(UUID gesuchId) {
-        darlehenAuthorizer.canGetDarlehenSb();
-        return darlehenService.getFreiwilligDarlehenAllSb(gesuchId);
     }
 
     @Override
@@ -255,7 +252,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenGs(UUID fallId) {
         darlehenAuthorizer.canGetDarlehenByFallId(fallId);
-        return darlehenService.getFreiwilligDarlehenAllGs(fallId);
+        return darlehenService.getAllFreiwilligDarlehenOfFallGs(fallId);
+    }
+
+    @Override
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
+    public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(UUID fallId) {
+        darlehenAuthorizer.canGetDarlehenSb();
+        return darlehenService.getAllFreiwilligDarlehenOfFallSb(fallId);
     }
 
     @Override
@@ -267,7 +271,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
             dokumentId,
             DokumentDownloadConstants.DARLEHEN_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 
@@ -278,7 +282,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtPar,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM
         );
         return darlehenService.getDarlehenNegativVerfuegung(dokumentId);
@@ -292,7 +296,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
             dokumentId,
             DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 
@@ -302,5 +306,12 @@ public class DarlehenResourceImpl implements DarlehenResource {
     public void deleteDarlehenDokument(UUID dokumentId) {
         darlehenAuthorizer.canDeleteDarlehenDokument(dokumentId);
         darlehenService.removeDokument(dokumentId);
+    }
+
+    @Override
+    @RolesAllowed({ FREIWILLIG_DARLEHEN_READ, GS_GESUCH_READ })
+    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrysByFallId(UUID fallId) {
+        darlehenAuthorizer.canGetDarlehenByFallId(fallId);
+        return darlehenService.getDarlehenBuchhaltungEntryOverviewByFallId(fallId);
     }
 }

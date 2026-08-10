@@ -17,25 +17,32 @@
 
 package ch.dvbern.stip.api.benutzereinstellungen.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Entity
 @Table(
     name = "benutzereinstellungen",
-    indexes = @Index(name = "IX_benutzereinstellungen_mandant", columnList = "mandant")
+    indexes = @Index(name = "IX_benutzereinstellungen_tenant", columnList = "tenant")
 )
 @Audited
 @Getter
 @Setter
-public class Benutzereinstellungen extends AbstractMandantEntity {
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
+public class Benutzereinstellungen extends AbstractTenantEntity {
     @NotNull
     @Column(name = "digitale_kommunikation", nullable = false)
     private boolean digitaleKommunikation = true;

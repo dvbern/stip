@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.demo.util;
 
+import java.security.SecureRandom;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -27,6 +28,10 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class DemoDataAnonymizerUtil {
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private static final String CHARS =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
     public void anonymizeGesuch(DemoData demoData, Gesuch gesuch) {
         anonymizeZahlungsverbindung(gesuch);
         anonymizePersonInAusbildung(demoData, gesuch);
@@ -38,21 +43,19 @@ public class DemoDataAnonymizerUtil {
 
     private void anonymizeZahlungsverbindung(Gesuch gesuch) {
         final var zahlungsverbindung = gesuch.getAusbildung().getFall().getAuszahlung().getZahlungsverbindung();
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
-        zahlungsverbindung.setVorname("Vorname-%s".formatted(gesuchSuffix));
-        zahlungsverbindung.setNachname("Nachname-%s".formatted(gesuchSuffix));
+        zahlungsverbindung.setVorname("%s-Vorname".formatted(getRandomNamePrefix()));
+        zahlungsverbindung.setNachname("%s-Nachname".formatted(getRandomNamePrefix()));
         anonymizeAdresse(gesuch, zahlungsverbindung.getAdresse());
     }
 
-    private void anonymizeAbstractPerson(DemoData demoData, AbstractPerson person, String prefix, String suffix) {
-        person.setVorname("%s-%s".formatted(prefix, suffix));
-        person.setNachname("%s-%s".formatted(demoData.getTestFall(), suffix));
+    private void anonymizeAbstractPerson(DemoData demoData, AbstractPerson person, String type) {
+        person.setVorname("%s-%s".formatted(getRandomNamePrefix(), type));
+        person.setNachname("%s-%s".formatted(getRandomNamePrefix(), demoData.getTestFall()));
     }
 
     private void anonymizePersonInAusbildung(DemoData demoData, Gesuch gesuch) {
         final var personInAusbildung = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
-        anonymizeAbstractPerson(demoData, personInAusbildung, "PiA", gesuchSuffix);
+        anonymizeAbstractPerson(demoData, personInAusbildung, "PiA");
         anonymizeAdresse(gesuch, personInAusbildung.getAdresse());
     }
 
@@ -61,46 +64,52 @@ public class DemoDataAnonymizerUtil {
         if (Objects.isNull(partner)) {
             return;
         }
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
-        anonymizeAbstractPerson(demoData, partner, "Partner", gesuchSuffix);
+        anonymizeAbstractPerson(demoData, partner, "Partner");
         anonymizeAdresse(gesuch, partner.getAdresse());
     }
 
     private void anonymizeEltern(DemoData demoData, Gesuch gesuch) {
         final var elterns = gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns();
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
         elterns.forEach(eltern -> {
-            anonymizeAbstractPerson(demoData, eltern, eltern.getElternTyp().name(), gesuchSuffix);
+            anonymizeAbstractPerson(demoData, eltern, eltern.getElternTyp().name());
             anonymizeAdresse(gesuch, eltern.getAdresse());
         });
     }
 
     private void anonymizeGeschwisters(DemoData demoData, Gesuch gesuch) {
         final var geschwisters = gesuch.getLatestGesuchTranche().getGesuchFormular().getGeschwisters();
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
         var count = 0;
         for (var geschwister : geschwisters) {
-            anonymizeAbstractPerson(demoData, geschwister, "Geschwister-%d".formatted(++count), gesuchSuffix);
+            anonymizeAbstractPerson(demoData, geschwister, "Geschwister-%d".formatted(++count));
         }
     }
 
     private void anonymizeKinds(DemoData demoData, Gesuch gesuch) {
         final var kinds = gesuch.getLatestGesuchTranche().getGesuchFormular().getKinds();
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
         var count = 0;
         for (var geschwister : kinds) {
-            anonymizeAbstractPerson(demoData, geschwister, "Kind-%d".formatted(++count), gesuchSuffix);
+            anonymizeAbstractPerson(demoData, geschwister, "Kind-%d".formatted(++count));
         }
     }
 
     private void anonymizeAdresse(Gesuch gesuch, Adresse adresse) {
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
         adresse.setStrasse("Strasse");
-        adresse.setHausnummer(gesuchSuffix);
+        adresse.setHausnummer(getLastGesuchNummerPart(gesuch));
     }
 
     private String getLastGesuchNummerPart(Gesuch gesuch) {
         final var gesuchNummer = gesuch.getGesuchNummer();
         return gesuchNummer.substring(gesuchNummer.lastIndexOf('.') + 1);
+    }
+
+    public String getRandomNamePrefix() {
+        StringBuilder id = new StringBuilder(6);
+
+        for (int i = 0; i < 6; i++) {
+            int index = SECURE_RANDOM.nextInt(CHARS.length());
+            id.append(CHARS.charAt(index));
+        }
+
+        return id.toString();
     }
 }

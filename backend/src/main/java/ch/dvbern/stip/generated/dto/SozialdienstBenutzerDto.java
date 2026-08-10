@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstBenutzer")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstBenutzerDto  implements Serializable {
   private @Valid String vorname;
@@ -25,6 +25,17 @@ public class SozialdienstBenutzerDto  implements Serializable {
   private @Valid String email;
   private @Valid UUID id;
   private @Valid Boolean isAdmin;
+
+  protected SozialdienstBenutzerDto(SozialdienstBenutzerDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.email = b.email;
+    this.id = b.id;
+    this.isAdmin = b.isAdmin;
+  }
+
+  public SozialdienstBenutzerDto() {
+  }
 
   /**
    **/
@@ -168,5 +179,53 @@ public class SozialdienstBenutzerDto  implements Serializable {
   }
 
 
+  public static SozialdienstBenutzerDtoBuilder<?, ?> builder() {
+    return new SozialdienstBenutzerDtoBuilderImpl();
+  }
+
+  private static final class SozialdienstBenutzerDtoBuilderImpl extends SozialdienstBenutzerDtoBuilder<SozialdienstBenutzerDto, SozialdienstBenutzerDtoBuilderImpl> {
+
+    @Override
+    protected SozialdienstBenutzerDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SozialdienstBenutzerDto build() {
+      return new SozialdienstBenutzerDto(this);
+    }
+  }
+
+  public static abstract class SozialdienstBenutzerDtoBuilder<C extends SozialdienstBenutzerDto, B extends SozialdienstBenutzerDtoBuilder<C, B>>  {
+    private String vorname;
+    private String nachname;
+    private String email;
+    private UUID id;
+    private Boolean isAdmin;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B isAdmin(Boolean isAdmin) {
+      this.isAdmin = isAdmin;
+      return self();
+    }
+  }
 }
 

@@ -5,18 +5,19 @@ import type {
 } from '@angular/cdk/portal';
 import { QueryParamsHandling, UrlTree } from '@angular/router';
 
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   BenutzerRole,
   SozialdienstBenutzerRole,
 } from '@dv/shared/model/benutzer';
 
 export type Portal<T = unknown> =
-  | TemplatePortal
+  | TemplatePortal<T>
   | ComponentPortal<T>
   | DomPortal;
 
 export type TranslateLabel = {
-  key: string;
+  key: SharedTranslationKey;
   context?: Record<string, string | number>;
 };
 
@@ -28,6 +29,9 @@ interface NavItemBase {
   active?: boolean | undefined;
   routerlinkActiveOptions?: { exact: boolean };
   testId?: string;
+  badge?: {
+    count: number;
+  };
 }
 
 export interface NavItemLink extends NavItemBase {
@@ -59,7 +63,7 @@ export type NavItem =
   | NavItemSeparator;
 
 export interface TabNavItem {
-  key: string;
+  key: 'verfuegung' | 'formular';
   active: boolean | undefined;
   route: UrlTree | (string | undefined)[];
   roles?: BenutzerRole[] | SozialdienstBenutzerRole[];

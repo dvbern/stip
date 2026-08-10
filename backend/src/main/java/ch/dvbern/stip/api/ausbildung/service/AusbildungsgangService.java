@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
@@ -46,7 +46,7 @@ public class AusbildungsgangService {
     private final AusbildungsgangRepository ausbildungsgangRepository;
     private final AusbildungsgangQueryBuilder ausbildungsgangQueryBuilder;
     private final AusbildungsgangMapper ausbildungsgangMapper;
-    private final ConfigService configService;
+    private final StipConfig config;
 
     @Transactional
     public Ausbildungsgang requireById(final UUID id) {
@@ -81,7 +81,7 @@ public class AusbildungsgangService {
         final String ausbildungsstaetteNameFr,
         final Boolean aktiv
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 

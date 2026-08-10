@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.verfuegung.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -43,23 +43,20 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH;
 
 @Audited
 @Entity
 @Table(
     name = "verfuegung", indexes = {
-        @Index(name = "IX_verfuegung_mandant", columnList = "mandant")
+        @Index(name = "IX_verfuegung_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class Verfuegung extends AbstractMandantEntity {
+public class Verfuegung extends AbstractTenantEntity {
     @Nullable
     @Enumerated(EnumType.STRING)
     @Column(name = "stip_decision")
@@ -89,8 +86,7 @@ public class Verfuegung extends AbstractMandantEntity {
     private List<VerfuegungDokument> dokumente = new ArrayList<>();
 
     @Nullable
-    @Size(max = DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH)
-    @Column(name = "berechnung_json_data", nullable = true, length = DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH)
+    @Column(columnDefinition = "text", name = "berechnung_json_data", nullable = true)
     private String berechnungJsonData;
 
     @Transient

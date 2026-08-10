@@ -1,10 +1,16 @@
-import { Signal, computed } from '@angular/core';
+import { Signal, computed, effect } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { format } from 'date-fns/format';
 import { filter, map } from 'rxjs';
 
-import { FreiwilligDarlehen, GesuchTrancheSlim } from '@dv/shared/model/gesuch';
+import { translatableShared } from '@dv/shared/assets/i18n';
+import {
+  FreiwilligDarlehen,
+  GesuchTrancheSlim,
+  GesuchUrlType,
+} from '@dv/shared/model/gesuch';
+import { GesuchFormStep, TRANCHE } from '@dv/shared/model/gesuch-form';
 import {
   darlehenCompletedStates,
   darlehenStatusMapping,
@@ -39,11 +45,61 @@ export const createParamsIdSig = (
     return params ? params[idKey] : undefined;
   });
 
+export const createStepFallbackRouteEffect = (config: {
+  router: Router;
+  stepSig: Signal<GesuchFormStep | undefined>;
+  currentStepSig: Signal<unknown>;
+  loadingSig: Signal<boolean>;
+  gesuchIdSig: Signal<string | undefined>;
+  trancheIdSig: Signal<string | undefined>;
+  trancheTypSig: Signal<GesuchUrlType | undefined>;
+}) => {
+  const {
+    router,
+    stepSig,
+    currentStepSig,
+    loadingSig,
+    gesuchIdSig,
+    trancheIdSig,
+    trancheTypSig,
+  } = config;
+
+  return effect(() => {
+    const step = stepSig();
+    const hasCurrentStep = !!currentStepSig();
+    const loading = loadingSig();
+    const gesuchId = gesuchIdSig();
+    const trancheId = trancheIdSig();
+    const trancheTyp = trancheTypSig();
+
+    if (
+      !step ||
+      step.route === TRANCHE.route ||
+      hasCurrentStep ||
+      loading ||
+      !gesuchId
+    ) {
+      return;
+    }
+
+    const fallbackRoute = ['gesuch', TRANCHE.route, gesuchId];
+    if (trancheTyp && trancheId) {
+      fallbackRoute.push(trancheTyp.toLowerCase(), trancheId);
+    }
+
+    router.navigate(fallbackRoute, {
+      queryParamsHandling: 'merge',
+      queryParams: { originStep: TRANCHE.route },
+      replaceUrl: true,
+    });
+  });
+};
+
 export function buildGesuchNavItems(
   gesuchId: string | undefined,
   tranchen: Pick<GesuchTrancheSlim, 'id' | 'gueltigAb'>[],
+  tabRouteSegments: string[],
   trancheId: string | undefined,
-  baseKey = 'shared',
 ): NavItem[] {
   if (!gesuchId) return [];
 
@@ -52,20 +108,26 @@ export function buildGesuchNavItems(
       {
         type: 'menu',
         id: 'gesuch',
-        label: { key: `${baseKey}.header.gesuch` },
+        label: { key: 'shared.header.gesuch' },
         icon: 'description',
         active: !!gesuchId,
-        children: tranchen.map((tranche, index) => ({
+        children: tranchen.map((tranche) => ({
           type: 'link' as const,
           id: tranche.id,
           label: {
-            key: `${baseKey}.header.tranche.item`,
+            key: 'shared.header.tranche.item',
             context: {
               date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
-              index: index + 1,
             },
           },
-          route: ['/gesuch', gesuchId, 'tranche', tranche.id],
+          route: [
+            '/gesuch',
+            ...tabRouteSegments,
+            gesuchId,
+            'tranche',
+            tranche.id,
+          ],
+          queryParams: { originStep: tabRouteSegments.join('/') },
           active: trancheId === tranche.id,
         })),
       },
@@ -77,9 +139,16 @@ export function buildGesuchNavItems(
       {
         type: 'link',
         id: 'gesuch',
-        label: { key: `${baseKey}.header.gesuch` },
+        label: { key: 'shared.header.gesuch' },
         icon: 'description',
-        route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
+        route: [
+          '/gesuch',
+          ...tabRouteSegments,
+          gesuchId,
+          'tranche',
+          tranchen[0].id,
+        ],
+        queryParams: { originStep: tabRouteSegments.join('/') },
         active: !!gesuchId,
       },
     ];
@@ -115,14 +184,16 @@ export function buildDarlehenMenu(config: {
           type: 'separator' as const,
           id: `separator-${status}`,
           label: {
-            key: `shared.header.darlehen.complete-states.${status}`,
+            key: translatableShared(
+              `shared.header.darlehen.complete-states.${status}`,
+            ),
           },
         },
         ...list.map((dar) => ({
           type: 'link' as const,
           id: dar.id,
           label: {
-            key: 'shared.header.darlehen.item',
+            key: translatableShared('shared.header.darlehen.item'),
             context: {
               date: dar.timestampErstellt
                 ? format(dar.timestampErstellt, 'dd.MM.yyyy')
@@ -156,4 +227,15 @@ export function buildDarlehenMenu(config: {
       : darlehenMenuItems,
     active: isDarlehenRoute,
   };
+}
+
+export function getQueryParamValueSig(
+  route: ActivatedRoute,
+  paramName: string,
+) {
+  return toSignal(
+    route.queryParamMap.pipe(
+      map((params) => params.get(paramName) ?? undefined),
+    ),
+  );
 }

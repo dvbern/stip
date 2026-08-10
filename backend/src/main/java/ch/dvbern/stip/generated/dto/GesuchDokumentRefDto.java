@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDokumentRef")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentRefDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
   private @Valid UUID entryId;
+
+  protected GesuchDokumentRefDto(GesuchDokumentRefDtoBuilder<?, ?> b) {
+    this.dokumentTyp = b.dokumentTyp;
+    this.entryId = b.entryId;
+  }
+
+  public GesuchDokumentRefDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class GesuchDokumentRefDto  implements Serializable {
   }
 
 
+  public static GesuchDokumentRefDtoBuilder<?, ?> builder() {
+    return new GesuchDokumentRefDtoBuilderImpl();
+  }
+
+  private static final class GesuchDokumentRefDtoBuilderImpl extends GesuchDokumentRefDtoBuilder<GesuchDokumentRefDto, GesuchDokumentRefDtoBuilderImpl> {
+
+    @Override
+    protected GesuchDokumentRefDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchDokumentRefDto build() {
+      return new GesuchDokumentRefDto(this);
+    }
+  }
+
+  public static abstract class GesuchDokumentRefDtoBuilder<C extends GesuchDokumentRefDto, B extends GesuchDokumentRefDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
+    private UUID entryId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B dokumentTyp(ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp) {
+      this.dokumentTyp = dokumentTyp;
+      return self();
+    }
+    public B entryId(UUID entryId) {
+      this.entryId = entryId;
+      return self();
+    }
+  }
 }
 

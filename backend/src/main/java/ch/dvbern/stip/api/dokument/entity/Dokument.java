@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,7 +43,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "dokument",
     indexes = {
-        @Index(name = "IX_dokument_mandant", columnList = "mandant")
+        @Index(name = "IX_dokument_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -51,7 +51,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dokument extends AbstractMandantEntity {
+public class Dokument extends AbstractTenantEntity {
     @Nullable
     @ManyToOne
     @JoinColumn(name = "gesuch_dokument_id", foreignKey = @ForeignKey(name = "FK_dokument_gesuch_dokument_id"))

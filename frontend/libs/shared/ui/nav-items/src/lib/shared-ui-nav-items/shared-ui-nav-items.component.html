@@ -9,6 +9,7 @@
             [attr.data-testid]="item.testId"
             [matMenuTriggerFor]="itemMenu"
             [class.isActive]="item.active"
+            [matBadge]="item.badge?.count"
           >
             @if (item.icon) {
               <i class="material-symbols-rounded tw:mr-2">{{ item.icon }}</i>
@@ -28,12 +29,14 @@
       }
       @case ('link') {
         <a
+          class="tw:dv-nav-button tw:flex tw:items-center tw:px-2 tw:relative"
           [routerLink]="item.route"
           [queryParams]="item.queryParams"
-          class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
+          [queryParamsHandling]="'merge'"
           [attr.data-testid]="item.testId"
           [class.isActive]="item.active"
           routerLinkActive="active"
+          [matBadge]="item.badge?.count"
         >
           @if (item.icon) {
             <i class="material-symbols-rounded tw:mr-2">{{ item.icon }}</i>
@@ -50,6 +53,7 @@
           [attr.data-testid]="item.testId"
           (click)="item.action()"
           [disabled]="item.disabled"
+          [matBadge]="item.badge?.count"
         >
           <div class="tw:flex tw:items-center tw:gap-2">
             @if (item.icon) {

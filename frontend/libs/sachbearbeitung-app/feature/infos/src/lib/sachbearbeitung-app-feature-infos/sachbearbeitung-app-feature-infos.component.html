@@ -2,10 +2,10 @@
   <div class="tw:flex tw:h-full">
     <ng-template #navigation cdkPortal>
       <div class="sidenav tw:p-6">
-        @for (option of infosOptions; track $index) {
+        @for (option of infosOptions(); track $index) {
           <a
             type="button"
-            class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
+            class="tw:dv-nav-button tw:relative tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
             [routerLink]="['/gesuch', infosRoute, option.route, gesuchIdSig()]"
             routerLinkActive="active"
             (click)="navClicked$.emit()"
@@ -14,15 +14,29 @@
             <span class="tw:text-start">
               {{ t(option.translationKey, option.translationOptions) }}
             </span>
+            @if (option.badge) {
+              <span
+                class="tw:-left-2.5 tw:absolute tw:flex tw:items-center tw:justify-center tw:rounded-full tw:leading-none tw:w-5 tw:h-5"
+                [ngClass]="{
+                  'tw:bg-dv-warning': option.badge.type === 'warning',
+                  'tw:bg-dv-red': option.badge.type === 'error',
+                  'tw:bg-dv-blue': option.badge.type === 'info',
+                }"
+                [matTooltip]="t(option.badge.titleKey)"
+              >
+              </span>
+            }
           </a>
         }
       </div>
     </ng-template>
+
     <!-- left step nav (Desktop) -->
     <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white">
       <ng-container *ngTemplateOutlet="navigation"></ng-container>
     </div>
-    <div class="tw:p-6 tw:bg-white tw:dv-pass-height">
+
+    <div class="tw:dv-container tw:bg-white tw:dv-pass-height tw:p-6 tw:pb-32">
       <!-- step header (mobile) -->
       <div
         class="tw:flex tw:items-center tw:justify-between border-bottom tw:lg:hidden tw:mt-4 tw:mb-6 border-1 tw:pb-4"
@@ -32,23 +46,21 @@
 
       <!-- title (desktop) -->
       @if (option) {
-        <div class="tw:hidden tw:lg:flex tw:justify-start tw:items-center">
+        <div class="tw:dv-page-title tw:hidden tw:lg:flex tw:justify-start tw:items-center">
           <dv-shared-ui-icon-chip class="tw:mr-4">
             <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
           </dv-shared-ui-icon-chip>
 
-          <h2 class="tw:text-3xl tw:font-bold" data-testid="step-title">
+          <h1 data-testid="step-title">
             {{ t(option.titleTranslationKey) }}
-          </h2>
+          </h1>
         </div>
       }
 
-      <div class="tw:mt-6">
-        <dv-shared-ui-router-outlet-wrapper
-          attribute="option"
-          (data)="option = $event"
-        ></dv-shared-ui-router-outlet-wrapper>
-      </div>
+      <dv-shared-ui-router-outlet-wrapper
+        attribute="option"
+        (data)="option = $event"
+      ></dv-shared-ui-router-outlet-wrapper>
     </div>
   </div>
 </ng-container>

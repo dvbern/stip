@@ -85,7 +85,7 @@ public class FamilieEntityWohnsitzValidator {
             familiensituation.getVaterUnbekanntVerstorben() == ElternAbwesenheitsGrund.VERSTORBEN;
 
         if (bothElternteilsDead) {
-            return familieEntity.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
+            return familieEntity.getWohnsitz().isEigenerHaushalt();
         }
         return ONE_ELTERNTEIL_ABSENT_WOHNSITUATION_VALID_MAP.get(familieEntity.getWohnsitz())
             .orElseGet(() -> isWohnsitzanteilValidWhenOneElternteilIsAbsent(familieEntity, familiensituation));

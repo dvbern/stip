@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FamilienBudgetresultatKosten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FamilienBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer total;
@@ -36,6 +36,25 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer fahrkostenTotal;
   private @Valid List<PersonValueItemDto> verpflegung = new ArrayList<>();
   private @Valid Integer verpflegungTotal;
+
+  protected FamilienBudgetresultatKostenDto(FamilienBudgetresultatKostenDtoBuilder<?, ?> b) {
+    this.total = b.total;
+    this.grundbedarf = b.grundbedarf;
+    this.wohnkosten = b.wohnkosten;
+    this.medizinischeGrundversorgung = b.medizinischeGrundversorgung;
+    this.integrationszulage = b.integrationszulage;
+    this.integrationszulageAnzahl = b.integrationszulageAnzahl;
+    this.integrationszulageTotal = b.integrationszulageTotal;
+    this.kantonsGemeindesteuern = b.kantonsGemeindesteuern;
+    this.bundessteuern = b.bundessteuern;
+    this.fahrkosten = b.fahrkosten;
+    this.fahrkostenTotal = b.fahrkostenTotal;
+    this.verpflegung = b.verpflegung;
+    this.verpflegungTotal = b.verpflegungTotal;
+  }
+
+  public FamilienBudgetresultatKostenDto() {
+  }
 
   /**
    **/
@@ -380,5 +399,93 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
   }
 
 
+  public static FamilienBudgetresultatKostenDtoBuilder<?, ?> builder() {
+    return new FamilienBudgetresultatKostenDtoBuilderImpl();
+  }
+
+  private static final class FamilienBudgetresultatKostenDtoBuilderImpl extends FamilienBudgetresultatKostenDtoBuilder<FamilienBudgetresultatKostenDto, FamilienBudgetresultatKostenDtoBuilderImpl> {
+
+    @Override
+    protected FamilienBudgetresultatKostenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FamilienBudgetresultatKostenDto build() {
+      return new FamilienBudgetresultatKostenDto(this);
+    }
+  }
+
+  public static abstract class FamilienBudgetresultatKostenDtoBuilder<C extends FamilienBudgetresultatKostenDto, B extends FamilienBudgetresultatKostenDtoBuilder<C, B>>  {
+    private Integer total;
+    private Integer grundbedarf;
+    private Integer wohnkosten;
+    private Integer medizinischeGrundversorgung;
+    private Integer integrationszulage;
+    private Integer integrationszulageAnzahl;
+    private Integer integrationszulageTotal;
+    private Integer kantonsGemeindesteuern;
+    private Integer bundessteuern;
+    private List<PersonValueItemDto> fahrkosten = new ArrayList<>();
+    private Integer fahrkostenTotal;
+    private List<PersonValueItemDto> verpflegung = new ArrayList<>();
+    private Integer verpflegungTotal;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B total(Integer total) {
+      this.total = total;
+      return self();
+    }
+    public B grundbedarf(Integer grundbedarf) {
+      this.grundbedarf = grundbedarf;
+      return self();
+    }
+    public B wohnkosten(Integer wohnkosten) {
+      this.wohnkosten = wohnkosten;
+      return self();
+    }
+    public B medizinischeGrundversorgung(Integer medizinischeGrundversorgung) {
+      this.medizinischeGrundversorgung = medizinischeGrundversorgung;
+      return self();
+    }
+    public B integrationszulage(Integer integrationszulage) {
+      this.integrationszulage = integrationszulage;
+      return self();
+    }
+    public B integrationszulageAnzahl(Integer integrationszulageAnzahl) {
+      this.integrationszulageAnzahl = integrationszulageAnzahl;
+      return self();
+    }
+    public B integrationszulageTotal(Integer integrationszulageTotal) {
+      this.integrationszulageTotal = integrationszulageTotal;
+      return self();
+    }
+    public B kantonsGemeindesteuern(Integer kantonsGemeindesteuern) {
+      this.kantonsGemeindesteuern = kantonsGemeindesteuern;
+      return self();
+    }
+    public B bundessteuern(Integer bundessteuern) {
+      this.bundessteuern = bundessteuern;
+      return self();
+    }
+    public B fahrkosten(List<PersonValueItemDto> fahrkosten) {
+      this.fahrkosten = fahrkosten;
+      return self();
+    }
+    public B fahrkostenTotal(Integer fahrkostenTotal) {
+      this.fahrkostenTotal = fahrkostenTotal;
+      return self();
+    }
+    public B verpflegung(List<PersonValueItemDto> verpflegung) {
+      this.verpflegung = verpflegung;
+      return self();
+    }
+    public B verpflegungTotal(Integer verpflegungTotal) {
+      this.verpflegungTotal = verpflegungTotal;
+      return self();
+    }
+  }
 }
 

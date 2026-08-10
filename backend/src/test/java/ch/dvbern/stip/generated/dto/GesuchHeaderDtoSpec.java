@@ -18,6 +18,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.GesuchAenderungsDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.InitialGesuchsDtoSpec;
 import ch.dvbern.stip.generated.dto.VerfuegtGesuchDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -38,13 +40,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchHeaderDtoSpec.JSON_PROPERTY_VERSIONS,
   GesuchHeaderDtoSpec.JSON_PROPERTY_AENDERUNGS,
   GesuchHeaderDtoSpec.JSON_PROPERTY_CURRENT_TRANCHES,
+  GesuchHeaderDtoSpec.JSON_PROPERTY_LATEST_VERFUEGUNG_ID,
+  GesuchHeaderDtoSpec.JSON_PROPERTY_LATEST_VERFUEGT_AT,
   GesuchHeaderDtoSpec.JSON_PROPERTY_GESUCH_INFO
 })
 @JsonTypeName("GesuchHeader")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchHeaderDtoSpec {
   public static final String JSON_PROPERTY_INITIAL = "initial";
-  private VerfuegtGesuchDtoSpec initial;
+  private InitialGesuchsDtoSpec initial;
 
   public static final String JSON_PROPERTY_VERSIONS = "versions";
   private List<VerfuegtGesuchDtoSpec> versions;
@@ -55,13 +59,19 @@ public class GesuchHeaderDtoSpec {
   public static final String JSON_PROPERTY_CURRENT_TRANCHES = "currentTranches";
   private List<GesuchTrancheSlimDtoSpec> currentTranches;
 
+  public static final String JSON_PROPERTY_LATEST_VERFUEGUNG_ID = "latestVerfuegungId";
+  private UUID latestVerfuegungId;
+
+  public static final String JSON_PROPERTY_LATEST_VERFUEGT_AT = "latestVerfuegtAt";
+  private java.time.LocalDateTime latestVerfuegtAt;
+
   public static final String JSON_PROPERTY_GESUCH_INFO = "gesuchInfo";
   private GesuchInfoDtoSpec gesuchInfo;
 
   public GesuchHeaderDtoSpec() {
   }
 
-  public GesuchHeaderDtoSpec initial(VerfuegtGesuchDtoSpec initial) {
+  public GesuchHeaderDtoSpec initial(InitialGesuchsDtoSpec initial) {
     
     this.initial = initial;
     return this;
@@ -75,14 +85,14 @@ public class GesuchHeaderDtoSpec {
   @JsonProperty(JSON_PROPERTY_INITIAL)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public VerfuegtGesuchDtoSpec getInitial() {
+  public InitialGesuchsDtoSpec getInitial() {
     return initial;
   }
 
 
   @JsonProperty(JSON_PROPERTY_INITIAL)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInitial(VerfuegtGesuchDtoSpec initial) {
+  public void setInitial(InitialGesuchsDtoSpec initial) {
     this.initial = initial;
   }
 
@@ -181,6 +191,58 @@ public class GesuchHeaderDtoSpec {
   }
 
 
+  public GesuchHeaderDtoSpec latestVerfuegungId(UUID latestVerfuegungId) {
+    
+    this.latestVerfuegungId = latestVerfuegungId;
+    return this;
+  }
+
+   /**
+   * Get latestVerfuegungId
+   * @return latestVerfuegungId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGUNG_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getLatestVerfuegungId() {
+    return latestVerfuegungId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGUNG_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLatestVerfuegungId(UUID latestVerfuegungId) {
+    this.latestVerfuegungId = latestVerfuegungId;
+  }
+
+
+  public GesuchHeaderDtoSpec latestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+    
+    this.latestVerfuegtAt = latestVerfuegtAt;
+    return this;
+  }
+
+   /**
+   * Get latestVerfuegtAt
+   * @return latestVerfuegtAt
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGT_AT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public java.time.LocalDateTime getLatestVerfuegtAt() {
+    return latestVerfuegtAt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGT_AT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLatestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+    this.latestVerfuegtAt = latestVerfuegtAt;
+  }
+
+
   public GesuchHeaderDtoSpec gesuchInfo(GesuchInfoDtoSpec gesuchInfo) {
     
     this.gesuchInfo = gesuchInfo;
@@ -219,12 +281,14 @@ public class GesuchHeaderDtoSpec {
         Objects.equals(this.versions, gesuchHeader.versions) &&
         Objects.equals(this.aenderungs, gesuchHeader.aenderungs) &&
         Objects.equals(this.currentTranches, gesuchHeader.currentTranches) &&
+        Objects.equals(this.latestVerfuegungId, gesuchHeader.latestVerfuegungId) &&
+        Objects.equals(this.latestVerfuegtAt, gesuchHeader.latestVerfuegtAt) &&
         Objects.equals(this.gesuchInfo, gesuchHeader.gesuchInfo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(initial, versions, aenderungs, currentTranches, gesuchInfo);
+    return Objects.hash(initial, versions, aenderungs, currentTranches, latestVerfuegungId, latestVerfuegtAt, gesuchInfo);
   }
 
   @Override
@@ -235,6 +299,8 @@ public class GesuchHeaderDtoSpec {
     sb.append("    versions: ").append(toIndentedString(versions)).append("\n");
     sb.append("    aenderungs: ").append(toIndentedString(aenderungs)).append("\n");
     sb.append("    currentTranches: ").append(toIndentedString(currentTranches)).append("\n");
+    sb.append("    latestVerfuegungId: ").append(toIndentedString(latestVerfuegungId)).append("\n");
+    sb.append("    latestVerfuegtAt: ").append(toIndentedString(latestVerfuegtAt)).append("\n");
     sb.append("    gesuchInfo: ").append(toIndentedString(gesuchInfo)).append("\n");
     sb.append("}");
     return sb.toString();

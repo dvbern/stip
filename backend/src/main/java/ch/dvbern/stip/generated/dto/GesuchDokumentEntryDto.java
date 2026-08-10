@@ -18,14 +18,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDokumentEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentEntryDto  implements Serializable {
   private @Valid UUID entryId;
   private @Valid String name;
   private @Valid List<ch.dvbern.stip.api.dokument.type.DokumentTyp> dokumentTyps = new ArrayList<>();
+
+  protected GesuchDokumentEntryDto(GesuchDokumentEntryDtoBuilder<?, ?> b) {
+    this.entryId = b.entryId;
+    this.name = b.name;
+    this.dokumentTyps = b.dokumentTyps;
+  }
+
+  public GesuchDokumentEntryDto() {
+  }
 
   /**
    **/
@@ -144,5 +153,43 @@ public class GesuchDokumentEntryDto  implements Serializable {
   }
 
 
+  public static GesuchDokumentEntryDtoBuilder<?, ?> builder() {
+    return new GesuchDokumentEntryDtoBuilderImpl();
+  }
+
+  private static final class GesuchDokumentEntryDtoBuilderImpl extends GesuchDokumentEntryDtoBuilder<GesuchDokumentEntryDto, GesuchDokumentEntryDtoBuilderImpl> {
+
+    @Override
+    protected GesuchDokumentEntryDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchDokumentEntryDto build() {
+      return new GesuchDokumentEntryDto(this);
+    }
+  }
+
+  public static abstract class GesuchDokumentEntryDtoBuilder<C extends GesuchDokumentEntryDto, B extends GesuchDokumentEntryDtoBuilder<C, B>>  {
+    private UUID entryId;
+    private String name;
+    private List<ch.dvbern.stip.api.dokument.type.DokumentTyp> dokumentTyps = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B entryId(UUID entryId) {
+      this.entryId = entryId;
+      return self();
+    }
+    public B name(String name) {
+      this.name = name;
+      return self();
+    }
+    public B dokumentTyps(List<ch.dvbern.stip.api.dokument.type.DokumentTyp> dokumentTyps) {
+      this.dokumentTyps = dokumentTyps;
+      return self();
+    }
+  }
 }
 

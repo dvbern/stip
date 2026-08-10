@@ -54,7 +54,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         GesuchTranche tranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
         Gesuch gesuch = gesuchRepository.requireById(tranche.getGesuch().getId());
         if (!gesuch.isVerfuegt()) {
-            throw new IllegalStateException("Gesuch was not Verfuegt");
+            forbidden();
         }
     }
 
@@ -66,6 +66,15 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     @Transactional
     public void sbOrJuristCanRead() {
         permitAll();
+    }
+
+    @Transactional
+    public void gsSbFreigabestelleOrJuristCanRead(final UUID gesuchTrancheId) {
+        if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
+            return;
+        }
+
+        gsCanRead(gesuchTrancheId);
     }
 
     @Transactional
@@ -142,9 +151,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             throw new IllegalStateException();
         }
 
-        final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
-
-        if (requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)) {
+        if (requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche)) {
             return;
         }
 

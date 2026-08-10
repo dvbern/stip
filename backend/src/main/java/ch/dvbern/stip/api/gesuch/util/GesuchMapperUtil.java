@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -31,6 +32,8 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.MIN_AGE_EIGENER_WOHNSITZ;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -58,11 +61,14 @@ public class GesuchMapperUtil {
         final var gesuchDto = gesuchMapper.toDto(gesuch);
         final GesuchTrancheDto gesuchTrancheToWorkWith;
         if (withVersteckteEltern) {
-            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche);
+            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithConfidentialFields(tranche);
         } else {
-            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithoutVersteckteEltern(tranche);
+            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithoutConfidentialFields(tranche);
         }
 
+        gesuchDto.minDateEigenerWohnsitz(
+            DateUtil.getEigenerWohnsitzStichtagDate(tranche.getGesuchFormular()).minusYears(MIN_AGE_EIGENER_WOHNSITZ)
+        );
         gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheToWorkWith);
         return gesuchDto;
     }
@@ -72,15 +78,18 @@ public class GesuchMapperUtil {
         final GesuchTranche tranche,
         final GesuchTranche changes,
         final boolean isInitial,
-        final boolean withVersteckteEltern
+        final boolean withConfidentialFields
     ) {
         var dto = gesuchMapper.toWithChangesDto(gesuch);
         dto.setIsInitial(isInitial);
-        dto.setGesuchTrancheToWorkWith(mapWithOrWithoutEltern(tranche, withVersteckteEltern));
+        dto.setGesuchTrancheToWorkWith(mapWithOrWithoutConfidentialFields(tranche, withConfidentialFields));
+        dto.minDateEigenerWohnsitz(
+            DateUtil.getEigenerWohnsitzStichtagDate(tranche.getGesuchFormular()).minusYears(MIN_AGE_EIGENER_WOHNSITZ)
+        );
         if (Objects.isNull(changes)) {
             dto.setChanges(List.of());
         } else {
-            dto.setChanges(List.of(mapWithOrWithoutEltern(changes, withVersteckteEltern)));
+            dto.setChanges(List.of(mapWithOrWithoutConfidentialFields(changes, withConfidentialFields)));
         }
         return dto;
     }
@@ -89,14 +98,14 @@ public class GesuchMapperUtil {
         final Gesuch gesuch,
         final GesuchTranche tranche,
         final GesuchTranche changes,
-        final boolean withVersteckteEltern
+        final boolean withConfidentialFields
     ) {
         return toWithChangesDto(
             gesuch,
             tranche,
             changes,
             false,
-            withVersteckteEltern
+            withConfidentialFields
         );
     }
 
@@ -106,16 +115,19 @@ public class GesuchMapperUtil {
         final List<GesuchTranche> changes
     ) {
         final var dto = gesuchMapper.toWithChangesDto(gesuch);
-        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche));
-        dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDtoWithVersteckteEltern).toList());
+        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDtoWithConfidentialFields(tranche));
+        dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDtoWithConfidentialFields).toList());
         return dto;
     }
 
-    private GesuchTrancheDto mapWithOrWithoutEltern(final GesuchTranche tranche, final boolean withVersteckteEltern) {
-        if (withVersteckteEltern) {
-            return gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche);
+    private GesuchTrancheDto mapWithOrWithoutConfidentialFields(
+        final GesuchTranche tranche,
+        final boolean withConfidentialFields
+    ) {
+        if (withConfidentialFields) {
+            return gesuchTrancheMapper.toDtoWithConfidentialFields(tranche);
         } else {
-            return gesuchTrancheMapper.toDtoWithoutVersteckteEltern(tranche);
+            return gesuchTrancheMapper.toDtoWithoutConfidentialFields(tranche);
         }
     }
 

@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SbDashboardGesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SbDashboardGesuchDto  implements Serializable {
   private @Valid UUID id;
@@ -32,6 +32,23 @@ public class SbDashboardGesuchDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus;
   private @Valid String bearbeiter;
   private @Valid LocalDate letzteAktivitaet;
+
+  protected SbDashboardGesuchDto(SbDashboardGesuchDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.gesuchTrancheId = b.gesuchTrancheId;
+    this.fallNummer = b.fallNummer;
+    this.typ = b.typ;
+    this.piaNachname = b.piaNachname;
+    this.piaVorname = b.piaVorname;
+    this.piaGeburtsdatum = b.piaGeburtsdatum;
+    this.gesuchStatus = b.gesuchStatus;
+    this.trancheStatus = b.trancheStatus;
+    this.bearbeiter = b.bearbeiter;
+    this.letzteAktivitaet = b.letzteAktivitaet;
+  }
+
+  public SbDashboardGesuchDto() {
+  }
 
   /**
    **/
@@ -302,5 +319,83 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
 
+  public static SbDashboardGesuchDtoBuilder<?, ?> builder() {
+    return new SbDashboardGesuchDtoBuilderImpl();
+  }
+
+  private static final class SbDashboardGesuchDtoBuilderImpl extends SbDashboardGesuchDtoBuilder<SbDashboardGesuchDto, SbDashboardGesuchDtoBuilderImpl> {
+
+    @Override
+    protected SbDashboardGesuchDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SbDashboardGesuchDto build() {
+      return new SbDashboardGesuchDto(this);
+    }
+  }
+
+  public static abstract class SbDashboardGesuchDtoBuilder<C extends SbDashboardGesuchDto, B extends SbDashboardGesuchDtoBuilder<C, B>>  {
+    private UUID id;
+    private UUID gesuchTrancheId;
+    private String fallNummer;
+    private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
+    private String piaNachname;
+    private String piaVorname;
+    private LocalDate piaGeburtsdatum;
+    private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+    private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus;
+    private String bearbeiter;
+    private LocalDate letzteAktivitaet;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B gesuchTrancheId(UUID gesuchTrancheId) {
+      this.gesuchTrancheId = gesuchTrancheId;
+      return self();
+    }
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
+      return self();
+    }
+    public B typ(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
+      this.typ = typ;
+      return self();
+    }
+    public B piaNachname(String piaNachname) {
+      this.piaNachname = piaNachname;
+      return self();
+    }
+    public B piaVorname(String piaVorname) {
+      this.piaVorname = piaVorname;
+      return self();
+    }
+    public B piaGeburtsdatum(LocalDate piaGeburtsdatum) {
+      this.piaGeburtsdatum = piaGeburtsdatum;
+      return self();
+    }
+    public B gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
+      this.gesuchStatus = gesuchStatus;
+      return self();
+    }
+    public B trancheStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus) {
+      this.trancheStatus = trancheStatus;
+      return self();
+    }
+    public B bearbeiter(String bearbeiter) {
+      this.bearbeiter = bearbeiter;
+      return self();
+    }
+    public B letzteAktivitaet(LocalDate letzteAktivitaet) {
+      this.letzteAktivitaet = letzteAktivitaet;
+      return self();
+    }
+  }
 }
 

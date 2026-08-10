@@ -20,7 +20,7 @@ package ch.dvbern.stip.stipdecision.decider;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 
 @Singleton
 @RequiredArgsConstructor
-@StipDeciderTenant(MandantIdentifier.BERN)
+@StipDeciderTenant(TenantIdentifier.BERN)
 public class BernStipDecider extends BaseStipDecider {
     private final PlzService plzService;
 
@@ -188,7 +188,7 @@ public class BernStipDecider extends BaseStipDecider {
             }
             if (piaFluechtlingOderStaatenlos(gesuchTranche)) {
                 if (elternlosOderElternImAusland(gesuchTranche)) {
-                    if (piaKantonMandantZugewiesen(gesuchTranche)) {
+                    if (piaKantonTenantZugewiesen(gesuchTranche)) {
                         return StipDeciderResult.GESUCH_VALID;
                     }
                     return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN;
@@ -342,10 +342,10 @@ public class BernStipDecider extends BaseStipDecider {
                 .getZustaendigeKESB() == ZustaendigeKESB.KESB_BERN;
         }
 
-        private static boolean piaKantonMandantZugewiesen(final GesuchTranche gesuchTranche) {
+        private static boolean piaKantonTenantZugewiesen(final GesuchTranche gesuchTranche) {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
-                .getNiederlassungsstatus() == Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT;
+                .getNiederlassungsstatus() == Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT;
         }
 
         private static boolean piaNationalitaetEuEfta(

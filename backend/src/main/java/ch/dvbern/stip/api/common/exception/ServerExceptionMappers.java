@@ -18,8 +18,11 @@
 package ch.dvbern.stip.api.common.exception;
 
 import ch.dvbern.stip.generated.dto.DemoDataErrorDto;
-import ch.dvbern.stip.generated.dto.NeskoErrorDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenPortErrorDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortExceptionMapper;
+import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortInternalException;
+import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortNotFoundException;
 import jakarta.ws.rs.BadRequestException;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -43,18 +46,18 @@ public class ServerExceptionMappers {
     }
 
     @ServerExceptionMapper
-    public RestResponse<NeskoErrorDto> mapException(NeskoNotFoundException e) {
+    public RestResponse<SteuerdatenPortErrorDto> mapException(SteuerdatenPortNotFoundException e) {
         return RestResponse.status(
             RestResponse.Status.NOT_FOUND,
-            NeskoExceptionMapper.toDto(e)
+            SteuerdatenPortExceptionMapper.toDto(e)
         );
     }
 
     @ServerExceptionMapper
-    public RestResponse<NeskoErrorDto> mapException(NeskoInternalException e) {
+    public RestResponse<SteuerdatenPortErrorDto> mapException(SteuerdatenPortInternalException e) {
         return RestResponse.status(
             RestResponse.Status.BAD_GATEWAY,
-            NeskoExceptionMapper.toDto(e)
+            SteuerdatenPortExceptionMapper.toDto(e)
         );
     }
 

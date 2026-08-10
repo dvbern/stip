@@ -22,15 +22,18 @@ import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.generated.dto.GeschwisterDto;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
 import jakarta.ws.rs.NotFoundException;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface GeschwisterMapper {
+
     Geschwister toEntity(GeschwisterDto geschwisterDto);
 
     GeschwisterDto toDto(Geschwister geschwister);
@@ -72,4 +75,15 @@ public interface GeschwisterMapper {
     }
 
     GeschwisterUpdateDto toUpdateDto(Geschwister geschwister);
+
+    @BeforeMapping
+    default void resetDependentDataBeforeUpdate(
+        final GeschwisterUpdateDto newGeschwister,
+        final @MappingTarget Geschwister geschwister
+    ) {
+        if (newGeschwister.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
+            newGeschwister.setWohnsitzAnteilMutter(null);
+            newGeschwister.setWohnsitzAnteilVater(null);
+        }
+    }
 }

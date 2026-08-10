@@ -1,4 +1,4 @@
-<div>
+<div *transloco="let t">
   @let view = viewSig();
   <!-- loading -->
   @if (view.loading) {
@@ -9,167 +9,151 @@
       [dvSharedUiFormReadonly]="view.readonly"
       (gotReenabledSig)="gotReenabled$.next({})"
       novalidate
-      class="testing-library-fix tw:mt-6"
+      class="testing-library-fix tw:dv-form-grid"
       data-testid="form-partner-form"
       (ngSubmit)="handleSaveAndContinue()"
     >
-      <h3 class="tw:mb-6 tw:pt-12 tw:text-2xl tw:font-semibold">
-        {{ 'shared.form.shared.section.personal-details' | transloco }}
+      <h3 class="tw:xl:col-span-3 tw:mb-6 tw:pt-12 tw:text-2xl tw:font-semibold">
+        {{ t('shared.form.shared.section.personal-details') }}
       </h3>
+
       <!-- AHV -->
-      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-        <div class="testing-library-fix tw:flex tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-          <mat-form-field dvSharedUiFormField class="tw:grow">
-            <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}</mat-label>
-            <input
-              matInput
-              type="text"
-              formControlName="sozialversicherungsnummer"
-              data-testid="form-partner-sozialversicherungsnummer"
-              placeholder="756.xxxx.xxxx.xx"
-              [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges.sozialversicherungsnummer"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-            <mat-error *dvSharedUiFormMessageError="'ahv'">
-              {{ 'shared.form.error.ahv' | transloco }}
-            </mat-error>
-            <mat-error *dvSharedUiFormMessageError="'notUniqueAhv'">
-              {{ 'shared.form.error.notUniqueAhv' | transloco }}
-            </mat-error>
-          </mat-form-field>
-          <button
-            type="button"
-            (click)="ahvPartnerInfoDialog.toggle()"
-            class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-          >
-            <span class="material-symbols-rounded tw:text-3xl!"> info </span>
-          </button>
-        </div>
-        <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.partner.sozialversicherungsnummer.infoTitle'"
-          [dialogMessageKey]="'shared.form.partner.sozialversicherungsnummer.info'"
-          #ahvPartnerInfoDialog="dvSharedUiInfoDialog"
-          class="tw:hidden tw:xl:block tw:xl:col-span-4"
-        ></div>
-      </div>
-      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-          <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
-          <input formControlName="nachname" data-testid="form-partner-nachname" matInput dvMaxLength type="text" />
-          <mat-hint *dvZuvorHint="view.formChanges.nachname"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-          <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
-          <input formControlName="vorname" data-testid="form-partner-vorname" matInput dvMaxLength type="text" />
-          <mat-hint *dvZuvorHint="view.formChanges.vorname"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!-- Adresse -->
-      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-        <dv-shared-ui-form-address
-          class="testing-library-fix tw:col-span-12 tw:xl:col-span-8"
-          [group]="form.controls.adresse"
-          [changes]="view.formChanges.adresse"
-          [languageSig]="languageSig()"
-        />
-      </div>
-
-      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-        <!-- GEBURTSDATUM -->
-        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:xl:col-span-4">
-          <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
-
+      <div class="testing-library-fix tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
+        <mat-form-field dvSharedUiFormField class="tw:grow">
+          <mat-label>{{ t('shared.form.shared.sozialversicherungsnummer.label') }}</mat-label>
           <input
             matInput
-            [dvMaxLength]="'small'"
-            placeholder="dd.mm.yyyy"
-            formControlName="geburtsdatum"
-            data-testid="form-partner-geburtsdatum"
-            (blur)="onGeburtsdatumBlur()"
+            type="text"
+            formControlName="sozialversicherungsnummer"
+            data-testid="form-partner-sozialversicherungsnummer"
+            placeholder="756.xxxx.xxxx.xx"
+            [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
           />
-          <mat-hint *dvZuvorHint="view.formChanges.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
-
+          <mat-hint *dvZuvorHint="view.formChanges.sozialversicherungsnummer"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-            {{ 'shared.form.error.dateFormat' | transloco }}
+          <mat-error *dvSharedUiFormMessageError="'ahv'">
+            {{ t('shared.form.error.ahv') }}
           </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'minDate'">
-            {{ 'shared.form.error.minDatePast' | transloco }}
-          </mat-error>
-          <mat-error *dvSharedUiFormMessageError="'maxDate'">
-            {{ 'shared.form.error.maxDatePast' | transloco }}
+          <mat-error *dvSharedUiFormMessageError="'notUniqueAhv'">
+            {{ t('shared.form.error.notUniqueAhv') }}
           </mat-error>
         </mat-form-field>
-      </div>
-
-      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-        <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
-        <div
-          class="testing-library-fix tw:col-span-12 tw:xl:col-span-4 tw:md:col-span-6 tw:flex tw:items-center tw:grow tw:gap-2"
+        <button
+          type="button"
+          (click)="ahvPartnerInfoDialog.toggle()"
+          class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
+          [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
         >
-          <mat-checkbox type="checkbox" formControlName="inAusbildung" data-testid="form-partner-inAusbildung">{{
-            'shared.form.partner.inAusbildung.label' | transloco
-          }}</mat-checkbox>
-          <dv-shared-ui-form-zuvor-hint
-            [changes]="view.formChanges.inAusbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
-          ></dv-shared-ui-form-zuvor-hint>
-        </div>
+          <span class="material-symbols-rounded tw:text-3xl!"> info </span>
+        </button>
+      </div>
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKeySig]="'shared.form.partner.sozialversicherungsnummer.infoTitle'"
+        [dialogMessageKeySig]="'shared.form.partner.sozialversicherungsnummer.info'"
+        #ahvPartnerInfoDialog="dvSharedUiInfoDialog"
+        class="tw:hidden tw:xl:block tw:xl:col-start-3"
+      ></div>
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.shared.lastname.label') }}</mat-label>
+        <input formControlName="nachname" data-testid="form-partner-nachname" matInput dvMaxLength type="text" />
+        <mat-hint *dvZuvorHint="view.formChanges.nachname"></mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ t('shared.form.error.required') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.shared.firstname.label') }}</mat-label>
+        <input formControlName="vorname" data-testid="form-partner-vorname" matInput dvMaxLength type="text" />
+        <mat-hint *dvZuvorHint="view.formChanges.vorname"></mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ t('shared.form.error.required') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Adresse -->
+      <dv-shared-ui-form-address
+        [group]="form.controls.adresse"
+        [changes]="view.formChanges.adresse"
+        [languageSig]="languageSig()"
+      />
+
+      <!-- GEBURTSDATUM -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.shared.birthday.label') }}</mat-label>
+        <input
+          matInput
+          [dvMaxLength]="'small'"
+          placeholder="dd.mm.yyyy"
+          formControlName="geburtsdatum"
+          data-testid="form-partner-geburtsdatum"
+          (blur)="onGeburtsdatumBlur()"
+        />
+        <mat-hint *dvZuvorHint="view.formChanges.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ t('shared.form.error.required') }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+          {{ t('shared.form.error.dateFormat') }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'minDate'">
+          {{ t('shared.form.error.minDatePast') }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'maxDate'">
+          {{ t('shared.form.error.maxDatePast') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
+      <div class="testing-library-fix tw:dv-form-item tw:flex tw:items-center tw:gap-4">
+        <mat-checkbox type="checkbox" formControlName="inAusbildung" data-testid="form-partner-inAusbildung">{{
+          t('shared.form.partner.inAusbildung.label')
+        }}</mat-checkbox>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="view.formChanges.inAusbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
+        ></dv-shared-ui-form-zuvor-hint>
       </div>
 
-      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-        <!-- PENSUM -->
-        @if (showAusbildungspensumSig()) {
-          <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:xl:col-span-4">
-            <mat-label>{{ 'shared.form.ausbildung.pensum.label' | transloco }}</mat-label>
-            <mat-select
-              formControlName="ausbildungspensum"
-              data-testid="form-partner-ausbildungspensum"
-              [placeholder]="'shared.form.select.empty' | transloco"
-            >
-              @for (l of ausbildungspensumValues; track $index) {
-                <mat-option [value]="l" [attr.data-testid]="l">
-                  {{ 'shared.form.ausbildung.pensum.' + l | transloco }}
-                </mat-option>
-              }
-            </mat-select>
+      <!-- PENSUM -->
+      @if (showAusbildungspensumSig()) {
+        <mat-form-field dvSharedUiFormField class="testing-library-fix tw:dv-form-item">
+          <mat-label>{{ t('shared.form.ausbildung.pensum.label') }}</mat-label>
+          <mat-select
+            formControlName="ausbildungspensum"
+            data-testid="form-partner-ausbildungspensum"
+            [placeholder]="t('shared.form.select.empty')"
+          >
+            @for (l of ausbildungspensumValues; track $index) {
+              <mat-option [value]="l" [attr.data-testid]="l">
+                {{ t('shared.form.ausbildung.pensum.' + l) }}
+              </mat-option>
+            }
+          </mat-select>
 
-            <mat-hint
-              *dvZuvorHint="
-                view.formChanges.ausbildungspensum | dvTranslateChange: 'shared.form.ausbildung.pensum.$VALUE' | async
-              "
-            ></mat-hint>
+          <mat-hint
+            *dvZuvorHint="
+              view.formChanges.ausbildungspensum | dvTranslateChange: 'shared.form.ausbildung.pensum.$VALUE' | async
+            "
+          ></mat-hint>
 
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </mat-form-field>
-        }
-      </div>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ t('shared.form.error.required') }}
+          </mat-error>
+        </mat-form-field>
+      }
 
       <!-- Buttons -->
-      <dv-shared-ui-step-form-buttons>
+      <dv-shared-ui-step-form-buttons class="testing-library-fix tw:xl:col-span-3 tw:dv-form-action">
         @if (!view.readonly) {
           <button
             type="submit"
             class="testing-library-fix tw:dv-button-main-primary"
             data-testid="button-save-continue"
           >
-            {{ 'shared.form.save-and-continue' | transloco }}
+            {{ t('shared.form.save-and-continue') }}
           </button>
         } @else {
           <button
@@ -178,7 +162,7 @@
             (click)="handleContinue()"
             data-testid="button-next"
           >
-            {{ 'shared.form.gonext' | transloco }}
+            {{ t('shared.form.gonext') }}
           </button>
         }
       </dv-shared-ui-step-form-buttons>

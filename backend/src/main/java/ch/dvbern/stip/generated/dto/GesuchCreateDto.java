@@ -15,12 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchCreateDto  implements Serializable {
   private @Valid UUID ausbildungId;
+
+  protected GesuchCreateDto(GesuchCreateDtoBuilder<?, ?> b) {
+    this.ausbildungId = b.ausbildungId;
+  }
+
+  public GesuchCreateDto() {
+  }
 
   /**
    **/
@@ -81,5 +88,33 @@ public class GesuchCreateDto  implements Serializable {
   }
 
 
+  public static GesuchCreateDtoBuilder<?, ?> builder() {
+    return new GesuchCreateDtoBuilderImpl();
+  }
+
+  private static final class GesuchCreateDtoBuilderImpl extends GesuchCreateDtoBuilder<GesuchCreateDto, GesuchCreateDtoBuilderImpl> {
+
+    @Override
+    protected GesuchCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchCreateDto build() {
+      return new GesuchCreateDto(this);
+    }
+  }
+
+  public static abstract class GesuchCreateDtoBuilder<C extends GesuchCreateDto, B extends GesuchCreateDtoBuilder<C, B>>  {
+    private UUID ausbildungId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B ausbildungId(UUID ausbildungId) {
+      this.ausbildungId = ausbildungId;
+      return self();
+    }
+  }
 }
 

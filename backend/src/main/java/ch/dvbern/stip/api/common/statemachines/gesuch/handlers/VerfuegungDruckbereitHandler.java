@@ -20,12 +20,12 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
-    private final ConfigService configService;
     private final BerechnungService berechnungService;
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungPdfService verfuegungPdfService;
@@ -47,9 +46,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
         if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {
             stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-                gesuch,
-                configService.getCurrentDmnMajorVersion(),
-                configService.getCurrentDmnMinorVersion()
+                gesuch
             );
 
             final int berechnungsresultat = stipendien.getBerechnungStipendium();
@@ -58,7 +55,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             latestVerfuegung.setVerfuegungStatus(
                 hasAnspruch ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH
             );
-            latestVerfuegung.setBerechnungJsonData(BerechnungService.serializeBerechnungresultatDto(stipendien));
+            latestVerfuegung.setBerechnungJsonData(BerechnungUtil.serializeBerechnungresultatDto(stipendien));
 
             if (hasAnspruch || !gesuch.isFirstVerfuegung()) {
                 buchhaltungService.createStipendiumBuchhaltungEntry(
@@ -68,6 +65,8 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             }
         }
 
-        verfuegungPdfService.createVerfuegungsDocuments(gesuch, Optional.ofNullable(stipendien));
+        if (latestVerfuegung.getDokumente().isEmpty()) {
+            verfuegungPdfService.createVerfuegungsDocuments(gesuch, Optional.ofNullable(stipendien));
+        }
     }
 }

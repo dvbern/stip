@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PersonInAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersonInAusbildungDto  implements Serializable {
   private @Valid AdresseDto adresse;
@@ -47,6 +47,36 @@ public class PersonInAusbildungDto  implements Serializable {
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
   private @Valid ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB;
+
+  protected PersonInAusbildungDto(PersonInAusbildungDtoBuilder<?, ?> b) {
+    this.adresse = b.adresse;
+    this.sozialversicherungsnummer = b.sozialversicherungsnummer;
+    this.vorname = b.vorname;
+    this.anrede = b.anrede;
+    this.identischerZivilrechtlicherWohnsitz = b.identischerZivilrechtlicherWohnsitz;
+    this.email = b.email;
+    this.telefonnummer = b.telefonnummer;
+    this.geburtsdatum = b.geburtsdatum;
+    this.nationalitaetId = b.nationalitaetId;
+    this.wohnsitz = b.wohnsitz;
+    this.sozialhilfebeitraege = b.sozialhilfebeitraege;
+    this.nachname = b.nachname;
+    this.korrespondenzSprache = b.korrespondenzSprache;
+    this.heimatort = b.heimatort;
+    this.heimatortPLZ = b.heimatortPLZ;
+    this.niederlassungsstatus = b.niederlassungsstatus;
+    this.einreisedatum = b.einreisedatum;
+    this.zivilstand = b.zivilstand;
+    this.wohnsitzAnteilMutter = b.wohnsitzAnteilMutter;
+    this.wohnsitzAnteilVater = b.wohnsitzAnteilVater;
+    this.vormundschaft = b.vormundschaft;
+    this.identischerZivilrechtlicherWohnsitzOrt = b.identischerZivilrechtlicherWohnsitzOrt;
+    this.identischerZivilrechtlicherWohnsitzPLZ = b.identischerZivilrechtlicherWohnsitzPLZ;
+    this.zustaendigeKESB = b.zustaendigeKESB;
+  }
+
+  public PersonInAusbildungDto() {
+  }
 
   /**
    **/
@@ -586,5 +616,148 @@ public class PersonInAusbildungDto  implements Serializable {
   }
 
 
+  public static PersonInAusbildungDtoBuilder<?, ?> builder() {
+    return new PersonInAusbildungDtoBuilderImpl();
+  }
+
+  private static final class PersonInAusbildungDtoBuilderImpl extends PersonInAusbildungDtoBuilder<PersonInAusbildungDto, PersonInAusbildungDtoBuilderImpl> {
+
+    @Override
+    protected PersonInAusbildungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PersonInAusbildungDto build() {
+      return new PersonInAusbildungDto(this);
+    }
+  }
+
+  public static abstract class PersonInAusbildungDtoBuilder<C extends PersonInAusbildungDto, B extends PersonInAusbildungDtoBuilder<C, B>>  {
+    private AdresseDto adresse;
+    private String sozialversicherungsnummer;
+    private String vorname;
+    private ch.dvbern.stip.api.common.type.Anrede anrede;
+    private Boolean identischerZivilrechtlicherWohnsitz;
+    private String email;
+    private String telefonnummer;
+    private LocalDate geburtsdatum;
+    private UUID nationalitaetId;
+    private ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
+    private Boolean sozialhilfebeitraege;
+    private String nachname;
+    private ch.dvbern.stip.api.personinausbildung.type.Sprache korrespondenzSprache;
+    private String heimatort;
+    private String heimatortPLZ;
+    private ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus;
+    private LocalDate einreisedatum;
+    private ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
+    private BigDecimal wohnsitzAnteilMutter;
+    private BigDecimal wohnsitzAnteilVater;
+    private Boolean vormundschaft;
+    private String identischerZivilrechtlicherWohnsitzOrt;
+    private String identischerZivilrechtlicherWohnsitzPLZ;
+    private ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B adresse(AdresseDto adresse) {
+      this.adresse = adresse;
+      return self();
+    }
+    public B sozialversicherungsnummer(String sozialversicherungsnummer) {
+      this.sozialversicherungsnummer = sozialversicherungsnummer;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B anrede(ch.dvbern.stip.api.common.type.Anrede anrede) {
+      this.anrede = anrede;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
+      this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B telefonnummer(String telefonnummer) {
+      this.telefonnummer = telefonnummer;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B nationalitaetId(UUID nationalitaetId) {
+      this.nationalitaetId = nationalitaetId;
+      return self();
+    }
+    public B wohnsitz(ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz) {
+      this.wohnsitz = wohnsitz;
+      return self();
+    }
+    public B sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
+      this.sozialhilfebeitraege = sozialhilfebeitraege;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B korrespondenzSprache(ch.dvbern.stip.api.personinausbildung.type.Sprache korrespondenzSprache) {
+      this.korrespondenzSprache = korrespondenzSprache;
+      return self();
+    }
+    public B heimatort(String heimatort) {
+      this.heimatort = heimatort;
+      return self();
+    }
+    public B heimatortPLZ(String heimatortPLZ) {
+      this.heimatortPLZ = heimatortPLZ;
+      return self();
+    }
+    public B niederlassungsstatus(ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus) {
+      this.niederlassungsstatus = niederlassungsstatus;
+      return self();
+    }
+    public B einreisedatum(LocalDate einreisedatum) {
+      this.einreisedatum = einreisedatum;
+      return self();
+    }
+    public B zivilstand(ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand) {
+      this.zivilstand = zivilstand;
+      return self();
+    }
+    public B wohnsitzAnteilMutter(BigDecimal wohnsitzAnteilMutter) {
+      this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
+      return self();
+    }
+    public B wohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
+      this.wohnsitzAnteilVater = wohnsitzAnteilVater;
+      return self();
+    }
+    public B vormundschaft(Boolean vormundschaft) {
+      this.vormundschaft = vormundschaft;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
+      this.identischerZivilrechtlicherWohnsitzOrt = identischerZivilrechtlicherWohnsitzOrt;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
+      this.identischerZivilrechtlicherWohnsitzPLZ = identischerZivilrechtlicherWohnsitzPLZ;
+      return self();
+    }
+    public B zustaendigeKESB(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB) {
+      this.zustaendigeKESB = zustaendigeKESB;
+      return self();
+    }
+  }
 }
 

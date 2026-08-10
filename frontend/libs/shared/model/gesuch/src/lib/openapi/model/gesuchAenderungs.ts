@@ -13,8 +13,11 @@ import { GesuchTrancheSlim } from './gesuchTrancheSlim';
 
 export interface GesuchAenderungs { 
     offen?: GesuchTrancheSlim;
+    eingereicht?: GesuchTrancheSlim;
+    manuell: Array<GesuchTrancheSlim>;
     akzeptiert: Array<GesuchTrancheSlim>;
     abgelehnt: Array<GesuchTrancheSlim>;
+    fehlendeDokumente: Array<GesuchTrancheSlim>;
     canAenderungEinreichen: boolean;
 }
 

@@ -31,9 +31,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoData")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataDto  implements Serializable {
   private @Valid DemoAusbildungDto ausbildung;
@@ -51,6 +51,27 @@ public class DemoDataDto  implements Serializable {
   private @Valid DemoPartnerDto partner;
   private @Valid DemoEinnahmenKostenDto einnahmenKostenPartner;
   private @Valid DemoDataTestBerechnungValuesDto berechnungValues;
+
+  protected DemoDataDto(DemoDataDtoBuilder<?, ?> b) {
+    this.ausbildung = b.ausbildung;
+    this.personInAusbildung = b.personInAusbildung;
+    this.lebenslauf = b.lebenslauf;
+    this.kinder = b.kinder;
+    this.einnahmenKosten = b.einnahmenKosten;
+    this.familiensituation = b.familiensituation;
+    this.elterns = b.elterns;
+    this.steuererklaerung = b.steuererklaerung;
+    this.steuerdaten = b.steuerdaten;
+    this.geschwister = b.geschwister;
+    this.auszahlung = b.auszahlung;
+    this.darlehen = b.darlehen;
+    this.partner = b.partner;
+    this.einnahmenKostenPartner = b.einnahmenKostenPartner;
+    this.berechnungValues = b.berechnungValues;
+  }
+
+  public DemoDataDto() {
+  }
 
   /**
    **/
@@ -482,5 +503,103 @@ public class DemoDataDto  implements Serializable {
   }
 
 
+  public static DemoDataDtoBuilder<?, ?> builder() {
+    return new DemoDataDtoBuilderImpl();
+  }
+
+  private static final class DemoDataDtoBuilderImpl extends DemoDataDtoBuilder<DemoDataDto, DemoDataDtoBuilderImpl> {
+
+    @Override
+    protected DemoDataDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoDataDto build() {
+      return new DemoDataDto(this);
+    }
+  }
+
+  public static abstract class DemoDataDtoBuilder<C extends DemoDataDto, B extends DemoDataDtoBuilder<C, B>>  {
+    private DemoAusbildungDto ausbildung;
+    private DemoPersonInAusbildungDto personInAusbildung;
+    private DemoLebenslaufDto lebenslauf;
+    private List<DemoKindDto> kinder = new ArrayList<>();
+    private DemoEinnahmenKostenDto einnahmenKosten;
+    private DemoFamiliensituationDto familiensituation;
+    private List<DemoElternteilDto> elterns = new ArrayList<>();
+    private List<DemoSteuererklaerungDto> steuererklaerung = new ArrayList<>();
+    private List<DemoSteuerdatenDto> steuerdaten = new ArrayList<>();
+    private List<DemoGeschwisterDto> geschwister = new ArrayList<>();
+    private DemoAuszahlungDto auszahlung;
+    private DemoDarlehenDto darlehen;
+    private DemoPartnerDto partner;
+    private DemoEinnahmenKostenDto einnahmenKostenPartner;
+    private DemoDataTestBerechnungValuesDto berechnungValues;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B ausbildung(DemoAusbildungDto ausbildung) {
+      this.ausbildung = ausbildung;
+      return self();
+    }
+    public B personInAusbildung(DemoPersonInAusbildungDto personInAusbildung) {
+      this.personInAusbildung = personInAusbildung;
+      return self();
+    }
+    public B lebenslauf(DemoLebenslaufDto lebenslauf) {
+      this.lebenslauf = lebenslauf;
+      return self();
+    }
+    public B kinder(List<DemoKindDto> kinder) {
+      this.kinder = kinder;
+      return self();
+    }
+    public B einnahmenKosten(DemoEinnahmenKostenDto einnahmenKosten) {
+      this.einnahmenKosten = einnahmenKosten;
+      return self();
+    }
+    public B familiensituation(DemoFamiliensituationDto familiensituation) {
+      this.familiensituation = familiensituation;
+      return self();
+    }
+    public B elterns(List<DemoElternteilDto> elterns) {
+      this.elterns = elterns;
+      return self();
+    }
+    public B steuererklaerung(List<DemoSteuererklaerungDto> steuererklaerung) {
+      this.steuererklaerung = steuererklaerung;
+      return self();
+    }
+    public B steuerdaten(List<DemoSteuerdatenDto> steuerdaten) {
+      this.steuerdaten = steuerdaten;
+      return self();
+    }
+    public B geschwister(List<DemoGeschwisterDto> geschwister) {
+      this.geschwister = geschwister;
+      return self();
+    }
+    public B auszahlung(DemoAuszahlungDto auszahlung) {
+      this.auszahlung = auszahlung;
+      return self();
+    }
+    public B darlehen(DemoDarlehenDto darlehen) {
+      this.darlehen = darlehen;
+      return self();
+    }
+    public B partner(DemoPartnerDto partner) {
+      this.partner = partner;
+      return self();
+    }
+    public B einnahmenKostenPartner(DemoEinnahmenKostenDto einnahmenKostenPartner) {
+      this.einnahmenKostenPartner = einnahmenKostenPartner;
+      return self();
+    }
+    public B berechnungValues(DemoDataTestBerechnungValuesDto berechnungValues) {
+      this.berechnungValues = berechnungValues;
+      return self();
+    }
+  }
 }
 

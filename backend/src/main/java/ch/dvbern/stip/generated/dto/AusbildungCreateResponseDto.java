@@ -16,13 +16,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungCreateResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungCreateResponseDto  implements Serializable {
   private @Valid AusbildungDto ausbildung;
   private @Valid GesuchsperiodeSelectErrorDto error;
+
+  protected AusbildungCreateResponseDto(AusbildungCreateResponseDtoBuilder<?, ?> b) {
+    this.ausbildung = b.ausbildung;
+    this.error = b.error;
+  }
+
+  public AusbildungCreateResponseDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class AusbildungCreateResponseDto  implements Serializable {
   }
 
 
+  public static AusbildungCreateResponseDtoBuilder<?, ?> builder() {
+    return new AusbildungCreateResponseDtoBuilderImpl();
+  }
+
+  private static final class AusbildungCreateResponseDtoBuilderImpl extends AusbildungCreateResponseDtoBuilder<AusbildungCreateResponseDto, AusbildungCreateResponseDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungCreateResponseDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungCreateResponseDto build() {
+      return new AusbildungCreateResponseDto(this);
+    }
+  }
+
+  public static abstract class AusbildungCreateResponseDtoBuilder<C extends AusbildungCreateResponseDto, B extends AusbildungCreateResponseDtoBuilder<C, B>>  {
+    private AusbildungDto ausbildung;
+    private GesuchsperiodeSelectErrorDto error;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B ausbildung(AusbildungDto ausbildung) {
+      this.ausbildung = ausbildung;
+      return self();
+    }
+    public B error(GesuchsperiodeSelectErrorDto error) {
+      this.error = error;
+      return self();
+    }
+  }
 }
 

@@ -1,6 +1,5 @@
 <ng-container *dvTranslocoSb="let t">
-  <!-- <mat-slide-toggle class=""> Slide me! </mat-slide-toggle> -->
-  <nav class="tw:mt-6" mat-tab-nav-bar [tabPanel]="tabPanel" [disablePagination]="true">
+  <nav class="tw:mt-6" mat-tab-nav-bar [tabPanel]="tabPanel">
     @for (tab of tabsSig(); track tab.key) {
       <a
         mat-tab-link

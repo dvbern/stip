@@ -20,30 +20,23 @@ package ch.dvbern.stip.api.dokument.entity;
 import java.util.Set;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
 class DokumentsRequiredDokumentProducerTest {
-    private DokumentsRequiredDokumentProducer producer;
-
-    private GesuchFormular formular;
-
-    @BeforeEach
-    void setup() {
-        producer = new DokumentsRequiredDokumentProducer();
-        formular = new GesuchFormular();
-    }
 
     @Test
     void requiresIfPiaLedigWithChildren() {
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
+        final var formular = gesuch.getLatestGesuchTranche().getGesuchFormular();
         formular.setPersonInAusbildung(
             new PersonInAusbildung()
                 .setZivilstand(Zivilstand.LEDIG)
@@ -54,7 +47,7 @@ class DokumentsRequiredDokumentProducerTest {
                 )
             );
 
-        final var requiredDocs = producer.getRequiredDokuments(formular);
+        final var requiredDocs = new DokumentsRequiredDokumentProducer().getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION);
     }
 }

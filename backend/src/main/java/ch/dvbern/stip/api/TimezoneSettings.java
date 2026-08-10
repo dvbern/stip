@@ -19,7 +19,7 @@ package ch.dvbern.stip.api;
 
 import java.util.TimeZone;
 
-import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.BusinessDateConstants;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Singleton;
@@ -28,7 +28,7 @@ import jakarta.inject.Singleton;
 public class TimezoneSettings {
     public void setTimezone(@Observes StartupEvent startupEvent) {
         // Statically set the timezone to be Europe/Zurich, no matter what the local or passed zone is
-        TimeZone.setDefault(TimeZone.getTimeZone(DateUtil.ZUERICH_ZONE));
-        System.setProperty("user.timezone", DateUtil.ZUERICH_ZONE.getId());
+        TimeZone.setDefault(TimeZone.getTimeZone(BusinessDateConstants.ZUERICH_ZONE));
+        System.setProperty("user.timezone", BusinessDateConstants.ZUERICH_ZONE.getId());
     }
 }

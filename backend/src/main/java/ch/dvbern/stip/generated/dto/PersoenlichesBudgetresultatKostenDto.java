@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("PersoenlichesBudgetresultatKosten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer total;
@@ -36,11 +36,31 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
   private @Valid Integer medizinischeGrundversorgungTotal;
   private @Valid Integer betreuungskostenKinder;
-  private @Valid Integer kantonsGemeindesteuern;
-  private @Valid Integer bundessteuern;
+  private @Valid Integer steuern;
   private @Valid Integer anteilLebenshaltungskosten;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
+
+  protected PersoenlichesBudgetresultatKostenDto(PersoenlichesBudgetresultatKostenDtoBuilder<?, ?> b) {
+    this.total = b.total;
+    this.ausbildungskosten = b.ausbildungskosten;
+    this.ausbildungskostenTotal = b.ausbildungskostenTotal;
+    this.fahrkosten = b.fahrkosten;
+    this.fahrkostenTotal = b.fahrkostenTotal;
+    this.verpflegungskosten = b.verpflegungskosten;
+    this.grundbedarf = b.grundbedarf;
+    this.wohnkosten = b.wohnkosten;
+    this.medizinischeGrundversorgung = b.medizinischeGrundversorgung;
+    this.medizinischeGrundversorgungTotal = b.medizinischeGrundversorgungTotal;
+    this.betreuungskostenKinder = b.betreuungskostenKinder;
+    this.steuern = b.steuern;
+    this.anteilLebenshaltungskosten = b.anteilLebenshaltungskosten;
+    this.fahrkostenPartner = b.fahrkostenPartner;
+    this.verpflegungPartner = b.verpflegungPartner;
+  }
+
+  public PersoenlichesBudgetresultatKostenDto() {
+  }
 
   /**
    **/
@@ -269,40 +289,21 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatKostenDto kantonsGemeindesteuern(Integer kantonsGemeindesteuern) {
-    this.kantonsGemeindesteuern = kantonsGemeindesteuern;
+  public PersoenlichesBudgetresultatKostenDto steuern(Integer steuern) {
+    this.steuern = steuern;
     return this;
   }
 
   
-  @JsonProperty("kantonsGemeindesteuern")
+  @JsonProperty("steuern")
   @NotNull
-  public Integer getKantonsGemeindesteuern() {
-    return kantonsGemeindesteuern;
+  public Integer getSteuern() {
+    return steuern;
   }
 
-  @JsonProperty("kantonsGemeindesteuern")
-  public void setKantonsGemeindesteuern(Integer kantonsGemeindesteuern) {
-    this.kantonsGemeindesteuern = kantonsGemeindesteuern;
-  }
-
-  /**
-   **/
-  public PersoenlichesBudgetresultatKostenDto bundessteuern(Integer bundessteuern) {
-    this.bundessteuern = bundessteuern;
-    return this;
-  }
-
-  
-  @JsonProperty("bundessteuern")
-  @NotNull
-  public Integer getBundessteuern() {
-    return bundessteuern;
-  }
-
-  @JsonProperty("bundessteuern")
-  public void setBundessteuern(Integer bundessteuern) {
-    this.bundessteuern = bundessteuern;
+  @JsonProperty("steuern")
+  public void setSteuern(Integer steuern) {
+    this.steuern = steuern;
   }
 
   /**
@@ -381,8 +382,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultatKosten.medizinischeGrundversorgung) &&
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
         Objects.equals(this.betreuungskostenKinder, persoenlichesBudgetresultatKosten.betreuungskostenKinder) &&
-        Objects.equals(this.kantonsGemeindesteuern, persoenlichesBudgetresultatKosten.kantonsGemeindesteuern) &&
-        Objects.equals(this.bundessteuern, persoenlichesBudgetresultatKosten.bundessteuern) &&
+        Objects.equals(this.steuern, persoenlichesBudgetresultatKosten.steuern) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner);
@@ -390,7 +390,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, steuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
   }
 
   @Override
@@ -409,8 +409,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
-    sb.append("    kantonsGemeindesteuern: ").append(toIndentedString(kantonsGemeindesteuern)).append("\n");
-    sb.append("    bundessteuern: ").append(toIndentedString(bundessteuern)).append("\n");
+    sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
@@ -430,5 +429,103 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
 
+  public static PersoenlichesBudgetresultatKostenDtoBuilder<?, ?> builder() {
+    return new PersoenlichesBudgetresultatKostenDtoBuilderImpl();
+  }
+
+  private static final class PersoenlichesBudgetresultatKostenDtoBuilderImpl extends PersoenlichesBudgetresultatKostenDtoBuilder<PersoenlichesBudgetresultatKostenDto, PersoenlichesBudgetresultatKostenDtoBuilderImpl> {
+
+    @Override
+    protected PersoenlichesBudgetresultatKostenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PersoenlichesBudgetresultatKostenDto build() {
+      return new PersoenlichesBudgetresultatKostenDto(this);
+    }
+  }
+
+  public static abstract class PersoenlichesBudgetresultatKostenDtoBuilder<C extends PersoenlichesBudgetresultatKostenDto, B extends PersoenlichesBudgetresultatKostenDtoBuilder<C, B>>  {
+    private Integer total;
+    private Integer ausbildungskosten;
+    private Integer ausbildungskostenTotal;
+    private Integer fahrkosten;
+    private Integer fahrkostenTotal;
+    private Integer verpflegungskosten;
+    private Integer grundbedarf;
+    private Integer wohnkosten;
+    private List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
+    private Integer medizinischeGrundversorgungTotal;
+    private Integer betreuungskostenKinder;
+    private Integer steuern;
+    private Integer anteilLebenshaltungskosten;
+    private Integer fahrkostenPartner;
+    private Integer verpflegungPartner;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B total(Integer total) {
+      this.total = total;
+      return self();
+    }
+    public B ausbildungskosten(Integer ausbildungskosten) {
+      this.ausbildungskosten = ausbildungskosten;
+      return self();
+    }
+    public B ausbildungskostenTotal(Integer ausbildungskostenTotal) {
+      this.ausbildungskostenTotal = ausbildungskostenTotal;
+      return self();
+    }
+    public B fahrkosten(Integer fahrkosten) {
+      this.fahrkosten = fahrkosten;
+      return self();
+    }
+    public B fahrkostenTotal(Integer fahrkostenTotal) {
+      this.fahrkostenTotal = fahrkostenTotal;
+      return self();
+    }
+    public B verpflegungskosten(Integer verpflegungskosten) {
+      this.verpflegungskosten = verpflegungskosten;
+      return self();
+    }
+    public B grundbedarf(Integer grundbedarf) {
+      this.grundbedarf = grundbedarf;
+      return self();
+    }
+    public B wohnkosten(Integer wohnkosten) {
+      this.wohnkosten = wohnkosten;
+      return self();
+    }
+    public B medizinischeGrundversorgung(List<PersonValueItemDto> medizinischeGrundversorgung) {
+      this.medizinischeGrundversorgung = medizinischeGrundversorgung;
+      return self();
+    }
+    public B medizinischeGrundversorgungTotal(Integer medizinischeGrundversorgungTotal) {
+      this.medizinischeGrundversorgungTotal = medizinischeGrundversorgungTotal;
+      return self();
+    }
+    public B betreuungskostenKinder(Integer betreuungskostenKinder) {
+      this.betreuungskostenKinder = betreuungskostenKinder;
+      return self();
+    }
+    public B steuern(Integer steuern) {
+      this.steuern = steuern;
+      return self();
+    }
+    public B anteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+      this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
+      return self();
+    }
+    public B fahrkostenPartner(Integer fahrkostenPartner) {
+      this.fahrkostenPartner = fahrkostenPartner;
+      return self();
+    }
+    public B verpflegungPartner(Integer verpflegungPartner) {
+      this.verpflegungPartner = verpflegungPartner;
+      return self();
+    }
+  }
 }
 

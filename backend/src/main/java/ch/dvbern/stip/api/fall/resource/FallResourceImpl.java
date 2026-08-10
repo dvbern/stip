@@ -20,23 +20,29 @@ package ch.dvbern.stip.api.fall.resource;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.authorization.FallAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.generated.api.FallResource;
 import ch.dvbern.stip.generated.dto.FallDto;
+import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_READ;
 
+@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class FallResourceImpl implements FallResource {
     private final FallAuthorizer fallAuthorizer;
     private final FallService fallService;
+    private final PdfPortFactory pdfPortFactory;
 
     @Override
     @RolesAllowed(FALL_CREATE)

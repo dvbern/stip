@@ -14,12 +14,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("JuristischeAbklaerungNotizAntwort")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
   private @Valid String antwort;
+
+  protected JuristischeAbklaerungNotizAntwortDto(JuristischeAbklaerungNotizAntwortDtoBuilder<?, ?> b) {
+    this.antwort = b.antwort;
+  }
+
+  public JuristischeAbklaerungNotizAntwortDto() {
+  }
 
   /**
    **/
@@ -80,5 +87,33 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
   }
 
 
+  public static JuristischeAbklaerungNotizAntwortDtoBuilder<?, ?> builder() {
+    return new JuristischeAbklaerungNotizAntwortDtoBuilderImpl();
+  }
+
+  private static final class JuristischeAbklaerungNotizAntwortDtoBuilderImpl extends JuristischeAbklaerungNotizAntwortDtoBuilder<JuristischeAbklaerungNotizAntwortDto, JuristischeAbklaerungNotizAntwortDtoBuilderImpl> {
+
+    @Override
+    protected JuristischeAbklaerungNotizAntwortDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public JuristischeAbklaerungNotizAntwortDto build() {
+      return new JuristischeAbklaerungNotizAntwortDto(this);
+    }
+  }
+
+  public static abstract class JuristischeAbklaerungNotizAntwortDtoBuilder<C extends JuristischeAbklaerungNotizAntwortDto, B extends JuristischeAbklaerungNotizAntwortDtoBuilder<C, B>>  {
+    private String antwort;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B antwort(String antwort) {
+      this.antwort = antwort;
+      return self();
+    }
+  }
 }
 

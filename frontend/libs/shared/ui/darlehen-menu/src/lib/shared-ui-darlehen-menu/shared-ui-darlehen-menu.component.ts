@@ -19,8 +19,6 @@ import {
   darlehenStatusMapping,
 } from '@dv/shared/model/ui';
 
-export type IdType = 'gesuch' | 'fall';
-
 @Component({
   selector: 'dv-shared-ui-darlehen-menu',
   imports: [CommonModule, TranslocoPipe, RouterModule, MatMenuModule],
@@ -29,12 +27,7 @@ export type IdType = 'gesuch' | 'fall';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiDarlehenMenuComponent {
-  /**
-   * A tuple containing
-   * - Type of ID to be used in the routes (either 'gesuch' or 'fall').
-   * - The actual ID value.
-   */
-  idTypeSig = input.required<[IdType, string | undefined]>();
+  fallIdSig = input.required<string | undefined>();
   displayModeSig = input<'menu' | 'list'>('list');
   darlehenListSig = input.required<FreiwilligDarlehen[] | undefined>();
   canCreateDarlehenSig = input<boolean | undefined>();
@@ -54,17 +47,15 @@ export class SharedUiDarlehenMenuComponent {
     'accepted',
   ];
 
-  idTypeValueSig = computed(() => {
-    const [type, id] = this.idTypeSig();
-    return { type, id };
-  });
-
   darlehenListByStatusSig = computed(() => {
     const darlehenList = this.darlehenListSig() ?? [];
 
     return darlehenList.reduce(
       (acc, darlehen) => {
-        const statusKey = darlehenStatusMapping[darlehen.status!];
+        if (!darlehen.status) {
+          return acc;
+        }
+        const statusKey = darlehenStatusMapping[darlehen.status];
 
         if (!acc[statusKey]) {
           acc[statusKey] = [];

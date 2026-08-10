@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
@@ -70,7 +70,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
     name = "fall",
     indexes = {
         @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-        @Index(name = "IX_fall_mandant", columnList = "mandant")
+        @Index(name = "IX_fall_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -78,14 +78,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Fall extends AbstractMandantEntity {
+public class Fall extends AbstractTenantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "fall_nummer", nullable = false, updatable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Opt
     private String fallNummer;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(
         name = "gesuchsteller_id",
         foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"),
@@ -98,13 +98,13 @@ public class Fall extends AbstractMandantEntity {
         name = "sachbearbeiter_zuordnung_id",
         foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id")
     )
-    @OneToOne(mappedBy = "fall", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "fall", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Zuordnung sachbearbeiterZuordnung;
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
     private Set<Ausbildung> ausbildungs = new HashSet<>();
 
-    @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Buchhaltung> buchhaltungs = new ArrayList<>();
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)

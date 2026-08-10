@@ -26,7 +26,6 @@ import { FileDownloadToken } from '../model/fileDownloadToken';
 import { FreiwilligDarlehen } from '../model/freiwilligDarlehen';
 import { FreiwilligDarlehenGsResponse } from '../model/freiwilligDarlehenGsResponse';
 import { FreiwilligDarlehenUpdateGs } from '../model/freiwilligDarlehenUpdateGs';
-import { GetFreiwilligDarlehenSbQueryType } from '../model/getFreiwilligDarlehenSbQueryType';
 import { Kommentar } from '../model/kommentar';
 import { NullableDarlehenDokument } from '../model/nullableDarlehenDokument';
 import { PaginatedSbFreiwilligDarlehenDashboard } from '../model/paginatedSbFreiwilligDarlehenDashboard';
@@ -110,12 +109,17 @@ export interface DarlehenServiceGetAllFreiwilligDarlehenGsRequestParams {
 }
 
 export interface DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams {
-    gesuchId: string;
+    fallId: string;
 }
 
 export interface DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams {
     /** Die ID vom Gesuch */
     gesuchId: string;
+}
+
+export interface DarlehenServiceGetDarlehenBuchhaltungEntrysByFallIdRequestParams {
+    /** Die ID vom Fall */
+    fallId: string;
 }
 
 export interface DarlehenServiceGetDarlehenDokumentRequestParams {
@@ -132,7 +136,8 @@ export interface DarlehenServiceGetDarlehenNegativVerfuegungDownloadTokenRequest
 }
 
 export interface DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams {
-    getFreiwilligDarlehenSbQueryType: GetFreiwilligDarlehenSbQueryType;
+    bearbeitbar?: boolean;
+    zugewiesen?: boolean;
     fallNummer?: string;
     piaNachname?: string;
     piaVorname?: string;
@@ -1696,11 +1701,11 @@ export class DarlehenService {
     }
 
     public getAllFreiwilligDarlehenSbPath = (requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams) => {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
         }
-        let path = `/api/v1/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let path = `/api/v1/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -1721,9 +1726,9 @@ export class DarlehenService {
      public getAllFreiwilligDarlehenSb$(requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<FreiwilligDarlehen>>>;
      public getAllFreiwilligDarlehenSb$(requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<FreiwilligDarlehen>>>;
      public getAllFreiwilligDarlehenSb$(requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1771,7 +1776,7 @@ export class DarlehenService {
             }
         }
 
-        const localVarPath = `/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Array<FreiwilligDarlehen>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -1861,6 +1866,95 @@ export class DarlehenService {
         }
 
         const localVarPath = `/darlehen/buchhaltung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<DarlehenBuchhaltungOverview>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public getDarlehenBuchhaltungEntrysByFallIdPath = (requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysByFallIdRequestParams) => {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getDarlehenBuchhaltungEntrysByFallId$.');
+        }
+        let path = `/api/v1/darlehen/buchhaltung/fall/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Gets all darlehen buchhaltungsentrys by fallId
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getDarlehenBuchhaltungEntrysByFallId$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysByFallIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<DarlehenBuchhaltungOverview>;
+     public getDarlehenBuchhaltungEntrysByFallId$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysByFallIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<DarlehenBuchhaltungOverview>>;
+     public getDarlehenBuchhaltungEntrysByFallId$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysByFallIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<DarlehenBuchhaltungOverview>>;
+     public getDarlehenBuchhaltungEntrysByFallId$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysByFallIdRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getDarlehenBuchhaltungEntrysByFallId$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/darlehen/buchhaltung/fall/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<DarlehenBuchhaltungOverview>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -2149,10 +2243,8 @@ export class DarlehenService {
     }
 
     public getFreiwilligDarlehenDashboardSbPath = (requestParameters: DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams) => {
-        const getFreiwilligDarlehenSbQueryType = requestParameters.getFreiwilligDarlehenSbQueryType;
-        if (getFreiwilligDarlehenSbQueryType === null || getFreiwilligDarlehenSbQueryType === undefined) {
-            throw new Error('Required parameter getFreiwilligDarlehenSbQueryType was null or undefined when calling getFreiwilligDarlehenDashboardSb$.');
-        }
+        const bearbeitbar = requestParameters.bearbeitbar;
+        const zugewiesen = requestParameters.zugewiesen;
         const fallNummer = requestParameters.fallNummer;
         const piaNachname = requestParameters.piaNachname;
         const piaVorname = requestParameters.piaVorname;
@@ -2171,10 +2263,18 @@ export class DarlehenService {
         }
         const sortColumn = requestParameters.sortColumn;
         const sortOrder = requestParameters.sortOrder;
-        let path = `/api/v1/darlehen/dashboard/${this.configuration.encodeParam({name: "getFreiwilligDarlehenSbQueryType", value: getFreiwilligDarlehenSbQueryType, in: "path", style: "simple", explode: false, dataType: "GetFreiwilligDarlehenSbQueryType", dataFormat: undefined})}`;
+        let path = `/api/v1/darlehen/dashboard`;
 
         // Query Params
         let queryParams = new URLSearchParams();
+
+        if (bearbeitbar !== undefined && bearbeitbar !== null) {
+          queryParams.append('bearbeitbar', bearbeitbar.toString());
+        }
+
+        if (zugewiesen !== undefined && zugewiesen !== null) {
+          queryParams.append('zugewiesen', zugewiesen.toString());
+        }
 
         if (fallNummer !== undefined && fallNummer !== null) {
           queryParams.append('fallNummer', fallNummer.toString());
@@ -2240,10 +2340,8 @@ export class DarlehenService {
      public getFreiwilligDarlehenDashboardSb$(requestParameters: DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSbFreiwilligDarlehenDashboard>>;
      public getFreiwilligDarlehenDashboardSb$(requestParameters: DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSbFreiwilligDarlehenDashboard>>;
      public getFreiwilligDarlehenDashboardSb$(requestParameters: DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const getFreiwilligDarlehenSbQueryType = requestParameters.getFreiwilligDarlehenSbQueryType;
-        if (getFreiwilligDarlehenSbQueryType === null || getFreiwilligDarlehenSbQueryType === undefined) {
-            throw new Error('Required parameter getFreiwilligDarlehenSbQueryType was null or undefined when calling getFreiwilligDarlehenDashboardSb$.');
-        }
+        const bearbeitbar = requestParameters.bearbeitbar;
+        const zugewiesen = requestParameters.zugewiesen;
         const fallNummer = requestParameters.fallNummer;
         const piaNachname = requestParameters.piaNachname;
         const piaVorname = requestParameters.piaVorname;
@@ -2264,6 +2362,14 @@ export class DarlehenService {
         const sortOrder = requestParameters.sortOrder;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (bearbeitbar !== undefined && bearbeitbar !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>bearbeitbar, 'bearbeitbar');
+        }
+        if (zugewiesen !== undefined && zugewiesen !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>zugewiesen, 'zugewiesen');
+        }
         if (fallNummer !== undefined && fallNummer !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>fallNummer, 'fallNummer');
@@ -2358,7 +2464,7 @@ export class DarlehenService {
             }
         }
 
-        const localVarPath = `/darlehen/dashboard/${this.configuration.encodeParam({name: "getFreiwilligDarlehenSbQueryType", value: getFreiwilligDarlehenSbQueryType, in: "path", style: "simple", explode: false, dataType: "GetFreiwilligDarlehenSbQueryType", dataFormat: undefined})}`;
+        const localVarPath = `/darlehen/dashboard`;
         return this.httpClient.request<PaginatedSbFreiwilligDarlehenDashboard>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

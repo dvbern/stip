@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("EinnahmenKostenUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class EinnahmenKostenUpdateDto  implements Serializable {
   private @Valid Integer nettoerwerbseinkommen;
@@ -43,6 +43,36 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   private @Valid Integer steuerjahr;
   private @Valid Integer vermoegen;
   private @Valid Integer steuern;
+
+  protected EinnahmenKostenUpdateDto(EinnahmenKostenUpdateDtoBuilder<?, ?> b) {
+    this.nettoerwerbseinkommen = b.nettoerwerbseinkommen;
+    this.fahrkosten = b.fahrkosten;
+    this.arbeitspensumProzent = b.arbeitspensumProzent;
+    this.unterhaltsbeitraege = b.unterhaltsbeitraege;
+    this.einnahmenBGSA = b.einnahmenBGSA;
+    this.taggelderAHVIV = b.taggelderAHVIV;
+    this.andereEinnahmen = b.andereEinnahmen;
+    this.zulagen = b.zulagen;
+    this.renten = b.renten;
+    this.eoLeistungen = b.eoLeistungen;
+    this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.beitraege = b.beitraege;
+    this.ausbildungskosten = b.ausbildungskosten;
+    this.wohnkosten = b.wohnkosten;
+    this.wgWohnend = b.wgWohnend;
+    this.wgAnzahlPersonen = b.wgAnzahlPersonen;
+    this.alternativeWohnformWohnend = b.alternativeWohnformWohnend;
+    this.auswaertigeMittagessenProWoche = b.auswaertigeMittagessenProWoche;
+    this.verpflegungskosten = b.verpflegungskosten;
+    this.betreuungskostenKinder = b.betreuungskostenKinder;
+    this.veranlagungsStatus = b.veranlagungsStatus;
+    this.steuerjahr = b.steuerjahr;
+    this.vermoegen = b.vermoegen;
+    this.steuern = b.steuern;
+  }
+
+  public EinnahmenKostenUpdateDto() {
+  }
 
   /**
    **/
@@ -479,7 +509,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   }
 
   /**
-   * transient and calculated readonly field
+   * only visible by SB
    * minimum: 0
    * maximum: 2147483647
    **/
@@ -585,5 +615,148 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   }
 
 
+  public static EinnahmenKostenUpdateDtoBuilder<?, ?> builder() {
+    return new EinnahmenKostenUpdateDtoBuilderImpl();
+  }
+
+  private static final class EinnahmenKostenUpdateDtoBuilderImpl extends EinnahmenKostenUpdateDtoBuilder<EinnahmenKostenUpdateDto, EinnahmenKostenUpdateDtoBuilderImpl> {
+
+    @Override
+    protected EinnahmenKostenUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public EinnahmenKostenUpdateDto build() {
+      return new EinnahmenKostenUpdateDto(this);
+    }
+  }
+
+  public static abstract class EinnahmenKostenUpdateDtoBuilder<C extends EinnahmenKostenUpdateDto, B extends EinnahmenKostenUpdateDtoBuilder<C, B>>  {
+    private Integer nettoerwerbseinkommen;
+    private Integer fahrkosten;
+    private Integer arbeitspensumProzent;
+    private Integer unterhaltsbeitraege;
+    private Integer einnahmenBGSA;
+    private Integer taggelderAHVIV;
+    private Integer andereEinnahmen;
+    private Integer zulagen;
+    private Integer renten;
+    private Integer eoLeistungen;
+    private Integer ergaenzungsleistungen;
+    private Integer beitraege;
+    private Integer ausbildungskosten;
+    private Integer wohnkosten;
+    private Boolean wgWohnend;
+    private Integer wgAnzahlPersonen;
+    private Boolean alternativeWohnformWohnend;
+    private Integer auswaertigeMittagessenProWoche;
+    private Integer verpflegungskosten;
+    private Integer betreuungskostenKinder;
+    private String veranlagungsStatus;
+    private Integer steuerjahr;
+    private Integer vermoegen;
+    private Integer steuern;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B nettoerwerbseinkommen(Integer nettoerwerbseinkommen) {
+      this.nettoerwerbseinkommen = nettoerwerbseinkommen;
+      return self();
+    }
+    public B fahrkosten(Integer fahrkosten) {
+      this.fahrkosten = fahrkosten;
+      return self();
+    }
+    public B arbeitspensumProzent(Integer arbeitspensumProzent) {
+      this.arbeitspensumProzent = arbeitspensumProzent;
+      return self();
+    }
+    public B unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+      this.unterhaltsbeitraege = unterhaltsbeitraege;
+      return self();
+    }
+    public B einnahmenBGSA(Integer einnahmenBGSA) {
+      this.einnahmenBGSA = einnahmenBGSA;
+      return self();
+    }
+    public B taggelderAHVIV(Integer taggelderAHVIV) {
+      this.taggelderAHVIV = taggelderAHVIV;
+      return self();
+    }
+    public B andereEinnahmen(Integer andereEinnahmen) {
+      this.andereEinnahmen = andereEinnahmen;
+      return self();
+    }
+    public B zulagen(Integer zulagen) {
+      this.zulagen = zulagen;
+      return self();
+    }
+    public B renten(Integer renten) {
+      this.renten = renten;
+      return self();
+    }
+    public B eoLeistungen(Integer eoLeistungen) {
+      this.eoLeistungen = eoLeistungen;
+      return self();
+    }
+    public B ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+      this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B beitraege(Integer beitraege) {
+      this.beitraege = beitraege;
+      return self();
+    }
+    public B ausbildungskosten(Integer ausbildungskosten) {
+      this.ausbildungskosten = ausbildungskosten;
+      return self();
+    }
+    public B wohnkosten(Integer wohnkosten) {
+      this.wohnkosten = wohnkosten;
+      return self();
+    }
+    public B wgWohnend(Boolean wgWohnend) {
+      this.wgWohnend = wgWohnend;
+      return self();
+    }
+    public B wgAnzahlPersonen(Integer wgAnzahlPersonen) {
+      this.wgAnzahlPersonen = wgAnzahlPersonen;
+      return self();
+    }
+    public B alternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+      this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+      return self();
+    }
+    public B auswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
+      this.auswaertigeMittagessenProWoche = auswaertigeMittagessenProWoche;
+      return self();
+    }
+    public B verpflegungskosten(Integer verpflegungskosten) {
+      this.verpflegungskosten = verpflegungskosten;
+      return self();
+    }
+    public B betreuungskostenKinder(Integer betreuungskostenKinder) {
+      this.betreuungskostenKinder = betreuungskostenKinder;
+      return self();
+    }
+    public B veranlagungsStatus(String veranlagungsStatus) {
+      this.veranlagungsStatus = veranlagungsStatus;
+      return self();
+    }
+    public B steuerjahr(Integer steuerjahr) {
+      this.steuerjahr = steuerjahr;
+      return self();
+    }
+    public B vermoegen(Integer vermoegen) {
+      this.vermoegen = vermoegen;
+      return self();
+    }
+    public B steuern(Integer steuern) {
+      this.steuern = steuern;
+      return self();
+    }
+  }
 }
 

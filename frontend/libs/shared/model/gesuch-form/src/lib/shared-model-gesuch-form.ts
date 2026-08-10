@@ -9,12 +9,15 @@ export type StepValidation = {
 
 export type StepState = 'VALID' | 'INVALID' | 'WARNING';
 
+export type StepGroup = 'PERSOENLICHE_ANGABEN' | 'FAMILIENANGABEN';
+
 export interface GesuchFormStep {
   route: string;
   routes?: string[];
   translationKey: SharedTranslationKey;
   titleTranslationKey: SharedTranslationKey;
   iconSymbolName: string;
+  group?: StepGroup;
 }
 
 export type GesuchFormStepProgress = {

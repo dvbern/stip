@@ -26,9 +26,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchFormularUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchFormularUpdateDto  implements Serializable {
   private @Valid PersonInAusbildungUpdateDto personInAusbildung;
@@ -41,6 +41,22 @@ public class GesuchFormularUpdateDto  implements Serializable {
   private @Valid EinnahmenKostenUpdateDto einnahmenKosten;
   private @Valid EinnahmenKostenUpdateDto einnahmenKostenPartner;
   private @Valid List<SteuererklaerungUpdateDto> steuererklaerung;
+
+  protected GesuchFormularUpdateDto(GesuchFormularUpdateDtoBuilder<?, ?> b) {
+    this.personInAusbildung = b.personInAusbildung;
+    this.familiensituation = b.familiensituation;
+    this.partner = b.partner;
+    this.elterns = b.elterns;
+    this.geschwisters = b.geschwisters;
+    this.lebenslaufItems = b.lebenslaufItems;
+    this.kinds = b.kinds;
+    this.einnahmenKosten = b.einnahmenKosten;
+    this.einnahmenKostenPartner = b.einnahmenKostenPartner;
+    this.steuererklaerung = b.steuererklaerung;
+  }
+
+  public GesuchFormularUpdateDto() {
+  }
 
   /**
    **/
@@ -360,5 +376,78 @@ public class GesuchFormularUpdateDto  implements Serializable {
   }
 
 
+  public static GesuchFormularUpdateDtoBuilder<?, ?> builder() {
+    return new GesuchFormularUpdateDtoBuilderImpl();
+  }
+
+  private static final class GesuchFormularUpdateDtoBuilderImpl extends GesuchFormularUpdateDtoBuilder<GesuchFormularUpdateDto, GesuchFormularUpdateDtoBuilderImpl> {
+
+    @Override
+    protected GesuchFormularUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchFormularUpdateDto build() {
+      return new GesuchFormularUpdateDto(this);
+    }
+  }
+
+  public static abstract class GesuchFormularUpdateDtoBuilder<C extends GesuchFormularUpdateDto, B extends GesuchFormularUpdateDtoBuilder<C, B>>  {
+    private PersonInAusbildungUpdateDto personInAusbildung;
+    private FamiliensituationUpdateDto familiensituation;
+    private PartnerUpdateDto partner;
+    private List<ElternUpdateDto> elterns;
+    private List<GeschwisterUpdateDto> geschwisters;
+    private List<LebenslaufItemUpdateDto> lebenslaufItems;
+    private List<KindUpdateDto> kinds;
+    private EinnahmenKostenUpdateDto einnahmenKosten;
+    private EinnahmenKostenUpdateDto einnahmenKostenPartner;
+    private List<SteuererklaerungUpdateDto> steuererklaerung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B personInAusbildung(PersonInAusbildungUpdateDto personInAusbildung) {
+      this.personInAusbildung = personInAusbildung;
+      return self();
+    }
+    public B familiensituation(FamiliensituationUpdateDto familiensituation) {
+      this.familiensituation = familiensituation;
+      return self();
+    }
+    public B partner(PartnerUpdateDto partner) {
+      this.partner = partner;
+      return self();
+    }
+    public B elterns(List<ElternUpdateDto> elterns) {
+      this.elterns = elterns;
+      return self();
+    }
+    public B geschwisters(List<GeschwisterUpdateDto> geschwisters) {
+      this.geschwisters = geschwisters;
+      return self();
+    }
+    public B lebenslaufItems(List<LebenslaufItemUpdateDto> lebenslaufItems) {
+      this.lebenslaufItems = lebenslaufItems;
+      return self();
+    }
+    public B kinds(List<KindUpdateDto> kinds) {
+      this.kinds = kinds;
+      return self();
+    }
+    public B einnahmenKosten(EinnahmenKostenUpdateDto einnahmenKosten) {
+      this.einnahmenKosten = einnahmenKosten;
+      return self();
+    }
+    public B einnahmenKostenPartner(EinnahmenKostenUpdateDto einnahmenKostenPartner) {
+      this.einnahmenKostenPartner = einnahmenKostenPartner;
+      return self();
+    }
+    public B steuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+      this.steuererklaerung = steuererklaerung;
+      return self();
+    }
+  }
 }
 

@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
-import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
@@ -47,7 +47,7 @@ public class LandTestSeeding extends Seeder {
         TestConstants.TEST_LAND_STATELESS_ID = stateless.getId();
     }
 
-    protected List<String> getProfiles() {
-        return List.of("test");
+    protected Set<String> getProfiles() {
+        return Set.of("test");
     }
 }

@@ -22,14 +22,16 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.VerfuegungAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.VerfuegungResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
+import ch.dvbern.stip.generated.dto.VerfuegungFallDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -48,10 +50,11 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@PopulateCurrentBenutzerContext
 public class VerfuegungResourceImpl implements VerfuegungResource {
 
     private final BenutzerService benutzerService;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final JWTParser jwtParser;
     private final VerfuegungService verfuegungService;
     private final VerfuegungAuthorizer verfuegungAuthorizer;
@@ -65,7 +68,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
         final var verfuegungDokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM
         );
         return verfuegungService.getVerfuegungDokument(verfuegungDokumentId);
@@ -80,7 +83,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
             verfuegungDokumentId,
             DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 
@@ -90,5 +93,12 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
         verfuegungAuthorizer.canGetVerfuegungen();
 
         return verfuegungService.getVerfuegungen(gesuchId);
+    }
+
+    @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public List<VerfuegungFallDto> getVerfuegungenByFallId(UUID fallId) {
+        verfuegungAuthorizer.canGetVerfuegungenByFallId(fallId);
+        return verfuegungService.getVerfuegungenByFallId(fallId);
     }
 }

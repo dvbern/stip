@@ -28,8 +28,10 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer
 import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
+import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
@@ -37,6 +39,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
@@ -52,8 +55,29 @@ public class GesuchStatusService {
     private final Validator validator;
     private final GesuchStatusConfigProducer configProducer;
     private final BenutzerService benutzerService;
+    private final RequiredDokumentService requiredDokumentService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Transactional
+    public boolean canFreigabeVerfuegen(final Gesuch gesuch) {
+        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_FREIGABE) {
+            return false;
+        }
+
+        final var currentBenutzern = benutzerService.getCurrentBenutzer();
+        final var inFreigabeBenutzerUUID =
+            gesuchHistoryRepository.getUserMutiertOfLatestToInFreigabeChange(gesuch.getId());
+
+        if (inFreigabeBenutzerUUID.isEmpty()) {
+            LOG.warn("No user found that made transition to InFreigabe state for gesuch {}", gesuch.getId());
+            return true;
+        }
+
+        return !inFreigabeBenutzerUUID.get().equals(currentBenutzern.getId());
+    }
+
+    @Transactional
+    @WithSpan
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
         triggerStateMachineEventWithComment(gesuch, event, null, false);
     }
@@ -102,10 +126,15 @@ public class GesuchStatusService {
 
     public boolean canBearbeitungAbschliessen(final Gesuch gesuch) {
         return Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(gesuch.getGesuchStatus())
-        && canFire(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
+        && canFire(gesuch, GesuchStatusChangeEvent.IN_FREIGABE)
+        && requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuch);
     }
 
-    public boolean canGetBerechnung(final Gesuch gesuch) {
+    public boolean canGetBerechnungGs(final Gesuch gesuch) {
+        return gesuch.isVerfuegt();
+    }
+
+    public boolean canGetBerechnungSb(final Gesuch gesuch) {
         boolean canGetBerechnung =
             GesuchUtil.gesuchIsInOneOfGesuchStatus(gesuch, Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG);
         for (var gesuchTranche : gesuch.getGesuchTranchen()) {

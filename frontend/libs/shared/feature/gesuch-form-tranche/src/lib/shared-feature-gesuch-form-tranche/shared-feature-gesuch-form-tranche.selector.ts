@@ -43,7 +43,7 @@ export const selectSharedFeatureGesuchFormTrancheView = createSelector(
       gesuchsNummer: cache.gesuch?.gesuchNummer,
       sachbearbeiter: cache.gesuch?.bearbeiter,
       lastUpdate: gesuchsView.lastUpdate,
-      appType: config.compileTimeConfig?.appType,
+      appConfig: config.appConfig,
       readonly: gesuchsView.readonly,
     };
   },

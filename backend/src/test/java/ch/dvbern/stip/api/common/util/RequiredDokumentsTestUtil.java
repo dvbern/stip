@@ -35,7 +35,7 @@ public class RequiredDokumentsTestUtil {
     ) {
         final var requiredTypes = new ArrayList<Pair<String, Set<DokumentTyp>>>();
         for (final var producer : producers) {
-            requiredTypes.add(producer.getRequiredDokuments(formular));
+            requiredTypes.add(producer.getRequiredDokuments(formular, true));
         }
 
         return requiredTypes.stream().filter(pair -> !pair.getRight().isEmpty()).toList();

@@ -48,7 +48,7 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
@@ -99,12 +99,13 @@ import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -124,12 +125,14 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
+import ch.dvbern.stip.generated.dto.InitialGesuchsDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDto;
 import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
+import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -144,7 +147,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_NACHFRIST_NOT_FUTURE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -171,7 +173,8 @@ public class GesuchService {
     private final GesuchNummerService gesuchNummerService;
     private final FallRepository fallRepository;
     private final FallDashboardItemMapper fallDashboardItemMapper;
-    private final ConfigService configService;
+    private final StipConfig config;
+    private final TenantService tenantService;
     private final GesuchNotizService gesuchNotizService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
@@ -277,7 +280,7 @@ public class GesuchService {
     public void updateGesuch(
         final UUID gesuchId,
         final GesuchUpdateDto gesuchUpdateDto,
-        final boolean overrideIncomingVersteckteEltern
+        final boolean withConfidentialFields
     ) throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
         var trancheToUpdate = gesuch
@@ -303,7 +306,7 @@ public class GesuchService {
         updateGesuchTranche(
             gesuchUpdateDto.getGesuchTrancheToWorkWith(),
             trancheToUpdate,
-            overrideIncomingVersteckteEltern
+            withConfidentialFields
         );
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
@@ -318,9 +321,9 @@ public class GesuchService {
     private void updateGesuchTranche(
         final GesuchTrancheUpdateDto trancheUpdate,
         final GesuchTranche trancheToUpdate,
-        final boolean overrideIncomingVersteckteEltern
+        final boolean withConfidentialFields
     ) {
-        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate, overrideIncomingVersteckteEltern);
+        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate, withConfidentialFields);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
@@ -417,28 +420,34 @@ public class GesuchService {
         gesuch.getGesuchTranchen().add(tranche);
     }
 
-    @Transactional
-    public PaginatedSbGesucheDashboardDto findGesucheSB(
-        final GetGesucheSBQueryType queryType,
+    private void checkPageSizeSB(
+        final int pageSize
+    ) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
+            throw new IllegalArgumentException("Page size exceeded max allowed page size");
+        }
+    }
+
+    private int configureQuery(
+        JPAQuery<? extends AbstractEntity> baseQuery,
+        final Boolean zugewiesen,
         final String fallNummer,
         final String piaNachname,
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
-        final String status,
         final String bearbeiter,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
-        final GesuchTrancheTyp typ,
         final int page,
         final int pageSize,
         final SbGesucheDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
-            throw new IllegalArgumentException("Page size exceeded max allowed page size");
-        }
+        final var currentBenutzerId = benutzerService.getCurrentBenutzer().getId();
 
-        final var baseQuery = sbDashboardQueryBuilder.baseQuery(queryType, typ);
+        if (Boolean.TRUE.equals(zugewiesen)) {
+            sbDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, currentBenutzerId);
+        }
 
         if (fallNummer != null) {
             sbDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
@@ -454,10 +463,6 @@ public class GesuchService {
 
         if (piaGeburtsdatum != null) {
             sbDashboardQueryBuilder.piaGeburtsdatum(baseQuery, piaGeburtsdatum);
-        }
-
-        if (status != null) {
-            sbDashboardQueryBuilder.status(baseQuery, typ, status);
         }
 
         if (bearbeiter != null) {
@@ -479,15 +484,169 @@ public class GesuchService {
         }
 
         sbDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.stream()
-            .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, typ))
+        return Math.toIntExact(countQuery.fetchFirst());
+    }
+
+    @Transactional
+    public PaginatedSbGesucheDashboardDto getDashboardSB(
+        final GesuchTrancheTyp trancheTyp,
+        final GetGesucheSBQueryType queryType,
+        final Boolean bearbeitbar,
+        final Boolean zugewiesen,
+        final String fallNummer,
+        final String piaNachname,
+        final String piaVorname,
+        final LocalDate piaGeburtsdatum,
+        final String status,
+        final String bearbeiter,
+        final LocalDate letzteAktivitaetFrom,
+        final LocalDate letzteAktivitaetTo,
+        final int page,
+        final int pageSize,
+        final SbGesucheDashboardColumn sortColumn,
+        final SortOrder sortOrder
+    ) {
+        return switch (trancheTyp) {
+            case TRANCHE -> findGesuchsSB(
+                queryType,
+                bearbeitbar,
+                zugewiesen,
+                fallNummer,
+                piaNachname,
+                piaVorname,
+                piaGeburtsdatum,
+                status,
+                bearbeiter,
+                letzteAktivitaetFrom,
+                letzteAktivitaetTo,
+                page,
+                pageSize,
+                sortColumn,
+                sortOrder
+            );
+            case AENDERUNG -> findAendeurngsSB(
+                bearbeitbar,
+                zugewiesen,
+                fallNummer,
+                piaNachname,
+                piaVorname,
+                piaGeburtsdatum,
+                status,
+                bearbeiter,
+                letzteAktivitaetFrom,
+                letzteAktivitaetTo,
+                page,
+                pageSize,
+                sortColumn,
+                sortOrder
+            );
+        };
+    }
+
+    private PaginatedSbGesucheDashboardDto findGesuchsSB(
+        final GetGesucheSBQueryType queryType,
+        final Boolean bearbeitbar,
+        final Boolean zugewiesen,
+        final String fallNummer,
+        final String piaNachname,
+        final String piaVorname,
+        final LocalDate piaGeburtsdatum,
+        final String status,
+        final String bearbeiter,
+        final LocalDate letzteAktivitaetFrom,
+        final LocalDate letzteAktivitaetTo,
+        final int page,
+        final int pageSize,
+        final SbGesucheDashboardColumn sortColumn,
+        final SortOrder sortOrder
+    ) {
+        checkPageSizeSB(pageSize);
+        final var query = sbDashboardQueryBuilder.baseGesuchQuery(queryType);
+        final var totalEntries = configureQuery(
+            query,
+            zugewiesen,
+            fallNummer,
+            piaNachname,
+            piaVorname,
+            piaGeburtsdatum,
+            bearbeiter,
+            letzteAktivitaetFrom,
+            letzteAktivitaetTo,
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder
+        );
+
+        if (Boolean.TRUE.equals(bearbeitbar)) {
+            sbDashboardQueryBuilder.onlyBearbeitbarGesuchs(query);
+        }
+        if (status != null) {
+            sbDashboardQueryBuilder.gesuchStatus(query, status);
+        }
+
+        final var entries = query.stream()
+            .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, gesuch.getLatestGesuchTranche()))
             .toList();
 
         return new PaginatedSbGesucheDashboardDto(
             page,
-            results.size(),
-            Math.toIntExact(countQuery.fetchFirst()),
-            results
+            entries.size(),
+            totalEntries,
+            entries
+        );
+    }
+
+    private PaginatedSbGesucheDashboardDto findAendeurngsSB(
+        final Boolean bearbeitbar,
+        final Boolean zugewiesen,
+        final String fallNummer,
+        final String piaNachname,
+        final String piaVorname,
+        final LocalDate piaGeburtsdatum,
+        final String status,
+        final String bearbeiter,
+        final LocalDate letzteAktivitaetFrom,
+        final LocalDate letzteAktivitaetTo,
+        final int page,
+        final int pageSize,
+        final SbGesucheDashboardColumn sortColumn,
+        final SortOrder sortOrder
+    ) {
+        checkPageSizeSB(pageSize);
+        final var query = sbDashboardQueryBuilder.baseAenderungQuery();
+        final var totalEntries = configureQuery(
+            query,
+            zugewiesen,
+            fallNummer,
+            piaNachname,
+            piaVorname,
+            piaGeburtsdatum,
+            bearbeiter,
+            letzteAktivitaetFrom,
+            letzteAktivitaetTo,
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder
+        );
+
+        if (Boolean.TRUE.equals(bearbeitbar)) {
+            sbDashboardQueryBuilder.onlyBearbeitbarAenderungs(query);
+        }
+        if (status != null) {
+            sbDashboardQueryBuilder.trancheStatus(query, status);
+        }
+
+        final var entries = query.stream()
+            .map(aenderung -> sbDashboardGesuchMapper.toDto(aenderung.getGesuch(), aenderung))
+            .toList();
+
+        return new PaginatedSbGesucheDashboardDto(
+            page,
+            entries.size(),
+            totalEntries,
+            entries
         );
     }
 
@@ -512,13 +671,18 @@ public class GesuchService {
         return fallDashboardItemMapper.toDto(fall);
     }
 
-    public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
-        return gesuchMapper.toInfoDto(gesuchRepository.requireById(gesuchId));
+    public GesuchInfoDto getGesuchInfoGs(UUID gesuchId) {
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
+        return gesuchMapper.toInfoDtoGs(gesuch);
+    }
+
+    public GesuchInfoDto getGesuchInfoSb(UUID gesuchId) {
+        return gesuchMapper.toInfoDtoSb(gesuchRepository.requireById(gesuchId));
     }
 
     @Transactional
     public void deleteGesuch(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var gesuch = gesuchRepository.requireById(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
         final var objectIds = gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
@@ -528,6 +692,7 @@ public class GesuchService {
         ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
         statisticsdataService.deleteForGesuch(gesuchId);
         darlehenService.deleteForGesuch(gesuchId);
+        gesuch = gesuchRepository.requireById(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
         gesuch.getDatenschutzbriefs().clear();
@@ -603,10 +768,10 @@ public class GesuchService {
     public void bearbeitungAbschliessen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
+        final var tenantConfig = tenantService.getConfigForCurrentTenant();
+
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-            gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
+            gesuch
         );
 
         if (stipendien.getBerechnungVorKuerzungUndTeilung() <= 0) {
@@ -662,11 +827,13 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
         if (
-            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG && !haveAllDatenschutzbriefeBeenSent(gesuch)
+            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG &&
+            !gesuch.wasInBereitFuerBearbeitung() && !haveAllDatenschutzbriefeBeenSent(gesuch)
         ) {
             changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
+        gesuch.wasInBereitFuerBearbeitung(true);
         gesuchStatusService.triggerStateMachineEvent(
             gesuch,
             changeEvent
@@ -794,30 +961,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeGesuchStatusToVersandbereit(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
-
-        if (
-            !latestVerfuegung.getVerfuegungStatus().isNegativ()
-            && !unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)
-        ) {
-            throw new CustomValidationsException(
-                "Required Unterschriftenblaetter are not uploaded",
-                new CustomConstraintViolation(
-                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
-                    "unterschriftenblaetter"
-                )
-            );
-        }
-
-        gesuchStatusService.triggerStateMachineEvent(
-            gesuch,
-            GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT
-        );
-    }
-
-    @Transactional
     public List<GesuchDokumentDto> getGesuchDokumenteForGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -851,13 +994,26 @@ public class GesuchService {
         notificationService.createGesuchNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
     }
 
-    public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
+    @Transactional
+    public BerechnungsresultatDto getBerechnungsresultatSb(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        return berechnungService.getBerechnungsresultatFromGesuch(gesuch);
     }
 
-    public Verfuegung getLatestVerfuegungForGesuch(final UUID gesuchId) {
-        return verfuegungService.getLatestVerfuegung(gesuchId);
+    @Transactional
+    public GesuchDto getEingereichtGesuchByTrancheId(UUID gesuchTrancheId) {
+        final var gesuch = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch();
+
+        final var eingereichtTranche =
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+                .flatMap(eingereichtGesuch -> eingereichtGesuch.getTranchenTranchen().findFirst())
+                .orElseThrow(NotFoundException::new);
+
+        return gesuchMapperUtil.mapWithTranche(
+            eingereichtTranche.getGesuch(),
+            eingereichtTranche,
+            true
+        );
     }
 
     @Transactional
@@ -933,7 +1089,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
+    public GesuchWithChangesDto getTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
         final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
         final var gesuch = getGesuchById(aenderung.getGesuch().getId());
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
@@ -949,10 +1105,23 @@ public class GesuchService {
     public GesuchDto gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         ValidatorUtil.throwIfEntityNotValid(validator, gesuchTranche);
-        gesuchStatusService.triggerStateMachineEvent(
-            gesuchTranche.getGesuch(),
-            GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN
-        );
+
+        switch (gesuchTranche.getTyp()) {
+            case GesuchTrancheTyp.TRANCHE: {
+                gesuchStatusService.triggerStateMachineEvent(
+                    gesuchTranche.getGesuch(),
+                    GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN
+                );
+                break;
+            }
+            case GesuchTrancheTyp.AENDERUNG: {
+                gesuchTrancheStatusService.triggerStateMachineEvent(
+                    gesuchTranche,
+                    GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN
+                );
+                break;
+            }
+        }
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
     }
 
@@ -1000,10 +1169,11 @@ public class GesuchService {
             .stream()
             .filter(gesuchTranche -> gesuchTranche.getGesuch().getNachfristDokumente().isBefore(LocalDate.now()))
             .toList();
+
         if (!toUpdate.isEmpty()) {
             gesuchTrancheStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,
-                GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS
+                GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
             );
         }
     }
@@ -1278,20 +1448,26 @@ public class GesuchService {
     }
 
     @Transactional
-    public VerfuegtGesuchDto getInitialGesuchTranches(final Gesuch gesuch) {
-        final var initialVerfuegtGesuchOpt =
+    public InitialGesuchsDto getInitialGesuchTranches(final Gesuch gesuch) {
+        final var verfuegtGesuchOpt =
             gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
-        if (initialVerfuegtGesuchOpt.isEmpty()) {
+        final var eingerichtGesuchOpt =
+            gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT);
+        if (verfuegtGesuchOpt.isEmpty() && eingerichtGesuchOpt.isEmpty()) {
             return null;
         }
-        final var initialVerfuegtGesuch = initialVerfuegtGesuchOpt.get();
-        final var verfuegtGesuch = new VerfuegtGesuchDto();
-        verfuegtGesuch.setTranchen(
-            initialVerfuegtGesuch.getGesuchTranchen().stream().map(gesuchTrancheMapper::toSlimDto).toList()
-        );
-        verfuegtGesuch.setTimestamp(initialVerfuegtGesuch.getTimestampMutiert().toLocalDate());
-        verfuegtGesuch.setBerechnungId(initialVerfuegtGesuch.getVerfuegungs().getLast().getId());
-        return verfuegtGesuch;
+        final var eingereichtGesuch = eingerichtGesuchOpt
+            .map(eingereicht -> gesuchTrancheMapper.toSlimDto(eingereicht.getLatestGesuchTranche()))
+            .orElse(null);
+        final var verfuegtGesuch = verfuegtGesuchOpt.map(
+            verfuegt -> new VerfuegtGesuchDto()
+                .tranchen(
+                    verfuegt.getGesuchTranchen().stream().map(gesuchTrancheMapper::toSlimDto).toList()
+                )
+                .timestamp(verfuegt.getTimestampMutiert().toLocalDate())
+                .berechnungId(verfuegt.getVerfuegungs().getLast().getId())
+        ).orElse(null);
+        return new InitialGesuchsDto(eingereichtGesuch, verfuegtGesuch);
     }
 
     public List<VerfuegtGesuchDto> getHistorizedVerfuegtVersionsOfGesuch(final Gesuch gesuch) {
@@ -1312,19 +1488,36 @@ public class GesuchService {
         }).sorted(Comparator.comparing(VerfuegtGesuchDto::getTimestamp).reversed()).toList();
     }
 
-    @Transactional
-    public GesuchHeaderDto getGesuchTrancheHeader(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public GesuchHeaderDto getGesuchTrancheHeader(Gesuch gesuch) {
         final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
-        final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
         final var initialGesuch = getInitialGesuchTranches(gesuch);
+        final var latestVerfuegung = verfuegungService.getLatestVerfuegungByGesuchId(gesuch.getId());
 
         return new GesuchHeaderDto()
-            .gesuchInfo(gesuchMapper.toInfoDto(gesuch))
-            .aenderungs(aenderungs)
+            .gesuchInfo(gesuchMapper.toInfoDtoGs(gesuch))
             .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+            .latestVerfuegungId(latestVerfuegung.map(Verfuegung::getId).orElse(null))
+            .latestVerfuegtAt(latestVerfuegung.map(Verfuegung::getTimestampErstellt).orElse(null))
             .initial(initialGesuch)
             .versions(versions);
+    }
+
+    @Transactional
+    public GesuchHeaderDto getGesuchTrancheHeaderGs(UUID gesuchId) {
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
+        final var aenderungs = gesuchTrancheService.getHistorizedAenderungsGs(gesuch, gesuchId);
+
+        return getGesuchTrancheHeader(gesuch)
+            .aenderungs(aenderungs);
+    }
+
+    @Transactional
+    public GesuchHeaderDto getGesuchTrancheHeaderSb(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var aenderungs = gesuchTrancheService.getHistorizedAenderungsSb(gesuch);
+
+        return getGesuchTrancheHeader(gesuch)
+            .aenderungs(aenderungs);
     }
 
     public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {

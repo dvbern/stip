@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DoCheck,
+  HostBinding,
   Input,
   computed,
   inject,
@@ -70,6 +71,7 @@ type AddresseFormGroup = FormGroup<{
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFormAddressComponent implements DoCheck {
+  @HostBinding('class') klass = 'testing-library-fix tw:contents';
   private landLookupService = inject(LandLookupService);
   @Input({ required: true }) group!: AddresseFormGroup;
   languageSig = input.required<Language>();
@@ -97,7 +99,6 @@ export class SharedUiFormAddressComponent implements DoCheck {
     return laenderRd;
   });
 
-  isValidLandEntry = this.landLookupService.isValidLandEntry;
   touchedSig = signal(false);
 
   static buildAddressFormGroup(

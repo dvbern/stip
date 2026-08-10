@@ -19,8 +19,6 @@ tags:
     x-displayName: Tenant
   - name: Plz
     x-displayName: Plz
-  - name: Notification
-    x-displayName: Notification
   - name: Darlehen
     x-displayName: Darlehen
   - name: Delegieren
@@ -47,6 +45,10 @@ tags:
     x-displayName: Buchhaltung
   - name: Fall
     x-displayName: Fall
+  - name: FallHeader
+    x-displayName: FallHeader
+  - name: Notification
+    x-displayName: Notification
   - name: Dokument
     x-displayName: Dokument
   - name: GesuchNotiz
@@ -161,35 +163,10 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /notifications:
-    get:
-      tags:
-        - Notification
-      responses:
-        '200':
-          description: Returns all Notifications for the user
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Notification'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getNotificationsForCurrentUser
-      summary: Gets all notifications for the User
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}:
+  /darlehen/dashboard:
     parameters:
-      - name: getFreiwilligDarlehenSbQueryType
-        schema:
-          $ref: '#/components/schemas/GetFreiwilligDarlehenSbQueryType'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/bearbeitbar'
+      - $ref: '#/components/parameters/zugewiesen'
       - $ref: '#/components/parameters/fallNummer'
       - $ref: '#/components/parameters/piaNachname'
       - $ref: '#/components/parameters/piaVorname'
@@ -711,9 +688,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/getAllDarlehenSb/{gesuchId}:
+  /darlehen/getAllDarlehenSb/{fallId}:
     parameters:
-      - name: gesuchId
+      - name: fallId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -853,6 +830,32 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDarlehenBuchhaltungSaldokorrektur
       summary: Create a darlehen buchhaltungsentry from a saldokorrektur
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/buchhaltung/fall/{fallId}:
+    parameters:
+      - $ref: '#/components/parameters/fallId'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarlehenBuchhaltungOverview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenBuchhaltungEntrysByFallId
+      summary: Gets all darlehen buchhaltungsentrys by fallId
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -1572,6 +1575,44 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /demo-data/all:
+    post:
+      tags:
+        - DemoData
+      responses:
+        '204':
+          description: Testcases were successfully generated
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: generateAllGesucheAsVerfuegt
+      summary: Generate all Testcase Gesuche as verfuegt
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /demo-data/bfs-statistik:
+    post:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: The XML with all Testcases and existing gesuche
+      operationId: getStatistikXmlWithAllTestcases
+      summary: Returns a BFS statistik file with all Testcases
+      x-quarkus-response-type: io.smallrye.mutiny.Multi<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /demo-data/test-all-berechnung:
     get:
       tags:
@@ -1783,6 +1824,7 @@ paths:
           $ref: '#/components/schemas/GetGesucheSBQueryType'
         in: path
         required: true
+      - $ref: '#/components/parameters/zugewiesen'
     post:
       tags:
         - Massendruck
@@ -2050,6 +2092,35 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /verfuegung/fall/{fallId}/verfuegungen:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VerfuegungFall'
+          description: Returns a list of all Verfuegungen for a Fall
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungenByFallId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /verfuegung/dokument/download:
     parameters:
       - name: token
@@ -2098,7 +2169,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getVerfuegungDokumentDownloadToken
-      summary: get Token to downlaod Verfuegung
+      summary: get Token to download Verfuegung
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2999,7 +3070,7 @@ paths:
         - auth-uat-bern: []
         - auth-dev-bern: []
   /buchhaltung/failed:
-    summary: asdf
+    summary: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
     get:
       tags:
         - Buchhaltung
@@ -3095,6 +3166,88 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createFallForGs
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /fall/header/{fallId}:
+    get:
+      tags:
+        - FallHeader
+      parameters:
+        - $ref: '#/components/parameters/fallId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallHeader'
+          description: Get the FallHeader by FallId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getFallHeader
+      summary: Get FallHeader for the GS and Soz App
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /fall/{fallId}/notifications:
+    parameters:
+      - name: fallId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      tags:
+        - Notification
+      operationId: getNotificationsForFall
+      summary: Returns all notifications for the given Fall
+      responses:
+        '200':
+          description: List of notifications for the Fall
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /fall/notifications/{notificationId}/markAsRead:
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    patch:
+      tags:
+        - Notification
+      operationId: markNotificationAsRead
+      summary: Marks a notification as read
+      responses:
+        '204':
+          description: Notification marked as read
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -4296,6 +4449,36 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /gesuch/eingereicht/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getEingereichtTranche
+      summary: Returns the inital eingereicht tranche by gesuchTrancheId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /gesuch/gs/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
@@ -4356,7 +4539,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/info:
+  /gesuch/{gesuchId}/info/gs:
     parameters:
       - name: gesuchId
         schema:
@@ -4381,7 +4564,37 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuchInfo
+      operationId: getGesuchInfoGs
+      summary: Returns the basic Gesuch info with the given Id, potentially historized
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/{gesuchId}/info/sb:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchInfo'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchInfoSb
       summary: Returns the basic Gesuch info with the given Id
       security:
         - auth-uat-bern: []
@@ -4456,6 +4669,8 @@ paths:
             $ref: '#/components/schemas/GetGesucheSBQueryType'
           in: path
           required: true
+        - $ref: '#/components/parameters/bearbeitbar'
+        - $ref: '#/components/parameters/zugewiesen'
         - $ref: '#/components/parameters/fallNummer'
         - $ref: '#/components/parameters/piaNachname'
         - $ref: '#/components/parameters/piaVorname'
@@ -5293,7 +5508,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/berechnung:
+  /gesuch/{gesuchId}/berechnung/sb:
     parameters:
       - name: gesuchId
         schema:
@@ -5320,7 +5535,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getBerechnungForGesuch
+      operationId: getBerechnungForGesuchSb
       summary: Berechnet und holt die Berechnung für ein Gesuch
       security:
         - auth-uat-bern: []
@@ -5360,6 +5575,11 @@ paths:
   /gesuch/{aenderungId}/aenderung/gs/changes:
     parameters:
       - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
     get:
       tags:
         - Gesuch
@@ -5378,7 +5598,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGsAenderungChangesInBearbeitung
+      operationId: getAenderungChangesGs
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -5408,7 +5628,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getSbAenderungChanges
+      operationId: getAenderungChangesSb
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -5901,7 +6121,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /steuerdaten/nesko/{gesuchTrancheId}:
+  /steuerdaten/port/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
         schema:
@@ -5913,7 +6133,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NeskoGetSteuerdatenRequest'
+              $ref: '#/components/schemas/GetSteuerdatenFromPortRequest'
         required: true
       tags:
         - Steuerdaten
@@ -5936,7 +6156,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: updateSteuerdatenFromNesko
+      operationId: updateSteuerdatenFromPort
       summary: Updates the Steuerdaten from Nesko
       security:
         - auth-uat-bern: []
@@ -6870,7 +7090,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Statistik'
-          description: Token returned
+          description: Statistik list
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -6883,6 +7103,34 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllStatistiks
       summary: Get All statistiks
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /statistik/years:
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+          description: Available years list
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllStatistikYears
+      summary: All available years
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -6995,24 +7243,29 @@ components:
         realm: some text
     TenantFeature:
       required:
-        - nesko
+        - enabled
       type: object
       properties:
-        nesko:
+        enabled:
           type: boolean
+        adapterType:
+          $ref: '#/components/schemas/SteuerdatenAdapterType'
+    TenantFeatures:
+      type: object
+      properties:
+        steuerdaten:
+          $ref: '#/components/schemas/TenantFeature'
     TenantInfo:
-      title: Root Type for TenantInfo
-      description: Client Application Info about a `Tenant`
+      type: object
       required:
         - clientAuth
         - features
         - identifier
-      type: object
       properties:
         clientAuth:
           $ref: '#/components/schemas/TenantAuthConfig'
         features:
-          $ref: '#/components/schemas/TenantFeature'
+          $ref: '#/components/schemas/TenantFeatures'
         identifier:
           type: string
     StipDecisionText:
@@ -7050,16 +7303,16 @@ components:
           type: string
         redirectUri:
           type: string
-    NeskoError:
+    SteuerdatenPortError:
       required:
         - type
-        - neskoError
+        - error
         - userMessage
       type: object
       properties:
         type:
           type: string
-        neskoError:
+        error:
           type: string
         userMessage:
           type: string
@@ -7068,6 +7321,11 @@ components:
         - BERN
         - ANDERER_KANTON
       type: string
+    SteuerdatenAdapterType:
+      type: string
+      enum:
+        - DUMMY
+        - NESKO
     UUID:
       format: uuid
       type: string
@@ -7123,57 +7381,6 @@ components:
             Whether or not the Gesuch validated has one or more GesuchDokument
             attached
           type: boolean
-    NotificationType:
-      enum:
-        - GESUCH_EINGEREICHT
-        - GESUCH_STATUS_CHANGE_WITH_COMMENT
-        - FEHLENDE_DOKUMENTE_EINREICHEN
-        - FEHLENDE_DOKUMENTE
-        - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
-        - AENDERUNG_ABGELEHNT
-        - AENDERUNG_EINGEREICHT
-        - GESUCH_IN_BEARBEITUNG_AS_AENDERUNG
-        - NACHFRIST_DOKUMENTE_CHANGED
-        - NEUE_VERFUEGUNG
-        - FAILED_AUSZAHLUNG
-        - DELEGIERUNG_ANGENOMMEN
-        - DELEGIERUNG_ABGELEHNT
-        - DELEGIERUNG_AUFGELOEST
-        - DARLEHEN_EINGEGEBEN
-        - DARLEHEN_ZURUECKGEWIESEN
-        - DARLEHEN_AKZEPTIERT
-        - DARLEHEN_ABGELEHNT
-        - AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT
-        - AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT
-        - AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT
-    LocalDate:
-      format: date
-      type: string
-      example: '2022-03-10'
-    Notification:
-      description: Notification for a Gesuch
-      type: object
-      required:
-        - notificationType
-        - fallId
-        - timestampErstellt
-        - userErstellt
-        - absender
-      properties:
-        notificationText:
-          type: string
-        notificationType:
-          $ref: '#/components/schemas/NotificationType'
-        fallId:
-          $ref: '#/components/schemas/UUID'
-        contextId:
-          $ref: '#/components/schemas/UUID'
-        userErstellt:
-          type: string
-        timestampErstellt:
-          $ref: '#/components/schemas/LocalDate'
-        absender:
-          type: string
     SbFreiwilligDarlehenDashboardColumn:
       enum:
         - FALLNUMMER
@@ -7183,12 +7390,6 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    GetFreiwilligDarlehenSbQueryType:
-      enum:
-        - ALLE_DARLEHEN
-        - MEINE_DARLEHEN
-        - ALLE_BEARBEITBAR
-        - MEINE_BEARBEITBAR
     PaginatedSbFreiwilligDarlehenDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -7344,6 +7545,8 @@ components:
           $ref: '#/components/schemas/Dokument'
         betrag:
           type: integer
+        yearRange:
+          type: string
         userErstellt:
           type: string
         kommentar:
@@ -7488,7 +7691,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
     DelegierungEntry:
       required:
-        - mandant
+        - tenant
       type: object
       allOf:
         - $ref: '#/components/schemas/Delegierung'
@@ -7497,7 +7700,7 @@ components:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
-        mandant:
+        tenant:
           type: string
     PaginatedSozDashboard:
       allOf:
@@ -7565,6 +7768,10 @@ components:
         - HERR
         - FRAU
       type: string
+    LocalDate:
+      format: date
+      type: string
+      example: '2022-03-10'
     Sprache:
       enum:
         - DEUTSCH
@@ -8155,10 +8362,6 @@ components:
           type: boolean
         werZahltAlimente:
           $ref: '#/components/schemas/Elternschaftsteilung'
-        mutterWiederverheiratetAlimente:
-          type: boolean
-        vaterWiederverheiratetAlimente:
-          type: boolean
         elternteilUnbekanntVerstorben:
           type: boolean
         mutterVerstorben:
@@ -8169,8 +8372,6 @@ components:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
         mutterKeineOptionen:
           type: boolean
-        mutterWiederverheiratetUnbekannt:
-          type: boolean
         vaterVerstorben:
           type: boolean
         vaterUnbekannt:
@@ -8178,12 +8379,6 @@ components:
         vaterUnbekanntGrund:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
         vaterKeineOptionen:
-          type: boolean
-        vaterWiederverheiratetUnbekannt:
-          type: boolean
-        mutterWiederverheiratetUngewiss:
-          type: boolean
-        vaterWiederverheiratetUngewiss:
           type: boolean
     DemoElternteil:
       required:
@@ -8242,6 +8437,8 @@ components:
         sozialhilfebeitraege:
           type: boolean
         ausweisbFluechtling:
+          type: boolean
+        wiederverheiratet:
           type: boolean
     DemoSteuererklaerung:
       required:
@@ -8325,6 +8522,7 @@ components:
         - alter
         - wohnsitzBei
         - ausbildungssituation
+        - geschwisterTyp
       type: object
       properties:
         nachname:
@@ -8344,6 +8542,8 @@ components:
           type: integer
         ausbildungssituation:
           $ref: '#/components/schemas/Ausbildungssituation'
+        geschwisterTyp:
+          $ref: '#/components/schemas/GeschwisterTyp'
     DemoAuszahlung:
       required:
         - nachname
@@ -8588,7 +8788,7 @@ components:
         - NIEDERLASSUNGSBEWILLIGUNG_C
         - PARTNER_ERWERBSTAETIG_UND_KIND_CI
         - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
-        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT
         - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
         - GRENZGAENGIG_G
         - KURZAUFENTHALT_L
@@ -8674,6 +8874,12 @@ components:
         - FAMILIE
         - VATER
         - MUTTER
+      type: string
+    GeschwisterTyp:
+      enum:
+        - LEIBLICH
+        - STIEF
+        - HALB
       type: string
     DatenschutzbriefCreate:
       required:
@@ -8819,18 +9025,10 @@ components:
           $ref: '#/components/schemas/ElternTyp'
     GetGesucheSBQueryType:
       enum:
-        - ALLE_GESUCHE
-        - MEINE_GESUCHE
-        - ALLE_PENDENTE_GESUCHE
-        - MEINE_PENDENTE_GESUCHE
-        - ALLE_BEARBEITBAR
-        - MEINE_BEARBEITBAR
-        - ALLE_JURISTISCHE_ABKLAERUNG
-        - ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG
-        - ALLE_DRUCKBAR_VERFUEGUNGEN
-        - MEINE_DRUCKBAR_VERFUEGUNGEN
-        - ALLE_DRUCKBAR_DATENSCHUTZBRIEFE
-        - MEINE_DRUCKBAR_DATENSCHUTZBRIEFE
+        - ALLE
+        - PENDENTE
+        - DRUCKBAR_VERFUEGUNGEN
+        - DRUCKBAR_DATENSCHUTZBRIEFE
       type: string
     VerfuegungDokumentTyp:
       enum:
@@ -8840,6 +9038,7 @@ components:
         - BERECHNUNGSBLATT_FAMILIE
         - VERSENDETE_VERFUEGUNG
         - VERFUEGUNGSBRIEF
+        - MANUELLE_NEGATIVE_VERFUEGUNG
     VerfuegungDokument:
       type: object
       required:
@@ -8867,6 +9066,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VerfuegungDokument'
+    VerfuegungFall:
+      type: object
+      required:
+        - timestampErstellt
+        - yearRange
+        - totalbetragStipendium
+        - dokumente
+      properties:
+        timestampErstellt:
+          type: string
+        yearRange:
+          type: string
+        totalbetragStipendium:
+          type: integer
+        dokument:
+          $ref: '#/components/schemas/VerfuegungDokument'
     AusbildungBase:
       required:
         - fallId
@@ -9425,15 +9640,78 @@ components:
       required:
         - id
         - fallNummer
-        - mandant
+        - tenant
       type: object
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
-        mandant:
+        tenant:
           type: string
+    FallHeader:
+      required:
+        - fallId
+        - unreadNotificationsCount
+      type: object
+      properties:
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        unreadNotificationsCount:
+          type: integer
+    NotificationType:
+      enum:
+        - GESUCH_EINGEREICHT
+        - GESUCH_STATUS_CHANGE_WITH_COMMENT
+        - FEHLENDE_DOKUMENTE_EINREICHEN
+        - FEHLENDE_DOKUMENTE
+        - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
+        - AENDERUNG_ABGELEHNT
+        - AENDERUNG_EINGEREICHT
+        - GESUCH_IN_BEARBEITUNG_AS_AENDERUNG
+        - NACHFRIST_DOKUMENTE_CHANGED
+        - NEUE_VERFUEGUNG
+        - FAILED_AUSZAHLUNG
+        - DELEGIERUNG_ANGENOMMEN
+        - DELEGIERUNG_ABGELEHNT
+        - DELEGIERUNG_AUFGELOEST
+        - DARLEHEN_EINGEGEBEN
+        - DARLEHEN_ZURUECKGEWIESEN
+        - DARLEHEN_AKZEPTIERT
+        - DARLEHEN_ABGELEHNT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT
+    Notification:
+      description: Notification for a Gesuch
+      type: object
+      required:
+        - id
+        - notificationType
+        - fallId
+        - timestampErstellt
+        - userErstellt
+        - absender
+        - read
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        notificationText:
+          type: string
+        notificationType:
+          $ref: '#/components/schemas/NotificationType'
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        contextId:
+          $ref: '#/components/schemas/UUID'
+        userErstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
+        absender:
+          type: string
+        read:
+          type: boolean
     GesuchDokumentKommentar:
       description: Kommentar zu einem (abgelehnten) GesuchDokument
       type: object
@@ -9548,7 +9826,7 @@ components:
         - >-
           PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
         - >-
-          PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+          PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT
         - >-
           PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
         - PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G
@@ -9561,7 +9839,7 @@ components:
         - PERSON_NIEDERLASSUNGSSTATUS_NICHT_ZUGETEILT
         - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
         - PERSON_KESB_ERNENNUNG
-        - PERSON_MIETVERTRAG
+        - PERSON_EIGENER_HAUSHALT
         - PERSON_SOZIALHILFEBUDGET
         - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
         - PERSON_AUSWEIS
@@ -9801,7 +10079,6 @@ components:
       required:
         - fall
         - ausbildungDashboardItems
-        - notifications
       type: object
       properties:
         fall:
@@ -9810,10 +10087,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AusbildungDashboardItem'
-        notifications:
-          type: array
-          items:
-            $ref: '#/components/schemas/Notification'
         currentDelegierung:
           $ref: '#/components/schemas/DelegierungSlim'
         earliestActiveGesuchPeriodeStart:
@@ -10030,10 +10303,18 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - manuell
+        - fehlendeDokumente
         - canAenderungEinreichen
       properties:
         offen:
           $ref: '#/components/schemas/GesuchTrancheSlim'
+        eingereicht:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        manuell:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
         akzeptiert:
           type: array
           items:
@@ -10042,8 +10323,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        fehlendeDokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
         canAenderungEinreichen:
           type: boolean
+    InitialGesuchs:
+      type: object
+      properties:
+        eingereichtGesuch:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        verfuegtGesuch:
+          $ref: '#/components/schemas/VerfuegtGesuch'
     VerfuegtGesuch:
       type: object
       required:
@@ -10064,6 +10356,7 @@ components:
       required:
         - id
         - fallNummer
+        - fallId
         - gesuchNummer
         - startDate
         - endDate
@@ -10073,6 +10366,8 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
+          type: string
+        fallId:
           type: string
         gesuchNummer:
           type: string
@@ -10095,7 +10390,7 @@ components:
       type: object
       properties:
         initial:
-          $ref: '#/components/schemas/VerfuegtGesuch'
+          $ref: '#/components/schemas/InitialGesuchs'
         versions:
           type: array
           items:
@@ -10106,6 +10401,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        latestVerfuegungId:
+          $ref: '#/components/schemas/UUID'
+        latestVerfuegtAt:
+          $ref: '#/components/schemas/LocalDateTime'
         gesuchInfo:
           $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:
@@ -10236,24 +10535,28 @@ components:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - total
+        - ungekuerztTotal
         - gueltigAb
         - gueltigBis
         - ausbildungAb
         - ausbildungBis
         - yearRange
         - gesuchTrancheId
-        - berechnungsanteilKinder
-        - teilzeitKinderBeiPiaAnrechnen
-        - berechnungsanteilKinderPia
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
+        - personenHaushaltGroups
       type: object
       properties:
         total:
           description: >-
             Die Summe der berechneten Stpendiums- und Darlehensansprüche für
             diese Tranche
+          type: integer
+        ungekuerztTotal:
+          description: >-
+            Die ungekürzte Summe der berechneten Stpendiums- und
+            Darlehensansprüche für diese Tranche
           type: integer
         gueltigAb:
           $ref: '#/components/schemas/LocalDate'
@@ -10271,10 +10574,10 @@ components:
             resultate mit der gleichen ID sind die berechnungen für getrennte
             eltern mit Kindern die eine Obhutsteilung haben
           $ref: '#/components/schemas/UUID'
-        berechnungsanteilKinder:
+        berechnungsanteilKinderDerEltern:
           description: >-
             Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
-            nur eine Berechnung haben ist dieser wert == 1.
+            nur eine Berechnung haben ist dieser Wert null.
           type: number
         teilzeitKinderBeiPiaAnrechnen:
           description: >-
@@ -10284,7 +10587,7 @@ components:
         berechnungsanteilKinderPia:
           description: >-
             Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
-            nur eine Berechnung haben ist dieser wert == 1.
+            nur eine Berechnung haben ist dieser Wert null.
           type: number
         berechnungsStammdaten:
           description: Stammdaten für die Stipendienberechnung
@@ -10297,6 +10600,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FamilienBudgetresultat'
+        personenHaushaltGroups:
+          description: >-
+            Enthällt eine Liste aller relevanten Personen für die jeweiligen
+            Personen Haushalt Gruppen
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonenHaushaltGruppe'
     BerechnungsStammdaten:
       description: Stammdaten used for the calculation of the stipendium
       required:
@@ -10341,6 +10651,7 @@ components:
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:
+        - haushaltNames
         - vorname
         - nachname
         - sozialversicherungsnummer
@@ -10355,6 +10666,10 @@ components:
         - einnahmen
         - kosten
       properties:
+        haushaltNames:
+          type: array
+          items:
+            type: string
         vorname:
           type: string
         nachname:
@@ -10498,8 +10813,7 @@ components:
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungTotal
         - betreuungskostenKinder
-        - kantonsGemeindesteuern
-        - bundessteuern
+        - steuern
         - anteilLebenshaltungskosten
       type: object
       properties:
@@ -10531,15 +10845,14 @@ components:
           type: integer
         betreuungskostenKinder:
           type: integer
-        kantonsGemeindesteuern:
-          type: integer
-        bundessteuern:
+        steuern:
           type: integer
         anteilLebenshaltungskosten:
           type: integer
     FamilienBudgetresultat:
       description: Familien Budget daten fuer und von der Berechnung
       required:
+        - haushaltNames
         - steuerdatenTyp
         - vorname
         - nachname
@@ -10558,9 +10871,14 @@ components:
         - fehlbetrag
         - proKopfTeilung
         - ungedeckterAnteilLebenshaltungskosten
+        - teilzeitKinderProzente
         - einnahmen
         - kosten
       properties:
+        haushaltNames:
+          type: array
+          items:
+            type: string
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
         vorname:
@@ -10573,7 +10891,13 @@ components:
           type: string
         sozialversicherungsnummer:
           type: string
+        sozialversicherungsnummerPartner:
+          type: string
         geburtsdatum:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        geburtsdatumPartner:
           format: date
           description: dd.MM.yyyy
           type: string
@@ -10602,6 +10926,8 @@ components:
         proKopfTeilung:
           type: integer
         ungedeckterAnteilLebenshaltungskosten:
+          type: integer
+        teilzeitKinderProzente:
           type: integer
         einnahmen:
           description: Einnahmen des familien Budgets
@@ -10701,6 +11027,24 @@ components:
             $ref: '#/components/schemas/PersonValueItem'
         verpflegungTotal:
           type: integer
+    PersonenHaushalt:
+      enum:
+        - PIA
+        - MUTTER
+        - VATER
+        - FAMILIE
+    PersonenHaushaltGruppe:
+      type: object
+      required:
+        - typ
+        - names
+      properties:
+        typ:
+          $ref: '#/components/schemas/PersonenHaushalt'
+        names:
+          type: array
+          items:
+            type: string
     PersonInAusbildungUpdate:
       required:
         - adresse
@@ -10796,14 +11140,10 @@ components:
           $ref: '#/components/schemas/ElternAbwesenheitsGrund'
         mutterUnbekanntGrund:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
-        mutterWiederverheiratet:
-          type: boolean
         vaterUnbekanntVerstorben:
           $ref: '#/components/schemas/ElternAbwesenheitsGrund'
         vaterUnbekanntGrund:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
-        vaterWiederverheiratet:
-          type: boolean
         werZahltAlimente:
           $ref: '#/components/schemas/Elternschaftsteilung'
           description: Required nur wenn gerichtlicheAlimentenregelung = true
@@ -10880,6 +11220,8 @@ components:
             Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen
             falls Sie zusammen wohnen
           type: integer
+        wiederverheiratet:
+          type: boolean
     GeschwisterUpdate:
       title: Root Type for Geschwister
       required:
@@ -10887,6 +11229,7 @@ components:
         - wohnsitz
         - vorname
         - nachname
+        - geschwisterTyp
         - geburtsdatum
         - ausbildungssituation
       type: object
@@ -10914,6 +11257,10 @@ components:
           type: number
         nachname:
           type: string
+        geschwisterTyp:
+          $ref: '#/components/schemas/GeschwisterTyp'
+        hidden:
+          type: boolean
     LebenslaufItemUpdate:
       title: Root Type for Lebenslauf
       required:
@@ -10948,6 +11295,9 @@ components:
         taetigkeitsBeschreibung:
           description: Required wenn taetigkeitsart != null
           type: string
+        invalid:
+          description: Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+          type: boolean
     KindUpdate:
       title: Root Type for Kind
       required:
@@ -11059,7 +11409,7 @@ components:
           minimum: 0
           maximum: 2147483647
         steuern:
-          description: transient and calculated readonly field
+          description: only visible by SB
           type: integer
           minimum: 0
           maximum: 2147483647
@@ -11323,6 +11673,8 @@ components:
           type: string
         hadDelegierungs:
           type: boolean
+        minDateEigenerWohnsitz:
+          $ref: '#/components/schemas/LocalDate'
         delegierung:
           $ref: '#/components/schemas/DelegierungSlim'
         nachfristDokumente:
@@ -11351,18 +11703,22 @@ components:
       required:
         - gesuchStatus
         - beschwerdeHaengig
-        - canGetBerechnung
+        - canGSGetBerechnung
+        - canSBGetBerechnung
         - canChangeGesuchsperiode
         - canTriggerManuellPruefen
         - canBearbeitungAbschliessen
         - canSBInitAenderung
+        - canFreigeben
       type: object
       properties:
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
         beschwerdeHaengig:
           type: boolean
-        canGetBerechnung:
+        canGSGetBerechnung:
+          type: boolean
+        canSBGetBerechnung:
           type: boolean
         canChangeGesuchsperiode:
           type: boolean
@@ -11374,6 +11730,8 @@ components:
           type: boolean
         inBearbeitungSbReason:
           $ref: '#/components/schemas/InBearbeitungSbReason'
+        canFreigeben:
+          type: boolean
     GesuchTrancheSlim:
       type: object
       required:
@@ -11397,6 +11755,10 @@ components:
           $ref: '#/components/schemas/GesuchTrancheTyp'
         revision:
           type: integer
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: '2022-03-10T12:00:00'
     Kanton:
       enum:
         - AG
@@ -11537,7 +11899,7 @@ components:
           $ref: '#/components/schemas/DokumentTyp'
         entryId:
           $ref: '#/components/schemas/UUID'
-    NeskoGetSteuerdatenRequest:
+    GetSteuerdatenFromPortRequest:
       required:
         - steuerdatenTyp
         - steuerjahr
@@ -12041,8 +12403,6 @@ components:
         - valid
         - userTriggeredCreation
         - year
-        - filename
-        - filesize
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -12055,14 +12415,12 @@ components:
         year:
           type: integer
           format: int32
+        error:
+          type: string
         filename:
           type: string
         filesize:
           type: string
-    LocalDateTime:
-      format: date-time
-      type: string
-      example: '2022-03-10T12:00:00'
   responses:
     Unauthorized:
       content:
@@ -12087,6 +12445,16 @@ components:
         text/plain: {}
       description: Die angeforderte Ressource existiert nicht
   parameters:
+    bearbeitbar:
+      in: query
+      name: bearbeitbar
+      schema:
+        type: boolean
+    zugewiesen:
+      in: query
+      name: zugewiesen
+      schema:
+        type: boolean
     fallNummer:
       in: query
       name: fallNummer

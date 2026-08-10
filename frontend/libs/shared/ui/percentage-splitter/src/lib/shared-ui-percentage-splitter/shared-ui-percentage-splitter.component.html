@@ -1,12 +1,12 @@
-<div>
+<div *dvTranslocoShared="let t">
   <!-- WOHNSITZ AUFTEILUNG -->
 
   <!-- label -->
   <ng-content></ng-content>
 
-  <div class="tw:grid tw:grid-cols-12 tw:gap-x-2 tw:mt-4">
+  <div class="tw:flex tw:gap-4 tw:flex-wrap tw:mt-4">
     <!-- LEFT -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-6">
+    <mat-form-field dvSharedUiFormField class="tw:flex-1">
       <mat-label><ng-content select="[dvLabelA]"></ng-content></mat-label>
 
       <input
@@ -18,15 +18,15 @@
       />
       <mat-hint><ng-content select="[dvHintA]"></ng-content></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'minlength'">
-        {{ 'shared.form.error.requiredShort' | transloco }}
+        {{ t('shared.form.error.requiredShort') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.requiredShort' | transloco }}
+        {{ t('shared.form.error.requiredShort') }}
       </mat-error>
     </mat-form-field>
 
     <!-- RIGHT -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-6">
+    <mat-form-field dvSharedUiFormField class="tw:flex-1">
       <mat-label><ng-content select="[dvLabelB]"></ng-content></mat-label>
       <input
         type="text"
@@ -37,11 +37,22 @@
       />
       <mat-hint><ng-content select="[dvHintB]"></ng-content></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'minlength'">
-        {{ 'shared.form.error.requiredShort' | transloco }}
+        {{ t('shared.form.error.requiredShort') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.requiredShort' | transloco }}
+        {{ t('shared.form.error.requiredShort') }}
       </mat-error>
     </mat-form-field>
   </div>
+
+  @if (
+    (controlA.touched || controlB.touched) &&
+    (controlA.errors?.['atLeastOneValue'] || controlB.errors?.['atLeastOneValue'])
+  ) {
+    <div class="group-errors">
+      <mat-error>
+        {{ t('shared.form.shared.wohnsitzanteil.error.atLeastOne') }}
+      </mat-error>
+    </div>
+  }
 </div>

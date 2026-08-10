@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.pdf.DarlehensVerfuegungPdfService;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehenDokument;
@@ -43,7 +44,6 @@ import ch.dvbern.stip.api.darlehen.repo.GesetzlichDarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
-import ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -60,7 +60,8 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.berechnung.domain.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
@@ -99,7 +100,8 @@ public class DarlehenService {
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDeleteService dokumentDeleteService;
     private final S3AsyncClient s3;
-    private final ConfigService configService;
+    private final StipConfig config;
+    private final TenantService tenantService;
     private final Antivirus antivirus;
     private final DarlehenDokumentRepository darlehenDokumentRepository;
     private final DokumentRepository dokumentRepository;
@@ -133,15 +135,11 @@ public class DarlehenService {
         return darlehenBuchhaltungEntry;
     }
 
-    public ByteArrayOutputStream createGesetzlichDarlehen(final Gesuch gesuch, final int betrag) {
-        final boolean isAenderung = gesuch.getAkzeptierteAenderungs().findAny().isPresent();
-        int gesetzlicheDarlehenBisher = 0;
-        if (isAenderung) {
-            gesetzlicheDarlehenBisher = gesetzlichDarlehenRepository.findAllByGesuchId(gesuch.getId())
-                .stream()
-                .mapToInt(GesetzlichDarlehen::getBetrag)
-                .sum();
-        }
+    public Optional<ByteArrayOutputStream> createGesetzlichDarlehen(final Gesuch gesuch, final int betrag) {
+        final int gesetzlicheDarlehenBisher = gesetzlichDarlehenRepository.findAllByGesuchId(gesuch.getId())
+            .stream()
+            .mapToInt(GesetzlichDarlehen::getBetrag)
+            .sum();
         final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuch.getId());
         final int darlehenBisher = darlehenBuchhaltungEntrys.stream()
             .map(DarlehenBuchhaltungEntry::getBetrag)
@@ -150,7 +148,7 @@ public class DarlehenService {
             .sum();
         final var remainingQuota = Math.max(
             0,
-            BerechnungUtil.darlehenLimit - darlehenBisher
+            BerechnungUtil.DARLEHEN_LIMIT - darlehenBisher
         );
 
         var darlehenBetrag = Math.max(0, betrag - gesetzlicheDarlehenBisher);
@@ -162,15 +160,18 @@ public class DarlehenService {
         gesetzlichDarlehen.setBetrag(darlehenBetrag);
 
         gesetzlichDarlehenRepository.persistAndFlush(gesetzlichDarlehen);
+        if (darlehenBetrag == 0) {
+            return Optional.empty();
+        }
 
-        final ByteArrayOutputStream out =
+        final var byteArrayOutputStream =
             darlehensVerfuegungPdfService.generatePositiveDarlehensVerfuegungPdf(gesetzlichDarlehen);
 
-        final String objectId = dokumentUploadService.executeUploadDocument(
-            out.toByteArray(),
+        final var objectId = dokumentUploadService.executeUploadDocument(
+            byteArrayOutputStream.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             s3,
-            configService,
+            config,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -178,7 +179,7 @@ public class DarlehenService {
         darlehensVerfuegung.setObjectId(objectId);
         darlehensVerfuegung.setFilename(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
-        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+        darlehensVerfuegung.setFilesize(Integer.toString(byteArrayOutputStream.size()));
         gesetzlichDarlehen.setVerfuegung(darlehensVerfuegung);
 
         createDarlehenBuchhaltungEntry(
@@ -189,14 +190,14 @@ public class DarlehenService {
         );
 
         mailService.sendDarlehenVerfuegungEmail(
-            configService.getDarlehenVerfuegungEmailRecipient(),
+            tenantService.getConfigForCurrentTenant().darlehen().verfuegung().emailRecipient(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
-            out.toByteArray(),
+            byteArrayOutputStream.toByteArray(),
             gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter()
         );
 
-        return out;
+        return Optional.of(byteArrayOutputStream);
     }
 
     @Transactional
@@ -208,7 +209,7 @@ public class DarlehenService {
             out.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             s3,
-            configService,
+            config,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -219,7 +220,7 @@ public class DarlehenService {
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
 
         mailService.sendDarlehenVerfuegungEmail(
-            configService.getDarlehenVerfuegungEmailRecipient(),
+            tenantService.getConfigForCurrentTenant().darlehen().verfuegung().emailRecipient(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             out.toByteArray(),
             darlehen.getRelatedGesuch().getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
@@ -326,15 +327,6 @@ public class DarlehenService {
     }
 
     @Transactional
-    public List<FreiwilligDarlehenDto> getFreiwilligDarlehenAllSb(final UUID gesuchId) {
-        final var darlehenList = freiwilligDarlehenRepository.findByGesuchId(gesuchId);
-        return darlehenList.stream()
-            .sorted(Comparator.comparing(FreiwilligDarlehen::getTimestampErstellt).reversed())
-            .map(freiwilligDarlehenMapper::toDtoGs)
-            .toList();
-    }
-
-    @Transactional
     public boolean canCreateDarlehen(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
         final var ausbildungs = fall.getAusbildungs();
@@ -380,7 +372,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public FreiwilligDarlehenGsResponseDto getFreiwilligDarlehenAllGs(final UUID fallId) {
+    public FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenOfFallGs(final UUID fallId) {
         final var darlehenList = freiwilligDarlehenRepository.findByFallId(fallId);
         final var darlehenDto = new FreiwilligDarlehenGsResponseDto();
         darlehenDto.setCanCreateDarlehen(canCreateDarlehen(fallId));
@@ -394,8 +386,18 @@ public class DarlehenService {
     }
 
     @Transactional
+    public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenOfFallSb(final UUID fallId) {
+        final var darlehenList = freiwilligDarlehenRepository.findByFallId(fallId);
+        return darlehenList.stream()
+            .sorted(Comparator.comparing(FreiwilligDarlehen::getTimestampErstellt).reversed())
+            .map(freiwilligDarlehenMapper::toDtoGs)
+            .toList();
+    }
+
+    @Transactional
     public PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(
-        final GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,
+        final Boolean bearbeitbar,
+        final Boolean zugewiesen,
         final Integer page,
         final Integer pageSize,
         final String fallNummer,
@@ -409,11 +411,19 @@ public class DarlehenService {
         final SbFreiwilligDarlehenDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var baseQuery = darlehenDashboardQueryBuilder.baseQuery(getFreiwilligDarlehenSbQueryType);
+        final var baseQuery = darlehenDashboardQueryBuilder.baseQuery();
+
+        if (Boolean.TRUE.equals(bearbeitbar)) {
+            darlehenDashboardQueryBuilder.onlyBearbeitbar(baseQuery);
+        }
+
+        if (Boolean.TRUE.equals(zugewiesen)) {
+            darlehenDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, benutzerService.getCurrentBenutzer().getId());
+        }
 
         if (fallNummer != null) {
             darlehenDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
@@ -452,7 +462,9 @@ public class DarlehenService {
         }
 
         darlehenDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.distinct()
+        final var results = baseQuery
+            // Fetch is used to prevent using `distinct`
+            .fetch()
             .stream()
             .map(freiwilligDarlehenMapper::toDashboardDto)
             .toList();
@@ -498,7 +510,7 @@ public class DarlehenService {
             dokumentRepository.delete(dokument);
             dokumentDeleteService.executeDeleteDokumentFromS3(
                 s3,
-                configService.getBucketName(),
+                config.s3().bucketName(),
                 DARLEHEN_VERFUEGUNG_DOKUMENT_PATH + dokument.getObjectId()
             );
         }
@@ -618,7 +630,7 @@ public class DarlehenService {
             dokumentUploadService.validateScanUploadDokument(
                 negativeVerfuegung,
                 s3,
-                configService,
+                config,
                 antivirus,
                 DARLEHEN_VERFUEGUNG_DOKUMENT_PATH,
                 objectId -> uploadNegativVerfuegungDokument(darlehen, negativeVerfuegung, objectId),
@@ -640,7 +652,7 @@ public class DarlehenService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH,
             dokument.getFilename()
@@ -662,7 +674,7 @@ public class DarlehenService {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
             DARLEHEN_DOKUMENT_PATH,
             objectId -> uploadDarlehenDokument(
@@ -753,7 +765,7 @@ public class DarlehenService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             dokument.getFilepath(),
             dokument.getFilename()
@@ -779,7 +791,7 @@ public class DarlehenService {
         dokumentRepository.delete(dokument);
         dokumentDeleteService.executeDeleteDokumentFromS3(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             DARLEHEN_DOKUMENT_PATH + dokument.getObjectId()
         );
     }
@@ -830,6 +842,20 @@ public class DarlehenService {
     ) {
         final Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuch.getId());
+        return toDarlehenBuchhaltungOverview(darlehenBuchhaltungEntrys);
+    }
+
+    @Transactional
+    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntryOverviewByFallId(
+        final UUID fallId
+    ) {
+        final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByFallId(fallId);
+        return toDarlehenBuchhaltungOverview(darlehenBuchhaltungEntrys);
+    }
+
+    private DarlehenBuchhaltungOverviewDto toDarlehenBuchhaltungOverview(
+        final List<DarlehenBuchhaltungEntry> darlehenBuchhaltungEntrys
+    ) {
         final DarlehenBuchhaltungOverviewDto darlehenBuchhaltungOverviewDto = new DarlehenBuchhaltungOverviewDto();
         final List<DarlehenBuchhaltungEntry> nonNullBetragEntrys = darlehenBuchhaltungEntrys.stream()
             .filter(darlehenBuchhaltungEntry -> Objects.nonNull(darlehenBuchhaltungEntry.getBetrag()))

@@ -17,14 +17,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DeploymentConfig")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DeploymentConfigDto  implements Serializable {
   private @Valid String environment;
   private @Valid String version;
   private @Valid List<String> allowedMimeTypes;
+
+  protected DeploymentConfigDto(DeploymentConfigDtoBuilder<?, ?> b) {
+    this.environment = b.environment;
+    this.version = b.version;
+    this.allowedMimeTypes = b.allowedMimeTypes;
+  }
+
+  public DeploymentConfigDto() {
+  }
 
   /**
    **/
@@ -140,5 +149,43 @@ public class DeploymentConfigDto  implements Serializable {
   }
 
 
+  public static DeploymentConfigDtoBuilder<?, ?> builder() {
+    return new DeploymentConfigDtoBuilderImpl();
+  }
+
+  private static final class DeploymentConfigDtoBuilderImpl extends DeploymentConfigDtoBuilder<DeploymentConfigDto, DeploymentConfigDtoBuilderImpl> {
+
+    @Override
+    protected DeploymentConfigDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DeploymentConfigDto build() {
+      return new DeploymentConfigDto(this);
+    }
+  }
+
+  public static abstract class DeploymentConfigDtoBuilder<C extends DeploymentConfigDto, B extends DeploymentConfigDtoBuilder<C, B>>  {
+    private String environment;
+    private String version;
+    private List<String> allowedMimeTypes;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B environment(String environment) {
+      this.environment = environment;
+      return self();
+    }
+    public B version(String version) {
+      this.version = version;
+      return self();
+    }
+    public B allowedMimeTypes(List<String> allowedMimeTypes) {
+      this.allowedMimeTypes = allowedMimeTypes;
+      return self();
+    }
+  }
 }
 

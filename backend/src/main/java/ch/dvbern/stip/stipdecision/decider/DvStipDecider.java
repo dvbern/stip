@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.stipdecision.decider;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Singleton
 @RequiredArgsConstructor
-@StipDeciderTenant(MandantIdentifier.DV)
+@StipDeciderTenant(TenantIdentifier.DV)
 public class DvStipDecider extends BaseStipDecider {
     private final BernStipDecider bernStipDecider;
 

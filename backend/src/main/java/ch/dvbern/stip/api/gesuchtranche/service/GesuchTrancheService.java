@@ -22,6 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungValidatorService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -43,11 +44,14 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
-import ch.dvbern.stip.api.dokument.util.IsDokumentOfVersteckterElternteilUtil;
+import ch.dvbern.stip.api.dokument.util.IsDokumentOfHiddenElternteilUtil;
+import ch.dvbern.stip.api.dokument.util.IsDokumentOfHiddenGeschwisterUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -121,31 +125,68 @@ public class GesuchTrancheService {
         return gesuchTranche.getGesuch().getId();
     }
 
-    @Transactional
-    public GesuchAenderungsDto getHistorizedAenderungs(final Gesuch gesuch) {
-        final var offeneAenderung =
-            gesuch.getAenderungZuUeberpruefen().map(gesuchTrancheMapper::toSlimDto).orElse(null);
+    private GesuchAenderungsDto getHistorizedAenderungs(final Gesuch gesuch) {
         final var akzeptierteAenderungs = gesuch.getAenderungs()
-            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.AKZEPTIERT)
+            .filter(
+                aenderung -> aenderung.getStatus() == GesuchTrancheStatus.AKZEPTIERT
+            )
             .map(gesuchTrancheMapper::toSlimDto)
             .toList();
+        final var fehlendeDokumenteAenderungs = gesuch.getAenderungs()
+            .filter(
+                aenderung -> aenderung.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+            )
+            .map(gesuchTrancheMapper::toSlimDto)
+            .toList();
+        final var manuelleAenderungs = gesuch.getAenderungs()
+            .filter(
+                aenderung -> aenderung.getStatus() == GesuchTrancheStatus.MANUELLE_AENDERUNG
+            )
+            .map(gesuchTrancheMapper::toSlimDto)
+            .toList();
+        return new GesuchAenderungsDto()
+            .manuell(manuelleAenderungs)
+            .akzeptiert(akzeptierteAenderungs)
+            .fehlendeDokumente(fehlendeDokumenteAenderungs);
+    }
+
+    @Transactional
+    public GesuchAenderungsDto getHistorizedAenderungsGs(final Gesuch historizedGesuch, final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var offeneAenderung = gesuchTrancheRepository.findOffeneAenderungGs(gesuch.getId())
+            .map(gesuchTrancheMapper::toSlimDto)
+            .orElse(null);;
+        final var eingereichteAenderung = gesuchTrancheRepository.findLatestAenderungGs(gesuch.getId())
+            .filter(_aenderung -> !GesuchStatusUtil.gsReceivesCurrentGesuch(gesuch.getGesuchStatus()))
+            .map(gesuchTrancheMapper::toSlimDto)
+            .orElse(null);
+        return getHistorizedAenderungs(historizedGesuch)
+            .offen(offeneAenderung)
+            .eingereicht(eingereichteAenderung)
+            .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));
+    }
+
+    @Transactional
+    public GesuchAenderungsDto getHistorizedAenderungsSb(final Gesuch gesuch) {
+        final var offeneAenderung =
+            gesuch.getAenderungZuUeberpruefen().map(gesuchTrancheMapper::toSlimDto).orElse(null);
         final var abgelehnteAenderungs =
             gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungs(gesuch.getId())
                 .stream()
                 .map(pair -> gesuchTrancheMapper.toSlimDto(pair.getLeft(), pair.getRight().getId()))
                 .toList();
-        return new GesuchAenderungsDto()
+        return getHistorizedAenderungs(gesuch)
             .offen(offeneAenderung)
-            .akzeptiert(akzeptierteAenderungs)
             .abgelehnt(abgelehnteAenderungs)
-            .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));
+            .canAenderungEinreichen(false);
     }
 
     private DokumenteToUploadDto setFlagsOnDokumenteToUploadDto(
-        final Gesuch gesuch,
+        final GesuchTranche gesuchTranche,
         DokumenteToUploadDto dokumenteToUploadDto
     ) {
         final var benutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchTranche.getGesuch();
         final var needsUnterschriftenblatt = !gesuch.isVerfuegt()
         || Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus());
         dokumenteToUploadDto.setSbCanUploadUnterschriftenblatt(needsUnterschriftenblatt);
@@ -155,42 +196,45 @@ public class GesuchTrancheService {
                 .getGSCanFehlendeDokumenteEinreichen(gesuch, benutzer)
         );
 
-        dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
-            requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)
-        );
-
-        return dokumenteToUploadDto;
+        return switch (gesuchTranche.getTyp()) {
+            case TRANCHE -> dokumenteToUploadDto.sbCanFehlendeDokumenteUebermitteln(
+                requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)
+            );
+            case AENDERUNG -> dokumenteToUploadDto.sbCanFehlendeDokumenteUebermitteln(
+                requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche)
+            );
+        };
     }
 
     @Transactional
     public DokumenteToUploadDto getDokumenteToUploadGS(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
 
-        final var required = getRequiredDokumentTypes(gesuchTranche);
-        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche);
+        final var required = getRequiredDokumentTypes(gesuchTranche, false);
+        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche, false);
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, requiredRefs, List.of(), customRequired);
-        return setFlagsOnDokumenteToUploadDto(gesuchTranche.getGesuch(), dokumenteToUploadDto);
+        return setFlagsOnDokumenteToUploadDto(gesuchTranche, dokumenteToUploadDto);
     }
 
     @Transactional
     public DokumenteToUploadDto getDokumenteToUploadSB(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
-        final var required = getRequiredDokumentTypes(gesuchTranche);
-        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche);
+        final var required = getRequiredDokumentTypes(gesuchTranche, true);
+        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche, true);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         var dokumenteToUploadDto =
             dokumenteToUploadMapper.toDto(required, requiredRefs, unterschriftenblaetter, customRequired);
-        return setFlagsOnDokumenteToUploadDto(gesuchTranche.getGesuch(), dokumenteToUploadDto);
+        return setFlagsOnDokumenteToUploadDto(gesuchTranche, dokumenteToUploadDto);
     }
 
-    public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId) {
+    public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId, final boolean includeHidden) {
         var allRequired = new ArrayList<String>();
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTranche);
-        final var requiredDokumentRefs = getRequiredDokumentRefs(gesuchTranche);
+        final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTranche, includeHidden);
+        final var requiredDokumentRefs = getRequiredDokumentRefs(gesuchTranche, includeHidden);
         final var requiredCustomDokumentTypes = getRequiredCustomDokumentTypes(gesuchTranche);
         allRequired.addAll(requiredDokumentTypes.stream().map(Enum::toString).toList());
         allRequired.addAll(
@@ -209,19 +253,24 @@ public class GesuchTrancheService {
             .toList();
     }
 
-    public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
-        return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
+    public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche, final boolean includeHidden) {
+        return requiredDokumentService
+            .getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular(), includeHidden);
     }
 
-    public List<Pair<DokumentTyp, UUID>> getRequiredDokumentRefs(final GesuchTranche gesuchTranche) {
-        return requiredDokumentService.getRequiredDokumentRefsForGesuchFormular(gesuchTranche.getGesuchFormular());
+    public List<Pair<DokumentTyp, UUID>> getRequiredDokumentRefs(
+        final GesuchTranche gesuchTranche,
+        final boolean includeHidden
+    ) {
+        return requiredDokumentService
+            .getRequiredDokumentRefsForGesuchFormular(gesuchTranche.getGesuchFormular(), includeHidden);
     }
 
     @Transactional
     public GesuchDokumentListDto getGesuchDokumentListGS(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
         final var gesuchDokuments = getAndCheckGesuchDokumentsForGesuchTrancheGS(gesuchTranche);
-        final var entrys = getGesuchDokumentEntrys(gesuchTranche);
+        final var entrys = getGesuchDokumentEntrys(gesuchTranche, false);
 
         return new GesuchDokumentListDto().dokuments(gesuchDokuments)
             .entrys(entrys);
@@ -237,15 +286,18 @@ public class GesuchTrancheService {
             .stream()
             .map(gesuchDokumentMapper::toDto)
             .toList();
-        final var entrys = getGesuchDokumentEntrys(gesuchTranche);
+        final var entrys = getGesuchDokumentEntrys(gesuchTranche, true);
 
         return new GesuchDokumentListDto().dokuments(gesuchDokuments)
             .entrys(entrys);
     }
 
-    private List<GesuchDokumentEntryDto> getGesuchDokumentEntrys(final GesuchTranche gesuchTranche) {
+    private List<GesuchDokumentEntryDto> getGesuchDokumentEntrys(
+        final GesuchTranche gesuchTranche,
+        final boolean includeHidden
+    ) {
         final var requiredDokumentRefs =
-            requiredDokumentService.getRequiredDokumentRefMap(gesuchTranche.getGesuchFormular());
+            requiredDokumentService.getRequiredDokumentRefMap(gesuchTranche.getGesuchFormular(), includeHidden);
         final var entrys = new ArrayList<GesuchDokumentEntryDto>();
 
         for (var kind : gesuchTranche.getGesuchFormular().getKinds()) {
@@ -283,12 +335,20 @@ public class GesuchTrancheService {
     }
 
     private List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTrancheGS(final GesuchTranche gesuchTranche) {
-        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
+        final var hiddenElterns = gesuchTranche.getGesuchFormular().getVersteckteEltern();
+        final var hiddenGeschwisters = gesuchTranche.getGesuchFormular()
+            .getGeschwisters()
+            .stream()
+            .filter(Geschwister::isHidden)
+            .collect(
+                Collectors.toSet()
+            );
         return gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(
-                gesuchDokument -> !IsDokumentOfVersteckterElternteilUtil
-                    .isVerstecktesDokument(versteckteEltern, gesuchDokument)
+                gesuchDokument -> !IsDokumentOfHiddenElternteilUtil
+                    .isHiddenDokument(hiddenElterns, gesuchDokument)
+                && !IsDokumentOfHiddenGeschwisterUtil.isHiddenDokument(hiddenGeschwisters, gesuchDokument)
             )
             .map(gesuchDokumentMapper::toDto)
             .toList();
@@ -329,13 +389,6 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public List<GesuchDokumentDto> getGesuchDokumenteForGesuchTranche(final UUID gesuchTrancheId) {
-        return gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
-            .map(gesuchDokumentMapper::toDto)
-            .toList();
-    }
-
-    @Transactional
     public ValidationReportDto validatePagesGS(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
 
@@ -343,7 +396,7 @@ public class GesuchTrancheService {
         if (gesuchFormular == null) {
             throw new NotFoundException();
         }
-        return gesuchFormularService.validatePages(gesuchFormular);
+        return gesuchFormularService.validatePagesGs(gesuchFormular);
     }
 
     @Transactional
@@ -353,7 +406,7 @@ public class GesuchTrancheService {
         if (gesuchFormular == null) {
             throw new NotFoundException();
         }
-        return gesuchFormularService.validatePages(gesuchFormular);
+        return gesuchFormularService.validatePagesSb(gesuchFormular);
     }
 
     @Transactional
@@ -379,7 +432,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDtoWithoutVersteckteEltern(newTranche);
+        return gesuchTrancheMapper.toDtoWithoutConfidentialFields(newTranche);
     }
 
     @Transactional
@@ -404,7 +457,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDtoWithVersteckteEltern(newTranche);
+        return gesuchTrancheMapper.toDtoWithConfidentialFields(newTranche);
     }
 
     @Transactional
@@ -437,7 +490,7 @@ public class GesuchTrancheService {
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
         final var newTranche = gesuchTrancheRepository.findMostRecentCreatedTranche(aenderung.getGesuch());
-        return gesuchTrancheMapper.toDtoWithVersteckteEltern(newTranche.orElseThrow(NotFoundException::new));
+        return gesuchTrancheMapper.toDtoWithConfidentialFields(newTranche.orElseThrow(NotFoundException::new));
     }
 
     @Transactional
@@ -536,7 +589,7 @@ public class GesuchTrancheService {
         notificationService
             .createAenderungAbgelehntNotificationAndSendStdMail(aenderung.getGesuch(), aenderung, kommentarDto);
 
-        return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
+        return gesuchTrancheMapper.toDtoWithConfidentialFields(aenderung.getGesuch().getLatestGesuchTranche());
     }
 
     @Transactional
@@ -567,7 +620,7 @@ public class GesuchTrancheService {
         gesuchStatusService
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
-        return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
+        return gesuchTrancheMapper.toDtoWithConfidentialFields(aenderung);
     }
 
     private ValidationReportDto bearbeitungAbschliessenValidationReport(final GesuchTranche gesuchTranche) {

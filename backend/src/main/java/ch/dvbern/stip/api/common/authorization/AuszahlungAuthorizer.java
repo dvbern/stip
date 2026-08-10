@@ -44,7 +44,7 @@ public class AuszahlungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 
-        if (isSachbearbeiterOrFreigabestelle(currentBenutzer)) {
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
             return;
         }
         if (

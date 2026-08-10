@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungUpdateDto  implements Serializable {
   private @Valid UUID fallId;
@@ -35,6 +35,27 @@ public class AusbildungUpdateDto  implements Serializable {
   private @Valid Boolean isAusbildungAusland;
   private @Valid UUID landId;
   private @Valid UUID ausbildungsgangId;
+
+  protected AusbildungUpdateDto(AusbildungUpdateDtoBuilder<?, ?> b) {
+    this.fallId = b.fallId;
+    this.ausbildungBegin = b.ausbildungBegin;
+    this.ausbildungEnd = b.ausbildungEnd;
+    this.pensum = b.pensum;
+    this.id = b.id;
+    this.fachrichtungBerufsbezeichnung = b.fachrichtungBerufsbezeichnung;
+    this.ausbildungNichtGefunden = b.ausbildungNichtGefunden;
+    this.besuchtBMS = b.besuchtBMS;
+    this.alternativeAusbildungsstaette = b.alternativeAusbildungsstaette;
+    this.alternativeAusbildungsgang = b.alternativeAusbildungsgang;
+    this.ausbildungsortPLZ = b.ausbildungsortPLZ;
+    this.ausbildungsort = b.ausbildungsort;
+    this.isAusbildungAusland = b.isAusbildungAusland;
+    this.landId = b.landId;
+    this.ausbildungsgangId = b.ausbildungsgangId;
+  }
+
+  public AusbildungUpdateDto() {
+  }
 
   /**
    **/
@@ -385,5 +406,103 @@ public class AusbildungUpdateDto  implements Serializable {
   }
 
 
+  public static AusbildungUpdateDtoBuilder<?, ?> builder() {
+    return new AusbildungUpdateDtoBuilderImpl();
+  }
+
+  private static final class AusbildungUpdateDtoBuilderImpl extends AusbildungUpdateDtoBuilder<AusbildungUpdateDto, AusbildungUpdateDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungUpdateDto build() {
+      return new AusbildungUpdateDto(this);
+    }
+  }
+
+  public static abstract class AusbildungUpdateDtoBuilder<C extends AusbildungUpdateDto, B extends AusbildungUpdateDtoBuilder<C, B>>  {
+    private UUID fallId;
+    private String ausbildungBegin;
+    private String ausbildungEnd;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
+    private UUID id;
+    private String fachrichtungBerufsbezeichnung;
+    private Boolean ausbildungNichtGefunden;
+    private Boolean besuchtBMS;
+    private String alternativeAusbildungsstaette;
+    private String alternativeAusbildungsgang;
+    private String ausbildungsortPLZ;
+    private String ausbildungsort;
+    private Boolean isAusbildungAusland;
+    private UUID landId;
+    private UUID ausbildungsgangId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B fallId(UUID fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B ausbildungBegin(String ausbildungBegin) {
+      this.ausbildungBegin = ausbildungBegin;
+      return self();
+    }
+    public B ausbildungEnd(String ausbildungEnd) {
+      this.ausbildungEnd = ausbildungEnd;
+      return self();
+    }
+    public B pensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
+      this.pensum = pensum;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+      this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
+      return self();
+    }
+    public B ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+      this.ausbildungNichtGefunden = ausbildungNichtGefunden;
+      return self();
+    }
+    public B besuchtBMS(Boolean besuchtBMS) {
+      this.besuchtBMS = besuchtBMS;
+      return self();
+    }
+    public B alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
+      this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
+      return self();
+    }
+    public B alternativeAusbildungsgang(String alternativeAusbildungsgang) {
+      this.alternativeAusbildungsgang = alternativeAusbildungsgang;
+      return self();
+    }
+    public B ausbildungsortPLZ(String ausbildungsortPLZ) {
+      this.ausbildungsortPLZ = ausbildungsortPLZ;
+      return self();
+    }
+    public B ausbildungsort(String ausbildungsort) {
+      this.ausbildungsort = ausbildungsort;
+      return self();
+    }
+    public B isAusbildungAusland(Boolean isAusbildungAusland) {
+      this.isAusbildungAusland = isAusbildungAusland;
+      return self();
+    }
+    public B landId(UUID landId) {
+      this.landId = landId;
+      return self();
+    }
+    public B ausbildungsgangId(UUID ausbildungsgangId) {
+      this.ausbildungsgangId = ausbildungsgangId;
+      return self();
+    }
+  }
 }
 

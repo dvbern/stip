@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.Kanton;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
+import ch.dvbern.stip.generated.dto.VerfuegungFallDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -68,7 +69,7 @@ public class VerfuegungService {
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final VerfuegungMapper verfuegungMapper;
     private final Antivirus antivirus;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final S3AsyncClient s3;
     private final VerfuegungDokumentRepository verfuegungDokumentRepository;
     private final DokumentUploadService dokumentUploadService;
@@ -79,6 +80,19 @@ public class VerfuegungService {
         return gesuch.getVerfuegungs()
             .stream()
             .map(verfuegungMapper::toDto)
+            .toList();
+    }
+
+    public Optional<Verfuegung> getLatestVerfuegungByGesuchId(final UUID gesuchId) {
+        return verfuegungRepository.getLatestVerfuegungByGesuchId(gesuchId);
+    }
+
+    @Transactional
+    public List<VerfuegungFallDto> getVerfuegungenByFallId(final UUID fallId) {
+        return gesuchRepository.findAllForFall(fallId)
+            .flatMap(gesuch -> gesuch.getVerfuegungs().stream())
+            .sorted(Comparator.comparing(Verfuegung::getTimestampErstellt).reversed())
+            .map(verfuegungMapper::toFallDto)
             .toList();
     }
 
@@ -94,7 +108,7 @@ public class VerfuegungService {
         final var response = dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
             VERFUEGUNG_DOKUMENT_PATH,
             objectId -> {
@@ -104,7 +118,7 @@ public class VerfuegungService {
 
                 final var verfuegungsDokument = new VerfuegungDokument();
                 verfuegungsDokument.setVerfuegung(verfuegung);
-                verfuegungsDokument.setTyp(VerfuegungDokumentTyp.VERFUEGUNGSBRIEF);
+                verfuegungsDokument.setTyp(VerfuegungDokumentTyp.MANUELLE_NEGATIVE_VERFUEGUNG);
                 verfuegungsDokument.setObjectId(objectId);
                 verfuegungsDokument.setFilename(fileUpload.fileName());
                 verfuegungsDokument.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
@@ -152,7 +166,7 @@ public class VerfuegungService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             verfuegungDokument.getObjectId(),
             verfuegungDokument.getFilepath(),
             verfuegungDokument.getFilename()
@@ -171,7 +185,7 @@ public class VerfuegungService {
             pdfContent.toByteArray(),
             filename,
             s3,
-            configService,
+            config,
             VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -204,7 +218,7 @@ public class VerfuegungService {
                 .format(FILENAME_PREFIX_BERECHNUNGSBLATT_VATER, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
             case BERECHNUNGSBLATT_FAMILIE -> String
                 .format(FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
-            case VERSENDETE_VERFUEGUNG -> String
+            case VERSENDETE_VERFUEGUNG, MANUELLE_NEGATIVE_VERFUEGUNG -> String
                 .format(FILENAME_PREFIX_VERFUEGUNG, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
             case VERFUEGUNGSBRIEF -> String
                 .format(FILENAME_PREFIX_VERFUEGUNGSBRIEF, fallNr, formattedDate, FILENAME_EXTENSION_PDF);

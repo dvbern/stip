@@ -3,7 +3,6 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDto;
 import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
 import ch.dvbern.stip.generated.dto.FallDto;
-import ch.dvbern.stip.generated.dto.NotificationDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,16 +21,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FallDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallDashboardItemDto  implements Serializable {
   private @Valid FallDto fall;
   private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
-  private @Valid List<NotificationDto> notifications = new ArrayList<>();
   private @Valid DelegierungSlimDto currentDelegierung;
   private @Valid LocalDate earliestActiveGesuchPeriodeStart;
+
+  protected FallDashboardItemDto(FallDashboardItemDtoBuilder<?, ?> b) {
+    this.fall = b.fall;
+    this.ausbildungDashboardItems = b.ausbildungDashboardItems;
+    this.currentDelegierung = b.currentDelegierung;
+    this.earliestActiveGesuchPeriodeStart = b.earliestActiveGesuchPeriodeStart;
+  }
+
+  public FallDashboardItemDto() {
+  }
 
   /**
    **/
@@ -89,41 +97,6 @@ public class FallDashboardItemDto  implements Serializable {
   }
   /**
    **/
-  public FallDashboardItemDto notifications(List<NotificationDto> notifications) {
-    this.notifications = notifications;
-    return this;
-  }
-
-  
-  @JsonProperty("notifications")
-  @NotNull
-  public List<NotificationDto> getNotifications() {
-    return notifications;
-  }
-
-  @JsonProperty("notifications")
-  public void setNotifications(List<NotificationDto> notifications) {
-    this.notifications = notifications;
-  }
-
-  public FallDashboardItemDto addNotificationsItem(NotificationDto notificationsItem) {
-    if (this.notifications == null) {
-      this.notifications = new ArrayList<>();
-    }
-
-    this.notifications.add(notificationsItem);
-    return this;
-  }
-
-  public FallDashboardItemDto removeNotificationsItem(NotificationDto notificationsItem) {
-    if (notificationsItem != null && this.notifications != null) {
-      this.notifications.remove(notificationsItem);
-    }
-
-    return this;
-  }
-  /**
-   **/
   public FallDashboardItemDto currentDelegierung(DelegierungSlimDto currentDelegierung) {
     this.currentDelegierung = currentDelegierung;
     return this;
@@ -170,14 +143,13 @@ public class FallDashboardItemDto  implements Serializable {
     FallDashboardItemDto fallDashboardItem = (FallDashboardItemDto) o;
     return Objects.equals(this.fall, fallDashboardItem.fall) &&
         Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
-        Objects.equals(this.notifications, fallDashboardItem.notifications) &&
         Objects.equals(this.currentDelegierung, fallDashboardItem.currentDelegierung) &&
         Objects.equals(this.earliestActiveGesuchPeriodeStart, fallDashboardItem.earliestActiveGesuchPeriodeStart);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fall, ausbildungDashboardItems, notifications, currentDelegierung, earliestActiveGesuchPeriodeStart);
+    return Objects.hash(fall, ausbildungDashboardItems, currentDelegierung, earliestActiveGesuchPeriodeStart);
   }
 
   @Override
@@ -187,7 +159,6 @@ public class FallDashboardItemDto  implements Serializable {
     
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
-    sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
     sb.append("    currentDelegierung: ").append(toIndentedString(currentDelegierung)).append("\n");
     sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("}");
@@ -206,5 +177,48 @@ public class FallDashboardItemDto  implements Serializable {
   }
 
 
+  public static FallDashboardItemDtoBuilder<?, ?> builder() {
+    return new FallDashboardItemDtoBuilderImpl();
+  }
+
+  private static final class FallDashboardItemDtoBuilderImpl extends FallDashboardItemDtoBuilder<FallDashboardItemDto, FallDashboardItemDtoBuilderImpl> {
+
+    @Override
+    protected FallDashboardItemDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FallDashboardItemDto build() {
+      return new FallDashboardItemDto(this);
+    }
+  }
+
+  public static abstract class FallDashboardItemDtoBuilder<C extends FallDashboardItemDto, B extends FallDashboardItemDtoBuilder<C, B>>  {
+    private FallDto fall;
+    private List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
+    private DelegierungSlimDto currentDelegierung;
+    private LocalDate earliestActiveGesuchPeriodeStart;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B fall(FallDto fall) {
+      this.fall = fall;
+      return self();
+    }
+    public B ausbildungDashboardItems(List<AusbildungDashboardItemDto> ausbildungDashboardItems) {
+      this.ausbildungDashboardItems = ausbildungDashboardItems;
+      return self();
+    }
+    public B currentDelegierung(DelegierungSlimDto currentDelegierung) {
+      this.currentDelegierung = currentDelegierung;
+      return self();
+    }
+    public B earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+      this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+      return self();
+    }
+  }
 }
 

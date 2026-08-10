@@ -4,10 +4,10 @@
 @if (berechnungStore.berechnung() | rdIsPendingWithoutCache) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
-  <ng-container *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.zusammenfassung'">
+  <ng-container *dvTranslocoShared="let t">
     <!-- resultat -->
     <h2 class="tw:mb-6 tw:font-bold tw:text-3xl">
-      {{ t('resultat.title') }}
+      {{ t('shared.verfuegung.zusammenfassung.resultat.title') }}
     </h2>
 
     <div
@@ -15,17 +15,17 @@
       class="tw:min-h-24 tw:flex tw:gap-2 tw:justify-between tw:p-4 tw:items-center tw:rounded-xl tw:mb-10 tw:bg-gray-100"
     >
       <div
-        class="tw:font-semibold tw:text-2xl tw:font-bold tw:flex tw:items-center tw:gap-2 tw:ml-3"
+        class="tw:text-2xl tw:font-bold tw:flex tw:items-center tw:gap-2 tw:ml-3"
         data-testid="zusammenfassung-resultat"
       >
         <span class="material-symbols-rounded tw:text-4xl!">{{ accepted ? 'check_circle' : 'cancel' }}</span>
         <span>
-          {{ accepted ? t('resultat.angenommen') : t('resultat.abgelehnt') }}
+          {{ t(`shared.verfuegung.zusammenfassung.resultat.${accepted ? 'angenommen' : 'abgelehnt'}`) }}
         </span>
       </div>
     </div>
 
-    <h3 class="tw:mb-4 tw:font-bold tw:text-2xl">{{ t('total') }}</h3>
+    <h3 class="tw:mb-4 tw:font-bold tw:text-2xl">{{ t('shared.verfuegung.zusammenfassung.total') }}</h3>
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
@@ -37,7 +37,7 @@
           <div class="tw:flex tw:flex-col tw:text-dv-muted tw:mt-2">
             <div class="tw:flex tw:justify-between tw:text-sm">
               <div>
-                {{ t('totalVorKuerzungUndTeilung') }}
+                {{ t('shared.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung') }}
               </div>
               <div>
                 {{ zusammenfassung.berechnungVorKuerzungUndTeilung | formatChf }}
@@ -47,21 +47,21 @@
             @if (hasKuerzungenNachEinreichefrist) {
               <div class="tw:flex tw:justify-between tw:items-center tw:text-sm">
                 <div class="tw:flex tw:items-center">
-                  {{ t('totalNachKuerzungNachEinreichefrist') }}
+                  {{ t('shared.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist') }}
 
                   <button
                     type="button"
                     (click)="einreichefristInfoDialog.toggle()"
                     class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue"
-                    [attr.aria-label]="t('toggle-info-messages')"
+                    [attr.aria-label]="t('shared.verfuegung.zusammenfassung.toggle-info-messages')"
                   >
                     <span class="material-symbols-rounded tw:text-xl!"> info </span>
                   </button>
                   <div
                     dvSharedUiInfoDialog
                     [forceDialogPosition]="true"
-                    [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title'"
-                    [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.info'"
+                    [dialogTitleKeySig]="'shared.verfuegung.berechnung.hinweis.einreichefrist.title'"
+                    [dialogMessageKeySig]="'shared.verfuegung.berechnung.hinweis.einreichefrist.info'"
                     [dialogMessageParams]="{
                       anzahlMonate: zusammenfassung.anzahlMonateEinreichefrist,
                       betrag:
@@ -73,14 +73,17 @@
                   ></div>
                 </div>
                 <div>
-                  {{ zusammenfassung.totalNachKuerzungNachEinreichefrist | formatChf }}
+                  {{
+                    zusammenfassung.berechnungVorKuerzungUndTeilung -
+                      (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) | formatChfNegative: true
+                  }}
                 </div>
               </div>
             }
             @if (hasKuerzungenUnterbruch) {
               <div class="tw:flex tw:justify-between tw:text-sm">
                 <div class="tw:flex tw:items-center">
-                  {{ t('totalNachKuerzungUnterbruch') }}
+                  {{ t('shared.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch') }}
 
                   <button
                     type="button"
@@ -93,8 +96,8 @@
                   <div
                     dvSharedUiInfoDialog
                     [forceDialogPosition]="true"
-                    [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title'"
-                    [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info'"
+                    [dialogTitleKeySig]="'shared.verfuegung.berechnung.hinweis.unterbruch.title'"
+                    [dialogMessageKeySig]="'shared.verfuegung.berechnung.hinweis.unterbruch.info'"
                     [dialogMessageParams]="{
                       anzahlMonate: zusammenfassung.anzahlMonateUnterbruch,
                       betrag:
@@ -116,7 +119,7 @@
         @if (hasDarlehen) {
           <div class="tw:flex tw:justify-between tw:font-bold">
             <div>
-              {{ t('berechnungVorTeilungDarlehen') }}
+              {{ t('shared.verfuegung.zusammenfassung.berechnungVorTeilungDarlehen') }}
             </div>
             <div>
               {{ zusammenfassung.berechnungVorTeilungDarlehen | formatChf }}
@@ -130,7 +133,7 @@
           <div class="tw:border-t tw:border-gray-500 tw:my-4"></div>
           <div class="tw:flex tw:justify-between tw:font-bold tw:mb-4">
             <div>
-              {{ t('totalStipendium') }}
+              {{ t('shared.verfuegung.zusammenfassung.totalStipendium') }}
             </div>
             <div>
               {{ zusammenfassung.berechnungStipendium | formatChf }}
@@ -141,21 +144,21 @@
           <div class="tw:flex tw:justify-between tw:font-bold tw:mb-4">
             <div class="tw:flex tw:items-center tw:gap-1">
               <div>
-                {{ t('totalDarlehen') }}
+                {{ t('shared.verfuegung.zusammenfassung.totalDarlehen') }}
               </div>
               <button
                 type="button"
                 (click)="eigenverdienstInfoDialog.toggle()"
                 class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue"
-                [attr.aria-label]="t('toggle-info-messages')"
+                [attr.aria-label]="t('shared.verfuegung.zusammenfassung.toggle-info-messages')"
               >
                 <span class="material-symbols-rounded tw:text-xl!"> info </span>
               </button>
               <div
                 dvSharedUiInfoDialog
                 [forceDialogPosition]="true"
-                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title'"
-                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info'"
+                [dialogTitleKeySig]="'shared.verfuegung.berechnung.hinweis.eigenverdienst.title'"
+                [dialogMessageKeySig]="'shared.verfuegung.berechnung.hinweis.eigenverdienst.info'"
                 [dialogMessageParams]="{
                   einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
                 }"
@@ -170,12 +173,24 @@
         } @else {
           <div class="tw:flex tw:justify-between tw:font-bold">
             <div>
-              {{ t('totalStipendium') }}
+              {{ t('shared.verfuegung.zusammenfassung.totalStipendium') }}
             </div>
             <div>
               {{ zusammenfassung.berechnungStipendium | formatChf }}
             </div>
           </div>
+
+          @if (zusammenfassung.berechnungStipendium < (zusammenfassung.stammdaten?.stipLimiteMinimalstipendium ?? 0)) {
+            <div class="tw:flex tw:justify-between tw:mb-4">
+              <div>
+                {{
+                  t('shared.verfuegung.zusammenfassung.limit', {
+                    limit: zusammenfassung.stammdaten?.stipLimiteMinimalstipendium,
+                  })
+                }}
+              </div>
+            </div>
+          }
 
           @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
             <ng-container *ngTemplateOutlet="kuerzungUndInfoTemplate"></ng-container>
@@ -184,44 +199,63 @@
       </mat-card-content>
     </mat-card>
 
-    <h3 class="tw:mb-4 tw:font-bold tw:text-2xl">{{ t('berechnungen') }}</h3>
+    <h3 class="tw:mb-4 tw:font-bold tw:text-2xl">{{ t('shared.verfuegung.zusammenfassung.berechnungen') }}</h3>
 
-    <mat-card class="tw:mb-10">
-      <mat-card-content>
-        @for (berechnungen of zusammenfassung.berechnungsresultateGroup; track $index) {
-          @for (teilBerechnung of berechnungen.berechnungen; track $index; let berechnungsIndex = $index) {
-            <div class="tw:flex tw:justify-between tw:font-semibold tw:mb-6">
-              <div class="tw:flex tw:gap-2 tw:font-bold">
-                <div>
-                  {{
-                    t('item.title', {
-                      index: berechnungsIndex + 1,
-                      startDate: teilBerechnung.gueltigAb | date: 'dd.MM.yyyy',
-                      endDate: teilBerechnung.gueltigBis | date: 'dd.MM.yyyy',
-                    })
-                  }}
-                </div>
-
-                <a
-                  class="tw:font-light tw:text-dv-blue"
-                  [routerLink]="['../../', berechnungen.trancheId, 'berechnung', berechnungsIndex + 1]"
-                >
-                  <div class="tw:flex">
-                    {{ t('item.link') }}
-                    <i class="material-symbols-rounded tw:ml-1 tw:text-lg/snug!">arrow_right_alt</i>
-                  </div>
-                </a>
-              </div>
-              <div>
-                {{ teilBerechnung.total | formatChf: false }}
-              </div>
+    @for (group of zusammenfassung.berechnungsresultateGroup; track $index) {
+      <mat-card class="tw:mb-4 tw:p-0!">
+        <mat-card-content>
+          <div class="tw:flex tw:justify-between">
+            <div class="tw:flex tw:gap-2">
+              <span class="tw:font-bold tw:text-base/snug">{{
+                t(`shared.verfuegung.zusammenfassung.item.title`, group.tranche)
+              }}</span>
+              <span class="tw:text-sm/normal">
+                ({{
+                  t('shared.verfuegung.zusammenfassung.item.titleSuffix', {
+                    startDate: group.tranche.startDate | date: 'MM.yyyy',
+                    endDate: group.tranche.endDate | date: 'MM.yyyy',
+                  })
+                }})
+              </span>
             </div>
-          }
-          @if (!$last) {
-            <div class="tw:border-t tw:border-gray-300 tw:my-6"></div>
-          }
-        }
-      </mat-card-content>
-    </mat-card>
+            <div class="tw:font-bold tw:text-base/snug">
+              {{ group.tranche.total | formatChf: false }}
+            </div>
+          </div>
+          <hr class="tw:dv-divider tw:my-2.5 tw:border-t-2" />
+          <div class="tw:w-full tw:grid tw:grid-cols-[auto_auto_1fr_auto] tw:gap-2 tw:text-dv-muted tw:text-sm">
+            @for (teilBerechnung of group.tranche.berechnungen; track $index; let berechnungsIndex = $index) {
+              <span class="tw:whitespace-nowrap">
+                {{ t('shared.verfuegung.zusammenfassung.berechnung') }}
+                @if (group.tranche.berechnungen.length > 1) {
+                  {{ berechnungsIndex + 1 }}
+                }
+              </span>
+              <a
+                class="tw:font-light tw:text-dv-blue"
+                [routerLink]="['../../', group.tranche.gesuchTrancheId, 'berechnung', berechnungsIndex + 1]"
+                queryParamsHandling="merge"
+              >
+                <div class="tw:flex">
+                  {{ t('shared.verfuegung.zusammenfassung.item.link') }}
+                  <i class="material-symbols-rounded tw:ml-1 tw:text-lg/snug!">arrow_right_alt</i>
+                </div>
+              </a>
+              <span class="tw:whitespace-nowrap tw:text-right tw:mr-8">
+                {{
+                  t('shared.verfuegung.zusammenfassung.teilberechnung.wert', {
+                    percentage: teilBerechnung.berechnungsanteilTotal,
+                    value: teilBerechnung.ungekuerztTotal | formatChf: false,
+                  })
+                }}
+              </span>
+              <span class="tw:text-right">
+                {{ teilBerechnung.total | formatChf: false }}
+              </span>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
   </ng-container>
 }

@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.common.service.IdEncryptionService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchNummerSeqRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -35,21 +36,21 @@ public class GesuchNummerService {
     private final IdEncryptionService idEncryptionService;
     private final GesuchsperiodenService gesuchsperiodenService;
     private final GesuchsjahrService gesuchsjahrService;
-
-    private static final String MANDANT = "BE"; // TODO KSTIP-1411: Mandantenkürzel
+    private final TenantService tenantService;
 
     @Transactional
     public String createGesuchNummer(final UUID gesuchsperiodeId) {
+        final var tenant = tenantService.getCurrentTenant().getIdentifier().toUpperCase();
         final var gesuchsperiode =
             gesuchsperiodenService.getGesuchsperiode(gesuchsperiodeId).orElseThrow(NotFoundException::new);
         final var gesuchsjahr = gesuchsjahrService.getGesuchsjahr(gesuchsperiode.getGesuchsjahrId());
         final var technischesJahr = gesuchsjahr.getTechnischesJahr();
 
-        var nextValue = gesuchNummerSeqRepository.getNextSequenceValue(MANDANT, technischesJahr);
+        var nextValue = gesuchNummerSeqRepository.getNextSequenceValue(tenant, technischesJahr);
 
         var encoded = idEncryptionService.encryptLengthFive(nextValue);
 
-        return String.format("%s.%s.G.%s", technischesJahr, MANDANT, encoded);
+        return String.format("%s.%s.G.%s", technischesJahr, tenant, encoded);
     }
 
 }

@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BeschwerdeEntscheid")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BeschwerdeEntscheidDto  implements Serializable {
   private @Valid String kommentar;
   private @Valid Boolean beschwerdeErfolgreich;
   private @Valid DokumentDto dokument;
+
+  protected BeschwerdeEntscheidDto(BeschwerdeEntscheidDtoBuilder<?, ?> b) {
+    this.kommentar = b.kommentar;
+    this.beschwerdeErfolgreich = b.beschwerdeErfolgreich;
+    this.dokument = b.dokument;
+  }
+
+  public BeschwerdeEntscheidDto() {
+  }
 
   /**
    **/
@@ -125,5 +134,43 @@ public class BeschwerdeEntscheidDto  implements Serializable {
   }
 
 
+  public static BeschwerdeEntscheidDtoBuilder<?, ?> builder() {
+    return new BeschwerdeEntscheidDtoBuilderImpl();
+  }
+
+  private static final class BeschwerdeEntscheidDtoBuilderImpl extends BeschwerdeEntscheidDtoBuilder<BeschwerdeEntscheidDto, BeschwerdeEntscheidDtoBuilderImpl> {
+
+    @Override
+    protected BeschwerdeEntscheidDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BeschwerdeEntscheidDto build() {
+      return new BeschwerdeEntscheidDto(this);
+    }
+  }
+
+  public static abstract class BeschwerdeEntscheidDtoBuilder<C extends BeschwerdeEntscheidDto, B extends BeschwerdeEntscheidDtoBuilder<C, B>>  {
+    private String kommentar;
+    private Boolean beschwerdeErfolgreich;
+    private DokumentDto dokument;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B kommentar(String kommentar) {
+      this.kommentar = kommentar;
+      return self();
+    }
+    public B beschwerdeErfolgreich(Boolean beschwerdeErfolgreich) {
+      this.beschwerdeErfolgreich = beschwerdeErfolgreich;
+      return self();
+    }
+    public B dokument(DokumentDto dokument) {
+      this.dokument = dokument;
+      return self();
+    }
+  }
 }
 

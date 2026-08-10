@@ -59,7 +59,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
     name = "eltern",
     indexes = {
         @Index(name = "IX_eltern_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_eltern_mandant", columnList = "mandant")
+        @Index(name = "IX_eltern_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -123,4 +123,8 @@ public class Eltern extends AbstractPerson {
     @Column(name = "wohnkosten")
     @Min(0)
     private Integer wohnkosten;
+
+    @Nullable
+    @Column(name = "wiederverheiratet")
+    private Boolean wiederverheiratet;
 }

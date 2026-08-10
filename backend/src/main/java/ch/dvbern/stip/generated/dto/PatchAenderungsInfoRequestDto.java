@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PatchAenderungsInfoRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PatchAenderungsInfoRequestDto  implements Serializable {
   private @Valid LocalDate start;
   private @Valid String comment;
   private @Valid LocalDate end;
+
+  protected PatchAenderungsInfoRequestDto(PatchAenderungsInfoRequestDtoBuilder<?, ?> b) {
+    this.start = b.start;
+    this.comment = b.comment;
+    this.end = b.end;
+  }
+
+  public PatchAenderungsInfoRequestDto() {
+  }
 
   /**
    **/
@@ -124,5 +133,43 @@ public class PatchAenderungsInfoRequestDto  implements Serializable {
   }
 
 
+  public static PatchAenderungsInfoRequestDtoBuilder<?, ?> builder() {
+    return new PatchAenderungsInfoRequestDtoBuilderImpl();
+  }
+
+  private static final class PatchAenderungsInfoRequestDtoBuilderImpl extends PatchAenderungsInfoRequestDtoBuilder<PatchAenderungsInfoRequestDto, PatchAenderungsInfoRequestDtoBuilderImpl> {
+
+    @Override
+    protected PatchAenderungsInfoRequestDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PatchAenderungsInfoRequestDto build() {
+      return new PatchAenderungsInfoRequestDto(this);
+    }
+  }
+
+  public static abstract class PatchAenderungsInfoRequestDtoBuilder<C extends PatchAenderungsInfoRequestDto, B extends PatchAenderungsInfoRequestDtoBuilder<C, B>>  {
+    private LocalDate start;
+    private String comment;
+    private LocalDate end;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B start(LocalDate start) {
+      this.start = start;
+      return self();
+    }
+    public B comment(String comment) {
+      this.comment = comment;
+      return self();
+    }
+    public B end(LocalDate end) {
+      this.end = end;
+      return self();
+    }
+  }
 }
 

@@ -13,7 +13,7 @@
     <contract.version>1.24.0</contract.version>
     <itext.version>9.4.0</itext.version>
     <kie.version>10.1.0</kie.version>
-    <liquibase-maven-plugin.version>5.0.1</liquibase-maven-plugin.version>
+    <liquibase-maven-plugin.version>5.0.3</liquibase-maven-plugin.version>
     <lombok.version>1.18.42</lombok.version>
     <mapstruct.version>1.6.3</mapstruct.version>
     <maven.compiler.release>21</maven.compiler.release>
@@ -36,7 +36,8 @@
     <skipITs>true</skipITs>
     <sonar.exclusions>file:**/generated/**,
       file:**/.mvn/**,
-      file:**/.quarkus/**</sonar.exclusions>
+      file:**/.quarkus/**
+    </sonar.exclusions>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <sonar.customAssertionMethods>ch.dvbern.stip.api.util.TestUtil#executeAndAssert</sonar.customAssertionMethods>
     <spotless.eclipse.version>4.29</spotless.eclipse.version>
@@ -249,7 +250,25 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-observability-devservices-lgtm</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-opentelemetry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5-component</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -449,9 +468,21 @@
         </dependencies>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>properties</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
         <configuration>
+          <argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <quarkus.log.level>${ci.logLevel}</quarkus.log.level>
@@ -502,7 +533,7 @@
         </dependencies>
         <configuration>
           <changeLogFile>src/main/resources/db/migration/changelog.xml</changeLogFile>
-          <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
+          <diffChangeLogFile>src/main/resources/db/migration/KSTIP-XXXX.xml</diffChangeLogFile>
           <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
           <propertyFile>liquibase.properties</propertyFile>
           <driver>org.postgresql.Driver</driver>
@@ -522,7 +553,7 @@
         </executions>
         <configuration>
           <java>
-            <toggleOffOn />
+            <toggleOffOn/>
             <excludes>
               <include>src/**/generated/**/*.*</include>
             </excludes>
@@ -531,16 +562,16 @@
               <searchRegex>import\s+(?:static\s+)?[^\*\s]+\*;(\r\n|\r|\n)</searchRegex>
               <replacement>$1</replacement>
             </replaceRegex>
-            <cleanthat />
+            <cleanthat/>
             <eclipse>
               <version>${spotless.eclipse.version}</version>
               <file>${project.basedir}/stip-codestyle.xml</file>
             </eclipse>
-            <trimTrailingWhitespace />
+            <trimTrailingWhitespace/>
             <importOrder>
               <order>java,,\#</order>
             </importOrder>
-            <removeUnusedImports />
+            <removeUnusedImports/>
             <licenseHeader>
               <file>${project.basedir}/LICENSE_HEADER.txt</file>
             </licenseHeader>
@@ -679,68 +710,73 @@
                   <modelNameSuffix>Dto</modelNameSuffix>
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
-                  <schemaMappings>FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
-                      DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
-                      DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
-                      DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
-                      GetFreiwilligDarlehenSbQueryType=ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType,
-                      SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
-                      Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
-                      Anrede=ch.dvbern.stip.api.common.type.Anrede,
-                      Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
-                      Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
-                      Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
-                      ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
-                      ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
-                      Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
-                      ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
-                      DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
-                      Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
-                      Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
-                      Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
-                      WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                      LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
-                      SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp,
-                      GetGesucheSBQueryType=ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType,
-                      NotificationType=ch.dvbern.stip.api.notification.type.NotificationType,
-                      Dokumentstatus=ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus,
-                      GesuchTrancheStatus=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus,
-                      GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
-                      SbGesucheDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn,
-                      SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
-                      AusbildungsPensum=ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum,
-                      AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
-                      StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
-                      GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
-                      UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
-                      DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt,
-                      SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
-                      BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType,
-                      ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
-                      Kanton=ch.dvbern.stip.api.common.type.Kanton,
-                      ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB,
-                      GesuchsperiodeSelectErrorType=ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType,
-                      Ausbildungskategorie=ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie,
-                      Bildungskategorie=ch.dvbern.stip.api.ausbildung.type.Bildungskategorie,
-                      Bildungsrichtung=ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung,
-                      FerienTyp=ch.dvbern.stip.api.ausbildung.type.FerienTyp,
-                      AbschlussZusatzfrage=ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage,
-                      AbschlussSortColumn=ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn,
-                      AusbildungsstaetteSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn,
-                      AusbildungsgangSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn,
-                      StatusprotokollEntryTyp=ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp,
-                      GetDelegierungSozQueryTypeMitarbeiter=ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter,
-                      GetDelegierungSozQueryTypeAdmin=ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin,
-                      AusbildungsstaetteNummerTyp=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp,
-                      MassendruckJobTyp=ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp,
-                      MassendruckJobStatus=ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus,
-                      MassendruckJobSortColumn=ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn,
-                      GetMassendruckJobQueryType=ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType,
-                      DarlehenBuchhaltungEntryKategorie=ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie,
-                      VerfuegungStatus=ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus,
-                      AusbildungUnterbruchAntragStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus,
-                      InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason,
-                      DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus</schemaMappings>
+                  <schemaMappings>
+                    FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
+                    DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
+                    DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
+                    DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
+
+                    SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
+                    Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
+                    Anrede=ch.dvbern.stip.api.common.type.Anrede,
+                    Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
+                    Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
+                    Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
+                    ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
+                    ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
+                    Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
+                    ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
+                    DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
+                    Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
+                    Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
+                    Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
+                    WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
+                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
+                    SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp,
+                    GetGesucheSBQueryType=ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType,
+                    NotificationType=ch.dvbern.stip.api.notification.type.NotificationType,
+                    Dokumentstatus=ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus,
+                    GesuchTrancheStatus=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus,
+                    GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
+                    SbGesucheDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn,
+                    SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
+                    AusbildungsPensum=ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum,
+                    AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
+                    StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
+                    GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
+                    UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
+                    DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt,
+                    SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
+                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType,
+                    ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
+                    Kanton=ch.dvbern.stip.api.common.type.Kanton,
+                    ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB,
+                    GesuchsperiodeSelectErrorType=ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType,
+                    Ausbildungskategorie=ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie,
+                    Bildungskategorie=ch.dvbern.stip.api.ausbildung.type.Bildungskategorie,
+                    Bildungsrichtung=ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung,
+                    FerienTyp=ch.dvbern.stip.api.ausbildung.type.FerienTyp,
+                    AbschlussZusatzfrage=ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage,
+                    AbschlussSortColumn=ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn,
+                    AusbildungsstaetteSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn,
+                    AusbildungsgangSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn,
+                    StatusprotokollEntryTyp=ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp,
+                    GetDelegierungSozQueryTypeMitarbeiter=ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter,
+                    GetDelegierungSozQueryTypeAdmin=ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin,
+                    AusbildungsstaetteNummerTyp=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp,
+                    MassendruckJobTyp=ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp,
+                    MassendruckJobStatus=ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus,
+                    MassendruckJobSortColumn=ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn,
+                    GetMassendruckJobQueryType=ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType,
+                    DarlehenBuchhaltungEntryKategorie=ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie,
+                    VerfuegungStatus=ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus,
+                    AusbildungUnterbruchAntragStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus,
+                    InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason,
+                    DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus,
+                    PersonenHaushalt=ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt,
+                    SteuerdatenAdapterType=ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType,
+                    GeschwisterTyp=ch.dvbern.stip.api.geschwister.type.GeschwisterTyp
+                  </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>
@@ -755,11 +791,15 @@
                     <useSwaggerAnnotations>false</useSwaggerAnnotations>
                     <interfaceOnly>true</interfaceOnly>
                     <returnResponse>false</returnResponse>
-                    <additionalModelTypeAnnotations>@lombok.NoArgsConstructor
+                    <additionalModelTypeAnnotations>
+<!--                      @lombok.NoArgsConstructor-->
                       @lombok.AllArgsConstructor
-                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)</additionalModelTypeAnnotations>
+                      @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+                      @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
+                    </additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                     <useTags>true</useTags>
+                    <generateBuilders>true</generateBuilders>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>

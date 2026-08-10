@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchsjahr.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,14 +38,22 @@ public class GesuchsjahrService {
     private final GesuchsjahrRepository gesuchsjahrRepository;
 
     public GesuchsjahrDto getGesuchsjahr(final UUID gesuchsjahrId) {
-        final var gesuchsperiode = gesuchsjahrRepository.requireById(gesuchsjahrId);
-        return gesuchsjahrMapper.toDto(gesuchsperiode);
+        final var gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        return gesuchsjahrMapper.toDto(gesuchsjahr);
     }
 
     public List<GesuchsjahrDto> getGesuchsjahre() {
         return gesuchsjahrRepository.findAll()
             .stream()
             .map(gesuchsjahrMapper::toDto)
+            .toList();
+    }
+
+    public List<Integer> getGesuchsjahreIntList() {
+        return gesuchsjahrRepository.findAll()
+            .stream()
+            .map(Gesuchsjahr::getTechnischesJahr)
+            .sorted(Comparator.reverseOrder())
             .toList();
     }
 

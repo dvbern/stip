@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import io.quarkus.hibernate.orm.PersistenceUnitExtension;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,11 +27,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 @PersistenceUnitExtension
 public class MockDataTenantResolver extends DataTenantResolver {
     public MockDataTenantResolver() {
-        super(null);
+        super(null, new TenantContext().setTenantIdentifier(TenantIdentifier.BERN));
     }
 
     @Override
     public String resolveTenantId() {
-        return getDefaultTenantId();
+        return TenantIdentifier.BERN.getIdentifier();
     }
 }

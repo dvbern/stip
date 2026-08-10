@@ -25,9 +25,10 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.authorization.AusbildungUnterbruchAntragAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.generated.api.AusbildungResource;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
@@ -58,6 +59,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class AusbildungResourceImpl implements AusbildungResource {
     private final AusbildungService ausbildungService;
     private final AusbildungAuthorizer ausbildungAuthorizer;
@@ -65,7 +67,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
     private final DokumentDownloadService dokumentDownloadService;
     private final JWTParser jwtParser;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final BenutzerService benutzerService;
 
     @Override
@@ -129,7 +131,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_ID_CLAIM
         );
         return ausbildungUnterbruchAntragService.getDokument(dokumentId);
@@ -154,7 +156,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
             dokumentId,
             DokumentDownloadConstants.AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 

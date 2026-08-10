@@ -72,12 +72,22 @@ public abstract class GesuchMapper {
     public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
+    @Mapping(source = "ausbildung.fall.id", target = "fallId")
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
     @Mapping(source = ".", target = "state")
     @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
     @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
-    public abstract GesuchInfoDto toInfoDto(Gesuch gesuch);
+    public abstract GesuchInfoDto toInfoDtoGs(Gesuch gesuch);
+
+    @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
+    @Mapping(source = "ausbildung.fall.id", target = "fallId")
+    @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
+    @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
+    @Mapping(source = ".", target = "state")
+    @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
+    @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
+    public abstract GesuchInfoDto toInfoDtoSb(Gesuch gesuch);
 
     @Nullable
     @Named("getPiaVorname")

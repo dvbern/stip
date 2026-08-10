@@ -20,6 +20,7 @@ export interface TimelineRawItem {
   label: TimelineLabel;
   von: Date;
   bis: Date;
+  invalid: boolean;
   editable: boolean;
   wohnsitz?: string;
   ausbildungAbgeschlossen: boolean;
@@ -34,6 +35,7 @@ export interface TimelineAddCommand {
 }
 
 export interface TimelineBlock {
+  id: string;
   col: 'LEFT' | 'RIGHT' | 'BOTH';
   positionStartRow: number;
   positionRowSpan: number;
@@ -47,6 +49,7 @@ export interface TimelineBusyBlock extends TimelineBlock {
   id: string;
   col: 'LEFT' | 'RIGHT';
   label: TimelineLabel;
+  invalid: boolean;
   editable: boolean;
   wohnsitz?: string;
   ausbildungAbgeschlossen: boolean;
@@ -89,10 +92,15 @@ export class TwoColumnTimeline {
   leftCols!: number;
   rightCols!: number;
 
-  fillWith(expectedStartDate: Date | null, rawItems: TimelineRawItem[]) {
+  fillWith(
+    expectedStartDate: Date | null,
+    rawItems: TimelineRawItem[],
+    plannedAusbildung: TimelineRawItem,
+  ) {
     const { items, rows, leftCols, rightCols } = TwoColumnTimeline.prepareItems(
       expectedStartDate,
       rawItems,
+      plannedAusbildung,
     );
     this.items = items;
     this.rows = rows;
@@ -103,6 +111,7 @@ export class TwoColumnTimeline {
   static prepareItems(
     expectedStartDate: Date | null,
     rawItems: TimelineRawItem[],
+    plannedAusbildung: TimelineRawItem,
   ): {
     items: (TimelineBusyBlock | TimelineGapBlock)[];
     rows: number;
@@ -124,12 +133,13 @@ export class TwoColumnTimeline {
     const unevenStartHeight = 1;
 
     // Startluecke falls Startdatum vorhanden
-    if (inputSorted.length && expectedStartDate) {
-      if (isAfter(inputSorted[0].von, expectedStartDate)) {
+    if (expectedStartDate) {
+      const firstVon = inputSorted[0]?.von ?? plannedAusbildung.von;
+      if (isAfter(firstVon, expectedStartDate)) {
         output.push({
           col: 'BOTH',
           von: expectedStartDate,
-          bis: subMonths(inputSorted[0].von, 1),
+          bis: subMonths(firstVon, 1),
           positionStartRow: startRow,
           positionRowSpan: 1,
         } as TimelineGapBlock);
@@ -240,6 +250,20 @@ export class TwoColumnTimeline {
       }
     }
 
+    // nach Startdatum sortieren: dadurch kommen die spaeteren Boxen ueber die frueheren
+    output.sort((a, b) => (isBefore(a.von, b.von) ? -1 : 1));
+
+    const endDate = addMonths(this.getLatestEnddate(output), 1);
+    if (isBefore(endDate, plannedAusbildung.von)) {
+      output.push({
+        col: 'BOTH',
+        von: endDate,
+        bis: subMonths(plannedAusbildung.von, 1),
+        positionStartRow: startRow++,
+        positionRowSpan: 1,
+      } as TimelineGapBlock);
+    }
+
     // Spaltenpositionen
     for (const item of output) {
       const currentCols = item.col === 'LEFT' ? leftCols : rightCols;
@@ -248,8 +272,14 @@ export class TwoColumnTimeline {
         item.col === 'BOTH' ? leftCols + rightCols : currentCols;
     }
 
-    // nach Startdatum sortieren: dadurch kommen die spaeteren Boxen ueber die frueheren
-    output.sort((a, b) => (isBefore(a.von, b.von) ? -1 : 1));
+    output.push({
+      ...plannedAusbildung,
+      children: [plannedAusbildung],
+      positionColSpan: 1,
+      positionRowSpan: 1,
+      positionStartCol: 1,
+      positionStartRow: startRow,
+    });
 
     return {
       items: output,

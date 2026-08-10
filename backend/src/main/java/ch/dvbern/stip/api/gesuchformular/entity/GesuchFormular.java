@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenPartnerNeglectedFieldsNullConstraint;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
@@ -34,8 +34,10 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
+import ch.dvbern.stip.api.gesuchformular.validation.AenderungGesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.AuszahlungPageValidation;
-import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredGsValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredSbValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.ElternPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.FamiliensituationPageValidation;
@@ -116,12 +118,22 @@ import org.jilt.BuilderStyle;
     groups = GesuchEinreichenValidationGroup.class,
     property = "familiensituation"
 )
+@ElternWiederverheiratetRequiredConstraint(
+    groups = { GesuchEinreichenValidationGroup.class, ElternPageValidation.class },
+    property = "elterns"
+)
 @EinnahmeKostenPartnerVerpflegungskostenRequiredConstraint
 @EinnahmenKostenAuswaertigeMittagessenProWocheRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
+)
+@LebenslaufAusbildungUeberschneidenConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        LebenslaufItemPageValidation.class
+    }, property = "lebenslaufItems"
 )
 @LebenslaufLuckenlosConstraint(
     groups = {
@@ -213,12 +225,6 @@ import org.jilt.BuilderStyle;
     }, property = "einnahmenKostenPartner",
     einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
-@LebenslaufAusbildungUeberschneidenConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        LebenslaufItemPageValidation.class
-    }, property = "lebenslaufItems"
-)
 @PartnerNullRequiredWhenAlleinstehendConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -227,13 +233,18 @@ import org.jilt.BuilderStyle;
 )
 @DocumentsRequiredConstraint(
     groups = {
-        DocumentsRequiredValidationGroup.class
-    }, payload = Severity.Warning.class
+        DocumentsRequiredSbValidationGroup.class
+    }, payload = Severity.Warning.class, includeHidden = true
+)
+@DocumentsRequiredConstraint(
+    groups = {
+        DocumentsRequiredGsValidationGroup.class
+    }, payload = Severity.Warning.class, includeHidden = false
 )
 @DocumentsRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class
-    }
+    }, includeHidden = false
 )
 @EinnahmenKostenPartnerRequiredConstraint(
     groups = {
@@ -256,7 +267,11 @@ import org.jilt.BuilderStyle;
         GesuchDokumentsAcceptedValidationGroup.class
     }
 )
-@NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
+@AenderungDocumentsAcceptedConstraint(
+    groups = {
+        AenderungGesuchDokumentsAcceptedValidationGroup.class
+    }
+)
 @SteuerdatenTabRequiredConstraint(
     groups = {
         SteuerdatenPageValidation.class
@@ -302,7 +317,7 @@ import org.jilt.BuilderStyle;
         @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
         @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
         @Index(name = "FK_gesuch_formular_einnahmen_kosten_partner_id", columnList = "einnahmen_kosten_id"),
-        @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
+        @Index(name = "IX_gesuch_formular_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -310,7 +325,7 @@ import org.jilt.BuilderStyle;
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class GesuchFormular extends AbstractMandantEntity {
+public class GesuchFormular extends AbstractTenantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(
@@ -319,11 +334,6 @@ public class GesuchFormular extends AbstractMandantEntity {
     )
     @HasPageValidation(PersonInAusbildungPageValidation.class)
     private @Valid PersonInAusbildung personInAusbildung;
-
-    @Transient
-    public Ausbildung getAusbildung() {
-        return tranche.getGesuch().getAusbildung();
-    }
 
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -402,5 +412,10 @@ public class GesuchFormular extends AbstractMandantEntity {
 
     public Optional<Eltern> getElternteilOfTyp(final ElternTyp elternTyp) {
         return elterns.stream().filter(elternteil -> elternteil.getElternTyp() == elternTyp).findFirst();
+    }
+
+    @Transient
+    public Ausbildung getAusbildung() {
+        return tranche.getGesuch().getAusbildung();
     }
 }

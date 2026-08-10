@@ -3,6 +3,10 @@
     {
       "path": "./",
     },
+    {
+      "path": "./backend/src/main/resources/typst/",
+      "name": "typst",
+    },
   ],
   "extensions": {
     "recommendations": [
@@ -12,6 +16,7 @@
       "SonarSource.sonarlint-vscode",
       "bradlc.vscode-tailwindcss",
       "hyoban.tailwindcss-classname-highlight",
+      "myriad-dreamin.tinymist",
     ],
   },
   "tasks": {
@@ -51,6 +56,7 @@
     "files.exclude": {
       "backend/**": true,
     },
+    "tinymist.rootPath": "${workspaceFolder}/backend/src/main/resources/typst/",
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
     "tailwindCSS.files.exclude": [
       "**/.git/**",
@@ -72,12 +78,20 @@
       "statusBar.background": "#075fa4",
       "statusBar.foreground": "#e7e7e7",
       "statusBarItem.hoverBackground": "#097bd5",
-      "statusBarItem.remoteBackground": "#075fa4",
+      "statusBarItem.remoteBackground": "#f748aa",
       "statusBarItem.remoteForeground": "#e7e7e7",
       "titleBar.activeBackground": "#075fa4",
       "titleBar.activeForeground": "#e7e7e7",
       "titleBar.inactiveBackground": "#075fa499",
-      "titleBar.inactiveForeground": "#e7e7e799"
+      "titleBar.inactiveForeground": "#e7e7e799",
+      "titleBar.inactiveForeground": "#e7e7e799",
+      "activityBarTop.activeBackground": "#097bd5",
+      "activityBarTop.background": "#097bd5",
+      "activityBarTop.foreground": "#e7e7e7",
+      "activityBarTop.inactiveForeground": "#e7e7e799",
+      "commandCenter.foreground": "#e7e7e7",
+      "statusBar.debuggingBackground": "#075fa4",
+      "statusBar.debuggingForeground": "#e7e7e7"
     },
     "peacock.color": "#075fa4",
     "prettier.configPath": "frontend/.prettierrc",

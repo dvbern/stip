@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDarlehen_gruende")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDarlehenGruendeDto  implements Serializable {
   private @Valid Boolean grundNichtBerechtigt;
@@ -24,6 +24,17 @@ public class DemoDarlehenGruendeDto  implements Serializable {
   private @Valid Boolean grundHoheGebuehren;
   private @Valid Boolean grundAnschaffungenFuerAusbildung;
   private @Valid Boolean grundZweitausbildung;
+
+  protected DemoDarlehenGruendeDto(DemoDarlehenGruendeDtoBuilder<?, ?> b) {
+    this.grundNichtBerechtigt = b.grundNichtBerechtigt;
+    this.grundAusbildungZwoelfJahre = b.grundAusbildungZwoelfJahre;
+    this.grundHoheGebuehren = b.grundHoheGebuehren;
+    this.grundAnschaffungenFuerAusbildung = b.grundAnschaffungenFuerAusbildung;
+    this.grundZweitausbildung = b.grundZweitausbildung;
+  }
+
+  public DemoDarlehenGruendeDto() {
+  }
 
   /**
    **/
@@ -163,5 +174,53 @@ public class DemoDarlehenGruendeDto  implements Serializable {
   }
 
 
+  public static DemoDarlehenGruendeDtoBuilder<?, ?> builder() {
+    return new DemoDarlehenGruendeDtoBuilderImpl();
+  }
+
+  private static final class DemoDarlehenGruendeDtoBuilderImpl extends DemoDarlehenGruendeDtoBuilder<DemoDarlehenGruendeDto, DemoDarlehenGruendeDtoBuilderImpl> {
+
+    @Override
+    protected DemoDarlehenGruendeDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoDarlehenGruendeDto build() {
+      return new DemoDarlehenGruendeDto(this);
+    }
+  }
+
+  public static abstract class DemoDarlehenGruendeDtoBuilder<C extends DemoDarlehenGruendeDto, B extends DemoDarlehenGruendeDtoBuilder<C, B>>  {
+    private Boolean grundNichtBerechtigt;
+    private Boolean grundAusbildungZwoelfJahre;
+    private Boolean grundHoheGebuehren;
+    private Boolean grundAnschaffungenFuerAusbildung;
+    private Boolean grundZweitausbildung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B grundNichtBerechtigt(Boolean grundNichtBerechtigt) {
+      this.grundNichtBerechtigt = grundNichtBerechtigt;
+      return self();
+    }
+    public B grundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
+      this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
+      return self();
+    }
+    public B grundHoheGebuehren(Boolean grundHoheGebuehren) {
+      this.grundHoheGebuehren = grundHoheGebuehren;
+      return self();
+    }
+    public B grundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
+      this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
+      return self();
+    }
+    public B grundZweitausbildung(Boolean grundZweitausbildung) {
+      this.grundZweitausbildung = grundZweitausbildung;
+      return self();
+    }
+  }
 }
 

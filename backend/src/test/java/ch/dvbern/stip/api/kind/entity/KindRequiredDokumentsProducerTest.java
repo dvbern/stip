@@ -48,7 +48,7 @@ class KindRequiredDokumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDokuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_ALIMENTENVERORDUNG);
     }
 
@@ -61,7 +61,7 @@ class KindRequiredDokumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDokuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN);
     }
 
@@ -74,7 +74,7 @@ class KindRequiredDokumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDokuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_RENTEN);
     }
 
@@ -87,7 +87,7 @@ class KindRequiredDokumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDokuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN);
     }
 
@@ -100,7 +100,7 @@ class KindRequiredDokumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDokuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_ANDERE_EINNAHMEN);
     }
 }

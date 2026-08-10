@@ -146,14 +146,10 @@ FamiliensituationUpdate:
       $ref: '#/ElternAbwesenheitsGrund'
     mutterUnbekanntGrund:
       $ref: '#/ElternUnbekanntheitsGrund'
-    mutterWiederverheiratet:
-      type: boolean
     vaterUnbekanntVerstorben:
       $ref: '#/ElternAbwesenheitsGrund'
     vaterUnbekanntGrund:
       $ref: '#/ElternUnbekanntheitsGrund'
-    vaterWiederverheiratet:
-      type: boolean
     werZahltAlimente:
       $ref: '#/Elternschaftsteilung'
       description: Required nur wenn gerichtlicheAlimentenregelung = true
@@ -240,6 +236,8 @@ ElternUpdate:
     wohnkosten:
       description: 'Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen'
       type: integer
+    wiederverheiratet:
+      type: boolean
 
 Geschwister:
   title: Root Type for Geschwister
@@ -253,6 +251,7 @@ GeschwisterUpdate:
     - wohnsitz
     - vorname
     - nachname
+    - geschwisterTyp
     - geburtsdatum
     - ausbildungssituation
   type: object
@@ -280,7 +279,10 @@ GeschwisterUpdate:
       type: number
     nachname:
       type: string
-
+    geschwisterTyp:
+      $ref: '#/GeschwisterTyp'
+    hidden:
+      type: boolean
 LebenslaufItem:
   title: Root Type for Lebenslauf
   type: object
@@ -319,6 +321,9 @@ LebenslaufItemUpdate:
     taetigkeitsBeschreibung:
       description: Required wenn taetigkeitsart != null
       type: string
+    invalid:
+      description: Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+      type: boolean
 
 Kind:
   title: Root Type for Kind
@@ -440,7 +445,7 @@ EinnahmenKostenUpdate:
       minimum: 0
       maximum: 2147483647
     steuern:
-      description: transient and calculated readonly field
+      description: only visible by SB
       type: integer
       minimum: 0
       maximum: 2147483647
@@ -467,6 +472,12 @@ SteuererklaerungUpdate:
     andereEinnahmen:
       type: integer
 
+GeschwisterTyp:
+  enum:
+    - LEIBLICH
+    - STIEF
+    - HALB
+  type: string
 Niederlassungsstatus:
   enum:
     - SAISONARBEITEND_A
@@ -474,7 +485,7 @@ Niederlassungsstatus:
     - NIEDERLASSUNGSBEWILLIGUNG_C
     - PARTNER_ERWERBSTAETIG_UND_KIND_CI
     - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
-    - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+    - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT
     - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
     - GRENZGAENGIG_G
     - KURZAUFENTHALT_L

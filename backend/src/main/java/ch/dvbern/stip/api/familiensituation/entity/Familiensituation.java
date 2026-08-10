@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.familiensituation.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
@@ -42,14 +42,14 @@ import org.jilt.BuilderStyle;
 @Entity
 @Table(
     name = "familiensituation",
-    indexes = @Index(name = "IX_familiensituation_mandant", columnList = "mandant")
+    indexes = @Index(name = "IX_familiensituation_tenant", columnList = "tenant")
 )
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Familiensituation extends AbstractMandantEntity {
+public class Familiensituation extends AbstractTenantEntity {
     @NotNull
     @Column(name = "eltern_verheiratet_zusammen", nullable = false)
     private Boolean elternVerheiratetZusammen;
@@ -73,10 +73,6 @@ public class Familiensituation extends AbstractMandantEntity {
     private ElternUnbekanntheitsGrund mutterUnbekanntGrund;
 
     @NullableUnlessGenerated
-    @Column(name = "mutter_wiederverheiratet")
-    private Boolean mutterWiederverheiratet;
-
-    @NullableUnlessGenerated
     @Column(name = "vater_unbekannt_verstorben")
     @Enumerated(EnumType.STRING)
     private ElternAbwesenheitsGrund vaterUnbekanntVerstorben;
@@ -85,10 +81,6 @@ public class Familiensituation extends AbstractMandantEntity {
     @Column(name = "vater_unbekannt_grund")
     @Enumerated(EnumType.STRING)
     private ElternUnbekanntheitsGrund vaterUnbekanntGrund;
-
-    @NullableUnlessGenerated
-    @Column(name = "vater_wiederverheiratet")
-    private Boolean vaterWiederverheiratet;
 
     @NullableUnlessGenerated
     @Column(name = "wer_zahlt_alimente")

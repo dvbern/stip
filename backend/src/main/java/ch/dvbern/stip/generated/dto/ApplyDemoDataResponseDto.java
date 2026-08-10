@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("ApplyDemoDataResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ApplyDemoDataResponseDto  implements Serializable {
   private @Valid UUID gesuchId;
@@ -28,6 +28,18 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   private @Valid LocalDate gueltigBis;
   private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid DemoDataTestBerechnungResultatDto berechnungResultat;
+
+  protected ApplyDemoDataResponseDto(ApplyDemoDataResponseDtoBuilder<?, ?> b) {
+    this.gesuchId = b.gesuchId;
+    this.gesuchTrancheId = b.gesuchTrancheId;
+    this.gueltigAb = b.gueltigAb;
+    this.gueltigBis = b.gueltigBis;
+    this.gesuchStatus = b.gesuchStatus;
+    this.berechnungResultat = b.berechnungResultat;
+  }
+
+  public ApplyDemoDataResponseDto() {
+  }
 
   /**
    **/
@@ -193,5 +205,58 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   }
 
 
+  public static ApplyDemoDataResponseDtoBuilder<?, ?> builder() {
+    return new ApplyDemoDataResponseDtoBuilderImpl();
+  }
+
+  private static final class ApplyDemoDataResponseDtoBuilderImpl extends ApplyDemoDataResponseDtoBuilder<ApplyDemoDataResponseDto, ApplyDemoDataResponseDtoBuilderImpl> {
+
+    @Override
+    protected ApplyDemoDataResponseDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public ApplyDemoDataResponseDto build() {
+      return new ApplyDemoDataResponseDto(this);
+    }
+  }
+
+  public static abstract class ApplyDemoDataResponseDtoBuilder<C extends ApplyDemoDataResponseDto, B extends ApplyDemoDataResponseDtoBuilder<C, B>>  {
+    private UUID gesuchId;
+    private UUID gesuchTrancheId;
+    private LocalDate gueltigAb;
+    private LocalDate gueltigBis;
+    private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+    private DemoDataTestBerechnungResultatDto berechnungResultat;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B gesuchTrancheId(UUID gesuchTrancheId) {
+      this.gesuchTrancheId = gesuchTrancheId;
+      return self();
+    }
+    public B gueltigAb(LocalDate gueltigAb) {
+      this.gueltigAb = gueltigAb;
+      return self();
+    }
+    public B gueltigBis(LocalDate gueltigBis) {
+      this.gueltigBis = gueltigBis;
+      return self();
+    }
+    public B gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
+      this.gesuchStatus = gesuchStatus;
+      return self();
+    }
+    public B berechnungResultat(DemoDataTestBerechnungResultatDto berechnungResultat) {
+      this.berechnungResultat = berechnungResultat;
+      return self();
+    }
+  }
 }
 

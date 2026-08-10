@@ -1,7 +1,7 @@
 import { IChange, diff } from 'json-diff-ts';
 
 import { RolesMap } from '@dv/shared/model/benutzer';
-import { CompileTimeConfig } from '@dv/shared/model/config';
+import { AppConfig } from '@dv/shared/model/config';
 import {
   AppTrancheChange,
   ElternTyp,
@@ -11,10 +11,9 @@ import {
   GSFormStepProps,
   GesuchFormular,
   GesuchFormularType,
-  GesuchHeader,
   GesuchTranche,
-  GesuchTrancheSlim,
   GesuchUrlType,
+  Gesuchstatus,
   SBFormStepProps,
   SharedModelGesuch,
   SteuerdatenTyp,
@@ -29,8 +28,8 @@ import {
   GesuchFormStepView,
   isSteuererklaerungStep,
 } from '@dv/shared/model/gesuch-form';
-import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
-import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
+import { byAppConfig } from '@dv/shared/model/permission-state';
+import { capitalized, lowercased } from '@dv/shared/model/type-util';
 
 export interface ElternSituation {
   expectVater: boolean;
@@ -110,7 +109,7 @@ type ArrayForms = Extract<GesuchFormularType[ChangeableProperties], unknown[]>;
 /**
  * Keys to skip when calculating the changes between two versions of a form.
  */
-const keysToSkip = ['id'];
+const keysToSkip = ['id', 'adresse.id'];
 
 /**
  * This function checks which previous changes should be displayed in the view.
@@ -341,16 +340,18 @@ export const appendSteps = (
   }, [] as GesuchFormStep[]);
 };
 
-export function addStepsByAppType(
+export function addStepsByAppConfig(
   sharedSteps: GesuchFormStep[],
   rolesMap: RolesMap,
   steuerdatenTabs: SteuerdatenTyp[] | undefined,
-  compileTimeConfig?: CompileTimeConfig,
+  appConfig?: AppConfig,
 ) {
-  switch (compileTimeConfig?.appType) {
-    case 'gesuch-app':
-      return [...sharedSteps, ABSCHLUSS];
-    case 'sachbearbeitung-app': {
+  if (!appConfig || appConfig.view === 'demo') {
+    return [];
+  }
+  return byAppConfig(appConfig, {
+    gesuchsteller: () => [...sharedSteps, ABSCHLUSS],
+    sachbearbeiter: () => {
       const steuerdatenSteps =
         rolesMap.V0_Sachbearbeiter || rolesMap.V0_Freigabestelle
           ? steuerdatenTabs?.map((typ) => ({
@@ -369,11 +370,8 @@ export function addStepsByAppType(
             }),
           )
         : sharedSteps;
-    }
-
-    default:
-      return [];
-  }
+    },
+  });
 }
 
 /**
@@ -514,40 +512,9 @@ const formularPropsContaining = <T extends Record<string, unknown>>(
   obj: Record<FieldsThatContain<T>, null>,
 ) => Object.keys(obj) as FieldsThatContain<T>[];
 
-export const currentTrancheNumber = (
-  trancheSetting: TrancheSetting | null,
-  currentTranche: GesuchTrancheSlim | undefined,
-  header: Partial<GesuchHeader>,
-  revision: number | undefined,
-  isLoading: boolean | undefined,
+export const isInOneOfGivenStatus = (
+  gesuchStatus: Gesuchstatus,
+  list: Gesuchstatus[],
 ) => {
-  const { currentTranches, initial, aenderungs, versions } = header;
-  if (!currentTranches || isLoading) {
-    return '…';
-  }
-
-  const gesuchUrlTyp =
-    revision && trancheSetting?.gesuchUrlTyp === 'TRANCHE'
-      ? ('VERSION' as const)
-      : trancheSetting?.gesuchUrlTyp;
-  const allTranchen = {
-    TRANCHE: [currentTranches ?? []],
-    VERSION: versions?.map((v) => v.tranchen) ?? [],
-    AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
-    INITIAL: [initial?.tranchen ?? []],
-  } satisfies Record<Exclude<typeof gesuchUrlTyp, undefined>, unknown>;
-  const index = gesuchUrlTyp
-    ? findIndexInOneOf(
-        (tranche) =>
-          tranche.id === currentTranche?.id &&
-          isDefined(tranche.revision) === isDefined(revision),
-        ...allTranchen[gesuchUrlTyp],
-      )
-    : -1;
-
-  const foundIndex = index >= 0 ? index + 1 : null;
-  if (foundIndex) {
-    return foundIndex;
-  }
-  return gesuchUrlTyp !== 'AENDERUNG' ? '...' : null;
+  return list.includes(gesuchStatus);
 };

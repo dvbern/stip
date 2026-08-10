@@ -40,7 +40,7 @@ class AusbildungRequiredDokumentsProducerTest {
         GesuchTranche tranche = GesuchGenerator.initGesuchTranche();
         formular.setTranche(tranche);
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         );
     }

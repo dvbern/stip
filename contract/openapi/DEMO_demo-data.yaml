@@ -129,6 +129,38 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: applyDemoData
       summary: Returns the created data after applying demo data
+  /demo-data/all:
+    post:
+      tags:
+        - DemoData
+      responses:
+        '204':
+          description: Testcases were successfully generated
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: generateAllGesucheAsVerfuegt
+      summary: Generate all Testcase Gesuche as verfuegt
+  /demo-data/bfs-statistik:
+    post:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: The XML with all Testcases and existing gesuche
+      operationId: getStatistikXmlWithAllTestcases
+      summary: Returns a BFS statistik file with all Testcases
+      x-quarkus-response-type: io.smallrye.mutiny.Multi<io.vertx.mutiny.core.buffer.Buffer>
   /demo-data/test-all-berechnung:
     get:
       tags:
@@ -561,10 +593,6 @@ components:
           type: boolean
         werZahltAlimente:
           $ref: './components/gesuch-formular.yaml#/Elternschaftsteilung'
-        mutterWiederverheiratetAlimente:
-          type: boolean
-        vaterWiederverheiratetAlimente:
-          type: boolean
         elternteilUnbekanntVerstorben:
           type: boolean
         mutterVerstorben:
@@ -575,8 +603,6 @@ components:
           $ref: './components/gesuch-formular.yaml#/ElternUnbekanntheitsGrund'
         mutterKeineOptionen:
           type: boolean
-        mutterWiederverheiratetUnbekannt:
-          type: boolean
         vaterVerstorben:
           type: boolean
         vaterUnbekannt:
@@ -584,12 +610,6 @@ components:
         vaterUnbekanntGrund:
           $ref: './components/gesuch-formular.yaml#/ElternUnbekanntheitsGrund'
         vaterKeineOptionen:
-          type: boolean
-        vaterWiederverheiratetUnbekannt:
-          type: boolean
-        mutterWiederverheiratetUngewiss:
-          type: boolean
-        vaterWiederverheiratetUngewiss:
           type: boolean
     DemoElternteil:
       required:
@@ -648,6 +668,8 @@ components:
         sozialhilfebeitraege:
           type: boolean
         ausweisbFluechtling:
+          type: boolean
+        wiederverheiratet:
           type: boolean
     DemoSteuererklaerung:
       required:
@@ -731,6 +753,7 @@ components:
         - alter
         - wohnsitzBei
         - ausbildungssituation
+        - geschwisterTyp
       type: object
       properties:
         nachname:
@@ -750,6 +773,8 @@ components:
           type: integer
         ausbildungssituation:
           $ref: './components/gesuch-formular.yaml#/Ausbildungssituation'
+        geschwisterTyp:
+          $ref: './components/gesuch-formular.yaml#/GeschwisterTyp'
     DemoAuszahlung:
       required:
         - nachname

@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Gesuchsjahr")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsjahrDto  implements Serializable {
   private @Valid UUID id;
@@ -26,6 +26,17 @@ public class GesuchsjahrDto  implements Serializable {
   private @Valid String bezeichnungFr;
   private @Valid Integer technischesJahr;
   private @Valid GueltigkeitStatusDto gueltigkeitStatus;
+
+  protected GesuchsjahrDto(GesuchsjahrDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+    this.technischesJahr = b.technischesJahr;
+    this.gueltigkeitStatus = b.gueltigkeitStatus;
+  }
+
+  public GesuchsjahrDto() {
+  }
 
   /**
    **/
@@ -170,5 +181,53 @@ public class GesuchsjahrDto  implements Serializable {
   }
 
 
+  public static GesuchsjahrDtoBuilder<?, ?> builder() {
+    return new GesuchsjahrDtoBuilderImpl();
+  }
+
+  private static final class GesuchsjahrDtoBuilderImpl extends GesuchsjahrDtoBuilder<GesuchsjahrDto, GesuchsjahrDtoBuilderImpl> {
+
+    @Override
+    protected GesuchsjahrDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchsjahrDto build() {
+      return new GesuchsjahrDto(this);
+    }
+  }
+
+  public static abstract class GesuchsjahrDtoBuilder<C extends GesuchsjahrDto, B extends GesuchsjahrDtoBuilder<C, B>>  {
+    private UUID id;
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    private Integer technischesJahr;
+    private GueltigkeitStatusDto gueltigkeitStatus;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+    public B technischesJahr(Integer technischesJahr) {
+      this.technischesJahr = technischesJahr;
+      return self();
+    }
+    public B gueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+      this.gueltigkeitStatus = gueltigkeitStatus;
+      return self();
+    }
+  }
 }
 

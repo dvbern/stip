@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.util;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +60,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecMode
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
@@ -115,6 +115,8 @@ import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_MUTTER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_VATER;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -132,6 +134,14 @@ public class TestUtil {
 
             return response;
         };
+
+    public static DateRange getActiveGueltigkeitsRange() {
+        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
+            return GUELTIGKEIT_PERIODE_CURRENT;
+        } else {
+            return GUELTIGKEIT_PERIODE_FIXED;
+        }
+    }
 
     public static void deleteGesuch(final GesuchApiSpec gesuchApiSpec, final UUID gesuchId) {
         gesuchApiSpec.deleteGesuch()
@@ -635,6 +645,65 @@ public class TestUtil {
             .statusCode(Response.Status.CREATED.getStatusCode());
     }
 
+    /**
+     * Aligns Steuerdaten and accepts all GesuchDokuments for each of the given Tranchen.
+     * Works for a single Tranche as well as for multiple Tranchen (varargs).
+     */
+    public static void alignSteuerdatenAndAcceptAllDokuments(
+        final GesuchTrancheApiSpec gesuchTrancheApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final SteuerdatenApiSpec steuerdatenApiSpec,
+        final SteuerdatenTypDtoSpec steuerdatenTyp,
+        final UUID... gesuchTrancheIds
+    ) {
+        for (final var trancheId : gesuchTrancheIds) {
+            updateSteuerdaten(steuerdatenApiSpec, trancheId, steuerdatenTyp);
+            acceptAllGesuchDokuments(gesuchTrancheApiSpec, dokumentApiSpec, trancheId);
+        }
+    }
+
+    public static void updateSteuerdaten(
+        final SteuerdatenApiSpec steuerdatenApiSpec,
+        final UUID gesuchTrancheId,
+        final SteuerdatenTypDtoSpec typDtoSpec
+    ) {
+        final var steuerdatenUpdateDto =
+            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(typDtoSpec);
+        steuerdatenApiSpec.updateSteuerdaten()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .body(List.of(steuerdatenUpdateDto))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    public static void acceptAllGesuchDokuments(
+        final GesuchTrancheApiSpec gesuchTrancheApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final UUID gesuchTrancheId
+    ) {
+        final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
+
+        for (var dokument : gesuchdokuments) {
+            dokumentApiSpec.gesuchDokumentAkzeptieren()
+                .gesuchDokumentIdPath(dokument.getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+        }
+    }
+
     public static ValidatableResponse uploadUnterschriftenblatt(
         final DokumentApiSpec dokumentApiSpec,
         final UUID gesuchId,
@@ -667,10 +736,17 @@ public class TestUtil {
     }
 
     public static Gesuch getBaseGesuchForBerechnung(final UUID trancheUuid) {
-        final var gueltigkeit = DateRange.getFruehlingOrHerbst(LocalDate.now());
+        return getBaseGesuchForBerechnungWithReferenceDate(trancheUuid, LocalDate.now());
+    }
+
+    public static Gesuch getBaseGesuchForBerechnungWithReferenceDate(
+        final UUID trancheUuid,
+        final LocalDate referenceDate
+    ) {
+        final var gueltigkeit = DateRange.getFruehlingOrHerbst(referenceDate);
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()
-                .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(Year.now().getValue()))
+                .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(referenceDate.getYear()))
                 .setGesuchsperiodeStart(gueltigkeit.getGueltigAb())
                 .setGesuchsperiodeStopp(gueltigkeit.getGueltigBis())
                 .setMaxSaeule3a(7000)
@@ -707,10 +783,10 @@ public class TestUtil {
                 .setErwachsene2599(5400)
                 .setJugendlicheErwachsene1824(4600)
                 .setKinder0017(1400)
-                .setEinreichefristNormal(LocalDate.now().plusMonths(5))
-                .setEinreichefristReduziert(LocalDate.now().plusMonths(5))
+                .setEinreichefristNormal(referenceDate.plusMonths(5))
+                .setEinreichefristReduziert(referenceDate.plusMonths(5))
                 .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
-                .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate.of(Year.now().getValue(), 12, 31))
+                .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(referenceDate.withMonth(12).withDayOfMonth(31))
         )
             .setGesuchTranchen(
                 List.of(
@@ -732,8 +808,9 @@ public class TestUtil {
                         .setId(trancheUuid)
                 )
             )
-            .setEinreichedatum(LocalDate.now().plusMonths(5));
+            .setEinreichedatum(referenceDate.plusMonths(5));
 
+        gesuch.setId(UUID.randomUUID());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setTranche(gesuch.getNewestGesuchTranche().get());
         gesuch.getNewestGesuchTranche().get().setGesuch(gesuch);
         return gesuch;
@@ -767,8 +844,15 @@ public class TestUtil {
     }
 
     public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {
-        final var baseGesuch = getBaseGesuchForBerechnung(trancheUuid);
-        final var baseRange = DateRange.getFruehlingOrHerbst(LocalDate.now());
+        return getGesuchForBerechnungWithReferenceDate(trancheUuid, LocalDate.now());
+    }
+
+    public static Gesuch getGesuchForBerechnungWithReferenceDate(
+        final UUID trancheUuid,
+        final LocalDate referenceDate
+    ) {
+        final var baseGesuch = getBaseGesuchForBerechnungWithReferenceDate(trancheUuid, referenceDate);
+        final var baseRange = DateRange.getFruehlingOrHerbst(referenceDate);
         baseGesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
@@ -814,13 +898,13 @@ public class TestUtil {
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setNachname("a")
             .setVorname("a")
-            .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
+            .setGeburtsdatum(referenceDate.minusYears(18).minusDays(1));
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()
                 .setNettoerwerbseinkommen(12916)
                 .setErgaenzungsleistungen(1200)
-                .setWohnkosten(6000)
+                .setWohnkosten(72000)
                 .setAusbildungskosten(450)
                 .setFahrkosten(523)
                 .setZulagen(0)
@@ -843,7 +927,7 @@ public class TestUtil {
                 )
                 .setNachname("a")
                 .setVorname("a")
-                .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
+                .setGeburtsdatum(referenceDate.minusYears(18).minusDays(1))
         );
 
         gesuchFormular.setEinnahmenKostenPartner(
@@ -864,34 +948,35 @@ public class TestUtil {
                 .setElternVerheiratetZusammen(false)
                 .setGerichtlicheAlimentenregelung(false)
                 .setElternteilUnbekanntVerstorben(false)
-                .setVaterWiederverheiratet(false)
-                .setMutterWiederverheiratet(true)
         );
 
         gesuchFormular.setGeschwisters(
             Set.of(
                 (Geschwister) new Geschwister()
                     .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setGeschwisterTyp(GeschwisterTyp.LEIBLICH)
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
-                    .setGeburtsdatum(LocalDate.now())
+                    .setGeburtsdatum(referenceDate)
                     .setNachname("a")
                     .setVorname("a"),
                 (Geschwister) new Geschwister()
                     .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setGeschwisterTyp(GeschwisterTyp.LEIBLICH)
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(30))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(70))
-                    .setGeburtsdatum(LocalDate.now())
+                    .setGeburtsdatum(referenceDate)
                     .setNachname("a")
                     .setVorname("a"),
                 (Geschwister) new Geschwister()
                     .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setGeschwisterTyp(GeschwisterTyp.LEIBLICH)
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(100))
-                    .setGeburtsdatum(LocalDate.now())
+                    .setGeburtsdatum(referenceDate)
                     .setNachname("a")
                     .setVorname("a")
             )
@@ -901,6 +986,7 @@ public class TestUtil {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
+                    .setWiederverheiratet(false)
                     .setSozialversicherungsnummer(AHV_NUMMER_VALID_VATER)
                     .setWohnkosten(0)
                     .setTelefonnummer("0987654321")
@@ -914,9 +1000,10 @@ public class TestUtil {
                     )
                     .setNachname("a")
                     .setVorname("a")
-                    .setGeburtsdatum(LocalDate.now().minusYears(30)),
+                    .setGeburtsdatum(referenceDate.minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWiederverheiratet(true)
                     .setSozialversicherungsnummer(AHV_NUMMER_VALID_MUTTER)
                     .setWohnkosten(0)
                     .setTelefonnummer("0987654321")
@@ -930,7 +1017,7 @@ public class TestUtil {
                     )
                     .setNachname("a")
                     .setVorname("a")
-                    .setGeburtsdatum(LocalDate.now().minusYears(30))
+                    .setGeburtsdatum(referenceDate.minusYears(30))
             )
         );
 

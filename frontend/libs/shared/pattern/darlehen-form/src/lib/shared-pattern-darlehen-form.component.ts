@@ -133,7 +133,7 @@ export class SharedPatternDarlehenFormComponent {
 
     return getDarlehenPermissions(
       darlehen?.status,
-      this.compileTimeConfig.appType,
+      this.compileTimeConfig.app,
       this.permissionStore.rolesMapSig(),
       darlehen?.isDelegiert,
     ).permissions;

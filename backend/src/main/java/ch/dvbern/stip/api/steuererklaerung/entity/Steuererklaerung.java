@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.steuererklaerung.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.persistence.Column;
@@ -41,7 +41,7 @@ import org.jilt.BuilderStyle;
 @Table(
     name = "steuererklaerung",
     indexes = {
-        @Index(name = "IX_steuererklaerung_mandant", columnList = "mandant")
+        @Index(name = "IX_steuererklaerung_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -49,7 +49,7 @@ import org.jilt.BuilderStyle;
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Steuererklaerung extends AbstractMandantEntity {
+public class Steuererklaerung extends AbstractTenantEntity {
     @NotNull
     @Column(name = "steuerdaten_typ", nullable = false)
     @Enumerated(EnumType.STRING)

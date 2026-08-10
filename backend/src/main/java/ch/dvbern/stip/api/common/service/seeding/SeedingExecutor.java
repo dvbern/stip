@@ -19,10 +19,10 @@ package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
 
-import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
+import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.configuration.ConfigUtils;
@@ -39,22 +39,12 @@ public class SeedingExecutor {
     private final Instance<Seeder> seeders;
 
     @Startup
-    @RunForTenant(MandantIdentifier.BERN)
-    public void seedForBern() {
-        LOG.info("SeedingExecutor starting execution for Bern");
-        doSeed();
-        LOG.info("SeedingExecutor finished execution for Bern");
-    }
-
-    @Startup
-    @RunForTenant(MandantIdentifier.DV)
-    public void seedForDv() {
-        LOG.info("SeedingExecutor starting execution for DV");
-        doSeed();
-        LOG.info("SeedingExecutor finished execution for DV");
+    public void seed() {
+        QuarkusTransactionUtil.runForTenantsInNewTransaction(TenantIdentifier.values(), this::doSeed);
     }
 
     private void doSeed() {
+        LOG.info("SeedingExecutor starting execution for Tenants");
         seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(seeder -> {
             if (shouldSeed(seeder.getProfiles())) {
                 seeder.seed();
@@ -62,9 +52,10 @@ public class SeedingExecutor {
                 LOG.info("Skipping seeder for profiles {} due to config", ConfigUtils.getProfiles());
             }
         });
+        LOG.info("SeedingExecutor finished execution for Tenants");
     }
 
-    private boolean shouldSeed(final List<String> profilesToSeedOn) {
+    private boolean shouldSeed(final Set<String> profilesToSeedOn) {
         return !Collections.disjoint(ConfigUtils.getProfiles(), profilesToSeedOn);
     }
 }

@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("CustomDokumentTyp")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class CustomDokumentTypDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String type;
   private @Valid String description;
+
+  protected CustomDokumentTypDto(CustomDokumentTypDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.type = b.type;
+    this.description = b.description;
+  }
+
+  public CustomDokumentTypDto() {
+  }
 
   /**
    **/
@@ -125,5 +134,43 @@ public class CustomDokumentTypDto  implements Serializable {
   }
 
 
+  public static CustomDokumentTypDtoBuilder<?, ?> builder() {
+    return new CustomDokumentTypDtoBuilderImpl();
+  }
+
+  private static final class CustomDokumentTypDtoBuilderImpl extends CustomDokumentTypDtoBuilder<CustomDokumentTypDto, CustomDokumentTypDtoBuilderImpl> {
+
+    @Override
+    protected CustomDokumentTypDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public CustomDokumentTypDto build() {
+      return new CustomDokumentTypDto(this);
+    }
+  }
+
+  public static abstract class CustomDokumentTypDtoBuilder<C extends CustomDokumentTypDto, B extends CustomDokumentTypDtoBuilder<C, B>>  {
+    private UUID id;
+    private String type;
+    private String description;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B type(String type) {
+      this.type = type;
+      return self();
+    }
+    public B description(String description) {
+      this.description = description;
+      return self();
+    }
+  }
 }
 

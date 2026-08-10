@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AuszahlungUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AuszahlungUpdateDto  implements Serializable {
   private @Valid Boolean auszahlungAnSozialdienst;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
+
+  protected AuszahlungUpdateDto(AuszahlungUpdateDtoBuilder<?, ?> b) {
+    this.auszahlungAnSozialdienst = b.auszahlungAnSozialdienst;
+    this.zahlungsverbindung = b.zahlungsverbindung;
+  }
+
+  public AuszahlungUpdateDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class AuszahlungUpdateDto  implements Serializable {
   }
 
 
+  public static AuszahlungUpdateDtoBuilder<?, ?> builder() {
+    return new AuszahlungUpdateDtoBuilderImpl();
+  }
+
+  private static final class AuszahlungUpdateDtoBuilderImpl extends AuszahlungUpdateDtoBuilder<AuszahlungUpdateDto, AuszahlungUpdateDtoBuilderImpl> {
+
+    @Override
+    protected AuszahlungUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AuszahlungUpdateDto build() {
+      return new AuszahlungUpdateDto(this);
+    }
+  }
+
+  public static abstract class AuszahlungUpdateDtoBuilder<C extends AuszahlungUpdateDto, B extends AuszahlungUpdateDtoBuilder<C, B>>  {
+    private Boolean auszahlungAnSozialdienst;
+    private ZahlungsverbindungDto zahlungsverbindung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
+      this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
+      return self();
+    }
+    public B zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+      this.zahlungsverbindung = zahlungsverbindung;
+      return self();
+    }
+  }
 }
 

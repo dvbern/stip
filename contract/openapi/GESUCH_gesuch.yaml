@@ -149,6 +149,33 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getInitialTrancheChanges
       summary: Returns the inital tranche changes by gesuchTrancheId
+  '/gesuch/eingereicht/{gesuchTrancheId}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getEingereichtTranche
+      summary: Returns the inital eingereicht tranche by gesuchTrancheId
   '/gesuch/gs/{gesuchTrancheId}':
     parameters:
       - name: gesuchTrancheId
@@ -203,7 +230,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getGesuchSB
       summary: Returns the Gesuch with the given Id
-  '/gesuch/{gesuchId}/info':
+  '/gesuch/{gesuchId}/info/gs':
     parameters:
       - name: gesuchId
         schema:
@@ -228,7 +255,34 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getGesuchInfo
+      operationId: getGesuchInfoGs
+      summary: Returns the basic Gesuch info with the given Id, potentially historized
+  '/gesuch/{gesuchId}/info/sb':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchInfo'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchInfoSb
       summary: Returns the basic Gesuch info with the given Id
   '/gesuch/gs/header/{gesuchId}':
     parameters:
@@ -294,6 +348,8 @@ paths:
             $ref: './components/common.yaml#/GetGesucheSBQueryType'
           in: path
           required: true
+        - $ref: './components/parameters.yaml#/bearbeitbar'
+        - $ref: './components/parameters.yaml#/zugewiesen'
         - $ref: './components/parameters.yaml#/fallNummer'
         - $ref: './components/parameters.yaml#/piaNachname'
         - $ref: './components/parameters.yaml#/piaVorname'
@@ -1045,7 +1101,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getBerechnungForVerfuegung
       summary: Holt die Berechnung für die angegebene Verfügung
-  '/gesuch/{gesuchId}/berechnung':
+  '/gesuch/{gesuchId}/berechnung/sb':
     parameters:
       - name: gesuchId
         schema:
@@ -1072,7 +1128,7 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getBerechnungForGesuch
+      operationId: getBerechnungForGesuchSb
       summary: Berechnet und holt die Berechnung für ein Gesuch
   '/gesuch/{gesuchId}/berechnungsblatt/token':
     parameters:
@@ -1106,6 +1162,11 @@ paths:
   '/gesuch/{aenderungId}/aenderung/gs/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
     get:
       tags:
         - Gesuch
@@ -1124,7 +1185,7 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getGsAenderungChangesInBearbeitung
+      operationId: getAenderungChangesGs
   '/gesuch/{aenderungId}/aenderung/sb/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
@@ -1151,7 +1212,7 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getSbAenderungChanges
+      operationId: getAenderungChangesSb
 
 components:
   securitySchemes:
@@ -1222,7 +1283,6 @@ components:
       required:
         - fall
         - ausbildungDashboardItems
-        - notifications
       type: object
       properties:
         fall:
@@ -1231,10 +1291,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AusbildungDashboardItem'
-        notifications:
-          type: array
-          items:
-            $ref: './components/common.yaml#/Notification'
         currentDelegierung:
           $ref: './components/common.yaml#/DelegierungSlim'
         earliestActiveGesuchPeriodeStart:
@@ -1453,10 +1509,18 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - manuell
+        - fehlendeDokumente
         - canAenderungEinreichen
       properties:
         offen:
           $ref: './components/common.yaml#/GesuchTrancheSlim'
+        eingereicht:
+          $ref: './components/common.yaml#/GesuchTrancheSlim'
+        manuell:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
         akzeptiert:
           type: array
           items:
@@ -1465,8 +1529,19 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
+        fehlendeDokumente:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
         canAenderungEinreichen:
           type: boolean
+    InitialGesuchs:
+      type: object
+      properties:
+        eingereichtGesuch:
+          $ref: './components/common.yaml#/GesuchTrancheSlim'
+        verfuegtGesuch:
+          $ref: '#/components/schemas/VerfuegtGesuch'
     VerfuegtGesuch:
       type: object
       required:
@@ -1487,6 +1562,7 @@ components:
       required:
         - id
         - fallNummer
+        - fallId
         - gesuchNummer
         - startDate
         - endDate
@@ -1496,6 +1572,8 @@ components:
         id:
           $ref: './components/common.yaml#/UUID'
         fallNummer:
+          type: string
+        fallId:
           type: string
         gesuchNummer:
           type: string
@@ -1518,7 +1596,7 @@ components:
       type: object
       properties:
         initial:
-          $ref: '#/components/schemas/VerfuegtGesuch'
+          $ref: '#/components/schemas/InitialGesuchs'
         versions:
           type: array
           items:
@@ -1529,6 +1607,10 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
+        latestVerfuegungId:
+          $ref: './components/common.yaml#/UUID'
+        latestVerfuegtAt:
+          $ref: './components/common.yaml#/LocalDateTime'
         gesuchInfo:
           $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:
@@ -1653,22 +1735,24 @@ components:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - total
+        - ungekuerztTotal
         - gueltigAb
         - gueltigBis
         - ausbildungAb
         - ausbildungBis
         - yearRange
         - gesuchTrancheId
-        - berechnungsanteilKinder
-        - teilzeitKinderBeiPiaAnrechnen
-        - berechnungsanteilKinderPia
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
+        - personenHaushaltGroups
       type: object
       properties:
         total:
           description: 'Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche'
+          type: integer
+        ungekuerztTotal:
+          description: 'Die ungekürzte Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche'
           type: integer
         gueltigAb:
           $ref: './components/common.yaml#/LocalDate'
@@ -1685,16 +1769,16 @@ components:
             Mehrere resultate mit der gleichen ID sind die berechnungen für
             getrennte eltern mit Kindern die eine Obhutsteilung haben'
           $ref: './components/common.yaml#/UUID'
-        berechnungsanteilKinder:
+        berechnungsanteilKinderDerEltern:
           description: 'Anteil dieser Berechnung am Berechnungstotal.
-            Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+            Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.'
           type: number
         teilzeitKinderBeiPiaAnrechnen:
           description: 'Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet'
           type: boolean
         berechnungsanteilKinderPia:
           description: 'Anteil dieser Berechnung am Berechnungstotal.
-            Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+            Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.'
           type: number
         berechnungsStammdaten:
           description: 'Stammdaten für die Stipendienberechnung'
@@ -1707,6 +1791,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FamilienBudgetresultat'
+        personenHaushaltGroups:
+          description: 'Enthällt eine Liste aller relevanten Personen für die jeweiligen Personen Haushalt Gruppen'
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonenHaushaltGruppe'
     BerechnungsStammdaten:
       description: Stammdaten used for the calculation of the stipendium
       required:
@@ -1751,6 +1840,7 @@ components:
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:
+        - haushaltNames
         - vorname
         - nachname
         - sozialversicherungsnummer
@@ -1765,6 +1855,10 @@ components:
         - einnahmen
         - kosten
       properties:
+        haushaltNames:
+          type: array
+          items:
+            type: string
         vorname:
           type: string
         nachname:
@@ -1908,8 +2002,7 @@ components:
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungTotal
         - betreuungskostenKinder
-        - kantonsGemeindesteuern
-        - bundessteuern
+        - steuern
         - anteilLebenshaltungskosten
       type: object
       properties:
@@ -1941,15 +2034,14 @@ components:
           type: integer
         betreuungskostenKinder:
           type: integer
-        kantonsGemeindesteuern:
-          type: integer
-        bundessteuern:
+        steuern:
           type: integer
         anteilLebenshaltungskosten:
           type: integer
     FamilienBudgetresultat:
       description: Familien Budget daten fuer und von der Berechnung
       required:
+        - haushaltNames
         - steuerdatenTyp
         - vorname
         - nachname
@@ -1968,9 +2060,14 @@ components:
         - fehlbetrag
         - proKopfTeilung
         - ungedeckterAnteilLebenshaltungskosten
+        - teilzeitKinderProzente
         - einnahmen
         - kosten
       properties:
+        haushaltNames:
+          type: array
+          items:
+            type: string
         steuerdatenTyp:
           $ref: './components/common.yaml#/SteuerdatenTyp'
         vorname:
@@ -1983,7 +2080,13 @@ components:
           type: string
         sozialversicherungsnummer:
           type: string
+        sozialversicherungsnummerPartner:
+          type: string
         geburtsdatum:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        geburtsdatumPartner:
           format: date
           description: dd.MM.yyyy
           type: string
@@ -2012,6 +2115,8 @@ components:
         proKopfTeilung:
           type: integer
         ungedeckterAnteilLebenshaltungskosten:
+          type: integer
+        teilzeitKinderProzente:
           type: integer
         einnahmen:
           description: 'Einnahmen des familien Budgets'
@@ -2111,5 +2216,23 @@ components:
             $ref: './components/common.yaml#/PersonValueItem'
         verpflegungTotal:
           type: integer
+    PersonenHaushalt:
+      enum:
+        - PIA
+        - MUTTER
+        - VATER
+        - FAMILIE
+    PersonenHaushaltGruppe:
+      type: object
+      required:
+        - typ
+        - names
+      properties:
+        typ:
+          $ref: '#/components/schemas/PersonenHaushalt'
+        names:
+          type: array
+          items:
+            type: string
 security:
   $ref: './components/security.yaml#/security'

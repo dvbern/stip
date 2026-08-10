@@ -5,228 +5,219 @@
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-kind-form"
   novalidate
-  class="tw:mt-6"
+  class="tw:dv-form-grid"
   (ngSubmit)="handleSave()"
 >
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:pt-6">
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
-      <input matInput dvMaxLength [formControl]="form.controls.nachname" data-testid="form-kind-nachname" type="text" />
-      <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
-      <input matInput dvMaxLength [formControl]="form.controls.vorname" data-testid="form-kind-vorname" type="text" />
-      <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-    </mat-form-field>
-  </div>
+  <!-- Nachname -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
+    <input matInput dvMaxLength [formControl]="form.controls.nachname" data-testid="form-kind-nachname" type="text" />
+    <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+  </mat-form-field>
 
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- GEBURTSDATUM -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
+  <!-- Vorname -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
+    <input matInput dvMaxLength [formControl]="form.controls.vorname" data-testid="form-kind-vorname" type="text" />
+    <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+  </mat-form-field>
 
-      <input
-        placeholder="dd.mm.yyyy"
-        matInput
-        [dvMaxLength]="'small'"
-        [formControl]="form.controls.geburtsdatum"
-        data-testid="form-kind-geburtsdatum"
-        (blur)="onGeburtsdatumBlur()"
-      />
-      <mat-hint *dvZuvorHint="changes.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
+  <!-- GEBURTSDATUM -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-        {{ 'shared.form.error.dateFormat' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'minDate'">
-        {{ 'shared.form.error.minDatePast' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'maxDate'">
-        {{ 'shared.form.error.maxDatePast' | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <input
+      placeholder="dd.mm.yyyy"
+      matInput
+      [dvMaxLength]="'small'"
+      [formControl]="form.controls.geburtsdatum"
+      data-testid="form-kind-geburtsdatum"
+      (blur)="onGeburtsdatumBlur()"
+    />
+    <mat-hint *dvZuvorHint="changes.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
 
-    <!-- Wohnsitz -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.shared.wohnsitzAnteilPia.label' | transloco }}</mat-label>
-      <input
-        type="text"
-        data-testid="form-kind-wohnsitzAnteilPia"
-        matInput
-        [formControl]="form.controls.wohnsitzAnteilPia"
-        [maskito]="maskitoOptionsPercent"
-      />
-      <mat-hint *dvZuvorHint="changes.wohnsitzAnteilPia; suffix: '%'"></mat-hint>
-      <mat-error *dvSharedUiFormMessageError="'pattern'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'minlength'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-    </mat-form-field>
-  </div>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+      {{ 'shared.form.error.dateFormat' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'minDate'">
+      {{ 'shared.form.error.minDatePast' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'maxDate'">
+      {{ 'shared.form.error.maxDatePast' | transloco }}
+    </mat-error>
+  </mat-form-field>
 
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- Ausbildungssituation -->
-    <div class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
-      <mat-radio-group
-        class="tw:flex tw:flex-col"
-        [formControl]="form.controls.ausbildungssituation"
-        data-testid="form-kind-ausbildungssituation"
-        dvSharedUiFormField
-      >
-        @for (a of ausbildungssituationValues; track $index) {
-          <mat-radio-button [attr.data-testid]="a" [value]="a">{{
-            'shared.form.geschwister.ausbildungssituation.select.' + a | transloco
-          }}</mat-radio-button>
-        }
-        <div class="group-errors">
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </div>
-      </mat-radio-group>
-      <mat-hint
-        *dvZuvorHint="
-          changes.ausbildungssituation
-            | dvTranslateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
-            | async
-        "
-      ></mat-hint>
-    </div>
-  </div>
+  <!-- Wohnsitz -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.shared.wohnsitzAnteilPia.label' | transloco }}</mat-label>
+    <input
+      type="text"
+      data-testid="form-kind-wohnsitzAnteilPia"
+      matInput
+      [formControl]="form.controls.wohnsitzAnteilPia"
+      [maskito]="maskitoOptionsPercent"
+    />
+    <mat-hint *dvZuvorHint="changes.wohnsitzAnteilPia; suffix: '%'"></mat-hint>
+    <mat-error *dvSharedUiFormMessageError="'pattern'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'minlength'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+  </mat-form-field>
 
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- Unterhaltsbeitraege -->
-    <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ 'shared.form.kinder.unterhaltsbeitraege.label' | transloco }}</mat-label>
-        <input
-          matInput
-          [maskito]="maskitoNumber"
-          [formControl]="form.controls.unterhaltsbeitraege"
-          data-testid="form-kind-unterhaltsbeitraege"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes.unterhaltsbeitraege"></mat-hint>
+  <!-- Ausbildungssituation -->
+  <div class="tw:dv-form-item">
+    <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
+    <mat-radio-group
+      class="tw:flex tw:flex-col"
+      [formControl]="form.controls.ausbildungssituation"
+      data-testid="form-kind-ausbildungssituation"
+      dvSharedUiFormField
+    >
+      @for (a of ausbildungssituationValues; track $index) {
+        <mat-radio-button [attr.data-testid]="a" [value]="a">{{
+          'shared.form.geschwister.ausbildungssituation.select.' + a | transloco
+        }}</mat-radio-button>
+      }
+      <div class="group-errors">
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
         </mat-error>
-      </mat-form-field>
-      @if (unterhaltsbeitraegeDocumentSig(); as options) {
-        <dv-shared-pattern-document-upload
-          class="flex-shrink-1"
-          [optionsSig]="options"
-        ></dv-shared-pattern-document-upload>
-      }
-    </div>
-
-    <!-- Kinder- und Ausbildungszulagen -->
-    <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ 'shared.form.kinder.kinderUndAusbildungszulagen.label' | transloco }}</mat-label>
-        <input
-          matInput
-          [maskito]="maskitoNumber"
-          [formControl]="form.controls.kinderUndAusbildungszulagen"
-          data-testid="form-kind-kinderUndAusbildungszulagen"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes.kinderUndAusbildungszulagen"></mat-hint>
-      </mat-form-field>
-      @if (kinderUndAusbildungszulagenDocumentSig(); as options) {
-        <dv-shared-pattern-document-upload
-          class="flex-shrink-1"
-          [optionsSig]="options"
-        ></dv-shared-pattern-document-upload>
-      }
-    </div>
+      </div>
+    </mat-radio-group>
+    <mat-hint
+      *dvZuvorHint="
+        changes.ausbildungssituation
+          | dvTranslateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
+          | async
+      "
+    ></mat-hint>
   </div>
 
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- Renten -->
-    <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ 'shared.form.kinder.renten.label' | transloco }}</mat-label>
-        <input
-          matInput
-          [maskito]="maskitoNumber"
-          [formControl]="form.controls.renten"
-          data-testid="form-kind-renten"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes.renten"></mat-hint>
-      </mat-form-field>
-      @if (rentenDocumentSig(); as options) {
-        <dv-shared-pattern-document-upload
-          class="flex-shrink-1"
-          [optionsSig]="options"
-        ></dv-shared-pattern-document-upload>
-      }
-    </div>
-
-    <!-- Ergänzungsleistungen -->
-    <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ 'shared.form.kinder.ergaenzungsleistungen.label' | transloco }}</mat-label>
-        <input
-          matInput
-          [maskito]="maskitoNumber"
-          [formControl]="form.controls.ergaenzungsleistungen"
-          data-testid="form-kind-ergaenzungsleistungen"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes.ergaenzungsleistungen"></mat-hint>
-      </mat-form-field>
-      @if (ergaenzungsleistungenDocumentSig(); as options) {
-        <dv-shared-pattern-document-upload
-          class="flex-shrink-1"
-          [optionsSig]="options"
-        ></dv-shared-pattern-document-upload>
-      }
-    </div>
+  <!-- Unterhaltsbeitraege -->
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
+      <mat-label>{{ 'shared.form.kinder.unterhaltsbeitraege.label' | transloco }}</mat-label>
+      <input
+        matInput
+        [maskito]="maskitoNumber"
+        [formControl]="form.controls.unterhaltsbeitraege"
+        data-testid="form-kind-unterhaltsbeitraege"
+        type="text"
+      />
+      <mat-hint *dvZuvorHint="changes.unterhaltsbeitraege"></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+    </mat-form-field>
+    @if (unterhaltsbeitraegeDocumentSig(); as options) {
+      <dv-shared-pattern-document-upload
+        class="flex-shrink-1"
+        [optionsSig]="options"
+      ></dv-shared-pattern-document-upload>
+    }
   </div>
 
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- Andere Einnahmen -->
-    <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ 'shared.form.kinder.andereEinnahmen.label' | transloco }}</mat-label>
-        <input
-          matInput
-          [maskito]="maskitoNumber"
-          [formControl]="form.controls.andereEinnahmen"
-          data-testid="form-kind-andereEinnahmen"
-          type="text"
-        />
-        <mat-hint>{{ 'shared.form.kinder.andereEinnahmen.info' | transloco }}</mat-hint>
-        <mat-hint *dvZuvorHint="changes.andereEinnahmen"></mat-hint>
-      </mat-form-field>
-      @if (andereEinnahmenDocumentSig(); as options) {
-        <dv-shared-pattern-document-upload
-          class="flex-shrink-1"
-          [optionsSig]="options"
-        ></dv-shared-pattern-document-upload>
-      }
-    </div>
+  <!-- Kinder- und Ausbildungszulagen -->
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
+      <mat-label>{{ 'shared.form.kinder.kinderUndAusbildungszulagen.label' | transloco }}</mat-label>
+      <input
+        matInput
+        [maskito]="maskitoNumber"
+        [formControl]="form.controls.kinderUndAusbildungszulagen"
+        data-testid="form-kind-kinderUndAusbildungszulagen"
+        type="text"
+      />
+      <mat-hint *dvZuvorHint="changes.kinderUndAusbildungszulagen"></mat-hint>
+    </mat-form-field>
+    @if (kinderUndAusbildungszulagenDocumentSig(); as options) {
+      <dv-shared-pattern-document-upload
+        class="flex-shrink-1"
+        [optionsSig]="options"
+      ></dv-shared-pattern-document-upload>
+    }
+  </div>
+
+  <!-- Renten -->
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
+      <mat-label>{{ 'shared.form.kinder.renten.label' | transloco }}</mat-label>
+      <input
+        matInput
+        [maskito]="maskitoNumber"
+        [formControl]="form.controls.renten"
+        data-testid="form-kind-renten"
+        type="text"
+      />
+      <mat-hint *dvZuvorHint="changes.renten"></mat-hint>
+    </mat-form-field>
+    @if (rentenDocumentSig(); as options) {
+      <dv-shared-pattern-document-upload
+        class="flex-shrink-1"
+        [optionsSig]="options"
+      ></dv-shared-pattern-document-upload>
+    }
+  </div>
+
+  <!-- Ergänzungsleistungen -->
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
+      <mat-label>{{ 'shared.form.kinder.ergaenzungsleistungen.label' | transloco }}</mat-label>
+      <input
+        matInput
+        [maskito]="maskitoNumber"
+        [formControl]="form.controls.ergaenzungsleistungen"
+        data-testid="form-kind-ergaenzungsleistungen"
+        type="text"
+      />
+      <mat-hint *dvZuvorHint="changes.ergaenzungsleistungen"></mat-hint>
+    </mat-form-field>
+    @if (ergaenzungsleistungenDocumentSig(); as options) {
+      <dv-shared-pattern-document-upload
+        class="flex-shrink-1"
+        [optionsSig]="options"
+      ></dv-shared-pattern-document-upload>
+    }
+  </div>
+
+  <!-- Andere Einnahmen -->
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
+      <mat-label>{{ 'shared.form.kinder.andereEinnahmen.label' | transloco }}</mat-label>
+      <input
+        matInput
+        [maskito]="maskitoNumber"
+        [formControl]="form.controls.andereEinnahmen"
+        data-testid="form-kind-andereEinnahmen"
+        type="text"
+      />
+      <mat-hint>{{ 'shared.form.kinder.andereEinnahmen.info' | transloco }}</mat-hint>
+      <mat-hint *dvZuvorHint="changes.andereEinnahmen"></mat-hint>
+    </mat-form-field>
+    @if (andereEinnahmenDocumentSig(); as options) {
+      <dv-shared-pattern-document-upload
+        class="flex-shrink-1"
+        [optionsSig]="options"
+      ></dv-shared-pattern-document-upload>
+    }
   </div>
 
   <!-- buttons -->
-  <dv-shared-ui-step-form-buttons>
+  <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
     <button type="button" class="tw:dv-button-outline" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.cancel-and-back' | transloco }}
     </button>

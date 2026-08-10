@@ -14,7 +14,7 @@
   >
     @if (view.auszahlung.isDelegated) {
       <mat-checkbox
-        class="tw:md:col-span-2 tw:lg:col-span-3"
+        class="tw:dv-form-item"
         [formControl]="form.controls.auszahlungAnSozialdienst"
         data-testid="form-auszahlung-auszahlungAnSozialdienst"
       >
@@ -24,7 +24,7 @@
 
     @if (!form.controls.auszahlungAnSozialdienst.value) {
       <!-- Nachname -->
-      <mat-form-field dvSharedUiFormField>
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
         <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
         <input
           matInput
@@ -39,7 +39,7 @@
       </mat-form-field>
 
       <!-- Vorname -->
-      <div class="tw:flex tw:items-start tw:gap-2">
+      <div class="tw:flex tw:items-center tw:gap-2 tw:dv-form-item">
         <mat-form-field dvSharedUiFormField class="tw:flex-1">
           <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
           <input
@@ -56,7 +56,7 @@
         <button
           type="button"
           (click)="beguenstigteInfoDialog.toggle()"
-          class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
+          class="tw:dv-button-icon tw:text-dv-blue"
           [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
         >
           <span class="material-symbols-rounded tw:text-3xl!"> info </span>
@@ -65,13 +65,14 @@
 
       <div
         dvSharedUiInfoDialog
-        [dialogTitleKey]="'shared.form.auszahlung.empfaenger.info.title'"
-        [dialogMessageKey]="'shared.form.auszahlung.empfaenger.info.message'"
+        class="tw:hidden tw:xl:block tw:col-start-3"
+        [dialogTitleKeySig]="'shared.form.auszahlung.empfaenger.info.title'"
+        [dialogMessageKeySig]="'shared.form.auszahlung.empfaenger.info.message'"
         #beguenstigteInfoDialog="dvSharedUiInfoDialog"
       ></div>
 
       <!-- institution -->
-      <mat-form-field dvSharedUiFormField class="tw:col-span-2">
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
         <mat-label>{{ 'shared.form.auszahlung.institution.label' | transloco }}</mat-label>
         <input
           matInput
@@ -86,54 +87,56 @@
       </mat-form-field>
 
       <!-- ADRESSE -->
-
       <dv-shared-ui-form-address
-        class="tw:col-start-1 tw:md:col-span-2 tw:lg:col-span-2"
         [group]="zahlungsverbindungControls.adresse"
         [languageSig]="view.language"
         [onlyIso2Laender]="true"
       />
 
       <!-- IBAN -->
-      <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:grow">
-        <mat-label>{{ 'shared.form.auszahlung.iban.label' | transloco }}</mat-label>
-        <span matTextPrefix>CH</span>
-        <input
-          data-testid="form-auszahlung-iban"
-          matInput
-          type="text"
-          [formControl]="zahlungsverbindungControls.iban"
-          [maskito]="MASK_IBAN"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
-          {{ 'shared.form.error.invalidIBAN' | transloco }}
-        </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
-          {{ 'shared.form.error.invalidIBAN' | transloco }}
-        </mat-error>
-      </mat-form-field>
+      <div class="tw:dv-form-item tw:flex tw:gap-4 tw:items-center">
+        <mat-form-field dvSharedUiFormField class="tw:flex-1">
+          <mat-label>{{ 'shared.form.auszahlung.iban.label' | transloco }}</mat-label>
+          <span matTextPrefix>CH</span>
+          <input
+            data-testid="form-auszahlung-iban"
+            matInput
+            type="text"
+            [formControl]="zahlungsverbindungControls.iban"
+            [maskito]="MASK_IBAN"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | transloco }}
+          </mat-error>
+          <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
+            {{ 'shared.form.error.invalidIBAN' | transloco }}
+          </mat-error>
+          <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
+            {{ 'shared.form.error.invalidIBAN' | transloco }}
+          </mat-error>
+        </mat-form-field>
 
-      <button
-        type="button"
-        (click)="ibanDialog.toggle()"
-        class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
-        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-      >
-        <span class="material-symbols-rounded tw:text-3xl!"> info </span>
-      </button>
+        <button
+          type="button"
+          (click)="ibanDialog.toggle()"
+          class="tw:dv-button-icon tw:text-dv-blue"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+        >
+          <span class="material-symbols-rounded tw:text-3xl!"> info </span>
+        </button>
+      </div>
+
       <div
         dvSharedUiInfoDialog
-        [dialogTitleKey]="'shared.form.auszahlung.iban.label'"
-        [dialogMessageKey]="'shared.form.auszahlung.iban.info'"
+        class="tw:hidden tw:xl:block tw:col-start-3"
+        [dialogTitleKeySig]="'shared.form.auszahlung.iban.label'"
+        [dialogMessageKeySig]="'shared.form.auszahlung.iban.info'"
         #ibanDialog="dvSharedUiInfoDialog"
       ></div>
     }
 
     <!-- Buttons -->
-    <dv-shared-ui-step-form-buttons>
+    <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
       @if (!isGesuchFormStepSig()) {
         <button type="button" class="tw:dv-button-outline" (click)="backTriggered.emit()" data-testid="button-next">
           {{ 'shared.form.back' | transloco }}
@@ -152,11 +155,14 @@
           </button>
         }
       } @else {
-        <dv-shared-ui-form-save
-          [disabled]="form.invalid || form.pristine"
-          [loading]="view.isLoading"
-          [labelKey]="'shared.form.save-and-continue'"
-        ></dv-shared-ui-form-save>
+        <button
+          type="submit"
+          class="tw:dv-button-main-primary"
+          [disabled]="form.invalid || form.pristine || view.isLoading"
+          data-testid="button-save-and-next"
+        >
+          {{ 'shared.form.save-and-continue' | transloco }}
+        </button>
       }
     </dv-shared-ui-step-form-buttons>
   </form>

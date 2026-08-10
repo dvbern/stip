@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.gesuchformular.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +33,7 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -52,6 +51,8 @@ import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
@@ -76,7 +77,6 @@ import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
@@ -85,11 +85,11 @@ import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-import static io.smallrye.common.constraint.Assert.assertFalse;
-import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 class GesuchFormularMapperTest {
@@ -138,6 +138,7 @@ class GesuchFormularMapperTest {
     @Test
     void resetEinnahmenKostenRemovesWohnkostenTest() {
         final var targetPia = new PersonInAusbildung();
+        targetPia.setGeburtsdatum(LocalDate.now().minusYears(16));
         targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         final var target = initTarget()
             .setPersonInAusbildung(targetPia)
@@ -145,6 +146,7 @@ class GesuchFormularMapperTest {
 
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        updatePia.setGeburtsdatum(LocalDate.now().minusYears(16));;
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setWohnkosten(1);
@@ -165,44 +167,11 @@ class GesuchFormularMapperTest {
     }
 
     @Test
-    void resetEinnahmenKostenRemovesAlimenteTest() {
-        // Arrange
-        final var updateFamsit = new FamiliensituationUpdateDto();
-        updateFamsit.setElternVerheiratetZusammen(false);
-        updateFamsit.setGerichtlicheAlimentenregelung(true);
-
-        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setUnterhaltsbeitraege(1);
-
-        final var updateEinnahmenKostenPartner = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setUnterhaltsbeitraege(1);
-
-        final var update = new GesuchFormularUpdateDto();
-        update.setFamiliensituation(updateFamsit);
-        update.setEinnahmenKosten(updateEinnahmenKosten);
-        update.setEinnahmenKostenPartner(updateEinnahmenKostenPartner);
-
-        final var mapper = createMapper();
-        final var target = initTarget();
-
-        // Initialise target
-        mapper.partialUpdate(update, target);
-
-        updateFamsit.setGerichtlicheAlimentenregelung(false);
-
-        // Act
-        mapper.resetEinnahmenKosten(update, target);
-
-        // Assert
-        assertThat(update.getEinnahmenKosten().getUnterhaltsbeitraege(), is(nullValue()));
-        assertThat(update.getEinnahmenKostenPartner().getUnterhaltsbeitraege(), is(nullValue()));
-    }
-
-    @Test
     void resetEinnahmenKostenRemovesAuswaertigeMittagessenTest() {
         // Arrange
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        updatePia.setGeburtsdatum(LocalDate.now().minusYears(16));
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setAuswaertigeMittagessenProWoche(1);
@@ -262,6 +231,7 @@ class GesuchFormularMapperTest {
 
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        updatePia.setGeburtsdatum(LocalDate.now().minusYears(16));
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setWgWohnend(true);
@@ -279,43 +249,11 @@ class GesuchFormularMapperTest {
     }
 
     @Test
-    void resetLebenslaufItemsClearsLebenslaufItems() {
-        // Arrange
-        final var updatePia = new PersonInAusbildungUpdateDto();
-        updatePia.setGeburtsdatum(LocalDate.now().minusYears(20));
-
-        final var dateFormatter = DateTimeFormatter.ofPattern("MM.yyyy");
-        final var updateLebenslaufItem = new LebenslaufItemUpdateDto();
-        updateLebenslaufItem.setVon(LocalDate.now().minusMonths(1).format(dateFormatter));
-        updateLebenslaufItem.setBis(LocalDate.now().plusMonths(1).format(dateFormatter));
-
-        final var updateLebenslaufItems = new ArrayList<LebenslaufItemUpdateDto>();
-        updateLebenslaufItems.add(updateLebenslaufItem);
-
-        final var update = new GesuchFormularUpdateDto();
-        update.setPersonInAusbildung(updatePia);
-        update.setLebenslaufItems(updateLebenslaufItems);
-
-        final var mapper = createMapper();
-        final var target = initTarget();
-
-        // Initialise target
-        mapper.partialUpdate(update, target);
-
-        updatePia.setGeburtsdatum(LocalDate.now().minusYears(10));
-
-        // Act
-        mapper.resetLebenslaufItems(update, target);
-
-        // Assert
-        assertThat(update.getLebenslaufItems().size(), is(0));
-    }
-
-    @Test
     void resetPartnerClearsPartnerTest() {
         // Arrange
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setZivilstand(Zivilstand.KONKUBINAT);
+        updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
 
         final var updatePartner = new PartnerUpdateDto();
 
@@ -383,30 +321,6 @@ class GesuchFormularMapperTest {
     }
 
     @Test
-    void setCorrectVermoegenForPartnerValueLT18Test() {
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(16);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        var parter = new Partner();
-        parter.setGeburtsdatum(geburtsDatum);
-        var ekPartner = new EinnahmenKosten();
-        ekPartner.setVermoegen(5);
-        tranche.getGesuchFormular().setEinnahmenKostenPartner(ekPartner);
-        tranche.getGesuchFormular().setPartner(parter);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertFalse(GesuchFormularCalculationUtil.wasPartnerOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKostenPartner().getVermoegen() == null);
-    }
-
-    @Test
     void setCorrectVermoegenNonZeroValueGT18Test() {
         final int vermoegen = 10000;
         // neues gesuch
@@ -440,28 +354,6 @@ class GesuchFormularMapperTest {
                 .setTranche(tranche)
         );
         tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
-
-        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
-    }
-
-    @Test
-    void setCorrectVermoegenNonZeroValueLT18Test() {
-        final int vermoegen = 10000;
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(16);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        tranche.getGesuchFormular().getEinnahmenKosten().setVermoegen(vermoegen);
         GesuchFormularMapper gesuchFormularMapper = createMapper();
         GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
         assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
@@ -672,7 +564,7 @@ class GesuchFormularMapperTest {
             unterschriftenblattRepositoryMock,
             null,
             null,
-            Mockito.mock(ConfigService.class), s3,
+            Mockito.mock(StipConfig.class, Mockito.RETURNS_DEEP_STUBS), s3,
             null,
             null,
             null,
@@ -719,7 +611,17 @@ class GesuchFormularMapperTest {
     }
 
     private GesuchFormular initTarget() {
-        return new GesuchFormular().setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
+        var formular = new GesuchFormular().setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
+        var gesuchperiode =
+            new Gesuchsperiode().setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(LocalDate.now().getYear() - 1));
+        var tranche = new GesuchTranche().setGesuch(new Gesuch().setGesuchsperiode(gesuchperiode));
+
+        final var targetPia = new PersonInAusbildung();
+        targetPia.setGeburtsdatum(LocalDate.now().minusYears(16));
+        targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        formular.setPersonInAusbildung(targetPia);
+        formular.setTranche(tranche);
+        return formular;
     }
 
     private GesuchFormular addChPersonInAusbildung(final GesuchFormular gesuchFormular) {

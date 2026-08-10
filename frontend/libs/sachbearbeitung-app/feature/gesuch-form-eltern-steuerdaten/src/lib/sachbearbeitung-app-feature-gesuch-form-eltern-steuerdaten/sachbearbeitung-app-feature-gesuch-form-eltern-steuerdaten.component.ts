@@ -24,10 +24,10 @@ import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 
-import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { SachbearbeitungAppDialogUpdateSteuerdatenComponent } from '@dv/sachbearbeitung-app/dialog/update-steuerdaten';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import { SteuerdatenStore } from '@dv/shared/data-access/steuerdaten';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { Steuerdaten, SteuerdatenTyp } from '@dv/shared/model/gesuch';
@@ -171,7 +171,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   }
 
   private createSteuerDatenSBEffects() {
-    const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
+    const isSachbearbeitungApp = this.config.app.view === 'sachbearbeiter';
 
     if (isSachbearbeitungApp) {
       effect(() => {
@@ -205,7 +205,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     }
   }
 
-  updateSteuerdatenFromNesko(gesuchTrancheId: string) {
+  updateSteuerdatenFromPort(gesuchTrancheId: string) {
     const steuerdatenTyp = this.stepSig().type;
 
     SachbearbeitungAppDialogUpdateSteuerdatenComponent.open(this.dialog)
@@ -215,7 +215,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
         if (!result) return;
 
         const { steuerjahr } = result;
-        this.steuerdatenStore.updateSteuerdatenFromNesko$({
+        this.steuerdatenStore.updateSteuerdatenFromPort$({
           gesuchTrancheId,
           steuerdatenTyp,
           steuerjahr,

@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Familiensituation")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FamiliensituationDto  implements Serializable {
   private @Valid Boolean elternVerheiratetZusammen;
@@ -24,11 +24,23 @@ public class FamiliensituationDto  implements Serializable {
   private @Valid Boolean gerichtlicheAlimentenregelung;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund mutterUnbekanntVerstorben;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund;
-  private @Valid Boolean mutterWiederverheiratet;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund vaterUnbekanntVerstorben;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
-  private @Valid Boolean vaterWiederverheiratet;
   private @Valid ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente;
+
+  protected FamiliensituationDto(FamiliensituationDtoBuilder<?, ?> b) {
+    this.elternVerheiratetZusammen = b.elternVerheiratetZusammen;
+    this.elternteilUnbekanntVerstorben = b.elternteilUnbekanntVerstorben;
+    this.gerichtlicheAlimentenregelung = b.gerichtlicheAlimentenregelung;
+    this.mutterUnbekanntVerstorben = b.mutterUnbekanntVerstorben;
+    this.mutterUnbekanntGrund = b.mutterUnbekanntGrund;
+    this.vaterUnbekanntVerstorben = b.vaterUnbekanntVerstorben;
+    this.vaterUnbekanntGrund = b.vaterUnbekanntGrund;
+    this.werZahltAlimente = b.werZahltAlimente;
+  }
+
+  public FamiliensituationDto() {
+  }
 
   /**
    **/
@@ -123,24 +135,6 @@ public class FamiliensituationDto  implements Serializable {
 
   /**
    **/
-  public FamiliensituationDto mutterWiederverheiratet(Boolean mutterWiederverheiratet) {
-    this.mutterWiederverheiratet = mutterWiederverheiratet;
-    return this;
-  }
-
-  
-  @JsonProperty("mutterWiederverheiratet")
-  public Boolean getMutterWiederverheiratet() {
-    return mutterWiederverheiratet;
-  }
-
-  @JsonProperty("mutterWiederverheiratet")
-  public void setMutterWiederverheiratet(Boolean mutterWiederverheiratet) {
-    this.mutterWiederverheiratet = mutterWiederverheiratet;
-  }
-
-  /**
-   **/
   public FamiliensituationDto vaterUnbekanntVerstorben(ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund vaterUnbekanntVerstorben) {
     this.vaterUnbekanntVerstorben = vaterUnbekanntVerstorben;
     return this;
@@ -177,24 +171,6 @@ public class FamiliensituationDto  implements Serializable {
 
   /**
    **/
-  public FamiliensituationDto vaterWiederverheiratet(Boolean vaterWiederverheiratet) {
-    this.vaterWiederverheiratet = vaterWiederverheiratet;
-    return this;
-  }
-
-  
-  @JsonProperty("vaterWiederverheiratet")
-  public Boolean getVaterWiederverheiratet() {
-    return vaterWiederverheiratet;
-  }
-
-  @JsonProperty("vaterWiederverheiratet")
-  public void setVaterWiederverheiratet(Boolean vaterWiederverheiratet) {
-    this.vaterWiederverheiratet = vaterWiederverheiratet;
-  }
-
-  /**
-   **/
   public FamiliensituationDto werZahltAlimente(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente) {
     this.werZahltAlimente = werZahltAlimente;
     return this;
@@ -226,16 +202,14 @@ public class FamiliensituationDto  implements Serializable {
         Objects.equals(this.gerichtlicheAlimentenregelung, familiensituation.gerichtlicheAlimentenregelung) &&
         Objects.equals(this.mutterUnbekanntVerstorben, familiensituation.mutterUnbekanntVerstorben) &&
         Objects.equals(this.mutterUnbekanntGrund, familiensituation.mutterUnbekanntGrund) &&
-        Objects.equals(this.mutterWiederverheiratet, familiensituation.mutterWiederverheiratet) &&
         Objects.equals(this.vaterUnbekanntVerstorben, familiensituation.vaterUnbekanntVerstorben) &&
         Objects.equals(this.vaterUnbekanntGrund, familiensituation.vaterUnbekanntGrund) &&
-        Objects.equals(this.vaterWiederverheiratet, familiensituation.vaterWiederverheiratet) &&
         Objects.equals(this.werZahltAlimente, familiensituation.werZahltAlimente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, mutterWiederverheiratet, vaterUnbekanntVerstorben, vaterUnbekanntGrund, vaterWiederverheiratet, werZahltAlimente);
+    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, vaterUnbekanntVerstorben, vaterUnbekanntGrund, werZahltAlimente);
   }
 
   @Override
@@ -248,10 +222,8 @@ public class FamiliensituationDto  implements Serializable {
     sb.append("    gerichtlicheAlimentenregelung: ").append(toIndentedString(gerichtlicheAlimentenregelung)).append("\n");
     sb.append("    mutterUnbekanntVerstorben: ").append(toIndentedString(mutterUnbekanntVerstorben)).append("\n");
     sb.append("    mutterUnbekanntGrund: ").append(toIndentedString(mutterUnbekanntGrund)).append("\n");
-    sb.append("    mutterWiederverheiratet: ").append(toIndentedString(mutterWiederverheiratet)).append("\n");
     sb.append("    vaterUnbekanntVerstorben: ").append(toIndentedString(vaterUnbekanntVerstorben)).append("\n");
     sb.append("    vaterUnbekanntGrund: ").append(toIndentedString(vaterUnbekanntGrund)).append("\n");
-    sb.append("    vaterWiederverheiratet: ").append(toIndentedString(vaterWiederverheiratet)).append("\n");
     sb.append("    werZahltAlimente: ").append(toIndentedString(werZahltAlimente)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -269,5 +241,68 @@ public class FamiliensituationDto  implements Serializable {
   }
 
 
+  public static FamiliensituationDtoBuilder<?, ?> builder() {
+    return new FamiliensituationDtoBuilderImpl();
+  }
+
+  private static final class FamiliensituationDtoBuilderImpl extends FamiliensituationDtoBuilder<FamiliensituationDto, FamiliensituationDtoBuilderImpl> {
+
+    @Override
+    protected FamiliensituationDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FamiliensituationDto build() {
+      return new FamiliensituationDto(this);
+    }
+  }
+
+  public static abstract class FamiliensituationDtoBuilder<C extends FamiliensituationDto, B extends FamiliensituationDtoBuilder<C, B>>  {
+    private Boolean elternVerheiratetZusammen;
+    private Boolean elternteilUnbekanntVerstorben;
+    private Boolean gerichtlicheAlimentenregelung;
+    private ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund mutterUnbekanntVerstorben;
+    private ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund;
+    private ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund vaterUnbekanntVerstorben;
+    private ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
+    private ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B elternVerheiratetZusammen(Boolean elternVerheiratetZusammen) {
+      this.elternVerheiratetZusammen = elternVerheiratetZusammen;
+      return self();
+    }
+    public B elternteilUnbekanntVerstorben(Boolean elternteilUnbekanntVerstorben) {
+      this.elternteilUnbekanntVerstorben = elternteilUnbekanntVerstorben;
+      return self();
+    }
+    public B gerichtlicheAlimentenregelung(Boolean gerichtlicheAlimentenregelung) {
+      this.gerichtlicheAlimentenregelung = gerichtlicheAlimentenregelung;
+      return self();
+    }
+    public B mutterUnbekanntVerstorben(ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund mutterUnbekanntVerstorben) {
+      this.mutterUnbekanntVerstorben = mutterUnbekanntVerstorben;
+      return self();
+    }
+    public B mutterUnbekanntGrund(ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund) {
+      this.mutterUnbekanntGrund = mutterUnbekanntGrund;
+      return self();
+    }
+    public B vaterUnbekanntVerstorben(ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund vaterUnbekanntVerstorben) {
+      this.vaterUnbekanntVerstorben = vaterUnbekanntVerstorben;
+      return self();
+    }
+    public B vaterUnbekanntGrund(ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund) {
+      this.vaterUnbekanntGrund = vaterUnbekanntGrund;
+      return self();
+    }
+    public B werZahltAlimente(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente) {
+      this.werZahltAlimente = werZahltAlimente;
+      return self();
+    }
+  }
 }
 

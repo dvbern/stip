@@ -38,10 +38,8 @@ extends AbstractTestBuilder<Familiensituation, FamiliensituationTestBuilder> {
             .gerichtlicheAlimentenregelung(false)
             .mutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT)
             .mutterUnbekanntGrund(ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT)
-            .mutterWiederverheiratet(null)
             .vaterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT)
             .vaterUnbekanntGrund(ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT)
-            .vaterWiederverheiratet(null)
             .werZahltAlimente(null)
             .build();
 

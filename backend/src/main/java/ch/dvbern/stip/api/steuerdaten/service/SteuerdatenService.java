@@ -18,38 +18,38 @@
 package ch.dvbern.stip.api.steuerdaten.service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.eltern.util.ElternUtil;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
-import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
-import ch.dvbern.stip.api.nesko.service.NeskoSteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
+import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPortFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
+@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
 public class SteuerdatenService {
     private final Validator validator;
     private final GesuchTrancheRepository trancheRepository;
     private final SteuerdatenMapper steuerdatenMapper;
     private final SteuerdatenRepository steuerdatenRepository;
-    private final NeskoGetSteuerdatenService neskoGetSteuerdatenService;
+    private final SteuerdatenPortFactory steuerdatenPortFactory;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @Transactional
@@ -80,7 +80,7 @@ public class SteuerdatenService {
     }
 
     @Transactional
-    public List<SteuerdatenDto> updateSteuerdatenFromNesko(
+    public List<SteuerdatenDto> updateSteuerdatenFromPort(
         UUID gesuchTrancheId,
         SteuerdatenTyp steuerdatenTyp,
         int steuerjahr
@@ -101,27 +101,22 @@ public class SteuerdatenService {
 
         final Optional<Eltern> elternToUse = switch (steuerdatenTyp) {
             // If Familie, use Vater for lookup, see KSTIP-2734
-            case FAMILIE, VATER -> gesuchFormular.getElterns()
-                .stream()
-                .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
-                .findFirst();
-            case MUTTER -> gesuchFormular.getElterns()
-                .stream()
-                .filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
-                .findFirst();
+            case FAMILIE, VATER -> ElternUtil.getElternByType(gesuchFormular.getElterns(), ElternTyp.VATER);
+            case MUTTER -> ElternUtil.getElternByType(gesuchFormular.getElterns(), ElternTyp.MUTTER);
         };
 
         String ssvn = elternToUse.orElseThrow(NotFoundException::new).getSozialversicherungsnummer();
 
-        var getSteuerdatenResponse = neskoGetSteuerdatenService.getSteuerdatenResponse(
-            ssvn,
-            steuerjahr,
-            gesuchtranche.getGesuch().getAusbildung().getFall().getFallNummer(),
-            gesuchtranche.getGesuch().getGesuchNummer()
-        );
+        var steuerdatenPortData = steuerdatenPortFactory.getSteuerdatenAdapter()
+            .getSteuerdaten(
+                ssvn,
+                steuerjahr,
+                steuerdatenTyp,
+                gesuchtranche.getGesuch().getAusbildung().getFall().getFallNummer(),
+                gesuchtranche.getGesuch().getGesuchNummer()
+            );
 
-        steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
-        updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);
+        steuerdaten = steuerdatenMapper.partialUpdate(steuerdatenPortData, steuerdaten);
         gesuchFormular.getSteuerdaten().add(steuerdaten);
 
         steuerdatenRepository.persistAndFlush(steuerdaten);
@@ -131,39 +126,5 @@ public class SteuerdatenService {
             .stream()
             .map(steuerdatenMapper::toDto)
             .toList();
-    }
-
-    private void updateDependentDataInSteuerdaten(
-        Steuerdaten steuerdaten,
-        GesuchFormular gesuchFormular
-    ) {
-        steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(
-            evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-                steuerdaten,
-                gesuchFormular.getSteuerdaten(),
-                gesuchFormular.getFamiliensituation()
-            )
-        );
-    }
-
-    public boolean evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-        Steuerdaten actualSteuerdaten,
-        Set<Steuerdaten> allSteuerdatenTabs,
-        Familiensituation familiensituation
-    ) {
-        if (
-            Objects.nonNull(familiensituation.getVaterWiederverheiratet()) &&
-            familiensituation.getVaterWiederverheiratet()
-            || Objects.nonNull(familiensituation.getMutterWiederverheiratet())
-            && familiensituation.getMutterWiederverheiratet()
-        ) {
-            return allSteuerdatenTabs.stream()
-                .anyMatch(
-                    steuerdaten1 -> Objects.nonNull(steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig())
-                    && steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig()
-                );
-        }
-
-        return actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig();
     }
 }

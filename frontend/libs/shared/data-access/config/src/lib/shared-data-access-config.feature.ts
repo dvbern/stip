@@ -1,6 +1,6 @@
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 
-import { CompileTimeConfig } from '@dv/shared/model/config';
+import { AppConfig } from '@dv/shared/model/config';
 import { SharedModelError } from '@dv/shared/model/error';
 import { DeploymentConfig } from '@dv/shared/model/gesuch';
 import { VERSION } from '@dv/shared/model/version';
@@ -9,14 +9,14 @@ import { SharedDataAccessConfigEvents } from './shared-data-access-config.events
 
 export interface State {
   deploymentConfig: DeploymentConfig | undefined;
-  compileTimeConfig: CompileTimeConfig | undefined;
+  appConfig: AppConfig | undefined;
   loading: boolean;
   error: SharedModelError | undefined;
 }
 
 const initialState: State = {
   deploymentConfig: undefined,
-  compileTimeConfig: undefined,
+  appConfig: undefined,
   loading: false,
   error: undefined,
 };
@@ -27,9 +27,9 @@ export const sharedDataAccessConfigsFeature = createFeature({
     initialState,
     on(
       SharedDataAccessConfigEvents.appInit,
-      (state, { compileTimeConfig }): State => ({
+      (state, { appConfig }): State => ({
         ...state,
-        compileTimeConfig,
+        appConfig,
         loading: true,
         error: undefined,
       }),
@@ -49,7 +49,7 @@ export const sharedDataAccessConfigsFeature = createFeature({
       // add other failure actions here (if handled the same way)
       (state, { error }): State => ({
         ...state,
-        deploymentConfig: undefined,
+        appConfig: undefined,
         loading: false,
         error,
       }),

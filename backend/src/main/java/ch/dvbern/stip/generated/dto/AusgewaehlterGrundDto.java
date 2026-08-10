@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusgewaehlterGrund")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusgewaehlterGrundDto  implements Serializable {
   private @Valid UUID decisionId;
   private @Valid ch.dvbern.stip.api.common.type.Kanton kanton;
+
+  protected AusgewaehlterGrundDto(AusgewaehlterGrundDtoBuilder<?, ?> b) {
+    this.decisionId = b.decisionId;
+    this.kanton = b.kanton;
+  }
+
+  public AusgewaehlterGrundDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class AusgewaehlterGrundDto  implements Serializable {
   }
 
 
+  public static AusgewaehlterGrundDtoBuilder<?, ?> builder() {
+    return new AusgewaehlterGrundDtoBuilderImpl();
+  }
+
+  private static final class AusgewaehlterGrundDtoBuilderImpl extends AusgewaehlterGrundDtoBuilder<AusgewaehlterGrundDto, AusgewaehlterGrundDtoBuilderImpl> {
+
+    @Override
+    protected AusgewaehlterGrundDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusgewaehlterGrundDto build() {
+      return new AusgewaehlterGrundDto(this);
+    }
+  }
+
+  public static abstract class AusgewaehlterGrundDtoBuilder<C extends AusgewaehlterGrundDto, B extends AusgewaehlterGrundDtoBuilder<C, B>>  {
+    private UUID decisionId;
+    private ch.dvbern.stip.api.common.type.Kanton kanton;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B decisionId(UUID decisionId) {
+      this.decisionId = decisionId;
+      return self();
+    }
+    public B kanton(ch.dvbern.stip.api.common.type.Kanton kanton) {
+      this.kanton = kanton;
+      return self();
+    }
+  }
 }
 

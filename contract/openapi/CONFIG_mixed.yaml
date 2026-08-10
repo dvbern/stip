@@ -70,25 +70,6 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getPlz
       summary: Gets all PLZs
-  /notifications:
-    get:
-      tags:
-        - Notification
-      responses:
-        '200':
-          description: Returns all Notifications for the user
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: './components/common.yaml#/Notification'
-        '404':
-          $ref: './components/responses.yaml#/NotFound'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getNotificationsForCurrentUser
-      summary: Gets all notifications for the User
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
@@ -123,24 +104,33 @@ components:
         realm: some text
     TenantFeature:
       required:
-        - nesko
+        - enabled
       type: object
       properties:
-        nesko:
+        enabled:
           type: boolean
+        adapterType:
+          $ref: '#/components/schemas/SteuerdatenAdapterType'
+    #          use as soon as more enums join the party !!!
+    #          oneOf:
+    #            - $ref: '#/components/schemas/SteuerdatenAdapterType'
+    #            - ...
+    TenantFeatures:
+      type: object
+      properties:
+        steuerdaten:
+          $ref: '#/components/schemas/TenantFeature'
     TenantInfo:
-      title: Root Type for TenantInfo
-      description: Client Application Info about a `Tenant`
+      type: object
       required:
         - clientAuth
         - features
         - identifier
-      type: object
       properties:
         clientAuth:
           $ref: '#/components/schemas/TenantAuthConfig'
         features:
-          $ref: '#/components/schemas/TenantFeature'
+          $ref: '#/components/schemas/TenantFeatures'
         identifier:
           type: string
     StipDecisionText:
@@ -178,16 +168,16 @@ components:
           type: string
         redirectUri:
           type: string
-    NeskoError:
+    SteuerdatenPortError:
       required:
         - type
-        - neskoError
+        - error
         - userMessage
       type: object
       properties:
         type:
           type: string
-        neskoError:
+        error:
           type: string
         userMessage:
           type: string
@@ -196,5 +186,10 @@ components:
         - BERN
         - ANDERER_KANTON
       type: string
+    SteuerdatenAdapterType:
+      type: string
+      enum:
+        - DUMMY
+        - NESKO
 security:
   $ref: './components/security.yaml#/security'

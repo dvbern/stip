@@ -17,7 +17,8 @@
 
 package ch.dvbern.stip.api.statistik.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -40,14 +41,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "statistik",
     indexes = {
-        @Index(name = "IX_statistik_mandant", columnList = "mandant"),
+        @Index(name = "IX_statistik_tenant", columnList = "tenant"),
         @Index(name = "IX_statistik_year", columnList = "year")
     }
 )
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Statistik extends AbstractMandantEntity {
+public class Statistik extends AbstractTenantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "user_triggered_creation", nullable = false)
@@ -58,26 +59,31 @@ public class Statistik extends AbstractMandantEntity {
     @Builder.Default
     private boolean valid = true;
 
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "error", nullable = true)
+    private String error;
+
     @NotNull
     @Column(name = "year", nullable = false)
     private int year;
 
-    @NotNull
+    @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "filename", nullable = false)
+    @Column(name = "filename", nullable = true)
     private String filename;
 
-    @NotNull
+    @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "filepath", nullable = false)
+    @Column(name = "filepath", nullable = true)
     private String filepath;
 
-    @NotNull
-    @Column(name = "filesize", nullable = false)
-    private int filesize;
+    @Nullable
+    @Column(name = "filesize", nullable = true)
+    private Integer filesize;
 
-    @NotNull
+    @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "object_id", nullable = false)
+    @Column(name = "object_id", nullable = true)
     private String objectId;
 }

@@ -14,30 +14,57 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("TenantFeature")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TenantFeatureDto  implements Serializable {
-  private @Valid Boolean nesko;
+  private @Valid Boolean enabled;
+  private @Valid ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType;
+
+  protected TenantFeatureDto(TenantFeatureDtoBuilder<?, ?> b) {
+    this.enabled = b.enabled;
+    this.adapterType = b.adapterType;
+  }
+
+  public TenantFeatureDto() {
+  }
 
   /**
    **/
-  public TenantFeatureDto nesko(Boolean nesko) {
-    this.nesko = nesko;
+  public TenantFeatureDto enabled(Boolean enabled) {
+    this.enabled = enabled;
     return this;
   }
 
   
-  @JsonProperty("nesko")
+  @JsonProperty("enabled")
   @NotNull
-  public Boolean getNesko() {
-    return nesko;
+  public Boolean getEnabled() {
+    return enabled;
   }
 
-  @JsonProperty("nesko")
-  public void setNesko(Boolean nesko) {
-    this.nesko = nesko;
+  @JsonProperty("enabled")
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  /**
+   **/
+  public TenantFeatureDto adapterType(ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType) {
+    this.adapterType = adapterType;
+    return this;
+  }
+
+  
+  @JsonProperty("adapterType")
+  public ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType getAdapterType() {
+    return adapterType;
+  }
+
+  @JsonProperty("adapterType")
+  public void setAdapterType(ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType) {
+    this.adapterType = adapterType;
   }
 
 
@@ -50,12 +77,13 @@ public class TenantFeatureDto  implements Serializable {
       return false;
     }
     TenantFeatureDto tenantFeature = (TenantFeatureDto) o;
-    return Objects.equals(this.nesko, tenantFeature.nesko);
+    return Objects.equals(this.enabled, tenantFeature.enabled) &&
+        Objects.equals(this.adapterType, tenantFeature.adapterType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nesko);
+    return Objects.hash(enabled, adapterType);
   }
 
   @Override
@@ -63,7 +91,8 @@ public class TenantFeatureDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class TenantFeatureDto {\n");
     
-    sb.append("    nesko: ").append(toIndentedString(nesko)).append("\n");
+    sb.append("    enabled: ").append(toIndentedString(enabled)).append("\n");
+    sb.append("    adapterType: ").append(toIndentedString(adapterType)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -80,5 +109,38 @@ public class TenantFeatureDto  implements Serializable {
   }
 
 
+  public static TenantFeatureDtoBuilder<?, ?> builder() {
+    return new TenantFeatureDtoBuilderImpl();
+  }
+
+  private static final class TenantFeatureDtoBuilderImpl extends TenantFeatureDtoBuilder<TenantFeatureDto, TenantFeatureDtoBuilderImpl> {
+
+    @Override
+    protected TenantFeatureDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public TenantFeatureDto build() {
+      return new TenantFeatureDto(this);
+    }
+  }
+
+  public static abstract class TenantFeatureDtoBuilder<C extends TenantFeatureDto, B extends TenantFeatureDtoBuilder<C, B>>  {
+    private Boolean enabled;
+    private ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B enabled(Boolean enabled) {
+      this.enabled = enabled;
+      return self();
+    }
+    public B adapterType(ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType) {
+      this.adapterType = adapterType;
+      return self();
+    }
+  }
 }
 

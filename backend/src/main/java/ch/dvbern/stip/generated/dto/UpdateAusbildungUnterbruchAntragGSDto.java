@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("UpdateAusbildungUnterbruchAntragGS")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class UpdateAusbildungUnterbruchAntragGSDto  implements Serializable {
   private @Valid String kommentarGS;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
+
+  protected UpdateAusbildungUnterbruchAntragGSDto(UpdateAusbildungUnterbruchAntragGSDtoBuilder<?, ?> b) {
+    this.kommentarGS = b.kommentarGS;
+    this.startDate = b.startDate;
+    this.endDate = b.endDate;
+  }
+
+  public UpdateAusbildungUnterbruchAntragGSDto() {
+  }
 
   /**
    **/
@@ -125,5 +134,43 @@ public class UpdateAusbildungUnterbruchAntragGSDto  implements Serializable {
   }
 
 
+  public static UpdateAusbildungUnterbruchAntragGSDtoBuilder<?, ?> builder() {
+    return new UpdateAusbildungUnterbruchAntragGSDtoBuilderImpl();
+  }
+
+  private static final class UpdateAusbildungUnterbruchAntragGSDtoBuilderImpl extends UpdateAusbildungUnterbruchAntragGSDtoBuilder<UpdateAusbildungUnterbruchAntragGSDto, UpdateAusbildungUnterbruchAntragGSDtoBuilderImpl> {
+
+    @Override
+    protected UpdateAusbildungUnterbruchAntragGSDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public UpdateAusbildungUnterbruchAntragGSDto build() {
+      return new UpdateAusbildungUnterbruchAntragGSDto(this);
+    }
+  }
+
+  public static abstract class UpdateAusbildungUnterbruchAntragGSDtoBuilder<C extends UpdateAusbildungUnterbruchAntragGSDto, B extends UpdateAusbildungUnterbruchAntragGSDtoBuilder<C, B>>  {
+    private String kommentarGS;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B kommentarGS(String kommentarGS) {
+      this.kommentarGS = kommentarGS;
+      return self();
+    }
+    public B startDate(LocalDate startDate) {
+      this.startDate = startDate;
+      return self();
+    }
+    public B endDate(LocalDate endDate) {
+      this.endDate = endDate;
+      return self();
+    }
+  }
 }
 

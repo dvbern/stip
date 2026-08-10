@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.service.SbDashboardQueryBuilder;
@@ -30,7 +31,6 @@ import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
 import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
 import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
@@ -68,7 +68,8 @@ public class MassendruckJobService {
     private final VerfuegungMassendruckMapper verfuegungMassendruckMapper;
     private final GesuchService gesuchService;
     private final TenantService tenantService;
-    private final ConfigService configService;
+    private final StipConfig config;
+    private final BenutzerService benutzerService;
 
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
         final GetMassendruckJobQueryType queryTyp,
@@ -81,7 +82,7 @@ public class MassendruckJobService {
         final MassendruckJobSortColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
@@ -134,19 +135,25 @@ public class MassendruckJobService {
     }
 
     @Transactional
-    public MassendruckJobDto createMassendruckJobForQueryType(final GetGesucheSBQueryType getGesucheSBQueryType) {
-        final var gesuche = sbDashboardQueryBuilder.baseQuery(getGesucheSBQueryType, GesuchTrancheTyp.TRANCHE)
-            .stream()
-            .toList();
+    public MassendruckJobDto createMassendruckJobForQueryType(
+        final GetGesucheSBQueryType getGesucheSBQueryType,
+        final Boolean zugewiesen
+    ) {
+        final var gesucheQuery = sbDashboardQueryBuilder.baseGesuchQuery(getGesucheSBQueryType);
 
+        if (Boolean.TRUE.equals(zugewiesen)) {
+            sbDashboardQueryBuilder.onlyCurrentBenutzer(gesucheQuery, benutzerService.getCurrentBenutzer().getId());
+        }
+
+        final var gesuche = gesucheQuery.stream().toList();
         final var massendruckJob = new MassendruckJob().setStatus(MassendruckJobStatus.IN_PROGRESS);
 
         switch (getGesucheSBQueryType) {
-            case ALLE_DRUCKBAR_VERFUEGUNGEN, MEINE_DRUCKBAR_VERFUEGUNGEN -> createAndSetVerfuegungMassendruck(
+            case DRUCKBAR_VERFUEGUNGEN -> createAndSetVerfuegungMassendruck(
                 massendruckJob,
                 gesuche
             );
-            case ALLE_DRUCKBAR_DATENSCHUTZBRIEFE, MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> createAndSetDatenschutzbriefMassendruck(
+            case DRUCKBAR_DATENSCHUTZBRIEFE -> createAndSetDatenschutzbriefMassendruck(
                 massendruckJob,
                 gesuche
             );

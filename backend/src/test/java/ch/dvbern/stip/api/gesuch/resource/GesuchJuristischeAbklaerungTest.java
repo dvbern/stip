@@ -110,7 +110,7 @@ class GesuchJuristischeAbklaerungTest {
     void ausbildungAnpassen() {
         final var gesuchInfo = TestUtil.executeAndExtract(
             GesuchInfoDtoSpec.class,
-            gesuchApiSpec.getGesuchInfo().gesuchIdPath(gesuchDtoSpec.getId())
+            gesuchApiSpec.getGesuchInfoSb().gesuchIdPath(gesuchDtoSpec.getId())
         );
         assertThat(
             "Gesuch ist in Abklaerung durch Rechtsabteilung",

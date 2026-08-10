@@ -17,12 +17,13 @@
 
 package ch.dvbern.stip.api.statistik.service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.statistik.repo.StatistikRepository;
 import ch.dvbern.stip.api.statistik.util.StatistikConstants;
@@ -37,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.ObjectAlreadyExistsException;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
@@ -52,7 +54,7 @@ public class StatistikService {
     private final StatistikMapper statistikMapper;
     private final DokumentDownloadService dokumentDownloadService;
     private final BenutzerService benutzerService;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final JWTParser jwtParser;
     private final S3AsyncClient s3AsyncClient;
     private final TenantService tenantService;
@@ -62,12 +64,12 @@ public class StatistikService {
 
         final JobDetail jobDetail = JobBuilder.newJob(StatistikXMLJob.class)
             .withIdentity(
-                StatistikConstants.STATISTIK_JOB_PREFIX + year + "-" + System.currentTimeMillis(),
+                String.format("%s-%d-%s", StatistikConstants.STATISTIK_JOB_NAME, year, LocalDate.now()),
                 "statistik"
             )
             .usingJobData(
                 StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_TENANT_KEY,
-                tenantService.getCurrentTenantIdentifier()
+                tenantService.getCurrentStringIdentifier()
             )
             .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY, String.valueOf(year))
             .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_USER_KEY, currentUserName)
@@ -75,7 +77,7 @@ public class StatistikService {
 
         final Trigger trigger = TriggerBuilder.newTrigger()
             .withIdentity(
-                StatistikConstants.STATISTIK_JOB_PREFIX + "trigger-" + year + "-" + System.currentTimeMillis(),
+                StatistikConstants.STATISTIK_JOB_NAME,
                 "statistik"
             )
             .startNow()
@@ -83,6 +85,8 @@ public class StatistikService {
 
         try {
             scheduler.scheduleJob(jobDetail, trigger);
+        } catch (ObjectAlreadyExistsException e) {
+            LOG.warn("Already existing statistik job exists", e);
         } catch (SchedulerException e) {
             LOG.error("Could not schedule statistik job", e);
         }
@@ -100,7 +104,7 @@ public class StatistikService {
         final var statistikId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             StatistikConstants.STATISTIK_FILE_DOWNLOAD_TOKEN_CLAIM_ID
         );
 
@@ -108,7 +112,7 @@ public class StatistikService {
 
         return dokumentDownloadService.getDokument(
             s3AsyncClient,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             statistik.getObjectId(),
             statistik.getFilepath(),
             statistik.getFilename()
@@ -120,7 +124,7 @@ public class StatistikService {
             statistikId,
             StatistikConstants.STATISTIK_FILE_DOWNLOAD_TOKEN_CLAIM_ID,
             benutzerService,
-            configService
+            config
         );
     }
 }

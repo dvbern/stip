@@ -23,12 +23,13 @@ import java.util.List;
 
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,17 +53,18 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 
 @Audited
 @SapDeliverysLengthConstraint
+@SaldoaenderungBuchhaltungNotZeroConstraint
 @Entity
 @Table(
     name = "buchhaltung",
     indexes = {
         @Index(name = "IX_buchhaltung_gesuch_id", columnList = "gesuch_id"),
-        @Index(name = "IX_buchhaltung_mandant", columnList = "mandant")
+        @Index(name = "IX_buchhaltung_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class Buchhaltung extends AbstractMandantEntity {
+public class Buchhaltung extends AbstractTenantEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "buchhaltung_type", nullable = false)
@@ -81,7 +83,7 @@ public class Buchhaltung extends AbstractMandantEntity {
     private Integer stipendium;
 
     @Nullable
-    @OneToMany(mappedBy = "buchhaltung", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "buchhaltung", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<SapDelivery> sapDeliverys = new ArrayList<>();
 
     @NotNull

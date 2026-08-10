@@ -13,6 +13,6 @@
 export interface Fall { 
     id: string;
     fallNummer: string;
-    mandant: string;
+    tenant: string;
 }
 

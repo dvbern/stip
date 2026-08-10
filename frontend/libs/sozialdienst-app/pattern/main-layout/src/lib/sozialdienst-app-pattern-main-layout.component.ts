@@ -7,15 +7,17 @@ import {
   inject,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
@@ -24,6 +26,7 @@ import {
   buildGesuchNavItems,
   createAllRouteParamsSig,
   createParamsIdSig,
+  getQueryParamValueSig,
   sozialdienstBaseMenuItems,
 } from '@dv/shared/util/navigation';
 
@@ -64,11 +67,16 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private store = inject(Store);
+  private fallHeaderStore = inject(FallHeaderStore);
 
   baseMenuItems = sozialdienstBaseMenuItems;
+
+  @HostBinding('class')
+  hostClass = 'tw:flex tw:flex-col';
 
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
 
@@ -77,15 +85,14 @@ export class SozialdienstAppPatternMainLayoutComponent {
     return gesuch?.fallId;
   });
 
-  @HostBinding('class')
-  hostClass = 'tw:flex tw:flex-col';
-
   private allRouteParamsSig = createAllRouteParamsSig(this.router);
 
   private darlehenIdSig = createParamsIdSig(
     'darlehenId',
     this.allRouteParamsSig,
   );
+
+  private originStepSig = getQueryParamValueSig(this.route, 'originStep');
 
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
@@ -106,58 +113,84 @@ export class SozialdienstAppPatternMainLayoutComponent {
     this.fallStore.loadCurrentFall$();
 
     effect(() => {
+      // Read allRouteParamsSig to re-run on every navigation
+      this.allRouteParamsSig();
       const fallId = this.fallIdSig();
       if (fallId) {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
+        this.fallHeaderStore.loadFallHeader$({ fallId });
       }
     });
 
-    // naviation items effect
+    // navigation items effect
     effect(() => {
-      const darlehnen = this.darlehenStore.darlehenGsViewSig();
+      // Read allRouteParamsSig to re-run on every navigation
+      this.allRouteParamsSig();
+      const darlehnen = this.darlehenStore.darlehenListViewSig();
       const fallId = this.fallIdSig();
       const gesuchId = this.gesuchIdSig();
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
+      const originStep = this.originStepSig();
+      const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(sozialdienstBaseMenuItems);
         return;
       }
 
-      const fallNav: NavItem[] = [];
-      const ausZahlungNav: NavItem[] = [];
+      const fallNav: NavItem = {
+        type: 'link',
+        id: 'fall',
+        label: { key: 'shared.header.fall' },
+        icon: 'assignment_ind',
+        route: ['/fall', fallId],
+      };
 
-      if (fallId) {
-        fallNav.push({
+      const auszahlung: NavItem = {
+        type: 'link',
+        id: 'auszahlung',
+        label: { key: 'shared.header.auszahlung' },
+        icon: 'payments',
+        route: ['/auszahlung', fallId],
+      };
+
+      const fallDokumente: NavItem = {
+        type: 'link',
+        id: 'fall-dokumente',
+        label: { key: 'shared.menu.fallDokumente' },
+        icon: 'description',
+        route: ['/fall-dokumente', fallId],
+      };
+
+      const nachrichten: NavItem[] = [
+        {
           type: 'link',
-          id: 'fall',
-          label: { key: 'sozialdienst-app.header.fall' },
-          icon: 'assignment_ind',
-          route: ['/fall', fallId],
-        });
+          id: 'nachrichten',
+          icon: 'mail',
+          label: { key: 'shared.menu.nachrichten' },
+          route: ['/nachrichten', fallId],
+          badge: fallHeader?.unreadNotificationsCount
+            ? {
+                count: fallHeader.unreadNotificationsCount,
+              }
+            : undefined,
+        },
+        {
+          type: 'separator',
+          id: 'separator-1',
+          orientation: 'vertical',
+        },
+      ];
 
-        ausZahlungNav.push(
-          {
-            type: 'link',
-            id: 'auszahlung',
-            label: { key: 'sozialdienst-app.header.auszahlung' },
-            icon: 'payments',
-            route: ['/auszahlung', fallId],
-          },
-          {
-            type: 'separator',
-            id: 'separator-1',
-            orientation: 'vertical',
-          },
-        );
-      }
+      const tab = decodeURI(originStep ?? '') || TRANCHE.route;
+      const tabSegments = tab.split('/').filter(Boolean);
 
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
         this.gesuchHeaderStore.viewSig().currentTranches ?? [],
+        tabSegments,
         this.trancheIdSig(),
-        'sozialdienst-app',
       );
 
       const darlehenMenu = buildDarlehenMenu({
@@ -172,10 +205,12 @@ export class SozialdienstAppPatternMainLayoutComponent {
       });
 
       const navItems: NavItem[] = [
-        ...fallNav,
+        fallNav,
         ...gesuchNav,
         darlehenMenu,
-        ...ausZahlungNav,
+        fallDokumente,
+        auszahlung,
+        ...nachrichten,
         ...this.baseMenuItems,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {

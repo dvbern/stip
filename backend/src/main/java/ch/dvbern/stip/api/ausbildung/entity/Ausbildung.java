@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.adresse.entity.NotStatelessConstraint;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -71,7 +71,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
     indexes = {
         @Index(name = "IX_ausbildung_fall_id", columnList = "fall_id"),
         @Index(name = "IX_ausbildung_ausbildungsgang_id", columnList = "ausbildungsgang_id"),
-        @Index(name = "IX_ausbildung_mandant", columnList = "mandant")
+        @Index(name = "IX_ausbildung_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -79,9 +79,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ausbildung extends AbstractMandantEntity {
+public class Ausbildung extends AbstractTenantEntity {
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_ausbildung_fall_id"))
     private Fall fall;
 

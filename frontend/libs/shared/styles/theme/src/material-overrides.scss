@@ -144,6 +144,7 @@ $dv-all-colors: info, danger, success, warn, primary;
 .cdk-overlay-container .header-menu-panel {
   padding: 5px 12px;
   max-width: 450px;
+  min-width: 250px;
 }
 
 .mat-mdc-list-item {
@@ -153,6 +154,10 @@ $dv-all-colors: info, danger, success, warn, primary;
   }
 }
 
+.mat-mdc-dialog-container {
+  max-height: 100vh !important;
+}
+
 .info-dialog-columnar {
   &.cdk-overlay-pane.mat-mdc-dialog-panel {
     min-width: unset;
@@ -160,10 +165,11 @@ $dv-all-colors: info, danger, success, warn, primary;
 }
 
 .dv-dialog-formular {
-  --mat-dialog-container-min-width: 900px;
+  --mat-dialog-container-min-width: min(900px, 100%);
 }
 
-.mat-mdc-tab-nav-bar {
+.mat-mdc-tab-nav-bar,
+.mat-mdc-tab-group {
   &.nav-style-tabs {
     .mat-mdc-tab-links {
       gap: 0 24px;
@@ -176,6 +182,15 @@ $dv-all-colors: info, danger, success, warn, primary;
       --tw-duration,
       var(--tw-default-transition-duration)
     );
+  }
+}
+
+.mat-mdc-tab-group {
+  .mat-mdc-tab-body:not(.mat-mdc-tab-body-active) .mat-mdc-tab-body-content {
+    overflow: hidden;
+  }
+  .mdc-tab__text-label {
+    height: 100%;
   }
 }
 
@@ -200,7 +215,17 @@ $dv-all-colors: info, danger, success, warn, primary;
   }
 }
 
-dv-sachbearbeitung-app-feature-verfuegung {
+.mat-expansion-panel.dv-nav-expansion-panel {
+  border-radius: 1px;
+  .mat-expansion-panel-header {
+    padding: 0.5rem 1rem;
+  }
+  .mat-expansion-panel-body {
+    padding: 0 1rem;
+  }
+}
+
+dv-shared-feature-verfuegung {
   .mat-mdc-card {
     background-color: var(--tw-color-gray-100);
     border-width: 1px;
@@ -209,17 +234,6 @@ dv-sachbearbeitung-app-feature-verfuegung {
     border-radius: var(--dv-border-radius);
     box-shadow: none;
     padding-block: 1rem;
-  }
-}
-
-dv-sachbearbeitung-app-feature-gesuch-layout {
-  .tw\:dv-table {
-    box-shadow: none;
-    border: 1px solid var(--tw-color-gray-300);
-  }
-  .mat-mdc-tab-link.btn-nav {
-    box-shadow: none;
-    border: 1px solid var(--tw-color-gray-300);
   }
 }
 

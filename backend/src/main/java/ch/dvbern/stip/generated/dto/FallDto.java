@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Fall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String fallNummer;
-  private @Valid String mandant;
+  private @Valid String tenant;
+
+  protected FallDto(FallDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.fallNummer = b.fallNummer;
+    this.tenant = b.tenant;
+  }
+
+  public FallDto() {
+  }
 
   /**
    **/
@@ -64,21 +73,21 @@ public class FallDto  implements Serializable {
 
   /**
    **/
-  public FallDto mandant(String mandant) {
-    this.mandant = mandant;
+  public FallDto tenant(String tenant) {
+    this.tenant = tenant;
     return this;
   }
 
   
-  @JsonProperty("mandant")
+  @JsonProperty("tenant")
   @NotNull
-  public String getMandant() {
-    return mandant;
+  public String getTenant() {
+    return tenant;
   }
 
-  @JsonProperty("mandant")
-  public void setMandant(String mandant) {
-    this.mandant = mandant;
+  @JsonProperty("tenant")
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
   }
 
 
@@ -93,12 +102,12 @@ public class FallDto  implements Serializable {
     FallDto fall = (FallDto) o;
     return Objects.equals(this.id, fall.id) &&
         Objects.equals(this.fallNummer, fall.fallNummer) &&
-        Objects.equals(this.mandant, fall.mandant);
+        Objects.equals(this.tenant, fall.tenant);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, mandant);
+    return Objects.hash(id, fallNummer, tenant);
   }
 
   @Override
@@ -108,7 +117,7 @@ public class FallDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
-    sb.append("    mandant: ").append(toIndentedString(mandant)).append("\n");
+    sb.append("    tenant: ").append(toIndentedString(tenant)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -125,5 +134,43 @@ public class FallDto  implements Serializable {
   }
 
 
+  public static FallDtoBuilder<?, ?> builder() {
+    return new FallDtoBuilderImpl();
+  }
+
+  private static final class FallDtoBuilderImpl extends FallDtoBuilder<FallDto, FallDtoBuilderImpl> {
+
+    @Override
+    protected FallDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FallDto build() {
+      return new FallDto(this);
+    }
+  }
+
+  public static abstract class FallDtoBuilder<C extends FallDto, B extends FallDtoBuilder<C, B>>  {
+    private UUID id;
+    private String fallNummer;
+    private String tenant;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
+      return self();
+    }
+    public B tenant(String tenant) {
+      this.tenant = tenant;
+      return self();
+    }
+  }
 }
 

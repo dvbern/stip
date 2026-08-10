@@ -113,14 +113,19 @@ public interface DarlehenResource {
     FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenGs(@PathParam("fallId") UUID fallId);
 
     @GET
-    @Path("/getAllDarlehenSb/{gesuchId}")
+    @Path("/getAllDarlehenSb/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(@PathParam("gesuchId") UUID gesuchId);
+    List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/buchhaltung/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrys(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/buchhaltung/fall/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrysByFallId(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/dokument/{darlehenId}/{dokumentType}")
@@ -138,9 +143,9 @@ public interface DarlehenResource {
     FileDownloadTokenDto getDarlehenNegativVerfuegungDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/dashboard/{getFreiwilligDarlehenSbQueryType}")
+    @Path("/dashboard")
     @Produces({ "application/json", "text/plain" })
-    PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(@PathParam("getFreiwilligDarlehenSbQueryType") ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+    PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("bearbeitbar")   Boolean bearbeitbar,@QueryParam("zugewiesen")   Boolean zugewiesen,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
     @Path("/{darlehenId}/gs")

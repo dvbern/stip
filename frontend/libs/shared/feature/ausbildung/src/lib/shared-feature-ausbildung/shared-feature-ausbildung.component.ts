@@ -27,7 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { addYears, subDays } from 'date-fns';
 import { diff } from 'json-diff-ts';
@@ -57,6 +57,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -71,10 +72,10 @@ import {
   SharedUiRdIsPendingWithoutCachePipe,
 } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
-  provideMaterialDefaultOptions,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
 import {
@@ -113,7 +114,6 @@ const gesuchsPeriodenSelectErrorMap: Record<
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
-    TranslocoPipe,
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
@@ -131,15 +131,14 @@ const gesuchsPeriodenSelectErrorMap: Record<
     SharedPatternDocumentUploadComponent,
     SharedUiSelectSearchComponent,
     SharedUiPlzOrtAutocompleteDirective,
+    SharedUiAdvTranslocoDirective,
+    SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
   providers: [
     AusbildungStore,
     AusbildungsstaetteStore,
     provideDateFnsAdapter(),
-    provideMaterialDefaultOptions({
-      subscriptSizing: 'dynamic',
-    }),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -211,6 +210,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       ? { type: 'dialog' as const, fallId }
       : { type: 'gesuch-form' as const, fallId: gesuchFallId };
   });
+  subscriptSizingSig = computed(() =>
+    this.dialogDataSig()?.fallId ? 'dynamic' : 'fixed',
+  );
   private ausbildungsstaetteIdSig = toSignal(
     this.form.controls.ausbildungsstaetteId.valueChanges,
   );

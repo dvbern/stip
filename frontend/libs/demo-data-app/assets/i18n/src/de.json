@@ -57,5 +57,11 @@
   "demo-data-app.overview.test-berechnung.gesuch-invalid": "Diese Testdaten bilden kein valides Gesuch",
   "demo-data-app.overview.test-berechnung.copy-to-clipboard": "In die Zwischenablage kopieren",
   "demo-data-app.overview.test-berechnung.soll-ist": "Soll: {{soll}}\n Ist: {{ist}}",
-  "demo-data-app.overview.test-berechnung.success": "Die Testdaten wurden erfolgreich berechnet"
+  "demo-data-app.overview.test-berechnung.success": "Die Testdaten wurden erfolgreich berechnet",
+  "demo-data-app.overview.generate-multi.aktionen": "Aktionen",
+  "demo-data-app.overview.generate-multi.xmlStatistik": "BFS Statistik für alle Testcases",
+  "demo-data-app.overview.generate-multi.xmlStatistik.success": "Die Statistik wurde erfolgreich erstellt",
+  "demo-data-app.overview.generate-multi.persistent": "Alle Gesuche Generieren",
+  "demo-data-app.overview.generate-multi.persistent.warning": "Mit dieser aktion werden für alle Testcases Gesuche erstellt welche direkt in Verfügt gesetzt werden.<br><b>Die erstellten Gesuche sollten nicht bearbeitet werden.</b><br><br>Sind sie sicher?",
+  "demo-data-app.overview.generate-multi.persistent.success": "Die Gesuche sind erfolgriech erstellt worden"
 }

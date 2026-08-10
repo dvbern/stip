@@ -3,11 +3,13 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.GesuchAenderungsDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.InitialGesuchsDto;
 import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -21,16 +23,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchHeader")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchHeaderDto  implements Serializable {
   private @Valid List<VerfuegtGesuchDto> versions = new ArrayList<>();
   private @Valid GesuchAenderungsDto aenderungs;
   private @Valid List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
   private @Valid GesuchInfoDto gesuchInfo;
-  private @Valid VerfuegtGesuchDto initial;
+  private @Valid InitialGesuchsDto initial;
+  private @Valid UUID latestVerfuegungId;
+  private @Valid java.time.LocalDateTime latestVerfuegtAt;
+
+  protected GesuchHeaderDto(GesuchHeaderDtoBuilder<?, ?> b) {
+    this.versions = b.versions;
+    this.aenderungs = b.aenderungs;
+    this.currentTranches = b.currentTranches;
+    this.gesuchInfo = b.gesuchInfo;
+    this.initial = b.initial;
+    this.latestVerfuegungId = b.latestVerfuegungId;
+    this.latestVerfuegtAt = b.latestVerfuegtAt;
+  }
+
+  public GesuchHeaderDto() {
+  }
 
   /**
    **/
@@ -142,20 +159,56 @@ public class GesuchHeaderDto  implements Serializable {
 
   /**
    **/
-  public GesuchHeaderDto initial(VerfuegtGesuchDto initial) {
+  public GesuchHeaderDto initial(InitialGesuchsDto initial) {
     this.initial = initial;
     return this;
   }
 
   
   @JsonProperty("initial")
-  public VerfuegtGesuchDto getInitial() {
+  public InitialGesuchsDto getInitial() {
     return initial;
   }
 
   @JsonProperty("initial")
-  public void setInitial(VerfuegtGesuchDto initial) {
+  public void setInitial(InitialGesuchsDto initial) {
     this.initial = initial;
+  }
+
+  /**
+   **/
+  public GesuchHeaderDto latestVerfuegungId(UUID latestVerfuegungId) {
+    this.latestVerfuegungId = latestVerfuegungId;
+    return this;
+  }
+
+  
+  @JsonProperty("latestVerfuegungId")
+  public UUID getLatestVerfuegungId() {
+    return latestVerfuegungId;
+  }
+
+  @JsonProperty("latestVerfuegungId")
+  public void setLatestVerfuegungId(UUID latestVerfuegungId) {
+    this.latestVerfuegungId = latestVerfuegungId;
+  }
+
+  /**
+   **/
+  public GesuchHeaderDto latestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+    this.latestVerfuegtAt = latestVerfuegtAt;
+    return this;
+  }
+
+  
+  @JsonProperty("latestVerfuegtAt")
+  public java.time.LocalDateTime getLatestVerfuegtAt() {
+    return latestVerfuegtAt;
+  }
+
+  @JsonProperty("latestVerfuegtAt")
+  public void setLatestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+    this.latestVerfuegtAt = latestVerfuegtAt;
   }
 
 
@@ -172,12 +225,14 @@ public class GesuchHeaderDto  implements Serializable {
         Objects.equals(this.aenderungs, gesuchHeader.aenderungs) &&
         Objects.equals(this.currentTranches, gesuchHeader.currentTranches) &&
         Objects.equals(this.gesuchInfo, gesuchHeader.gesuchInfo) &&
-        Objects.equals(this.initial, gesuchHeader.initial);
+        Objects.equals(this.initial, gesuchHeader.initial) &&
+        Objects.equals(this.latestVerfuegungId, gesuchHeader.latestVerfuegungId) &&
+        Objects.equals(this.latestVerfuegtAt, gesuchHeader.latestVerfuegtAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(versions, aenderungs, currentTranches, gesuchInfo, initial);
+    return Objects.hash(versions, aenderungs, currentTranches, gesuchInfo, initial, latestVerfuegungId, latestVerfuegtAt);
   }
 
   @Override
@@ -190,6 +245,8 @@ public class GesuchHeaderDto  implements Serializable {
     sb.append("    currentTranches: ").append(toIndentedString(currentTranches)).append("\n");
     sb.append("    gesuchInfo: ").append(toIndentedString(gesuchInfo)).append("\n");
     sb.append("    initial: ").append(toIndentedString(initial)).append("\n");
+    sb.append("    latestVerfuegungId: ").append(toIndentedString(latestVerfuegungId)).append("\n");
+    sb.append("    latestVerfuegtAt: ").append(toIndentedString(latestVerfuegtAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -206,5 +263,63 @@ public class GesuchHeaderDto  implements Serializable {
   }
 
 
+  public static GesuchHeaderDtoBuilder<?, ?> builder() {
+    return new GesuchHeaderDtoBuilderImpl();
+  }
+
+  private static final class GesuchHeaderDtoBuilderImpl extends GesuchHeaderDtoBuilder<GesuchHeaderDto, GesuchHeaderDtoBuilderImpl> {
+
+    @Override
+    protected GesuchHeaderDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchHeaderDto build() {
+      return new GesuchHeaderDto(this);
+    }
+  }
+
+  public static abstract class GesuchHeaderDtoBuilder<C extends GesuchHeaderDto, B extends GesuchHeaderDtoBuilder<C, B>>  {
+    private List<VerfuegtGesuchDto> versions = new ArrayList<>();
+    private GesuchAenderungsDto aenderungs;
+    private List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
+    private GesuchInfoDto gesuchInfo;
+    private InitialGesuchsDto initial;
+    private UUID latestVerfuegungId;
+    private java.time.LocalDateTime latestVerfuegtAt;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B versions(List<VerfuegtGesuchDto> versions) {
+      this.versions = versions;
+      return self();
+    }
+    public B aenderungs(GesuchAenderungsDto aenderungs) {
+      this.aenderungs = aenderungs;
+      return self();
+    }
+    public B currentTranches(List<GesuchTrancheSlimDto> currentTranches) {
+      this.currentTranches = currentTranches;
+      return self();
+    }
+    public B gesuchInfo(GesuchInfoDto gesuchInfo) {
+      this.gesuchInfo = gesuchInfo;
+      return self();
+    }
+    public B initial(InitialGesuchsDto initial) {
+      this.initial = initial;
+      return self();
+    }
+    public B latestVerfuegungId(UUID latestVerfuegungId) {
+      this.latestVerfuegungId = latestVerfuegungId;
+      return self();
+    }
+    public B latestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+      this.latestVerfuegtAt = latestVerfuegtAt;
+      return self();
+    }
+  }
 }
 

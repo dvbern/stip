@@ -35,8 +35,14 @@ import org.jctools.queues.MessagePassingQueue.Consumer;
  */
 @Slf4j
 public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
+    private final String fallNummer;
+
     public Set<QName> getHeaders() {
         return Set.of();
+    }
+
+    public SOAPLoggingHandler(final String fallNummer) {
+        this.fallNummer = fallNummer;
     }
 
     public boolean handleMessage(SOAPMessageContext smc) {
@@ -74,7 +80,10 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
         try {
             final var outstream = new ByteArrayOutputStream();
             message.writeTo(outstream);
-            loggingFunction.accept(outstream.toString(StandardCharsets.UTF_8).replaceAll("\\R", ""));
+            loggingFunction.accept(
+                "Fall[%s]:%s"
+                    .formatted(this.fallNummer, outstream.toString(StandardCharsets.UTF_8).replaceAll("\\R", ""))
+            );
             loggingFunction.accept(""); // just to add a newline
         } catch (Exception e) {
             LOG.error("Exception in handler: " + e);

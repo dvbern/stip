@@ -75,6 +75,9 @@ public class ApiClient {
     public FallApiSpec fall() {
         return FallApiSpec.fall(config.reqSpecSupplier);
     }
+    public FallHeaderApiSpec fallHeader() {
+        return FallHeaderApiSpec.fallHeader(config.reqSpecSupplier);
+    }
     public GesuchApiSpec gesuch() {
         return GesuchApiSpec.gesuch(config.reqSpecSupplier);
     }

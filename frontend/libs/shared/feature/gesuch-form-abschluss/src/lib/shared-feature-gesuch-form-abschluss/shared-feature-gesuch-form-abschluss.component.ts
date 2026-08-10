@@ -9,12 +9,12 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchsView,
@@ -22,20 +22,23 @@ import {
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { isDefined } from '@dv/shared/model/type-util';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-abschluss',
   imports: [
     RouterLink,
-    TranslocoPipe,
+    SharedUiAdvTranslocoDirective,
     SharedUiInfoContainerComponent,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
+    SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-abschluss.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +50,7 @@ export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
   einreichenStore = inject(EinreichenStore);
   dokumentsStore = inject(DokumentsStore);
   headerStore = inject(GesuchHeaderStore);
+  fallHeaderStore = inject(FallHeaderStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
@@ -106,10 +110,16 @@ export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
           if (isEditingAenderung) {
             this.einreichenStore.aenderungEinreichen$({
               trancheId,
+              onSuccess: () => {
+                this.fallHeaderStore.loadFallHeader$({ fallId: gesuch.fallId });
+              },
             });
           } else {
             this.einreichenStore.gesuchEinreichen$({
               gesuchTrancheId: trancheId,
+              onSuccess: () => {
+                this.fallHeaderStore.loadFallHeader$({ fallId: gesuch.fallId });
+              },
             });
           }
         }
@@ -123,9 +133,10 @@ export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
         tranchenTyp: trancheSetting.type,
-        onSuccess: () => {
+        onSuccess: (fallId) => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+          this.fallHeaderStore.loadFallHeader$({ fallId });
         },
       });
     }

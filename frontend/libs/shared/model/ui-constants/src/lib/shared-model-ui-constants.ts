@@ -1,11 +1,10 @@
 export const DVBreakpoints = {
-  XS: 0,
-  SM: 576,
+  SM: 640,
   MD: 768,
-  LG: 992,
-  XL: 1200,
-  XXL: 1400,
-};
+  LG: 1024,
+  XL: 1280,
+  '2XL': 1536,
+} as const;
 
 export const PAGE_SIZES = [10, 20, 50];
 export const DEFAULT_PAGE_SIZE = 20;
@@ -16,6 +15,7 @@ export const BFSCODE_SCHWEIZ = '8100';
 
 export const MAX_EINKOMMEN = 9_999_999;
 
-export const noActionRoutes = ['aenderung', 'initial', 'infos', 'darlehen'];
-
-export const noGesuchActiveRoutes = ['aenderung', 'infos', 'darlehen'];
+// Is negative so not every form step has to be included!
+export const hideAktionenRoutes = ['infos', 'darlehen'];
+// Is negative so not every form step has to be included!
+export const notGesuchRoute = ['aenderung', 'infos', 'darlehen'];

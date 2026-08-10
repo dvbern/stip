@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+
 import { SharedUiInfoDialogDirective } from './shared-ui-info-dialog.directive';
 
 @Component({
@@ -17,6 +19,19 @@ describe('SharedUiInfoDialogDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: SharedModelCompileTimeConfig,
+          useFactory: () =>
+            new SharedModelCompileTimeConfig({
+              type: 'gesuch-app',
+              view: 'gesuchsteller',
+              keyPrefix: 'gesuch-app',
+            }),
+        },
+      ],
+    });
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

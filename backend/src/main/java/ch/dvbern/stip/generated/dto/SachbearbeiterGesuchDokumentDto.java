@@ -19,9 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SachbearbeiterGesuchDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterGesuchDokumentDto  implements Serializable {
   private @Valid String type;
@@ -29,6 +29,17 @@ public class SachbearbeiterGesuchDokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID gesuchId;
   private @Valid List<DokumentDto> dokumente = new ArrayList<>();
+
+  protected SachbearbeiterGesuchDokumentDto(SachbearbeiterGesuchDokumentDtoBuilder<?, ?> b) {
+    this.type = b.type;
+    this.description = b.description;
+    this.id = b.id;
+    this.gesuchId = b.gesuchId;
+    this.dokumente = b.dokumente;
+  }
+
+  public SachbearbeiterGesuchDokumentDto() {
+  }
 
   /**
    **/
@@ -189,5 +200,53 @@ public class SachbearbeiterGesuchDokumentDto  implements Serializable {
   }
 
 
+  public static SachbearbeiterGesuchDokumentDtoBuilder<?, ?> builder() {
+    return new SachbearbeiterGesuchDokumentDtoBuilderImpl();
+  }
+
+  private static final class SachbearbeiterGesuchDokumentDtoBuilderImpl extends SachbearbeiterGesuchDokumentDtoBuilder<SachbearbeiterGesuchDokumentDto, SachbearbeiterGesuchDokumentDtoBuilderImpl> {
+
+    @Override
+    protected SachbearbeiterGesuchDokumentDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SachbearbeiterGesuchDokumentDto build() {
+      return new SachbearbeiterGesuchDokumentDto(this);
+    }
+  }
+
+  public static abstract class SachbearbeiterGesuchDokumentDtoBuilder<C extends SachbearbeiterGesuchDokumentDto, B extends SachbearbeiterGesuchDokumentDtoBuilder<C, B>>  {
+    private String type;
+    private String description;
+    private UUID id;
+    private UUID gesuchId;
+    private List<DokumentDto> dokumente = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B type(String type) {
+      this.type = type;
+      return self();
+    }
+    public B description(String description) {
+      this.description = description;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B dokumente(List<DokumentDto> dokumente) {
+      this.dokumente = dokumente;
+      return self();
+    }
+  }
 }
 

@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -39,6 +40,27 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
     private final EntityManager em;
 
     private static final QGesuchTranche gesuchTranche = QGesuchTranche.gesuchTranche;
+
+    public JPAQuery<GesuchTranche> getFindAlleAenderungsQuery() {
+        return new JPAQueryFactory(em).selectFrom(gesuchTranche)
+            .where(gesuchTranche.typ.eq(GesuchTrancheTyp.AENDERUNG));
+    }
+
+    public Optional<GesuchTranche> findOffeneAenderungGs(final UUID gesuchId) {
+        return getFindAlleAenderungsQuery()
+            .where(gesuchTranche.gesuch.id.eq(gesuchId))
+            .where(gesuchTranche.status.eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+            .stream()
+            .findFirst();
+    }
+
+    public Optional<GesuchTranche> findLatestAenderungGs(final UUID gesuchId) {
+        return getFindAlleAenderungsQuery()
+            .where(gesuchTranche.gesuch.id.eq(gesuchId))
+            .orderBy(gesuchTranche.timestampMutiert.desc())
+            .stream()
+            .findFirst();
+    }
 
     public GesuchTranche requireAenderungById(final UUID aenderungId) {
         final var found = new JPAQueryFactory(em)

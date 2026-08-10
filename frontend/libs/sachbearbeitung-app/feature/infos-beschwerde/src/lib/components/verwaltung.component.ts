@@ -13,14 +13,15 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde';
 import { SachbearbeitungAppDialogBeschwaerdeEntscheidComponent } from '@dv/sachbearbeitung-app/dialog/beschwaerde-entscheid';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { BeschwerdeVerlaufEntry, Gesuchstatus } from '@dv/shared/model/gesuch';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -28,11 +29,11 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 
 @Component({
   imports: [
-    TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatTooltipModule,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './verwaltung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +48,7 @@ export class VerwaltungComponent {
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
   );
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
 
   canCreateEntscheidSig = computed(() => {
     const gesuchStatus =
@@ -112,6 +114,7 @@ export class VerwaltungComponent {
             kommentar: result.kommentar,
             onSucces: () => {
               this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
+              this.gesuchHeaderStore.loadHeader$({ gesuchId });
               this.beschwerdeStore.loadBeschwerden$({ gesuchId });
             },
           });
@@ -146,6 +149,7 @@ export class VerwaltungComponent {
             },
             onSucces: () => {
               this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
+              this.gesuchHeaderStore.loadHeader$({ gesuchId });
               this.beschwerdeStore.loadBeschwerden$({ gesuchId });
             },
           });

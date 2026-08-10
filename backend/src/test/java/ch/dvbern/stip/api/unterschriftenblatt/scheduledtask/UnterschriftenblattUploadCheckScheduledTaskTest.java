@@ -77,7 +77,7 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
     @Test
     void automaticChangeOfGesuchStatusToDruckbereit_shouldWork() {
         // act & assert
-        assertDoesNotThrow(() -> scheduledTask.runForBern());
+        assertDoesNotThrow(() -> scheduledTask.run());
         // todo KSTIP-2663 move call of addBerechnungsblattToDocument to another state transtition
         /*
          * try {

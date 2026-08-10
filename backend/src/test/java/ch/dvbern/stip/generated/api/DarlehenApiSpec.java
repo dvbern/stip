@@ -22,7 +22,6 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDtoSpec;
-import ch.dvbern.stip.generated.dto.GetFreiwilligDarlehenSbQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDtoSpec;
@@ -90,6 +89,7 @@ public class DarlehenApiSpec {
                 getAllFreiwilligDarlehenGs(),
                 getAllFreiwilligDarlehenSb(),
                 getDarlehenBuchhaltungEntrys(),
+                getDarlehenBuchhaltungEntrysByFallId(),
                 getDarlehenDokument(),
                 getDarlehenDownloadToken(),
                 getDarlehenNegativVerfuegungDownloadToken(),
@@ -165,6 +165,10 @@ public class DarlehenApiSpec {
 
     public GetDarlehenBuchhaltungEntrysOper getDarlehenBuchhaltungEntrys() {
         return new GetDarlehenBuchhaltungEntrysOper(createReqSpec());
+    }
+
+    public GetDarlehenBuchhaltungEntrysByFallIdOper getDarlehenBuchhaltungEntrysByFallId() {
+        return new GetDarlehenBuchhaltungEntrysByFallIdOper(createReqSpec());
     }
 
     public GetDarlehenDokumentOper getDarlehenDokument() {
@@ -1374,13 +1378,13 @@ public class DarlehenApiSpec {
      * Return all darlehen for a given fallId
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #fallIdPath  (required)
      * return List&lt;FreiwilligDarlehenDtoSpec&gt;
      */
     public static class GetAllFreiwilligDarlehenSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/getAllDarlehenSb/{gesuchId}";
+        public static final String REQ_URI = "/darlehen/getAllDarlehenSb/{fallId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1392,7 +1396,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/getAllDarlehenSb/{gesuchId}
+         * GET /darlehen/getAllDarlehenSb/{fallId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1403,7 +1407,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/getAllDarlehenSb/{gesuchId}
+         * GET /darlehen/getAllDarlehenSb/{fallId}
          * @param handler handler
          * @return List&lt;FreiwilligDarlehenDtoSpec&gt;
          */
@@ -1412,14 +1416,14 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param fallId (UUID)  (required)
          * @return operation
          */
-        public GetAllFreiwilligDarlehenSbOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetAllFreiwilligDarlehenSbOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
 
@@ -1512,6 +1516,79 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public GetDarlehenBuchhaltungEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Gets all darlehen buchhaltungsentrys by fallId
+     * 
+     *
+     * @see #fallIdPath Die ID vom Fall (required)
+     * return DarlehenBuchhaltungOverviewDtoSpec
+     */
+    public static class GetDarlehenBuchhaltungEntrysByFallIdOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/buchhaltung/fall/{fallId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDarlehenBuchhaltungEntrysByFallIdOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/buchhaltung/fall/{fallId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/buchhaltung/fall/{fallId}
+         * @param handler handler
+         * @return DarlehenBuchhaltungOverviewDtoSpec
+         */
+        public DarlehenBuchhaltungOverviewDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenBuchhaltungOverviewDtoSpec> type = new TypeRef<DarlehenBuchhaltungOverviewDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String FALL_ID_PATH = "fallId";
+
+        /**
+         * @param fallId (UUID) Die ID vom Fall (required)
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysByFallIdOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysByFallIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysByFallIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1751,9 +1828,10 @@ public class DarlehenApiSpec {
      * Returns darlehen filtered by status and sb
      * 
      *
-     * @see #getFreiwilligDarlehenSbQueryTypePath  (required)
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
+     * @see #bearbeitbarQuery  (optional)
+     * @see #zugewiesenQuery  (optional)
      * @see #fallNummerQuery  (optional)
      * @see #piaNachnameQuery  (optional)
      * @see #piaVornameQuery  (optional)
@@ -1769,7 +1847,7 @@ public class DarlehenApiSpec {
     public static class GetFreiwilligDarlehenDashboardSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}";
+        public static final String REQ_URI = "/darlehen/dashboard";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1781,7 +1859,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}
+         * GET /darlehen/dashboard
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1792,7 +1870,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}
+         * GET /darlehen/dashboard
          * @param handler handler
          * @return PaginatedSbFreiwilligDarlehenDashboardDtoSpec
          */
@@ -1801,14 +1879,25 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GET_FREIWILLIG_DARLEHEN_SB_QUERY_TYPE_PATH = "getFreiwilligDarlehenSbQueryType";
+        public static final String BEARBEITBAR_QUERY = "bearbeitbar";
 
         /**
-         * @param getFreiwilligDarlehenSbQueryType (GetFreiwilligDarlehenSbQueryTypeDtoSpec)  (required)
+         * @param bearbeitbar (Boolean)  (optional)
          * @return operation
          */
-        public GetFreiwilligDarlehenDashboardSbOper getFreiwilligDarlehenSbQueryTypePath(Object getFreiwilligDarlehenSbQueryType) {
-            reqSpec.addPathParam(GET_FREIWILLIG_DARLEHEN_SB_QUERY_TYPE_PATH, getFreiwilligDarlehenSbQueryType);
+        public GetFreiwilligDarlehenDashboardSbOper bearbeitbarQuery(Object... bearbeitbar) {
+            reqSpec.addQueryParam(BEARBEITBAR_QUERY, bearbeitbar);
+            return this;
+        }
+
+        public static final String ZUGEWIESEN_QUERY = "zugewiesen";
+
+        /**
+         * @param zugewiesen (Boolean)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper zugewiesenQuery(Object... zugewiesen) {
+            reqSpec.addQueryParam(ZUGEWIESEN_QUERY, zugewiesen);
             return this;
         }
 

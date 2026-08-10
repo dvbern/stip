@@ -18,16 +18,67 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchAenderungs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchAenderungsDto  implements Serializable {
+  private @Valid List<GesuchTrancheSlimDto> manuell = new ArrayList<>();
   private @Valid List<GesuchTrancheSlimDto> akzeptiert = new ArrayList<>();
   private @Valid List<GesuchTrancheSlimDto> abgelehnt = new ArrayList<>();
+  private @Valid List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
   private @Valid Boolean canAenderungEinreichen;
   private @Valid GesuchTrancheSlimDto offen;
+  private @Valid GesuchTrancheSlimDto eingereicht;
 
+  protected GesuchAenderungsDto(GesuchAenderungsDtoBuilder<?, ?> b) {
+    this.manuell = b.manuell;
+    this.akzeptiert = b.akzeptiert;
+    this.abgelehnt = b.abgelehnt;
+    this.fehlendeDokumente = b.fehlendeDokumente;
+    this.canAenderungEinreichen = b.canAenderungEinreichen;
+    this.offen = b.offen;
+    this.eingereicht = b.eingereicht;
+  }
+
+  public GesuchAenderungsDto() {
+  }
+
+  /**
+   **/
+  public GesuchAenderungsDto manuell(List<GesuchTrancheSlimDto> manuell) {
+    this.manuell = manuell;
+    return this;
+  }
+
+  
+  @JsonProperty("manuell")
+  @NotNull
+  public List<GesuchTrancheSlimDto> getManuell() {
+    return manuell;
+  }
+
+  @JsonProperty("manuell")
+  public void setManuell(List<GesuchTrancheSlimDto> manuell) {
+    this.manuell = manuell;
+  }
+
+  public GesuchAenderungsDto addManuellItem(GesuchTrancheSlimDto manuellItem) {
+    if (this.manuell == null) {
+      this.manuell = new ArrayList<>();
+    }
+
+    this.manuell.add(manuellItem);
+    return this;
+  }
+
+  public GesuchAenderungsDto removeManuellItem(GesuchTrancheSlimDto manuellItem) {
+    if (manuellItem != null && this.manuell != null) {
+      this.manuell.remove(manuellItem);
+    }
+
+    return this;
+  }
   /**
    **/
   public GesuchAenderungsDto akzeptiert(List<GesuchTrancheSlimDto> akzeptiert) {
@@ -100,6 +151,41 @@ public class GesuchAenderungsDto  implements Serializable {
   }
   /**
    **/
+  public GesuchAenderungsDto fehlendeDokumente(List<GesuchTrancheSlimDto> fehlendeDokumente) {
+    this.fehlendeDokumente = fehlendeDokumente;
+    return this;
+  }
+
+  
+  @JsonProperty("fehlendeDokumente")
+  @NotNull
+  public List<GesuchTrancheSlimDto> getFehlendeDokumente() {
+    return fehlendeDokumente;
+  }
+
+  @JsonProperty("fehlendeDokumente")
+  public void setFehlendeDokumente(List<GesuchTrancheSlimDto> fehlendeDokumente) {
+    this.fehlendeDokumente = fehlendeDokumente;
+  }
+
+  public GesuchAenderungsDto addFehlendeDokumenteItem(GesuchTrancheSlimDto fehlendeDokumenteItem) {
+    if (this.fehlendeDokumente == null) {
+      this.fehlendeDokumente = new ArrayList<>();
+    }
+
+    this.fehlendeDokumente.add(fehlendeDokumenteItem);
+    return this;
+  }
+
+  public GesuchAenderungsDto removeFehlendeDokumenteItem(GesuchTrancheSlimDto fehlendeDokumenteItem) {
+    if (fehlendeDokumenteItem != null && this.fehlendeDokumente != null) {
+      this.fehlendeDokumente.remove(fehlendeDokumenteItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
   public GesuchAenderungsDto canAenderungEinreichen(Boolean canAenderungEinreichen) {
     this.canAenderungEinreichen = canAenderungEinreichen;
     return this;
@@ -135,6 +221,24 @@ public class GesuchAenderungsDto  implements Serializable {
     this.offen = offen;
   }
 
+  /**
+   **/
+  public GesuchAenderungsDto eingereicht(GesuchTrancheSlimDto eingereicht) {
+    this.eingereicht = eingereicht;
+    return this;
+  }
+
+  
+  @JsonProperty("eingereicht")
+  public GesuchTrancheSlimDto getEingereicht() {
+    return eingereicht;
+  }
+
+  @JsonProperty("eingereicht")
+  public void setEingereicht(GesuchTrancheSlimDto eingereicht) {
+    this.eingereicht = eingereicht;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -145,15 +249,18 @@ public class GesuchAenderungsDto  implements Serializable {
       return false;
     }
     GesuchAenderungsDto gesuchAenderungs = (GesuchAenderungsDto) o;
-    return Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
+    return Objects.equals(this.manuell, gesuchAenderungs.manuell) &&
+        Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
         Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
+        Objects.equals(this.fehlendeDokumente, gesuchAenderungs.fehlendeDokumente) &&
         Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen) &&
-        Objects.equals(this.offen, gesuchAenderungs.offen);
+        Objects.equals(this.offen, gesuchAenderungs.offen) &&
+        Objects.equals(this.eingereicht, gesuchAenderungs.eingereicht);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(akzeptiert, abgelehnt, canAenderungEinreichen, offen);
+    return Objects.hash(manuell, akzeptiert, abgelehnt, fehlendeDokumente, canAenderungEinreichen, offen, eingereicht);
   }
 
   @Override
@@ -161,10 +268,13 @@ public class GesuchAenderungsDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchAenderungsDto {\n");
     
+    sb.append("    manuell: ").append(toIndentedString(manuell)).append("\n");
     sb.append("    akzeptiert: ").append(toIndentedString(akzeptiert)).append("\n");
     sb.append("    abgelehnt: ").append(toIndentedString(abgelehnt)).append("\n");
+    sb.append("    fehlendeDokumente: ").append(toIndentedString(fehlendeDokumente)).append("\n");
     sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");
     sb.append("    offen: ").append(toIndentedString(offen)).append("\n");
+    sb.append("    eingereicht: ").append(toIndentedString(eingereicht)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -181,5 +291,63 @@ public class GesuchAenderungsDto  implements Serializable {
   }
 
 
+  public static GesuchAenderungsDtoBuilder<?, ?> builder() {
+    return new GesuchAenderungsDtoBuilderImpl();
+  }
+
+  private static final class GesuchAenderungsDtoBuilderImpl extends GesuchAenderungsDtoBuilder<GesuchAenderungsDto, GesuchAenderungsDtoBuilderImpl> {
+
+    @Override
+    protected GesuchAenderungsDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchAenderungsDto build() {
+      return new GesuchAenderungsDto(this);
+    }
+  }
+
+  public static abstract class GesuchAenderungsDtoBuilder<C extends GesuchAenderungsDto, B extends GesuchAenderungsDtoBuilder<C, B>>  {
+    private List<GesuchTrancheSlimDto> manuell = new ArrayList<>();
+    private List<GesuchTrancheSlimDto> akzeptiert = new ArrayList<>();
+    private List<GesuchTrancheSlimDto> abgelehnt = new ArrayList<>();
+    private List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
+    private Boolean canAenderungEinreichen;
+    private GesuchTrancheSlimDto offen;
+    private GesuchTrancheSlimDto eingereicht;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B manuell(List<GesuchTrancheSlimDto> manuell) {
+      this.manuell = manuell;
+      return self();
+    }
+    public B akzeptiert(List<GesuchTrancheSlimDto> akzeptiert) {
+      this.akzeptiert = akzeptiert;
+      return self();
+    }
+    public B abgelehnt(List<GesuchTrancheSlimDto> abgelehnt) {
+      this.abgelehnt = abgelehnt;
+      return self();
+    }
+    public B fehlendeDokumente(List<GesuchTrancheSlimDto> fehlendeDokumente) {
+      this.fehlendeDokumente = fehlendeDokumente;
+      return self();
+    }
+    public B canAenderungEinreichen(Boolean canAenderungEinreichen) {
+      this.canAenderungEinreichen = canAenderungEinreichen;
+      return self();
+    }
+    public B offen(GesuchTrancheSlimDto offen) {
+      this.offen = offen;
+      return self();
+    }
+    public B eingereicht(GesuchTrancheSlimDto eingereicht) {
+      this.eingereicht = eingereicht;
+      return self();
+    }
+  }
 }
 

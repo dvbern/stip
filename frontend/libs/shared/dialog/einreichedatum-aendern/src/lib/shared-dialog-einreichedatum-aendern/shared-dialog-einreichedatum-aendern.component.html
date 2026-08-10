@@ -1,4 +1,4 @@
-<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-12">
+<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-6">
   <button
     type="button"
     (click)="close()"
@@ -12,7 +12,7 @@
   </h1>
 
   <form [formGroup]="form" (ngSubmit)="einreichedatumAendern()">
-    <mat-form-field dvSharedUiFormField class="tw:md:col-span-8 tw:col-span-12">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'shared.dialog.einreichedatum-aendern.einreichedatum.label' | transloco }}</mat-label>
       <input
         formControlName="einreichedatum"
@@ -29,7 +29,7 @@
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
-    <div class="tw:mt-10 tw:flex tw:justify-end tw:gap-3">
+    <div class="tw:mt-10 tw:flex tw:justify-between tw:gap-4">
       <button type="button" class="tw:dv-button-outline" (click)="close()" data-testid="dialog-cancel">
         {{ 'shared.cancel' | transloco }}
       </button>

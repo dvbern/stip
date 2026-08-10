@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenDiffUtil;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
+import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenPortData;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
@@ -40,6 +41,11 @@ public abstract class SteuerdatenMapper extends EntityUpdateMapper<SteuerdatenDt
 
     public abstract Steuerdaten partialUpdate(
         SteuerdatenDto steuerdatenDto,
+        @MappingTarget Steuerdaten steuerdaten
+    );
+
+    public abstract Steuerdaten partialUpdate(
+        SteuerdatenPortData steuerdatenPortData,
         @MappingTarget Steuerdaten steuerdaten
     );
 

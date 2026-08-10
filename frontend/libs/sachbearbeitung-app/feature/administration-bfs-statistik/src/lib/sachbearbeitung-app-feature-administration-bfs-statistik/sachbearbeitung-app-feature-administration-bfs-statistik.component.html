@@ -3,7 +3,7 @@
     class="tw:dv-button-main-primary tw:mt-6"
     type="button"
     data-testid="button-create-statistik"
-    (click)="createStatistik()"
+    (click)="createStatistik(yearsSig())"
   >
     {{ t('sachbearbeitung-app.admin.bfs-statistik.create') }}
   </button>
@@ -147,27 +147,36 @@
 
         <!-- File -->
         <ng-container matColumnDef="file">
-          <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
+          <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap tw:align-top">
             <label class="tw:pointer-none:" for="file">
               {{ t('sachbearbeitung-app.admin.bfs-statistik.file') }}
             </label>
-            <div>&nbsp;</div>
           </th>
           <td mat-cell *dvMatCellDef="let element; dataSource: bfsStatistikDataSourceSig()">
-            <button
-              type="button"
-              class="tw:dv-button tw:inline-flex tw:px-0!"
-              [attr.aria-label]="t('sachbearbeitung-app.admin.bfs-statistik.file')"
-              [dvDownloadButton]="{
-                type: 'statistik',
-                id: element.id,
-              }"
-            >
-              <span class="tw:underline">
-                {{ element.filename }}
-              </span>
-              <span class="material-symbols-rounded tw:underline tw:text-sm!">download</span>
-            </button>
+            @if (element.filename) {
+              <button
+                type="button"
+                class="tw:dv-button tw:inline-flex tw:px-0!"
+                [attr.aria-label]="t('sachbearbeitung-app.admin.bfs-statistik.file')"
+                [dvDownloadButton]="{
+                  type: 'statistik',
+                  id: element.id,
+                }"
+              >
+                <span class="tw:underline">
+                  {{ element.filename }}
+                </span>
+                <span class="material-symbols-rounded tw:underline tw:text-sm!">download</span>
+              </button>
+            }
+            @if (element.error) {
+              <i
+                class="material-symbols-rounded tw:cursor-default tw:text-xl! tw:align-middle tw:ml-1 tw:text-dv-main-danger"
+                [matTooltip]="element.error"
+              >
+                error
+              </i>
+            }
             @if (!element.valid) {
               <i
                 class="material-symbols-rounded tw:cursor-default tw:text-xl! tw:align-middle tw:ml-1 tw:text-dv-warning"

@@ -32,6 +32,17 @@ export const baseGesuchFormRoutes: Routes = [
       ),
   },
   {
+    path: AUSBILDUNG.route,
+    resolve: {
+      step: () => AUSBILDUNG,
+    },
+    title: AUSBILDUNG.translationKey,
+    loadChildren: () =>
+      import('@dv/shared/feature/ausbildung').then(
+        (m) => m.sharedFeatureAusbildungRoutes,
+      ),
+  },
+  {
     path: DELEGIERUNGEN.route,
     resolve: {
       step: () => DELEGIERUNGEN,
@@ -141,17 +152,6 @@ export const baseGesuchFormRoutes: Routes = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-person').then(
         (m) => m.gesuchAppFeatureGesuchFormPersonRoutes,
-      ),
-  },
-  {
-    path: AUSBILDUNG.route,
-    resolve: {
-      step: () => AUSBILDUNG,
-    },
-    title: AUSBILDUNG.translationKey,
-    loadChildren: () =>
-      import('@dv/shared/feature/ausbildung').then(
-        (m) => m.sharedFeatureAusbildungRoutes,
       ),
   },
   {

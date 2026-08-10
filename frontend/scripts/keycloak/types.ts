@@ -3,7 +3,7 @@ import RoleRepresentation from '@keycloak/keycloak-admin-client/lib/defs/roleRep
 import { DEMO_DATA_PERMISSIONS, PERMISSION_ROLE_LIST } from './roles-map';
 
 export const known = {
-  envs: ['DEV', 'UAT'],
+  envs: ['DEV', 'UAT', 'PROD'],
   realms: ['bern', 'dv'],
 } as const;
 export type KnownEnv = (typeof known)['envs'][number];
@@ -58,6 +58,7 @@ export const PERMISSIONS = unique(
 export const ENV_SPECIAL_PERMISSIONS = {
   DEV: DEMO_DATA_PERMISSIONS.map(_v),
   UAT: DEMO_DATA_PERMISSIONS.map(_v),
+  PROD: [],
 } satisfies Record<KnownEnv, string[]>;
 
 export const PERMISSIONS_BY_ROLES = PERMISSION_ROLE_LIST.reduce(

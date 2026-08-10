@@ -19,33 +19,38 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
-import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.generated.dto.GesuchStateInfoDto;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+@Slf4j
 @Mapper(config = MappingConfig.class)
 public abstract class GesuchStateInfoMapper {
     @Inject
     GesuchStatusService gesuchStatusService;
 
-    @Inject
-    RequiredDokumentService requiredDokumentService;
-
-    @Mapping(source = ".", target = "canGetBerechnung", qualifiedByName = "getCanGetBerechnung")
+    @Mapping(source = ".", target = "canGSGetBerechnung", qualifiedByName = "canGSGetBerechnung")
+    @Mapping(source = ".", target = "canSBGetBerechnung", qualifiedByName = "canSBGetBerechnung")
     @Mapping(source = ".", target = "canTriggerManuellPruefen", qualifiedByName = "getCanTriggerManuellPruefen")
     @Mapping(source = ".", target = "canBearbeitungAbschliessen", qualifiedByName = "canBearbeitungAbschliessen")
     @Mapping(source = ".", target = "canChangeGesuchsperiode", qualifiedByName = "canChangeGesuchsperiode")
     @Mapping(source = ".", target = "canSBInitAenderung", qualifiedByName = "canSBInitAenderung")
+    @Mapping(source = ".", target = "canFreigeben", qualifiedByName = "canFreigeben")
     public abstract GesuchStateInfoDto toDto(Gesuch gesuch);
 
-    @Named("getCanGetBerechnung")
-    boolean getCanGetBerechnung(Gesuch gesuch) {
-        return gesuchStatusService.canGetBerechnung(gesuch);
+    @Named("canGSGetBerechnung")
+    boolean canGSGetBerechnung(Gesuch gesuch) {
+        return gesuchStatusService.canGetBerechnungGs(gesuch);
+    }
+
+    @Named("canSBGetBerechnung")
+    boolean canSBGetBerechnung(Gesuch gesuch) {
+        return gesuchStatusService.canGetBerechnungSb(gesuch);
     }
 
     @Named("getCanTriggerManuellPruefen")
@@ -55,8 +60,7 @@ public abstract class GesuchStateInfoMapper {
 
     @Named("canBearbeitungAbschliessen")
     boolean canBearbeitungAbschliessen(Gesuch gesuch) {
-        return gesuchStatusService.canBearbeitungAbschliessen(gesuch) &&
-        requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuch);
+        return gesuchStatusService.canBearbeitungAbschliessen(gesuch);
     }
 
     @Named("canChangeGesuchsperiode")
@@ -67,6 +71,11 @@ public abstract class GesuchStateInfoMapper {
     @Named("canSBInitAenderung")
     boolean canSBInitAenderung(Gesuch gesuch) {
         return GesuchUtil.canSbInitAendererung(gesuch);
+    }
+
+    @Named("canFreigeben")
+    boolean canFreigeben(Gesuch gesuch) {
+        return gesuchStatusService.canFreigabeVerfuegen(gesuch);
     }
 
 }

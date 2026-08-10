@@ -18,13 +18,13 @@
 package ch.dvbern.stip.api.common.util;
 
 import ch.dvbern.stip.api.common.type.Kanton;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class KantonUtil {
-    public Kanton getByMandantIdentifier(MandantIdentifier mandantIdentifier) {
-        return switch (mandantIdentifier) {
+    public Kanton getByTenantIdentifier(TenantIdentifier tenantIdentifier) {
+        return switch (tenantIdentifier) {
             case BERN, DV -> Kanton.BE;
         };
     }

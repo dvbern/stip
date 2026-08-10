@@ -31,7 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class SteuererklaerungFamilieRequiredDokumentsProducer implements RequiredDokumentsProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
         final var steuererklarungen = formular.getSteuererklaerung();
 
         if (steuererklarungen == null || steuererklarungen.isEmpty()) {

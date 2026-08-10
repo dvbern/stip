@@ -1,26 +1,29 @@
 @let overview = infosStore.darlehenBuchhaltungViewSig();
-<div class="tw:dv-table tw:my-3">
+<div class="tw:dv-table tw:my-3" *dvTranslocoSb="let t">
   <div class="tw:relative tw:overflow-auto">
     @if (infosStore.darlehenBuchhaltungViewSig().loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
     }
 
     <!-- Summary -->
-    <div class="tw:p-4 tw:flex tw:gap-4 tw:justify-between">
-      <div class="tw:grid tw:grid-cols-[1fr_max-content] tw:gap-2 tw:font-semibold tw:text-lg">
-        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalFreiwilligDarlehen' | transloco }}:</div>
+    <div class="tw:p-6 tw:flex tw:gap-6 tw:justify-between">
+      <div class="tw:grid tw:grid-cols-[1fr_max-content] tw:gap-2 tw:font-bold">
+        <div class="tw:font-bold tw:text-lg">{{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.total') }}:</div>
+        <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
+        <div class="tw:font-bold">
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalFreiwilligDarlehen') }}:
+        </div>
         <div>{{ overview.darlehenBuchhaltung?.totalFreiwillig | formatChf }}</div>
-        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalGesetzlichesDarlehen' | transloco }}:</div>
+        <div class="tw:font-bold">
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalGesetzlichesDarlehen') }}:
+        </div>
         <div>{{ overview.darlehenBuchhaltung?.totalGesetzlich | formatChf }}</div>
       </div>
-      <div class="tw:flex tw:gap-2 tw:font-semibold tw:text-xl">
-        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.total' | transloco }}</div>
-        <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
-      </div>
+
       <!-- manuelle korrektur -->
-      <div class="">
+      <div>
         <button type="button" class="tw:dv-button-outline" (click)="createDarlehenBuchhaltungSaldokorrektur()">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.manuelleKorrektur' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.manuelleKorrektur') }}
         </button>
       </div>
     </div>
@@ -33,14 +36,14 @@
     >
       <caption class="cdk-visually-hidden">
         {{
-          'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.description' | transloco
+          t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.description')
         }}
       </caption>
 
       <!-- timestampErstellt -->
       <ng-container matColumnDef="timestampErstellt">
         <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.table.datum' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.table.datum') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.timestampErstellt | date: 'dd.MM.yyyy' }}
@@ -50,17 +53,17 @@
       <!-- Kategorie -->
       <ng-container matColumnDef="kategorie">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kategorie.label' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kategorie.label') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kategorie.' + dokument.kategorie | transloco }}
+          {{ t(`sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kategorie.${dokument.kategorie}`) }}
         </td>
       </ng-container>
 
       <!-- Darlehensverfügung -->
       <ng-container matColumnDef="verfuegung">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.darlehensverfuegung' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.darlehensverfuegung') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.verfuegung) {
@@ -73,7 +76,7 @@
               }"
             >
               <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.verfuegung.filename">{{
-                'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.darlehensverfuegung' | transloco
+                t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.darlehensverfuegung')
               }}</span>
               <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg!">download</span>
             </button>
@@ -86,7 +89,7 @@
       <!-- Betrag -->
       <ng-container matColumnDef="betrag">
         <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.betrag' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.betrag') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.betrag | formatChf }}
@@ -96,7 +99,7 @@
       <!-- User Erstellt -->
       <ng-container matColumnDef="userErstellt">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.userErstellt' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.userErstellt') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.userErstellt || '-' }}
@@ -106,7 +109,7 @@
       <!-- Kommentar -->
       <ng-container matColumnDef="kommentar">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kommentar' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kommentar') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.kommentar || '-' }}
@@ -117,7 +120,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
         <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
-          {{ 'shared.table.noData' | transloco }}
+          {{ t('shared.table.noData') }}
         </td>
       </tr>
     </table>

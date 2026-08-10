@@ -1,44 +1,42 @@
-@let view = viewSig();
+@let view = geschwistersViewSig();
 <!-- loading -->
-@if (view.loading) {
-  <dv-shared-ui-loading data-testid="form-geschwister-loading"></dv-shared-ui-loading>
-} @else if (editedGeschwister) {
-  <dv-shared-feature-gesuch-form-geschwister-editor
-    [geschwister]="editedGeschwister"
-    [changes]="changesSig()"
-    (saveTriggered)="handleEditorSave($event)"
-    (closeTriggered)="handleEditorClose()"
-    (formIsUnsaved)="hasUnsavedChanges = $event"
-  />
-} @else {
-  <!-- Infobx -->
-  <div class="tw:grid tw:grid-cols-12">
-    <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
-      <dv-shared-ui-info-container>
+<div class="tw:relative" *dvTranslocoShared="let t">
+  @if (view.loading && !view.geschwisters) {
+    <dv-shared-ui-loading data-testid="form-geschwister-loading"></dv-shared-ui-loading>
+  } @else if (editedGeschwister) {
+    <dv-shared-feature-gesuch-form-geschwister-editor
+      [geschwister]="editedGeschwister"
+      [changes]="changesSig()"
+      (saveTriggered)="handleEditorSave($event)"
+      (closeTriggered)="handleEditorClose()"
+      (formIsUnsaved)="hasUnsavedChanges = $event"
+    />
+  } @else {
+    @if (view.loading && view.geschwisters) {
+      <dv-shared-ui-loading data-testid="form-geschwister-loading" [overlay]="true"></dv-shared-ui-loading>
+    }
+    <div class="tw:dv-form-grid">
+      <!-- Infobx -->
+      <dv-shared-ui-info-container class="tw:dv-form-item">
         <div class="tw:flex tw:gap-3">
           <span class="material-symbols-rounded tw:text-dv-blue"> info </span>
-          <span>{{ 'shared.form.geschwister.top.info' | transloco }}</span>
+          <span>{{ t('shared.form.geschwister.top.info') }}</span>
         </div>
       </dv-shared-ui-info-container>
-    </div>
-  </div>
 
-  <div class="tw:grid tw:grid-cols-12">
-    <!-- Table -->
-    @if (view.gesuchFormular?.geschwisters; as geschwisters) {
-      <div class="tw:col-span-12 tw:xl:col-span-8">
+      <!-- Table -->
+      @if (view.geschwisters; as geschwisters) {
         @if (geschwisters.length) {
-          <table class="tw:dv-simple-table" aria-describedby="List von Geschwister">
+          <table class="tw:dv-simple-table tw:dv-form-item" aria-describedby="List von Geschwister">
             <thead>
               <tr>
                 <th></th>
                 <th>
-                  {{ 'shared.form.geschwister.name' | transloco }}
+                  {{ t('shared.form.geschwister.name') }}
                 </th>
                 <th>
-                  {{ 'shared.form.geschwister.geburtsdatum.label' | transloco }}
+                  {{ t('shared.form.geschwister.geburtsdatum.label') }}
                 </th>
-                <th></th>
                 <th></th>
               </tr>
             </thead>
@@ -59,38 +57,53 @@
                     <td>
                       {{ parseBackendLocalDateAndPrint(geschwister.geburtsdatum, languageSig()) }}
                     </td>
-                    <td>
-                      @if (!view.readonly) {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister)"
-                          [title]="'shared.form.geschwister.edit' | transloco"
-                        >
-                          <i class="material-symbols-rounded">edit</i>
-                        </button>
-                      }
-                    </td>
-                    <td>
-                      @if (!view.readonly) {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleDeleteGeschwister(geschwister)"
-                          [title]="'shared.form.geschwister.delete' | transloco"
-                        >
-                          <i class="material-symbols-rounded">delete</i>
-                        </button>
-                      } @else {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister)"
-                          [title]="'shared.form.geschwister.view' | transloco"
-                        >
-                          <i class="material-symbols-rounded">visibility</i>
-                        </button>
-                      }
+                    <td class="tw:w-0">
+                      <div class="tw:flex tw:items-center tw:gap-2">
+                        @if (!view.readonly) {
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 lh-1"
+                            (click)="handleSelectGeschwister(geschwister)"
+                            [title]="t('shared.form.geschwister.edit')"
+                          >
+                            <i class="material-symbols-rounded">edit</i>
+                          </button>
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 lh-1"
+                            (click)="handleDeleteGeschwister(geschwister)"
+                            [title]="t('shared.form.geschwister.delete')"
+                          >
+                            <i class="material-symbols-rounded">delete</i>
+                          </button>
+                        } @else {
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 lh-1"
+                            (click)="handleSelectGeschwister(geschwister)"
+                            [title]="t('shared.form.geschwister.view')"
+                          >
+                            <i class="material-symbols-rounded">visibility</i>
+                          </button>
+                        }
+                        @if (config.app.view === 'sachbearbeiter') {
+                          @let disabled = view.readonly || viewSig().loading;
+                          <button
+                            class="tw:not-disabled:cursor-pointer"
+                            (click)="hideGeschwister(geschwister, !geschwister.hidden)"
+                            [disabled]="disabled"
+                          >
+                            <mat-checkbox
+                              #checkbox="matCheckbox"
+                              class="tw:pointer-events-none"
+                              [checked]="!!geschwister.hidden"
+                              [disabled]="disabled"
+                            >
+                              <mat-label>{{ t('shared.form.geschwister.hiddenShortened') }}</mat-label>
+                            </mat-checkbox>
+                          </button>
+                        }
+                      </div>
                     </td>
                   }
                 </tr>
@@ -98,34 +111,34 @@
             </tbody>
           </table>
         }
-      </div>
-    }
-  </div>
+      }
 
-  <!-- ADD -->
-  <div class="tw:flex tw:flex-col flex-md-row">
-    @if (!view.readonly) {
-      <button
-        type="button"
-        class="tw:dv-button-outline tw:self-start"
-        (click)="handleAddGeschwister()"
-        data-testid="button-add-geschwister"
-      >
-        {{ 'shared.form.geschwister.add' | transloco }}
-      </button>
-    }
-  </div>
+      <!-- ADD -->
+      @if (!view.readonly) {
+        <div class="tw:dv-form-item tw:flex tw:flex-col flex-md-row">
+          <button
+            type="button"
+            class="tw:dv-button-outline tw:self-start"
+            (click)="handleAddGeschwister()"
+            data-testid="button-add-geschwister"
+          >
+            {{ t('shared.form.geschwister.add') }}
+          </button>
+        </div>
+      }
 
-  <!-- Buttons -->
-  <dv-shared-ui-step-form-buttons>
-    <button
-      type="button"
-      class="tw:dv-button-main-primary"
-      (click)="handleContinue()"
-      [disabled]="!view.gesuchId"
-      data-testid="button-continue"
-    >
-      {{ 'shared.form.gonext' | transloco }}
-    </button>
-  </dv-shared-ui-step-form-buttons>
-}
+      <!-- Buttons -->
+      <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
+        <button
+          type="button"
+          class="tw:dv-button-main-primary"
+          (click)="handleContinue()"
+          [disabled]="!view.gesuchId"
+          data-testid="button-continue"
+        >
+          {{ t('shared.form.gonext') }}
+        </button>
+      </dv-shared-ui-step-form-buttons>
+    </div>
+  }
+</div>

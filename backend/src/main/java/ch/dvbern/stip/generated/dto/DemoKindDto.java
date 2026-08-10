@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoKind")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoKindDto  implements Serializable {
   private @Valid String nachname;
@@ -30,6 +30,23 @@ public class DemoKindDto  implements Serializable {
   private @Valid Integer renten;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer andereEinnahmen;
+
+  protected DemoKindDto(DemoKindDtoBuilder<?, ?> b) {
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.geburtsdatum = b.geburtsdatum;
+    this.alter = b.alter;
+    this.wohnsitzAnteilPia = b.wohnsitzAnteilPia;
+    this.ausbildungssituation = b.ausbildungssituation;
+    this.unterhaltsbeitraege = b.unterhaltsbeitraege;
+    this.kinderUndAusbildungszulagen = b.kinderUndAusbildungszulagen;
+    this.renten = b.renten;
+    this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.andereEinnahmen = b.andereEinnahmen;
+  }
+
+  public DemoKindDto() {
+  }
 
   /**
    **/
@@ -300,5 +317,83 @@ public class DemoKindDto  implements Serializable {
   }
 
 
+  public static DemoKindDtoBuilder<?, ?> builder() {
+    return new DemoKindDtoBuilderImpl();
+  }
+
+  private static final class DemoKindDtoBuilderImpl extends DemoKindDtoBuilder<DemoKindDto, DemoKindDtoBuilderImpl> {
+
+    @Override
+    protected DemoKindDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoKindDto build() {
+      return new DemoKindDto(this);
+    }
+  }
+
+  public static abstract class DemoKindDtoBuilder<C extends DemoKindDto, B extends DemoKindDtoBuilder<C, B>>  {
+    private String nachname;
+    private String vorname;
+    private String geburtsdatum;
+    private Integer alter;
+    private Integer wohnsitzAnteilPia;
+    private ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+    private Integer unterhaltsbeitraege;
+    private Integer kinderUndAusbildungszulagen;
+    private Integer renten;
+    private Integer ergaenzungsleistungen;
+    private Integer andereEinnahmen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B geburtsdatum(String geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B alter(Integer alter) {
+      this.alter = alter;
+      return self();
+    }
+    public B wohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+      this.wohnsitzAnteilPia = wohnsitzAnteilPia;
+      return self();
+    }
+    public B ausbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
+      this.ausbildungssituation = ausbildungssituation;
+      return self();
+    }
+    public B unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+      this.unterhaltsbeitraege = unterhaltsbeitraege;
+      return self();
+    }
+    public B kinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
+      this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
+      return self();
+    }
+    public B renten(Integer renten) {
+      this.renten = renten;
+      return self();
+    }
+    public B ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+      this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B andereEinnahmen(Integer andereEinnahmen) {
+      this.andereEinnahmen = andereEinnahmen;
+      return self();
+    }
+  }
 }
 

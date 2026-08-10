@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.beschwerdeentscheid.service;
 import java.io.IOException;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDtoSpec;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -74,10 +75,12 @@ class GesuchResourceBeschwerdeEntscheidTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
+        GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
+
     // create a gesuch
     private GesuchDtoSpec gesuch;
     private UUID dokumentId;
-    private GesuchWithChangesDtoSpec gesuchWithChanges;
 
     @Test
     @TestAsGesuchsteller
@@ -100,16 +103,22 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    @TestAsFreigabestelleAndSachbearbeiter
+    @TestAsSachbearbeiter
     @Order(3)
     @Test
-    void setupGesuchVerfuegen() {
+    void setupGesuchToInFreigabe() {
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+
+        TestUtil.acceptAllGesuchDokuments(
+            gesuchTrancheApiSpec,
+            dokumentApiSpec,
+            gesuch.getGesuchTrancheToWorkWith().getId()
+        );
 
         TestUtil.uploadUnterschriftenblatt(
             dokumentApiSpec,
@@ -118,7 +127,19 @@ class GesuchResourceBeschwerdeEntscheidTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        gesuch = gesuchApiSpec.changeGesuchStatusToVerfuegt()
+        gesuchApiSpec.bearbeitungAbschliessen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @TestAsFreigabestelle
+    @Order(4)
+    @Test
+    void setupGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -127,9 +148,8 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.VERFUEGUNG_DRUCKBEREIT));
 
-        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+        final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -140,7 +160,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     @TestAsSachbearbeiter
     void setupGesuchVersenden() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
@@ -170,7 +190,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("SB should be able to create a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to false")
-    @Order(5)
+    @Order(6)
     void createBeschwerdeEntscheidWithFalseFlagShouldWorkTest() {
         final var file = TestUtil.getTestPng();
         TestUtil.uploadBeschwerdeEntscheid(gesuchApiSpec, gesuch.getId(), false, "test", file)
@@ -183,7 +203,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Description(
         "Verify the Gesuchstatus has not changed, when a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to false had been created"
     )
-    @Order(6)
+    @Order(7)
     void verifyGesuchShouldBeInSameStatus() {
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -205,7 +225,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("Verify that a BeschwerdeVerlaufEntry has been created")
-    @Order(7)
+    @Order(8)
     void verifyBeschwerdeVerlaufEntryCreated() {
         final var beschwerdeVerlaufEntries = gesuchApiSpec.getAllBeschwerdeVerlaufEntrys()
             .gesuchIdPath(gesuch.getId())
@@ -226,7 +246,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("SB should be able to create a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to true")
-    @Order(8)
+    @Order(9)
     void createBeschwerdeEntscheidWithTrueFlagShouldWorkTest() {
         final var file = TestUtil.getTestPng();
         TestUtil.uploadBeschwerdeEntscheid(gesuchApiSpec, gesuch.getId(), true, "test2", file)
@@ -239,7 +259,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Description(
         "Verify the Gesuchstatus has been set to BEREIT_FUER_BEARBEITUNG, when a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to true had been created"
     )
-    @Order(9)
+    @Order(10)
     void verifyGesuchShouldBeInStatus_BEREIT_FUER_BEARBEITUNG() {
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -260,7 +280,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("Verify that another BeschwerdeVerlaufEntry has been created")
-    @Order(10)
+    @Order(11)
     void verifyBeschwerdeVerlaufEntryCreated2() {
         final var beschwerdeVerlaufEntries = gesuchApiSpec.getAllBeschwerdeVerlaufEntrys()
             .gesuchIdPath(gesuch.getId())
@@ -281,7 +301,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("Verify that the documents of a BeschwerdeEntscheid is available")
-    @Order(11)
+    @Order(12)
     void getBeschwerdeEntscheidDokumentTest() throws IOException {
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)

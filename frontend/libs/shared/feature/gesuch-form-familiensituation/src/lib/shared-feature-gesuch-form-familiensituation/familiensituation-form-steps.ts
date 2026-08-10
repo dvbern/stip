@@ -56,25 +56,11 @@ export const FamiliensituationFormSteps = {
 
   ELTERN_UNBEKANNT_VERSTORBEN: createFamSitStep({
     name: 'ELTERN_UNBEKANNT_VERSTORBEN',
-    getNext(
-      familiensituation: FamiliensituationUpdate,
-    ): FamiliensituationFormStep {
-      return familiensituation.elternteilUnbekanntVerstorben === false
-        ? FamiliensituationFormSteps.ZWEI_FAMILIENBUDGET
-        : this;
-    },
-    getPrevious(): FamiliensituationFormStep {
-      return FamiliensituationFormSteps.ALIMENTENREGELUNG;
-    },
-  }),
-
-  ZWEI_FAMILIENBUDGET: createFamSitStep({
-    name: 'ZWEI_FAMILIENBUDGET',
     getNext(): FamiliensituationFormStep {
       return this;
     },
     getPrevious(): FamiliensituationFormStep {
-      return FamiliensituationFormSteps.ELTERN_UNBEKANNT_VERSTORBEN;
+      return FamiliensituationFormSteps.ALIMENTENREGELUNG;
     },
   }),
 } as const;

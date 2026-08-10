@@ -18,13 +18,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehenGsResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenGsResponseDto  implements Serializable {
   private @Valid List<FreiwilligDarlehenDto> darlehenList = new ArrayList<>();
   private @Valid Boolean canCreateDarlehen;
+
+  protected FreiwilligDarlehenGsResponseDto(FreiwilligDarlehenGsResponseDtoBuilder<?, ?> b) {
+    this.darlehenList = b.darlehenList;
+    this.canCreateDarlehen = b.canCreateDarlehen;
+  }
+
+  public FreiwilligDarlehenGsResponseDto() {
+  }
 
   /**
    **/
@@ -122,5 +130,38 @@ public class FreiwilligDarlehenGsResponseDto  implements Serializable {
   }
 
 
+  public static FreiwilligDarlehenGsResponseDtoBuilder<?, ?> builder() {
+    return new FreiwilligDarlehenGsResponseDtoBuilderImpl();
+  }
+
+  private static final class FreiwilligDarlehenGsResponseDtoBuilderImpl extends FreiwilligDarlehenGsResponseDtoBuilder<FreiwilligDarlehenGsResponseDto, FreiwilligDarlehenGsResponseDtoBuilderImpl> {
+
+    @Override
+    protected FreiwilligDarlehenGsResponseDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FreiwilligDarlehenGsResponseDto build() {
+      return new FreiwilligDarlehenGsResponseDto(this);
+    }
+  }
+
+  public static abstract class FreiwilligDarlehenGsResponseDtoBuilder<C extends FreiwilligDarlehenGsResponseDto, B extends FreiwilligDarlehenGsResponseDtoBuilder<C, B>>  {
+    private List<FreiwilligDarlehenDto> darlehenList = new ArrayList<>();
+    private Boolean canCreateDarlehen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B darlehenList(List<FreiwilligDarlehenDto> darlehenList) {
+      this.darlehenList = darlehenList;
+      return self();
+    }
+    public B canCreateDarlehen(Boolean canCreateDarlehen) {
+      this.canCreateDarlehen = canCreateDarlehen;
+      return self();
+    }
+  }
 }
 

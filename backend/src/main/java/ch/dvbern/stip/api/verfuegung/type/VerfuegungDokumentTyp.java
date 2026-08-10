@@ -17,11 +17,24 @@
 
 package ch.dvbern.stip.api.verfuegung.type;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum VerfuegungDokumentTyp {
     BERECHNUNGSBLATT_PIA,
     BERECHNUNGSBLATT_MUTTER,
     BERECHNUNGSBLATT_VATER,
     BERECHNUNGSBLATT_FAMILIE,
     VERSENDETE_VERFUEGUNG,
-    VERFUEGUNGSBRIEF
+    VERFUEGUNGSBRIEF,
+    MANUELLE_NEGATIVE_VERFUEGUNG;
+
+    public static final Set<VerfuegungDokumentTyp> VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG =
+        Collections.unmodifiableSet(
+            EnumSet.of(
+                VERSENDETE_VERFUEGUNG,
+                MANUELLE_NEGATIVE_VERFUEGUNG
+            )
+        );
 }

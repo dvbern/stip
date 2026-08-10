@@ -7,6 +7,7 @@ import {
   GesuchFormular,
   GesuchTrancheTyp,
   GesuchUrlType,
+  TRANCHE_TYPE_EINGEREICHT,
   TRANCHE_TYPE_INITIAL,
 } from '@dv/shared/model/gesuch';
 import {
@@ -23,7 +24,7 @@ import {
 } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
 import {
-  addStepsByAppType,
+  addStepsByAppConfig,
   appendSteps,
   createTrancheSetting,
   prepareTranchenChanges,
@@ -44,7 +45,8 @@ const isExistingTrancheTyp = (
 ): trancheTyp is GesuchUrlType => {
   return (
     Object.keys(GesuchTrancheTyp).includes(trancheTyp ?? '') ||
-    trancheTyp === TRANCHE_TYPE_INITIAL
+    trancheTyp === TRANCHE_TYPE_INITIAL ||
+    trancheTyp === TRANCHE_TYPE_EINGEREICHT
   );
 };
 export const selectTrancheTyp = createSelector(
@@ -111,12 +113,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       gesuchFormular,
       tranchenChanges,
       isEditingAenderung,
-      ...preparePermissions(
-        trancheTyp,
-        gesuch,
-        config.compileTimeConfig?.appType,
-        rolesMap,
-      ),
+      ...preparePermissions(trancheTyp, gesuch, config.appConfig, rolesMap),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       trancheSetting,
       gesuchId: gesuch?.id,
@@ -192,11 +189,11 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
         : []),
     ];
 
-    const steps = addStepsByAppType(
+    const steps = addStepsByAppConfig(
       appendSteps(baseFormStepsArray, appendStepsConfig),
       rolesMap,
       state.gesuchFormular?.steuerdatenTabs,
-      config?.compileTimeConfig,
+      config?.appConfig,
     );
     return {
       steps,
@@ -231,7 +228,7 @@ export const selectSharedDataAccessGesuchCacheView = createSelector(
       ...preparePermissions(
         trancheTyp,
         cache.gesuch,
-        config.compileTimeConfig?.appType,
+        config.appConfig,
         rolesMap,
       ),
     };

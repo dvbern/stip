@@ -14,6 +14,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
 import { SortAndPageInputs } from '@dv/shared/model/table';
 import {
   DashboardFilterTabItem,
@@ -39,6 +40,11 @@ const resetTableFilterObj: Record<
   pageSize: undefined,
 };
 
+type DashboardTabItem = Omit<DashboardFilterTabItem, 'key'> & {
+  key: FilterTabParam;
+} & {
+  roles: AvailableBenutzerRole[];
+};
 const baseFilterTabs = [
   {
     key: 'JURISTISCHE_ABKLAERUNG',
@@ -51,7 +57,7 @@ const baseFilterTabs = [
     roles: ['V0_Jurist'],
   },
   {
-    key: 'GESUCHE',
+    key: 'ALLE',
     route: ['gesuche'],
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
   },
@@ -82,12 +88,12 @@ const baseFilterTabs = [
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
   },
   {
-    key: 'PENDENTE_GESUCHE',
+    key: 'PENDENTE',
     route: ['gesuche'],
     class: 'tw:ml-auto',
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
-] satisfies Partial<DashboardFilterTabItem & { key: FilterTabParam }>[];
+] satisfies Partial<DashboardTabItem>[];
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-dashboard',
@@ -139,7 +145,7 @@ export class SachbearbeitungAppFeatureDashboardComponent {
           // reset table filters when switching filter tabs
           queryParams: { ...resetTableFilterObj, filterTab: tab.key },
           queryParamsHandling: 'merge',
-        }) satisfies DashboardFilterTabItem,
+        }) satisfies DashboardTabItem,
     );
   });
 

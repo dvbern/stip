@@ -1,224 +1,210 @@
 <form
+  class="testing-library-fix tw:dv-form-grid"
   [formGroup]="form"
   [dvSharedUiFormReadonly]="viewSig().readonly"
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-lebenslauf-form"
   novalidate
-  class="testing-library-fix tw:mt-6"
   (ngSubmit)="handleSave()"
 >
   @if (itemSig().type === 'AUSBILDUNG') {
-    <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:pt-6">
-      <!-- Abschluss -->
-      <div class="testing-library-fix tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-        <dv-shared-ui-select-search
-          [formControl]="form.controls.abschlussId"
-          [labelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss'"
-          [valuesSig]="abschluesseOptionsSig()"
-          [testIdSig]="'lebenslauf-editor-abschluss-select'"
-          [clearTestIdSig]="'button-form-lebenslauf-abschluss-clear'"
-          [languageSig]="languageSig()"
-          [invalidValueLabelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss.error' | transloco"
-        >
-          <ng-container *dvSearchOptionLabel="ausbildungsstatteStore.abschluesseViewSig(); let abschluss">
-            {{
-              `${(abschluss | translatedProp: 'bezeichnung' : languageSig())} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | transloco)}`
-            }}
-          </ng-container>
-        </dv-shared-ui-select-search>
-      </div>
+    <!-- Abschluss -->
+    <dv-shared-ui-select-search
+      class="testing-library-fix tw:dv-form-item"
+      [formControl]="form.controls.abschlussId"
+      [labelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss'"
+      [valuesSig]="abschluesseOptionsSig()"
+      [testIdSig]="'lebenslauf-editor-abschluss-select'"
+      [clearTestIdSig]="'button-form-lebenslauf-abschluss-clear'"
+      [languageSig]="languageSig()"
+      [invalidValueLabelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss.error' | transloco"
+    >
+      <ng-container *dvSearchOptionLabel="ausbildungsstatteStore.abschluesseViewSig(); let abschluss">
+        {{
+          `${(abschluss | translatedProp: 'bezeichnung' : languageSig())} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | transloco)}`
+        }}
+      </ng-container>
+    </dv-shared-ui-select-search>
 
-      <!-- zusatzfrage (falls nötig) -->
-      @if (selectedAbschlussSig()?.zusatzfrage; as zusatzfrage) {
-        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-          <mat-label>{{ `shared.form.lebenslauf.item.name.zusatzfrage.${zusatzfrage}` | transloco }}</mat-label>
-          <input
-            matInput
-            dvMaxLength
-            [formControl]="form.controls.fachrichtungBerufsbezeichnung"
-            data-testid="lebenslauf-editor-fachrichtungBerufsbezeichnung"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-      }
-    </div>
-  } @else if (itemSig().type === 'TAETIGKEIT') {
-    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-      <mat-form-field
-        dvSharedUiFormField
-        class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
-        data-testid="lebenslauf-editor-taetigkeitsart"
-      >
-        <mat-label>{{ 'shared.form.lebenslauf.item.subtype.taetigkeitsart' | transloco }}</mat-label>
-        <mat-select
-          [formControl]="form.controls.taetigkeitsart"
-          data-testid="lebenslauf-editor-taetigkeitsart-select"
-          [placeholder]="'shared.form.select.empty' | transloco"
-        >
-          @for (t of taetigkeitsartValues; track trackByIndex($index)) {
-            <mat-option [value]="t" [attr.data-testid]="t">
-              {{ 'shared.form.lebenslauf.item.subtype.taetigkeitsart.' + t | transloco }}
-            </mat-option>
-          }
-        </mat-select>
+    <!-- zusatzfrage (falls nötig) -->
+    @if (selectedAbschlussSig()?.zusatzfrage; as zusatzfrage) {
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ `shared.form.lebenslauf.item.name.zusatzfrage.${zusatzfrage}` | transloco }}</mat-label>
+        <input
+          matInput
+          dvMaxLength
+          [formControl]="form.controls.fachrichtungBerufsbezeichnung"
+          data-testid="lebenslauf-editor-fachrichtungBerufsbezeichnung"
+          type="text"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | transloco }}
+        </mat-error>
       </mat-form-field>
-
-      <!-- Tätigkeits Beschreibung -->
-      <div class="tw:flex tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-        <mat-form-field dvSharedUiFormField class="tw:grow">
-          <mat-label>{{ 'shared.form.lebenslauf.item.name.taetigkeit' | transloco }}</mat-label>
-          <input
-            matInput
-            dvMaxLength
-            [formControl]="form.controls.taetigkeitsBeschreibung"
-            data-testid="lebenslauf-editor-taetigkeitsBeschreibung"
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-        <button
-          type="button"
-          class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
-          (click)="taetigkeitsInfoDialog.toggle()"
-          [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-        >
-          <span class="material-symbols-rounded tw:text-3xl!"> info </span>
-        </button>
-      </div>
-      <div
-        dvSharedUiInfoDialog
-        [dialogTitleKey]="'shared.form.lebenslauf.taetigkeit.infoTitle'"
-        [dialogMessageKey]="'shared.form.lebenslauf.taetigkeit.info'"
-        #taetigkeitsInfoDialog="dvSharedUiInfoDialog"
-        class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
-      ></div>
-    </div>
-  }
-
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- START -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.lebenslauf.item.start.' + itemSig().type!.toLowerCase() | transloco }}</mat-label>
-
-      <input
-        matInput
-        [dvMaxLength]="'small'"
-        [formControl]="form.controls.von"
-        data-testid="lebenslauf-editor-von"
-        placeholder="MM.yyyy"
-        (blur)="onDateBlur(form.controls.von)"
-      />
-
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-        {{ 'shared.form.error.dateFormat' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'minDate'">
-        {{
-          'shared.form.lebenslauf.form.error.monthYearMin'
-            | transloco
-              : {
-                  min: form.controls.von.errors?.['minDate']?.minDate,
-                }
-        }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
-        {{ 'shared.form.lebenslauf.form.error.monthYearAfterStart' | transloco }}
-      </mat-error>
-    </mat-form-field>
-
-    <!-- ENDE -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.lebenslauf.item.end.' + itemSig().type!.toLowerCase() | transloco }}</mat-label>
-
-      <input
-        matInput
-        [dvMaxLength]="'small'"
-        [formControl]="form.controls.bis"
-        data-testid="lebenslauf-editor-bis"
-        placeholder="MM.yyyy"
-        (blur)="onDateBlur(form.controls.bis)"
-      />
-
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-        {{ 'shared.form.error.dateFormat' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
-        {{ 'shared.form.lebenslauf.form.error.monthYearAfterStart' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'maxDate'">
-        {{
-          'shared.form.lebenslauf.form.error.monthYearMax'
-            | transloco: { max: form.controls.bis.errors?.['maxDate']?.maxDate }
-        }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'overlapsOthers'">
-        {{ 'shared.form.lebenslauf.form.error.overlapsOthers' | transloco }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- Wohnsitz -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.lebenslauf.item.wohnsitz' | transloco }}</mat-label>
+    }
+  } @else if (itemSig().type === 'TAETIGKEIT') {
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item" data-testid="lebenslauf-editor-taetigkeitsart">
+      <mat-label>{{ 'shared.form.lebenslauf.item.subtype.taetigkeitsart' | transloco }}</mat-label>
       <mat-select
-        [formControl]="form.controls.wohnsitz"
-        data-testid="lebenslauf-editor-wohnsitz"
+        [formControl]="form.controls.taetigkeitsart"
+        data-testid="lebenslauf-editor-taetigkeitsart-select"
         [placeholder]="'shared.form.select.empty' | transloco"
       >
-        @for (k of kantonValues; track trackByIndex($index)) {
-          <mat-option [value]="k" [attr.data-testid]="k">
-            {{ 'shared.kanton.' + k | transloco }}
+        @for (t of taetigkeitsartValues; track trackByIndex($index)) {
+          <mat-option [value]="t" [attr.data-testid]="t">
+            {{ 'shared.form.lebenslauf.item.subtype.taetigkeitsart.' + t | transloco }}
           </mat-option>
         }
       </mat-select>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
     </mat-form-field>
-    <!-- Ausbildung abgeschlossen -->
-    @if (itemSig().type === 'AUSBILDUNG') {
-      <div class="tw:col-span-12 tw:md:col-span-6">
-        <mat-radio-group
-          class="tw:w-full"
-          [formControl]="form.controls.ausbildungAbgeschlossen"
-          data-testid="lebenslauf-editor-ausbildung-abgeschlossen"
-          dvSharedUiFormField
-        >
-          <div class="tw:flex tw:col-span-12">
-            <mat-label>{{ 'shared.form.lebenslauf.item.ausbildungAbgeschlossen' | transloco }}</mat-label>
-          </div>
-          <div class="tw:flex tw:justify-between tw:flex-col tw:col-span-12 tw:gap-2">
-            @for (value of [true, false]; track $index) {
-              <mat-radio-button [value]="value">{{
-                'shared.ui.' + (value ? 'yes' : 'no') | transloco
-              }}</mat-radio-button>
-            }
-          </div>
 
-          <div class="group-errors">
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </div>
-        </mat-radio-group>
-      </div>
-    }
-  </div>
+    <!-- Tätigkeits Beschreibung -->
+    <div class="tw:flex tw:gap-4 tw:dv-form-item">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
+        <mat-label>{{ 'shared.form.lebenslauf.item.name.taetigkeit' | transloco }}</mat-label>
+        <input
+          matInput
+          dvMaxLength
+          [formControl]="form.controls.taetigkeitsBeschreibung"
+          data-testid="lebenslauf-editor-taetigkeitsBeschreibung"
+          type="text"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | transloco }}
+        </mat-error>
+      </mat-form-field>
+      <button
+        type="button"
+        class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
+        (click)="taetigkeitsInfoDialog.toggle()"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+      >
+        <span class="material-symbols-rounded tw:text-3xl!"> info </span>
+      </button>
+    </div>
+    <div
+      dvSharedUiInfoDialog
+      class="tw:hidden tw:xl:block tw:xl:col-span-1"
+      [dialogTitleKeySig]="'shared.form.lebenslauf.taetigkeit.infoTitle'"
+      [dialogMessageKeySig]="'shared.form.lebenslauf.taetigkeit.info'"
+      #taetigkeitsInfoDialog="dvSharedUiInfoDialog"
+    ></div>
+  }
+
+  <!-- START -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.lebenslauf.item.start.' + itemSig().type!.toLowerCase() | transloco }}</mat-label>
+
+    <input
+      matInput
+      [dvMaxLength]="'small'"
+      [formControl]="form.controls.von"
+      data-testid="lebenslauf-editor-von"
+      placeholder="MM.yyyy"
+      (blur)="onDateBlur(form.controls.von)"
+    />
+
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+      {{ 'shared.form.error.dateFormat' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'minDate'">
+      {{
+        'shared.form.lebenslauf.form.error.monthYearMin'
+          | transloco
+            : {
+                min: form.controls.von.errors?.['minDate']?.minDate,
+              }
+      }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
+      {{ 'shared.form.lebenslauf.form.error.monthYearAfterStart' | transloco }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- ENDE -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.lebenslauf.item.end.' + itemSig().type!.toLowerCase() | transloco }}</mat-label>
+
+    <input
+      matInput
+      [dvMaxLength]="'small'"
+      [formControl]="form.controls.bis"
+      data-testid="lebenslauf-editor-bis"
+      placeholder="MM.yyyy"
+      (blur)="onDateBlur(form.controls.bis)"
+    />
+
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+      {{ 'shared.form.error.dateFormat' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
+      {{ 'shared.form.lebenslauf.form.error.monthYearAfterStart' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'maxDate'">
+      {{
+        'shared.form.lebenslauf.form.error.monthYearMax'
+          | transloco: { max: form.controls.bis.errors?.['maxDate']?.maxDate }
+      }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'overlapsOthers'">
+      {{ 'shared.form.lebenslauf.form.error.overlapsOthers' | transloco }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Wohnsitz -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.lebenslauf.item.wohnsitz' | transloco }}</mat-label>
+    <mat-select
+      [formControl]="form.controls.wohnsitz"
+      data-testid="lebenslauf-editor-wohnsitz"
+      [placeholder]="'shared.form.select.empty' | transloco"
+    >
+      @for (k of kantonValues; track trackByIndex($index)) {
+        <mat-option [value]="k" [attr.data-testid]="k">
+          {{ 'shared.kanton.' + k | transloco }}
+        </mat-option>
+      }
+    </mat-select>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Ausbildung abgeschlossen -->
+  @if (itemSig().type === 'AUSBILDUNG') {
+    <div class="tw:dv-form-item">
+      <mat-radio-group
+        class="tw:w-full"
+        [formControl]="form.controls.ausbildungAbgeschlossen"
+        data-testid="lebenslauf-editor-ausbildung-abgeschlossen"
+        dvSharedUiFormField
+      >
+        <div class="tw:flex tw:col-span-12">
+          <mat-label>{{ 'shared.form.lebenslauf.item.ausbildungAbgeschlossen' | transloco }}</mat-label>
+        </div>
+        <div class="tw:flex tw:justify-between tw:flex-col">
+          @for (value of [true, false]; track $index) {
+            <mat-radio-button [value]="value">{{ 'shared.ui.' + (value ? 'yes' : 'no') | transloco }}</mat-radio-button>
+          }
+        </div>
+
+        <div class="group-errors">
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | transloco }}
+          </mat-error>
+        </div>
+      </mat-radio-group>
+    </div>
+  }
 
   <!-- buttons -->
-  <dv-shared-ui-step-form-buttons>
+  <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
     @if (itemSig().id && !viewSig().readonly) {
       <button
         type="button"

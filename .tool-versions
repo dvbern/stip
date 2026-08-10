@@ -2,3 +2,4 @@ java temurin-21.0.6+7.0.LTS
 quarkus 3.21.2
 node 24.13.0
 npm 11
+typst 0.15.1

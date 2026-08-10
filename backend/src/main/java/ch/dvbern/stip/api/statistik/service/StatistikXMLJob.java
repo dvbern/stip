@@ -17,17 +17,20 @@
 
 package ch.dvbern.stip.api.statistik.service;
 
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
 import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 @Singleton
 @RequiredArgsConstructor
+@DisallowConcurrentExecution
 public class StatistikXMLJob implements Job {
     private final StatistikXMLService statistikXMLService;
 
@@ -42,7 +45,7 @@ public class StatistikXMLJob implements Job {
             context.getMergedJobDataMap().getString(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_TENANT_KEY);
 
         QuarkusTransactionUtil.runForTenantInNewTransaction(
-            tenant,
+            TenantIdentifier.of(tenant),
             () -> statistikXMLService.createAndSave(year, triggeredBy)
         );
     }

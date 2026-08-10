@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   StatistikDtoSpec.JSON_PROPERTY_VALID,
   StatistikDtoSpec.JSON_PROPERTY_USER_TRIGGERED_CREATION,
   StatistikDtoSpec.JSON_PROPERTY_YEAR,
+  StatistikDtoSpec.JSON_PROPERTY_ERROR,
   StatistikDtoSpec.JSON_PROPERTY_FILENAME,
   StatistikDtoSpec.JSON_PROPERTY_FILESIZE
 })
@@ -53,6 +54,9 @@ public class StatistikDtoSpec {
 
   public static final String JSON_PROPERTY_YEAR = "year";
   private Integer year;
+
+  public static final String JSON_PROPERTY_ERROR = "error";
+  private String error;
 
   public static final String JSON_PROPERTY_FILENAME = "filename";
   private String filename;
@@ -193,6 +197,32 @@ public class StatistikDtoSpec {
   }
 
 
+  public StatistikDtoSpec error(String error) {
+    
+    this.error = error;
+    return this;
+  }
+
+   /**
+   * Get error
+   * @return error
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getError() {
+    return error;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setError(String error) {
+    this.error = error;
+  }
+
+
   public StatistikDtoSpec filename(String filename) {
     
     this.filename = filename;
@@ -203,9 +233,9 @@ public class StatistikDtoSpec {
    * Get filename
    * @return filename
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_FILENAME)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getFilename() {
     return filename;
@@ -213,7 +243,7 @@ public class StatistikDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FILENAME)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setFilename(String filename) {
     this.filename = filename;
   }
@@ -229,9 +259,9 @@ public class StatistikDtoSpec {
    * Get filesize
    * @return filesize
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_FILESIZE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getFilesize() {
     return filesize;
@@ -239,7 +269,7 @@ public class StatistikDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FILESIZE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setFilesize(String filesize) {
     this.filesize = filesize;
   }
@@ -258,13 +288,14 @@ public class StatistikDtoSpec {
         Objects.equals(this.valid, statistik.valid) &&
         Objects.equals(this.userTriggeredCreation, statistik.userTriggeredCreation) &&
         Objects.equals(this.year, statistik.year) &&
+        Objects.equals(this.error, statistik.error) &&
         Objects.equals(this.filename, statistik.filename) &&
         Objects.equals(this.filesize, statistik.filesize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, valid, userTriggeredCreation, year, filename, filesize);
+    return Objects.hash(id, timestampErstellt, valid, userTriggeredCreation, year, error, filename, filesize);
   }
 
   @Override
@@ -276,6 +307,7 @@ public class StatistikDtoSpec {
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    userTriggeredCreation: ").append(toIndentedString(userTriggeredCreation)).append("\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
+    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
     sb.append("}");

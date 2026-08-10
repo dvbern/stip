@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -31,14 +32,18 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -65,6 +70,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+    private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
     private GesuchWithChangesDtoSpec gesuchWithChanges;
@@ -98,7 +104,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
     @TestAsFreigabestelleAndSachbearbeiter
     @Order(6)
     @Test
-    void makeGesuchVerfuegt() {
+    void changeGesuchToInFreigabe() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -120,13 +126,16 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
         createGesuchTrancheRequestDtoSpec.setEnd(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(5));
         createGesuchTrancheRequestDtoSpec.setComment("Bla");
 
-        gesuchTrancheApiSpec.createGesuchTrancheCopy()
+        final var newTranche = gesuchTrancheApiSpec.createGesuchTrancheCopy()
             .gesuchIdPath(gesuch.getId())
             .body(createGesuchTrancheRequestDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchTrancheDtoSpec.class);
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
@@ -136,33 +145,58 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
+        TestUtil.alignSteuerdatenAndAcceptAllDokuments(
+            gesuchTrancheApiSpec,
+            dokumentApiSpec,
+            steuerdatenApiSpec,
+            SteuerdatenTypDtoSpec.FAMILIE,
+            gesuch.getGesuchTrancheToWorkWith().getId(),
+            newTranche.getId()
+        );
+
+        gesuchApiSpec.bearbeitungAbschliessen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @TestAsFreigabestelle
+    @Order(7)
+    @Test
+    void changeGesuchToVerfuegt() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-        gesuchWithChanges =
-            gesuchApiSpec.getInitialTrancheChanges()
-                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchWithChangesDtoSpec.class);
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+
+        gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void shouldReturnListOfInitialTranches() {
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
             gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
-        assertThat(gesuchHeader.getInitial().getTranchen()).hasSize(2);
+        assertThat(gesuchHeader.getInitial().getEingereichtGesuch()).isNotNull();
+        assertThat(gesuchHeader.getInitial().getVerfuegtGesuch().getTranchen()).hasSize(2);
     }
 
     @Test

@@ -1,0 +1,39 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  '/fall/header/{fallId}':
+    get:
+      tags:
+        - FallHeader
+      parameters:
+        - $ref: './components/parameters.yaml#/fallId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FallHeader'
+          description: Get the FallHeader by FallId
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getFallHeader
+      summary: Get FallHeader for the GS and Soz App
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+security:
+  $ref: './components/security.yaml#/security'

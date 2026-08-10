@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Dokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DokumentDto  implements Serializable {
   private @Valid UUID id;
@@ -26,6 +26,18 @@ public class DokumentDto  implements Serializable {
   private @Valid String filesize;
   private @Valid String objectId;
   private @Valid String timestampErstellt;
+
+  protected DokumentDto(DokumentDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.filename = b.filename;
+    this.filepath = b.filepath;
+    this.filesize = b.filesize;
+    this.objectId = b.objectId;
+    this.timestampErstellt = b.timestampErstellt;
+  }
+
+  public DokumentDto() {
+  }
 
   /**
    **/
@@ -190,5 +202,58 @@ public class DokumentDto  implements Serializable {
   }
 
 
+  public static DokumentDtoBuilder<?, ?> builder() {
+    return new DokumentDtoBuilderImpl();
+  }
+
+  private static final class DokumentDtoBuilderImpl extends DokumentDtoBuilder<DokumentDto, DokumentDtoBuilderImpl> {
+
+    @Override
+    protected DokumentDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DokumentDto build() {
+      return new DokumentDto(this);
+    }
+  }
+
+  public static abstract class DokumentDtoBuilder<C extends DokumentDto, B extends DokumentDtoBuilder<C, B>>  {
+    private UUID id;
+    private String filename;
+    private String filepath;
+    private String filesize;
+    private String objectId;
+    private String timestampErstellt;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B filename(String filename) {
+      this.filename = filename;
+      return self();
+    }
+    public B filepath(String filepath) {
+      this.filepath = filepath;
+      return self();
+    }
+    public B filesize(String filesize) {
+      this.filesize = filesize;
+      return self();
+    }
+    public B objectId(String objectId) {
+      this.objectId = objectId;
+      return self();
+    }
+    public B timestampErstellt(String timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+  }
 }
 

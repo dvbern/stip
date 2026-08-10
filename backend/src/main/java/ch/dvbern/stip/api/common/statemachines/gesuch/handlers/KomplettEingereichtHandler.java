@@ -19,12 +19,13 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.time.ZonedDateTime;
 
-import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.BusinessDateConstants;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
     private final DatenschutzbriefService datenschutzbriefService;
 
     @Override
+    @WithSpan
     public void handle(Gesuch gesuch) {
         notificationService.createGesuchEingereichtNotificationAndSendStdMail(gesuch);
         gesuch.getGesuchTranchen()
@@ -48,7 +50,7 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
         datenschutzbriefService.createAllRequiredDatenschutzbriefeForGesuch(gesuch);
 
         // Ensure that we don't rely on the timezone of the server to be Europe/Zurich
-        final var todayInZuerich = ZonedDateTime.now(DateUtil.ZUERICH_ZONE).toLocalDate();
+        final var todayInZuerich = ZonedDateTime.now(BusinessDateConstants.ZUERICH_ZONE).toLocalDate();
         gesuch.setEinreichedatum(todayInZuerich);
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.INITIAL);
     }

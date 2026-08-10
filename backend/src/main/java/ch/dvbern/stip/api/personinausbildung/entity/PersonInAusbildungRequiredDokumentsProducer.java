@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -36,7 +35,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import static ch.dvbern.stip.api.common.util.Constants.MAX_AGE_AUSBILDUNGSBEGIN;
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.MAX_AGE_AUSBILDUNGSBEGIN;
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.MIN_AGE_EIGENER_WOHNSITZ;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -56,8 +56,8 @@ public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDoku
             DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
         );
         niederlassungsstatusMap.put(
-            Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT,
-            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+            Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT,
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT
         );
         niederlassungsstatusMap.put(
             Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON,
@@ -95,7 +95,7 @@ public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDoku
     }
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
         final var pia = formular.getPersonInAusbildung();
         if (pia == null) {
             return ImmutablePair.of("", Set.of());
@@ -111,8 +111,11 @@ public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDoku
             requiredDocs.add(DokumentTyp.PERSON_KESB_ERNENNUNG);
         }
 
-        if (pia.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
-            requiredDocs.add(DokumentTyp.PERSON_MIETVERTRAG);
+        if (
+            pia.getWohnsitz().isEigenerHaushalt()
+            && DateUtil.getPiaAgeDifferenceToEigenerWohnsitzStichtagDate(formular) < MIN_AGE_EIGENER_WOHNSITZ
+        ) {
+            requiredDocs.add(DokumentTyp.PERSON_EIGENER_HAUSHALT);
         }
 
         if (pia.isSozialhilfebeitraege()) {

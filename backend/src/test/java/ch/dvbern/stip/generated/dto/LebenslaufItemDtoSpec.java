@@ -38,7 +38,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   LebenslaufItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN,
   LebenslaufItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG,
   LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGKEITSART,
-  LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG
+  LebenslaufItemDtoSpec.JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG,
+  LebenslaufItemDtoSpec.JSON_PROPERTY_INVALID
 })
 @JsonTypeName("LebenslaufItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -69,6 +70,9 @@ public class LebenslaufItemDtoSpec {
 
   public static final String JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG = "taetigkeitsBeschreibung";
   private String taetigkeitsBeschreibung;
+
+  public static final String JSON_PROPERTY_INVALID = "invalid";
+  private Boolean invalid;
 
   public LebenslaufItemDtoSpec() {
   }
@@ -306,6 +310,32 @@ public class LebenslaufItemDtoSpec {
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
   }
 
+
+  public LebenslaufItemDtoSpec invalid(Boolean invalid) {
+    
+    this.invalid = invalid;
+    return this;
+  }
+
+   /**
+   * Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+   * @return invalid
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INVALID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getInvalid() {
+    return invalid;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_INVALID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setInvalid(Boolean invalid) {
+    this.invalid = invalid;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -323,12 +353,13 @@ public class LebenslaufItemDtoSpec {
         Objects.equals(this.ausbildungAbgeschlossen, lebenslaufItem.ausbildungAbgeschlossen) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, lebenslaufItem.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.taetigkeitsart, lebenslaufItem.taetigkeitsart) &&
-        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung);
+        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung) &&
+        Objects.equals(this.invalid, lebenslaufItem.invalid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, abschlussId, von, bis, wohnsitz, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung);
+    return Objects.hash(id, abschlussId, von, bis, wohnsitz, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung, invalid);
   }
 
   @Override
@@ -344,6 +375,7 @@ public class LebenslaufItemDtoSpec {
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
+    sb.append("    invalid: ").append(toIndentedString(invalid)).append("\n");
     sb.append("}");
     return sb.toString();
   }

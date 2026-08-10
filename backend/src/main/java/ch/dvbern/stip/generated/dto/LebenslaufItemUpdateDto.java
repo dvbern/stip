@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("LebenslaufItemUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class LebenslaufItemUpdateDto  implements Serializable {
   private @Valid String von;
@@ -29,6 +29,23 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   private @Valid String fachrichtungBerufsbezeichnung;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
   private @Valid String taetigkeitsBeschreibung;
+  private @Valid Boolean invalid;
+
+  protected LebenslaufItemUpdateDto(LebenslaufItemUpdateDtoBuilder<?, ?> b) {
+    this.von = b.von;
+    this.bis = b.bis;
+    this.wohnsitz = b.wohnsitz;
+    this.id = b.id;
+    this.abschlussId = b.abschlussId;
+    this.ausbildungAbgeschlossen = b.ausbildungAbgeschlossen;
+    this.fachrichtungBerufsbezeichnung = b.fachrichtungBerufsbezeichnung;
+    this.taetigkeitsart = b.taetigkeitsart;
+    this.taetigkeitsBeschreibung = b.taetigkeitsBeschreibung;
+    this.invalid = b.invalid;
+  }
+
+  public LebenslaufItemUpdateDto() {
+  }
 
   /**
    * Datum im Format mm.YYYY
@@ -199,6 +216,25 @@ public class LebenslaufItemUpdateDto  implements Serializable {
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
   }
 
+  /**
+   * Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+   **/
+  public LebenslaufItemUpdateDto invalid(Boolean invalid) {
+    this.invalid = invalid;
+    return this;
+  }
+
+  
+  @JsonProperty("invalid")
+  public Boolean getInvalid() {
+    return invalid;
+  }
+
+  @JsonProperty("invalid")
+  public void setInvalid(Boolean invalid) {
+    this.invalid = invalid;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -217,12 +253,13 @@ public class LebenslaufItemUpdateDto  implements Serializable {
         Objects.equals(this.ausbildungAbgeschlossen, lebenslaufItemUpdate.ausbildungAbgeschlossen) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, lebenslaufItemUpdate.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.taetigkeitsart, lebenslaufItemUpdate.taetigkeitsart) &&
-        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItemUpdate.taetigkeitsBeschreibung);
+        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItemUpdate.taetigkeitsBeschreibung) &&
+        Objects.equals(this.invalid, lebenslaufItemUpdate.invalid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung);
+    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung, invalid);
   }
 
   @Override
@@ -239,6 +276,7 @@ public class LebenslaufItemUpdateDto  implements Serializable {
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
+    sb.append("    invalid: ").append(toIndentedString(invalid)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -255,5 +293,78 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   }
 
 
+  public static LebenslaufItemUpdateDtoBuilder<?, ?> builder() {
+    return new LebenslaufItemUpdateDtoBuilderImpl();
+  }
+
+  private static final class LebenslaufItemUpdateDtoBuilderImpl extends LebenslaufItemUpdateDtoBuilder<LebenslaufItemUpdateDto, LebenslaufItemUpdateDtoBuilderImpl> {
+
+    @Override
+    protected LebenslaufItemUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public LebenslaufItemUpdateDto build() {
+      return new LebenslaufItemUpdateDto(this);
+    }
+  }
+
+  public static abstract class LebenslaufItemUpdateDtoBuilder<C extends LebenslaufItemUpdateDto, B extends LebenslaufItemUpdateDtoBuilder<C, B>>  {
+    private String von;
+    private String bis;
+    private ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+    private UUID id;
+    private UUID abschlussId;
+    private Boolean ausbildungAbgeschlossen;
+    private String fachrichtungBerufsbezeichnung;
+    private ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
+    private String taetigkeitsBeschreibung;
+    private Boolean invalid;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B von(String von) {
+      this.von = von;
+      return self();
+    }
+    public B bis(String bis) {
+      this.bis = bis;
+      return self();
+    }
+    public B wohnsitz(ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz) {
+      this.wohnsitz = wohnsitz;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B abschlussId(UUID abschlussId) {
+      this.abschlussId = abschlussId;
+      return self();
+    }
+    public B ausbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
+      this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
+      return self();
+    }
+    public B fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+      this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
+      return self();
+    }
+    public B taetigkeitsart(ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart) {
+      this.taetigkeitsart = taetigkeitsart;
+      return self();
+    }
+    public B taetigkeitsBeschreibung(String taetigkeitsBeschreibung) {
+      this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
+      return self();
+    }
+    public B invalid(Boolean invalid) {
+      this.invalid = invalid;
+      return self();
+    }
+  }
 }
 

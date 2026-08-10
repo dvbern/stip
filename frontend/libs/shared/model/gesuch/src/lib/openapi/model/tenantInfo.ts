@@ -10,14 +10,11 @@
  * Do not edit the class manually.
  */
 import { TenantAuthConfig } from './tenantAuthConfig';
-import { TenantFeature } from './tenantFeature';
+import { TenantFeatures } from './tenantFeatures';
 
-/**
- * Client Application Info about a `Tenant`
- */
 export interface TenantInfo { 
     clientAuth: TenantAuthConfig;
-    features: TenantFeature;
+    features: TenantFeatures;
     identifier: string;
 }
 

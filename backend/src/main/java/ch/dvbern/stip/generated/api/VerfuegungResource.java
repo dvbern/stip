@@ -4,6 +4,7 @@ import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
+import ch.dvbern.stip.generated.dto.VerfuegungFallDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -36,4 +37,9 @@ public interface VerfuegungResource {
     @Path("/{gesuchId}/verfuegungen")
     @Produces({ "application/json", "text/plain" })
     List<VerfuegungDto> getVerfuegungen(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/fall/{fallId}/verfuegungen")
+    @Produces({ "application/json", "text/plain" })
+    List<VerfuegungFallDto> getVerfuegungenByFallId(@PathParam("fallId") UUID fallId);
 }

@@ -18,15 +18,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedSbFreiwilligDarlehenDashboard")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedSbFreiwilligDarlehenDashboardDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
   private @Valid List<FreiwilligDarlehenDashboardDto> entries;
+
+  protected PaginatedSbFreiwilligDarlehenDashboardDto(PaginatedSbFreiwilligDarlehenDashboardDtoBuilder<?, ?> b) {
+    this.page = b.page;
+    this.pageSize = b.pageSize;
+    this.totalEntries = b.totalEntries;
+    this.entries = b.entries;
+  }
+
+  public PaginatedSbFreiwilligDarlehenDashboardDto() {
+  }
 
   /**
    **/
@@ -162,5 +172,48 @@ public class PaginatedSbFreiwilligDarlehenDashboardDto  implements Serializable 
   }
 
 
+  public static PaginatedSbFreiwilligDarlehenDashboardDtoBuilder<?, ?> builder() {
+    return new PaginatedSbFreiwilligDarlehenDashboardDtoBuilderImpl();
+  }
+
+  private static final class PaginatedSbFreiwilligDarlehenDashboardDtoBuilderImpl extends PaginatedSbFreiwilligDarlehenDashboardDtoBuilder<PaginatedSbFreiwilligDarlehenDashboardDto, PaginatedSbFreiwilligDarlehenDashboardDtoBuilderImpl> {
+
+    @Override
+    protected PaginatedSbFreiwilligDarlehenDashboardDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PaginatedSbFreiwilligDarlehenDashboardDto build() {
+      return new PaginatedSbFreiwilligDarlehenDashboardDto(this);
+    }
+  }
+
+  public static abstract class PaginatedSbFreiwilligDarlehenDashboardDtoBuilder<C extends PaginatedSbFreiwilligDarlehenDashboardDto, B extends PaginatedSbFreiwilligDarlehenDashboardDtoBuilder<C, B>>  {
+    private Integer page;
+    private Integer pageSize;
+    private Integer totalEntries;
+    private List<FreiwilligDarlehenDashboardDto> entries;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B page(Integer page) {
+      this.page = page;
+      return self();
+    }
+    public B pageSize(Integer pageSize) {
+      this.pageSize = pageSize;
+      return self();
+    }
+    public B totalEntries(Integer totalEntries) {
+      this.totalEntries = totalEntries;
+      return self();
+    }
+    public B entries(List<FreiwilligDarlehenDashboardDto> entries) {
+      this.entries = entries;
+      return self();
+    }
+  }
 }
 

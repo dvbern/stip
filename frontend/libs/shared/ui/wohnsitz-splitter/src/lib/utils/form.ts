@@ -1,8 +1,9 @@
-import { Signal, computed, effect } from '@angular/core';
+import { Signal, computed, effect, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 
@@ -25,7 +26,11 @@ type WohnsitzValuesGetter = (
 
 export const prepareWohnsitzForm = (payload: {
   projector: WohnsitzValuesGetter;
-  viewSig: Signal<{ gesuchFormular: GesuchFormular | null; readonly: boolean }>;
+  viewSig: Signal<{
+    gesuchFormular: GesuchFormular | null;
+    readonly: boolean;
+    allowOnlyOne?: boolean;
+  }>;
   form: WohnsitzAnteile<FormControl<string | undefined>> & {
     wohnsitz: FormControl<Wohnsitz>;
   };
@@ -70,7 +75,7 @@ export const prepareWohnsitzForm = (payload: {
   };
 
   const wohnsitzAnteileAsString = () => {
-    const formular = viewSig().gesuchFormular;
+    const formular = untracked(viewSig).gesuchFormular;
     const familiensituation = formular?.familiensituation;
     const mutterMissing = isVerstorbenUnbekannt('MUTTER', familiensituation);
     const vaterMissing = isVerstorbenUnbekannt('VATER', familiensituation);
@@ -101,35 +106,49 @@ export const prepareWohnsitzForm = (payload: {
   };
 
   const showWohnsitzSplitterSig = computed(() => {
+    const wohnsitz = wohnsitzChangedSig();
     return (
-      wohnsitzChangedSig() === 'MUTTER_VATER' &&
-      wohnsitzValuesSig().includes('MUTTER_VATER')
+      (wohnsitz === 'MUTTER_VATER' && wohnsitz.includes('MUTTER_VATER')) ||
+      (viewSig().allowOnlyOne && wohnsitz !== 'EIGENER_HAUSHALT')
     );
   });
 
+  const minOneRequiredValidator = minOneRequired(form);
   effect(() => {
     refreshSig();
-    const { gesuchFormular } = viewSig();
+    const { gesuchFormular, allowOnlyOne } = viewSig();
     const { elternteilUnbekanntVerstorben } =
       viewSig().gesuchFormular?.familiensituation ?? {};
-    const wohnsitzNotMutterVater =
-      wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
+    const enabled =
+      wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER || allowOnlyOne;
 
     updateWohnsitzControlsState(
       form,
-      wohnsitzNotMutterVater ||
+      !enabled ||
         viewSig().readonly ||
         !showWohnsitzSplitterSig() ||
         !!elternteilUnbekanntVerstorben,
     );
 
-    if (wohnsitzNotMutterVater) {
+    if (!enabled) {
       form.wohnsitzAnteilMutter.reset();
       form.wohnsitzAnteilVater.reset();
     } else if (gesuchFormular) {
       const anteile = wohnsitzAnteileAsString();
       form.wohnsitzAnteilMutter.patchValue(anteile.wohnsitzAnteilMutter);
       form.wohnsitzAnteilVater.patchValue(anteile.wohnsitzAnteilVater);
+    }
+
+    if (allowOnlyOne) {
+      form.wohnsitzAnteilMutter.removeValidators(Validators.required);
+      form.wohnsitzAnteilVater.removeValidators(Validators.required);
+      form.wohnsitzAnteilMutter.addValidators(minOneRequiredValidator);
+      form.wohnsitzAnteilVater.addValidators(minOneRequiredValidator);
+    } else {
+      form.wohnsitzAnteilMutter.addValidators(Validators.required);
+      form.wohnsitzAnteilVater.addValidators(Validators.required);
+      form.wohnsitzAnteilMutter.removeValidators(minOneRequiredValidator);
+      form.wohnsitzAnteilVater.removeValidators(minOneRequiredValidator);
     }
   });
 
@@ -146,11 +165,8 @@ export const addWohnsitzControls = (formBuilder: NonNullableFormBuilder) => {
     wohnsitz: formBuilder.control<Wohnsitz>('' as Wohnsitz, [
       Validators.required,
     ]),
-    wohnsitzAnteilMutter: [
-      <string | undefined>undefined,
-      [Validators.required],
-    ],
-    wohnsitzAnteilVater: [<string | undefined>undefined, [Validators.required]],
+    wohnsitzAnteilMutter: [<string | undefined>undefined],
+    wohnsitzAnteilVater: [<string | undefined>undefined],
   };
 };
 
@@ -166,3 +182,18 @@ export function updateWohnsitzControlsState(
     form.wohnsitzAnteilVater.enable();
   }
 }
+
+export const minOneRequired =
+  (controls: WohnsitzAnteile<FormControl<string | undefined>>): ValidatorFn =>
+  () => {
+    const hasNoAnteile = (['Mutter', 'Vater'] as const).every(
+      (elternteil) =>
+        !percentStringToNumber(controls[`wohnsitzAnteil${elternteil}`].value),
+    );
+
+    return hasNoAnteile
+      ? {
+          atLeastOneValue: true,
+        }
+      : {};
+  };

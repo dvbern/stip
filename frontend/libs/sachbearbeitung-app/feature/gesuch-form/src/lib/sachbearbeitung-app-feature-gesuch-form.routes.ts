@@ -1,7 +1,10 @@
 import { Route } from '@angular/router';
 
 import { baseGesuchFormRoutes } from '@dv/shared/feature/gesuch-form-routes';
-import { ELTERN_STEUERDATEN_STEPS } from '@dv/shared/model/gesuch-form';
+import {
+  ELTERN_STEUERDATEN_STEPS,
+  TRANCHE,
+} from '@dv/shared/model/gesuch-form';
 
 export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
   ...baseGesuchFormRoutes,
@@ -16,4 +19,8 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
         (m) => m.sachbearbeitungAppFeatureGesuchFormSteuerdatenRoutes,
       ),
   })),
+  {
+    path: '**',
+    redirectTo: TRANCHE.route,
+  },
 ];

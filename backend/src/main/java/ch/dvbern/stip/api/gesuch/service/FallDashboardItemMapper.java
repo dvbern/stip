@@ -41,14 +41,6 @@ public abstract class FallDashboardItemMapper {
     public abstract FallDashboardItemDto toDto(final Fall fall);
 
     @AfterMapping
-    protected void setNotifications(
-        final Fall entity,
-        @MappingTarget final FallDashboardItemDto dto
-    ) {
-        dto.setNotifications(benutzerService.getNotificationsForUser(entity.getGesuchsteller().getId()));
-    }
-
-    @AfterMapping
     protected void setEarliestActiveGesuchPeriodeStart(
         final Fall entity,
         @MappingTarget final FallDashboardItemDto dto

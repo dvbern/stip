@@ -21,9 +21,9 @@ import java.util.EnumMap;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
+import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.AenderungFehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.AkzeptiertHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteEinreichenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -45,7 +45,7 @@ public class GesuchTrancheStatusConfigProducer {
     private final GesuchTrancheFehlendeDokumenteNichtEingereichtHandler gesuchTrancheFehlendeDokumenteNichtEingereichtHandler;
     private final GesuchTrancheFehlendeDokumenteEinreichenHandler gesuchTrancheFehlendeDokumenteEinreichenHandler;
     private final AkzeptiertHandler akzeptiertHandler;
-    private final GesuchTrancheFehlendeDokumenteHandler gesuchTrancheFehlendeDokumenteHandler;
+    private final AenderungFehlendeDokumenteHandler gesuchTrancheFehlendeDokumenteHandler;
     private final StatusprotokollService statusprotokollService;
 
     public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig() {
@@ -61,11 +61,7 @@ public class GesuchTrancheStatusConfigProducer {
         }
 
         config.configure(GesuchTrancheStatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN)
-            .onEntryFrom(
-                triggers.get(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS),
-                gesuchTrancheFehlendeDokumenteNichtEingereichtHandler::handle
-            );
+            .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN);
 
         config.configure(GesuchTrancheStatus.UEBERPRUEFEN)
             .permit(GesuchTrancheStatusChangeEvent.ABLEHNEN, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
@@ -75,6 +71,10 @@ public class GesuchTrancheStatusConfigProducer {
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN),
                 gesuchTrancheFehlendeDokumenteEinreichenHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT),
+                gesuchTrancheFehlendeDokumenteNichtEingereichtHandler::handle
             );
 
         config.configure(GesuchTrancheStatus.MANUELLE_AENDERUNG)
@@ -90,7 +90,10 @@ public class GesuchTrancheStatusConfigProducer {
 
         config.configure(GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN, GesuchTrancheStatus.UEBERPRUEFEN)
-            .permit(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+            .permit(
+                GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT,
+                GesuchTrancheStatus.UEBERPRUEFEN
+            )
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE),
                 gesuchTrancheFehlendeDokumenteHandler::handle

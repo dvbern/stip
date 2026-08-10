@@ -1,112 +1,112 @@
-<div class="tw:dv-container">
-  <div class="tw:grid tw:grid-cols-12">
-    @let gesuch = gesuchViewSig().gesuch;
-    @let isEditingAenderung = gesuchViewSig().isEditingAenderung;
-    @let permissions = gesuchViewSig().permissions;
-    @let einreichenView = einreichenStore.einreichenViewSig();
-    @if (gesuchViewSig().loading || einreichenView.loading) {
-      <dv-shared-ui-loading class="tw:col-span-12" data-testid="abschluss-loading"></dv-shared-ui-loading>
-    } @else if (isEditingAenderung && !canAenderungEinreichenSig()) {
-      <div class="tw:col-span-12 tw:xl:col-span-8 tw:mt-6 tw:flex tw:flex-col align-items-start">
-        <dv-shared-ui-info-container [type]="'warning'" data-testid="alert-warning">
-          <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
-          <div class="tw:ml-4">
-            <span [innerHTML]="'shared.form.abschluss.aenderungNichtEinreichbar' | transloco"></span>
-          </div>
-        </dv-shared-ui-info-container>
-      </div>
-    } @else {
-      @if (gesuch; as gesuch) {
-        <div class="tw:col-span-12 tw:xl:col-span-8 tw:mt-6 tw:flex tw:flex-col align-items-start">
-          @let einreichenView = einreichenStore.einreichenViewSig();
-          @switch (einreichenView.abschlussPhase) {
-            @case ('FEHLENDE_DOKUMENTE') {
-              <dv-shared-ui-info-container [type]="'warning'" data-testid="alert-warning">
-                <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
-                <div class="tw:ml-4">
-                  @if (dokumenteRouteSig(); as dokumenteRoute) {
-                    <span [innerHTML]="'shared.form.abschluss.fehlendeDokumente' | transloco"></span>
-                    &nbsp;<a [routerLink]="dokumenteRoute">{{ 'shared.dokumente.title' | transloco }}</a>
+<div class="tw:dv-form-grid" *dvTranslocoShared="let t">
+  @let gesuch = gesuchViewSig().gesuch;
+  @let isEditingAenderung = gesuchViewSig().isEditingAenderung;
+  @let permissions = gesuchViewSig().permissions;
+  @let einreichenView = einreichenStore.einreichenViewSig();
+  @if (gesuchViewSig().loading || einreichenView.loading) {
+    <dv-shared-ui-loading class="tw:col-span-3" data-testid="abschluss-loading"></dv-shared-ui-loading>
+  } @else if (isEditingAenderung && !canAenderungEinreichenSig()) {
+    <div class="tw:dv-form-item">
+      <dv-shared-ui-info-container [type]="'warning'" data-testid="alert-warning">
+        <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
+        <div class="tw:ml-4">
+          <span [innerHTML]="t('shared.form.abschluss.aenderungNichtEinreichbar')"></span>
+        </div>
+      </dv-shared-ui-info-container>
+    </div>
+  } @else {
+    @if (gesuch; as gesuch) {
+      @let einreichenView = einreichenStore.einreichenViewSig();
+      @switch (einreichenView.abschlussPhase) {
+        @case ('FEHLENDE_DOKUMENTE') {
+          <dv-shared-ui-info-container class="tw:dv-form-item" [type]="'warning'" data-testid="alert-warning">
+            <span class="tw:text-dv-yellow material-symbols-rounded">warning</span>
+            <div class="tw:ml-4">
+              @if (dokumenteRouteSig(); as dokumenteRoute) {
+                <span [innerHTML]="t('shared.form.abschluss.fehlendeDokumente')"></span>
+                &nbsp;<a class="tw:underline" [routerLink]="dokumenteRoute">{{ t('shared.dokumente.title') }}</a>
+              }
+            </div>
+          </dv-shared-ui-info-container>
+        }
+        @case ('NOT_READY') {
+          @if (einreichenView.specialValidationErrors.length === 0) {
+            <dv-shared-ui-info-container
+              class="tw:dv-form-item tw:flex-col"
+              [type]="'warning'"
+              data-testid="alert-warning"
+            >
+              <div class="tw:flex tw:gap-4">
+                <span class="tw:text-dv-yellow material-symbols-rounded">warning</span>
+                <span [innerHTML]="t('shared.form.abschluss.notReady')"></span>
+              </div>
+
+              <ul class="tw:mt-6 tw:pl-8">
+                @for (step of einreichenView.invalidFormularSteps; track step.route) {
+                  @if (step.routeParts; as link) {
+                    <li>
+                      <a class="tw:text-dv-gray-dark tw:underline" [routerLink]="link">{{
+                        t(step.titleTranslationKey)
+                      }}</a>
+                    </li>
                   }
+                }
+              </ul>
+            </dv-shared-ui-info-container>
+          } @else {
+            @for (error of einreichenView.specialValidationErrors; track error) {
+              <dv-shared-ui-info-container class="tw:dv-form-item" [type]="'danger'" data-testid="alert-danger">
+                <span class="tw:text-dv-red material-symbols-rounded">error</span>
+                <div class="tw:ml-4">
+                  <span [innerHTML]="t(error.validationErrorKey)"></span>
+                  <br />
+                  <a class="tw:text-dv-gray-dark tw:underline" [routerLink]="error.stepRoute">{{ t(error.linkKey) }}</a>
                 </div>
               </dv-shared-ui-info-container>
             }
-            @case ('NOT_READY') {
-              @if (einreichenView.specialValidationErrors.length === 0) {
-                <dv-shared-ui-info-container class="tw:flex-col" [type]="'warning'" data-testid="alert-warning">
-                  <div class="tw:flex tw:gap-2">
-                    <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
-                    <span [innerHTML]="'shared.form.abschluss.notReady' | transloco"></span>
-                  </div>
-
-                  <ul class="tw:mt-6 tw:pl-8">
-                    @for (step of einreichenView.invalidFormularSteps; track step.route) {
-                      @if (step.routeParts; as link) {
-                        <li>
-                          <a class="tw:text-dv-gray-dark tw:underline" [routerLink]="link">{{
-                            step.titleTranslationKey | transloco
-                          }}</a>
-                        </li>
-                      }
-                    }
-                  </ul>
-                </dv-shared-ui-info-container>
-              } @else {
-                @for (error of einreichenView.specialValidationErrors; track error) {
-                  <dv-shared-ui-info-container [type]="'danger'" data-testid="alert-danger">
-                    <span class="tw:text-dv-red material-symbols-rounded">error</span>
-                    <div class="tw:ml-4">
-                      <span [innerHTML]="error.validationErrorKey | transloco"></span>
-                      <br />
-                      <a class="tw:text-dv-gray-dark tw:underline" [routerLink]="error.stepRoute">{{
-                        error.linkKey | transloco
-                      }}</a>
-                    </div>
-                  </dv-shared-ui-info-container>
-                }
-              }
-            }
-            @case ('READY_TO_SEND') {
-              <dv-shared-ui-info-container data-testid="alert-info">
-                <span class="tw:text-dv-blue material-symbols-rounded tw:mr-4">info</span>
-                <span [innerHTML]="'shared.form.abschluss.ready' | transloco"></span>
-              </dv-shared-ui-info-container>
-
-              @if (einreichenView.isFehlendeDokumente) {
-                <button
-                  type="submit"
-                  class="tw:dv-button-main-primary tw:self-start tw:mt-6"
-                  (click)="fehlendeDokumenteEinreichen()"
-                  data-testid="button-fehlende-dokumente-einreichen"
-                  [disabled]="
-                    (dokumentsStore.dokuments() | rdIsPending) ||
-                    (dokumentsStore.documentsToUpload() | rdIsPending) ||
-                    !canGSSendMissingDocumentsSig()
-                  "
-                >
-                  {{ 'shared.form.abschluss.fehlendeDokumenteEinreichen' | transloco }}
-                </button>
-              } @else {
-                <button
-                  type="submit"
-                  class="tw:dv-button-main-primary tw:self-start tw:mt-6"
-                  (click)="abschliessen()"
-                  data-testid="button-abschluss"
-                  [disabled]="!permissions.canFreigeben || einreichenStore.einreicheOperationIsInProgressSig()"
-                >
-                  {{ 'shared.form.abschluss.abschliessen' | transloco }}
-                </button>
-              }
-            }
-            @case ('SUBMITTED') {
-              <dv-shared-ui-info-container [type]="'success'" data-testid="alert-success">
-                <span class="tw:text-dv-main-success material-symbols-rounded tw:mr-4">check_circle</span>
-                <span [innerHTML]="'shared.form.abschluss.submitted' | transloco"></span>
-              </dv-shared-ui-info-container>
-            }
           }
-        </div>
+        }
+        @case ('READY_TO_SEND') {
+          <dv-shared-ui-info-container class="tw:dv-form-item" data-testid="alert-info">
+            <span class="tw:text-dv-blue material-symbols-rounded tw:mr-4">info</span>
+            <span [innerHTML]="t('shared.form.abschluss.ready')"></span>
+          </dv-shared-ui-info-container>
+
+          <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
+            @if (einreichenView.isFehlendeDokumente) {
+              <button
+                type="submit"
+                class="tw:dv-button-main-primary"
+                (click)="fehlendeDokumenteEinreichen()"
+                data-testid="button-fehlende-dokumente-einreichen"
+                [disabled]="
+                  (dokumentsStore.dokuments() | rdIsPending) ||
+                  (dokumentsStore.documentsToUpload() | rdIsPending) ||
+                  !canGSSendMissingDocumentsSig()
+                "
+              >
+                {{ t('shared.form.abschluss.fehlendeDokumenteEinreichen') }}
+              </button>
+            } @else {
+              <button
+                type="submit"
+                class="tw:dv-button-main-primary"
+                (click)="abschliessen()"
+                data-testid="button-abschluss"
+                [disabled]="!permissions.canFreigeben || einreichenStore.einreicheOperationIsInProgressSig()"
+              >
+                {{ t('shared.form.abschluss.abschliessen') }}
+              </button>
+            }
+          </dv-shared-ui-step-form-buttons>
+        }
+        @case ('SUBMITTED') {
+          <dv-shared-ui-info-container class="tw:dv-form-item" [type]="'success'" data-testid="alert-success">
+            <span class="tw:text-dv-main-success material-symbols-rounded tw:mr-4">check_circle</span>
+            <span [innerHTML]="t(`shared.form.abschluss.submitted.${gesuch.gesuchTrancheToWorkWith.typ}`)"></span>
+          </dv-shared-ui-info-container>
+        }
       }
     }
-  </div>
+  }
 </div>

@@ -1,5 +1,4 @@
 @let view = dokumenteViewSig();
-@let expandedRow = expandedRowSig();
 @if (view.loading) {
   <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
 }
@@ -11,7 +10,7 @@
 
     @if (view.gesuchId && view.nachfrist) {
       <div class="tw:flex tw:items-center tw:gap-3">
-        <dl class="tw:mt-6 tw:flex tw:gap-3">
+        <dl class="tw:flex tw:gap-3">
           <dt class="tw:font-semibold">{{ t('shared.dokumente.nachfrist.label') }}</dt>
           <dd>{{ view.nachfrist | date: 'dd.MM.yyyy' }}</dd>
         </dl>
@@ -31,7 +30,7 @@
     }
   </div>
 
-  <div class="tw:dv-table">
+  <div class="tw:dv-table tw:shadow-none tw:border">
     <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
       <caption class="cdk-visually-hidden">
         {{

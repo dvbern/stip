@@ -17,112 +17,27 @@
 
 package ch.dvbern.stip.berechnung.util;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
-
-import ch.dvbern.stip.api.tenancy.service.MockTenantService;
-import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
-import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
-import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
-import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
-import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
-import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder;
-import ch.dvbern.stip.berechnung.dto.v1.BerechnungsStammdatenV1Mapper;
-import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1Builder;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.berechnung.service.BerechnungTestcase;
-import ch.dvbern.stip.berechnung.service.PersonenImHaushaltCalculator;
-import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
-import ch.dvbern.stip.berechnung.service.StipendienCalculator;
-import ch.dvbern.stip.berechnung.service.bern.v1.PersonenImHaushaltCalculatorV1;
-import ch.dvbern.stip.berechnung.service.bern.v1.StipendienCalculatorV1;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import jakarta.enterprise.inject.Instance;
+import ch.dvbern.stip.berechnung.adapter.bern.v1_0.service.BernBerechnungAdapterV1_0;
+import ch.dvbern.stip.berechnung.domain.port.BerechnungPortFactory;
+import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.service.BerechnungsStammdatenMapper;
 import lombok.experimental.UtilityClass;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 
 @UtilityClass
 public class BerechnungTestUtil {
-    public ObjectMapper createObjectMapper() {
-        return new ObjectMapper()
-            .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
-    }
-
-    public CalculatorRequest getRequest(final int fall) {
-        try {
-            final var resource =
-                BerechnungTestUtil.class.getClassLoader().getResource(String.format("berechnung/fall_%d.json", fall));
-            assert resource != null;
-            final var inputs = Files.readString(Paths.get(resource.toURI()));
-            final var mapper = createObjectMapper();
-
-            return mapper.readValue(inputs, BerechnungRequestV1.class);
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public BerechnungTestcase getTestcase(final int no) {
-        try {
-            final var resource =
-                BerechnungTestUtil.class.getClassLoader().getResource(String.format("testcase/testcase_%d.json", no));
-            assert resource != null;
-            final var inputs = Files.readString(Paths.get(resource.toURI()));
-            final var mapper = createObjectMapper()
-                .registerModule(new ParameterNamesModule())
-                .registerModule(new Jdk8Module());
-
-            return mapper.readValue(inputs, BerechnungTestcase.class);
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public BerechnungService getMockBerechnungService() {
-        final var personenImHaushaltService = getPersonenImHaushaltService();
 
-        final var requestBuilders = (Instance<BerechnungRequestBuilder>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new BerechnungRequestV1Builder(personenImHaushaltService)))
-            .when(requestBuilders)
-            .stream();
+        final var berechnungPort = new BernBerechnungAdapterV1_0(Mappers.getMapper(BerechnungsStammdatenMapper.class));
 
-        final var berechnungStammdatenMapper = (Instance<BerechnungsStammdatenMapper>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new BerechnungsStammdatenV1Mapper()))
-            .when(berechnungStammdatenMapper)
-            .stream();
+        final var berechnungPortFactory = Mockito.mock(BerechnungPortFactory.class);
 
-        final var calculators = (Instance<StipendienCalculator>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new StipendienCalculatorV1())).when(calculators).stream();
+        Mockito.doAnswer(invocation -> berechnungPort).when(berechnungPortFactory).getBerechnungPort();
 
         return new BerechnungService(
-            requestBuilders,
-            berechnungStammdatenMapper,
-            calculators,
-            new MockTenantService()
-        );
-    }
-
-    public PersonenImHaushaltService getPersonenImHaushaltService() {
-        final var personenImHaushaltCalculators = (Instance<PersonenImHaushaltCalculator>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltCalculatorV1()))
-            .when(personenImHaushaltCalculators)
-            .stream();
-
-        final var personenImHaushaltRequestBuilders =
-            (Instance<PersonenImHaushaltRequestBuilder>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltRequestV1Builder()))
-            .when(personenImHaushaltRequestBuilders)
-            .stream();
-
-        return new PersonenImHaushaltService(
-            personenImHaushaltCalculators,
-            personenImHaushaltRequestBuilders
+            berechnungPortFactory
         );
     }
 }

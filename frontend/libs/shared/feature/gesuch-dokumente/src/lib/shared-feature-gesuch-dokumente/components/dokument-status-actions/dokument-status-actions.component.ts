@@ -9,14 +9,14 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { SharedModelTableDokument } from '@dv/shared/model/dokument';
 import { Gesuchstatus } from '@dv/shared/model/gesuch';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
-import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
+import { SharedUiReplaceAppConfigPipe } from '@dv/shared/ui/replace-app-type';
 
 @Component({
   selector: 'dv-dokument-status-actions',
   imports: [
     TranslocoPipe,
     SharedUiIconBadgeComponent,
-    SharedUiReplaceAppTypePipe,
+    SharedUiReplaceAppConfigPipe,
   ],
   templateUrl: './dokument-status-actions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

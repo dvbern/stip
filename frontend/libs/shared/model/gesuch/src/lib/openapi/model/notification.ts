@@ -15,6 +15,7 @@ import { NotificationType } from './notificationType';
  * Notification for a Gesuch
  */
 export interface Notification { 
+    id: string;
     notificationText?: string;
     notificationType: NotificationType;
     fallId: string;
@@ -22,6 +23,7 @@ export interface Notification {
     userErstellt: string;
     timestampErstellt: string;
     absender: string;
+    read: boolean;
 }
 
 

@@ -1,109 +1,112 @@
-keycloak:
-  url: '${STIP_OIDC_AUTH_SERVER}'
-  frontend-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND:${keycloak.url}}'
-  client-id: 'stip-api'
-
-kstip:
-  version: '0.1-SNAPSHOT'
-  environment: 'local'
-  default-tenant: 'bern'
-  allowed:
-    mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
-    testcase-mimetypes:
-      - 'application/x-tika-ooxml'
-      - 'application/zip'
-  darlehen:
-    verfuegung-email:
-      recipient: 'ausbildungsdarlehen@mailbucket.dvbern.ch'
-  pre-signed-request:
-    issuer: 'https://stip.kibon.ch'
-    expires-in-minutes: 1
-    secret: '${STIP_PRE_SIGNED_REQUEST_SECRET}'
+old:
   sap:
     system-id: '${STIP_SAP_SYSID}'
     auth-header-value: '${STIP_SAP_AUTH_HEADER_VALUE}'
     connectionTimeout: 6000
     receiveTimeout: 1000
-  demo:
-    smallest-png: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQAAAAA3bvkkAAAACklEQVR4AWNgAAAAAgABc3UBGAAAAABJRU5ErkJggg=='
-  seeding:
-    seed-on:
-      - 'dev'
-    all-profiles:
-      - 'dev'
-      - 'prod'
-      - 'test'
-  plzdata:
-    cron: '0 15 10 10W * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
-    featurekey: 'ortschaftenverzeichnis_plz_2056.csv.zip'
-    hashkey: 'checksum:multihash'
-  gesuchsperiode:
-    cron: '0 0 0 1/1 * ? *' # Fires daily at 00:00
-  unterschriftenblatt:
-    cron: '0 0 9 1/1 * ? *' # Fires daily at 09:00
-  fehlendedokumente:
-    cron: '0 0 10 1/1 * ? *' # Fires daily at 10:00
-  sapbusinesspartner:
-    bern:
-      cron: '0 0/2 * * * ? *' # Fires every 2 minutes, starting at XX:00
-    dv:
-      cron: '0 1/2 * * * ? *' # Fires every 2 minutes, starting at XX:01
-  sappendingauszahlung:
-    bern:
-      cron: '0 1/2 * * * ? *' # Fires every 2 minutes, starting at XX:01
-    dv:
-      cron: '0 2/2 * * * ? *' # Fires every 2 minutes, starting at XX:02
-  sapremainderauszahlung:
-    bern:
-      cron: '0 2/2 * * * ? *' # Fires every 2 minutes, starting at XX:02
-    dv:
-      cron: '0 3/2 * * * ? *' # Fires every 2 minutes, starting at XX:03
-  sapretryfailedauszahlungsbuchhaltung:
-    bern:
-      cron: '0 3/2 * * * ? *' # Fires every 2 minutes, starting at XX:03
-    dv:
-      cron: '0 4/2 * * * ? *' # Fires every 2 minutes, starting at XX:04
-  bern:
-    seeding:
-      sozialdienste: # Can be set via environment variable using: KSTIP_BERN_SEEDING_SOZIALDIENSTE, KSTIP_DV_SEEDING_SOZIALDIENSTE, etc.
-    welcome-mail:
 
-      kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
-      kc-path: '${STIP_WELCOME_MAIL_PATH}'
-      kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
-      kc-scope: '${STIP_BERN_WELCOME_MAIL_SCOPE}'
-    frontend-uri: '${STIP_FRONTEND_URI:localhost:4200}'
-  dv:
-    welcome-mail:
-      kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'
-      kc-path: '${STIP_WELCOME_MAIL_PATH}'
-      kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
-      kc-scope: '${STIP_DV_WELCOME_MAIL_SCOPE}'
-  dmn:
-    current-major-version: 1
-    current-minor-version: 0
-  pagination:
-    max-allowed-page-size: 50
-  should-clear-database: false
-  nesko:
-    wsdl-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
-    username: '${NESKO_TECHNICAL_USER_NAME}'
-    password: '${NESKO_TECHNICAL_USER_PASSWORD}'
-  tenancy:
+kstip:
+  oidc:
+    url: ${STIP_OIDC_AUTH_SERVER}
+  s3:
+    bucket-name: '${bucket.name}'
+
+  scheduler:
+    plz-data:
+      cron: '0 15 10 10W * ?' # Fires at 10:15 on the closest weekday to the 10th of each month
+    gesuch-periode:
+      cron: '0 0 0 1/1 * ? *' # Fires daily at 00:00
+    unterschriftenblatt:
+      cron: '0 0 9 1/1 * ? *' # Fires daily at 09:00
+    fehlende-dokumente:
+      cron: '0 0 10 1/1 * ? *' # Fires daily at 10:00
+    sap-business-partner:
+      cron: '0 0/2 * * * ? *' # Every 2 minutes, starting at XX:00
+    sap-pending-auszahlung:
+      cron: '0 1/2 * * * ? *' # Every 2 minutes, starting at XX:01
+    sap-remainder-auszahlung:
+      cron: '0 2/2 * * * ? *' # Every 2 minutes, starting at XX:02
+    sap-retry-failed-auszahlungs-buchhaltung:
+      cron: '0 3/2 * * * ? *' # Every 2 minutes, starting at XX:03
+
+  global-adapter:
+    pdf:
+      typst:
+        binary: "/usr/local/bin/typst"
+        max-output-bytes: 10000000
+        compile-timeout: 10
+        shutdown-wait-timeout: 10
+        shutdown-force-timeout: 5
+        root-path: "/deployments/typst"
+        fonts-path: "/deployments/fonts"
+
+  # Tenants
+  #
+  # All tenant-specific configuration lives here. Each tenant has the same
+  # structure.
+  #
+  # Environment overrides:
+  #   KSTIP_TENANT_BERN_SEEDING_SOZIALDIENSTE
+  #   KSTIP_TENANT_DV_SEEDING_SOZIALDIENSTE
+  #   ...
+  tenant:
     bern:
       subdomains:
         - '^dev-.*'
         - '^feature-kstip.*'
+      welcome-mail:
+        kc-path: '${STIP_WELCOME_MAIL_PATH}'
+        kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
+        kc-scope: '${STIP_BERN_WELCOME_MAIL_SCOPE}'
+      port:
+        steuerdaten:
+          enabled: true
+          adapter-type: nesko
+        berechnung:
+          enabled: true
+          adapter-type: bern
+          major-version: 1
+          minor-version: 0
+        pdf:
+          enabled: true
+          adapter-type: typst
+      adapter:
+        pdf:
+          typst:
+            root-template-path: tenants/bern
+            template-path:
+              berechnungsblatt-uebersicht: /tenants/bern/templates/berechnung/uebersicht.typ
+              berechnungsblatt-pia: /tenants/bern/templates/berechnung/pia.typ
+              berechnungsblatt-familie: /tenants/bern/templates/berechnung/familie.typ
+        steuerdaten:
+          nesko:
+            url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
+            username: '${NESKO_TECHNICAL_USER_NAME}'
+            password: '${NESKO_TECHNICAL_USER_PASSWORD}'
+
     dv:
       subdomains:
         - '^dv-.*'
-  features:
-    bern:
-      nesko: true
-    dv:
-      nesko: false
+      welcome-mail:
+        kc-path: '${STIP_WELCOME_MAIL_PATH}'
+        kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
+        kc-scope: '${STIP_DV_WELCOME_MAIL_SCOPE}'
+      port:
+        steuerdaten:
+          enabled: false
+        berechnung:
+          enabled: true
+          adapter-type: bern
+          major-version: 1
+          minor-version: 0
+  seeding:
+    seed-on-profile:
+      - 'prod'
+      - 'dev'
 
 quarkus:
+  scheduler:
+    start-mode: forced
   #  live-reload:
   #    instrumentation: true
   hibernate-validator:
@@ -138,12 +141,12 @@ quarkus:
     validate-on-migrate: true
   oidc:
     bern:
-      auth-server-url: '${keycloak.url}/realms/bern'
-      client-id: '${keycloak.client-id}'
+      auth-server-url: '${kstip.oidc.url}/realms/bern'
+      client-id: '${kstip.oidc.client-id}'
       application-type: service
     dv:
-      auth-server-url: '${keycloak.url}/realms/dv'
-      client-id: '${keycloak.client-id}'
+      auth-server-url: '${kstip.oidc.url}/realms/dv'
+      client-id: '${kstip.oidc.client-id}'
       application-type: service
   s3:
     aws:
@@ -159,6 +162,15 @@ quarkus:
     auth-methods: 'DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN'
     host: 'mailext.dvbern.ch'
     from: 'kstip@dvbern.ch'
+  observability:
+    # To use tracing and nice grafana dashboard toggle this and otel.enabled bellow
+    enabled: false
+  otel:
+    enabled: false
+    metric:
+      enabled: true
+    logs:
+      enabled: true
   datasource:
     username: '${STIP_DB_USERNAME}'
     db-kind: 'postgresql'
@@ -173,7 +185,7 @@ quarkus:
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true
-#      sql: true
+    #      sql: true
     multitenant: 'DISCRIMINATOR'
     jdbc:
       timezone: 'Europe/Zurich'
@@ -192,10 +204,12 @@ quarkus:
     devservices:
       enabled: false
     admin-client:
-      server-url: ${keycloak.url}
+      server-url: ${kstip.oidc.url}
       grant-type: password
       username: ${STIP_KEYCLOAK_ADMIN_USER}
       password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
+      client-id: admin-cli
+      realm: master
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
@@ -228,9 +242,9 @@ quarkus:
   #            - 'src/main/resources/wsdl/nesko/binding.xml'
 
   rest-client:
-    GeoCollection-api:
+    swisstopo-plz-api:
       url: 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo-vd.ortschaftenverzeichnis_plz'
-    NeskoGetBearerToken-api:
+    nesko-get-bearer-token-api:
       url: 'https://nesko-int.sv.fin.be.ch/sso/auth/realms/hades-int/protocol/openid-connect'
     swisstopo-rest-api:
       url: 'https://api3.geo.admin.ch/rest/services/api/MapServer'
@@ -279,22 +293,28 @@ quarkus:
       security-scheme: 'oauth2-implicit'
       security-scheme-name: 'auth-dev-bern'
       oauth2-implicit-authorization-url: '${STIP_OIDC_AUTH_SERVER}/realms/bern/protocol/openid-connect/auth'
-    keycloak:
-      admin-client:
-        server-url: ${keycloak.url}
-        grant-type: password
-        username: ${STIP_KEYCLOAK_ADMIN_USER}
-        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
-        tls-configuration-name: bern
     quartz:
       clustered: false
     liquibase:
       contexts: dev
+    keycloak:
+      admin-client:
+        tls-configuration-name: bern
   kstip:
     pre-signed-request:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 5
+    global-adapter:
+      pdf:
+        typst:
+          binary: "typst"
+          docker-enabled: true
+          docker-image: "ghcr.io/typst/typst:0.15.1"
 
+          # https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
+          # `user.dir` is the directory from which the jvm was started
+          root-path: "${user.dir}/src/main/resources/typst"
+          fonts-path: "${user.dir}/src/main/resources/fonts"
 '%test':
   mp:
     jwt:
@@ -318,8 +338,8 @@ quarkus:
       database:
         generation: 'drop-and-create'
     oidc:
-      auth-server-url: '${keycloak.url:replaced-by-test-resource}/realms/quarkus/'
-      client-id: '${keycloak.client-id}'
+      auth-server-url: '${kstip.oidc.url:replaced-by-test-resource}/realms/quarkus/'
+      client-id: '${kstip.oidc.client-id}'
       application-type: service
     s3:
       aws:
@@ -331,37 +351,24 @@ quarkus:
       devservices:
         enabled: false
         buckets: '${bucket.name}'
-    keycloak:
-      admin-client:
-        server-url: ${keycloak.url}
-        grant-type: password
-        username: 'test'
-        password: 'test'
     quartz:
       clustered: false
     liquibase:
       contexts: test
   bucket:
     name: 'stip-usercontent-test'
-  keycloak:
-    url: 'http://dummy.keycloak'
-    frontend-url: 'http://dummy.keycloak'
   kstip:
-    allowed:
-      mimetypes: 'text/plain,image/png'
+    s3:
+      bucket-name: '${bucket.name}'
+    upload:
+      allowed-mimetypes: 'text/plain,image/png'
+    oidc:
+      url: 'http://dummy.keycloak'
+      frontend-url: 'http://dummy.keycloak'
     pre-signed-request:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
-    bern:
-      welcome-mail:
-        kc-url: 'http://dummy.keycloak'
-        kc-path: '/realms/bern/protocol/openid-connect/auth'
-        kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
-        kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
-    nesko:
-      username: 'username'
-      password: 'password'
 '%prod':
   quarkus:
     s3:
@@ -370,12 +377,6 @@ quarkus:
       clamav:
         host: '${STIP_CLAMAV_HOST}'
         port: '${STIP_CLAMAV_PORT:3310}'
-    keycloak:
-      admin-client:
-        server-url: ${keycloak.url}
-        grant-type: password
-        username: ${STIP_KEYCLOAK_ADMIN_USER}
-        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
     quartz:
       clustered: true
       store-type: jdbc-cmt
@@ -391,12 +392,14 @@ mp:
         relative: true
       path: '/openapi.yml'
       enabled: true
+
 openapi:
   ui:
     swaggerHeaderVisibility: 'hidden'
     yamlUrl: '/openapi.yml'
     swaggerUiTheme: 'feeling-blue'
     serverVisibility: 'hidden'
+
 bucket:
   name: '${STIP_S3_BUCKET_NAME}'
 

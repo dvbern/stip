@@ -1,0 +1,171 @@
+common:
+  svn: N° AVS
+  birthday: Date de naissance
+  ausbildungsjahr: Année de formation
+  steuerjahr: Année fiscale
+  veranlagungscode: Code de taxation
+  from: Du
+  till: Au
+  months: Mois
+berechnung:
+  persoenlich: Budget personnel
+  familie: Budget familial
+  mutter: Budget de la mère
+  vater: Budget du père
+  notes:
+    uebersicht:
+      kuerzung:
+        identifier: k)
+        text: La demande a été déposée avec {anzahlMonate} mois de retard. Il en résulte une réduction de {betrag}.
+      unterbruch:
+        identifier: u)
+        text: La demande a été interrompue pendant {anzahlMonate} mois. Il en résulte une réduction de {betrag}.
+    einnahmen-kosten:
+      bgsa:
+        identifier: 1)
+        text: Revenus soumis à la procédure de décompte simplifiée (loi fédérale concernant des mesures en matière de lutte contre le travail au noir)
+      hoechstwerte:
+        identifier: 2)
+        text: Vous trouverez les montants maximaux reconnus donnant droit à une bourse dans la feuille annexe (annexe 1) ou sur www.be.ch/allocationsdeformation > Bases légales > Montants maximaux reconnus donnant droit à une bourse
+  uebersicht:
+    resultat: Résultat
+    abgelehnt: Bourse refusée
+    gewaehrt: Bourse accordée
+    total:
+      heading: Total
+      betrag: Montant total
+      ohneKuerzung: Montant total avant réductions
+      kuerzung: Réduction pour dépôt tardif
+      unterbruch: Réduction pour interruption
+      stipendium: Montant total de la bourse
+      darlehen: Montant total du prêt
+    berechnungen:
+      heading: Calculs
+      tranche:
+        heading: Tranche de {anzahlMonate} mois
+        berechnung-index: Calcul {index}
+        percentage-von: "{percentage} % de {base}"
+  einnahmen:
+    label: Revenus
+    info: Total des revenus annuels pris en compte
+    nettoerwerbseinkommen:
+      label: Revenu net d’activité lucrative
+      info: Réalisé pendant l’année de formation. Pour une personne requérante suivant des études de niveau tertiaire, la franchise sur le revenu de {einkommensfreibetrag} est déjà déduite.
+    totalEinkuenfte:
+      label: Total des revenus
+      info: Voir année fiscale.
+    einnahmenBGSA:
+      label: Revenus selon la LTN
+    kinderAusbildungszulagen:
+      label: Allocations pour enfant et allocations de formation
+    unterhaltsbeitraege:
+      label: Contributions d’entretien
+    eoLeistungen:
+      label: Allocations pour perte de gain (APG)
+      info: Service militaire, service civil et protection civile.
+    taggelderAHVIV:
+      label: Indemnités journalières
+      info: Indemnités journalières de chômage, indemnités journalières AI.
+    renten:
+      label: Rentes
+      info: Rentes pour enfant/orphelin, rentes AI, rentes de caisse de pension, etc.
+    ergaenzungsleistungen:
+      label: Prestations complémentaires
+    beitraegeGemeindeInstitutionen:
+      label: Contributions de communes ou d’institutions
+    andereEinnahmen:
+      label: Autres revenus
+      info: Dons, autres bourses, etc.
+    anrechenbaresVermoegen:
+      label: Fortune prise en compte
+      info: 15% de la fortune imposable de {steuerbaresVermoegen} sont pris en compte.
+      selbststaendigerwerbende: Les travailleurs indépendants bénéficient d’un abattement de {freibetrag}.
+    elterlicheLeistung:
+      label: Contribution parentale prise en compte selon le budget familial
+    eigenmietwert:
+      label: déduction de la valeur locative
+    unterhaltsbeitraegeAbzug:
+      label: déduction des contributions d’entretien
+      info: Incluses dans le total des revenus et destinées à la personne en formation.
+    sauele3:
+      label: déduction du pilier 3a
+      info: Pris en compte uniquement pour les personnes exerçant une activité indépendante.
+    sauele2:
+      label: déduction du 2e pilier
+      info: Pris en compte uniquement pour les personnes exerçant une activité indépendante, pour autant que ces cotisations ne soient pas incluses dans le compte de résultat.
+    rentenAbzug:
+      label: déduction des rentes pour la personne en formation
+      info: Rentes AI, rentes de caisse de pension, etc. Déduction si elles sont déjà incluses dans le total des revenus.
+    einkommensfreibetragAbzug:
+      label: déduction de la franchise sur le revenu
+      info: La franchise sur le revenu s’élève à {einkommensfreibetrag}.
+    zwischentotal:
+      label: Sous-total des revenus annuels pris en compte
+      info: Les revenus après déduction de la franchise sur le revenu ne peuvent pas être négatifs.
+  kosten:
+    label: Frais
+    info: Total des frais annuels pris en compte
+    ausbildungskosten:
+      label: Frais de formation de la personne en formation
+      info: Les frais de formation de {ausbildungskosten} sont multipliés par le nombre de personnes dans le ménage {anzahlPersonenImHaushalt} pour les personnes en formation mariées, vivant en partenariat enregistré ou en concubinage stable, afin que la part par personne soit correctement indiquée.
+    fahrkosten:
+      label: Frais de transport de la personne en formation
+      info: Seuls les frais d’un abonnement annuel sont pris en compte. Les frais de transport de {fahrkosten} sont multipliés, pour les personnes en formation mariées, vivant en partenariat enregistré ou en concubinage stable, par le nombre de personnes dans le ménage {anzahlPersonenImHaushalt}, afin que la part par personne soit correctement indiquée.
+    verpflegungskosten:
+      label: Repas pris à l’extérieur par la personne en formation
+      info: Uniquement si elle vit chez ses parents.
+    grundbedarf:
+      label: Besoins de base pour un ménage de {anzahlPersonenImHaushalt} personnes
+      info: Uniquement en cas de ménage propre.
+    wohnkosten:
+      label: Frais de logement pour un ménage de {anzahlPersonenImHaushalt} personnes
+      info: Uniquement en cas de ménage propre.
+    medizinischeGrundversorgung:
+      label: Couverture médicale de base pour un ménage de {anzahlPersonenImHaushalt} personnes
+      info: Uniquement en cas de ménage propre.
+    fahrkostenPartner:
+      label: Frais de transport de la partenaire / du partenaire
+      info: Uniquement si elle/il exerce une activité lucrative et ne suit pas une formation reconnue.
+    verpflegungPartner:
+      label: Repas de la partenaire / du partenaire
+      info: Uniquement si elle/il exerce une activité lucrative et ne suit pas une formation reconnue.
+    betreuungskostenKinder:
+      label: Frais de garde pour ses propres enfants
+    steuern:
+      label: Impôts
+      info: Impôts à payer pendant l’année de formation.
+    anteilLebenshaltungskosten:
+      label: Part non couverte des frais d’entretien
+      info: Report du budget familial. Uniquement si la personne vit chez ses parents.
+    integrationszulage:
+      label: Supplément d’intégration pour {inAusbildungStehendeKinder} enfant(s) en formation
+      info: Le supplément d’intégration et la franchise sur le revenu ne doivent pas dépasser {abzugsLimite} par ménage.
+    kantonsGemeindesteuern:
+      label: Impôts cantonaux et communaux
+      info: Impôts à payer, voir l’année fiscale.
+    bundessteuern:
+      label: Impôt fédéral
+      info: Impôt à payer, voir l’année fiscale.
+    fahrkostenFam:
+      label: Frais de déplacement
+      info: Frais de déplacement reconnus fiscalement.
+    verpflegung:
+      label: Repas pris à l’extérieur
+      info: Frais supplémentaires fiscalement reconnus pour les repas pris à l’extérieur.
+  total:
+    anspruch:
+      label: Droit total pour {anzahlMonate} mois
+    anrechenbareElterlicheLeistung:
+      label: Contribution parentale prise en compte
+      info: Reportée comme revenu dans le budget personnel
+    ungedeckterAnteilLebenshaltungskosten:
+      label: Part non couverte des frais d’entretien
+      info: Reportée comme dépense dans le budget personnel, uniquement si la personne vit chez ses parents
+    fehlbetrag:
+      label: Découvert
+      info: Revenus moins coûts
+      proKopfTeilung: Répartition par tête lors du calcul avec une partenaire ou un partenaire
+    einnahmeUeberschuss:
+      label: Excédent de revenus
+      info: Revenus moins dépenses.
+      proKopfTeilung: Divisé par le nombre d’enfants en formation

@@ -16,13 +16,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchTrancheUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchTrancheUpdateDto  implements Serializable {
   private @Valid GesuchFormularUpdateDto gesuchFormular;
   private @Valid UUID id;
+
+  protected GesuchTrancheUpdateDto(GesuchTrancheUpdateDtoBuilder<?, ?> b) {
+    this.gesuchFormular = b.gesuchFormular;
+    this.id = b.id;
+  }
+
+  public GesuchTrancheUpdateDto() {
+  }
 
   /**
    **/
@@ -104,5 +112,38 @@ public class GesuchTrancheUpdateDto  implements Serializable {
   }
 
 
+  public static GesuchTrancheUpdateDtoBuilder<?, ?> builder() {
+    return new GesuchTrancheUpdateDtoBuilderImpl();
+  }
+
+  private static final class GesuchTrancheUpdateDtoBuilderImpl extends GesuchTrancheUpdateDtoBuilder<GesuchTrancheUpdateDto, GesuchTrancheUpdateDtoBuilderImpl> {
+
+    @Override
+    protected GesuchTrancheUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchTrancheUpdateDto build() {
+      return new GesuchTrancheUpdateDto(this);
+    }
+  }
+
+  public static abstract class GesuchTrancheUpdateDtoBuilder<C extends GesuchTrancheUpdateDto, B extends GesuchTrancheUpdateDtoBuilder<C, B>>  {
+    private GesuchFormularUpdateDto gesuchFormular;
+    private UUID id;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuchFormular(GesuchFormularUpdateDto gesuchFormular) {
+      this.gesuchFormular = gesuchFormular;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+  }
 }
 

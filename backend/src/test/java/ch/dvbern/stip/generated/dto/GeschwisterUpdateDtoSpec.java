@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
+import ch.dvbern.stip.generated.dto.GeschwisterTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,7 +41,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_ID,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
-  GeschwisterUpdateDtoSpec.JSON_PROPERTY_NACHNAME
+  GeschwisterUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
+  GeschwisterUpdateDtoSpec.JSON_PROPERTY_GESCHWISTER_TYP,
+  GeschwisterUpdateDtoSpec.JSON_PROPERTY_HIDDEN
 })
 @JsonTypeName("GeschwisterUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -71,6 +74,12 @@ public class GeschwisterUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
+
+  public static final String JSON_PROPERTY_GESCHWISTER_TYP = "geschwisterTyp";
+  private GeschwisterTypDtoSpec geschwisterTyp;
+
+  public static final String JSON_PROPERTY_HIDDEN = "hidden";
+  private Boolean hidden;
 
   public GeschwisterUpdateDtoSpec() {
   }
@@ -308,6 +317,58 @@ public class GeschwisterUpdateDtoSpec {
     this.nachname = nachname;
   }
 
+
+  public GeschwisterUpdateDtoSpec geschwisterTyp(GeschwisterTypDtoSpec geschwisterTyp) {
+    
+    this.geschwisterTyp = geschwisterTyp;
+    return this;
+  }
+
+   /**
+   * Get geschwisterTyp
+   * @return geschwisterTyp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESCHWISTER_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GeschwisterTypDtoSpec getGeschwisterTyp() {
+    return geschwisterTyp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESCHWISTER_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGeschwisterTyp(GeschwisterTypDtoSpec geschwisterTyp) {
+    this.geschwisterTyp = geschwisterTyp;
+  }
+
+
+  public GeschwisterUpdateDtoSpec hidden(Boolean hidden) {
+    
+    this.hidden = hidden;
+    return this;
+  }
+
+   /**
+   * Get hidden
+   * @return hidden
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getHidden() {
+    return hidden;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHidden(Boolean hidden) {
+    this.hidden = hidden;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -325,12 +386,14 @@ public class GeschwisterUpdateDtoSpec {
         Objects.equals(this.id, geschwisterUpdate.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwisterUpdate.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, geschwisterUpdate.wohnsitzAnteilVater) &&
-        Objects.equals(this.nachname, geschwisterUpdate.nachname);
+        Objects.equals(this.nachname, geschwisterUpdate.nachname) &&
+        Objects.equals(this.geschwisterTyp, geschwisterUpdate.geschwisterTyp) &&
+        Objects.equals(this.hidden, geschwisterUpdate.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, geschwisterTyp, hidden);
   }
 
   @Override
@@ -346,6 +409,8 @@ public class GeschwisterUpdateDtoSpec {
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    geschwisterTyp: ").append(toIndentedString(geschwisterTyp)).append("\n");
+    sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();
   }

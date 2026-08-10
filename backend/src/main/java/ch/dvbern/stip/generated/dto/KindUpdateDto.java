@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("KindUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class KindUpdateDto  implements Serializable {
   private @Valid UUID entryId;
@@ -33,6 +33,24 @@ public class KindUpdateDto  implements Serializable {
   private @Valid Integer renten;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer andereEinnahmen;
+
+  protected KindUpdateDto(KindUpdateDtoBuilder<?, ?> b) {
+    this.entryId = b.entryId;
+    this.vorname = b.vorname;
+    this.geburtsdatum = b.geburtsdatum;
+    this.ausbildungssituation = b.ausbildungssituation;
+    this.wohnsitzAnteilPia = b.wohnsitzAnteilPia;
+    this.nachname = b.nachname;
+    this.id = b.id;
+    this.unterhaltsbeitraege = b.unterhaltsbeitraege;
+    this.kinderUndAusbildungszulagen = b.kinderUndAusbildungszulagen;
+    this.renten = b.renten;
+    this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.andereEinnahmen = b.andereEinnahmen;
+  }
+
+  public KindUpdateDto() {
+  }
 
   /**
    **/
@@ -319,5 +337,88 @@ public class KindUpdateDto  implements Serializable {
   }
 
 
+  public static KindUpdateDtoBuilder<?, ?> builder() {
+    return new KindUpdateDtoBuilderImpl();
+  }
+
+  private static final class KindUpdateDtoBuilderImpl extends KindUpdateDtoBuilder<KindUpdateDto, KindUpdateDtoBuilderImpl> {
+
+    @Override
+    protected KindUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public KindUpdateDto build() {
+      return new KindUpdateDto(this);
+    }
+  }
+
+  public static abstract class KindUpdateDtoBuilder<C extends KindUpdateDto, B extends KindUpdateDtoBuilder<C, B>>  {
+    private UUID entryId;
+    private String vorname;
+    private LocalDate geburtsdatum;
+    private ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+    private Integer wohnsitzAnteilPia;
+    private String nachname;
+    private UUID id;
+    private Integer unterhaltsbeitraege;
+    private Integer kinderUndAusbildungszulagen;
+    private Integer renten;
+    private Integer ergaenzungsleistungen;
+    private Integer andereEinnahmen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B entryId(UUID entryId) {
+      this.entryId = entryId;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B ausbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
+      this.ausbildungssituation = ausbildungssituation;
+      return self();
+    }
+    public B wohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+      this.wohnsitzAnteilPia = wohnsitzAnteilPia;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+      this.unterhaltsbeitraege = unterhaltsbeitraege;
+      return self();
+    }
+    public B kinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
+      this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
+      return self();
+    }
+    public B renten(Integer renten) {
+      this.renten = renten;
+      return self();
+    }
+    public B ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+      this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B andereEinnahmen(Integer andereEinnahmen) {
+      this.andereEinnahmen = andereEinnahmen;
+      return self();
+    }
+  }
 }
 

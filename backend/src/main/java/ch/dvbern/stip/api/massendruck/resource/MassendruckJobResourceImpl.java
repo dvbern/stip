@@ -22,9 +22,10 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.MassendruckJobAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -56,20 +57,25 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class MassendruckJobResourceImpl implements MassendruckResource {
     private final MassendruckJobAuthorizer authorizer;
     private final MassendruckJobService massendruckJobService;
     private final MassendruckJobPdfService massendruckJobPdfService;
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final DokumentDownloadService dokumentDownloadService;
 
     @Override
     @RolesAllowed({ SB_GESUCH_UPDATE })
-    public MassendruckJobDto createMassendruckJobForQueryType(GetGesucheSBQueryType getGesucheSBQueryType) {
+    public MassendruckJobDto createMassendruckJobForQueryType(
+        GetGesucheSBQueryType getGesucheSBQueryType,
+        Boolean zugewiesen
+    ) {
         authorizer.canCreateMassendruckJob(getGesucheSBQueryType);
-        final var massendruckJob = massendruckJobService.createMassendruckJobForQueryType(getGesucheSBQueryType);
+        final var massendruckJob =
+            massendruckJobService.createMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
         massendruckJobService.combineDocument(massendruckJob.getId());
         return massendruckJob;
     }
@@ -109,7 +115,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
             massendruckId,
             DokumentDownloadConstants.MASSENDRUCK_JOB_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 
@@ -120,7 +126,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
         final var massendruckJobId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.MASSENDRUCK_JOB_ID_CLAIM
         );
 

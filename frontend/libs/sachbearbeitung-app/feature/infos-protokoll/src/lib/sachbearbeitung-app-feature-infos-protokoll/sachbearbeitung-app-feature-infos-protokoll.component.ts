@@ -15,6 +15,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
@@ -38,6 +39,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureInfosProtokollComponent {
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
   displayedColumns = ['datum', 'typ', 'status', 'user', 'kommentar'];
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
@@ -61,6 +63,9 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       this.statusprotokollStore.loadCachedStatusprotokoll$({
+        gesuchId,
+      });
+      this.gesuchHeaderStore.loadHeader$({
         gesuchId,
       });
     });

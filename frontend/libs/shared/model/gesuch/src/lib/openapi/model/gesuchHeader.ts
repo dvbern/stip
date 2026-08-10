@@ -13,12 +13,15 @@ import { GesuchAenderungs } from './gesuchAenderungs';
 import { VerfuegtGesuch } from './verfuegtGesuch';
 import { GesuchInfo } from './gesuchInfo';
 import { GesuchTrancheSlim } from './gesuchTrancheSlim';
+import { InitialGesuchs } from './initialGesuchs';
 
 export interface GesuchHeader { 
-    initial?: VerfuegtGesuch;
+    initial?: InitialGesuchs;
     versions: Array<VerfuegtGesuch>;
     aenderungs: GesuchAenderungs;
     currentTranches: Array<GesuchTrancheSlim>;
+    latestVerfuegungId?: string;
+    latestVerfuegtAt?: string;
     gesuchInfo: GesuchInfo;
 }
 

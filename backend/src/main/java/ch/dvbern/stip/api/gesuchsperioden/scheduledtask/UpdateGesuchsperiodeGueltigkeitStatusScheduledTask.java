@@ -17,38 +17,30 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.scheduledtask;
 
-import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
-import io.quarkus.scheduler.Scheduled;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
 @Singleton
 @Slf4j
 @UnlessBuildProfile("test")
-public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask {
-    private final GesuchsperiodenService gesuchsperiodenService;
+public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask extends RunForTenantsScheduledTask {
+    @Inject
+    GesuchsperiodenService gesuchsperiodenService;
 
-    @Transactional
-    @Scheduled(cron = "{kstip.gesuchsperiode.cron}", timeZone = "Europe/Zurich")
-    @RunForTenant(MandantIdentifier.BERN)
-    public void runForBern() {
-        run();
+    UpdateGesuchsperiodeGueltigkeitStatusScheduledTask() {
+        super(ScheduledTaskCronKey.GESUCH_PERIODE, TenantIdentifier.values());
     }
 
+    @Override
     @Transactional
-    @Scheduled(cron = "{kstip.gesuchsperiode.cron}", timeZone = "Europe/Zurich")
-    @RunForTenant(MandantIdentifier.DV)
-    public void runForDV() {
-        run();
-    }
-
-    private void run() {
+    protected void run() {
         try {
             LOG.info("Start checking for any Gesuchperioden to be archived");
             gesuchsperiodenService.setOutdatedGesuchsperiodenToArchiviert();
@@ -57,5 +49,4 @@ public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask {
             LOG.error(e.getMessage(), e);
         }
     }
-
 }

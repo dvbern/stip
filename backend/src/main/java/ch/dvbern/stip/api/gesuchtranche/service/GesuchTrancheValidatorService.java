@@ -17,8 +17,8 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,21 +26,19 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
-import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.AenderungGesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidationGroup;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
+import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +46,9 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchTrancheValidatorService {
+    private static final EnumSet<GesuchTrancheStatusChangeEvent> IGNORED_CHANGE_EVENTS =
+        EnumSet.of(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT);
+
     private static final Map<Gesuchstatus, List<Class<?>>> gesuchStatusToValidationGroups =
         new EnumMap<>(Gesuchstatus.class);
     private static final Map<GesuchTrancheStatus, List<Class<?>>> trancheStatusToValidationGroups =
@@ -73,7 +74,7 @@ public class GesuchTrancheValidatorService {
                 GesuchEinreichenValidationGroup.class,
                 GesuchNachInBearbeitungSBValidationGroup.class,
                 GesuchNachInFreigabeValidationGroup.class,
-                GesuchDokumentsAcceptedValidationGroup.class
+                AenderungGesuchDokumentsAcceptedValidationGroup.class
             )
         );
         trancheStatusToValidationGroups.put(
@@ -81,7 +82,7 @@ public class GesuchTrancheValidatorService {
             List.of(
                 GesuchEinreichenValidationGroup.class,
                 GesuchNachInBearbeitungSBValidationGroup.class,
-                GesuchDokumentsAcceptedValidationGroup.class
+                AenderungGesuchDokumentsAcceptedValidationGroup.class
             )
         );
         trancheStatusToValidationGroups.put(
@@ -92,6 +93,17 @@ public class GesuchTrancheValidatorService {
 
     private final Validator validator;
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
+
+    public void validateGesuchTrancheForStatus(
+        final GesuchTranche toValidate,
+        final Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition
+    ) {
+        if (IGNORED_CHANGE_EVENTS.contains(transition.getTrigger())) {
+            return;
+        }
+
+        validateGesuchTrancheForStatus(toValidate, transition.getDestination());
+    }
 
     public void validateGesuchTrancheForStatus(
         final GesuchTranche toValidate,
@@ -112,10 +124,6 @@ public class GesuchTrancheValidatorService {
         ).toList();
 
         ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroups);
-    }
-
-    public void validateGesuchTrancheForCurrentStatus(final GesuchTranche toValidate) {
-        validateGesuchTrancheForStatus(toValidate, toValidate.getStatus());
     }
 
     public void validateAenderungForAkzeptiert(final GesuchTranche toValidate) {
@@ -144,19 +152,6 @@ public class GesuchTrancheValidatorService {
                 toValidate.getGesuchFormular().getPersonInAusbildung(),
                 gesuch.getId()
             );
-        }
-    }
-
-    @Transactional
-    public void validateBearbeitungAbschliessen(final Gesuch gesuch) {
-        final var validationGroups = new ArrayList<>(
-            GesuchValidatorService.SB_ABSCHLIESSEN_VALIDATION_GROUPS
-        );
-
-        Set<ConstraintViolation<Gesuch>> violations =
-            validator.validate(gesuch, validationGroups.toArray(new Class<?>[0]));
-        if (!violations.isEmpty()) {
-            throw new ValidationsException("Die Entität ist nicht valid", violations);
         }
     }
 

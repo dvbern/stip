@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.dokument.entity.SachbearbeiterGesuchDokument;
 import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
@@ -67,6 +67,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -88,7 +89,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
     name = "gesuch",
     indexes = {
         @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
-        @Index(name = "IX_gesuch_mandant", columnList = "mandant")
+        @Index(name = "IX_gesuch_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -96,9 +97,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Gesuch extends AbstractMandantEntity {
+public class Gesuch extends AbstractTenantEntity {
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_id"))
     private Ausbildung ausbildung;
 
@@ -205,6 +206,13 @@ public class Gesuch extends AbstractMandantEntity {
     @Column(name = "verfuegt", nullable = false)
     private boolean verfuegt = false;
 
+    /**
+     * Gesuch was BEREIT_FUER_BEARBEITUNG at least once in the past
+     */
+    @Column(name = "was_in_bereit_fuer_bearbeitung", nullable = false)
+    @Accessors(fluent = true)
+    private boolean wasInBereitFuerBearbeitung = false;
+
     @OrderBy("timestampErstellt DESC")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private List<Verfuegung> verfuegungs = new ArrayList<>();
@@ -220,7 +228,7 @@ public class Gesuch extends AbstractMandantEntity {
     private InBearbeitungSbReason inBearbeitungSbReason;
 
     @Nullable
-    @OneToOne(mappedBy = "gesuch")
+    @OneToOne(mappedBy = "gesuch", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private Statisticsdata statisticsdata;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
@@ -287,18 +295,6 @@ public class Gesuch extends AbstractMandantEntity {
             .findFirst();
     }
 
-    public LocalDate getGesuchGueltigkeitBis() {
-        final var relevantGesuchTranche = getTranchenTranchen().max(
-            Comparator.comparing(tranche -> {
-                assert tranche.getGueltigkeit().getGueltigBis() != null;
-                return tranche.getGueltigkeit().getGueltigBis();
-            })
-        )
-            .orElseThrow(IllegalStateException::new);
-        assert relevantGesuchTranche.getGueltigkeit().getGueltigBis() != null;
-        return relevantGesuchTranche.getGueltigkeit().getGueltigBis();
-    }
-
     public LocalDate getGesuchGueltigkeitAb() {
         final var relevantGesuchTranche = getTranchenTranchen().min(
             Comparator.comparing(tranche -> {
@@ -307,8 +303,18 @@ public class Gesuch extends AbstractMandantEntity {
             })
         )
             .orElseThrow(IllegalStateException::new);
-        assert relevantGesuchTranche.getGueltigkeit().getGueltigAb() != null;
         return relevantGesuchTranche.getGueltigkeit().getGueltigAb();
+    }
+
+    public LocalDate getGesuchGueltigkeitBis() {
+        final var relevantGesuchTranche = getTranchenTranchen().max(
+            Comparator.comparing(tranche -> {
+                assert tranche.getGueltigkeit().getGueltigBis() != null;
+                return tranche.getGueltigkeit().getGueltigBis();
+            })
+        )
+            .orElseThrow(IllegalStateException::new);
+        return relevantGesuchTranche.getGueltigkeit().getGueltigBis();
     }
 
     public Stream<Datenschutzbrief> getAllPendingDatenschutschbriefsForMassendruck() {

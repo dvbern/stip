@@ -18,13 +18,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BuchhaltungOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BuchhaltungOverviewDto  implements Serializable {
   private @Valid Boolean canRetryAuszahlung;
   private @Valid List<BuchhaltungEntryDto> buchhaltungEntrys = new ArrayList<>();
+
+  protected BuchhaltungOverviewDto(BuchhaltungOverviewDtoBuilder<?, ?> b) {
+    this.canRetryAuszahlung = b.canRetryAuszahlung;
+    this.buchhaltungEntrys = b.buchhaltungEntrys;
+  }
+
+  public BuchhaltungOverviewDto() {
+  }
 
   /**
    **/
@@ -122,5 +130,38 @@ public class BuchhaltungOverviewDto  implements Serializable {
   }
 
 
+  public static BuchhaltungOverviewDtoBuilder<?, ?> builder() {
+    return new BuchhaltungOverviewDtoBuilderImpl();
+  }
+
+  private static final class BuchhaltungOverviewDtoBuilderImpl extends BuchhaltungOverviewDtoBuilder<BuchhaltungOverviewDto, BuchhaltungOverviewDtoBuilderImpl> {
+
+    @Override
+    protected BuchhaltungOverviewDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BuchhaltungOverviewDto build() {
+      return new BuchhaltungOverviewDto(this);
+    }
+  }
+
+  public static abstract class BuchhaltungOverviewDtoBuilder<C extends BuchhaltungOverviewDto, B extends BuchhaltungOverviewDtoBuilder<C, B>>  {
+    private Boolean canRetryAuszahlung;
+    private List<BuchhaltungEntryDto> buchhaltungEntrys = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B canRetryAuszahlung(Boolean canRetryAuszahlung) {
+      this.canRetryAuszahlung = canRetryAuszahlung;
+      return self();
+    }
+    public B buchhaltungEntrys(List<BuchhaltungEntryDto> buchhaltungEntrys) {
+      this.buchhaltungEntrys = buchhaltungEntrys;
+      return self();
+    }
+  }
 }
 

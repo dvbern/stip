@@ -5,13 +5,16 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatLabel } from '@angular/material/form-field';
 import { Store } from '@ngrx/store';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { Geschwister, GeschwisterUpdate } from '@dv/shared/model/gesuch';
 import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -24,12 +27,14 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
 @Component({
   selector: 'dv-shared-feature-gesuch-form-geschwister',
   imports: [
-    TranslocoPipe,
+    MatLabel,
+    MatCheckboxModule,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiChangeIndicatorComponent,
     SharedUiLoadingComponent,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,9 +42,13 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
 export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   private store = inject(Store);
 
+  config = inject(SharedModelCompileTimeConfig);
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormGeschwisterView,
   );
+  geschwistersViewSig = computed(() => this.viewSig(), {
+    equal: (_, b) => b.loading,
+  });
   changesSig = computed<Partial<Geschwister>>(() => {
     const { listChanges } = this.viewSig();
     if (!this.editedGeschwister?.entryId) {
@@ -115,6 +124,14 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
 
   handleEditorClose() {
     this.editedGeschwister = undefined;
+  }
+
+  hideGeschwister(geschwister: Geschwister, hidden: boolean) {
+    if (!geschwister.id) {
+      return;
+    }
+
+    this.handleEditorSave({ ...geschwister, hidden });
   }
 
   private buildUpdatedGesuchWithDeletedGeschwister(

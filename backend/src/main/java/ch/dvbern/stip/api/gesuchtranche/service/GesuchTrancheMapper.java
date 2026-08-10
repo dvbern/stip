@@ -18,11 +18,17 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -60,19 +66,25 @@ public abstract class GesuchTrancheMapper {
     @Inject
     FamiliensituationMapper familiensituationMapper;
 
-    @ToDtoDefaultMapping
-    public abstract GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
+    @Inject
+    GeschwisterMapper geschwisterMapper;
 
-    public GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch) {
-        return toDtoWithVersteckteEltern(gesuch, gesuch);
+    @ToDtoDefaultMapping
+    public abstract GesuchTrancheDto toDtoWithConfidentialFields(GesuchTranche gesuch, @Context GesuchTranche context);
+
+    public GesuchTrancheDto toDtoWithConfidentialFields(GesuchTranche gesuch) {
+        return toDtoWithConfidentialFields(gesuch, gesuch);
     }
 
     @ToDtoDefaultMapping
-    @BeanMapping(qualifiedByName = "afterMappingWithoutVersteckteEltern")
-    public abstract GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
+    @BeanMapping(qualifiedByName = "afterMappingWithoutConfidentialFields")
+    public abstract GesuchTrancheDto toDtoWithoutConfidentialFields(
+        GesuchTranche gesuchTranche,
+        @Context GesuchTranche context
+    );
 
-    public GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch) {
-        return toDtoWithoutVersteckteEltern(gesuch, gesuch);
+    public GesuchTrancheDto toDtoWithoutConfidentialFields(GesuchTranche gesuchTranche) {
+        return toDtoWithoutConfidentialFields(gesuchTranche, gesuchTranche);
     }
 
     @ToDtoDefaultMapping
@@ -90,14 +102,14 @@ public abstract class GesuchTrancheMapper {
 
     @BeanMapping(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        qualifiedByName = "centralMappingWithOverrideIncomingElternteile"
+        qualifiedByName = "beforeMappingRejectConfidentialFields"
     )
-    public abstract GesuchTranche partialUpdateOverrideIncomingVersteckteEltern(
+    public abstract GesuchTranche partialUpdateRejectConfidentialFields(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
 
-    public abstract GesuchTranche partialUpdateAcceptIncomingVersteckteEltern(
+    public abstract GesuchTranche partialUpdateAcceptConfidentialFields(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
@@ -105,23 +117,39 @@ public abstract class GesuchTrancheMapper {
     public GesuchTranche partialUpdate(
         final GesuchTrancheUpdateDto gesuchUpdateDto,
         final GesuchTranche gesuch,
-        final boolean overrideIncomingVersteckteEltern
+        final boolean updateConfidentialFields
     ) {
-        if (overrideIncomingVersteckteEltern) {
-            return partialUpdateOverrideIncomingVersteckteEltern(gesuchUpdateDto, gesuch);
+        if (updateConfidentialFields) {
+            return partialUpdateRejectConfidentialFields(gesuchUpdateDto, gesuch);
         } else {
-            return partialUpdateAcceptIncomingVersteckteEltern(gesuchUpdateDto, gesuch);
+            return partialUpdateAcceptConfidentialFields(gesuchUpdateDto, gesuch);
         }
     }
 
-    @Named("afterMappingWithoutVersteckteEltern")
+    @Named("afterMappingWithoutConfidentialFields")
     @AfterMapping
-    protected void afterMappingWithoutVersteckteEltern(
-        @MappingTarget GesuchTrancheDto gesuchTrancheDto,
-        @Context GesuchTranche context
+    protected void afterMappingWithoutConfidentialFields(
+        GesuchTranche gesuchTranche,
+        @MappingTarget GesuchTrancheDto gesuchTrancheDto
     ) {
+        markInvalidLebenslaufItems(gesuchTranche, gesuchTrancheDto);
+        removeHiddenElternsData(gesuchTrancheDto, gesuchTranche);
+        removeHiddenGeschwistersData(gesuchTrancheDto, gesuchTranche);
+    }
+
+    protected void removeHiddenElternsData(
+        GesuchTrancheDto gesuchTrancheDto,
+        GesuchTranche gesuchTranche
+    ) {
+        Stream.of(
+            gesuchTrancheDto.getGesuchFormular().getEinnahmenKosten(),
+            gesuchTrancheDto.getGesuchFormular().getEinnahmenKostenPartner()
+        )
+            .filter(Objects::nonNull)
+            .forEach(ek -> ek.setSteuern(null));
+
         final var eltern = gesuchTrancheDto.getGesuchFormular().getElterns();
-        final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
+        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         if (eltern != null) {
             eltern.removeIf(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()));
         }
@@ -137,18 +165,59 @@ public abstract class GesuchTrancheMapper {
         }
     }
 
-    @Named("centralMappingWithOverrideIncomingElternteile")
-    @BeforeMapping
-    protected void centralBeforeMappingWithOverrideIncomingElternteile(
-        final GesuchTrancheUpdateDto newTranche,
-        final @MappingTarget GesuchTranche gesuchTranche
+    protected void removeHiddenGeschwistersData(
+        GesuchTrancheDto gesuchTrancheDto,
+        GesuchTranche context
     ) {
+        if (Objects.isNull(gesuchTrancheDto.getGesuchFormular().getGeschwisters())) {
+            return;
+        }
+        final var hiddenGeschwistersUUIDs = context.getGesuchFormular()
+            .getGeschwisters()
+            .stream()
+            .filter(Geschwister::isHidden)
+            .map(Geschwister::getId)
+            .toList();
+
+        final var onlyPublicGeschwisters = gesuchTrancheDto.getGesuchFormular()
+            .getGeschwisters()
+            .stream()
+            .filter(geschwisterDto -> !hiddenGeschwistersUUIDs.contains(geschwisterDto.getId()))
+            .toList();
+        gesuchTrancheDto.getGesuchFormular().setGeschwisters(onlyPublicGeschwisters);
+    }
+
+    @Named("beforeMappingRejectConfidentialFields")
+    @BeforeMapping
+    protected void beforeMappingAddOverrideConfidentialFields(
+        final GesuchTrancheUpdateDto newTranche,
+        @MappingTarget final GesuchTranche gesuchTranche
+    ) {
+        beforeMappingOverrideSteuern(newTranche, gesuchTranche);
         beforeMappingOverrideIncomingVersteckteEltern(newTranche, gesuchTranche);
+        beforeMappingAddHiddenGeschwisters(newTranche, gesuchTranche);
+    }
+
+    protected void beforeMappingOverrideSteuern(
+        final GesuchTrancheUpdateDto newTranche,
+        @MappingTarget final GesuchTranche gesuchTranche
+    ) {
+        final var ekDto = newTranche.getGesuchFormular().getEinnahmenKosten();
+        final var ek = gesuchTranche.getGesuchFormular().getEinnahmenKosten();
+        if (Objects.nonNull(ekDto) && Objects.nonNull(ek)) {
+            ekDto.setSteuern(ek.getSteuern());
+        }
+
+        final var ekPartnerDto = newTranche.getGesuchFormular().getEinnahmenKostenPartner();
+        final var ekPartner = gesuchTranche.getGesuchFormular().getEinnahmenKostenPartner();
+        if (Objects.nonNull(ekPartnerDto) && Objects.nonNull(ekPartner)) {
+            ekPartnerDto.setSteuern(ekPartner.getSteuern());
+        }
     }
 
     protected void beforeMappingOverrideIncomingVersteckteEltern(
         final GesuchTrancheUpdateDto newTranche,
-        final @MappingTarget GesuchTranche gesuchTranche
+        @MappingTarget final GesuchTranche gesuchTranche
     ) {
         final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         if (versteckteEltern.isEmpty()) {
@@ -206,5 +275,50 @@ public abstract class GesuchTrancheMapper {
 
             newFormular.getSteuererklaerung().add(replacementSteuererklaerung);
         }
+    }
+
+    protected void beforeMappingAddHiddenGeschwisters(
+        final GesuchTrancheUpdateDto newTranche,
+        @MappingTarget final GesuchTranche gesuchTranche
+    ) {
+        final var hiddenGeschwisters =
+            gesuchTranche.getGesuchFormular().getGeschwisters().stream().filter(Geschwister::isHidden);
+        final var hiddenGeschwistersDtos = hiddenGeschwisters.map(geschwisterMapper::toUpdateDto).toList();
+        final var currentGeschwisters =
+            Optional.ofNullable(newTranche.getGesuchFormular().getGeschwisters()).orElse(List.of());
+        newTranche.getGesuchFormular()
+            .setGeschwisters(
+                Stream
+                    .concat(
+                        currentGeschwisters.stream(),
+                        hiddenGeschwistersDtos.stream()
+                    )
+                    .toList()
+            );
+    }
+
+    @AfterMapping
+    public void markInvalidLebenslaufItems(
+        GesuchTranche gesuchTranche,
+        @MappingTarget GesuchTrancheDto gesuchTrancheDto
+    ) {
+        final var ausbildung = gesuchTranche.getGesuch().getAusbildung();
+        final var invalidLebenslaufItemsIds = gesuchTranche.getGesuchFormular()
+            .getLebenslaufItems()
+            .stream()
+            .filter(
+                item -> item.getBis().isAfter(ausbildung.getAusbildungBegin())
+            )
+            .map(AbstractEntity::getId)
+            .toList();
+
+        if (Objects.isNull(gesuchTrancheDto.getGesuchFormular().getLebenslaufItems())) {
+            return;
+        }
+        gesuchTrancheDto.getGesuchFormular()
+            .getLebenslaufItems()
+            .stream()
+            .filter(item -> invalidLebenslaufItemsIds.contains(item.getId()))
+            .forEach(itemDto -> itemDto.setInvalid(true));
     }
 }

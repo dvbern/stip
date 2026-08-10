@@ -53,6 +53,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.eltern.util.ElternUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -99,7 +100,7 @@ import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -144,6 +145,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
@@ -235,7 +237,8 @@ class GesuchServiceTest {
     static void setup() {
         final var requiredDokumentServiceMock = Mockito.mock(RequiredDokumentService.class);
         Mockito.when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
-        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any(), anyBoolean()))
+            .thenReturn(List.of());
         QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);
 
         final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
@@ -583,130 +586,6 @@ class GesuchServiceTest {
 
     @Test
     @TestAsGesuchsteller
-    void resetAlimenteIfGesetzlicheAlimenteregelungFromNoFamsitToTrue() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setFamiliensituation(null);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setUnterhaltsbeitraege(1000);
-        GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
-        gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche, true);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .setFamiliensituation(new FamiliensituationUpdateDto());
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getFamiliensituation()
-            .setElternVerheiratetZusammen(false);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getFamiliensituation()
-            .setGerichtlicheAlimentenregelung(true);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getFamiliensituation()
-            .setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM);
-
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto, true);
-
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void resetAlimenteIfGesetzlicheAlimenteregelungFromNullToTrue() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setUnterhaltsbeitraege(1000);
-
-        GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, true, gesuchUpdateDto);
-
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void resetAlimenteIfGesetzlicheAlimenteregelungFromFalseToTrue() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setUnterhaltsbeitraege(1000);
-
-        GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, true, gesuchUpdateDto);
-
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void noResetAlimenteIfGesetzlicheAlimenteregelungFromTrueToTrue() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        final var alimente = 1000;
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setUnterhaltsbeitraege(alimente);
-
-        GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, true, gesuchUpdateDto);
-
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.is(alimente));
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void resetAlimenteIfGesetzlicheAlimenteregelungFromNullToFalse() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setUnterhaltsbeitraege(1000);
-
-        GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, false, gesuchUpdateDto);
-
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void resetAlimenteIfGesetzlicheAlimenteregelungFromTrueToFalse() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setUnterhaltsbeitraege(1000);
-
-        GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, false, gesuchUpdateDto);
-
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    void noResetAlimenteIfGesetzlicheAlimenteregelungFromFalseToFalse() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        final var alimente = 1000;
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setUnterhaltsbeitraege(alimente);
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getFamiliensituation()
-            .setGerichtlicheAlimentenregelung(false);
-
-        GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, false, gesuchUpdateDto);
-
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.is(alimente));
-    }
-
-    @Test
-    @TestAsGesuchsteller
     void noResetAuswertigesMittagessenIfPersonIsAusbildungIsNull() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().setPersonInAusbildung(null);
@@ -889,29 +768,6 @@ class GesuchServiceTest {
 
     @Test
     @TestAsGesuchsteller
-    void resetLebenslaufIfGebrutsdatumChanged() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-
-        assertThat(
-            tranche.getGesuchFormular().getLebenslaufItems().size(),
-            Matchers.is(1)
-        );
-
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setGeburtsdatum(LocalDate.of(2000, 10, 11));
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto, true);
-        assertThat(
-            tranche.getGesuchFormular().getLebenslaufItems().size(),
-            Matchers.is(0)
-        );
-    }
-
-    @Test
-    @TestAsGesuchsteller
     void noResetLebenslaufIfNoUpdateOfPersonInAusbildung() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -1065,40 +921,6 @@ class GesuchServiceTest {
         );
     }
 
-    // TODO KSTIP-1236: Enable this test
-    // @Test
-    // @TestAsGesuchsteller
-    // void gesuchEinreichenTest() {
-    // GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
-    // tranche.getGesuchFormular()
-    // .getAusbildung()
-    // .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
-    // final var oldZivilstand = tranche.getGesuchFormular().getPersonInAusbildung().getZivilstand();
-    // tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(LEDIG);
-    //
-    // when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-    // when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-    // doNothing().when(notificationService).createNotification(any(), any());
-    //
-    // tranche.getGesuchFormular().setTranche(tranche);
-    // tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
-    // tranche.getGesuchFormular().setPartner(null);
-    // tranche.getGesuch().setGesuchDokuments(
-    // Arrays.stream(DokumentTyp.values())
-    // .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
-    // .toList()
-    // );
-    //
-    // gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
-    //
-    // assertThat(
-    // tranche.getGesuch().getGesuchStatus(),
-    // Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-    // );
-    //
-    // tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
-    // }
-
     @Test
     @TestAsGesuchsteller
     void gesuchUpdateEinnahmenkostenDoNotSetSteuerdatenTest() {
@@ -1210,7 +1032,7 @@ class GesuchServiceTest {
         berechnungsResultatDto.setBerechnungStipendium(0);
         berechnungsResultatDto.setBerechnungDarlehen(0);
         berechnungsResultatDto.setYear(Year.now().getValue());
-        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch))
             .thenReturn(berechnungsResultatDto);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
@@ -1251,7 +1073,7 @@ class GesuchServiceTest {
         final var berechnungsresultat = new BerechnungsresultatDto();
         berechnungsresultat.setBerechnungStipendium(0);
         berechnungsresultat.setYear(Year.now().getValue());
-        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch))
             .thenReturn(berechnungsresultat);
 
         var verfuegung = new Verfuegung();
@@ -1966,7 +1788,7 @@ class GesuchServiceTest {
         final var berechnungsresultat = new BerechnungsresultatDto();
         berechnungsresultat.setBerechnungStipendium(0);
         berechnungsresultat.setYear(Year.now().getValue());
-        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch))
             .thenReturn(berechnungsresultat);
 
         gesuchFormular
@@ -2027,17 +1849,11 @@ class GesuchServiceTest {
     }
 
     private boolean hasMutter(Set<Eltern> elterns) {
-        return getElternFromElternsByElternTyp(elterns, ElternTyp.MUTTER).isPresent();
+        return ElternUtil.getElternByType(elterns, ElternTyp.MUTTER).isPresent();
     }
 
     private boolean hasVater(Set<Eltern> elterns) {
-        return getElternFromElternsByElternTyp(elterns, ElternTyp.VATER).isPresent();
-    }
-
-    private Optional<Eltern> getElternFromElternsByElternTyp(Set<Eltern> elterns, ElternTyp elternTyp) {
-        return elterns.stream()
-            .filter(eltern -> eltern.getElternTyp() == elternTyp)
-            .findFirst();
+        return ElternUtil.getElternByType(elterns, ElternTyp.VATER).isPresent();
     }
 
     private GesuchTranche updateElternteilUnbekanntVerstorben(

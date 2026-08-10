@@ -6,13 +6,15 @@ import {
   inject,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
@@ -22,6 +24,7 @@ import {
   createAllRouteParamsSig,
   createParamsIdSig,
   gesuchBaseMenuItems,
+  getQueryParamValueSig,
 } from '@dv/shared/util/navigation';
 
 /**
@@ -59,8 +62,10 @@ export class GesuchAppPatternMainLayoutComponent {
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+  private fallHeaderStore = inject(FallHeaderStore);
 
   baseMenuItems = gesuchBaseMenuItems;
 
@@ -74,6 +79,8 @@ export class GesuchAppPatternMainLayoutComponent {
     this.allRouteParamsSig,
   );
 
+  private originStepSig = getQueryParamValueSig(this.route, 'originStep');
+
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
   private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
@@ -86,29 +93,37 @@ export class GesuchAppPatternMainLayoutComponent {
 
       if (fallId) {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
+        this.fallHeaderStore.loadFallHeader$({ fallId });
       }
     });
 
     // navigation items effect
     effect(() => {
       const gesuchId = this.gesuchIdSig();
-      const darlehnen = this.darlehenStore.darlehenGsViewSig();
+      const darlehnen = this.darlehenStore.darlehenListViewSig();
       const fallId = this.fallStore.currentFallViewSig()?.id;
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
+      const originStep = this.originStepSig();
+      const gesuchHeader = this.gesuchHeaderStore.viewSig();
+      const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
         return;
       }
 
+      const tab = decodeURI(originStep ?? '') || TRANCHE.route;
+      const tabSegments = tab.split('/').filter(Boolean);
+
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
-        this.gesuchHeaderStore.viewSig().currentTranches ?? [],
+        gesuchHeader.currentTranches ?? [],
+        tabSegments,
         this.trancheIdSig(),
       );
 
-      const auszahlungMenu: NavItem = {
+      const auszahlung: NavItem = {
         type: 'link',
         icon: 'payments',
         id: 'auszahlungen',
@@ -116,22 +131,53 @@ export class GesuchAppPatternMainLayoutComponent {
         route: ['/auszahlung', fallId],
       };
 
-      const darlehenMenu = buildDarlehenMenu({
-        darlehen: darlehnen.list,
-        canCreateDarlehen: darlehnen.canCreateDarlehen,
-        fallId: fallId,
-        isDarlehenRoute: !!darlehenId,
-        createDarlehen: () =>
-          this.darlehenStore.createDarlehen$({
-            fallId: fallId,
-          }),
-      });
+      const fallDokumente: NavItem = {
+        type: 'link',
+        id: 'fall-dokumente',
+        icon: 'description',
+        label: { key: 'shared.menu.fallDokumente' },
+        route: ['/fall-dokumente', fallId],
+      };
+
+      const nachrichten: NavItem = {
+        type: 'link',
+        id: 'nachrichten',
+        icon: 'mail',
+        label: { key: 'shared.menu.nachrichten' },
+        route: ['/nachrichten', fallId],
+        badge: fallHeader?.unreadNotificationsCount
+          ? {
+              count: fallHeader.unreadNotificationsCount,
+            }
+          : undefined,
+      };
+
+      const darlehenMenu = [
+        // TODO: KSTIP-3643 remove darlehen menu entirely once it is shown in the dashboard content
+        // Currently hidden on gesuch views
+        ...(!gesuchId
+          ? [
+              buildDarlehenMenu({
+                darlehen: darlehnen.list,
+                canCreateDarlehen: darlehnen.canCreateDarlehen,
+                fallId: fallId,
+                isDarlehenRoute: !!darlehenId,
+                createDarlehen: () =>
+                  this.darlehenStore.createDarlehen$({
+                    fallId: fallId,
+                  }),
+              }),
+            ]
+          : []),
+      ];
 
       const navItems: NavItem[] = [
         ...gesuchBaseMenuItems,
         ...gesuchNav,
-        darlehenMenu,
-        auszahlungMenu,
+        ...darlehenMenu,
+        fallDokumente,
+        auszahlung,
+        nachrichten,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;

@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoPartner")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoPartnerDto  implements Serializable {
   private @Valid String sozialversicherungsnummer;
@@ -32,6 +32,25 @@ public class DemoPartnerDto  implements Serializable {
   private @Valid Boolean inAusbildung;
   private @Valid String coAdresse;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
+
+  protected DemoPartnerDto(DemoPartnerDtoBuilder<?, ?> b) {
+    this.sozialversicherungsnummer = b.sozialversicherungsnummer;
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.strasse = b.strasse;
+    this.hausnummer = b.hausnummer;
+    this.plz = b.plz;
+    this.ort = b.ort;
+    this.land = b.land;
+    this.geburtsdatum = b.geburtsdatum;
+    this.alter = b.alter;
+    this.inAusbildung = b.inAusbildung;
+    this.coAdresse = b.coAdresse;
+    this.pensum = b.pensum;
+  }
+
+  public DemoPartnerDto() {
+  }
 
   /**
    **/
@@ -342,5 +361,93 @@ public class DemoPartnerDto  implements Serializable {
   }
 
 
+  public static DemoPartnerDtoBuilder<?, ?> builder() {
+    return new DemoPartnerDtoBuilderImpl();
+  }
+
+  private static final class DemoPartnerDtoBuilderImpl extends DemoPartnerDtoBuilder<DemoPartnerDto, DemoPartnerDtoBuilderImpl> {
+
+    @Override
+    protected DemoPartnerDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoPartnerDto build() {
+      return new DemoPartnerDto(this);
+    }
+  }
+
+  public static abstract class DemoPartnerDtoBuilder<C extends DemoPartnerDto, B extends DemoPartnerDtoBuilder<C, B>>  {
+    private String sozialversicherungsnummer;
+    private String nachname;
+    private String vorname;
+    private String strasse;
+    private String hausnummer;
+    private String plz;
+    private String ort;
+    private String land;
+    private String geburtsdatum;
+    private Integer alter;
+    private Boolean inAusbildung;
+    private String coAdresse;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B sozialversicherungsnummer(String sozialversicherungsnummer) {
+      this.sozialversicherungsnummer = sozialversicherungsnummer;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B strasse(String strasse) {
+      this.strasse = strasse;
+      return self();
+    }
+    public B hausnummer(String hausnummer) {
+      this.hausnummer = hausnummer;
+      return self();
+    }
+    public B plz(String plz) {
+      this.plz = plz;
+      return self();
+    }
+    public B ort(String ort) {
+      this.ort = ort;
+      return self();
+    }
+    public B land(String land) {
+      this.land = land;
+      return self();
+    }
+    public B geburtsdatum(String geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B alter(Integer alter) {
+      this.alter = alter;
+      return self();
+    }
+    public B inAusbildung(Boolean inAusbildung) {
+      this.inAusbildung = inAusbildung;
+      return self();
+    }
+    public B coAdresse(String coAdresse) {
+      this.coAdresse = coAdresse;
+      return self();
+    }
+    public B pensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
+      this.pensum = pensum;
+      return self();
+    }
+  }
 }
 

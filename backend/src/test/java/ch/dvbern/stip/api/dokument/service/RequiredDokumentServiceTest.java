@@ -17,22 +17,19 @@
 
 package ch.dvbern.stip.api.dokument.service;
 
-import java.lang.annotation.Annotation;
-import java.util.Iterator;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.benutzer.entity.Rolle;
-import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.validation.RequiredCustomDokumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.generator.entities.gesuch.GesuchTestBuilder;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -40,208 +37,123 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.inject.Instance;
-import jakarta.enterprise.util.TypeLiteral;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Execution(ExecutionMode.CONCURRENT)
 class RequiredDokumentServiceTest {
+    private static final DokumentTyp REQUIRED_DOKUMENT_TYP = DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE;
+    private Instance<RequiredDokumentsProducer> requiredDokumentProducers;
+    private Instance<RequiredRefDokumentsProducer> requiredRefDokumentProducers;
+    private Instance<RequiredCustomDokumentsProducer> requiredCustomDokumentProducers;
+
+    @BeforeEach
+    @SuppressWarnings("unchecked")
+    void setup() {
+        RequiredDokumentsProducer mockProducer = mock(RequiredDokumentsProducer.class);
+        requiredDokumentProducers = mock(Instance.class);
+        requiredRefDokumentProducers = mock(Instance.class);
+        requiredCustomDokumentProducers = mock(Instance.class);
+
+        when(mockProducer.getRequiredDokuments(any(), anyBoolean()))
+            .thenReturn(ImmutablePair.of("mock", Set.of(REQUIRED_DOKUMENT_TYP)));
+        when(requiredDokumentProducers.stream()).thenReturn(Stream.of(mockProducer));
+    }
+
     @Test
-    void setGSCanFehlendeDokumenteEinreichenToFalseForGSIfDelegated() {
+    void gsCannotFehlendeDokumenteUebermittelnIfDelegiert() {
         // arrange
         final var sozialdienstService = Mockito.mock(SozialdienstService.class);
-        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(Mockito.any())).thenReturn(true);
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(false);
 
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), null, null, sozialdienstService
+            requiredDokumentProducers, requiredRefDokumentProducers, requiredCustomDokumentProducers,
+            sozialdienstService
         );
 
-        // setup gs benutzer
-        var gsBenutzer = new Benutzer();
-        var gsRole = new Rolle();
-        gsRole.setKeycloakIdentifier(OidcConstants.ROLE_GESUCHSTELLER);
-        gsBenutzer.setRollen(Set.of(gsRole));
-        // setup gesuch with delegierung
-        var gesuch = new Gesuch();
-        var fall = new Fall();
-        fall.setGesuchsteller(gsBenutzer);
-        var ausbildung = new Ausbildung();
-        ausbildung.setFall(fall);
-        gesuch.setAusbildung(ausbildung);
-        var delegierung = new Delegierung();
+        final var gesuch = createGesuch();
+        final var delegierung = new Delegierung();
+        final var gsBenutzer = gesuch.getAusbildung().getFall().getGesuchsteller();
+
         delegierung.setSozialdienst(new Sozialdienst());
-        gesuch.getAusbildung().getFall().setCurrentDelegierung(delegierung);
+        gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        gesuch.getLatestGesuchTranche().setGesuchDokuments(createGesuchDokumentForTyps(REQUIRED_DOKUMENT_TYP));
+        gesuch.getAusbildung().getFall().setCurrentDelegierung(delegierung).getCurrentDelegierung().akzeptieren();
 
         // act & assert
         assertThat(service.getGSCanFehlendeDokumenteEinreichen(gesuch, gsBenutzer), is(false));
     }
 
     @Test
-    void setGSCanFehlendeDokumenteEinreichenToTrueForSozialdienstmitarbeiterIfDelegated() {
+    void sozialdienstMitarbeiterCanFehlendeDokumenteUebermittelnIfDelegiert() {
         // arrange
         final var sozialdienstService = Mockito.mock(SozialdienstService.class);
-        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(Mockito.any())).thenReturn(true);
-
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), null, null, sozialdienstService
+            requiredDokumentProducers, requiredRefDokumentProducers, requiredCustomDokumentProducers,
+            sozialdienstService
         );
-
-        // setup soz-ma benutzer
-        var sozMaBenutzer = new Benutzer();
-        var sozMaRole = new Rolle();
-        sozMaRole.setKeycloakIdentifier(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER);
-        sozMaBenutzer.setRollen(Set.of(sozMaRole));
-        // setup gesuch with delegierung
-        var gesuch = new Gesuch();
-        gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
-        var fall = new Fall();
-        fall.setGesuchsteller(sozMaBenutzer);
-        var ausbildung = new Ausbildung();
-        ausbildung.setFall(fall);
-        gesuch.setAusbildung(ausbildung);
-        var delegierung = new Delegierung();
+        final var gesuch = createGesuch();
+        final var delegierung = new Delegierung();
+        final var gsBenutzer = gesuch.getAusbildung().getFall().getGesuchsteller();
         delegierung.setSozialdienst(new Sozialdienst());
-        gesuch.getAusbildung().getFall().setCurrentDelegierung(delegierung);
+        gesuch.getLatestGesuchTranche().setGesuchDokuments(createGesuchDokumentForTyps(REQUIRED_DOKUMENT_TYP));
+        gesuch.getAusbildung().getFall().setCurrentDelegierung(delegierung).getCurrentDelegierung().akzeptieren();
 
         // act & assert
-        assertThat(service.getGSCanFehlendeDokumenteEinreichen(gesuch, sozMaBenutzer), is(true));
+        assertThat(service.getGSCanFehlendeDokumenteEinreichen(gesuch, gsBenutzer), is(true));
     }
 
     @Test
-    void getRequiredDokumentsForGesuchFormularTest() {
+    void returnsRequiredDokumentsIfNoneRegistered() {
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), null, null, null
+            requiredDokumentProducers, requiredRefDokumentProducers, requiredCustomDokumentProducers, null
         );
-        final var requiredDokuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
+        final var requiredDokuments = service.getRequiredDokumentsForGesuchFormular(createFormular(List.of()), true);
 
         assertThat(requiredDokuments.size(), is(1));
     }
 
     @Test
-    void getEmptyListTest() {
+    void noRequiredDokumentsIfTheRequiredTypIsRegistered() {
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockEmptyDocumentProducer())),
-            null, null, null
-        );
-        final var requiredDokuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
-
-        assertThat(requiredDokuments.size(), is(0));
-    }
-
-    @Test
-    void oneExistingTest() {
-        final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())),
-            null, null, null
+            requiredDokumentProducers, requiredRefDokumentProducers, requiredCustomDokumentProducers, null
         );
         final var requiredDokuments = service
             .getRequiredDokumentsForGesuchFormular(
-                initFormular(List.of(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE))
+                createFormular(List.of(REQUIRED_DOKUMENT_TYP)),
+                true
             );
 
         assertThat(requiredDokuments.size(), is(0));
     }
 
-    private GesuchFormular initFormular(final List<DokumentTyp> existingTypes) {
+    private Gesuch createGesuch() {
+        return GesuchTestBuilder.standardWithNestedDeps(LocalDate.now())
+            .with(gesuch -> gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE))
+            .build();
+    }
+
+    private GesuchFormular createFormular(final List<DokumentTyp> existingTypes) {
         return new GesuchFormular().setTranche(
             new GesuchTranche().setGesuch(
                 new Gesuch()
             )
-                .setGesuchDokuments(
-                    existingTypes.stream()
-                        .map(x -> new GesuchDokument().setDokumentTyp(x).setDokumente(List.of(new Dokument())))
-                        .toList()
-                )
+                .setGesuchDokuments(createGesuchDokumentForTyps(existingTypes.toArray(new DokumentTyp[] {})))
         );
     }
 
-    public static class MockDocumentProducer implements RequiredDokumentsProducer {
-        @Override
-        public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
-            return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE));
-        }
-    }
-
-    static class MockEmptyDocumentProducer implements RequiredDokumentsProducer {
-        @Override
-        public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
-            return ImmutablePair.of("", Set.of());
-        }
-    }
-
-    public static class MockInstance implements Instance<RequiredDokumentsProducer> {
-        private final List<RequiredDokumentsProducer> collection;
-
-        MockInstance(List<RequiredDokumentsProducer> collection) {
-            this.collection = collection;
-        }
-
-        @Override
-        public Stream<RequiredDokumentsProducer> stream() {
-            return collection.stream();
-        }
-
-        @Override
-        public Instance<RequiredDokumentsProducer> select(Annotation... qualifiers) {
-            return null;
-        }
-
-        @Override
-        public <U extends RequiredDokumentsProducer> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
-            return null;
-        }
-
-        @Override
-        public <U extends RequiredDokumentsProducer> Instance<U> select(
-            TypeLiteral<U> subtype,
-            Annotation... qualifiers
-        ) {
-            return null;
-        }
-
-        @Override
-        public boolean isUnsatisfied() {
-            return false;
-        }
-
-        @Override
-        public boolean isAmbiguous() {
-            return false;
-        }
-
-        @Override
-        public void destroy(RequiredDokumentsProducer instance) {
-
-        }
-
-        @Override
-        public Handle<RequiredDokumentsProducer> getHandle() {
-            return null;
-        }
-
-        @Override
-        public Iterable<? extends Handle<RequiredDokumentsProducer>> handles() {
-            return null;
-        }
-
-        @Override
-        public RequiredDokumentsProducer get() {
-            return null;
-        }
-
-        @NotNull
-        @Override
-        public Iterator<RequiredDokumentsProducer> iterator() {
-            return null;
-        }
+    private List<GesuchDokument> createGesuchDokumentForTyps(final DokumentTyp... dokumentTyps) {
+        return Stream.of(dokumentTyps)
+            .map(dokumentTyp -> new GesuchDokument().setDokumentTyp(dokumentTyp).setDokumente(List.of(new Dokument())))
+            .toList();
     }
 }

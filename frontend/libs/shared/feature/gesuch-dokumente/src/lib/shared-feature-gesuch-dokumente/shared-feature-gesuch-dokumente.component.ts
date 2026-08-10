@@ -14,8 +14,11 @@ import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import {
   SharedDataAccessGesuchEvents,
+  selectRouteTrancheId,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
@@ -70,10 +73,13 @@ export class SharedFeatureGesuchDokumenteComponent {
   private dialog = inject(MatDialog);
   private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
+  private einreichenStore = inject(EinreichenStore);
+  private fallHeaderStore = inject(FallHeaderStore);
   public dokumentsStore = inject(DokumentsStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   additionalDokumenteViewSig = computed(() => {
     const { allowTypes, gesuchId, permissions, trancheId, readonly } =
       this.gesuchViewSig();
@@ -101,9 +107,10 @@ export class SharedFeatureGesuchDokumenteComponent {
       trancheSetting,
       trancheId,
       readonly,
-      config: { isSachbearbeitungApp },
+      config: { appConfig },
       gesuch,
     } = this.gesuchViewSig();
+    const isSachbearbeitungApp = appConfig?.view === 'sachbearbeiter';
     const {
       dokuments,
       entrys,
@@ -146,8 +153,9 @@ export class SharedFeatureGesuchDokumenteComponent {
       trancheId,
       readonly,
       gesuch,
-      config: { isSachbearbeitungApp },
+      config: { appConfig },
     } = this.gesuchViewSig();
+    const isSachbearbeitungApp = appConfig?.view === 'sachbearbeiter';
 
     const { dokuments, requiredDocumentTypes, loading } =
       this.dokumentsStore.customDokumenteViewSig();
@@ -221,7 +229,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
       .pipe(
         takeUntilDestroyed(),
-        filter(() => this.config.isSachbearbeitungApp),
+        filter(() => this.config.app.view === 'sachbearbeiter'),
       )
       .subscribe((gesuchId) => {
         this.dokumentsStore.getAdditionalDokumente$({
@@ -238,8 +246,12 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
 
     effect(() => {
+      const gesuchTrancheId = this.gesuchTrancheIdSig();
       this.allDocumentsAcceptedChangedSig();
-      this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+      if (gesuchTrancheId) {
+        this.einreichenStore.validateEinreichen$({ gesuchTrancheId });
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+      }
     });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());
@@ -337,9 +349,10 @@ export class SharedFeatureGesuchDokumenteComponent {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
         tranchenTyp: trancheSetting.type,
-        onSuccess: () => {
+        onSuccess: (fallId) => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+          this.fallHeaderStore.loadFallHeader$({ fallId });
           // Also load the required documents again
           this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
             gesuchTrancheId: trancheId,

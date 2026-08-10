@@ -12,6 +12,24 @@ Verfuegung:
       type: array
       items:
         $ref: '#/VerfuegungDokument'
+
+VerfuegungFall:
+  type: object
+  required:
+    - timestampErstellt
+    - yearRange
+    - totalbetragStipendium
+    - dokumente
+  properties:
+    timestampErstellt:
+      type: string
+    yearRange:
+      type: string
+    totalbetragStipendium:
+      type: integer
+    dokument:
+      $ref: '#/VerfuegungDokument'
+
 VerfuegungDokument:
   type: object
   required:
@@ -33,6 +51,7 @@ VerfuegungDokumentTyp:
     - BERECHNUNGSBLATT_FAMILIE
     - VERSENDETE_VERFUEGUNG
     - VERFUEGUNGSBRIEF
+    - MANUELLE_NEGATIVE_VERFUEGUNG
 CustomDokumentTyp:
   type: object
   required:
@@ -64,7 +83,7 @@ DokumentTyp:
     - PERSON_NIEDERLASSUNGSSTATUS_SAISONARBEITEND_A
     - PERSON_NIEDERLASSUNGSSTATUS_PARTNER_ERWERBSTAETIG_UND_KIND_CI
     - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
-    - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+    - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT
     - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
     - PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G
     - PERSON_NIEDERLASSUNGSSTATUS_KURZAUFENTHALT_L
@@ -76,7 +95,7 @@ DokumentTyp:
     - PERSON_NIEDERLASSUNGSSTATUS_NICHT_ZUGETEILT
     - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
     - PERSON_KESB_ERNENNUNG
-    - PERSON_MIETVERTRAG
+    - PERSON_EIGENER_HAUSHALT
     - PERSON_SOZIALHILFEBUDGET
     - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
     - PERSON_AUSWEIS
@@ -180,18 +199,10 @@ Gesuchstatus:
   type: string
 GetGesucheSBQueryType:
   enum:
-    - ALLE_GESUCHE
-    - MEINE_GESUCHE
-    - ALLE_PENDENTE_GESUCHE
-    - MEINE_PENDENTE_GESUCHE
-    - ALLE_BEARBEITBAR
-    - MEINE_BEARBEITBAR
-    - ALLE_JURISTISCHE_ABKLAERUNG
-    - ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG
-    - ALLE_DRUCKBAR_VERFUEGUNGEN
-    - MEINE_DRUCKBAR_VERFUEGUNGEN
-    - ALLE_DRUCKBAR_DATENSCHUTZBRIEFE
-    - MEINE_DRUCKBAR_DATENSCHUTZBRIEFE
+    - ALLE
+    - PENDENTE
+    - DRUCKBAR_VERFUEGUNGEN
+    - DRUCKBAR_DATENSCHUTZBRIEFE
   type: string
 GueltigkeitStatus:
   enum:
@@ -290,15 +301,25 @@ Fall:
   required:
     - id
     - fallNummer
-    - mandant
+    - tenant
   type: object
   properties:
     id:
       $ref: '#/UUID'
     fallNummer:
       type: string
-    mandant:
+    tenant:
       type: string
+FallHeader:
+  required:
+    - fallId
+    - unreadNotificationsCount
+  type: object
+  properties:
+    fallId:
+      $ref: '#/UUID'
+    unreadNotificationsCount:
+      type: integer
 Gesuchsjahr:
   type: object
   required:
@@ -388,6 +409,8 @@ Gesuch:
       type: string
     hadDelegierungs:
       type: boolean
+    minDateEigenerWohnsitz:
+      $ref: '#/LocalDate'
     delegierung:
       $ref: '#/DelegierungSlim'
     nachfristDokumente:
@@ -405,18 +428,22 @@ GesuchStateInfo:
   required:
     - gesuchStatus
     - beschwerdeHaengig
-    - canGetBerechnung
+    - canGSGetBerechnung
+    - canSBGetBerechnung
     - canChangeGesuchsperiode
     - canTriggerManuellPruefen
     - canBearbeitungAbschliessen
     - canSBInitAenderung
+    - canFreigeben
   type: object
   properties:
     gesuchStatus:
       $ref: '#/Gesuchstatus'
     beschwerdeHaengig:
       type: boolean
-    canGetBerechnung:
+    canGSGetBerechnung:
+      type: boolean
+    canSBGetBerechnung:
       type: boolean
     canChangeGesuchsperiode:
       type: boolean
@@ -428,6 +455,8 @@ GesuchStateInfo:
       type: boolean
     inBearbeitungSbReason:
       $ref: '#/InBearbeitungSbReason'
+    canFreigeben:
+      type: boolean
 PersoenlicheAngaben:
   required:
     - anrede
@@ -938,12 +967,16 @@ Notification:
   description: Notification for a Gesuch
   type: object
   required:
+    - id
     - notificationType
     - fallId
     - timestampErstellt
     - userErstellt
     - absender
+    - read
   properties:
+    id:
+      $ref: '#/UUID'
     notificationText:
       type: string
     notificationType:
@@ -958,6 +991,8 @@ Notification:
       $ref: '#/LocalDate'
     absender:
       type: string
+    read:
+      type: boolean
 NotificationType:
   enum:
     - GESUCH_EINGEREICHT

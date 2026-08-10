@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("MassendruckJob")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class MassendruckJobDto  implements Serializable {
   private @Valid UUID id;
@@ -25,6 +25,17 @@ public class MassendruckJobDto  implements Serializable {
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
   private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp;
+
+  protected MassendruckJobDto(MassendruckJobDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.userErstellt = b.userErstellt;
+    this.timestampErstellt = b.timestampErstellt;
+    this.massendruckJobStatus = b.massendruckJobStatus;
+    this.massendruckJobTyp = b.massendruckJobTyp;
+  }
+
+  public MassendruckJobDto() {
+  }
 
   /**
    **/
@@ -169,5 +180,53 @@ public class MassendruckJobDto  implements Serializable {
   }
 
 
+  public static MassendruckJobDtoBuilder<?, ?> builder() {
+    return new MassendruckJobDtoBuilderImpl();
+  }
+
+  private static final class MassendruckJobDtoBuilderImpl extends MassendruckJobDtoBuilder<MassendruckJobDto, MassendruckJobDtoBuilderImpl> {
+
+    @Override
+    protected MassendruckJobDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public MassendruckJobDto build() {
+      return new MassendruckJobDto(this);
+    }
+  }
+
+  public static abstract class MassendruckJobDtoBuilder<C extends MassendruckJobDto, B extends MassendruckJobDtoBuilder<C, B>>  {
+    private UUID id;
+    private String userErstellt;
+    private java.time.LocalDateTime timestampErstellt;
+    private ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
+    private ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B userErstellt(String userErstellt) {
+      this.userErstellt = userErstellt;
+      return self();
+    }
+    public B timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B massendruckJobStatus(ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus) {
+      this.massendruckJobStatus = massendruckJobStatus;
+      return self();
+    }
+    public B massendruckJobTyp(ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp) {
+      this.massendruckJobTyp = massendruckJobTyp;
+      return self();
+    }
+  }
 }
 

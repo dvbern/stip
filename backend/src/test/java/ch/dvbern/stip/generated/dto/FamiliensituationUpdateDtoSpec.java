@@ -35,10 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamiliensituationUpdateDtoSpec.JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG,
   FamiliensituationUpdateDtoSpec.JSON_PROPERTY_MUTTER_UNBEKANNT_VERSTORBEN,
   FamiliensituationUpdateDtoSpec.JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND,
-  FamiliensituationUpdateDtoSpec.JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET,
   FamiliensituationUpdateDtoSpec.JSON_PROPERTY_VATER_UNBEKANNT_VERSTORBEN,
   FamiliensituationUpdateDtoSpec.JSON_PROPERTY_VATER_UNBEKANNT_GRUND,
-  FamiliensituationUpdateDtoSpec.JSON_PROPERTY_VATER_WIEDERVERHEIRATET,
   FamiliensituationUpdateDtoSpec.JSON_PROPERTY_WER_ZAHLT_ALIMENTE
 })
 @JsonTypeName("FamiliensituationUpdate")
@@ -59,17 +57,11 @@ public class FamiliensituationUpdateDtoSpec {
   public static final String JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND = "mutterUnbekanntGrund";
   private ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund;
 
-  public static final String JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET = "mutterWiederverheiratet";
-  private Boolean mutterWiederverheiratet;
-
   public static final String JSON_PROPERTY_VATER_UNBEKANNT_VERSTORBEN = "vaterUnbekanntVerstorben";
   private ElternAbwesenheitsGrundDtoSpec vaterUnbekanntVerstorben;
 
   public static final String JSON_PROPERTY_VATER_UNBEKANNT_GRUND = "vaterUnbekanntGrund";
   private ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund;
-
-  public static final String JSON_PROPERTY_VATER_WIEDERVERHEIRATET = "vaterWiederverheiratet";
-  private Boolean vaterWiederverheiratet;
 
   public static final String JSON_PROPERTY_WER_ZAHLT_ALIMENTE = "werZahltAlimente";
   private ElternschaftsteilungDtoSpec werZahltAlimente;
@@ -207,32 +199,6 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  public FamiliensituationUpdateDtoSpec mutterWiederverheiratet(Boolean mutterWiederverheiratet) {
-    
-    this.mutterWiederverheiratet = mutterWiederverheiratet;
-    return this;
-  }
-
-   /**
-   * Get mutterWiederverheiratet
-   * @return mutterWiederverheiratet
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getMutterWiederverheiratet() {
-    return mutterWiederverheiratet;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterWiederverheiratet(Boolean mutterWiederverheiratet) {
-    this.mutterWiederverheiratet = mutterWiederverheiratet;
-  }
-
-
   public FamiliensituationUpdateDtoSpec vaterUnbekanntVerstorben(ElternAbwesenheitsGrundDtoSpec vaterUnbekanntVerstorben) {
     
     this.vaterUnbekanntVerstorben = vaterUnbekanntVerstorben;
@@ -285,32 +251,6 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  public FamiliensituationUpdateDtoSpec vaterWiederverheiratet(Boolean vaterWiederverheiratet) {
-    
-    this.vaterWiederverheiratet = vaterWiederverheiratet;
-    return this;
-  }
-
-   /**
-   * Get vaterWiederverheiratet
-   * @return vaterWiederverheiratet
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getVaterWiederverheiratet() {
-    return vaterWiederverheiratet;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterWiederverheiratet(Boolean vaterWiederverheiratet) {
-    this.vaterWiederverheiratet = vaterWiederverheiratet;
-  }
-
-
   public FamiliensituationUpdateDtoSpec werZahltAlimente(ElternschaftsteilungDtoSpec werZahltAlimente) {
     
     this.werZahltAlimente = werZahltAlimente;
@@ -350,16 +290,14 @@ public class FamiliensituationUpdateDtoSpec {
         Objects.equals(this.gerichtlicheAlimentenregelung, familiensituationUpdate.gerichtlicheAlimentenregelung) &&
         Objects.equals(this.mutterUnbekanntVerstorben, familiensituationUpdate.mutterUnbekanntVerstorben) &&
         Objects.equals(this.mutterUnbekanntGrund, familiensituationUpdate.mutterUnbekanntGrund) &&
-        Objects.equals(this.mutterWiederverheiratet, familiensituationUpdate.mutterWiederverheiratet) &&
         Objects.equals(this.vaterUnbekanntVerstorben, familiensituationUpdate.vaterUnbekanntVerstorben) &&
         Objects.equals(this.vaterUnbekanntGrund, familiensituationUpdate.vaterUnbekanntGrund) &&
-        Objects.equals(this.vaterWiederverheiratet, familiensituationUpdate.vaterWiederverheiratet) &&
         Objects.equals(this.werZahltAlimente, familiensituationUpdate.werZahltAlimente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, mutterWiederverheiratet, vaterUnbekanntVerstorben, vaterUnbekanntGrund, vaterWiederverheiratet, werZahltAlimente);
+    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, vaterUnbekanntVerstorben, vaterUnbekanntGrund, werZahltAlimente);
   }
 
   @Override
@@ -371,10 +309,8 @@ public class FamiliensituationUpdateDtoSpec {
     sb.append("    gerichtlicheAlimentenregelung: ").append(toIndentedString(gerichtlicheAlimentenregelung)).append("\n");
     sb.append("    mutterUnbekanntVerstorben: ").append(toIndentedString(mutterUnbekanntVerstorben)).append("\n");
     sb.append("    mutterUnbekanntGrund: ").append(toIndentedString(mutterUnbekanntGrund)).append("\n");
-    sb.append("    mutterWiederverheiratet: ").append(toIndentedString(mutterWiederverheiratet)).append("\n");
     sb.append("    vaterUnbekanntVerstorben: ").append(toIndentedString(vaterUnbekanntVerstorben)).append("\n");
     sb.append("    vaterUnbekanntGrund: ").append(toIndentedString(vaterUnbekanntGrund)).append("\n");
-    sb.append("    vaterWiederverheiratet: ").append(toIndentedString(vaterWiederverheiratet)).append("\n");
     sb.append("    werZahltAlimente: ").append(toIndentedString(werZahltAlimente)).append("\n");
     sb.append("}");
     return sb.toString();

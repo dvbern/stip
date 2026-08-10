@@ -2,12 +2,9 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Injector,
   computed,
   effect,
   inject,
-  runInInjectionContext,
-  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -18,11 +15,10 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Router, RouterLink } from '@angular/router';
 import { TranslocoService, translateSignal } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { addMonths, endOfMonth } from 'date-fns';
-import { filter, firstValueFrom } from 'rxjs';
+import { filter } from 'rxjs';
 
 import { translatableShared } from '@dv/shared/assets/i18n';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -30,10 +26,6 @@ import {
   SharedDataAccessGesuchEvents,
   selectRevision,
 } from '@dv/shared/data-access/gesuch';
-import {
-  AenderungChangeState,
-  GesuchAenderungStore,
-} from '@dv/shared/data-access/gesuch-aenderung';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -50,18 +42,12 @@ import {
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
-import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
-import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
-import { isPending } from '@dv/shared/util/remote-data';
 import {
   dateFromMonthYearString,
   formatBackendLocalDate,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
-import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
-import { currentTrancheNumber } from '@dv/shared/util-fn/gesuch-util';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
@@ -70,15 +56,12 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     SharedUiFormFieldDirective,
     SharedUiHeaderSuffixDirective,
-    SharedUiIfSachbearbeiterDirective,
     SharedUiFormReadonlyDirective,
-    SharedUiLoadingComponent,
     SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
@@ -86,19 +69,16 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
 })
 export class SharedFeatureGesuchFormTrancheComponent {
   private store = inject(Store);
-  private router = inject(Router);
   private dialog = inject(MatDialog);
   private translate = inject(TranslocoService);
   private formBuilder = inject(NonNullableFormBuilder);
-  private injector = inject(Injector);
-  private globalNotificationStore = inject(GlobalNotificationStore);
   private defaultCommentSig = translateSignal(
     translatableShared('shared.form.tranche.bemerkung.initialgesuch'),
   );
+  private globalNotificationStore = inject(GlobalNotificationStore);
 
-  isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
+  isSbApp = inject(SharedModelCompileTimeConfig).app.view === 'sachbearbeiter';
   einreichenStore = inject(EinreichenStore);
-  gesuchAenderungStore = inject(GesuchAenderungStore);
   gesuchHeaderStore = inject(GesuchHeaderStore);
   gesuchInfoStore = inject(GesuchInfoStore, {
     optional: true,
@@ -107,13 +87,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
   revisionSig = this.store.selectSignal(selectRevision);
-  isAenderungUpdatingSig = computed(() => {
-    const { loading } = this.viewSig();
-    return (
-      loading || isPending(this.gesuchAenderungStore.cachedGesuchAenderung())
-    );
-  });
-  isExportingSig = signal(false);
 
   form = this.formBuilder.group({
     status: [''],
@@ -127,32 +100,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
     bis: [''],
     bemerkung: [''],
     einreichedatum: [''],
-  });
-
-  exportValuesSig = computed<ExportView | undefined>(() => {
-    const { gesuch, tranche, isEditingAenderung, sachbearbeiter, periode } =
-      this.viewSig();
-
-    if (!tranche || !gesuch || !periode || !isDefined(isEditingAenderung)) {
-      return undefined;
-    }
-
-    return { gesuch, tranche, sachbearbeiter, isEditingAenderung, periode };
-  });
-
-  currentTrancheNumberSig = computed(() => {
-    const { tranche: currentTranche, trancheSetting } = this.viewSig();
-    const revision = this.revisionSig();
-
-    const { isLoading, ...header } = this.gesuchHeaderStore.viewSig();
-
-    return currentTrancheNumber(
-      trancheSetting,
-      currentTranche,
-      header,
-      revision,
-      isLoading,
-    );
   });
 
   currentGesuchSig = computed(
@@ -182,7 +129,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
         fallNummer,
         periode,
         sachbearbeiter,
-        appType,
+        appConfig,
       } = this.viewSig();
 
       // Also used to react to language change
@@ -197,7 +144,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
       const pia = tranche.gesuchFormular?.personInAusbildung;
       const status = isEditingAenderung ? tranche.status : gesuch.gesuchStatus;
       const type = isEditingAenderung ? 'tranche' : 'contract';
-      const appPrefix = type === 'contract' ? appType : 'shared';
+      const appPrefix = type === 'contract' ? appConfig?.keyPrefix : 'shared';
       const overridenStatus = gesuch.hasPendingAusbildungUnterbruchAntrag
         ? this.translate.translate('shared.gesuch.status.unterbruchAnfrage')
         : null;
@@ -261,6 +208,9 @@ export class SharedFeatureGesuchFormTrancheComponent {
             gesuchId,
             change: result,
           });
+          this.globalNotificationStore.createSuccessNotification({
+            messageKey: 'shared.dialog.einreichedatum-aendern.success',
+          });
         }
       });
   }
@@ -269,13 +219,14 @@ export class SharedFeatureGesuchFormTrancheComponent {
     const {
       id: gesuchId,
       gesuchTrancheToWorkWith: { id, gueltigAb, gueltigBis, gesuchFormular },
-      gesuchsperiode: { gesuchsperiodeStart },
+      gesuchsperiode: { gesuchsjahr },
     } = gesuch;
 
     const begin = dateFromMonthYearString(
       gesuchFormular?.ausbildung?.ausbildungBegin,
     );
     if (!begin) return;
+    begin.setFullYear(gesuchsjahr.technischesJahr);
 
     const maxDate = endOfMonth(addMonths(new Date(begin), 11));
 
@@ -283,7 +234,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
       type: 'updateAenderungVonBis',
       trancheId: id,
       gesuchId,
-      minDate: new Date(gesuchsperiodeStart),
+      minDate: begin,
       maxDate,
       currentGueligAb: new Date(gueltigAb),
       currentGueligBis: new Date(gueltigBis),
@@ -309,70 +260,5 @@ export class SharedFeatureGesuchFormTrancheComponent {
     })
       .afterClosed()
       .subscribe();
-  }
-
-  async changeAenderungState(
-    aenderungId: string,
-    target: AenderungChangeState,
-    gesuchId: string,
-  ) {
-    let comment = undefined;
-    if (target === 'ABGELEHNT') {
-      comment = (
-        await firstValueFrom(
-          SharedUiKommentarDialogComponent.open(this.dialog, {
-            titleKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.title',
-            messageKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.description',
-            labelKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.comment.label',
-            placeholderKey: 'shared.nothing',
-            confirmKey: 'shared.form.send',
-          }).afterClosed(),
-        )
-      )?.kommentar;
-
-      if (!comment) {
-        return;
-      }
-    }
-
-    this.gesuchAenderungStore.changeAenderungState$({
-      aenderungId,
-      target,
-      comment: comment ?? '',
-      gesuchId,
-      onSuccess: (trancheId) => {
-        const routesMap = {
-          AKZEPTIERT: ['gesuch', gesuchId, 'tranche', trancheId],
-          ABGELEHNT: ['/'],
-          MANUELLE_AENDERUNG: ['gesuch', gesuchId],
-        } satisfies Record<AenderungChangeState, unknown>;
-
-        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-        this.router.navigate(routesMap[target]);
-      },
-    });
-  }
-
-  async exportTranche(exportValues: ExportView) {
-    if (!exportValues) {
-      return;
-    }
-    this.isExportingSig.set(true);
-
-    try {
-      const module = await import('@dv/shared/util-data-access/export-tranche');
-      const exportTrancheService = runInInjectionContext(this.injector, () =>
-        inject(module.SharedExportTrancheService),
-      );
-
-      await exportTrancheService.exportTranche(exportValues);
-    } catch {
-      this.globalNotificationStore.createNotification({
-        type: 'ERROR',
-        messageKey: translatableShared('shared.form.tranche.export.error'),
-      });
-    }
-
-    this.isExportingSig.set(false);
   }
 }

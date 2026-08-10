@@ -34,7 +34,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecMod
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuererklaerungUpdateTabsDtoSpecModel;
-import ch.dvbern.stip.api.generator.depricated.entities.service.DokumentGenerator;
+import ch.dvbern.stip.api.generator.service.DokumentGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -109,6 +109,7 @@ class GesuchFillFormularTest {
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
     private UUID gesuchId;
+    private UUID fallId;
     private UUID gesuchTrancheId;
     private UUID ausbildungId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
@@ -122,6 +123,7 @@ class GesuchFillFormularTest {
     void testCreateEndpoint() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
+        fallId = gesuch.getFallId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
@@ -379,17 +381,22 @@ class GesuchFillFormularTest {
     void noSuperfluousDocuments() {
         final var expectedDokumentTypes = new DokumentTypDtoSpec[] {
             DokumentTypDtoSpec.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE,
-            DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE, DokumentTypDtoSpec.PERSON_MIETVERTRAG,
+            DokumentTypDtoSpec.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
+            DokumentTypDtoSpec.PERSON_EIGENER_HAUSHALT,
             DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_VATER,
             DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
-            DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN, DokumentTypDtoSpec.EK_BELEG_BEZAHLTE_RENTEN,
-            DokumentTypDtoSpec.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO, DokumentTypDtoSpec.EK_MIETVERTRAG,
+            DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN,
+            DokumentTypDtoSpec.EK_BELEG_BEZAHLTE_RENTEN,
+            DokumentTypDtoSpec.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
+            DokumentTypDtoSpec.EK_MIETVERTRAG,
             DokumentTypDtoSpec.EK_LOHNABRECHNUNG,
             DokumentTypDtoSpec.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE,
-            DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET, DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
+            DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET,
+            DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
             DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
-            DokumentTypDtoSpec.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN, DokumentTypDtoSpec.EK_BELEG_OV_ABONNEMENT,
+            DokumentTypDtoSpec.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
+            DokumentTypDtoSpec.EK_BELEG_OV_ABONNEMENT,
             DokumentTypDtoSpec.EK_BELEG_BETREUUNGSKOSTEN_KINDER,
         };
 
@@ -475,7 +482,8 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(25)
     void gesuchNotificationTest() {
-        var notifications = notificationApiSpec.getNotificationsForCurrentUser()
+        var notifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(fallId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

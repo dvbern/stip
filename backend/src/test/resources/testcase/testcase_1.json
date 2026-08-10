@@ -53,10 +53,8 @@
           "gerichtlicheAlimentenregelung": null,
           "mutterUnbekanntVerstorben": null,
           "mutterUnbekanntGrund": null,
-          "mutterWiederverheiratet": null,
           "vaterUnbekanntVerstorben": null,
           "vaterUnbekanntGrund": null,
-          "vaterWiederverheiratet": null,
           "werZahltAlimente": null
         },
         "partner": {
@@ -86,6 +84,7 @@
               "coAdresse": null,
               "hausnummer": "2"
             },
+            "wiederverheiratet": null,
             "identischerZivilrechtlicherWohnsitz": true,
             "telefonnummer": "0791111111",
             "geburtsdatum": "1966-05-03",
@@ -108,6 +107,7 @@
               "coAdresse": null,
               "hausnummer": "3"
             },
+            "wiederverheiratet": null,
             "identischerZivilrechtlicherWohnsitz": true,
             "telefonnummer": "0791111111",
             "geburtsdatum": "1969-12-25",

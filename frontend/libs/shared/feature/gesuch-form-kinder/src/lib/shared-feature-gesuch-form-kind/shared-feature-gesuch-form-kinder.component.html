@@ -14,10 +14,10 @@
     (formIsUnsaved)="hasUnsavedChanges = $event"
   />
 } @else {
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+  <div class="tw:dv-form-grid">
     <!-- Table -->
-    @if (view.gesuchFormular?.kinds; as kinder) {
-      <div class="tw:col-span-12 tw:xl:col-span-8">
+    @if (view.kinds; as kinder) {
+      <div class="tw:dv-form-item">
         @if (kinder.length) {
           <table class="tw:dv-simple-table">
             <thead>
@@ -29,7 +29,6 @@
                 <th>
                   {{ 'shared.form.geschwister.geburtsdatum.label' | transloco }}
                 </th>
-                <th></th>
                 <th></th>
               </tr>
             </thead>
@@ -50,38 +49,36 @@
                     <td>
                       {{ parseBackendLocalDateAndPrint(kind.geburtsdatum, languageSig()) }}
                     </td>
-                    <td>
-                      @if (!view.readonly) {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 tw:align-middle"
-                          (click)="handleSelectKinder(kind)"
-                          [title]="'shared.form.kinder.edit' | transloco"
-                        >
-                          <i class="material-symbols-rounded">edit</i>
-                        </button>
-                      }
-                    </td>
-                    <td>
-                      @if (!view.readonly) {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 tw:align-middle"
-                          (click)="handleDeleteKinder(kind)"
-                          [title]="'shared.form.kinder.delete' | transloco"
-                        >
-                          <i class="material-symbols-rounded">delete</i>
-                        </button>
-                      } @else {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 tw:align-middle"
-                          (click)="handleSelectKinder(kind)"
-                          [title]="'shared.form.kinder.view' | transloco"
-                        >
-                          <i class="material-symbols-rounded">visibility</i>
-                        </button>
-                      }
+                    <td class="tw:w-0">
+                      <div class="tw:flex tw:items-center tw:gap-2">
+                        @if (!view.readonly) {
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 tw:align-middle"
+                            (click)="handleSelectKinder(kind)"
+                            [title]="'shared.form.kinder.edit' | transloco"
+                          >
+                            <i class="material-symbols-rounded">edit</i>
+                          </button>
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 tw:align-middle"
+                            (click)="handleDeleteKinder(kind)"
+                            [title]="'shared.form.kinder.delete' | transloco"
+                          >
+                            <i class="material-symbols-rounded">delete</i>
+                          </button>
+                        } @else {
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 tw:align-middle"
+                            (click)="handleSelectKinder(kind)"
+                            [title]="'shared.form.kinder.view' | transloco"
+                          >
+                            <i class="material-symbols-rounded">visibility</i>
+                          </button>
+                        }
+                      </div>
                     </td>
                   }
                 </tr>
@@ -91,32 +88,32 @@
         }
       </div>
     }
-  </div>
 
-  <!-- ADD -->
-  <div class="tw:flex tw:flex-col flex-md-row">
+    <!-- ADD -->
     @if (!view.readonly) {
+      <div class="tw:dv-form-item tw:flex tw:flex-col tw:gap-4 flex-md-row">
+        <button
+          type="button"
+          class="tw:dv-button-outline tw:self-start"
+          (click)="handleAddKinder()"
+          data-testid="button-add-kind"
+        >
+          {{ 'shared.form.kinder.add' | transloco }}
+        </button>
+      </div>
+    }
+
+    <!-- Buttons -->
+    <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
       <button
         type="button"
-        class="tw:dv-button-outline tw:self-start"
-        (click)="handleAddKinder()"
-        data-testid="button-add-kind"
+        class="tw:dv-button-main-primary"
+        (click)="handleContinue()"
+        [disabled]="!view.gesuchId"
+        data-testid="button-continue"
       >
-        {{ 'shared.form.kinder.add' | transloco }}
+        {{ 'shared.form.gonext' | transloco }}
       </button>
-    }
+    </dv-shared-ui-step-form-buttons>
   </div>
-
-  <!-- Buttons -->
-  <dv-shared-ui-step-form-buttons>
-    <button
-      type="button"
-      class="tw:dv-button-main-primary"
-      (click)="handleContinue()"
-      [disabled]="!view.gesuchId"
-      data-testid="button-continue"
-    >
-      {{ 'shared.form.gonext' | transloco }}
-    </button>
-  </dv-shared-ui-step-form-buttons>
 }

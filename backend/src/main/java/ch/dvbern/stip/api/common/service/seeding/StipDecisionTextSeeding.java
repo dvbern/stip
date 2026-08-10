@@ -20,9 +20,10 @@ package ch.dvbern.stip.api.common.service.seeding;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.StipDecision;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
@@ -39,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StipDecisionTextSeeding extends Seeder {
     private static final String PATH_TO_CSV = "/seeding/stipDecisionText/%s/stipDecisionText.csv";
 
-    private final ConfigService configService;
+    private final StipConfig config;
     private final StipDecisionTextRepository decisionTextRepository;
     private final TenantService tenantService;
 
@@ -50,15 +51,15 @@ public class StipDecisionTextSeeding extends Seeder {
             return;
         }
 
-        final var decisionTexts = getDecisionTextsToSeed(tenantService.getCurrentTenantIdentifier());
+        final var decisionTexts = getDecisionTextsToSeed(tenantService.getCurrentStringIdentifier());
         if (!decisionTexts.isEmpty()) {
             decisionTextRepository.persist(decisionTexts);
         }
     }
 
     @Override
-    protected List<String> getProfiles() {
-        return configService.getSeedOnProfile();
+    protected Set<String> getProfiles() {
+        return config.seeding().seedOnProfile();
     }
 
     @SneakyThrows

@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungDokumentRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class VerfuegungAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
     private final BenutzerService benutzerService;
+    private final FallRepository fallRepository;
     private final VerfuegungDokumentRepository verfuegungDokumentRepository;
 
     @Transactional
@@ -41,7 +43,7 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
         final var verfuegungDokument = verfuegungDokumentRepository.requireById(verfuegungId);
         final var gesuch = verfuegungDokument.getVerfuegung().getGesuch();
         if (
-            isSachbearbeiter(currentBenutzer)
+            isSbOrFreigabestelleOrJurist(currentBenutzer)
             || AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuch.getAusbildung().getFall(),
                 currentBenutzer,
@@ -56,5 +58,26 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetVerfuegungen() {
         permitAll();
+    }
+
+    @Transactional
+    public void canGetVerfuegungenByFallId(final UUID fallId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
+            return;
+        }
+
+        final var fall = fallRepository.requireById(fallId);
+        if (
+            AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                fall,
+                currentBenutzer,
+                sozialdienstService
+            )
+        ) {
+            return;
+        }
+
+        forbidden();
     }
 }
