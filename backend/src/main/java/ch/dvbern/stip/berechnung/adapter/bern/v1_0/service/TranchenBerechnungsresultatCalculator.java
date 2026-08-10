@@ -117,7 +117,6 @@ public class TranchenBerechnungsresultatCalculator {
             teilzeitStiefHalbGeschwistersBeiElternAnrechnenVals.add(null);
         }
         return teilzeitStiefHalbGeschwistersBeiElternAnrechnenVals;
-
     }
 
     private List<SteuerdatenTyp> getSteuerdatenTypsToPrioritize(

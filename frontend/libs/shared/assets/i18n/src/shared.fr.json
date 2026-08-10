@@ -568,6 +568,7 @@
   "shared.verfuegung.zusammenfassung.resultat.abgelehnt": "Bourse refusée",
   "shared.verfuegung.zusammenfassung.title": "Résumé",
   "shared.verfuegung.zusammenfassung.total": "Total",
+  "shared.verfuegung.zusammenfassung.limit": "Les montants inférieurs à {{ limit }} francs ne sont pas accordés",
   "shared.verfuegung.zusammenfassung.berechnungen": "Calculs",
   "shared.verfuegung.zusammenfassung.item.link": "Détail",
   "shared.verfuegung.zusammenfassung.item.title": "Calcul pour {{ anzahlMonate }} mois",

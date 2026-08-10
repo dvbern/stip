@@ -37,7 +37,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
@@ -65,8 +64,7 @@ public class Statusprotokoll extends AbstractTenantEntity {
     private StatusprotokollEntryTyp typ;
 
     @Nullable
-    @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
-    @Column(name = "comment", length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
+    @Column(columnDefinition = "text", name = "comment")
     private String comment;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

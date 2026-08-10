@@ -29,10 +29,12 @@ public final class MathUtil {
         return value.setScale(0, RoundingMode.HALF_UP).intValue();
     }
 
-    public static BigDecimal divideByTranchen(BigDecimal value, int tranchen) {
-        if (tranchen == 12) {
+    public static BigDecimal divideByTrancheDuration(BigDecimal value, int trancheDurationMonths) {
+        if (trancheDurationMonths == 12) {
             return value;
         }
-        return value.multiply(BigDecimal.valueOf(tranchen)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
+        return value.multiply(BigDecimal.valueOf(trancheDurationMonths))
+            .divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
     }
+
 }

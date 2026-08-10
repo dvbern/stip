@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 
 public class BerechnungTestcaseParserArgumentProvider implements ArgumentsProvider {
-    static final String TESTFILE_PATH = "testcase/kiBon-Stip_Testfallmatrix_Master (2026-06-26) (1).xlsx";
+    static final String TESTFILE_PATH = "testcase/kiBon-Stip_Testfallmatrix_Master.xlsx";
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
@@ -42,7 +42,7 @@ public class BerechnungTestcaseParserArgumentProvider implements ArgumentsProvid
             true
         );
 
-        return demoDatas.stream().map(Arguments::of);
+        return demoDatas.stream().map(demoData -> Arguments.argumentSet(demoData.getTestFall(), demoData));
     }
 
     public static List<DemoData> parseList(final File file, final Boolean ignoreBerechnungErrors) {
