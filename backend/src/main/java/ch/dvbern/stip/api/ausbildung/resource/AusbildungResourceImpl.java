@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.authorization.AusbildungUnterbruchAntragAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -127,6 +128,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> downloadAusbildungUnterbruchAntragDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
