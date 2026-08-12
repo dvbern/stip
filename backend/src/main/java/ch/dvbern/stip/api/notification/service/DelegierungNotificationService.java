@@ -17,10 +17,7 @@
 
 package ch.dvbern.stip.api.notification.service;
 
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
-import ch.dvbern.stip.api.notification.entity.Notification;
-import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import io.quarkus.qute.CheckedTemplate;
@@ -32,8 +29,7 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DelegierungNotificationService {
-    private final NotificationRepository notificationRepository;
-    private final MailService mailService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void createAbgelehntNotificationAndSendStdMail(final Delegierung delegierung) {
@@ -57,11 +53,6 @@ public class DelegierungNotificationService {
         final var fall = delegierung.getFall();
         final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
         final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
-
-        final Notification notification = new Notification()
-            .setNotificationType(notificationType)
-            .setFall(fall);
-        NotificationUtil.setAbsender(absender, notification);
 
         final String msg = switch (notificationType) {
             case DELEGIERUNG_ANGENOMMEN -> Templates
@@ -90,12 +81,9 @@ public class DelegierungNotificationService {
                 .render();
             default -> throw new IllegalStateException("Unexpected value: " + notificationType);
         };
-        notification.setNotificationText(msg);
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForFall(
-            delegierung.getPersoenlicheAngaben(),
-            fall
-        );
+
+        notificationService
+            .createNotificationAndSendStdMail(notificationType, fall, absender, persoenlicheAngaben, msg);
     }
 
     @CheckedTemplate

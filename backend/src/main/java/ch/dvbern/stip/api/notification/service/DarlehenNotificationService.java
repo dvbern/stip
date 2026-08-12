@@ -19,10 +19,7 @@ package ch.dvbern.stip.api.notification.service;
 
 import java.util.Optional;
 
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
-import ch.dvbern.stip.api.notification.entity.Notification;
-import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import io.quarkus.qute.CheckedTemplate;
@@ -34,8 +31,7 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DarlehenNotificationService {
-    private final NotificationRepository notificationRepository;
-    private final MailService mailService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void createAbgelehntNotificationAndSendStdMail(final FreiwilligDarlehen freiwilligDarlehen) {
@@ -81,7 +77,6 @@ public class DarlehenNotificationService {
         final FreiwilligDarlehen freiwilligDarlehen,
         Optional<String> kommentar
     ) {
-        final var fall = freiwilligDarlehen.getFall();
         final var absender =
             freiwilligDarlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
         final var pia =
@@ -90,11 +85,6 @@ public class DarlehenNotificationService {
                 .getLatestGesuchTranche()
                 .getGesuchFormular()
                 .getPersonInAusbildung();
-
-        final Notification notification = new Notification()
-            .setNotificationType(notificationType)
-            .setFall(fall);
-        NotificationUtil.setAbsender(absender, notification);
 
         final String msg = switch (notificationType) {
             case DARLEHEN_ABGELEHNT -> Templates
@@ -120,9 +110,13 @@ public class DarlehenNotificationService {
             default -> throw new IllegalStateException("Unexpected value: " + notificationType);
         };
 
-        notification.setNotificationText(msg);
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(freiwilligDarlehen.getRelatedGesuch());
+        notificationService.createNotificationAndSendStdMail(
+            notificationType,
+            freiwilligDarlehen.getRelatedGesuch(),
+            msg,
+            Optional.of(absender),
+            Optional.empty()
+        );
     }
 
     @CheckedTemplate

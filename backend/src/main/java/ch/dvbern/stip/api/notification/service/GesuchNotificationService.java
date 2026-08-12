@@ -20,13 +20,11 @@ package ch.dvbern.stip.api.notification.service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.notification.entity.Notification;
-import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
@@ -42,8 +40,7 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchNotificationService {
-    private final NotificationRepository notificationRepository;
-    private final MailService mailService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void createNeueVerfuegungNotificationAndSendStdMail(final Verfuegung verfuegung) {
@@ -63,15 +60,12 @@ public class GesuchNotificationService {
             Templates.getNeueVerfuegungText(pia.getVorname(), pia.getNachname(), pia.getKorrespondenzSprache())
                 .render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.NEUE_VERFUEGUNG)
-            .setFall(verfuegung.getGesuch().getAusbildung().getFall())
-            .setNotificationText(msg)
-            .setContextId(mostRecentVerfuegungsDokument.get().getId());
-        NotificationUtil.setAbsender(verfuegung.getGesuch(), notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(verfuegung.getGesuch());
+        notificationService.createNotificationAndSendStdMail(
+            NotificationType.NEUE_VERFUEGUNG,
+            verfuegung.getGesuch(),
+            msg,
+            Optional.of(mostRecentVerfuegungsDokument.get().getId())
+        );
     }
 
     @Transactional
@@ -88,14 +82,8 @@ public class GesuchNotificationService {
                 .getStatusChangeWithKommentarText(anrede, nachname, kommentar.getText(), pia.getKorrespondenzSprache())
                 .render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.GESUCH_STATUS_CHANGE_WITH_COMMENT)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService
+            .createNotificationAndSendStdMail(NotificationType.GESUCH_STATUS_CHANGE_WITH_COMMENT, gesuch, msg);
     }
 
     @Transactional
@@ -109,14 +97,7 @@ public class GesuchNotificationService {
             .getStatusChangeToEingereichtText(pia.getVorname(), pia.getNachname(), pia.getKorrespondenzSprache())
             .render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createNotificationAndSendStdMail(NotificationType.GESUCH_EINGEREICHT, gesuch, msg);
     }
 
     @Transactional
@@ -140,14 +121,7 @@ public class GesuchNotificationService {
             pia.getKorrespondenzSprache()
         ).render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createNotificationAndSendStdMail(NotificationType.FEHLENDE_DOKUMENTE, gesuch, msg);
     }
 
     @Transactional
@@ -161,14 +135,8 @@ public class GesuchNotificationService {
             .getFehlendeDokumenteEingereichtText(pia.getVorname(), pia.getNachname(), pia.getKorrespondenzSprache())
             .render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE_EINREICHEN)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService
+            .createNotificationAndSendStdMail(NotificationType.FEHLENDE_DOKUMENTE_EINGEREICHT, gesuch, msg);
     }
 
     @Transactional
@@ -184,14 +152,8 @@ public class GesuchNotificationService {
             pia.getKorrespondenzSprache()
         ).render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService
+            .createNotificationAndSendStdMail(NotificationType.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT, gesuch, msg);
     }
 
     @Transactional
@@ -211,14 +173,7 @@ public class GesuchNotificationService {
                 )
                 .render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.NACHFRIST_DOKUMENTE_CHANGED)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createNotificationAndSendStdMail(NotificationType.NACHFRIST_DOKUMENTE_CHANGED, gesuch, msg);
     }
 
     @Transactional
@@ -228,18 +183,11 @@ public class GesuchNotificationService {
             .getGesuchFormular()
             .getPersonInAusbildung();
 
-        final String message =
+        final String msg =
             Templates.getAuszahlungFailedText(pia.getVorname(), pia.getNachname(), pia.getKorrespondenzSprache())
                 .render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.FAILED_AUSZAHLUNG)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(message);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createNotificationAndSendStdMail(NotificationType.FAILED_AUSZAHLUNG, gesuch, msg);
     }
 
     @CheckedTemplate

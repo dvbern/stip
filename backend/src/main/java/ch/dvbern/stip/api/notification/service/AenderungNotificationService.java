@@ -17,11 +17,8 @@
 
 package ch.dvbern.stip.api.notification.service;
 
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.notification.entity.Notification;
-import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -35,8 +32,7 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class AenderungNotificationService {
-    private final NotificationRepository notificationRepository;
-    private final MailService mailService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void createEingereichtNotificationAndSendStdMail(final Gesuch gesuch) {
@@ -45,14 +41,7 @@ public class AenderungNotificationService {
         final String msg =
             Templates.getEingereicht(pia.getVorname(), pia.getNachname(), pia.getKorrespondenzSprache()).render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.AENDERUNG_EINGEREICHT)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createNotificationAndSendStdMail(NotificationType.AENDERUNG_EINGEREICHT, gesuch, msg);
     }
 
     @Transactional
@@ -68,14 +57,7 @@ public class AenderungNotificationService {
             .getAbgelehnt(pia.getVorname(), pia.getNachname(), kommentarDto.getText(), pia.getKorrespondenzSprache())
             .render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.AENDERUNG_ABGELEHNT)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createNotificationAndSendStdMail(NotificationType.AENDERUNG_ABGELEHNT, gesuch, msg);
     }
 
     @Transactional
@@ -91,14 +73,8 @@ public class AenderungNotificationService {
         final String msg =
             Templates.getInitiatedBySachbearbeiter(kommentar.getText(), pia.getKorrespondenzSprache()).render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.GESUCH_IN_BEARBEITUNG_AS_AENDERUNG)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(msg);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService
+            .createNotificationAndSendStdMail(NotificationType.AENDERUNG_INITIATED_BY_SACHBEARBEITER, gesuch, msg);
     }
 
     @CheckedTemplate

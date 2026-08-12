@@ -21,9 +21,6 @@ import java.time.LocalDate;
 
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.notification.entity.Notification;
-import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import io.quarkus.qute.CheckedTemplate;
@@ -36,8 +33,7 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class AusbildungNotificationService {
-    private final NotificationRepository notificationRepository;
-    private final MailService mailService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void createUnterbruchAntragEingereichtNotificationAndSendStdMail(
@@ -49,20 +45,14 @@ public class AusbildungNotificationService {
             .getGesuchFormular()
             .getPersonInAusbildung();
 
-        final String message = Templates.getUnterbruchAntragEingereichtText(
+        final String msg = Templates.getUnterbruchAntragEingereichtText(
             antrag.getGueltigkeit().getGueltigAb(),
             antrag.getGueltigkeit().getGueltigBis(),
             pia.getKorrespondenzSprache()
         ).render();
 
-        final Notification notification = new Notification()
-            .setNotificationType(NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(message);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService
+            .createNotificationAndSendStdMail(NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT, gesuch, msg);
     }
 
     @Transactional
@@ -75,7 +65,7 @@ public class AusbildungNotificationService {
             .getGesuchFormular()
             .getPersonInAusbildung();
 
-        final String message = switch (antrag.getStatus()) {
+        final String msg = switch (antrag.getStatus()) {
             case AKZEPTIERT -> Templates.getUnterbruchAntragAkzeptiertText(
                 antrag.getKommentarSB(),
                 antrag.getGueltigkeit().getGueltigAb(),
@@ -97,14 +87,7 @@ public class AusbildungNotificationService {
             case null, default -> throw new IllegalStateException();
         };
 
-        final Notification notification = new Notification()
-            .setNotificationType(notificationType)
-            .setFall(gesuch.getAusbildung().getFall())
-            .setNotificationText(message);
-        NotificationUtil.setAbsender(gesuch, notification);
-
-        notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createNotificationAndSendStdMail(notificationType, gesuch, msg);
     }
 
     @CheckedTemplate
