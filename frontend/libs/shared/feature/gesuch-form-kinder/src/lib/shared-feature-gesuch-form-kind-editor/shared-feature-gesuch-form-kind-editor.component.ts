@@ -21,7 +21,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 import { subYears } from 'date-fns';
@@ -40,6 +39,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiAppDatePipe } from '@dv/shared/ui/app-date-pipe';
 import {
   SharedUiFormFieldDirective,
@@ -53,7 +53,6 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
-  percentStringToNumber,
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
@@ -80,7 +79,6 @@ const MEDIUM_AGE = 20;
     CommonModule,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
-    TranslocoPipe,
     SharedUiFormMessageErrorDirective,
     MatFormFieldModule,
     MatCheckboxModule,
@@ -95,6 +93,7 @@ const MEDIUM_AGE = 20;
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
     SharedUiAppDatePipe,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-kind-editor.component.scss'],
@@ -154,6 +153,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       [Validators.required],
     ),
     unterhaltsbeitraege: [<string | undefined>undefined],
+    betreuungskosten: [<string | undefined>undefined],
     kinderUndAusbildungszulagen: [<string | undefined>undefined],
     renten: [<string | undefined>undefined],
     ergaenzungsleistungen: [<string | undefined>undefined],
@@ -177,6 +177,17 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     return unterhaltsbeitraege > 0
       ? DokumentTyp.KINDER_ALIMENTENVERORDUNG
       : null;
+  });
+
+  betreuungskostenChangeSig = toSignal(
+    this.form.controls.betreuungskosten.valueChanges,
+  );
+  betreuungskostenDocumentSig = this.createUploadOptionsSig(() => {
+    const betreuungskosten = fromFormatedNumber(
+      this.betreuungskostenChangeSig() ?? '0',
+    );
+
+    return betreuungskosten > 0 ? DokumentTyp.KINDER_BETREUUNGSKOSTEN : null;
   });
 
   kinderUndAusbildungszulagenChangeSig = toSignal(
@@ -213,6 +224,16 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     return amount > 0 ? DokumentTyp.KINDER_ANDERE_EINNAHMEN : null;
   });
 
+  private numberConverter = this.formUtils.createNumberConverter(this.form, [
+    'wohnsitzAnteilPia',
+    'unterhaltsbeitraege',
+    'betreuungskosten',
+    'kinderUndAusbildungszulagen',
+    'renten',
+    'ergaenzungsleistungen',
+    'andereEinnahmen',
+  ]);
+
   constructor() {
     this.formIsUnsaved = observeUnsavedChanges(
       this.form,
@@ -234,12 +255,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         kind.geburtsdatum,
         this.languageSig(),
       ),
-      wohnsitzAnteilPia: kind.wohnsitzAnteilPia?.toString(),
-      unterhaltsbeitraege: kind.unterhaltsbeitraege?.toString(),
-      kinderUndAusbildungszulagen: kind.kinderUndAusbildungszulagen?.toString(),
-      renten: kind.renten?.toString(),
-      ergaenzungsleistungen: kind.ergaenzungsleistungen?.toString(),
-      andereEinnahmen: kind.andereEinnahmen?.toString(),
+      ...this.numberConverter.toString(kind),
     });
   }
 
@@ -264,16 +280,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         id: kind?.id,
         entryId: this.entryIdSig(),
         geburtsdatum,
-        wohnsitzAnteilPia: percentStringToNumber(formValues.wohnsitzAnteilPia),
-        unterhaltsbeitraege: fromFormatedNumber(formValues.unterhaltsbeitraege),
-        kinderUndAusbildungszulagen: fromFormatedNumber(
-          formValues.kinderUndAusbildungszulagen,
-        ),
-        renten: fromFormatedNumber(formValues.renten),
-        ergaenzungsleistungen: fromFormatedNumber(
-          formValues.ergaenzungsleistungen,
-        ),
-        andereEinnahmen: fromFormatedNumber(formValues.andereEinnahmen),
+        ...this.numberConverter.toNumber(formValues),
       });
       this.form.markAsPristine();
     }

@@ -201,8 +201,8 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('betreuungskostenKinder')"
-        [amountSig]="kosten.betreuungskostenKinder | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.betreuungskostenKinder"
+        [amountSig]="kosten.betreuungskostenTotal | formatChfPositive"
+        *dvHideZero="hideZero; value: kosten.betreuungskostenTotal"
       >
       </dv-position>
 
