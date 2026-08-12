@@ -17,18 +17,13 @@
 
 package ch.dvbern.stip.api.gesuchformular.util;
 
-import java.util.List;
-import java.util.Set;
-
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import org.junit.jupiter.api.Test;
 
@@ -125,24 +120,5 @@ class GesuchFormularDiffUtilTest {
 
         updated.setPersonInAusbildung(null);
         assertTrue(GesuchFormularDiffUtil.hasWohnsitzChanged(updated, original));
-    }
-
-    @Test
-    void hasKinderChangedTest() {
-        final var original = new GesuchFormular().setKinds(Set.of(new Kind()));
-
-        var updateKinds = List.of(new KindUpdateDto());
-        final var update = new GesuchFormularUpdateDto();
-        update.setKinds(updateKinds);
-
-        assertFalse(GesuchFormularDiffUtil.hasKinderChanged(update, original));
-
-        updateKinds = List.of();
-        update.setKinds(updateKinds);
-
-        assertTrue(GesuchFormularDiffUtil.hasKinderChanged(update, original));
-
-        update.setKinds(null);
-        assertFalse(GesuchFormularDiffUtil.hasKinderChanged(update, original));
     }
 }

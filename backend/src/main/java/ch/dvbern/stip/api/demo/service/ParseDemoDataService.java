@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.type.DemoDataParseContext;
 import ch.dvbern.stip.api.demo.util.ParseDemoDataUtil;
 import ch.dvbern.stip.api.demo.util.ParseDemoEnumUtil;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -451,7 +451,7 @@ public class ParseDemoDataService {
         if (type == EinnahmenKostenType.PERSON_IN_AUSBILDUNG) {
             updateList(list, "Ausbildungskosten", 1, (c, d) -> d.setAusbildungskosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         }
-        updateList(list, "Betreuungskosten Kinder", 1, (c, d) -> d.setBetreuungskostenKinder(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Betreuungskosten Kinder", 1, (c, d) -> {});
         updateList(list, "Fahrkosten", 1, (c, d) -> d.setFahrkosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         if (type == EinnahmenKostenType.PARTNER) {
             updateList(list, "Verpflegungskosten", 1, (c, d) -> d.setVerpflegungskosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));

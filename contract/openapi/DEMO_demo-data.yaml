@@ -499,6 +499,7 @@ components:
         - kinderUndAusbildungszulagen
         - renten
         - ergaenzungsleistungen
+        - betreuungskosten
         - andereEinnahmen
       type: object
       properties:
@@ -522,6 +523,8 @@ components:
         renten:
           type: integer
         ergaenzungsleistungen:
+          type: integer
+        betreuungskosten:
           type: integer
         andereEinnahmen:
           type: integer
@@ -563,8 +566,6 @@ components:
         andereEinnahmen:
           type: integer
         ausbildungskosten:
-          type: integer
-        betreuungskostenKinder:
           type: integer
         fahrkosten:
           type: integer

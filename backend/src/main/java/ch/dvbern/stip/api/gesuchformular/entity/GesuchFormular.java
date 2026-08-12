@@ -160,13 +160,6 @@ import org.jilt.BuilderStyle;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
-@EinnahmenKostenBetreuungskostenRequiredConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten",
-    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
-)
 @EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(
     groups = {
         Default.class,
