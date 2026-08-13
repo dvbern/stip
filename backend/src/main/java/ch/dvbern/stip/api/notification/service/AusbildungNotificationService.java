@@ -55,6 +55,24 @@ public class AusbildungNotificationService {
             .createNotificationAndSendStdMail(NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT, gesuch, msg);
     }
 
+    public void createUnterbruchAntragAkzeptiertNotificationAndSendStdMail(final AusbildungUnterbruchAntrag antrag) {
+        final var gesuch = antrag.getGesuch();
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+
+        final String msg = Templates.getUnterbruchAntragAkzeptiertText(
+            antrag.getKommentarSB(),
+            antrag.getGueltigkeit().getGueltigAb(),
+            antrag.getGueltigkeit().getGueltigBis(),
+            pia.getKorrespondenzSprache()
+        ).render();
+
+        notificationService
+            .createNotificationAndSendStdMail(NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT, gesuch, msg);
+    }
+
     @Transactional
     public void createUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(
         final AusbildungUnterbruchAntrag antrag
@@ -65,29 +83,15 @@ public class AusbildungNotificationService {
             .getGesuchFormular()
             .getPersonInAusbildung();
 
-        final String msg = switch (antrag.getStatus()) {
-            case AKZEPTIERT -> Templates.getUnterbruchAntragAkzeptiertText(
-                antrag.getKommentarSB(),
-                antrag.getGueltigkeit().getGueltigAb(),
-                antrag.getGueltigkeit().getGueltigBis(),
-                pia.getKorrespondenzSprache()
-            ).render();
-            case ABGELEHNT -> Templates.getUnterbruchAntragAbgelehntText(
-                antrag.getKommentarSB(),
-                antrag.getGueltigkeit().getGueltigAb(),
-                antrag.getGueltigkeit().getGueltigBis(),
-                pia.getKorrespondenzSprache()
-            ).render();
-            case null, default -> throw new IllegalStateException();
-        };
+        final String msg = Templates.getUnterbruchAntragAbgelehntText(
+            antrag.getKommentarSB(),
+            antrag.getGueltigkeit().getGueltigAb(),
+            antrag.getGueltigkeit().getGueltigBis(),
+            pia.getKorrespondenzSprache()
+        ).render();
 
-        final NotificationType notificationType = switch (antrag.getStatus()) {
-            case AKZEPTIERT -> NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT;
-            case ABGELEHNT -> NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT;
-            case null, default -> throw new IllegalStateException();
-        };
-
-        notificationService.createNotificationAndSendStdMail(notificationType, gesuch, msg);
+        notificationService
+            .createNotificationAndSendStdMail(NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT, gesuch, msg);
     }
 
     @CheckedTemplate

@@ -35,48 +35,6 @@ public class DarlehenNotificationService {
 
     @Transactional
     public void createAbgelehntNotificationAndSendStdMail(final FreiwilligDarlehen freiwilligDarlehen) {
-        createNotificationAndSendStdMail(
-            NotificationType.DARLEHEN_ABGELEHNT,
-            freiwilligDarlehen,
-            Optional.empty()
-        );
-    }
-
-    @Transactional
-    public void createAkzeptiertNotificationAndSendStdMail(final FreiwilligDarlehen freiwilligDarlehen) {
-        createNotificationAndSendStdMail(
-            NotificationType.DARLEHEN_AKZEPTIERT,
-            freiwilligDarlehen,
-            Optional.empty()
-        );
-    }
-
-    @Transactional
-    public void createEingegebenNotificationAndSendStdMail(final FreiwilligDarlehen freiwilligDarlehen) {
-        createNotificationAndSendStdMail(
-            NotificationType.DARLEHEN_EINGEGEBEN,
-            freiwilligDarlehen,
-            Optional.empty()
-        );
-    }
-
-    @Transactional
-    public void createZurueckgewiesenNotificationAndSendStdMail(
-        final FreiwilligDarlehen freiwilligDarlehen,
-        String kommentar
-    ) {
-        createNotificationAndSendStdMail(
-            NotificationType.DARLEHEN_ZURUECKGEWIESEN,
-            freiwilligDarlehen,
-            Optional.of(kommentar)
-        );
-    }
-
-    private void createNotificationAndSendStdMail(
-        final NotificationType notificationType,
-        final FreiwilligDarlehen freiwilligDarlehen,
-        Optional<String> kommentar
-    ) {
         final var absender =
             freiwilligDarlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
         final var pia =
@@ -86,32 +44,96 @@ public class DarlehenNotificationService {
                 .getGesuchFormular()
                 .getPersonInAusbildung();
 
-        final String msg = switch (notificationType) {
-            case DARLEHEN_ABGELEHNT -> Templates
-                .getAbgelehnt(
-                    pia.getVorname(),
-                    pia.getNachname(),
-                    pia.getKorrespondenzSprache()
-                )
-                .render();
-            case DARLEHEN_AKZEPTIERT -> Templates
-                .getAkzeptiert(
-                    pia.getVorname(),
-                    pia.getNachname(),
-                    pia.getKorrespondenzSprache()
-                )
-                .render();
-            case DARLEHEN_EINGEGEBEN -> Templates
-                .getEingegeben(pia.getVorname(), pia.getNachname(), pia.getKorrespondenzSprache())
-                .render();
-            case DARLEHEN_ZURUECKGEWIESEN -> Templates
-                .getZurueckgewiesen(pia.getVorname(), pia.getNachname(), kommentar.get(), pia.getKorrespondenzSprache())
-                .render();
-            default -> throw new IllegalStateException("Unexpected value: " + notificationType);
-        };
+        final String msg = Templates
+            .getAbgelehnt(
+                pia.getVorname(),
+                pia.getNachname(),
+                pia.getKorrespondenzSprache()
+            )
+            .render();
 
         notificationService.createNotificationAndSendStdMail(
-            notificationType,
+            NotificationType.DARLEHEN_ABGELEHNT,
+            freiwilligDarlehen.getRelatedGesuch(),
+            msg,
+            Optional.of(absender),
+            Optional.empty()
+        );
+    }
+
+    @Transactional
+    public void createAkzeptiertNotificationAndSendStdMail(final FreiwilligDarlehen freiwilligDarlehen) {
+        final var absender =
+            freiwilligDarlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
+        final var pia =
+            freiwilligDarlehen.getFall()
+                .getLatestGesuch()
+                .getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung();
+
+        final String msg = Templates
+            .getAkzeptiert(
+                pia.getVorname(),
+                pia.getNachname(),
+                pia.getKorrespondenzSprache()
+            )
+            .render();
+
+        notificationService.createNotificationAndSendStdMail(
+            NotificationType.DARLEHEN_AKZEPTIERT,
+            freiwilligDarlehen.getRelatedGesuch(),
+            msg,
+            Optional.of(absender),
+            Optional.empty()
+        );
+    }
+
+    @Transactional
+    public void createEingegebenNotificationAndSendStdMail(final FreiwilligDarlehen freiwilligDarlehen) {
+        final var absender =
+            freiwilligDarlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
+        final var pia =
+            freiwilligDarlehen.getFall()
+                .getLatestGesuch()
+                .getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung();
+
+        final String msg = Templates
+            .getEingegeben(pia.getVorname(), pia.getNachname(), pia.getKorrespondenzSprache())
+            .render();
+
+        notificationService.createNotificationAndSendStdMail(
+            NotificationType.DARLEHEN_EINGEGEBEN,
+            freiwilligDarlehen.getRelatedGesuch(),
+            msg,
+            Optional.of(absender),
+            Optional.empty()
+        );
+    }
+
+    @Transactional
+    public void createZurueckgewiesenNotificationAndSendStdMail(
+        final FreiwilligDarlehen freiwilligDarlehen,
+        String kommentar
+    ) {
+
+        final var absender =
+            freiwilligDarlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
+        final var pia =
+            freiwilligDarlehen.getFall()
+                .getLatestGesuch()
+                .getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung();
+
+        final String msg = Templates
+            .getZurueckgewiesen(pia.getVorname(), pia.getNachname(), kommentar, pia.getKorrespondenzSprache())
+            .render();
+
+        notificationService.createNotificationAndSendStdMail(
+            NotificationType.DARLEHEN_ZURUECKGEWIESEN,
             freiwilligDarlehen.getRelatedGesuch(),
             msg,
             Optional.of(absender),

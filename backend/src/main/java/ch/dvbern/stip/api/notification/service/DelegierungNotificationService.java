@@ -33,57 +33,77 @@ public class DelegierungNotificationService {
 
     @Transactional
     public void createAbgelehntNotificationAndSendStdMail(final Delegierung delegierung) {
-        createNotificationAndSendStdMail(NotificationType.DELEGIERUNG_ABGELEHNT, delegierung);
-    }
-
-    @Transactional
-    public void createAngenommenNotificationAndSendStdMail(final Delegierung delegierung) {
-        createNotificationAndSendStdMail(NotificationType.DELEGIERUNG_ANGENOMMEN, delegierung);
-    }
-
-    @Transactional
-    public void createAufgeloestNotificationAndSendStdMail(final Delegierung delegierung) {
-        createNotificationAndSendStdMail(NotificationType.DELEGIERUNG_AUFGELOEST, delegierung);
-    }
-
-    private void createNotificationAndSendStdMail(
-        final NotificationType notificationType,
-        final Delegierung delegierung
-    ) {
         final var fall = delegierung.getFall();
         final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
         final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
 
-        final String msg = switch (notificationType) {
-            case DELEGIERUNG_ANGENOMMEN -> Templates
-                .getAngenommen(
-                    persoenlicheAngaben.getVorname(),
-                    persoenlicheAngaben.getNachname(),
-                    delegierung.getSozialdienst().getName(),
-                    persoenlicheAngaben.getSprache()
-                )
-                .render();
-            case DELEGIERUNG_ABGELEHNT -> Templates
-                .getAbgelehnt(
-                    persoenlicheAngaben.getVorname(),
-                    persoenlicheAngaben.getNachname(),
-                    delegierung.getSozialdienst().getName(),
-                    persoenlicheAngaben.getSprache()
-                )
-                .render();
-            case DELEGIERUNG_AUFGELOEST -> Templates
-                .getAufgeloest(
-                    persoenlicheAngaben.getVorname(),
-                    persoenlicheAngaben.getNachname(),
-                    delegierung.getSozialdienst().getName(),
-                    persoenlicheAngaben.getSprache()
-                )
-                .render();
-            default -> throw new IllegalStateException("Unexpected value: " + notificationType);
-        };
+        final String msg = Templates
+            .getAbgelehnt(
+                persoenlicheAngaben.getVorname(),
+                persoenlicheAngaben.getNachname(),
+                delegierung.getSozialdienst().getName(),
+                persoenlicheAngaben.getSprache()
+            )
+            .render();
 
         notificationService
-            .createNotificationAndSendStdMail(notificationType, fall, absender, persoenlicheAngaben, msg);
+            .createNotificationAndSendStdMail(
+                NotificationType.DELEGIERUNG_ABGELEHNT,
+                fall,
+                absender,
+                persoenlicheAngaben,
+                msg
+            );
+    }
+
+    @Transactional
+    public void createAngenommenNotificationAndSendStdMail(final Delegierung delegierung) {
+        final var fall = delegierung.getFall();
+        final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
+        final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
+
+        final String msg = Templates
+            .getAngenommen(
+                persoenlicheAngaben.getVorname(),
+                persoenlicheAngaben.getNachname(),
+                delegierung.getSozialdienst().getName(),
+                persoenlicheAngaben.getSprache()
+            )
+            .render();
+
+        notificationService
+            .createNotificationAndSendStdMail(
+                NotificationType.DELEGIERUNG_ANGENOMMEN,
+                fall,
+                absender,
+                persoenlicheAngaben,
+                msg
+            );
+    }
+
+    @Transactional
+    public void createAufgeloestNotificationAndSendStdMail(final Delegierung delegierung) {
+        final var fall = delegierung.getFall();
+        final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
+        final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
+
+        final String msg = Templates
+            .getAufgeloest(
+                persoenlicheAngaben.getVorname(),
+                persoenlicheAngaben.getNachname(),
+                delegierung.getSozialdienst().getName(),
+                persoenlicheAngaben.getSprache()
+            )
+            .render();
+
+        notificationService
+            .createNotificationAndSendStdMail(
+                NotificationType.DELEGIERUNG_AUFGELOEST,
+                fall,
+                absender,
+                persoenlicheAngaben,
+                msg
+            );
     }
 
     @CheckedTemplate

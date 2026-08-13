@@ -64,6 +64,7 @@ public class GesuchNotificationService {
             NotificationType.NEUE_VERFUEGUNG,
             verfuegung.getGesuch(),
             msg,
+            Optional.empty(),
             Optional.of(mostRecentVerfuegungsDokument.get().getId())
         );
     }
