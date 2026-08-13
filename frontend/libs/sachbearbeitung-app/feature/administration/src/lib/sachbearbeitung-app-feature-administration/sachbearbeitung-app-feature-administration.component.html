@@ -3,7 +3,6 @@
     <ng-template #navigation cdkPortal>
       <div class="sidenav tw:p-6">
         @for (option of options; track $index) {
-          @let isActive = route.isActive(option.route, false);
           <a
             *dvHasRoles="option.allowedRoles"
             type="button"
