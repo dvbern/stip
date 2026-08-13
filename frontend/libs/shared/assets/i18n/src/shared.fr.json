@@ -984,8 +984,9 @@
   "shared.form.familiensituation.file.GEBURTSSCHEIN": "Copie de l'acte de naissance",
   "shared.form.familiensituation.file.TRENNUNGSKONVENTION": "Convention de séparation / Convention de divorce Parents",
   "shared.form.familiensituation.file.TRENNUNGSKONVENTION_DESCRIPTION": "Copie de la convention de séparation de corps ou de divorce de vos parents, autorisée par voie judiciaire",
-  "shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_VATER": "Lettre d'explication",
-  "shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_MUTTER": "Lettre d'explication",
+  "shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_VATER": "Begründung Vater",
+  "shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_MUTTER": "Begründung Mutter",
+  "shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_DESCRIPTION": "Zur Begründung des unbekannten Aufenthaltsortes können Sie folgende Unterlagen einreichen:<br>amtliche Bestätigung der Abmeldung des letzten Wohnortes ohne Angabe der neuen Wohnortsadresse<br>Verschollenheitserklärung oder ähnliches Dokument</<br>Belege über Ihre Bemühungen zur Einreichung der Unterlagen (z.B. Kopie der Korrespondenz mit Behörden) oder eine Erklärung, warum entsprechende Dokumente nicht beschafft werden können",
 
   "shared.eltern.title": "Parent",
   "shared.form.eltern.MUTTER.title": "Informations sur la mère",
