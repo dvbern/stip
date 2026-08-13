@@ -17,16 +17,20 @@
 
 package ch.dvbern.stip.api.delegieren.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository.DelegierungEntry;
+import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -49,13 +53,13 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class DelegierenService {
+    private final BenutzerService benutzerService;
     private final DelegierungRepository delegierungRepository;
     private final FallRepository fallRepository;
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstService sozialdienstService;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final PersoenlicheAngabenMapper persoenlicheAngabenMapper;
-    private final SozialdienstDashboardQueryBuilder sozDashboardQueryBuilder;
     private final StipConfig config;
     private final DelegierungMapper delegierungMapper;
     private final NotificationService notificationService;
@@ -134,7 +138,6 @@ public class DelegierenService {
         String vorname,
         LocalDate geburtsdatum,
         String wohnort,
-        String status,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -152,7 +155,6 @@ public class DelegierenService {
             vorname,
             geburtsdatum,
             wohnort,
-            status,
             sortColumn,
             sortOrder
         );
@@ -168,7 +170,6 @@ public class DelegierenService {
         String vorname,
         LocalDate geburtsdatum,
         String wohnort,
-        String status,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -176,56 +177,46 @@ public class DelegierenService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var sozialdienst = sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer();
+        final var sozialdienstId = sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer().getId();
+        final var me = benutzerService.getCurrentBenutzer();
+        final var sozialdienstBenutzerId =
+            getDelegierungSozQueryType == GetDelegierungSozQueryTypeAdmin.ALLE_BEARBEITBAR_MEINE
+                ? sozialdienstBenutzerRepository.requireById(me.getId()).getId()
+                : null;
+        final var delegierungStatus = switch (getDelegierungSozQueryType) {
+            case GetDelegierungSozQueryTypeAdmin.ALLE, GetDelegierungSozQueryTypeAdmin.ALLE_BEARBEITBAR_MEINE -> null;
+            case GetDelegierungSozQueryTypeAdmin.OFFEN -> DelegierungStatus.EINGEREICHT;
+        };
 
-        final var baseQuery = sozDashboardQueryBuilder
-            .baseQuery(getDelegierungSozQueryType, sozialdienst.getId());
-
-        if (fallNummer != null) {
-            sozDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
-        }
-
-        if (vorname != null) {
-            sozDashboardQueryBuilder.vorname(baseQuery, vorname);
-        }
-
-        if (nachname != null) {
-            sozDashboardQueryBuilder.nachname(baseQuery, nachname);
-        }
-
-        if (geburtsdatum != null) {
-            sozDashboardQueryBuilder.geburtsdatum(baseQuery, geburtsdatum);
-        }
-
-        if (wohnort != null) {
-            sozDashboardQueryBuilder.wohnort(baseQuery, wohnort);
-        }
-
-        if (status != null) {
-            sozDashboardQueryBuilder.delegierungStatus(baseQuery, status);
-        }
-
-        // Creating the count query must happen before ordering,
-        // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
-        final var countQuery = sozDashboardQueryBuilder.getCountQuery(baseQuery);
-
-        if (sortColumn != null && sortOrder != null) {
-            sozDashboardQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
-        } else {
-            sozDashboardQueryBuilder.defaultOrder(baseQuery);
-        }
-
-        sozDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.stream()
-            .map(delegierung -> delegierungMapper.toEntryDto(delegierung))
-            .toList();
+        final var result = delegierungRepository.getFilteredAndOrderedDelegierungEntrys(
+            sozialdienstId,
+            sozialdienstBenutzerId,
+            fallNummer,
+            nachname,
+            vorname,
+            geburtsdatum,
+            wohnort,
+            delegierungStatus,
+            sortColumn,
+            sortOrder,
+            page,
+            pageSize
+        );
+        final var totalEntries =
+            BigDecimal.valueOf(result.stream().findFirst().map(DelegierungEntry::totalCount).orElse(0d)).intValue();
 
         return new PaginatedSozDashboardDto(
             page,
-            results.size(),
-            Math.toIntExact(countQuery.fetchFirst()),
-            results
+            result.size(),
+            totalEntries,
+            result.stream().map(delegierungMapper::toEntryDto).toList()
         );
+    }
+
+    public DelegierungDto getDelegierung(UUID delegierungId) {
+        final var delegierung = delegierungRepository.requireById(delegierungId);
+
+        return delegierungMapper.toDto(delegierung);
     }
 
     public List<DelegierungDto> getAllDelegierungsForGesuch(UUID gesuchId) {

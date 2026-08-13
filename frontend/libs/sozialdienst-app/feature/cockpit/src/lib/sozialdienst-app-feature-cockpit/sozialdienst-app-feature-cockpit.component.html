@@ -128,11 +128,11 @@
               </th>
               <td
                 mat-cell
-                *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                 class="tw:whitespace-nowrap"
-                [dvTruncateTooltip]="fall.persoenlicheAngaben.nachname"
+                [dvTruncateTooltip]="delegierung.nachname"
               >
-                {{ fall.persoenlicheAngaben.nachname }}
+                {{ delegierung.nachname }}
               </td>
             </ng-container>
 
@@ -164,9 +164,9 @@
                 mat-cell
                 *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                 class="tw:max-w-32 tw:whitespace-nowrap"
-                [dvTruncateTooltip]="delegierung.persoenlicheAngaben.vorname"
+                [dvTruncateTooltip]="delegierung.vorname"
               >
-                {{ delegierung.persoenlicheAngaben.vorname }}
+                {{ delegierung.vorname }}
               </td>
             </ng-container>
 
@@ -197,12 +197,12 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="tw:dv-button tw:text-dv-gray tw:!p-1"
+                      class="tw:dv-button tw:text-dv-gray tw:p-1"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                     >
-                      <dv-shared-ui-icon-chip class="tw:text-xs">
-                        <i class="icon material-symbols-rounded tw:text-lg!">event</i>
+                      <dv-shared-ui-icon-chip class="tw:text-sm!">
+                        <i class="material-symbols-rounded tw:text-lg!">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
@@ -219,7 +219,7 @@
                 *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                 class="tw:whitespace-nowrap"
               >
-                {{ delegierung.persoenlicheAngaben.geburtsdatum | date: 'dd.MM.yyyy' }}
+                {{ delegierung.geburtsdatum | date: 'dd.MM.yyyy' }}
               </td>
             </ng-container>
 
@@ -252,9 +252,9 @@
                 mat-cell
                 *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                 class="tw:max-w-32 tw:whitespace-nowrap"
-                [dvTruncateTooltip]="delegierung.persoenlicheAngaben.adresse.ort"
+                [dvTruncateTooltip]="delegierung.wohnort"
               >
-                {{ delegierung.persoenlicheAngaben.adresse.ort }}
+                {{ delegierung.wohnort }}
               </td>
             </ng-container>
 
@@ -284,13 +284,29 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                  *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                   class="tw:w-48 tw:whitespace-nowrap"
                 >
-                  {{ t(`shared.delegierung.status.${fall.status}`) }}
+                  {{ t(`shared.delegierung.status.${delegierung.status}`) }}
                 </td>
               </ng-container>
             }
+
+            <!-- status -->
+            <ng-container matColumnDef="FALL_STATUS">
+              <th mat-header-cell *matHeaderCellDef class="filtered tw:w-52 tw:whitespace-nowrap tw:align-top">
+                <div>{{ t('sozialdienst-app.cockpit.table.fallStatus') }}</div>
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
+                class="tw:w-48 tw:whitespace-nowrap"
+              >
+                @if (delegierung.statusKey) {
+                  {{ t(delegierung.statusKey) }}
+                }
+              </td>
+            </ng-container>
 
             <!-- aktionen -->
             <ng-container matColumnDef="AKTIONEN">

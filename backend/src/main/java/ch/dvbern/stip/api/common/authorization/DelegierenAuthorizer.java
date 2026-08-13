@@ -133,6 +133,11 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void canRead() {
+        permitAll();
+    }
+
+    @Transactional
     public void canAblehnen(final UUID delegierungId) {
         final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow();
         final var delegierung = delegierungRepository.requireById(delegierungId);

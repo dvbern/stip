@@ -71,7 +71,6 @@ export * from './delegierterMitarbeiterAendern';
 export * from './delegierung';
 export * from './delegierungCreate';
 export * from './delegierungEntry';
-export * from './delegierungEntryAllOf';
 export * from './delegierungSlim';
 export * from './delegierungStatus';
 export * from './demoAusbildung';
