@@ -189,7 +189,6 @@ class DocumentsRequiredConstraintValidatorTest {
         final List<DokumentTyp> requiredDokTypes = List.of(
             DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             DokumentTyp.EK_PARTNER_LOHNABRECHNUNG,
-            DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER,
             DokumentTyp.EK_PARTNER_BELEG_OV_ABONNEMENT,
             DokumentTyp.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
             DokumentTyp.EK_PARTNER_BELEG_BEZAHLTE_RENTEN,

@@ -416,6 +416,7 @@ public class ParseDemoDataService {
             updateList(kinds, ".*Unterhaltsbeiträge", 1, (c, o) -> o.get(index).ifPresent(d -> d.setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             updateList(kinds, ".*Ausbildungszulagen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setKinderUndAusbildungszulagen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             updateList(kinds, "Renten", 1, (c, o) -> o.get(index).ifPresent(d -> d.setRenten(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(kinds, "Betreuungskosten", 1, (c, o) -> o.get(index).ifPresent(d -> d.setBetreuungskosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             updateList(kinds, "Ergänzungsleistungen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setErgaenzungsleistungen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             updateList(kinds, "Andere Einnahmen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAndereEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             // spotless:on
@@ -732,7 +733,8 @@ public class ParseDemoDataService {
             updateList(geschwisters, "bei Vater.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilVater(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
             updateList(geschwisters, "bei Mutter.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
             updateList(geschwisters, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.ausbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c.getCell()))));
-            // updateList(geschwisters, "GeschwisterTyp", 1, (c, o) -> o.get(index).ifPresent(d -> d.geschwisterTyp(ParseDemoEnumUtil.parseGeschwisterTyp(c.getCell()))));
+            updateList(geschwisters, "GeschwisterTyp", 1, (c, o) -> o.get(index).ifPresent(d -> d.geschwisterTyp(ParseDemoEnumUtil.parseGeschwisterTyp(c.getCell()))));
+            updateList(geschwisters, "ElternTyp", 1, (c, o) -> {});
             // spotless:on
         }
 
