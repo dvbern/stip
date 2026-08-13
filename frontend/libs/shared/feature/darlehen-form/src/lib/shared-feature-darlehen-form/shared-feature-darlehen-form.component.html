@@ -19,6 +19,7 @@
       <dv-shared-pattern-darlehen-form
         (formIsUnsavedSig)="hasUnsavedChanges = $event"
         (darlehenDeletedSig)="redirectToHome()"
+        (darlehenUpdatedSig)="reloadFallHeader()"
       ></dv-shared-pattern-darlehen-form>
     </div>
   </div>
