@@ -52,7 +52,6 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
-import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +65,6 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_TINY;
 
 @RequestScoped
 @RequiredArgsConstructor
-@UnlessBuildProfile("test")
 @Slf4j
 public class VerfuegungBriefPdfService {
     private final StipDecisionTextRepository stipDecisionTextRepository;

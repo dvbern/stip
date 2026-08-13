@@ -47,12 +47,14 @@ import ch.dvbern.stip.integration.pdf.domain.model.PdfPayload;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfTemplateType;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
 import ch.dvbern.stip.integration.pdf.domain.service.BerechnungCopyMapper;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestScoped
 @RequiredArgsConstructor
+@UnlessBuildProfile("test")
 @Slf4j
 public class VerfuegungPdfComposerService {
 
@@ -98,7 +100,8 @@ public class VerfuegungPdfComposerService {
         versendetePdfs.add(berechnungsBlaetter);
         darlehensVerfuegung.ifPresent(versendetePdfs::add);
 
-        final var versendeteVerfuegungWithPageNumbers = PdfUtils.makePageNumberEven(PdfUtils.addPageNumbers(PdfUtils.mergePdfs(versendetePdfs)));
+        final var versendeteVerfuegungWithPageNumbers =
+            PdfUtils.makePageNumberEven(PdfUtils.addPageNumbers(PdfUtils.mergePdfs(versendetePdfs)));
 
         if (!gesuch.getAusbildung().getFall().isDelegiert()) {
             return versendeteVerfuegungWithPageNumbers;
@@ -257,7 +260,8 @@ public class VerfuegungPdfComposerService {
     }
 
     private Set<SteuerdatenTyp> getUploadedUnterschriftenblaetterTypes(final Gesuch gesuch) {
-        return gesuch.getUnterschriftenblaetter().stream()
+        return gesuch.getUnterschriftenblaetter()
+            .stream()
             .map(Unterschriftenblatt::getDokumentTyp)
             .map(this::mapToSteuerdatenTyp)
             .collect(Collectors.toSet());
