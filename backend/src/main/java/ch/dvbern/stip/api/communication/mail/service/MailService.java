@@ -105,7 +105,7 @@ public class MailService {
 
         mailAlreadySentCheckerService.sentStandardNotification();
 
-        // TODO(KSTIP-3686): implement link
+        // TODO(KSTIP-3738): implement link
         Templates.getStandardNotification(nachname, vorname, "", language)
             .to(recipients.toArray(String[]::new))
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
