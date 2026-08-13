@@ -1285,6 +1285,7 @@
   "shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER": "Frais de garde propres enfants",
   "shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER_DESCRIPTION": "Justificatif des frais de garde des propres enfants (sans frais de repas)",
   "shared.form.einnahmenkosten.file.LOHNABRECHNUNG": "Copie du décompte de salaire actuel",
+  "shared.form.einnahmenkosten.file.LOHNABRECHNUNG_DESCRIPTION": "Si vous n'avez pas encore de décompte de salaire, veuillez télécharger votre propre estimation",
   "shared.form.einnahmenkosten.file.VERMOEGEN": "Preuve de patrimoine",
   "shared.form.einnahmenkosten.file.VERMOEGEN_DESCRIPTION": "Copie de l'attestation de fortune de l’année précédente (extraits des comptes bancaires et/ou postaux présentant le solde au 31 décembre) de l'année précédente",
   "shared.form.einnahmenkosten.file.PARTNER_UNTERHALTSBEITRAEGE": "Reçu bancaire ou postal de votre partenaire",

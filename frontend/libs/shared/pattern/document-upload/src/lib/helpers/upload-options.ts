@@ -203,6 +203,8 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   EK_BELEG_BETREUUNGSKOSTEN_KINDER_DESCRIPTION:
     'shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER_DESCRIPTION',
   EK_LOHNABRECHNUNG: 'shared.form.einnahmenkosten.file.LOHNABRECHNUNG',
+  EK_LOHNABRECHNUNG_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.LOHNABRECHNUNG_DESCRIPTION',
   EK_VERMOEGEN: 'shared.form.einnahmenkosten.file.VERMOEGEN',
   EK_VERMOEGEN_DESCRIPTION:
     'shared.form.einnahmenkosten.file.VERMOEGEN_DESCRIPTION',
