@@ -4,7 +4,7 @@
   @let changes = adresseChangesSig();
 
   <!-- Strasse und Nr -->
-  <div class="testing-library-fix tw:dv-form-item tw:flex tw:gap-4">
+  <div class="testing-library-fix tw:dv-form-item tw:flex tw:flex-wrap tw:gap-4">
     <!-- Strasse -->
     <mat-form-field dvSharedUiFormField class="tw:flex-1">
       <mat-label>{{ 'shared.form.shared.address.street.label' | transloco }}</mat-label>
@@ -16,7 +16,7 @@
     </mat-form-field>
 
     <!-- Nr -->
-    <mat-form-field dvSharedUiFormField class="tw:basis-32">
+    <mat-form-field dvSharedUiFormField class="tw:basis-full tw:sm:basis-32">
       <mat-label>{{ 'shared.form.shared.address.number.label' | transloco }}</mat-label>
       <input
         matInput
@@ -34,14 +34,14 @@
 
   <!-- PLZ und Ort -->
   <div
-    class="testing-library-fix tw:dv-form-item tw:flex tw:gap-4"
+    class="testing-library-fix tw:dv-form-item tw:flex tw:flex-wrap tw:gap-4"
     formGroupName="plzOrt"
     dvPlzOrtAutocomplete
     [autocompleteSig]="plzAutocomplete"
     [plzFormSig]="group.controls.plzOrt"
     (plzLookupValuesSig)="plzValues = $event"
   >
-    <mat-form-field dvSharedUiFormField class="tw:basis-32">
+    <mat-form-field dvSharedUiFormField class="tw:basis-full tw:sm:basis-32">
       <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
       <input
         matInput

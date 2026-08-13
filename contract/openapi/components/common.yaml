@@ -320,6 +320,8 @@ FallHeader:
       $ref: '#/UUID'
     unreadNotificationsCount:
       type: integer
+    currentDelegierung:
+      $ref: '#/DelegierungSlim'
 Gesuchsjahr:
   type: object
   required:
@@ -492,12 +494,15 @@ DelegierungSlim:
   required:
     - status
     - sozialdienst
+    - persoenlicheAngaben
   type: object
   properties:
     status:
       $ref: '#/DelegierungStatus'
     sozialdienst:
       $ref: '#/SozialdienstSlim'
+    persoenlicheAngaben:
+      $ref: '#/PersoenlicheAngaben'
 GesuchWithChanges:
   allOf:
     - $ref: '#/Gesuch'

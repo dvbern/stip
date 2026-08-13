@@ -11,8 +11,3 @@ export const darlehenStatusMapping: Record<
   ABGELEHNT: 'rejected',
   AKZEPTIERT: 'accepted',
 };
-export const darlehenCompletedStates: DarlehenCompleteStates[] = [
-  'open',
-  'rejected',
-  'accepted',
-];

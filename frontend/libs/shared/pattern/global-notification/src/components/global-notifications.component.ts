@@ -7,13 +7,13 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { StatusColor } from '@dv/shared/model/gesuch';
 import { NotificationType } from '@dv/shared/model/global-notification';
+import { DVBreakpoints } from '@dv/shared/model/ui-constants';
 
 const PANEL_MAP: Record<NotificationType, `mat-${StatusColor}`> = {
   SEVERE: 'mat-danger',
@@ -41,7 +41,6 @@ const NOTIFICATION_TIME = 5000;
 export class GlobalNotificationsComponent {
   store = inject(GlobalNotificationStore);
 
-  private router = inject(Router);
   private snackbar = inject(MatSnackBar);
 
   @ViewChild('notificationTemplate')
@@ -65,7 +64,8 @@ export class GlobalNotificationsComponent {
              * @see `material.overrides.scss`
              */
             this.snackbar.openFromTemplate(this.notificationTemplate, {
-              verticalPosition: 'bottom',
+              verticalPosition:
+                window.innerWidth >= DVBreakpoints.SM ? 'bottom' : 'top',
               horizontalPosition: 'right',
               panelClass: PANEL_MAP[notification.type],
             });

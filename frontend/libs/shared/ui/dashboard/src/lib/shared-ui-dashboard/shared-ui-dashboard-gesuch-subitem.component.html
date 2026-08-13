@@ -1,0 +1,15 @@
+<div class="tw:relative tw:@container" *dvTranslocoShared="let t">
+  <div
+    class="tw:absolute tw:right-0 tw:top-0 tw:font-bold tw:bg-white tw:rounded-lg tw:px-2 tw:py-1 tw:leading-[normal] tw:border tw:border-dv-gray-subtle"
+  >
+    {{ statusSig() }}
+  </div>
+  <div class="tw:flex tw:flex-col tw:gap-8">
+    <dl class="tw:flex tw:flex-col">
+      <ng-content select="[dvItemInfo]"></ng-content>
+    </dl>
+    <div class="tw:self-start">
+      <ng-content select="[dvItemActions]"></ng-content>
+    </div>
+  </div>
+</div>

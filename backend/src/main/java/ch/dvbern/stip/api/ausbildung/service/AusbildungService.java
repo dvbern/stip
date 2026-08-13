@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
+import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoBuilder;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -90,14 +91,19 @@ public class AusbildungService {
         ausbildungRepository.persist(ausbildung);
         final var gesuchCreateDto = new GesuchCreateDto();
         gesuchCreateDto.setAusbildungId(ausbildung.getId());
-        gesuchService.createGesuchForAusbildung(gesuchCreateDto);
+        final var createGesuchResult = gesuchService.createGesuchForAusbildung(gesuchCreateDto);
 
         if (ausbildung.getAusbildungsgang() != null) {
             ausbildung
                 .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
         }
 
-        return new AusbildungCreateResponseDto(ausbildungMapper.toDto(ausbildung), null);
+        return AusbildungCreateResponseDtoBuilder.ausbildungCreateResponseDto()
+            .ausbildung(ausbildungMapper.toDto(ausbildung))
+            .gesuchId(createGesuchResult.getLeft().getId())
+            .gesuchTrancheId(createGesuchResult.getLeft().getGesuchTrancheToWorkWith().getId())
+            .error(null)
+            .build();
     }
 
     @Transactional

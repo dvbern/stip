@@ -4,17 +4,8 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { format } from 'date-fns/format';
 import { filter, map } from 'rxjs';
 
-import { translatableShared } from '@dv/shared/assets/i18n';
-import {
-  FreiwilligDarlehen,
-  GesuchTrancheSlim,
-  GesuchUrlType,
-} from '@dv/shared/model/gesuch';
+import { GesuchTrancheSlim, GesuchUrlType } from '@dv/shared/model/gesuch';
 import { GesuchFormStep, TRANCHE } from '@dv/shared/model/gesuch-form';
-import {
-  darlehenCompletedStates,
-  darlehenStatusMapping,
-} from '@dv/shared/model/ui';
 
 import { NavItem } from './navigation-types';
 
@@ -155,78 +146,6 @@ export function buildGesuchNavItems(
   }
 
   return [];
-}
-
-export function buildDarlehenMenu(config: {
-  darlehen: FreiwilligDarlehen[];
-  canCreateDarlehen: boolean;
-  fallId: string;
-  isDarlehenRoute: boolean;
-  createDarlehen: () => void;
-}): NavItem {
-  const {
-    darlehen,
-    canCreateDarlehen,
-    fallId,
-    isDarlehenRoute,
-    createDarlehen,
-  } = config;
-
-  const darlehenMenuItems: NavItem[] = darlehenCompletedStates.flatMap(
-    (status) => {
-      const list = darlehen.filter(
-        (dar) => dar.status && darlehenStatusMapping[dar.status] === status,
-      );
-      if (list.length === 0) return [];
-
-      return [
-        {
-          type: 'separator' as const,
-          id: `separator-${status}`,
-          label: {
-            key: translatableShared(
-              `shared.header.darlehen.complete-states.${status}`,
-            ),
-          },
-        },
-        ...list.map((dar) => ({
-          type: 'link' as const,
-          id: dar.id,
-          label: {
-            key: translatableShared('shared.header.darlehen.item'),
-            context: {
-              date: dar.timestampErstellt
-                ? format(dar.timestampErstellt, 'dd.MM.yyyy')
-                : '',
-            },
-          },
-          route: ['/darlehen', dar.id, 'fall', fallId],
-        })),
-      ];
-    },
-  );
-
-  return {
-    type: 'menu',
-    icon: 'account_balance',
-    id: 'darlehen',
-    label: { key: 'shared.header.darlehen' },
-    children: canCreateDarlehen
-      ? darlehenMenuItems.concat([
-          ...(darlehenMenuItems.length > 0
-            ? [{ type: 'separator' as const, id: 'separator-create' }]
-            : []),
-          {
-            type: 'action',
-            id: 'create-darlehen',
-            label: { key: 'shared.header.darlehen.create' },
-            icon: 'add',
-            action: createDarlehen,
-          },
-        ])
-      : darlehenMenuItems,
-    active: isDarlehenRoute,
-  };
 }
 
 export function getQueryParamValueSig(

@@ -14,6 +14,8 @@ import { Ausbildung } from './ausbildung';
 
 export interface AusbildungCreateResponse { 
     ausbildung?: Ausbildung;
+    gesuchId?: string;
+    gesuchTrancheId?: string;
     error?: GesuchsperiodeSelectError;
 }
 

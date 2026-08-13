@@ -14,8 +14,8 @@ export const appRoutes: Route[] = [
         path: 'dashboard',
         title: 'shared.dashboard.title',
         loadChildren: () =>
-          import('@dv/gesuch-app/feature/cockpit').then(
-            (m) => m.gesuchAppFeatureCockpitRoutes,
+          import('@dv/shared/feature/gesuchsteller-dashboard').then(
+            (m) => m.sharedFeatureGesuchstellerDashboardRoutes,
           ),
       },
       {
@@ -34,13 +34,6 @@ export const appRoutes: Route[] = [
         loadChildren: () =>
           import('@dv/shared/feature/gesuch-layout-routes').then(
             (m) => m.sharedFeatureGesuchLayoutRoutes,
-          ),
-      },
-      {
-        path: 'darlehen',
-        loadChildren: () =>
-          import('@dv/shared/feature/darlehen-form').then(
-            (m) => m.sharedFeatureDarlehenFeatureRoutes,
           ),
       },
       {

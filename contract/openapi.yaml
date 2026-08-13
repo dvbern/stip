@@ -9130,6 +9130,10 @@ components:
       properties:
         ausbildung:
           $ref: '#/components/schemas/Ausbildung'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
         error:
           $ref: '#/components/schemas/GesuchsperiodeSelectError'
     AusbildungUpdate:
@@ -9649,6 +9653,19 @@ components:
           type: string
         tenant:
           type: string
+    DelegierungSlim:
+      required:
+        - status
+        - sozialdienst
+        - persoenlicheAngaben
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/DelegierungStatus'
+        sozialdienst:
+          $ref: '#/components/schemas/SozialdienstSlim'
+        persoenlicheAngaben:
+          $ref: '#/components/schemas/PersoenlicheAngaben'
     FallHeader:
       required:
         - fallId
@@ -9659,6 +9676,8 @@ components:
           $ref: '#/components/schemas/UUID'
         unreadNotificationsCount:
           type: integer
+        currentDelegierung:
+          $ref: '#/components/schemas/DelegierungSlim'
     NotificationType:
       enum:
         - GESUCH_EINGEREICHT
@@ -10040,9 +10059,11 @@ components:
         - currentTrancheId
         - gesuchsperiode
         - gesuchStatus
+        - freiwilligeDarlehenList
         - startDate
         - endDate
         - canCreateAenderung
+        - canCreateDarlehen
       type: object
       properties:
         nachfristDokumente:
@@ -10057,6 +10078,10 @@ components:
           $ref: '#/components/schemas/UUID'
         offeneAenderung:
           $ref: '#/components/schemas/GesuchTrancheSlim'
+        freiwilligeDarlehenList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FreiwilligDarlehen'
         startDate:
           type: string
           format: date
@@ -10064,6 +10089,8 @@ components:
           type: string
           format: date
         canCreateAenderung:
+          type: boolean
+        canCreateDarlehen:
           type: boolean
         missingDocuments:
           required:
@@ -11619,16 +11646,6 @@ components:
           $ref: '#/components/schemas/GesuchTrancheStatus'
         typ:
           $ref: '#/components/schemas/GesuchTrancheTyp'
-    DelegierungSlim:
-      required:
-        - status
-        - sozialdienst
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/DelegierungStatus'
-        sozialdienst:
-          $ref: '#/components/schemas/SozialdienstSlim'
     Gesuch:
       required:
         - fallId

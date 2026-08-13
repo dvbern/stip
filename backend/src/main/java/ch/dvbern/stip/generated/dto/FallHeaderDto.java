@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -22,10 +23,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class FallHeaderDto  implements Serializable {
   private @Valid UUID fallId;
   private @Valid Integer unreadNotificationsCount;
+  private @Valid DelegierungSlimDto currentDelegierung;
 
   protected FallHeaderDto(FallHeaderDtoBuilder<?, ?> b) {
     this.fallId = b.fallId;
     this.unreadNotificationsCount = b.unreadNotificationsCount;
+    this.currentDelegierung = b.currentDelegierung;
   }
 
   public FallHeaderDto() {
@@ -69,6 +72,24 @@ public class FallHeaderDto  implements Serializable {
     this.unreadNotificationsCount = unreadNotificationsCount;
   }
 
+  /**
+   **/
+  public FallHeaderDto currentDelegierung(DelegierungSlimDto currentDelegierung) {
+    this.currentDelegierung = currentDelegierung;
+    return this;
+  }
+
+  
+  @JsonProperty("currentDelegierung")
+  public DelegierungSlimDto getCurrentDelegierung() {
+    return currentDelegierung;
+  }
+
+  @JsonProperty("currentDelegierung")
+  public void setCurrentDelegierung(DelegierungSlimDto currentDelegierung) {
+    this.currentDelegierung = currentDelegierung;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -80,12 +101,13 @@ public class FallHeaderDto  implements Serializable {
     }
     FallHeaderDto fallHeader = (FallHeaderDto) o;
     return Objects.equals(this.fallId, fallHeader.fallId) &&
-        Objects.equals(this.unreadNotificationsCount, fallHeader.unreadNotificationsCount);
+        Objects.equals(this.unreadNotificationsCount, fallHeader.unreadNotificationsCount) &&
+        Objects.equals(this.currentDelegierung, fallHeader.currentDelegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, unreadNotificationsCount);
+    return Objects.hash(fallId, unreadNotificationsCount, currentDelegierung);
   }
 
   @Override
@@ -95,6 +117,7 @@ public class FallHeaderDto  implements Serializable {
     
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    unreadNotificationsCount: ").append(toIndentedString(unreadNotificationsCount)).append("\n");
+    sb.append("    currentDelegierung: ").append(toIndentedString(currentDelegierung)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -131,6 +154,7 @@ public class FallHeaderDto  implements Serializable {
   public static abstract class FallHeaderDtoBuilder<C extends FallHeaderDto, B extends FallHeaderDtoBuilder<C, B>>  {
     private UUID fallId;
     private Integer unreadNotificationsCount;
+    private DelegierungSlimDto currentDelegierung;
     protected abstract B self();
 
     public abstract C build();
@@ -141,6 +165,10 @@ public class FallHeaderDto  implements Serializable {
     }
     public B unreadNotificationsCount(Integer unreadNotificationsCount) {
       this.unreadNotificationsCount = unreadNotificationsCount;
+      return self();
+    }
+    public B currentDelegierung(DelegierungSlimDto currentDelegierung) {
+      this.currentDelegierung = currentDelegierung;
       return self();
     }
   }

@@ -1,0 +1,4 @@
+@utility dv-chip-* {
+  --_color: --value(--color-dv-main-*);
+  @apply tw:text-white tw:bg-(--_color) tw:rounded-full tw:text-sm tw:px-2 tw:py-1 tw:overflow-x-hidden tw:text-ellipsis tw:whitespace-nowrap;
+}

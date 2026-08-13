@@ -1,175 +1,144 @@
 @let gesuch = gesuchSig();
 @let periode = gesuch.gesuchsperiode;
-<div class="tw:relative tw:@container">
-  <div class="tw:absolute tw:right-0 tw:top-0 tw:font-bold">
-    {{
-      (gesuch.isErstgesuch ? 'shared.dashboard.gesuch.order.erstgesuch' : 'shared.dashboard.gesuch.order.folgegesuch')
-        | transloco
-    }}
-  </div>
-  <div
-    class="tw:grid tw:gap-4"
-    [ngClass]="{ 'tw:grid-cols-[1fr] tw:@lg:grid-cols-[1fr_auto_1fr]': gesuch.offeneAenderung }"
-  >
-    <div class="tw:flex tw:flex-col">
-      <dl class="tw:flex tw:flex-col" [class.tw:!mb-0]="!gesuch.isActive" [class.tw:!mb-10]="gesuch.isActive">
-        <dt class="tw:font-bold">
-          {{ 'shared.dashboard.gesuch.title' | transloco: { yearRange: gesuch.yearRange } }}
-        </dt>
-        <dd class="tw:!mb-6">
-          {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
-        </dd>
-
-        @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
-        @if (gesuch.isActive) {
-          <dt class="tw:font-bold">{{ 'shared.dashboard.gesuch.status.title' | transloco }}</dt>
-          <dd class="tw:!mb-6">
-            @if (gesuch.hasPendingAusbildungUnterbruchAntrag) {
-              {{ 'shared.gesuch.status.unterbruchAnfrage' | transloco }}
-            } @else if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
-              {{ 'shared.dashboard.gesuch.status.missingDocuments' | transloco: { count } }}
-            } @else {
-              {{ 'gesuch-app.gesuch.status.contract.' + gesuch.gesuchStatus | transloco }}
-            }
+<div class="tw:@container" *dvTranslocoShared="let t">
+  <div class="tw:flex tw:flex-col tw:gap-8">
+    <dl class="tw:flex tw:flex-col">
+      <div class="tw:flex tw:flex-wrap tw:justify-between">
+        <div class="tw:flex tw:flex-col">
+          <dt class="tw:font-bold">
+            {{
+              t(
+                gesuch.isErstgesuch
+                  ? 'shared.dashboard.gesuch.order.erstgesuch'
+                  : 'shared.dashboard.gesuch.order.folgegesuch'
+              )
+            }}
+          </dt>
+          <dd class="tw:text-sm tw:mt-1">
+            {{ gesuch.startDate | date: 'MM.yyyy' }} - {{ gesuch.endDate | date: 'MM.yyyy' }}
           </dd>
+        </div>
+        <div
+          class="tw:self-start tw:font-bold tw:bg-white tw:rounded-lg tw:px-2 tw:py-1 tw:leading-[normal] tw:border tw:border-dv-gray-subtle"
+        >
+          {{ t(`gesuch-app.gesuch.status.contract.${gesuch.gesuchStatus}`) }}
+        </div>
+      </div>
 
-          @if (!gesuch.einreichefristAbgelaufen) {
-            @if (gesuch.reduzierterBeitrag) {
-              <span class="tw:font-bold">
-                {{ 'shared.dashboard.periode.einreichefrist.reduziert' | transloco }}
-              </span>
-            }
-            @if ((gesuch.einreichefristDays ?? 0) > 1) {
-              <span
-                [innerHTML]="
-                  'shared.dashboard.periode.einreichefrist.remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-                    | transloco: { days: gesuch.einreichefristDays }
-                "
-              ></span>
-            } @else if (gesuch.einreichefristDays === 1) {
-              <span
-                [innerHTML]="
-                  'shared.dashboard.periode.einreichefrist.1remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-                    | transloco
-                "
-              ></span>
-            } @else {
-              <span
-                [innerHTML]="
-                  'shared.dashboard.periode.einreichefrist.0remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-                    | transloco
-                "
-              ></span>
-            }
+      @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
+      @if (gesuch.isActive) {
+        @if (!gesuch.einreichefristAbgelaufen) {
+          @if (gesuch.reduzierterBeitrag) {
+            <span class="tw:font-bold">
+              {{ t('shared.dashboard.periode.einreichefrist.reduziert') }}
+            </span>
+          }
+          @if (gesuch.state === 'in-bearbeitung') {
             <dt class="tw:mt-6 tw:font-bold">
-              {{ 'shared.dashboard.periode.einreichefrist.text' | transloco }}
+              {{ t('shared.dashboard.periode.einreichefrist.text') }}
             </dt>
-            <dd>
+            <dd class="tw:text-sm tw:mt-1">
               {{
                 (gesuch.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
                   | date: 'dd.MM.yyyy'
               }}
-            </dd>
-          } @else {
-            <span class="tw:font-bold">
-              {{ 'shared.dashboard.periode.einreichefrist.abgelaufen.warning' | transloco }}
-            </span>
-            <span class="tw:mt-6">{{ 'shared.dashboard.periode.einreichefrist.abgelaufen.text' | transloco }}</span>
-          }
-          @if (missingDocTrancheId && gesuch.nachfristDokumente) {
-            <dt class="tw:mt-6 tw:font-bold">
-              {{ 'shared.dashboard.periode.nachfrist.text' | transloco }}
-            </dt>
-            <dd>
-              {{ gesuch.nachfristDokumente | date: 'dd.MM.yyyy' }}
+              <span
+                [innerHTML]="
+                  t('shared.dashboard.periode.einreichefrist.remaining', {
+                    days: gesuch.einreichefristDays,
+                  })
+                "
+              ></span>
             </dd>
           }
+        } @else {
+          <dt class="tw:mt-8 tw:font-bold">
+            {{ t('shared.dashboard.periode.einreichefrist.abgelaufen.warning') }}
+          </dt>
+          <dd class="tw:text-sm tw:mt-1">{{ t('shared.dashboard.periode.einreichefrist.abgelaufen.text') }}</dd>
         }
-      </dl>
-      <div class="tw:grow"></div>
-      <div
-        class="tw:gap-3"
-        [ngClass]="{
-          'tw:flex tw:flex-col-reverse': gesuch.offeneAenderung,
-          'tw:grid tw:grid-cols-2 tw:xl:grid-cols-3': !gesuch.offeneAenderung,
-        }"
-      >
-        @if (gesuch.id) {
-          @if (gesuch.isActive) {
-            @if (gesuch.canEdit) {
-              <a
-                class="tw:dv-button-main-primary"
-                data-testid="cockpit-gesuch-edit"
-                [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
-              >
-                {{ 'shared.dashboard.gesuch.edit' | transloco }}
-              </a>
-
-              @if (gesuch.canDelete) {
-                <button
-                  type="button"
-                  class="tw:dv-button-outline"
-                  data-testid="shared.dashboard.gesuch.delete"
-                  (click)="deleteGesuch.emit(gesuch.id)"
-                >
-                  <span>{{ 'shared.dashboard.gesuch.delete' | transloco }}</span>
-                </button>
-              }
-            } @else if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
-              <a
-                class="tw:dv-button-main-primary"
-                data-testid="cockpit-gesuch-edit"
-                [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
-              >
-                {{ 'shared.dashboard.gesuch.open' | transloco }}
-              </a>
-            } @else if (missingDocTrancheId) {
-              <a
-                class="tw:dv-button-main-primary"
-                data-testid="cockpit-gesuch-upload-missing-documents"
-                [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', missingDocTrancheId]"
-              >
-                {{ 'shared.dashboard.gesuch.uploadMissingDocuments' | transloco }}
-              </a>
-            }
-          }
-          @if (!gesuch.isActive || gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
+        @if (missingDocTrancheId && gesuch.nachfristDokumente) {
+          <dt class="tw:mt-6 tw:font-bold">
+            {{ t('shared.dashboard.periode.nachfrist.text') }}
+          </dt>
+          <dd class="tw:text-sm tw:mt-1">
+            {{ gesuch.nachfristDokumente | date: 'dd.MM.yyyy' }}
+          </dd>
+        }
+      }
+    </dl>
+    <div class="tw:flex tw:gap-3 tw:flex-wrap">
+      @if (gesuch.id) {
+        @if (gesuch.isActive) {
+          @if (gesuch.canEdit) {
             <a
-              class="tw:dv-button-outline"
+              class="tw:dv-button-main-primary"
               data-testid="cockpit-gesuch-edit"
               [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
             >
-              {{ 'shared.dashboard.gesuch.open' | transloco }}
+              {{ t('shared.dashboard.gesuch.edit') }}
             </a>
 
-            @if (gesuch.canCreateAenderung) {
+            @if (gesuch.canDelete) {
               <button
                 type="button"
                 class="tw:dv-button-outline"
-                data-testid="cockpit-gesuch-aenderung-create"
-                (click)="aenderungMelden.emit()"
+                data-testid="shared.dashboard.gesuch.delete"
+                (click)="output.emit({ typ: 'delete gesuch', id: gesuch.id })"
               >
-                {{ 'shared.dashboard.aenderung.create' | transloco }}
+                <span>{{ t('shared.dashboard.gesuch.delete') }}</span>
               </button>
             }
+          } @else if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
+            <a
+              class="tw:dv-button-main-primary"
+              data-testid="cockpit-gesuch-edit"
+              [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
+            >
+              {{ t('shared.dashboard.gesuch.open') }}
+            </a>
+          } @else if (missingDocTrancheId) {
+            <a
+              class="tw:dv-button-main-primary"
+              data-testid="cockpit-gesuch-upload-missing-documents"
+              [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', missingDocTrancheId]"
+            >
+              {{ t('shared.dashboard.gesuch.uploadMissingDocuments') }}
+            </a>
           }
         }
-      </div>
-    </div>
-    @if (gesuch.offeneAenderung) {
-      <!-- Vertical Line -->
-      <div class="tw:h-full tw:min-h-[3px] tw:w-full tw:min-w-[3px] tw:bg-(--dv-light-border-subtle)"></div>
-      <div class="tw:flex tw:flex-col">
-        @if (gesuch.offeneAenderung; as aenderung) {
-          <div class="divider tw:mr-6"></div>
-          <dv-shared-ui-aenderungs-entry
-            class="tw:flex tw:flex-1 tw:flex-col"
-            [gesuch]="gesuch"
-            [tranche]="aenderung"
-            (deleteAenderung)="deleteAenderung.emit($event)"
-          ></dv-shared-ui-aenderungs-entry>
+        @if (!gesuch.isActive || gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
+          <a
+            class="tw:dv-button-main-primary"
+            data-testid="cockpit-gesuch-edit"
+            [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
+          >
+            {{ t('shared.dashboard.gesuch.open') }}
+          </a>
+
+          @if (gesuch.canCreateAenderung) {
+            <button
+              type="button"
+              class="tw:dv-button-outline"
+              data-testid="cockpit-gesuch-aenderung-create"
+              (click)="output.emit({ typ: 'create aenderung', melden: { gesuch } })"
+            >
+              {{ t('shared.dashboard.aenderung.create') }}
+            </button>
+          }
         }
-      </div>
-    }
+
+        @if (gesuch.canCreateDarlehen) {
+          <button
+            type="button"
+            class="tw:dv-button-outline"
+            data-testid="cockpit-gesuch-darlehen-create"
+            (click)="output.emit({ typ: 'create darlehen', gesuchId: gesuch.id, fallId: gesuch.fallId })"
+          >
+            {{ t('shared.dashboard.darlehen.create') }}
+          </button>
+        }
+      }
+    </div>
   </div>
 </div>

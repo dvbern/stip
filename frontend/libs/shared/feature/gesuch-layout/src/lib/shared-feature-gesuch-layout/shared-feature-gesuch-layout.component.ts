@@ -35,6 +35,7 @@ import {
 } from '@dv/shared/model/config';
 import { FreiwilligDarlehen, getTrancheRoute } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import {
   createUrlChecksSig,
   urlAfterNavigationEnd,
@@ -46,7 +47,6 @@ import {
 } from '@dv/shared/model/ui';
 import { notGesuchRoute } from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
-import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
 import { SharedPatternInfoBarActionsComponent } from '@dv/shared/pattern/info-bar-actions';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
@@ -69,7 +69,6 @@ import { isInOneOfGivenStatus } from '@dv/shared/util-fn/gesuch-util';
     MatTooltipModule,
     MatIconModule,
     SharedPatternGesuchInfoBarComponent,
-    SharedPatternGlobalHeaderPartsDirective,
     SharedUiVersionenMenuComponent,
     SharedUiAdvTranslocoDirective,
     SharedPatternInfoBarActionsComponent,
@@ -80,7 +79,7 @@ import { isInOneOfGivenStatus } from '@dv/shared/util-fn/gesuch-util';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchLayoutComponent {
-  @HostBinding('class') klass = 'tw:px-6 tw:dv-pass-height';
+  @HostBinding('class') klass = 'tw:dv-pass-height tw:dv-container';
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -284,9 +283,6 @@ export class SharedFeatureGesuchLayoutComponent {
 
     return orderedDarlehen.length > 0 ? orderedDarlehen[0].id : undefined;
   });
-  private gesuchCacheSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchCache,
-  );
 
   constructor() {
     effect(() => {
@@ -300,10 +296,15 @@ export class SharedFeatureGesuchLayoutComponent {
     });
 
     effect(() => {
-      const fallId = this.headerViewSig().gesuchInfo?.fallId;
-
-      if (fallId) {
-        this.darlehenStore.getAllDarlehen$({ fallId });
+      const { gesuchInfo } = this.headerViewSig();
+      this.gesuchUpdatedSig();
+      if (gesuchInfo?.fallId) {
+        byAppConfig(this.config.app, {
+          gesuchsteller: () =>
+            this.darlehenStore.getAllDarlehenGs$({ fallId: gesuchInfo.fallId }),
+          sachbearbeiter: () =>
+            this.darlehenStore.getAllDarlehen$({ fallId: gesuchInfo.fallId }),
+        });
       }
     });
   }

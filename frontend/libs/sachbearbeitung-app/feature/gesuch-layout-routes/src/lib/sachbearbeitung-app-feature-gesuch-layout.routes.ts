@@ -22,8 +22,8 @@ export const sachbearbeitungAppFeatureGesuchLayoutRoutes: Route[] = [
     path: ':gesuchId/darlehen',
     title: 'shared.darlehen.title',
     loadChildren: () =>
-      import('@dv/shared/feature/darlehen').then(
-        (m) => m.sharedFeatureDarlehenRoutes,
+      import('@dv/shared/feature/darlehen-form').then(
+        (m) => m.sharedFeatureDarlehenFormRoutes,
       ),
   },
   {

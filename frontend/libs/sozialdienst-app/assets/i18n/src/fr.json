@@ -1,7 +1,5 @@
 {
   "app-name": "Stipends Online",
-  "sozialdienst-app.dashboard.welcome.title": "Demandeur {{name}}",
-  "sozialdienst-app.dashboard.ausbildung.create": "Demander une bourse",
 
   "sozialdienst-app.admin.option.sozialdienstBenutzer": "Gestion des utilisateurs",
 

@@ -129,6 +129,12 @@ import org.jilt.BuilderStyle;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
+@LebenslaufAusbildungUeberschneidenConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        LebenslaufItemPageValidation.class
+    }, property = "lebenslaufItems"
+)
 @LebenslaufLuckenlosConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,

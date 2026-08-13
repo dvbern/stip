@@ -1,9 +1,6 @@
 {
   "app-name": "Stipendien Online",
-  "gesuch-app.dashboard.welcome.title": "Guten Tag {{name}}",
-  "gesuch-app.dashboard.ausbildung.create": "Stipendium beantragen",
-  "gesuch-app.dashboard.fall.delegated.title": "Keine Ausbildung erfasst",
-  "gesuch-app.dashboard.fall.delegated.message": "Der Fall wurde an Ihren Sozialdienst oder Ihre Institution delegiert. Das Gesuch kann duch die verantwortliche Person des Sozialdienstes oder der Institution erstellt werden.",
 
-  "gesuch-app.delegieren-dialog.submit": "Delegieren"
+  "gesuch-app.delegieren-dialog.submit": "Delegieren",
+  "gesuch-app.delegieren-dialog.sozialdienst": "Sozialdienst"
 }

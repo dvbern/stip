@@ -400,6 +400,10 @@ components:
       properties:
         ausbildung:
           $ref: './components/common.yaml#/Ausbildung'
+        gesuchId:
+          $ref: './components/common.yaml#/UUID'
+        gesuchTrancheId:
+          $ref: './components/common.yaml#/UUID'
         error:
           $ref: './components/common.yaml#/GesuchsperiodeSelectError'
     AusbildungUpdate:

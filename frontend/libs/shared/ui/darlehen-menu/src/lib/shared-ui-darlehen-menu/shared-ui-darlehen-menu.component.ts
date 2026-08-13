@@ -5,12 +5,10 @@ import {
   computed,
   inject,
   input,
-  output,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
 import { FreiwilligDarlehen } from '@dv/shared/model/gesuch';
@@ -18,20 +16,23 @@ import {
   DarlehenCompleteStates,
   darlehenStatusMapping,
 } from '@dv/shared/model/ui';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 
 @Component({
   selector: 'dv-shared-ui-darlehen-menu',
-  imports: [CommonModule, TranslocoPipe, RouterModule, MatMenuModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatMenuModule,
+    SharedUiAdvTranslocoDirective,
+  ],
   templateUrl: './shared-ui-darlehen-menu.component.html',
   styleUrl: './shared-ui-darlehen-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiDarlehenMenuComponent {
   fallIdSig = input.required<string | undefined>();
-  displayModeSig = input<'menu' | 'list'>('list');
   darlehenListSig = input.required<FreiwilligDarlehen[] | undefined>();
-  canCreateDarlehenSig = input<boolean | undefined>();
-  createDarlehen = output<{ fallId: string }>();
   router = inject(Router);
   route = inject(ActivatedRoute);
 

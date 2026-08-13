@@ -3,13 +3,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostBinding,
   Output,
   computed,
   inject,
+  input,
   viewChild,
 } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 
@@ -21,24 +24,55 @@ import {
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
+import { SharedUiNavItemsComponent } from '@dv/shared/ui/nav-items';
+import { SharedUiNavMenuItemsComponent } from '@dv/shared/ui/nav-menu-items';
+import { NavItem, NavMenuItem } from '@dv/shared/util/navigation';
 
 @Component({
   selector: 'dv-shared-pattern-mobile-sidenav',
   imports: [
     MatSidenavModule,
-    TranslocoPipe,
     SharedUiLanguageSelectorComponent,
     PortalModule,
+    TranslocoDirective,
+    SharedUiNavItemsComponent,
+    SharedUiNavMenuItemsComponent,
+    MatMenuModule,
   ],
   templateUrl: './shared-pattern-mobile-sidenav.component.html',
   styleUrl: './shared-pattern-mobile-sidenav.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternMobileSidenavComponent {
+  @HostBinding('class') hostClass = 'tw:relative tw:w-full';
+
+  staticNavItemsSig = input<NavItem[]>([]);
+  staticMenuItemsSig = input<NavMenuItem[]>([]);
+
   private store = inject(Store);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
   private oauthService = inject(OAuthService);
   navigationStore = inject(NavigationStore);
+
+  navItemsSig = computed(() => {
+    const navigationItems = this.navigationStore.navigationViewSig();
+
+    if (navigationItems.length) {
+      return navigationItems;
+    }
+
+    return this.staticNavItemsSig() ?? [];
+  });
+
+  menuItemsSig = computed(() => {
+    const menuItems = this.navigationStore.menuItemsViewSig();
+
+    if (menuItems.length) {
+      return menuItems;
+    }
+
+    return this.staticMenuItemsSig() ?? [];
+  });
 
   @Output() closeSidenav = new EventEmitter<void>();
 

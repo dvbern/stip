@@ -9,9 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DelegierungSlim } from './delegierungSlim';
 
 export interface FallHeader { 
     fallId: string;
     unreadNotificationsCount: number;
+    currentDelegierung?: DelegierungSlim;
 }
 

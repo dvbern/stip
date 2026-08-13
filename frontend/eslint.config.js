@@ -162,6 +162,7 @@ module.exports = [
             {
               sourceTag: 'type:dialog',
               onlyDependOnLibsWithTags: [
+                'type:dialog',
                 'type:assets',
                 'type:feature',
                 'type:data-access',

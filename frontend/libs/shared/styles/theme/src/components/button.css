@@ -1,5 +1,5 @@
 @utility dv-button {
-  @apply tw:flex tw:justify-center tw:py-2.5 tw:px-5 tw:align-middle tw:border tw:border-transparent tw:rounded-xl tw:cursor-pointer tw:transition-[color,background-color,border-color,opacity,--tw-brightness];
+  @apply tw:flex tw:justify-center tw:w-full tw:whitespace-nowrap tw:sm:w-fit tw:py-2.5 tw:px-5 tw:align-middle tw:border tw:border-transparent tw:rounded-xl tw:cursor-pointer tw:transition-[color,background-color,border-color,opacity,--tw-brightness];
   &.disabled,
   &[disabled] {
     @apply tw:opacity-65 tw:pointer-events-none;
@@ -34,7 +34,7 @@
 }
 
 @utility dv-nav-button {
-  @apply tw:dv-button tw:text-dv-gray tw:[&.active]:bg-dv-red! tw:[&.isActive]:bg-dv-red tw:hover:bg-dv-red! tw:hover:text-white tw:[&.active]:text-white! tw:[&.isActive]:text-white tw:border-0;
+  @apply tw:dv-button tw:w-fit tw:justify-start tw:text-dv-gray tw:[&.active]:bg-dv-red! tw:[&.isActive]:bg-dv-red tw:hover:bg-dv-red! tw:hover:text-white tw:[&.active]:text-white! tw:[&.isActive]:text-white tw:border-0;
 
   --mat-tab-active-label-text-color: white;
   --mat-tab-active-focus-label-text-color: white;

@@ -1244,9 +1244,11 @@ components:
         - currentTrancheId
         - gesuchsperiode
         - gesuchStatus
+        - freiwilligeDarlehenList
         - startDate
         - endDate
         - canCreateAenderung
+        - canCreateDarlehen
       type: object
       properties:
         nachfristDokumente:
@@ -1261,6 +1263,10 @@ components:
           $ref: './components/common.yaml#/UUID'
         offeneAenderung:
           $ref: './components/common.yaml#/GesuchTrancheSlim'
+        freiwilligeDarlehenList:
+          type: array
+          items:
+            $ref: './components/common.yaml#/FreiwilligDarlehen'
         startDate:
           type: string
           format: date
@@ -1268,6 +1274,8 @@ components:
           type: string
           format: date
         canCreateAenderung:
+          type: boolean
+        canCreateDarlehen:
           type: boolean
         missingDocuments:
           required:

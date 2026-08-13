@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDashboardItemMissingDocumentsDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeDtoSpec;
@@ -25,6 +26,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -39,9 +43,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_ID,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_CURRENT_TRANCHE_ID,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_OFFENE_AENDERUNG,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_START_DATE,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_END_DATE,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_CAN_CREATE_AENDERUNG,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_CAN_CREATE_DARLEHEN,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_MISSING_DOCUMENTS
 })
 @JsonTypeName("GesuchDashboardItem")
@@ -65,6 +71,9 @@ public class GesuchDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_OFFENE_AENDERUNG = "offeneAenderung";
   private GesuchTrancheSlimDtoSpec offeneAenderung;
 
+  public static final String JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST = "freiwilligeDarlehenList";
+  private List<FreiwilligDarlehenDtoSpec> freiwilligeDarlehenList;
+
   public static final String JSON_PROPERTY_START_DATE = "startDate";
   private LocalDate startDate;
 
@@ -73,6 +82,9 @@ public class GesuchDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_CAN_CREATE_AENDERUNG = "canCreateAenderung";
   private Boolean canCreateAenderung;
+
+  public static final String JSON_PROPERTY_CAN_CREATE_DARLEHEN = "canCreateDarlehen";
+  private Boolean canCreateDarlehen;
 
   public static final String JSON_PROPERTY_MISSING_DOCUMENTS = "missingDocuments";
   private GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments;
@@ -236,6 +248,40 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
+  public GesuchDashboardItemDtoSpec freiwilligeDarlehenList(List<FreiwilligDarlehenDtoSpec> freiwilligeDarlehenList) {
+    
+    this.freiwilligeDarlehenList = freiwilligeDarlehenList;
+    return this;
+  }
+
+  public GesuchDashboardItemDtoSpec addFreiwilligeDarlehenListItem(FreiwilligDarlehenDtoSpec freiwilligeDarlehenListItem) {
+    if (this.freiwilligeDarlehenList == null) {
+      this.freiwilligeDarlehenList = new ArrayList<>();
+    }
+    this.freiwilligeDarlehenList.add(freiwilligeDarlehenListItem);
+    return this;
+  }
+
+   /**
+   * Get freiwilligeDarlehenList
+   * @return freiwilligeDarlehenList
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<FreiwilligDarlehenDtoSpec> getFreiwilligeDarlehenList() {
+    return freiwilligeDarlehenList;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFreiwilligeDarlehenList(List<FreiwilligDarlehenDtoSpec> freiwilligeDarlehenList) {
+    this.freiwilligeDarlehenList = freiwilligeDarlehenList;
+  }
+
+
   public GesuchDashboardItemDtoSpec startDate(LocalDate startDate) {
     
     this.startDate = startDate;
@@ -314,6 +360,32 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
+  public GesuchDashboardItemDtoSpec canCreateDarlehen(Boolean canCreateDarlehen) {
+    
+    this.canCreateDarlehen = canCreateDarlehen;
+    return this;
+  }
+
+   /**
+   * Get canCreateDarlehen
+   * @return canCreateDarlehen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_CREATE_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanCreateDarlehen() {
+    return canCreateDarlehen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_CREATE_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanCreateDarlehen(Boolean canCreateDarlehen) {
+    this.canCreateDarlehen = canCreateDarlehen;
+  }
+
+
   public GesuchDashboardItemDtoSpec missingDocuments(GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
     
     this.missingDocuments = missingDocuments;
@@ -354,15 +426,17 @@ public class GesuchDashboardItemDtoSpec {
         Objects.equals(this.id, gesuchDashboardItem.id) &&
         Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
+        Objects.equals(this.freiwilligeDarlehenList, gesuchDashboardItem.freiwilligeDarlehenList) &&
         Objects.equals(this.startDate, gesuchDashboardItem.startDate) &&
         Objects.equals(this.endDate, gesuchDashboardItem.endDate) &&
         Objects.equals(this.canCreateAenderung, gesuchDashboardItem.canCreateAenderung) &&
+        Objects.equals(this.canCreateDarlehen, gesuchDashboardItem.canCreateDarlehen) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachfristDokumente, gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, startDate, endDate, canCreateAenderung, missingDocuments);
+    return Objects.hash(nachfristDokumente, gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, freiwilligeDarlehenList, startDate, endDate, canCreateAenderung, canCreateDarlehen, missingDocuments);
   }
 
   @Override
@@ -375,9 +449,11 @@ public class GesuchDashboardItemDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    currentTrancheId: ").append(toIndentedString(currentTrancheId)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
+    sb.append("    freiwilligeDarlehenList: ").append(toIndentedString(freiwilligeDarlehenList)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    canCreateAenderung: ").append(toIndentedString(canCreateAenderung)).append("\n");
+    sb.append("    canCreateDarlehen: ").append(toIndentedString(canCreateDarlehen)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");
     return sb.toString();

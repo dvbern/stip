@@ -160,14 +160,14 @@
         }}</mat-label>
         @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
         <div
-          class="tw:dv-form-item tw:flex tw:gap-4 tw:items-center"
+          class="tw:dv-form-item tw:flex tw:flex-wrap tw:gap-4 tw:items-center"
           dvPlzOrtAutocomplete
           [autocompleteSig]="plzAutocomplete"
           [plzFormSig]="identischerZivilrechtlicherWohnsitzPlzOrt"
           (plzLookupValuesSig)="plzValues = $event"
         >
           <!-- PLZ -->
-          <mat-form-field dvSharedUiFormField class="tw:w-32">
+          <mat-form-field dvSharedUiFormField class="tw:basis-full tw:sm:basis-32">
             <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
             <input
               type="text"
@@ -441,14 +441,14 @@
       <!-- HEIMATORT -->
       @if (!hiddenFieldsSetSig().has(form.controls.heimatortPlzOrt)) {
         <div
-          class="tw:dv-form-item tw:flex tw:gap-4"
+          class="tw:dv-form-item tw:flex tw:flex-wrap tw:gap-4"
           dvPlzOrtAutocomplete
           [autocompleteSig]="plzAutocomplete"
           [plzFormSig]="form.controls.heimatortPlzOrt"
           (plzLookupValuesSig)="plzValues = $event"
         >
           <!-- PLZ -->
-          <mat-form-field dvSharedUiFormField class="tw:basis-32">
+          <mat-form-field dvSharedUiFormField class="tw:basis-full tw:sm:basis-32">
             <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
             <input
               type="text"
@@ -683,6 +683,7 @@
       @if (!hiddenFieldsSetSig().has(form.controls.zustaendigeKESB)) {
         <div class="tw:dv-form-item tw:flex tw:gap-4">
           <mat-form-field dvSharedUiFormField class="tw:grow">
+            <!-- todo: look at label with mada -->
             <mat-label>{{ 'shared.form.person.zustaendigeKESB.label' | transloco }}</mat-label>
             <mat-select
               [formControl]="form.controls.zustaendigeKESB"

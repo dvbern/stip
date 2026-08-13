@@ -4,7 +4,7 @@ import { Component, HostBinding } from '@angular/core';
   selector: 'dv-shared-pattern-gesuch-info-bar',
   template: `
     <div
-      class="tw:flex tw:items-center tw:justify-between tw: tw:w-full tw:shadow-md tw:shadow-gray-200 tw:border tw:border-gray-300 tw:rounded-xl tw:p-4"
+      class="tw:flex tw:flex-wrap tw:gap-2 tw:items-center tw:justify-between tw:w-full tw:shadow-md tw:shadow-gray-200 tw:border tw:border-gray-300 tw:rounded-xl tw:p-4"
     >
       <ng-content select="[dvGesuchStatusIndication]"></ng-content>
       <ng-content select="[dvGesuchNavItems]"></ng-content>
@@ -12,5 +12,5 @@ import { Component, HostBinding } from '@angular/core';
   `,
 })
 export class SharedPatternGesuchInfoBarComponent {
-  @HostBinding('class') klass = 'tw:bg-white tw:block tw:my-6';
+  @HostBinding('class') klass = 'tw:bg-white tw:block tw:mb-6';
 }

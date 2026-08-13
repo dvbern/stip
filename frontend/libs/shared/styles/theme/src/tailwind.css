@@ -1,5 +1,6 @@
 @import 'tailwindcss' prefix(tw);
 @import './components/button.css';
+@import './components/chip.css';
 @import './components/table.css';
 @import './components/material.css';
 
@@ -7,9 +8,11 @@
   --color-dv-yellow: #ffc107;
   --color-dv-yellow-subtle: #fff3cd;
   --color-dv-yellow-dark: #503d04;
+  --color-dv-orange: #fff3de;
   --color-dv-yellow-light: #fffbf0;
   --color-dv-blue: #298bef;
   --color-dv-blue-subtle: #d4e8fc;
+  --color-dv-blue-light: #eaf4fe;
   --color-dv-blue-dark: #004784;
   --color-dv-green: #2eb85c;
   --color-dv-green-subtle: #eff7e0;
@@ -17,7 +20,7 @@
   --color-dv-green-hover: #1e783c;
   --color-dv-gray: #777777;
   --color-dv-gray-subtle: #eeeeee;
-  --color-dv-gray-light: #929292;
+  --color-dv-gray-light: #f9f9f9;
   --color-dv-gray-dark: #4e4e4e;
   --color-dv-gray-darker: color-mix(
     in srgb,
@@ -25,7 +28,7 @@
     black
   );
   --color-dv-red: #fe5454;
-  --color-dv-red-subtle: #ffdddd;
+  --color-dv-red-subtle: #ffe7e7;
   --color-dv-red-dark: #930016;
   --color-dv-red-hover: rgb(215.9, 71.4, 71.4);
   --color-dv-warning: var(--tw-color-dv-yellow);
@@ -52,6 +55,14 @@
 }
 
 @layer base {
+  html {
+    font-size: 100%;
+  }
+  @media (max-width: theme('screens.md')) {
+    html {
+      font-size: 87.5%;
+    }
+  }
   * {
     border-style: none;
   }
@@ -62,7 +73,7 @@
     @apply tw:transition-opacity!;
   }
   :root {
-    --dv-base-font-size: 16px;
+    --dv-base-font-size: 1rem;
     --content-max-width: 1440px;
     --header-size: 76px;
     --header-sub-size: 180px;
@@ -80,7 +91,7 @@
     --dv-yellow: var(--tw-color-dv-yellow);
     --dv-yellow-subtle: var(--tw-color-dv-yellow-subtle);
     --dv-gray: var(--tw-color-dv-gray);
-    --dv-gray-subtle: var(--tw-color-dv-gray-dark);
+    --dv-gray-dark: var(--tw-color-dv-gray-dark);
 
     --dv-secondary-color: var(--dv-gray);
     --dv-light-bg-subtle: #fff;
@@ -94,9 +105,13 @@
     --mat-badge-text-size: 0.875rem;
     --mat-badge-container-size: 1.25rem;
     --mat-badge-line-height: var(--mat-badge-container-size);
+    --mat-form-field-container-height: 56px;
 
     @media (min-width: theme('screens.lg')) {
       --header-size: 110px;
+    }
+    @media (max-width: theme('screens.lg')) {
+      --mat-form-field-container-height: 45px;
     }
   }
 }
@@ -120,7 +135,19 @@
 }
 
 @utility dv-container {
-  @apply tw:max-w-xl tw:sm:max-w-3xl tw:md:max-w-240 tw:lg:max-w-285 tw:xl:max-w-330 tw:w-full tw:px-3 tw:mx-auto;
+  @apply tw:w-full tw:p-3 tw:lg:p-6 tw:mx-auto;
+}
+
+@utility dv-dialog-container {
+  @apply tw:p-3 tw:lg:p-6;
+}
+
+@utility dv-button-container {
+  @apply tw:flex tw:flex-wrap tw:gap-3 tw:mt-6;
+}
+
+@utility dv-scroll-space {
+  @apply tw:pb-6 tw:lg:pb-12;
 }
 
 @utility dv-max-w-half {
@@ -129,6 +156,10 @@
 
 @utility dv-page-title {
   @apply tw:text-3xl tw:font-bold tw:mb-8;
+}
+
+@utility dv-page-subtitle {
+  @apply tw:text-2xl tw:font-bold tw:mb-4;
 }
 
 @utility dv-page-title-mobile {
@@ -163,7 +194,7 @@
 }
 
 @utility dv-form-title {
-  @apply tw:xl:col-span-2 tw:text-2xl tw:font-semibold tw:mt-6;
+  @apply tw:xl:col-span-2 tw:text-xl tw:lg:text-2xl tw:font-semibold tw:mt-6;
 }
 
 @utility dv-form-half {
@@ -221,4 +252,8 @@
 
 @utility dv-icon-chip-info {
   @apply tw:bg-dv-blue-subtle tw:text-dv-blue;
+}
+
+dv-shared-pattern-mobile-sidenav dv-shared-pattern-gesuch-step-nav {
+  @apply tw:p-0;
 }

@@ -10,7 +10,6 @@
     [queryParams]="step.queryParams"
     [queryParamsHandling]="'merge'"
     [attr.data-testid]="'step-nav-' + step.name"
-    (click)="navClicked.emit({})"
   >
     @if (step.hasChanges) {
       <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
@@ -41,7 +40,7 @@
         [ngClass]="{ 'tw:border-t tw:border-dv-border': entry.borderTop, 'tw:bg-dv-gray-subtle!': entry.hasActive }"
         [expanded]="entry.hasActive || openedGroupsSig()[entry.group]"
       >
-        <mat-expansion-panel-header class="tw:hover:bg-inherit!">
+        <mat-expansion-panel-header (click)="$event.stopPropagation()" class="tw:hover:bg-inherit!">
           <mat-panel-title class="tw:font-semibold tw:text-dv-gray tw:flex tw:items-center tw:gap-2">
             @if (entry.groupStatus) {
               <i

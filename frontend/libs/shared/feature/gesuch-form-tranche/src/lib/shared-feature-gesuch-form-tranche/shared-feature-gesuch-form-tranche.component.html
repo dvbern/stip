@@ -194,5 +194,18 @@
         data-testid="form-tranche-sachbearbeiter"
       />
     </mat-form-field>
+
+    <!-- Buttons -->
+    <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
+      <button
+        type="button"
+        class="tw:dv-button-main-primary"
+        (click)="handleContinue()"
+        [disabled]="!view.gesuchId"
+        data-testid="button-continue"
+      >
+        {{ t('shared.form.gonext') }}
+      </button>
+    </dv-shared-ui-step-form-buttons>
   </form>
 </ng-container>

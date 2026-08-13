@@ -79,8 +79,7 @@ public class DateRange implements Serializable, Comparable<DateRange> {
 
     @Override
     public String toString() {
-        return "gueltigAb: " + gueltigAb.toString() +
-        "gueltigBis: " + gueltigBis.toString();
+        return "%s bis %s".formatted(getGueltigAb(), getGueltigBis());
     }
 
     @Override

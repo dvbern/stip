@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -30,6 +31,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   AusbildungCreateResponseDtoSpec.JSON_PROPERTY_AUSBILDUNG,
+  AusbildungCreateResponseDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  AusbildungCreateResponseDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
   AusbildungCreateResponseDtoSpec.JSON_PROPERTY_ERROR
 })
 @JsonTypeName("AusbildungCreateResponse")
@@ -37,6 +40,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungCreateResponseDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNG = "ausbildung";
   private AusbildungDtoSpec ausbildung;
+
+  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  private UUID gesuchId;
+
+  public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_ERROR = "error";
   private GesuchsperiodeSelectErrorDtoSpec error;
@@ -67,6 +76,58 @@ public class AusbildungCreateResponseDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAusbildung(AusbildungDtoSpec ausbildung) {
     this.ausbildung = ausbildung;
+  }
+
+
+  public AusbildungCreateResponseDtoSpec gesuchId(UUID gesuchId) {
+    
+    this.gesuchId = gesuchId;
+    return this;
+  }
+
+   /**
+   * Get gesuchId
+   * @return gesuchId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getGesuchId() {
+    return gesuchId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGesuchId(UUID gesuchId) {
+    this.gesuchId = gesuchId;
+  }
+
+
+  public AusbildungCreateResponseDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+    
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+   /**
+   * Get gesuchTrancheId
+   * @return gesuchTrancheId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
   }
 
 
@@ -105,12 +166,14 @@ public class AusbildungCreateResponseDtoSpec {
     }
     AusbildungCreateResponseDtoSpec ausbildungCreateResponse = (AusbildungCreateResponseDtoSpec) o;
     return Objects.equals(this.ausbildung, ausbildungCreateResponse.ausbildung) &&
+        Objects.equals(this.gesuchId, ausbildungCreateResponse.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, ausbildungCreateResponse.gesuchTrancheId) &&
         Objects.equals(this.error, ausbildungCreateResponse.error);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, error);
+    return Objects.hash(ausbildung, gesuchId, gesuchTrancheId, error);
   }
 
   @Override
@@ -118,6 +181,8 @@ public class AusbildungCreateResponseDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungCreateResponseDtoSpec {\n");
     sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
+    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("}");
     return sb.toString();

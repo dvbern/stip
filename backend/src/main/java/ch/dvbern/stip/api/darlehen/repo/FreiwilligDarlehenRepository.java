@@ -48,6 +48,16 @@ public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDa
         return query.stream().toList();
     }
 
+    public List<FreiwilligDarlehen> findByGesuchId(final UUID gesuchId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var query = queryFactory
+            .selectFrom(freiwilligDarlehen)
+            .where(
+                freiwilligDarlehen.relatedGesuch.id.eq(gesuchId)
+            );
+        return query.stream().toList();
+    }
+
     public JPAQuery<FreiwilligDarlehen> getAlleQuery() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(freiwilligDarlehen);

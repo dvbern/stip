@@ -48,6 +48,7 @@ import {
   GesuchsperiodeSelectErrorType,
   Plz,
 } from '@dv/shared/model/gesuch';
+import { AUSBILDUNG } from '@dv/shared/model/gesuch-form';
 import {
   capitalized,
   compareById,
@@ -165,7 +166,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     fallId: string;
     minAusbildungEnd: string | undefined;
   } | null>();
-  ausbildungSaved = output<void>();
+  ausbildungSaved = output<{ gesuchId: string; gesuchTrancheId: string }>();
   languageSig = this.store.selectSignal(selectLanguage);
   gotReenabledSig = signal({});
 
@@ -727,8 +728,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             ausbildungsortPLZ: ausbildungsortPlzOrt.plz,
           },
           onSuccess: (response) => {
-            if (response.ausbildung) {
-              this.ausbildungSaved.emit();
+            const { ausbildung, gesuchId, gesuchTrancheId } = response;
+            if (ausbildung && gesuchId && gesuchTrancheId) {
+              this.ausbildungSaved.emit({ gesuchId, gesuchTrancheId });
             }
           },
         });
@@ -756,10 +758,12 @@ export class SharedFeatureAusbildungComponent implements OnInit {
               gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
             });
 
-            this.router.navigate(['.'], {
-              onSameUrlNavigation: 'reload',
-              relativeTo: this.route,
-            });
+            this.store.dispatch(
+              SharedDataAccessGesuchEvents.nextTriggered({
+                id: gesuch.id,
+                origin: AUSBILDUNG,
+              }),
+            );
           },
         });
         break;
@@ -767,6 +771,18 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     }
 
     this.form.markAsPristine();
+  }
+
+  handleContinue() {
+    const { gesuchId } = this.gesuchViewSig();
+    if (gesuchId) {
+      this.store.dispatch(
+        SharedDataAccessGesuchEvents.nextTriggered({
+          id: gesuchId,
+          origin: AUSBILDUNG,
+        }),
+      );
+    }
   }
 
   isActive(obj: { aktiv: boolean }) {

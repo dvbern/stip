@@ -67,7 +67,10 @@ export const SteuerdatenPortError = z.object({
   error: z.string(),
   userMessage: z.string(),
 });
-export type SteuerdatenPortError = Extends<z.infer<typeof SteuerdatenPortError>, DvSteuerdatenPortError>;
+export type SteuerdatenPortError = Extends<
+  z.infer<typeof SteuerdatenPortError>,
+  DvSteuerdatenPortError
+>;
 
 export const DemoDataError = z.object({
   internalMessage: z.string(),
@@ -117,12 +120,13 @@ export type SharedModelErrorTypes = keyof typeof ErrorTypes;
 
 export const SharedModelError = z.intersection(
   z.union([
-    ErrorTypes.steuerdatenPortError.transform(({ error: { error, userMessage } }) =>
-      createError('steuerdatenPortError', {
-        message: userMessage,
-        messageKey: 'shared.genericError.nesko',
-        errorCode: error,
-      }),
+    ErrorTypes.steuerdatenPortError.transform(
+      ({ error: { error, userMessage } }) =>
+        createError('steuerdatenPortError', {
+          message: userMessage,
+          messageKey: 'shared.genericError.nesko',
+          errorCode: error,
+        }),
     ),
     ErrorTypes.genericValidationError.transform(({ error }) =>
       createError('genericValidationError', {

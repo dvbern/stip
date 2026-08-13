@@ -11,6 +11,8 @@ import {
 
 import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
 import {
+  GesuchDashboardItem,
+  GesuchState,
   Gesuchstatus,
   Niederlassungsstatus,
   ZustaendigerKanton,
@@ -354,4 +356,27 @@ export const niederlassungsStatusConverter = {
     }
     return value.niederlassungsstatus;
   },
+};
+
+export const getGesuchState = (
+  gesuch: GesuchDashboardItem,
+  flags: {
+    isActive: boolean;
+    isEinreichefristAbgelaufen: boolean;
+  },
+): GesuchState => {
+  const gsStatus: Gesuchstatus[] = ['IN_BEARBEITUNG_GS', 'FEHLENDE_DOKUMENTE'];
+  const verfuegtStatus: Gesuchstatus[] = [
+    'STIPENDIENANSPRUCH',
+    'KEIN_STIPENDIENANSPRUCH',
+  ];
+  const checkers = [
+    ['inactive', () => !flags.isActive],
+    ['expired', () => flags.isEinreichefristAbgelaufen],
+    ['in-bearbeitung', () => gsStatus.includes(gesuch.gesuchStatus)],
+    ['verfuegt', () => verfuegtStatus.includes(gesuch.gesuchStatus)],
+    ['in-ueberpruefung', () => true],
+  ] satisfies [GesuchState, () => boolean][];
+
+  return checkers.find(([, check]) => check())?.[0] ?? 'inactive';
 };

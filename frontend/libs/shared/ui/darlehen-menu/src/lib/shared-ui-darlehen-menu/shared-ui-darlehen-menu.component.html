@@ -1,114 +1,32 @@
 @let darlehens = darlehenListByStatusSig();
 @let fallId = fallIdSig();
 
-@if (displayModeSig() === 'menu') {
-  <button
-    type="button"
-    class="tw:dv-nav-button fw-normal tw:flex tw:items-center"
-    data-testid="header-nav-darlehen-menu"
-    [matMenuTriggerFor]="darlehenMenu"
-    [disabled]="!darlehenListSig()?.length && !canCreateDarlehenSig()"
-    [class.active]="darlehenRouteIdSig()"
-  >
-    <span>{{ 'shared.header.darlehen' | transloco }}</span>
-    <i class="material-symbols-rounded tw:ml-2">expand_more</i>
-  </button>
-
-  <mat-menu #darlehenMenu="matMenu" class="header-menu-panel tw:mt-2 tw:rounded-lg">
-    <div class="tw:flex tw:flex-col tw:gap-2">
-      @for (state of darlehenCompletedStates; track $index) {
-        @if (darlehens[state] && darlehens[state].length) {
-          <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
-            <hr class="tw:grow tw:border-t tw:border-dv-border" />
-            {{ 'shared.header.darlehen.complete-states.' + state | transloco }}
-            <hr class="tw:grow tw:border-t tw:border-dv-border" />
-          </div>
-          @for (darlehen of darlehens[state]; track $index) {
-            <a
-              [routerLink]="['/gesuch', 'darlehen', darlehen.id, 'fall', fallId]"
-              class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
-              data-testid="header-nav-darlehen-menu-item"
-              [class.disabled]="!fallId"
-              [class.active]="darlehenRouteIdSig() === darlehen.id"
-              mat-menu-item
-            >
-              <span>
-                {{
-                  'shared.header.darlehen.item'
-                    | transloco
-                      : {
-                          date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
-                        }
-                }}
-              </span>
-            </a>
-          }
-        }
-      }
-
-      @if (canCreateDarlehenSig() && fallId) {
-        <hr class="tw:grow tw:border-t tw:border-dv-border tw:hidden tw:not-first:block" />
-        <button
-          type="button"
-          class="tw:dv-button tw:font-normal tw:shadow-none!"
-          data-testid="cockpit-gesuch-darlehen-create"
-          (click)="createDarlehen.emit({ fallId })"
+<div class="tw:flex tw:flex-col tw:gap-2" *dvTranslocoShared="let t">
+  @for (state of darlehenCompletedStates; track $index) {
+    @if (darlehens[state] && darlehens[state].length) {
+      <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
+        <hr class="tw:grow tw:border-t tw:border-dv-border" />
+        {{ t(`shared.darlehen.complete-states.${state}`) }}
+        <hr class="tw:grow tw:border-t tw:border-dv-border" />
+      </div>
+      @for (darlehen of darlehens[state]; track $index) {
+        <a
+          [routerLink]="['/gesuch', darlehen.relatedGesuchId, 'darlehen', darlehen.id, 'fall', fallId]"
+          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
+          data-testid="nav-darlehen-menu-item"
+          [class.disabled]="!fallId"
+          [class.active]="darlehenRouteIdSig() === darlehen.id"
           mat-menu-item
         >
-          <div class="tw:flex tw:items-center tw:gap-2">
-            <i class="material-symbols-rounded">add_circle</i>
-            {{ 'shared.header.darlehen.create' | transloco }}
-          </div>
-        </button>
-      }
-    </div>
-  </mat-menu>
-} @else {
-  <div class="tw:flex tw:flex-col tw:gap-2">
-    @for (state of darlehenCompletedStates; track $index) {
-      @if (darlehens[state] && darlehens[state].length) {
-        <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
-          <hr class="tw:grow tw:border-t tw:border-dv-border" />
-          {{ 'shared.header.darlehen.complete-states.' + state | transloco }}
-          <hr class="tw:grow tw:border-t tw:border-dv-border" />
-        </div>
-        @for (darlehen of darlehens[state]; track $index) {
-          <a
-            [routerLink]="['/gesuch', 'darlehen', darlehen.id, 'fall', fallId]"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
-            data-testid="header-nav-darlehen-menu-item"
-            [class.disabled]="!fallId"
-            [class.active]="darlehenRouteIdSig() === darlehen.id"
-            mat-menu-item
-          >
-            <span>
-              {{
-                'shared.header.darlehen.item'
-                  | transloco
-                    : {
-                        date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
-                      }
-              }}
-            </span>
-          </a>
-        }
+          <span>
+            {{
+              t('shared.darlehen.item', {
+                date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
+              })
+            }}
+          </span>
+        </a>
       }
     }
-
-    @if (fallId && canCreateDarlehenSig()) {
-      <hr class="tw:grow tw:border-t tw:border-dv-border tw:hidden tw:not-first:block" />
-      <button
-        type="button"
-        class="tw:dv-button tw:font-normal tw:shadow-none!"
-        data-testid="cockpit-gesuch-darlehen-create"
-        (click)="createDarlehen.emit({ fallId })"
-        mat-menu-item
-      >
-        <div class="tw:flex tw:items-center tw:gap-2">
-          <i class="material-symbols-rounded">add_circle</i>
-          {{ 'shared.header.darlehen.create' | transloco }}
-        </div>
-      </button>
-    }
-  </div>
-}
+  }
+</div>

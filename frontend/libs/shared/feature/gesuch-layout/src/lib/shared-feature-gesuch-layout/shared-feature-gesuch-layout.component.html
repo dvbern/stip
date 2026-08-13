@@ -8,7 +8,7 @@
     <div dvGesuchStatusIndication class="tw:flex tw:items-center">
       @if (gesuchInfoDataSig(); as infoData) {
         @let appKey = businessAppConfig.keyPrefix;
-        <div class="tw:ml-4">
+        <div>
           <ng-container *dvIfTypeOneOf="['gesuch-app']">
             <span>{{ t('shared.header.ausbildungsjahr', { yearRange: infoData.ausbildungsjahr }) }}</span>
             -
@@ -32,7 +32,10 @@
       }
     </div>
 
-    <div dvGesuchNavItems class="tw:flex tw:items-center tw:gap-4">
+    <div
+      dvGesuchNavItems
+      class="tw:flex tw:[flex-wrap:balance] tw:not-supports-[flex-wrap:balance]:flex-wrap tw:items-center tw:gap-4"
+    >
       <!-- Versionen Menu -->
       <dv-shared-ui-versionen-menu
         [versionenSig]="headerViewSig().versions ?? []"
@@ -156,7 +159,7 @@
   </div>
 
   <mat-tab-nav-panel
-    class="tw:dv-pass-height tw:border tw:border-gray-300 tw:mb-4 tw:rounded-b-xl tw:rounded-tr-xl"
+    class="tw:dv-pass-height tw:border tw:border-gray-300 tw:rounded-b-xl tw:rounded-tr-xl"
     [class.tw:rounded-tl-xl]="!isGesuchRouteSig()"
     #tabPanel
   >

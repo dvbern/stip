@@ -7,6 +7,7 @@ import {
   sharedDataAccessGesuchEffects,
   sharedDataAccessGesuchsFeature,
 } from '@dv/shared/data-access/gesuch';
+import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { provideSharedPatternCore } from '@dv/shared/pattern/core';
 
 import { routes } from './app.routes';
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
       view: 'gesuchsteller',
       keyPrefix: 'gesuch-app',
     }),
+    SozialdienstStore,
     provideState(sharedDataAccessGesuchsFeature),
     provideEffects(sharedDataAccessGesuchEffects),
     provideAnimations(),

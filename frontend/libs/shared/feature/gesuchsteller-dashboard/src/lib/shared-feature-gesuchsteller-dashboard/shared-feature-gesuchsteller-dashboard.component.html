@@ -1,0 +1,60 @@
+<ng-container *dvTranslocoShared="let t">
+  <div class="tw:relative tw:justify-between tw:dv-container">
+    <h1 class="tw:mb-6 tw:dv-page-title">
+      @if (config.app.type === 'sozialdienst-app') {
+        {{ t('shared.dashboard.welcome.secondaryTitle', { name: piaNameSig() }) }}
+      } @else {
+        {{ t('shared.dashboard.welcome.title', { name: benutzerNameSig() }) }}
+      }
+    </h1>
+
+    @let dashboard = dashboardStore.dashboardViewSig();
+    @if (dashboard) {
+      @let fall = dashboard.fall;
+
+      <!-- main column -->
+      <div
+        class="tw:flex tw:flex-col tw:gap-8 tw:max-w-250 tw:m-auto"
+        [class.busy]="isUnterbruchOrAenderungPendingSig()"
+      >
+        @if (dashboard.ausbildungen.length > 0) {
+          @for (ausbildung of dashboard.ausbildungen; track ausbildung.id) {
+            <dv-shared-ui-dashboard-ausbildung
+              class="tw:shadow-lg"
+              [ausbildungSig]="ausbildung"
+              (output)="handleOutput($event)"
+            ></dv-shared-ui-dashboard-ausbildung>
+          }
+        } @else if (dashboard.canCreateAusbildung) {
+          <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-lg">
+            <button
+              data-testid="cockpit-create-ausbildung"
+              type="button"
+              (click)="createAusbildung(fall.id, dashboard.earliestActiveGesuchPeriodeStart)"
+              class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
+            >
+              <dv-shared-ui-icon-chip>
+                <i class="material-symbols-rounded">add</i>
+              </dv-shared-ui-icon-chip>
+              {{ t('shared.dashboard.ausbildung.create') }}
+            </button>
+          </div>
+        } @else {
+          <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6">
+            <h3 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-3xl tw:font-semibold">
+              <dv-shared-ui-icon-chip class="tw:bg-dv-green-subtle tw:text-dv-green">
+                <i class="material-symbols-rounded tw:text-2xl">school</i>
+              </dv-shared-ui-icon-chip>
+              {{ t('shared.dashboard.fall.delegated.title') }}
+            </h3>
+            <p class="tw:mb-0">
+              {{ t('shared.dashboard.fall.delegated.message') }}
+            </p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <dv-shared-ui-version-text [version]="cockpitViewSig().version" class="tw:text-white"></dv-shared-ui-version-text>
+</ng-container>

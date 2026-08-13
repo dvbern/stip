@@ -30,7 +30,7 @@
       <!-- elternVerheiratetZusammen -->
       <div class="questions-wrapper">
         <div
-          class="tw:grid tw:grid-cols-2 tw:my-6"
+          class="tw:grid tw:grid-cols-1 tw:sm:grid-cols-2 tw:my-6"
           (@inOutPaneAnimation.start)="duringAnimation = 'hide'"
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
           [@inOutPaneAnimation]="readonly ? 'in' : (stateSig()['ELTERN_VERHEIRATET_ZUSAMMEN'] ?? 'hidden')"

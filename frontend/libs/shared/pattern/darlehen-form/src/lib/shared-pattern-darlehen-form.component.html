@@ -1,6 +1,6 @@
 <ng-container *dvTranslocoShared="let t">
   @if (darlehenStore.darlehenViewSig().loading) {
-    <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
+    <dv-shared-ui-loading class="tw:md:w-1/2 tw:mt-8" data-testid="form-darlehen-loading"></dv-shared-ui-loading>
   } @else {
     <!-- sachbearbeiter form -->
     @if (darlehenPermissionsSig()?.canReadSbForm) {
@@ -323,7 +323,7 @@
         </mat-error>
       }
 
-      <div class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center" *dvIfGesuchsteller>
+      <div class="tw:col-span-2 tw:dv-button-container" *dvIfGesuchsteller>
         @if (darlehenPermissionsSig()?.canWriteGs) {
           <button
             type="button"

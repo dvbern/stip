@@ -1,7 +1,5 @@
 {
   "app-name": "Stipendien Online",
-  "sozialdienst-app.dashboard.welcome.title": "Gesuchsteller/-in {{name}}",
-  "sozialdienst-app.dashboard.ausbildung.create": "Stipendium beantragen",
 
   "sozialdienst-app.admin.option.sozialdienstBenutzer": "Benutzerverwaltung",
 

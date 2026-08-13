@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,10 +26,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
 import ch.dvbern.stip.generated.dto.GesuchDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDashboardItemMissingDocumentsDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
@@ -43,6 +46,9 @@ public abstract class GesuchDashboardItemMapper {
     @Inject
     GesuchHistoryService gesuchHistoryService;
 
+    @Inject
+    DarlehenService darlehenService;
+
     @Named("toGesuchDashboardItemDto")
     @Mapping(source = "gesuch.gesuchsperiode", target = "gesuchsperiode")
     @Mapping(source = "gesuch", target = "gesuchStatus", qualifiedByName = "getGesuchStatus")
@@ -54,6 +60,8 @@ public abstract class GesuchDashboardItemMapper {
     @Mapping(source = "gesuch", target = "endDate", qualifiedByName = "getEndDate")
     @Mapping(source = "gesuch.nachfristDokumente", target = "nachfristDokumente")
     @Mapping(source = "gesuch", target = "canCreateAenderung", qualifiedByName = "canCreateAenderung")
+    @Mapping(source = "gesuch", target = "canCreateDarlehen", qualifiedByName = "canCreateDarlehen")
+    @Mapping(source = "gesuch", target = "freiwilligeDarlehenList", qualifiedByName = "getFreiwilligeDarlehen")
     public abstract GesuchDashboardItemDto toDto(
         final Gesuch gesuch,
         final GesuchTrancheSlimDto offeneAenderung,
@@ -63,6 +71,11 @@ public abstract class GesuchDashboardItemMapper {
     @Named("canCreateAenderung")
     protected boolean canCreateAenderung(final Gesuch gesuch) {
         return GesuchUtil.canCreateAenderung(gesuch);
+    }
+
+    @Named("canCreateDarlehen")
+    protected boolean canCreateDarlehen(final Gesuch gesuch) {
+        return darlehenService.canCreateDarlehen(gesuch.getAusbildung().getFall().getId());
     }
 
     GesuchDashboardItemMissingDocumentsDto map(
@@ -98,5 +111,10 @@ public abstract class GesuchDashboardItemMapper {
             return gesuch.getGesuchStatus();
         }
         return Gesuchstatus.EINGEREICHT;
+    }
+
+    @Named("getFreiwilligeDarlehen")
+    List<FreiwilligDarlehenDto> getFreiwilligeDarlehen(Gesuch gesuch) {
+        return darlehenService.getAllFreiwilligDarlehenOfGesuchGs(gesuch.getId());
     }
 }

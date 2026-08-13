@@ -51,7 +51,6 @@ import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
-import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -156,8 +155,9 @@ public class GesuchTrancheService {
         final var offeneAenderung = gesuchTrancheRepository.findOffeneAenderungGs(gesuch.getId())
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);;
-        final var eingereichteAenderung = gesuchTrancheRepository.findLatestAenderungGs(gesuch.getId())
-            .filter(_aenderung -> !GesuchStatusUtil.gsReceivesCurrentGesuch(gesuch.getGesuchStatus()))
+        final var latestAenderung = gesuchTrancheRepository.findLatestAenderungGs(gesuch.getId());
+        final var eingereichteAenderung = latestAenderung
+            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);
         return getHistorizedAenderungs(historizedGesuch)

@@ -5,18 +5,24 @@
 <!-- Gesuch Aktionen Menu -->
 @if (isActionRouteSig()) {
   <div *dvTranslocoShared="let t">
-    <button
-      type="button"
-      class="tw:dv-button-outline tw:font-normal tw:flex tw:items-center tw:px-4"
-      data-testid="sb-gesuch-header-aktion-menu"
-      [class.active]="aktionTrigger.menuOpen"
-      [disabled]="actionMenu.isActionMenuDisabled"
-      #aktionTrigger="matMenuTrigger"
-      [matMenuTriggerFor]="aktionMenu"
-    >
-      <span>{{ t('shared.header.aktion') }}</span>
-      <i class="material-symbols-rounded tw:ml-2">expand_more</i>
-    </button>
+    <div class="tw:relative">
+      <button
+        type="button"
+        class="tw:dv-button-outline tw:font-normal tw:flex tw:items-center tw:px-4"
+        data-testid="sb-gesuch-header-aktion-menu"
+        [class.active]="aktionTrigger.menuOpen"
+        [disabled]="actionMenu.isActionMenuDisabled"
+        #aktionTrigger="matMenuTrigger"
+        [matMenuTriggerFor]="aktionMenu"
+      >
+        <span>{{ t('shared.header.aktion') }}</span>
+        <i class="material-symbols-rounded tw:ml-2">expand_more</i>
+      </button>
+
+      @if (isLoadingSig()) {
+        <dv-shared-ui-loading type="icon" [overlay]="true"></dv-shared-ui-loading>
+      }
+    </div>
     <!-- Aktion Menu -->
     <mat-menu
       #aktionMenu="matMenu"
