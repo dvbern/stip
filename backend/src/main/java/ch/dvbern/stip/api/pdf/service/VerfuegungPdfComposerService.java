@@ -23,6 +23,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
@@ -31,6 +33,8 @@ import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
+import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
@@ -117,6 +121,8 @@ public class VerfuegungPdfComposerService {
     ) {
         final var lang = LocaleUtil.getKorrespondenzSprache(gesuch);
 
+        final var uploadedSteuerdatenTypes = getUploadedUnterschriftenblaetterTypes(gesuch);
+
         final var allBerechnungsBlaetter = new ArrayList<ByteArrayOutputStream>();
         final var piaBlaetter = new ArrayList<ByteArrayOutputStream>();
         final var familienBlaetterByTyp =
@@ -143,7 +149,10 @@ public class VerfuegungPdfComposerService {
                 familienBlaetterByTyp
                     .computeIfAbsent(familien.getSteuerdatenTyp(), k -> new ArrayList<>())
                     .add(familienBlatt);
-                allBerechnungsBlaetter.add(familienBlatt);
+
+                if (uploadedSteuerdatenTypes.contains(familien.getSteuerdatenTyp())) {
+                    allBerechnungsBlaetter.add(familienBlatt);
+                }
             }
 
             final PersoenlichesBudgetresultatDto persoenlich = tranche.getPersoenlichesBudgetresultat();
@@ -199,7 +208,7 @@ public class VerfuegungPdfComposerService {
 
             final var merged = PdfUtils.mergePdfs(blaetter);
             if (merged != null) {
-                storeVerfuegungsDokument(verfuegung, mapSteuerdatenTypToVerfuegungDokumentTyp(typ), merged);
+                storeVerfuegungsDokument(verfuegung, mapToVerfuegungDokumentTyp(typ), merged);
             }
         }
     }
@@ -247,7 +256,22 @@ public class VerfuegungPdfComposerService {
         return verfuegungBriefPdfService.createVerfuegungMitAnspruchPdf(verfuegung, anhangs);
     }
 
-    private VerfuegungDokumentTyp mapSteuerdatenTypToVerfuegungDokumentTyp(final SteuerdatenTyp steuerdatenTyp) {
+    private Set<SteuerdatenTyp> getUploadedUnterschriftenblaetterTypes(final Gesuch gesuch) {
+        return gesuch.getUnterschriftenblaetter().stream()
+            .map(Unterschriftenblatt::getDokumentTyp)
+            .map(this::mapToSteuerdatenTyp)
+            .collect(Collectors.toSet());
+    }
+
+    private SteuerdatenTyp mapToSteuerdatenTyp(final UnterschriftenblattDokumentTyp unterschriftenblattDokumentTyp) {
+        return switch (unterschriftenblattDokumentTyp) {
+            case MUTTER -> SteuerdatenTyp.MUTTER;
+            case VATER -> SteuerdatenTyp.VATER;
+            case GEMEINSAM -> SteuerdatenTyp.FAMILIE;
+        };
+    }
+
+    private VerfuegungDokumentTyp mapToVerfuegungDokumentTyp(final SteuerdatenTyp steuerdatenTyp) {
         return switch (steuerdatenTyp) {
             case MUTTER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_MUTTER;
             case VATER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_VATER;
