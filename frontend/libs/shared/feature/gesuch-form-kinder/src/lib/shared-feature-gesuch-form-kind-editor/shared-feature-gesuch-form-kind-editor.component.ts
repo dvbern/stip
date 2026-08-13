@@ -53,6 +53,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
+  percentStringToNumber,
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
@@ -225,7 +226,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   });
 
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
-    'wohnsitzAnteilPia',
     'unterhaltsbeitraege',
     'betreuungskosten',
     'kinderUndAusbildungszulagen',
@@ -251,6 +251,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     const kind = this.kindSig();
     this.form.patchValue({
       ...kind,
+      wohnsitzAnteilPia: kind.wohnsitzAnteilPia?.toString(),
       geburtsdatum: parseBackendLocalDateAndPrint(
         kind.geburtsdatum,
         this.languageSig(),
@@ -280,6 +281,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         id: kind?.id,
         entryId: this.entryIdSig(),
         geburtsdatum,
+        wohnsitzAnteilPia: percentStringToNumber(formValues.wohnsitzAnteilPia),
         ...this.numberConverter.toNumber(formValues),
       });
       this.form.markAsPristine();
