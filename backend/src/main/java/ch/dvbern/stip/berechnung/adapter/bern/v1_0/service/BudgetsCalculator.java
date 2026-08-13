@@ -63,7 +63,7 @@ public class BudgetsCalculator {
                     familienBudgetInput.steuererklaerung(),
                     gesuchsperiode,
                     familienBudgetInput.kinderImHaushalt(),
-                    anzahlKinderDerElternInAusbildung,
+                    familienBudgetInput.anzahlKinderDerElternInAusbildung(),
                     halbierungElternbeitrag,
                     gesuchsjahr
                 )

@@ -607,7 +607,8 @@ public class GenerateDemoDataService {
                         .hidden(false)
                         .geschwisterTyp(
                             Objects.requireNonNullElse(geschwisterDto.getGeschwisterTyp(), GeschwisterTyp.LEIBLICH)
-                        ),
+                        )
+                        .elternteilPiaOfStiefHalbGeschwister(null),
                     AbstractFamilieEntityBuilder.abstractFamilieEntity()
                         .wohnsitz(geschwisterDto.getWohnsitzBei())
                         .wohnsitzAnteilMutter(

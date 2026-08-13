@@ -255,6 +255,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildungunterbruchantrag.gueltigkeit.message}";
     public static final String VALIDATION_ELTERN_WIEDERVERHEIRATET_REQUIRED =
         "{jakarta.validation.constraints.eltern.wiederverheiratet.required.message}";
+    public static final String VALIDATION_GESCHWISTER_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER_REQUIRED =
+        "{jakarta.validation.constraints.geschwister.elternteilPiaOfStiefHalbGeschwister.required.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

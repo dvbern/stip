@@ -24,10 +24,12 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
+import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -203,13 +205,45 @@ public class TranchenSubBerechnungsresultatCalculator {
                         .concat(leiblichKinderDerElternImHaushalt.stream(), stiefHalbKinderDerElternImHaushalt.stream())
                         .toList();
 
+                    final var geschwisterInAusbildung =
+                        gesuchFormular.getGeschwisters()
+                            .stream()
+                            .filter(
+                                geschwister -> geschwister
+                                    .getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG
+                            )
+                            .toList();
+
+                    final int anzahlKinderDerElternInAusbildung =
+                        Math.toIntExact(
+                            geschwisterInAusbildung
+                                .stream()
+                                .filter(
+                                    geschwister -> geschwister.getGeschwisterTyp() == GeschwisterTyp.LEIBLICH
+                                )
+                                .count()
+                        )
+                        + Math.toIntExact(
+                            geschwisterInAusbildung
+                                .stream()
+                                .filter(
+                                    geschwister -> geschwister.getGeschwisterTyp() != GeschwisterTyp.LEIBLICH
+                                    && (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE
+                                    || geschwister.getElternteilPiaOfStiefHalbGeschwister()
+                                        .getSteuerdatenTyp() == steuerdaten.getSteuerdatenTyp())
+                                )
+                                .count()
+                        )
+                        + BernCalculatorUtil.PIA_COUNT;
+
                     return new FamilienBudgetInput(
                         steuerdaten.getSteuerdatenTyp(),
                         elterns,
                         steuerdaten,
                         steuererklaerungOfSteuerdaten,
                         gesuchsperiode,
-                        kinderImHaushalt
+                        kinderImHaushalt,
+                        anzahlKinderDerElternInAusbildung
                     );
                 }
             )
