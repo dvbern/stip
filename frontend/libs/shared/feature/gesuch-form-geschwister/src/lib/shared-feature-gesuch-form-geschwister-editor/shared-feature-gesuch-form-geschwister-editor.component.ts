@@ -25,7 +25,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { subYears } from 'date-fns';
-import { Observable, Subject, map } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
@@ -33,6 +33,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   Ausbildungssituation,
   DokumentTyp,
+  ElternTyp,
   GeschwisterTyp,
   GeschwisterUpdate,
   Wohnsitz,
@@ -132,6 +133,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
 
   protected readonly ausbildungssituationValues =
     Object.values(Ausbildungssituation);
+  protected readonly elterntypValues = Object.values(ElternTyp);
   protected readonly geschwisterTyps = Object.values(GeschwisterTyp);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -170,15 +172,32 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
       [Validators.required],
     ),
     geschwisterTyp: [<GeschwisterTyp | null>null, Validators.required],
+    elternteilPiaOfStiefHalbGeschwister: [
+      <ElternTyp | undefined>undefined,
+      Validators.required,
+    ],
     hidden: [false, [Validators.required]],
   });
+  private formChangedSig = toSignal(this.form.valueChanges);
+  showElternteilSig = computed(() => {
+    const formValues = this.formChangedSig();
 
-  isNotLeiblichGeschwisterSig = toSignal(
-    this.form.controls.geschwisterTyp.valueChanges.pipe(
-      map((geschwisterTyp) => geschwisterTyp != 'LEIBLICH'),
-    ),
-    { initialValue: false },
-  );
+    return (
+      formValues?.wohnsitz === 'EIGENER_HAUSHALT' &&
+      formValues.geschwisterTyp &&
+      formValues.geschwisterTyp !== 'LEIBLICH'
+    );
+  });
+
+  isNotLeiblichGeschwisterSig = computed(() => {
+    const formValues = this.formChangedSig();
+
+    return !!(
+      formValues?.wohnsitz !== 'EIGENER_HAUSHALT' &&
+      formValues?.geschwisterTyp &&
+      formValues.geschwisterTyp !== 'LEIBLICH'
+    );
+  });
   wohnsitzViewSig = computed(() => {
     const view = this.viewSig();
     const isNotLeiblichGeschwister = this.isNotLeiblichGeschwisterSig();
@@ -231,6 +250,17 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
         ),
         ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
       });
+    });
+    effect(() => {
+      if (this.showElternteilSig()) {
+        this.form.controls.elternteilPiaOfStiefHalbGeschwister.enable();
+      } else {
+        this.formUtils.setDisabledState(
+          this.form.controls.elternteilPiaOfStiefHalbGeschwister,
+          true,
+          true,
+        );
+      }
     });
     effect(() => {
       this.formUtils.invalidateControlIfValidationFails(
