@@ -73,7 +73,8 @@ public class VerfuegungPdfComposerService {
         storeVerfuegungsDokument(verfuegung, VerfuegungDokumentTyp.VERFUEGUNGSBRIEF, verfuegungsBrief);
 
         if (verfuegung.getVerfuegungStatus().isNegativ() || stipendienBerechnungOpt.isEmpty()) {
-            storeVerfuegungsDokument(verfuegung, VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG, verfuegungsBrief);
+            final var finalVerfuegungsBrief = mergeWithSozialdienstDeckblattIfDelegiert(gesuch, verfuegungsBrief);
+            storeVerfuegungsDokument(verfuegung, VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG, finalVerfuegungsBrief);
             return;
         }
 
@@ -100,21 +101,25 @@ public class VerfuegungPdfComposerService {
         versendetePdfs.add(berechnungsBlaetter);
         darlehensVerfuegung.ifPresent(versendetePdfs::add);
 
-        final var versendeteVerfuegungWithPageNumbers =
+        final var versendeteMerged =
             PdfUtils.makePageNumberEven(PdfUtils.addPageNumbers(PdfUtils.mergePdfs(versendetePdfs)));
 
+        return mergeWithSozialdienstDeckblattIfDelegiert(gesuch, versendeteMerged);
+    }
+
+    private ByteArrayOutputStream mergeWithSozialdienstDeckblattIfDelegiert(
+        final Gesuch gesuch,
+        final ByteArrayOutputStream pdfContent
+    ) {
         if (!gesuch.getAusbildung().getFall().isDelegiert()) {
-            return versendeteVerfuegungWithPageNumbers;
+            return pdfContent;
         }
-
         final var sozialdienstDeckblatt = verfuegungBriefPdfService.createSozialdienstDeckblatt(gesuch);
-
-        final var versendetePdfsWithSozialdienst = new ArrayList<ByteArrayOutputStream>();
-        versendetePdfsWithSozialdienst.add(versendeteVerfuegungWithPageNumbers);
-        versendetePdfsWithSozialdienst.add(sozialdienstDeckblatt);
-        versendetePdfsWithSozialdienst.add(versendeteVerfuegungWithPageNumbers);
-
-        return PdfUtils.makePageNumberEven(PdfUtils.mergePdfs(versendetePdfsWithSozialdienst));
+        final var pdfs = new ArrayList<ByteArrayOutputStream>();
+        pdfs.add(pdfContent);
+        pdfs.add(sozialdienstDeckblatt);
+        pdfs.add(pdfContent);
+        return PdfUtils.makePageNumberEven(PdfUtils.mergePdfs(pdfs));
     }
 
     private ByteArrayOutputStream renderAndStoreBerechnungsblaetter(
