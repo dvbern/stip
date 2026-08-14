@@ -69,7 +69,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
     @Override
     @RolesAllowed(DELEGIERUNG_READ)
     public DelegierungDto getDelegierung(UUID delegierungId) {
-        delegierenAuthorizer.canRead();
+        delegierenAuthorizer.canRead(delegierungId);
         return delegierenService.getDelegierung(delegierungId);
     }
 

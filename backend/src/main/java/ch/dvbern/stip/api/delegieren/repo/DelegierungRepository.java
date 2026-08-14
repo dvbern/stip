@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.delegieren.repo;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
@@ -120,7 +119,15 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
                         and (cast(:geburtsdatum as date) is null or delegierung.persoenlicheAngaben.geburtsdatum = :geburtsdatum)
                         and (:ort is null or delegierung.persoenlicheAngaben.adresse.ort ilike :ort)
                         and (:delegierungStatus is null or delegierung.status = : delegierungStatus)
-                    order by :sortColumn %s
+                    order by
+                        case
+                            when :sortColumn = 'FALLNUMMER' then fall.fallNummer
+                            when :sortColumn = 'NACHNAME' then delegierung.persoenlicheAngaben.nachname
+                            when :sortColumn = 'VORNAME' then delegierung.persoenlicheAngaben.vorname
+                            when :sortColumn = 'GEBURTSDATUM' then to_char(delegierung.persoenlicheAngaben.geburtsdatum, 'yyyy-mm-dd')
+                            when :sortColumn = 'WOHNORT' then delegierung.persoenlicheAngaben.adresse.ort
+                        end %s,
+                        delegierung.timestampMutiert desc
                     limit :pageSize offset :page
                 """.formatted(
                     getSortOrder(sortOrder)
@@ -137,9 +144,9 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
             .setParameter("geburtsdatum", geburtsdatum)
             .setParameter("ort", asFuzzy(ort))
             .setParameter("delegierungStatus", delegierungStatus)
-            .setParameter("sortColumn", getSortColumn(sortColumn))
             .setParameter("pageSize", pageSize)
             .setParameter("page", page * pageSize)
+            .setParameter("sortColumn", getSortColumn(sortColumn))
             .getResultList();
     }
 
@@ -164,9 +171,10 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
     }
 
     private String getSortColumn(SozDashboardColumnDto sortColumn) {
-        return Optional.ofNullable(sortColumn)
-            .map(SozDashboardColumnDto::toString)
-            .orElse(QDelegierung.delegierung.timestampMutiert.getMetadata().getName());
+        if (Objects.isNull(sortColumn)) {
+            return null;
+        }
+        return sortColumn.toString();
     }
 
     private String asFuzzy(final String value) {
