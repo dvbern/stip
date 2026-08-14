@@ -1,24 +1,17 @@
 <div class="tw:md:p-6 tw:p-4" *dvTranslocoShared="let t">
   @let info = data.options.info;
-  <h1 class="tw:flex tw:items-center tw:self-start tw:mr-2 tw:mb-2 tw:pr-2">
-    <span class="material-symbols-rounded tw:text-dv-blue upload-icon tw:rounded-full tw:mr-2 tw:p-1">upload</span>
-    <div
-      class="tw:text-xl tw:font-semibold tw:whitespace-pre-wrap tw:px-8"
-      [innerHTML]="info.type === 'TEXT' ? info.title : t(info.title)"
-    ></div>
-    <span class="tw:grow"></span>
-    <button
-      type="button"
-      class="tw:dv-button-icon tw:absolute tw:self-start tw:right-0 tw:top-0"
-      (click)="closeDialog()"
-    >
-      <span class="material-symbols-rounded">close</span>
-    </button>
-  </h1>
+  <h1
+    class="tw:text-xl tw:font-semibold tw:whitespace-pre-wrap tw:mb-4"
+    [innerHTML]="info.type === 'TEXT' ? info.title : t(info.title)"
+  ></h1>
+
+  <button type="button" class="tw:dv-button-icon tw:absolute tw:self-start tw:right-0 tw:top-0" (click)="closeDialog()">
+    <span class="material-symbols-rounded">close</span>
+  </button>
 
   @if (info.description) {
     <div
-      class="tw:whitespace-pre-wrap tw:px-8 tw:[&_ul]:list-disc tw:[&_ul]:pl-5 tw:[&_ol]:list-decimal tw:[&_ol]:pl-5 tw:[&_li]:ml-2"
+      class="tw:whitespace-pre-wrap tw:[&_ul]:list-disc tw:[&_ul]:pl-5 tw:[&_ol]:list-decimal tw:[&_ol]:pl-5 tw:[&_li]:ml-2"
       [innerHTML]="info.type === 'TEXT' ? info.description : t(info.description)"
     ></div>
   }
