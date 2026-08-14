@@ -7,27 +7,22 @@ import {
   output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 
-import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
-import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry';
+import {
+  GsDashboardActions,
+  SharedModelGsGesuchView,
+} from '@dv/shared/model/ausbildung';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 
 @Component({
   selector: 'dv-shared-ui-dashboard-gesuch',
-  imports: [
-    CommonModule,
-    RouterLink,
-    TranslocoPipe,
-    SharedUiAenderungsEntryComponent,
-  ],
+  imports: [CommonModule, RouterLink, SharedUiAdvTranslocoDirective],
   templateUrl: './shared-ui-dashboard-gesuch.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiDashboardGesuchComponent {
   gesuchSig = input.required<SharedModelGsGesuchView>();
-  deleteGesuch = output<string>();
-  deleteAenderung = output<string>();
-  aenderungMelden = output<void>();
+  output = output<GsDashboardActions>();
   @HostBinding('class') defaultClasses =
-    'tw:flex tw:w-full tw:flex-col tw:rounded-lg tw:px-6 tw:pt-4 tw:pb-6';
+    'tw:flex tw:flex-col tw:rounded-lg tw:dv-container';
 }

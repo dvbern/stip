@@ -19,9 +19,11 @@ package ch.dvbern.stip.api.fall.service;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.FallHeaderDto;
+import ch.dvbern.stip.generated.dto.FallHeaderDtoBuilder;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +33,17 @@ import lombok.RequiredArgsConstructor;
 public class FallHeaderService {
     private final FallRepository fallRepository;
     private final NotificationService notificationService;
+    private final DelegierungMapper delegierungMapper;
 
     @Transactional
     public FallHeaderDto getFallHeader(final UUID fallId) {
-        fallRepository.requireById(fallId);
+        final var fall = fallRepository.requireById(fallId);
         final var unreadNotificationsCount = notificationService.getUnreadNotificationCountForFall(fallId);
 
-        return new FallHeaderDto()
+        return FallHeaderDtoBuilder.fallHeaderDto()
             .fallId(fallId)
-            .unreadNotificationsCount(Math.toIntExact(unreadNotificationsCount));
+            .unreadNotificationsCount(Math.toIntExact(unreadNotificationsCount))
+            .currentDelegierung(delegierungMapper.toSlimDto(fall.getCurrentDelegierung()))
+            .build();
     }
 }

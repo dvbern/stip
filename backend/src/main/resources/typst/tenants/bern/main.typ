@@ -1,10 +1,10 @@
 #import "/shared/translation/engine.typ": make-i18n
 #import "/tenants/bern/constants.typ"
 
-#let data = json(bytes(sys.inputs.at("data")))
+#let data = json(bytes("__TYPST_DATA__"))
 
-#let de = yaml("translations/de.yaml")
-#let fr = yaml("translations/fr.yaml")
+#let de = yaml("/tenants/bern/translations/de.yaml")
+#let fr = yaml("/tenants/bern/translations/fr.yaml")
 
 #let catalog = (
   de: de,

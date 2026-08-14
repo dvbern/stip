@@ -39,9 +39,12 @@ export class SharedUiInfoDialogComponent {
     dialog: MatDialog,
     dialogConfig: MatDialogConfig<InfoDialogData>,
   ) {
-    return dialog.open<SharedUiInfoDialogComponent, InfoDialogData>(
+    return dialog.open<SharedUiInfoDialogComponent, InfoDialogData, void>(
       SharedUiInfoDialogComponent,
-      dialogConfig,
+      {
+        ...dialogConfig,
+        panelClass: 'dv-info-dialog',
+      },
     );
   }
 

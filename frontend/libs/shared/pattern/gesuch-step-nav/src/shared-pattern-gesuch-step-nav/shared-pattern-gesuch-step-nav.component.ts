@@ -3,9 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Directive,
-  EventEmitter,
   HostBinding,
-  Output,
   computed,
   effect,
   inject,
@@ -83,7 +81,6 @@ export class StepViewTemplateDirective {
 })
 export class SharedPatternGesuchStepNavComponent {
   @HostBinding('class') klass = 'tw:dv-pass-height tw:h-full tw:p-6';
-  @Output() navClicked = new EventEmitter();
   private store = inject(Store);
 
   statusIconMap: Record<StepState, string> = {

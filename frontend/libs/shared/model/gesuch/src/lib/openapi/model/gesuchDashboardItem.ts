@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GesuchDashboardItemMissingDocuments } from './gesuchDashboardItemMissingDocuments';
+import { FreiwilligDarlehen } from './freiwilligDarlehen';
 import { Gesuchstatus } from './gesuchstatus';
 import { Gesuchsperiode } from './gesuchsperiode';
 import { GesuchTrancheSlim } from './gesuchTrancheSlim';
@@ -21,9 +22,11 @@ export interface GesuchDashboardItem {
     id: string;
     currentTrancheId: string;
     offeneAenderung?: GesuchTrancheSlim;
+    freiwilligeDarlehenList: Array<FreiwilligDarlehen>;
     startDate: string;
     endDate: string;
     canCreateAenderung: boolean;
+    canCreateDarlehen: boolean;
     missingDocuments?: GesuchDashboardItemMissingDocuments;
 }
 

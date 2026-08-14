@@ -179,6 +179,15 @@ export class TwoColumnTimelineComponent {
   }
 
   timeline = new TwoColumnTimeline();
+  expandedGapItems = new Set<TimelineGapBlock>();
+
+  toggleGapActions(item: TimelineGapBlock): void {
+    if (this.expandedGapItems.has(item)) {
+      this.expandedGapItems.delete(item);
+    } else {
+      this.expandedGapItems.add(item);
+    }
+  }
 
   trackByIndex(index: number) {
     return index;

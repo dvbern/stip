@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.PersoenlicheAngabenDto;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
@@ -22,10 +23,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DelegierungSlimDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
   private @Valid SozialdienstSlimDto sozialdienst;
+  private @Valid PersoenlicheAngabenDto persoenlicheAngaben;
 
   protected DelegierungSlimDto(DelegierungSlimDtoBuilder<?, ?> b) {
     this.status = b.status;
     this.sozialdienst = b.sozialdienst;
+    this.persoenlicheAngaben = b.persoenlicheAngaben;
   }
 
   public DelegierungSlimDto() {
@@ -69,6 +72,25 @@ public class DelegierungSlimDto  implements Serializable {
     this.sozialdienst = sozialdienst;
   }
 
+  /**
+   **/
+  public DelegierungSlimDto persoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+    this.persoenlicheAngaben = persoenlicheAngaben;
+    return this;
+  }
+
+  
+  @JsonProperty("persoenlicheAngaben")
+  @NotNull
+  public PersoenlicheAngabenDto getPersoenlicheAngaben() {
+    return persoenlicheAngaben;
+  }
+
+  @JsonProperty("persoenlicheAngaben")
+  public void setPersoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+    this.persoenlicheAngaben = persoenlicheAngaben;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -80,12 +102,13 @@ public class DelegierungSlimDto  implements Serializable {
     }
     DelegierungSlimDto delegierungSlim = (DelegierungSlimDto) o;
     return Objects.equals(this.status, delegierungSlim.status) &&
-        Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst);
+        Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst) &&
+        Objects.equals(this.persoenlicheAngaben, delegierungSlim.persoenlicheAngaben);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, sozialdienst);
+    return Objects.hash(status, sozialdienst, persoenlicheAngaben);
   }
 
   @Override
@@ -95,6 +118,7 @@ public class DelegierungSlimDto  implements Serializable {
     
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
+    sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -131,6 +155,7 @@ public class DelegierungSlimDto  implements Serializable {
   public static abstract class DelegierungSlimDtoBuilder<C extends DelegierungSlimDto, B extends DelegierungSlimDtoBuilder<C, B>>  {
     private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
     private SozialdienstSlimDto sozialdienst;
+    private PersoenlicheAngabenDto persoenlicheAngaben;
     protected abstract B self();
 
     public abstract C build();
@@ -141,6 +166,10 @@ public class DelegierungSlimDto  implements Serializable {
     }
     public B sozialdienst(SozialdienstSlimDto sozialdienst) {
       this.sozialdienst = sozialdienst;
+      return self();
+    }
+    public B persoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+      this.persoenlicheAngaben = persoenlicheAngaben;
       return self();
     }
   }
