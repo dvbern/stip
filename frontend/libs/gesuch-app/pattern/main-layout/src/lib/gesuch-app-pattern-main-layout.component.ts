@@ -146,6 +146,8 @@ export class GesuchAppPatternMainLayoutComponent {
       const fallId = this.fallStore.currentFallViewSig()?.id;
       const rolesMap = this.permissionStore.rolesMapSig();
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
+      const availableSozialdienste = this.availableSozialdiensteSig() ?? [];
+      const delegierung = fallHeader?.currentDelegierung;
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
@@ -181,11 +183,22 @@ export class GesuchAppPatternMainLayoutComponent {
           : undefined,
       };
 
+      const sozialdienstDelegieren: NavItem | undefined =
+        availableSozialdienste.length && !delegierung
+          ? {
+              type: 'action',
+              id: 'sozialdienst-delegieren',
+              label: { key: 'shared.menu.delegieren' },
+              action: () => this.delegiereSozialdienst(fallId),
+            }
+          : undefined;
+
       const navItems: NavItem[] = [
         ...gesuchBaseNavItems,
         fallDokumente,
         auszahlung,
         nachrichten,
+        ...(sozialdienstDelegieren ? [sozialdienstDelegieren] : []),
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;
@@ -199,11 +212,8 @@ export class GesuchAppPatternMainLayoutComponent {
 
     // menuItems items effect
     effect(() => {
-      const availableSozialdienste = this.availableSozialdiensteSig() ?? [];
       const fallId = this.fallStore.currentFallViewSig()?.id;
       const rolesMap = this.permissionStore.rolesMapSig();
-      const delegierung =
-        this.fallHeaderStore.fallHeaderViewSig()?.currentDelegierung;
 
       if (!fallId) {
         return;
@@ -255,23 +265,8 @@ export class GesuchAppPatternMainLayoutComponent {
         },
       };
 
-      const sozialdienstMenu: NavMenuItem | undefined =
-        availableSozialdienste.length
-          ? {
-              type: 'action',
-              id: 'sozialdienst-delegieren',
-              disabled:
-                delegierung &&
-                (delegierung.status === 'AKZEPTIERT' ||
-                  delegierung.status === 'EINGEREICHT'),
-              label: { key: 'shared.menu.delegieren' },
-              action: () => this.delegiereSozialdienst(fallId),
-            }
-          : undefined;
-
       const menuItems: NavMenuItem[] = [
         ...gesuchBaseMenuItems,
-        ...(sozialdienstMenu ? [sozialdienstMenu] : []),
         allgemeineInformationen,
         nutzungsbedingungen,
       ].filter((item) => {
