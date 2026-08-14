@@ -215,8 +215,11 @@ export class GesuchAppPatternMainLayoutComponent {
         label: { key: 'shared.menu.allgemeine-informationen' },
         action: () => {
           SharedUiInfoDialogComponent.open(this.dialog, {
-            titleKey: 'shared.allgemeine-informationen.title',
-            messageKey: 'shared.allgemeine-informationen.message',
+            data: {
+              type: 'translated',
+              titleKey: 'shared.allgemeine-informationen.title',
+              messageKey: 'shared.allgemeine-informationen.message',
+            },
           });
         },
       };

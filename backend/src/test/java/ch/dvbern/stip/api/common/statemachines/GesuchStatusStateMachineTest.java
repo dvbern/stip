@@ -141,7 +141,7 @@ class GesuchStatusStateMachineTest {
 
         final var trigger = GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT);
 
-        assertThrows(AppErrorException.class, () -> sm.fire(trigger, null));
+        assertThrows(AppErrorException.class, () -> sm.fire(trigger, null, null));
     }
 
     @Test
@@ -154,9 +154,9 @@ class GesuchStatusStateMachineTest {
                 .setGesuchStatusAenderungDatum(LocalDateTime.now()),
             config
         );
-        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT), gesuch);
+        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT), gesuch, null);
 
-        verify(komplettEingereichtHandlerSpy).handle(Mockito.any());
+        verify(komplettEingereichtHandlerSpy).handle(Mockito.any(), Mockito.any());
 
         final var handlerList = Arrays.asList(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -170,7 +170,7 @@ class GesuchStatusStateMachineTest {
             stipendienAnspruchHandlerSpy
         );
         handlerList.forEach(handler -> {
-            verify(handler, times(0)).handle(Mockito.any());
+            verify(handler, times(0)).handle(Mockito.any(), Mockito.any());
         });
     }
 }

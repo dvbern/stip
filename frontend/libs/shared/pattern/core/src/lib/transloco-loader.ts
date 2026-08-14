@@ -11,6 +11,15 @@ export class TranslocoHttpLoader implements TranslocoLoader {
     return forkJoin({
       base: this.http.get<Translation>(`/assets/i18n/${lang}.json`),
       shared: this.http.get<Translation>(`/assets/i18n/shared.${lang}.json`),
-    }).pipe(map(({ base, shared }) => ({ ...base, ...shared })));
+      contract: this.http.get<Translation>(
+        `/assets/i18n/contract.${lang}.json`,
+      ),
+    }).pipe(
+      map(({ base, shared, contract }) => ({
+        ...base,
+        ...shared,
+        ...contract,
+      })),
+    );
   }
 }

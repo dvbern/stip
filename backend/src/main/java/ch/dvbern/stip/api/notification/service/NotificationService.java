@@ -310,6 +310,15 @@ public class NotificationService {
         final Gesuch gesuch,
         final KommentarDto kommentar
     ) {
+        createGesuchStatusChangeWithCommentNotificationAndSendStdMail(gesuch, kommentar.getText());
+    }
+
+    @Transactional
+    @WithSpan
+    public void createGesuchStatusChangeWithCommentNotificationAndSendStdMail(
+        final Gesuch gesuch,
+        final String kommentar
+    ) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_STATUS_CHANGE_WITH_COMMENT)
             .setFall(gesuch.getAusbildung().getFall());
@@ -320,7 +329,7 @@ public class NotificationService {
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
         String msg =
-            Templates.getGesuchStatusChangeWithKommentarText(anrede, nachname, kommentar.getText(), sprache).render();
+            Templates.getGesuchStatusChangeWithKommentarText(anrede, nachname, kommentar, sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
         mailService.sendStandardNotificationEmailForGesuch(gesuch);
