@@ -9,22 +9,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SozialdienstSlim } from './sozialdienstSlim';
-import { PersoenlicheAngaben } from './persoenlicheAngaben';
-import { SozialdienstBenutzer } from './sozialdienstBenutzer';
+import { GesuchTrancheStatus } from './gesuchTrancheStatus';
+import { Gesuchstatus } from './gesuchstatus';
 import { DelegierungStatus } from './delegierungStatus';
 
 export interface DelegierungEntry { 
-    id: string;
-    sozialdienst: SozialdienstSlim;
-    delegierterMitarbeiter?: SozialdienstBenutzer;
-    persoenlicheAngaben: PersoenlicheAngaben;
+    id?: string;
+    fallNummer: string;
+    fallId: string;
+    nachname: string;
+    vorname: string;
+    geburtsdatum: string;
+    wohnort: string;
     status: DelegierungStatus;
-    startDate?: string;
-    endDate?: string;
-    fallId?: string;
-    fallNummer?: string;
-    tenant: string;
+    gesuchStatus?: Gesuchstatus;
+    aenderungStatus?: GesuchTrancheStatus;
+    totalCount: number;
 }
 
 

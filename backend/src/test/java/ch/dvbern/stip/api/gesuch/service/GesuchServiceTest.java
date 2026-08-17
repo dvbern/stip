@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -83,7 +82,6 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
@@ -218,9 +216,6 @@ class GesuchServiceTest {
 
     @InjectMock
     FallRepository fallRepository;
-
-    @InjectMock
-    VerfuegungPdfService verfuegungPdfService;
 
     @InjectMock
     StipDecisionTextRepository stipDecisionTextRepository;
@@ -1080,8 +1075,6 @@ class GesuchServiceTest {
         verfuegung.setTimestampErstellt(LocalDateTime.now());
         verfuegung.setGesuch(gesuch);
         gesuch.getVerfuegungs().add(verfuegung);
-        when(verfuegungPdfService.createVerfuegungOhneAnspruchPdf(any(), any()))
-            .thenReturn(new ByteArrayOutputStream());
         when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
