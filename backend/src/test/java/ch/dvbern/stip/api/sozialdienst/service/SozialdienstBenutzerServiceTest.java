@@ -124,7 +124,6 @@ class SozialdienstBenutzerServiceTest {
         var sozialdienstCreateDto = new SozialdienstCreateDto();
 
         sozialdienstCreateDto.setName("a");
-        sozialdienstCreateDto.setRedirectUri(WELCOME_MAIL_REDIRECT_URI);
         // sozialdienstCreateDto.setIban(VALID_IBAN_1);
         var sdAdresse = new AdresseDto();
         sdAdresse.setStrasse("Musterstrasse");

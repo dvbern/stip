@@ -25,8 +25,7 @@ import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
-import ch.dvbern.stip.api.config.type.StipConfig;
-import ch.dvbern.stip.api.config.type.TenantConfig;
+import ch.dvbern.stip.api.config.type.FrontendType;
 import ch.dvbern.stip.api.delegieren.entity.PersoenlicheAngaben;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -51,7 +50,6 @@ public class MailService {
     private final ReactiveMailer reactiveMailer;
     private final MailAlreadySentCheckerService mailAlreadySentCheckerService;
     private final TenantService tenantService;
-    private final StipConfig config;
 
     public void sendStandardNotificationEmailForGesuch(final Gesuch gesuch) {
         final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
@@ -126,19 +124,15 @@ public class MailService {
 
     public void sendBenutzerWelcomeEmail(
         final WelcomeMailDto welcomeMailDto,
-        final WelcomeMailBenutzerTyp benutzerTyp
+        final FrontendType frontendType
     ) {
-        String redirectURI = getWelcomeMailURI(
-            tenantService.getConfigForCurrentTenant(),
-            config,
-            tenantService.getCurrentStringIdentifier(),
-            welcomeMailDto.getRedirectUri(),
-            getWelcomeMailClientId(benutzerTyp)
-        );
+        String frontendURI = tenantService.getConfigForCurrentTenant().frontend().urls().get(frontendType);
 
-        Templates.benutzerWelcome(welcomeMailDto.getName(), welcomeMailDto.getVorname(), redirectURI)
+        frontendURI = String.format("https://%s", frontendURI);
+
+        Templates.benutzerWelcome(welcomeMailDto.getName(), welcomeMailDto.getVorname(), frontendURI)
             .to(welcomeMailDto.getEmail())
-            .subject("Benuzter Erstellt/ Utilisateur Créé")
+            .subject("Benuzter Erstellt / Utilisateur Créé")
             .send()
             .onFailure()
             .invoke(this::handleFailure)
@@ -231,32 +225,6 @@ public class MailService {
 
     private void handleFailure(final Throwable failure) {
         LOG.error("Failed to send email", failure);
-    }
-
-    private String getWelcomeMailClientId(final WelcomeMailBenutzerTyp benutzerTyp) {
-        return switch (benutzerTyp) {
-            case SACHBEARBEITER -> config.welcomeMail().clientIdSachbearbeiter();
-            case SOZIALDIENST_BENUTZER -> config.welcomeMail().clientIdSozialdienst();
-        };
-    }
-
-    private String getWelcomeMailURI(
-        TenantConfig tenantConfig,
-        StipConfig config,
-        String tenantIdentifier,
-        String redirectUri,
-        String clientId
-    ) {
-        return String.format(
-            "%s%s%s%s",
-            config.oidc().frontendUrl(),
-            tenantConfig.welcomeMail().kcPath().replace("<TENANT>", tenantIdentifier),
-            tenantConfig.welcomeMail()
-                .kcQueryParameter()
-                .replace("<CLIENT_ID>", clientId)
-                .replace("<REDIRECT_URI>", redirectUri),
-            tenantConfig.welcomeMail().kcScope()
-        );
     }
 
     @CheckedTemplate

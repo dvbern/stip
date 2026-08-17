@@ -7318,15 +7318,12 @@ components:
         - name
         - vorname
         - email
-        - redirectUri
       properties:
         name:
           type: string
         vorname:
           type: string
         email:
-          type: string
-        redirectUri:
           type: string
     SteuerdatenPortError:
       required:
@@ -8004,7 +8001,6 @@ components:
         - name
         - zahlungsverbindung
         - sozialdienstAdmin
-        - redirectUri
       properties:
         name:
           type: string
@@ -8012,8 +8008,6 @@ components:
           $ref: '#/components/schemas/Zahlungsverbindung'
         sozialdienstAdmin:
           $ref: '#/components/schemas/SozialdienstAdmin'
-        redirectUri:
-          type: string
     SozialdienstUpdate:
       required:
         - id
@@ -9519,8 +9513,6 @@ components:
           type: array
           items:
             type: string
-        redirectUri:
-          type: string
       allOf:
         - $ref: '#/components/schemas/BenutzerUpdate'
     Benutzereinstellungen:

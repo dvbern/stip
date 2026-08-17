@@ -378,7 +378,6 @@ components:
         - name
         - zahlungsverbindung
         - sozialdienstAdmin
-        - redirectUri
       properties:
         name:
           type: string
@@ -386,8 +385,6 @@ components:
           $ref: './components/common.yaml#/Zahlungsverbindung'
         sozialdienstAdmin:
           $ref: '#/components/schemas/SozialdienstAdmin'
-        redirectUri:
-          type: string
     SozialdienstUpdate:
       required:
         - id

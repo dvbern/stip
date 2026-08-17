@@ -24,13 +24,11 @@ public class SozialdienstCreateDto  implements Serializable {
   private @Valid String name;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
   private @Valid SozialdienstAdminDto sozialdienstAdmin;
-  private @Valid String redirectUri;
 
   protected SozialdienstCreateDto(SozialdienstCreateDtoBuilder<?, ?> b) {
     this.name = b.name;
     this.zahlungsverbindung = b.zahlungsverbindung;
     this.sozialdienstAdmin = b.sozialdienstAdmin;
-    this.redirectUri = b.redirectUri;
   }
 
   public SozialdienstCreateDto() {
@@ -93,25 +91,6 @@ public class SozialdienstCreateDto  implements Serializable {
     this.sozialdienstAdmin = sozialdienstAdmin;
   }
 
-  /**
-   **/
-  public SozialdienstCreateDto redirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-    return this;
-  }
-
-  
-  @JsonProperty("redirectUri")
-  @NotNull
-  public String getRedirectUri() {
-    return redirectUri;
-  }
-
-  @JsonProperty("redirectUri")
-  public void setRedirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -124,13 +103,12 @@ public class SozialdienstCreateDto  implements Serializable {
     SozialdienstCreateDto sozialdienstCreate = (SozialdienstCreateDto) o;
     return Objects.equals(this.name, sozialdienstCreate.name) &&
         Objects.equals(this.zahlungsverbindung, sozialdienstCreate.zahlungsverbindung) &&
-        Objects.equals(this.sozialdienstAdmin, sozialdienstCreate.sozialdienstAdmin) &&
-        Objects.equals(this.redirectUri, sozialdienstCreate.redirectUri);
+        Objects.equals(this.sozialdienstAdmin, sozialdienstCreate.sozialdienstAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, zahlungsverbindung, sozialdienstAdmin, redirectUri);
+    return Objects.hash(name, zahlungsverbindung, sozialdienstAdmin);
   }
 
   @Override
@@ -141,7 +119,6 @@ public class SozialdienstCreateDto  implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
-    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -179,7 +156,6 @@ public class SozialdienstCreateDto  implements Serializable {
     private String name;
     private ZahlungsverbindungDto zahlungsverbindung;
     private SozialdienstAdminDto sozialdienstAdmin;
-    private String redirectUri;
     protected abstract B self();
 
     public abstract C build();
@@ -194,10 +170,6 @@ public class SozialdienstCreateDto  implements Serializable {
     }
     public B sozialdienstAdmin(SozialdienstAdminDto sozialdienstAdmin) {
       this.sozialdienstAdmin = sozialdienstAdmin;
-      return self();
-    }
-    public B redirectUri(String redirectUri) {
-      this.redirectUri = redirectUri;
       return self();
     }
   }

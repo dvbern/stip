@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DOCUMENT,
   DestroyRef,
   OnDestroy,
   effect,
@@ -26,7 +25,6 @@ import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { MASK_IBAN, PATTERN_EMAIL } from '@dv/shared/model/gesuch';
-import { getCurrentUrl } from '@dv/shared/model/router';
 import { BFSCODE_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import {
   SharedUiFormFieldDirective,
@@ -67,7 +65,6 @@ export class SozialdienstDetailComponent implements OnDestroy {
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
-  private document = inject(DOCUMENT);
   private globalStore = inject(Store);
   private landStore = inject(LandStore);
 
@@ -234,7 +231,6 @@ export class SozialdienstDetailComponent implements OnDestroy {
         vorname: zahlungsverbindung.vorname,
         nachname: zahlungsverbindung.nachname,
       },
-      redirectUri: getCurrentUrl(this.document),
     };
 
     this.store.createSozialdienst$({

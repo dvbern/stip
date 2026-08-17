@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.config.type.FrontendType;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;
@@ -159,9 +160,8 @@ class MailServiceTest {
         WelcomeMailDto welcomeMailDto = new WelcomeMailDto()
             .name("WelcomeEmailTestName")
             .vorname("WelcomeEmailTestVorname")
-            .email(TEST_EMAIL)
-            .redirectUri("localhost:4200");
-        mailService.sendBenutzerWelcomeEmail(welcomeMailDto, WelcomeMailBenutzerTyp.SACHBEARBEITER);
+            .email(TEST_EMAIL);
+        mailService.sendBenutzerWelcomeEmail(welcomeMailDto, FrontendType.SB);
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(1, sent.size());
         MailMessage actual = sent.get(0);
@@ -169,7 +169,6 @@ class MailServiceTest {
         assertThat(actual.getSubject()).isNotBlank();
         assertThat(actual.getHtml()).contains(welcomeMailDto.getName());
         assertThat(actual.getHtml()).contains(welcomeMailDto.getVorname());
-        assertThat(actual.getHtml()).contains(welcomeMailDto.getRedirectUri());
         assertThat(actual.getHtml()).contains("client_id=stip-sachbearbeitung-app");
         assertThat(actual.getHtml()).doesNotContain("<CLIENT_ID>");
     }
@@ -179,9 +178,8 @@ class MailServiceTest {
         WelcomeMailDto welcomeMailDto = new WelcomeMailDto()
             .name("WelcomeEmailTestName")
             .vorname("WelcomeEmailTestVorname")
-            .email(TEST_EMAIL)
-            .redirectUri("localhost:4200");
-        mailService.sendBenutzerWelcomeEmail(welcomeMailDto, WelcomeMailBenutzerTyp.SOZIALDIENST_BENUTZER);
+            .email(TEST_EMAIL);
+        mailService.sendBenutzerWelcomeEmail(welcomeMailDto, FrontendType.SOZ);
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(1, sent.size());
         MailMessage actual = sent.get(0);
@@ -189,7 +187,6 @@ class MailServiceTest {
         assertThat(actual.getSubject()).isNotBlank();
         assertThat(actual.getHtml()).contains(welcomeMailDto.getName());
         assertThat(actual.getHtml()).contains(welcomeMailDto.getVorname());
-        assertThat(actual.getHtml()).contains(welcomeMailDto.getRedirectUri());
         assertThat(actual.getHtml()).contains("client_id=stip-sozialdienst-app");
         assertThat(actual.getHtml()).doesNotContain("<CLIENT_ID>");
     }

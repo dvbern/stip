@@ -17,41 +17,9 @@
 
 package ch.dvbern.stip.api.config.type;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import io.smallrye.config.WithDefault;
-
-public interface TenantConfig {
-    Set<String> subdomains();
-
-    Frontends frontend();
-
-    Darlehen darlehen();
-
-    Seeding seeding();
-
-    Map<String, SchedulerConfig> scheduler();
-
-    TenantPortConfig port();
-
-    TenantAdapterConfig adapter();
-
-    interface Frontends {
-        Map<FrontendType, String> urls();
-    }
-
-    interface Darlehen {
-        Verfuegung verfuegung();
-
-        interface Verfuegung {
-            @WithDefault("ausbildungsdarlehen@mailbucket.dvbern.ch")
-            String emailRecipient();
-        }
-    }
-
-    interface Seeding {
-        Optional<String> sozialdienste();
-    }
+public enum FrontendType {
+    GS,
+    SB,
+    SOZ,
+    DEMO
 }

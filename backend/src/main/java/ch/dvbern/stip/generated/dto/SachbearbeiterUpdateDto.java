@@ -32,7 +32,6 @@ public class SachbearbeiterUpdateDto  implements Serializable {
   private @Valid List<String> sachbearbeiterRollen = new ArrayList<>();
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
   private @Valid Boolean nutzungsbedingungenAkzeptiert;
-  private @Valid String redirectUri;
 
   protected SachbearbeiterUpdateDto(SachbearbeiterUpdateDtoBuilder<?, ?> b) {
     this.vorname = b.vorname;
@@ -44,7 +43,6 @@ public class SachbearbeiterUpdateDto  implements Serializable {
     this.sachbearbeiterRollen = b.sachbearbeiterRollen;
     this.benutzereinstellungen = b.benutzereinstellungen;
     this.nutzungsbedingungenAkzeptiert = b.nutzungsbedingungenAkzeptiert;
-    this.redirectUri = b.redirectUri;
   }
 
   public SachbearbeiterUpdateDto() {
@@ -235,24 +233,6 @@ public class SachbearbeiterUpdateDto  implements Serializable {
     this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
   }
 
-  /**
-   **/
-  public SachbearbeiterUpdateDto redirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-    return this;
-  }
-
-  
-  @JsonProperty("redirectUri")
-  public String getRedirectUri() {
-    return redirectUri;
-  }
-
-  @JsonProperty("redirectUri")
-  public void setRedirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -271,13 +251,12 @@ public class SachbearbeiterUpdateDto  implements Serializable {
         Objects.equals(this.funktionFr, sachbearbeiterUpdate.funktionFr) &&
         Objects.equals(this.sachbearbeiterRollen, sachbearbeiterUpdate.sachbearbeiterRollen) &&
         Objects.equals(this.benutzereinstellungen, sachbearbeiterUpdate.benutzereinstellungen) &&
-        Objects.equals(this.nutzungsbedingungenAkzeptiert, sachbearbeiterUpdate.nutzungsbedingungenAkzeptiert) &&
-        Objects.equals(this.redirectUri, sachbearbeiterUpdate.redirectUri);
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, sachbearbeiterUpdate.nutzungsbedingungenAkzeptiert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, benutzereinstellungen, nutzungsbedingungenAkzeptiert, redirectUri);
+    return Objects.hash(vorname, nachname, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, benutzereinstellungen, nutzungsbedingungenAkzeptiert);
   }
 
   @Override
@@ -294,7 +273,6 @@ public class SachbearbeiterUpdateDto  implements Serializable {
     sb.append("    sachbearbeiterRollen: ").append(toIndentedString(sachbearbeiterRollen)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
     sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
-    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -338,7 +316,6 @@ public class SachbearbeiterUpdateDto  implements Serializable {
     private List<String> sachbearbeiterRollen = new ArrayList<>();
     private BenutzereinstellungenUpdateDto benutzereinstellungen;
     private Boolean nutzungsbedingungenAkzeptiert;
-    private String redirectUri;
     protected abstract B self();
 
     public abstract C build();
@@ -377,10 +354,6 @@ public class SachbearbeiterUpdateDto  implements Serializable {
     }
     public B nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
       this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
-      return self();
-    }
-    public B redirectUri(String redirectUri) {
-      this.redirectUri = redirectUri;
       return self();
     }
   }

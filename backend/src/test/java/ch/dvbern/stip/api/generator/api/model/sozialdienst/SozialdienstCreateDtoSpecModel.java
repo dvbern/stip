@@ -32,7 +32,6 @@ public class SozialdienstCreateDtoSpecModel {
             model.setSozialdienstAdmin(admin);
             model.setName("Test Sozialdienst");
             model.setZahlungsverbindung(ZahlungsverbindungDtoSpecModel.zahlungsverbindungDtoSpec());
-            model.setRedirectUri("localhost:4200");
         });
     }
 }
