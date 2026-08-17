@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -32,6 +33,7 @@ import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
@@ -54,6 +56,9 @@ public abstract class AusbildungDashboardItemMapper {
 
     @Inject
     GesuchTrancheService gesuchTrancheService;
+
+    @Inject
+    GesuchHistoryService gesuchHistoryService;
 
     @Inject
     AusbildungAuthorizer ausbildungAuthorizer;
@@ -85,7 +90,21 @@ public abstract class AusbildungDashboardItemMapper {
         source = ".", target = "openAusbildungUnterbruchAntragId",
         qualifiedByName = "getOpenAusbildungUnterbruchAntragId"
     )
+    @Mapping(
+        source = ".", target = "gesuchs",
+        qualifiedByName = "getHistorizedGesuchs"
+    )
     public abstract AusbildungDashboardItemDto toDto(final Ausbildung ausbildung);
+
+    @Named("getHistorizedGesuchs")
+    public List<GesuchDashboardItemDto> getHistorizedGesuchs(final Ausbildung ausbildung) {
+        final var gesuchs = ausbildung.getGesuchs()
+            .stream()
+            .map(gesuch -> gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuch.getId()));
+        return gesuchs
+            .map(this::mapToGesuchDashboardItemDto)
+            .toList();
+    }
 
     @Named("canCreateAusbildungUnterbruchAntrag")
     protected boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {
@@ -133,7 +152,7 @@ public abstract class AusbildungDashboardItemMapper {
         dto.setEditable(ausbildungAuthorizer.canUpdateCheck(dto.getId()));
     }
 
-    GesuchDashboardItemDto map(final Gesuch gesuch) {
+    GesuchDashboardItemDto mapToGesuchDashboardItemDto(final Gesuch gesuch) {
         final var gesuchTranchen = gesuch.getGesuchTranchen();
 
         final var offeneAenderung = gesuchTranchen.stream()

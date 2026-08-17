@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchhistory.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,8 +58,18 @@ public class GesuchHistoryService {
         }
 
         if (gesuch.isVerfuegt()) {
-            return gesuchHistoryRepository
-                .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
+            final var timestampBeforeInBearbeitung =
+                gesuchHistoryRepository.getLatestRevisionTimestampWhereStatusChangedToOneOf(
+                    gesuchId,
+                    List.of(Gesuchstatus.IN_BEARBEITUNG_SB)
+                ).map(timestamp -> timestamp - 1);
+            return timestampBeforeInBearbeitung
+                .flatMap(timestamp -> gesuchHistoryRepository.getGesuchAtRevisionTimestamp(gesuchId, timestamp))
+                // If isVerfuegt can happen before GESUCH_VERFUEGUNG_ABGESCHLOSSEN, fetch the gesuch in this state
+                .or(
+                    () -> gesuchHistoryRepository
+                        .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
+                )
                 // There is a range where the gesuch is verfügt but did not reach GESUCH_VERFUEGUNG_ABGESCHLOSSEN yet
                 // return the eingereicht version instead in this case
                 .or(() -> gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT))
