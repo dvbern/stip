@@ -414,7 +414,7 @@ public class SapService {
             case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuch.getId());
             case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> {
                 gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
-                doBusinessPartnerActionOrGetStatus(gesuch, fall.getFailedBuchhaltungAuszahlungType());
+                getUpdateOrCreateBusinessPartner(gesuch);
             }
             case null, default -> throw new BadRequestException();
         }
@@ -431,10 +431,7 @@ public class SapService {
             case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuchId);
             case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> {
                 gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
-                doBusinessPartnerActionOrGetStatus(
-                    gesuch,
-                    gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()
-                );
+                getUpdateOrCreateBusinessPartner(gesuch);
             }
             default -> throw new BadRequestException();
         }
