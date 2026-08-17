@@ -887,6 +887,32 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /delegierung/{delegierungId}:
+    parameters:
+      - $ref: '#/components/parameters/delegierungId'
+    get:
+      tags:
+        - Delegieren
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Delegierung'
+          description: A delegierung and related entities
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDelegierung
+      summary: Returns delegierung by id
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /delegierung/{gesuchId}/all:
     parameters:
       - $ref: '#/components/parameters/gesuchId'
@@ -999,7 +1025,6 @@ paths:
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
-        - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
@@ -7671,12 +7696,15 @@ components:
       type: object
       required:
         - id
+        - fallNummer
         - sozialdienst
         - persoenlicheAngaben
         - status
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
         delegierterMitarbeiter:
@@ -7691,17 +7719,38 @@ components:
           $ref: '#/components/schemas/LocalDate'
     DelegierungEntry:
       required:
-        - tenant
+        - fallNummer
+        - fallId
+        - nachname
+        - vorname
+        - geburtsdatum
+        - wohnort
+        - status
+        - totalCount
       type: object
-      allOf:
-        - $ref: '#/components/schemas/Delegierung'
       properties:
-        fallId:
+        id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
-        tenant:
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        nachname:
           type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          $ref: '#/components/schemas/LocalDate'
+        wohnort:
+          type: string
+        status:
+          $ref: '#/components/schemas/DelegierungStatus'
+        gesuchStatus:
+          $ref: '#/components/schemas/Gesuchstatus'
+        aenderungStatus:
+          $ref: '#/components/schemas/GesuchTrancheStatus'
+        totalCount:
+          type: integer
     PaginatedSozDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -7882,6 +7931,42 @@ components:
         - AKZEPTIERT
         - ABGELEHNT
         - BEENDET
+    Gesuchstatus:
+      enum:
+        - ABKLAERUNG_DURCH_RECHSTABTEILUNG
+        - VERFUEGT
+        - VERFUEGUNG_DRUCKBEREIT
+        - VERFUEGUNG_AM_GENERIEREN
+        - VERFUEGUNG_VERSANDBEREIT
+        - VERFUEGUNG_VERSENDET
+        - WARTEN_AUF_UNTERSCHRIFTENBLATT
+        - IN_BEARBEITUNG_SB
+        - IN_FREIGABE
+        - IN_BEARBEITUNG_GS
+        - ANSPRUCH_MANUELL_PRUEFEN
+        - ANSPRUCH_PRUEFEN
+        - BEREIT_FUER_BEARBEITUNG
+        - EINGEREICHT
+        - JURISTISCHE_ABKLAERUNG
+        - FEHLENDE_DOKUMENTE
+        - NICHT_ANSPRUCHSBERECHTIGT
+        - NICHT_BEITRAGSBERECHTIGT
+        - KEIN_STIPENDIENANSPRUCH
+        - STIPENDIENANSPRUCH
+        - GESUCH_ABGELEHNT
+        - NEGATIVE_VERFUEGUNG
+        - DATENSCHUTZBRIEF_DRUCKBEREIT
+        - DATENSCHUTZBRIEF_AM_GENERIEREN
+        - DATENSCHUTZBRIEF_VERSANDBEREIT
+      type: string
+    GesuchTrancheStatus:
+      enum:
+        - IN_BEARBEITUNG_GS
+        - UEBERPRUEFEN
+        - MANUELLE_AENDERUNG
+        - AKZEPTIERT
+        - ABGELEHNT
+        - FEHLENDE_DOKUMENTE
     SozialdienstBenutzerCreate:
       required:
         - redirectUri
@@ -8732,34 +8817,6 @@ components:
       enum:
         - AENDERUNG
         - TRANCHE
-    Gesuchstatus:
-      enum:
-        - ABKLAERUNG_DURCH_RECHSTABTEILUNG
-        - VERFUEGT
-        - VERFUEGUNG_DRUCKBEREIT
-        - VERFUEGUNG_AM_GENERIEREN
-        - VERFUEGUNG_VERSANDBEREIT
-        - VERFUEGUNG_VERSENDET
-        - WARTEN_AUF_UNTERSCHRIFTENBLATT
-        - IN_BEARBEITUNG_SB
-        - IN_FREIGABE
-        - IN_BEARBEITUNG_GS
-        - ANSPRUCH_MANUELL_PRUEFEN
-        - ANSPRUCH_PRUEFEN
-        - BEREIT_FUER_BEARBEITUNG
-        - EINGEREICHT
-        - JURISTISCHE_ABKLAERUNG
-        - FEHLENDE_DOKUMENTE
-        - NICHT_ANSPRUCHSBERECHTIGT
-        - NICHT_BEITRAGSBERECHTIGT
-        - KEIN_STIPENDIENANSPRUCH
-        - STIPENDIENANSPRUCH
-        - GESUCH_ABGELEHNT
-        - NEGATIVE_VERFUEGUNG
-        - DATENSCHUTZBRIEF_DRUCKBEREIT
-        - DATENSCHUTZBRIEF_AM_GENERIEREN
-        - DATENSCHUTZBRIEF_VERSANDBEREIT
-      type: string
     VerfuegungStatus:
       enum:
         - AUSSTEHEND
@@ -11615,14 +11672,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SteuerdatenTyp'
-    GesuchTrancheStatus:
-      enum:
-        - IN_BEARBEITUNG_GS
-        - UEBERPRUEFEN
-        - MANUELLE_AENDERUNG
-        - AKZEPTIERT
-        - ABGELEHNT
-        - FEHLENDE_DOKUMENTE
     GesuchTranche:
       required:
         - id

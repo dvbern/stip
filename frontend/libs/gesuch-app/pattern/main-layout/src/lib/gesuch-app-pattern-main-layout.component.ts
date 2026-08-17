@@ -24,6 +24,7 @@ import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { filterByAppRole } from '@dv/shared/model/benutzer';
 import {
   SharedPatternGlobalHeaderComponent,
   SharedPatternGlobalHeaderPartsDirective,
@@ -186,13 +187,7 @@ export class GesuchAppPatternMainLayoutComponent {
         fallDokumente,
         auszahlung,
         nachrichten,
-      ].filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      });
+      ].filter(filterByAppRole(rolesMap));
 
       this.navigationStore.setNavigationItems(navItems);
     });
@@ -274,13 +269,7 @@ export class GesuchAppPatternMainLayoutComponent {
         ...(sozialdienstMenu ? [sozialdienstMenu] : []),
         allgemeineInformationen,
         nutzungsbedingungen,
-      ].filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      });
+      ].filter(filterByAppRole(rolesMap));
 
       this.navigationStore.setMenuItems(menuItems);
     });
