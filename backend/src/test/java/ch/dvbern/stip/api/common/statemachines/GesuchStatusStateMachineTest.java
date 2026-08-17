@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDok
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativVerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.SbInitialisiertAenderungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
@@ -74,6 +75,7 @@ class GesuchStatusStateMachineTest {
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
     private StatusprotokollService statusprotokollService;
     private VerfuegtHandler verfuegtHandlerMock;
+    private NegativVerfuegtHandler negativVerfuegtHandlerMock;
     private AenderungAkzeptierenHandler aenderungAkzeptierenHandler;
     private AusbildungUnterbruchAkzeptierenHandler ausbildungUnterbruchAkzeptierenHandler;
     private BeschwerdeErfolgreichAkzeptierenHandler beschwerdeErfolgreichAkzeptierenHandler;
@@ -100,6 +102,7 @@ class GesuchStatusStateMachineTest {
         aenderungFehlendeDokumenteZurueckweisenHandlerMock =
             Mockito.mock(AenderungFehlendeDokumenteZurueckweisenHandler.class);
         verfuegtHandlerMock = Mockito.mock(VerfuegtHandler.class);
+        negativVerfuegtHandlerMock = Mockito.mock(NegativVerfuegtHandler.class);
         aenderungAkzeptierenHandler = Mockito.mock(AenderungAkzeptierenHandler.class);
         ausbildungUnterbruchAkzeptierenHandler = Mockito.mock(AusbildungUnterbruchAkzeptierenHandler.class);
         beschwerdeErfolgreichAkzeptierenHandler = Mockito.mock(BeschwerdeErfolgreichAkzeptierenHandler.class);
@@ -121,6 +124,7 @@ class GesuchStatusStateMachineTest {
             statusprotokollService,
             aenderungFehlendeDokumenteZurueckweisenHandlerMock,
             verfuegtHandlerMock,
+            negativVerfuegtHandlerMock,
             aenderungAkzeptierenHandler,
             ausbildungUnterbruchAkzeptierenHandler,
             beschwerdeErfolgreichAkzeptierenHandler,
