@@ -184,7 +184,7 @@ export class GesuchAppPatternMainLayoutComponent {
       };
 
       const sozialdienstDelegieren: NavItem | undefined =
-        availableSozialdienste.length && !delegierung
+        availableSozialdienste.length && fallHeader && !delegierung
           ? {
               type: 'action',
               id: 'sozialdienst-delegieren',
