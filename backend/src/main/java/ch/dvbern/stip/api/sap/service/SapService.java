@@ -76,7 +76,7 @@ public class SapService {
     private final NotificationService notificationService;
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
 
-    private boolean businessPartnerNeedsUpate(
+    private boolean businessPartnerNeedsUpdate(
         final Gesuch gesuch,
         final Integer businessPartnerId
     ) {
@@ -264,7 +264,6 @@ public class SapService {
                         String.format("Failed to send %s action", businessPartnerActionBuchhaltungType.name()),
                         e
                     );
-                    sapDelivery.setSapStatus(SapStatus.FAILURE);
                 }
 
                 sapDelivery.setBuchhaltung(businessPartnerActionBuchhaltung);
@@ -377,7 +376,6 @@ public class SapService {
                     SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
                 } catch (Exception e) {
                     LOG.error("Failed to send createVendorPosting action", e);
-                    newSapDelivery.setSapStatus(SapStatus.FAILURE);
                 }
             }
         }
@@ -433,7 +431,7 @@ public class SapService {
                 gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
                 getUpdateOrCreateBusinessPartner(gesuch);
             }
-            default -> throw new BadRequestException();
+            case null, default -> throw new BadRequestException();
         }
 
         final var buchhaltung = buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
@@ -474,7 +472,7 @@ public class SapService {
                 .setSapBusinessPartnerId(
                     Integer.valueOf(businesspartner.getHEADER().getBPARTNER())
                 );
-            if (businessPartnerNeedsUpate(gesuch, Integer.valueOf(businesspartner.getHEADER().getBPARTNER()))) {
+            if (businessPartnerNeedsUpdate(gesuch, Integer.valueOf(businesspartner.getHEADER().getBPARTNER()))) {
                 doBusinessPartnerActionOrGetStatus(gesuch, BUSINESSPARTNER_CHANGE);
             }
         } else {
