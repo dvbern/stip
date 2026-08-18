@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { byAppConfig } from '@dv/shared/model/permission-state';
@@ -38,6 +39,7 @@ export class SharedFeatureDarlehenFormComponent {
   private config = inject(SharedModelCompileTimeConfig);
   private router = inject(Router);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
+  private fallHeaderStore = inject(FallHeaderStore);
   darlehenStore = inject(DarlehenStore);
   hasUnsavedChanges = false;
   darlehenIdSig = input<string | undefined>(undefined, { alias: 'darlehenId' });
@@ -100,6 +102,13 @@ export class SharedFeatureDarlehenFormComponent {
         sachbearbeiter: () => '/darlehen',
       }),
     ]);
+  }
+
+  reloadFallHeader() {
+    const fallId = this.fallIdSig();
+    if (fallId) {
+      this.fallHeaderStore.loadFallHeader$({ fallId });
+    }
   }
 
   reloadDarlehenList() {

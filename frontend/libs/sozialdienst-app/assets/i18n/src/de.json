@@ -30,9 +30,9 @@
   "sozialdienst-app.cockpit.table.fallStatus": "Gesuchstatus",
   "sozialdienst-app.cockpit.no-status-filter": "Alle",
   "sozialdienst-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
-  "sozialdienst-app.cockpit.delegierungen": "Delegaton",
+  "sozialdienst-app.cockpit.delegierungen": "Delegation",
   "sozialdienst-app.cockpit.table.delegierung.title.delegierung": "Delegation ",
-  "sozialdienst-app.cockpit.table.delegierung.title.anfrage": "Delegatonssanfrage",
+  "sozialdienst-app.cockpit.table.delegierung.title.anfrage": "Delegationsanfrage",
   "sozialdienst-app.cockpit.table.noData": "Keine Daten verfügbar",
 
   "sozialdienst-app.delegierung-dialog.zuweisung.title": "Zuweisung",

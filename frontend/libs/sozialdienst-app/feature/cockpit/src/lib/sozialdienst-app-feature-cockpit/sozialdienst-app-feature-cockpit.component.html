@@ -1,15 +1,12 @@
 <ng-container *dvTranslocoSd="let t">
   <div class="tw:dv-container">
     <!-- filters -->
-    <div
-      class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
-      [formGroup]="quickFilterForm"
-    >
+    <div class="tw:mt-2 tw:flex tw:flex-wrap tw:gap-6 tw:pt-6" [formGroup]="quickFilterForm">
       @for (quickFilter of availableQuickFiltersSig(); track quickFilter) {
         <button
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:border! tw:items-center tw:py-1"
+          class="tw:dv-nav-button tw:flex-none tw:bg-white! tw:not-[.active]:border-dv-border! tw:border! tw:items-center tw:py-1"
           [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
           [class.active]="radio.checked"
         >
