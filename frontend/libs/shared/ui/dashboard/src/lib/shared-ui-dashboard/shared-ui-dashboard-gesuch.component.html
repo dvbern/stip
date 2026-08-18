@@ -28,34 +28,45 @@
       @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
       @if (gesuch.isActive) {
         @if (!gesuch.einreichefristAbgelaufen) {
-          @if (gesuch.reduzierterBeitrag) {
-            <span class="tw:font-bold">
-              {{ t('shared.dashboard.periode.einreichefrist.reduziert') }}
-            </span>
-          }
           @if (gesuch.state === 'in-bearbeitung') {
-            <dt class="tw:mt-6 tw:font-bold">
-              {{ t('shared.dashboard.periode.einreichefrist.text') }}
-            </dt>
-            <dd class="tw:text-sm tw:mt-1">
-              {{
-                (gesuch.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
-                  | date: 'dd.MM.yyyy'
-              }}
-              <span
+            @if (gesuch.reduzierterBeitrag) {
+              <dt class="tw:mt-6 tw:font-bold">
+                {{
+                  t('shared.dashboard.periode.einreichefrist.text', {
+                    date: periode.einreichefristReduziert | date: 'dd.MM.yyyy',
+                  })
+                }}
+              </dt>
+              <dd
+                class="tw:text-sm tw:mt-1"
+                [innerHTML]="
+                  t('shared.dashboard.periode.einreichefrist.remaining.reduziert', {
+                    days: gesuch.einreichefristDays,
+                  })
+                "
+              ></dd>
+            } @else {
+              <dt class="tw:mt-6 tw:font-bold">
+                {{
+                  t('shared.dashboard.periode.einreichefrist.text', {
+                    date: periode.einreichefristNormal | date: 'dd.MM.yyyy',
+                  })
+                }}
+              </dt>
+              <dd
+                class="tw:text-sm tw:mt-1"
                 [innerHTML]="
                   t('shared.dashboard.periode.einreichefrist.remaining', {
                     days: gesuch.einreichefristDays,
                   })
                 "
-              ></span>
-            </dd>
+              ></dd>
+            }
           }
         } @else {
-          <dt class="tw:mt-8 tw:font-bold">
+          <div class="tw:mt-6 tw:font-bold">
             {{ t('shared.dashboard.periode.einreichefrist.abgelaufen.warning') }}
-          </dt>
-          <dd class="tw:text-sm tw:mt-1">{{ t('shared.dashboard.periode.einreichefrist.abgelaufen.text') }}</dd>
+          </div>
         }
         @if (missingDocTrancheId && gesuch.nachfristDokumente) {
           <dt class="tw:mt-6 tw:font-bold">
