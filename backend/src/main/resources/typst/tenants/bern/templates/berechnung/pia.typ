@@ -464,11 +464,11 @@
       table.entry(
         t(prefix + "label"),
         format.chf(
-          safe-get(einnahmen, "betreuungskostenTotal"),
+          safe-get(kosten, "betreuungskostenTotal"),
           prefix: "positive",
         ),
         sub-table: (
-          safe-get(einnahmen, "betreuungskosten", default: ()).map(
+          safe-get(kosten, "betreuungskosten", default: ()).map(
             person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
