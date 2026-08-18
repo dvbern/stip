@@ -12,9 +12,13 @@
   </button>
 
   <form [formGroup]="form" data-testid="form-delegieren-form" class="tw:dv-form-grid-one-col" novalidate>
-    <h1 class="tw:dv-page-title">
-      {{ t('shared.menu.delegieren') }}
+    <h1 class="tw:dv-page-title tw:mb-4">
+      {{ t('gesuch-app.delegieren-dialog.title') }}
     </h1>
+
+    <p class="tw:dv-form-item tw:text-xl tw:mb-4">
+      {{ t('gesuch-app.delegieren-dialog.message') }}
+    </p>
 
     @let sozialdienste = availableSozialdiensteSig();
     <mat-form-field class="tw:dv-form-item">
