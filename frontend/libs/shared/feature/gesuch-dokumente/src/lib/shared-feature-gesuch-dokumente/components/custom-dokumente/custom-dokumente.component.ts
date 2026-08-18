@@ -25,6 +25,7 @@ import {
   GesuchDokumentKommentar,
 } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
+import { THREE_LINE_CHARS_COUNT } from '@dv/shared/model/ui-constants';
 import {
   SharedPatternDocumentUploadComponent,
   createCustomDokumentOptions,
@@ -155,7 +156,8 @@ export class CustomDokumenteComponent {
       .map((dokument) => ({
         ...dokument,
         kommentarePending: isPending(kommentare),
-        hasLongDescription: dokument.dokumentTyp.description.length > 100,
+        hasLongDescription:
+          dokument.dokumentTyp.description.length > THREE_LINE_CHARS_COUNT,
         kommentare:
           kommentare.data?.filter(
             (k) => k.gesuchDokumentId === dokument.gesuchDokument?.id,
