@@ -9,9 +9,9 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
@@ -29,8 +29,10 @@ import {
   SharedPatternDocumentUploadComponent,
   createCustomDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
+import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { RemoteData, isPending } from '@dv/shared/util/remote-data';
@@ -41,7 +43,6 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
   selector: 'dv-custom-dokumente',
   imports: [
     CommonModule,
-    TranslocoPipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,
@@ -49,6 +50,7 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
     MatTooltipModule,
     DokumentStatusActionsComponent,
     SharedUiIfSachbearbeiterDirective,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './custom-dokumente.component.html',
   styleUrl: './custom-dokumente.component.scss',
@@ -58,6 +60,7 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
 export class CustomDokumenteComponent {
   dokumentStore = inject(DokumentsStore);
   expandedRowSig = signal<string | null>(null);
+  dialog = inject(MatDialog);
 
   dokumenteViewSig = input.required<{
     trancheId: string | undefined;
@@ -67,7 +70,7 @@ export class CustomDokumenteComponent {
     permissions: PermissionMap;
     canApproveDecline: boolean;
     isSachbearbeitungApp: boolean;
-    requiredDocumentTypes: CustomDokumentTyp[];
+    customDocumentTypes: CustomDokumentTyp[];
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
     loading: boolean;
     readonly: boolean;
@@ -99,7 +102,7 @@ export class CustomDokumenteComponent {
       permissions,
       dokuments,
       kommentare,
-      requiredDocumentTypes,
+      customDocumentTypes,
       isSachbearbeitungApp,
       readonly,
     } = this.dokumenteViewSig();
@@ -134,7 +137,7 @@ export class CustomDokumenteComponent {
     });
     const list = [
       ...uploadedDokuments,
-      ...requiredDocumentTypes.map((dokumentTyp) => ({
+      ...customDocumentTypes.map((dokumentTyp) => ({
         dokumentTyp: dokumentTyp,
         canDelete: false,
         gesuchDokument: undefined,
@@ -152,6 +155,7 @@ export class CustomDokumenteComponent {
       .map((dokument) => ({
         ...dokument,
         kommentarePending: isPending(kommentare),
+        hasLongDescription: dokument.dokumentTyp.description.length > 100,
         kommentare:
           kommentare.data?.filter(
             (k) => k.gesuchDokumentId === dokument.gesuchDokument?.id,
@@ -172,6 +176,16 @@ export class CustomDokumenteComponent {
       if (el !== 'custom') {
         this.expandedRowSig.set(null);
       }
+    });
+  }
+
+  showDescription(title: string, message: string) {
+    SharedUiInfoDialogComponent.open(this.dialog, {
+      data: {
+        type: 'plain',
+        title,
+        message,
+      },
     });
   }
 
