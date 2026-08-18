@@ -33,7 +33,7 @@ public class VerfuegungVersendetHandler implements GesuchStatusChangeHandler {
     private final NotificationService notificationService;
 
     @Override
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         gesuch.getVerfuegungs().forEach(verfuegung -> verfuegung.setVersendet(true));
 
         final var latestVerfuegung =

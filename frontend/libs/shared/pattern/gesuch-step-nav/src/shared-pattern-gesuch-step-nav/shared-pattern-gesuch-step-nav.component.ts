@@ -80,7 +80,7 @@ export class StepViewTemplateDirective {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternGesuchStepNavComponent {
-  @HostBinding('class') klass = 'tw:dv-pass-height tw:h-full tw:p-6';
+  @HostBinding('class') klass = 'tw:dv-pass-height tw:h-full tw:p-0 tw:md:p-6';
   private store = inject(Store);
 
   statusIconMap: Record<StepState, string> = {

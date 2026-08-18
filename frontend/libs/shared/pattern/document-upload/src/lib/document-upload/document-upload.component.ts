@@ -69,7 +69,10 @@ export class SharedPatternDocumentUploadComponent {
     }
 
     if (options.dokument.art === 'UNTERSCHRIFTENBLATT') {
-      return !options.dokument.permissions.canUploadUnterschriftenblatt;
+      return (
+        !options.dokument.permissions.canUploadUnterschriftenblatt &&
+        !options.initialDokumente?.length
+      );
     }
 
     if (isDokumentArtWithPermissions(options.dokument)) {

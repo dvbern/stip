@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
+import ch.dvbern.stip.api.pdf.service.VerfuegungPdfComposerService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
@@ -37,11 +37,11 @@ import lombok.extern.slf4j.Slf4j;
 public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     private final BerechnungService berechnungService;
     private final BuchhaltungService buchhaltungService;
-    private final VerfuegungPdfService verfuegungPdfService;
+    private final VerfuegungPdfComposerService verfuegungPdfComposerService;
     private final VerfuegungService verfuegungService;
 
     @Override
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         BerechnungsresultatDto stipendien = null;
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
         if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {
@@ -66,7 +66,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         }
 
         if (latestVerfuegung.getDokumente().isEmpty()) {
-            verfuegungPdfService.createVerfuegungsDocuments(gesuch, Optional.ofNullable(stipendien));
+            verfuegungPdfComposerService.createVerfuegungsDocuments(gesuch, Optional.ofNullable(stipendien));
         }
     }
 }

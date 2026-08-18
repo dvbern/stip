@@ -32,18 +32,22 @@ export class SharedUtilGesuchFormStepManagerService {
     steps: GesuchFormStep[],
     step?: GesuchFormStep,
   ): GesuchFormStepProgress {
+    const effectiveSteps = steps.filter(
+      (s) => s.route !== RETURN_TO_HOME.route,
+    );
+
     if (!step) {
       return {
         step: undefined,
-        total: steps.length,
+        total: effectiveSteps.length,
         percentage: undefined,
       };
     }
     const stepIndex = findStepIndex(step, steps);
     return {
       step: stepIndex + 1,
-      total: steps.length,
-      percentage: ((stepIndex + 1) / steps.length) * 100,
+      total: effectiveSteps.length,
+      percentage: ((stepIndex + 1) / effectiveSteps.length) * 100,
     };
   }
 

@@ -22,6 +22,7 @@ import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { filterByAppRole } from '@dv/shared/model/benutzer';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
@@ -130,11 +131,11 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
-        // todo: also filter for roles here!
-        this.navigationStore.setNavigationItems([
-          ...sozialdienstBaseNavItems,
-          ...sozialdienstAdminNavItems,
-        ]);
+        this.navigationStore.setNavigationItems(
+          [...sozialdienstBaseNavItems, ...sozialdienstAdminNavItems].filter(
+            filterByAppRole(rolesMap),
+          ),
+        );
         return;
       }
 
@@ -189,13 +190,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
         ...nachrichten,
         ...sozialdienstBaseNavItems,
         ...sozialdienstAdminNavItems,
-      ].filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      });
+      ].filter(filterByAppRole(rolesMap));
 
       this.navigationStore.setNavigationItems(navItems);
     });
@@ -215,8 +210,11 @@ export class SozialdienstAppPatternMainLayoutComponent {
         label: { key: 'shared.menu.allgemeine-informationen' },
         action: () => {
           SharedUiInfoDialogComponent.open(this.dialog, {
-            titleKey: 'shared.allgemeine-informationen.title',
-            messageKey: 'shared.allgemeine-informationen.message',
+            data: {
+              type: 'translated',
+              titleKey: 'shared.allgemeine-informationen.title',
+              messageKey: 'shared.allgemeine-informationen.message',
+            },
           });
         },
       };
@@ -256,13 +254,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
         ...sozialdienstBaseMenuItems,
         allgemeineInformationen,
         nutzungsbedingungen,
-      ].filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      });
+      ].filter(filterByAppRole(rolesMap));
 
       this.navigationStore.setMenuItems(menuItems);
     });

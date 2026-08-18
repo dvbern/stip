@@ -53,9 +53,14 @@ public interface DelegierenResource {
     List<DelegierungDto> getAllDelegierungsForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
+    @Path("/delegierung/{delegierungId}")
+    @Produces({ "application/json", "text/plain" })
+    DelegierungDto getDelegierung(@PathParam("delegierungId") UUID delegierungId);
+
+    @GET
     @Path("/delegierung/{getDelegierungSozQueryType}/admin")
     @Produces({ "application/json", "text/plain" })
-    PaginatedSozDashboardDto getDelegierungsOfSozialdienstAdmin(@PathParam("getDelegierungSozQueryType") ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin getDelegierungSozQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("nachname")   String nachname,@QueryParam("vorname")   String vorname,@QueryParam("geburtsdatum")   LocalDate geburtsdatum,@QueryParam("wohnort")   String wohnort,@QueryParam("status")   String status,@QueryParam("sortColumn")   SozDashboardColumnDto sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+    PaginatedSozDashboardDto getDelegierungsOfSozialdienstAdmin(@PathParam("getDelegierungSozQueryType") ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin getDelegierungSozQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("nachname")   String nachname,@QueryParam("vorname")   String vorname,@QueryParam("geburtsdatum")   LocalDate geburtsdatum,@QueryParam("wohnort")   String wohnort,@QueryParam("sortColumn")   SozDashboardColumnDto sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
     @Path("/delegierung/{getDelegierungSozQueryType}/ma")

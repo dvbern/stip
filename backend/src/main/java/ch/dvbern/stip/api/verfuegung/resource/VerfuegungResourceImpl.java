@@ -96,7 +96,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
+    @RolesAllowed({ GS_GESUCH_READ })
     public List<VerfuegungFallDto> getVerfuegungenByFallId(UUID fallId) {
         verfuegungAuthorizer.canGetVerfuegungenByFallId(fallId);
         return verfuegungService.getVerfuegungenByFallId(fallId);

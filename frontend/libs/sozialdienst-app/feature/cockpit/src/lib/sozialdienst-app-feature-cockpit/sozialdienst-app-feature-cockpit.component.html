@@ -1,15 +1,12 @@
 <ng-container *dvTranslocoSd="let t">
   <div class="tw:dv-container">
     <!-- filters -->
-    <div
-      class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
-      [formGroup]="quickFilterForm"
-    >
+    <div class="tw:mt-2 tw:flex tw:flex-wrap tw:gap-6 tw:pt-6" [formGroup]="quickFilterForm">
       @for (quickFilter of availableQuickFiltersSig(); track quickFilter) {
         <button
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:border! tw:items-center tw:py-1"
+          class="tw:dv-nav-button tw:flex-none tw:bg-white! tw:not-[.active]:border-dv-border! tw:border! tw:items-center tw:py-1"
           [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
           [class.active]="radio.checked"
         >
@@ -128,11 +125,11 @@
               </th>
               <td
                 mat-cell
-                *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                 class="tw:whitespace-nowrap"
-                [dvTruncateTooltip]="fall.persoenlicheAngaben.nachname"
+                [dvTruncateTooltip]="delegierung.nachname"
               >
-                {{ fall.persoenlicheAngaben.nachname }}
+                {{ delegierung.nachname }}
               </td>
             </ng-container>
 
@@ -164,9 +161,9 @@
                 mat-cell
                 *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                 class="tw:max-w-32 tw:whitespace-nowrap"
-                [dvTruncateTooltip]="delegierung.persoenlicheAngaben.vorname"
+                [dvTruncateTooltip]="delegierung.vorname"
               >
-                {{ delegierung.persoenlicheAngaben.vorname }}
+                {{ delegierung.vorname }}
               </td>
             </ng-container>
 
@@ -197,12 +194,12 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="tw:dv-button tw:text-dv-gray tw:!p-1"
+                      class="tw:dv-button tw:text-dv-gray tw:p-1"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                     >
-                      <dv-shared-ui-icon-chip class="tw:text-xs">
-                        <i class="icon material-symbols-rounded tw:text-lg!">event</i>
+                      <dv-shared-ui-icon-chip class="tw:text-sm!">
+                        <i class="material-symbols-rounded tw:text-lg!">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
@@ -219,7 +216,7 @@
                 *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                 class="tw:whitespace-nowrap"
               >
-                {{ delegierung.persoenlicheAngaben.geburtsdatum | date: 'dd.MM.yyyy' }}
+                {{ delegierung.geburtsdatum | date: 'dd.MM.yyyy' }}
               </td>
             </ng-container>
 
@@ -252,9 +249,9 @@
                 mat-cell
                 *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                 class="tw:max-w-32 tw:whitespace-nowrap"
-                [dvTruncateTooltip]="delegierung.persoenlicheAngaben.adresse.ort"
+                [dvTruncateTooltip]="delegierung.wohnort"
               >
-                {{ delegierung.persoenlicheAngaben.adresse.ort }}
+                {{ delegierung.wohnort }}
               </td>
             </ng-container>
 
@@ -284,13 +281,29 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                  *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
                   class="tw:w-48 tw:whitespace-nowrap"
                 >
-                  {{ t(`shared.delegierung.status.${fall.status}`) }}
+                  {{ t(`shared.delegierung.status.${delegierung.status}`) }}
                 </td>
               </ng-container>
             }
+
+            <!-- status -->
+            <ng-container matColumnDef="FALL_STATUS">
+              <th mat-header-cell *matHeaderCellDef class="filtered tw:w-52 tw:whitespace-nowrap tw:align-top">
+                <div>{{ t('sozialdienst-app.cockpit.table.fallStatus') }}</div>
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()"
+                class="tw:w-48 tw:whitespace-nowrap"
+              >
+                @if (delegierung.statusKey) {
+                  {{ t(delegierung.statusKey) }}
+                }
+              </td>
+            </ng-container>
 
             <!-- aktionen -->
             <ng-container matColumnDef="AKTIONEN">

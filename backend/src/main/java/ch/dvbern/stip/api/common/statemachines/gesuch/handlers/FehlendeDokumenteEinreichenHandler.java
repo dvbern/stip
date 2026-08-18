@@ -31,7 +31,7 @@ public class FehlendeDokumenteEinreichenHandler implements GesuchStatusChangeHan
     private final NotificationService notificationService;
 
     @Override
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         gesuch.getTranchenTranchen()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));

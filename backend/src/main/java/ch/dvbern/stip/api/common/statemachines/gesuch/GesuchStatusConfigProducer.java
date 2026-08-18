@@ -45,10 +45,11 @@ import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -77,12 +78,12 @@ public class GesuchStatusConfigProducer {
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
         final var triggers =
-            new EnumMap<GesuchStatusChangeEvent, TriggerWithParameters1<Gesuch, GesuchStatusChangeEvent>>(
+            new EnumMap<GesuchStatusChangeEvent, TriggerWithParameters2<Gesuch, String, GesuchStatusChangeEvent>>(
                 GesuchStatusChangeEvent.class
             );
 
         for (GesuchStatusChangeEvent event : GesuchStatusChangeEvent.values()) {
-            triggers.put(event, config.setTriggerParameters(event, Gesuch.class));
+            triggers.put(event, config.setTriggerParameters(event, Gesuch.class, String.class));
         }
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_GS)
@@ -317,13 +318,15 @@ public class GesuchStatusConfigProducer {
     }
 
     private void logTransition(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Object[] args) {
-        Gesuch gesuch = extractGesuchFromStateMachineArgs(args);
+        final var argsPair = extractGesuchFromStateMachineArgs(args);
+        final Gesuch gesuch = argsPair.getLeft();
+        final String comment = argsPair.getRight();
 
         statusprotokollService.createStatusprotokoll(
             transition.getDestination().toString(),
             transition.getSource().toString(),
             StatusprotokollEntryTyp.GESUCH,
-            gesuch.getComment(),
+            comment,
             gesuch
         );
 
@@ -336,13 +339,16 @@ public class GesuchStatusConfigProducer {
         );
     }
 
-    private Gesuch extractGesuchFromStateMachineArgs(Object[] args) {
-        if (args.length == 0 || !(args[0] instanceof Gesuch gesuch)) {
+    private Pair<Gesuch, String> extractGesuchFromStateMachineArgs(Object[] args) {
+        if (args.length != 2 || !(args[0] instanceof Gesuch gesuch)) {
             throw new AppErrorException(
                 "State Transition args sollte ein Gesuch Objekt enthalten, es gibt ein Problem in den "
                 + "Statemachine args"
             );
         }
-        return gesuch;
+        if (args[1] instanceof String comment) {
+            return Pair.of(gesuch, comment);
+        }
+        return Pair.of(gesuch, gesuch.getComment());
     }
 }
