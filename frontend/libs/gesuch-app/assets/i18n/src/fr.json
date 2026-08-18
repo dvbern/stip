@@ -1,6 +1,8 @@
 {
   "app-name": "Stipends Online",
 
+  "gesuch-app.delegieren-dialog.title": "Déléguer la demande à un service social ou à une institution",
+  "gesuch-app.delegieren-dialog.message": "Choisissez un service social ou une institution et remplissez les informations nécessaires pour déléguer la demande.",
   "gesuch-app.delegieren-dialog.submit": "Déléguer",
   "gesuch-app.delegieren-dialog.sozialdienst": "Service social"
 }
