@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DOCUMENT,
   OnDestroy,
   OnInit,
   computed,
@@ -58,7 +57,6 @@ export class SozialdienstMitarbeiterDetailComponent
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private document = inject(DOCUMENT);
   private formBuilder = inject(NonNullableFormBuilder);
 
   store = inject(SozialdienstStore);
