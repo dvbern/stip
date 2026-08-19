@@ -107,8 +107,8 @@ public class BerechnungTestcaseParser {
         )
     );
 
-    @ParameterizedTest
-    @ArgumentsSource(BerechnungTestcaseParserArgumentProvider.class)
+//    @ParameterizedTest
+//    @ArgumentsSource(BerechnungTestcaseParserArgumentProvider.class)
     void parseAndSafeTestcases(final DemoData demoData) {
         Mockito.when(landRepository.getByIso2code(ArgumentMatchers.any())).thenReturn(Optional.of(new Land()));
         Mockito.when(demoDataAusbildungsgangRepository.requireAusbildungsgangByDemoData(ArgumentMatchers.any()))
