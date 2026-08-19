@@ -43,7 +43,7 @@ export class SharedUiInfoDialogComponent {
       SharedUiInfoDialogComponent,
       {
         ...dialogConfig,
-        panelClass: 'dv-info-dialog',
+        panelClass: [...[dialogConfig.panelClass ?? []].flat()],
       },
     );
   }
