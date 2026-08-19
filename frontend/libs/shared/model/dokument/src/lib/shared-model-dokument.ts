@@ -92,6 +92,7 @@ export interface SharedModelTableCustomDokument {
   dokumentOptions: CustomDokumentOptions;
   kommentare: GesuchDokumentKommentar[];
   kommentarePending: boolean;
+  hasLongDescription?: boolean;
 }
 
 export interface SharedModelTableSachbearbeiterDokument {

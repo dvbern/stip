@@ -147,6 +147,11 @@ public class NotificationService {
     }
 
     @Transactional
+    public void createDelegierungEingegebenNotificationAndSendStdMail(final Delegierung delegierung) {
+        createDelegierungNotificationAndSendStdMail(NotificationType.DARLEHEN_EINGEGEBEN, delegierung);
+    }
+
+    @Transactional
     public void createDelegierungAufgeloestNotificationAndSendStdMail(final Delegierung delegierung) {
         createDelegierungNotificationAndSendStdMail(NotificationType.DELEGIERUNG_AUFGELOEST, delegierung);
     }
@@ -175,6 +180,9 @@ public class NotificationService {
         setAbsender(absender, notification);
 
         final String msg = switch (notificationType) {
+            case DARLEHEN_EINGEGEBEN -> Templates
+                .getDelegierungEingegeben(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
+                .render();
             case DELEGIERUNG_ANGENOMMEN -> Templates
                 .getDelegierungAngenommen(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
                 .render();
@@ -789,6 +797,20 @@ public class NotificationService {
                 return gesuchFehlendeDokumenteNichtEingereichtFr(anrede, nachname, sbVorname, sbNachname);
             }
             return gesuchFehlendeDokumenteNichtEingereichtDe(anrede, nachname, sbVorname, sbNachname);
+        }
+
+        public static native TemplateInstance delegierungEingegebenDE(final String sozialdienstName);
+
+        public static native TemplateInstance delegierungEingegebenFR(final String sozialdienstName);
+
+        public static TemplateInstance getDelegierungEingegeben(
+            final Sprache korrespondenzSprache,
+            final String sozialdienstName
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return delegierungEingegebenFR(sozialdienstName);
+            }
+            return delegierungEingegebenDE(sozialdienstName);
         }
 
         public static native TemplateInstance delegierungAbgelehntDE(final String sozialdienstName);

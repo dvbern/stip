@@ -92,4 +92,10 @@ public class Sozialdienst extends AbstractTenantEntity {
     public boolean isBenutzerAdmin(final SozialdienstBenutzer sozialdienstBenutzer) {
         return Objects.equals(getSozialdienstAdmin().getId(), sozialdienstBenutzer.getId());
     }
+
+    @Transient
+    public boolean isBenutzer(final SozialdienstBenutzer sozialdienstBenutzer) {
+        return isBenutzerAdmin(sozialdienstBenutzer) || sozialdienstBenutzers.stream()
+            .anyMatch(benutzer -> Objects.equals(benutzer.getId(), sozialdienstBenutzer.getId()));
+    }
 }

@@ -22,7 +22,6 @@ export interface DemoEinnahmenKosten {
     taggelderAHVIV: number;
     andereEinnahmen: number;
     ausbildungskosten?: number;
-    betreuungskostenKinder?: number;
     fahrkosten: number;
     verpflegungskosten?: number;
     auswaertigeMittagessenProWoche?: number;

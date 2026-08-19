@@ -89,6 +89,11 @@ public class Kind extends AbstractPerson {
     private Integer renten;
 
     @NullableUnlessGenerated
+    @Column(name = "betreuungskosten")
+    @Min(0)
+    private Integer betreuungskosten;
+
+    @NullableUnlessGenerated
     @Column(name = "andere_einnahmen")
     @Min(0)
     private Integer andereEinnahmen;

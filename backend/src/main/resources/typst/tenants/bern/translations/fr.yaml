@@ -129,7 +129,7 @@ berechnung:
     verpflegungPartner:
       label: Repas de la partenaire / du partenaire
       info: Uniquement si elle/il exerce une activité lucrative et ne suit pas une formation reconnue.
-    betreuungskostenKinder:
+    betreuungskosten:
       label: Frais de garde pour ses propres enfants
     steuern:
       label: Impôts

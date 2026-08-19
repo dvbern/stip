@@ -103,6 +103,8 @@ html {
 
 .group-errors .mat-mdc-form-field-error {
   font-size: var(--mat-sys-body-small-size);
+  display: block;
+  color: var(--mat-form-field-error-text-color, var(--mat-sys-error));
 }
 
 .mat-mdc-form-field.mat-mdc-form-field-label-always-float {

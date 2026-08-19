@@ -185,7 +185,6 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(true));
 
         // arrange
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), anyBoolean())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of(new CustomDokumentTyp()));
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
@@ -281,7 +280,6 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche2.setDokumente(List.of());
         gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), anyBoolean())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
