@@ -43,7 +43,7 @@ export class SharedUiInfoDialogComponent {
       SharedUiInfoDialogComponent,
       {
         ...dialogConfig,
-        panelClass: [...[dialogConfig.panelClass ?? []].flat()],
+        panelClass: [dialogConfig.panelClass ?? []].flat(),
       },
     );
   }
