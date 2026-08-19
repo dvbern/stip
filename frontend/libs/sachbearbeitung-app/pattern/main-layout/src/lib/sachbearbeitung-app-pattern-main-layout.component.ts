@@ -11,6 +11,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { map, startWith } from 'rxjs';
 
 import { PermissionStore } from '@dv/shared/global/permission';
+import { filterByAppRole } from '@dv/shared/model/benutzer';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
@@ -97,13 +98,7 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
     const navItems = baseNavItems;
 
     const filtered: NavItem[] = navItems
-      .filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      })
+      .filter(filterByAppRole(rolesMap))
       .map((item) => {
         if (item.type === 'link' && item.route) {
           const isActive = this.routeUrlSig()?.includes(item.route[0] ?? '');

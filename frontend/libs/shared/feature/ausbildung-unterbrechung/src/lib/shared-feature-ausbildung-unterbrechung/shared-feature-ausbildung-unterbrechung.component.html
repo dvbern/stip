@@ -1,9 +1,9 @@
 <ng-container *dvTranslocoShared="let t">
-  <div class="tw:relative tw:my-12 tw:justify-between tw:dv-container">
+  <div class="tw:relative tw:justify-between tw:dv-container tw:dv-scroll-space">
     <form class="tw:dv-form-grid" [formGroup]="form" [dvSharedUiFormReadonly]="!viewSig().canEdit">
       <dv-shared-ui-info-container [type]="'warning'" class="tw:col-span-2">
-        <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
-        <div class="tw:ml-4">{{ t('shared.ausbildung-unterbrechen.warning') }}</div>
+        <span class="tw:text-dv-yellow material-symbols-rounded">warning</span>
+        <div>{{ t('shared.ausbildung-unterbrechen.warning') }}</div>
       </dv-shared-ui-info-container>
 
       <!-- startDate -->
@@ -76,8 +76,10 @@
       </mat-form-field>
 
       <div class="tw:col-span-2 tw:col-start-1 tw:flex">
-        <label class="tw:flex! tw:items-center tw:gap-6">
-          {{ t('shared.ausbildung-unterbrechen.dokumente.title') }}
+        <label class="tw:flex! tw:w-full tw:items-center tw:gap-6">
+          <span class="tw:flex-1">
+            {{ t('shared.ausbildung-unterbrechen.dokumente.title') }}
+          </span>
           @if (unterbruchDokumenteOptionsSig(); as options) {
             <dv-shared-pattern-document-upload
               class="tw:shrink"
@@ -95,7 +97,7 @@
         </mat-error>
       }
 
-      <div class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
+      <div class="tw:col-span-2 tw:dv-button-container">
         <button
           type="button"
           (click)="deleteUnterbruch()"

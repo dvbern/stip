@@ -1,6 +1,6 @@
-import { NavItem } from './navigation-types';
+import { NavItem, NavMenuItem } from './navigation-types';
 
-export const sozialdienstBaseMenuItems: NavItem[] = [
+export const sozialdienstBaseNavItems: NavItem[] = [
   {
     type: 'link',
     id: 'antraege',
@@ -8,6 +8,9 @@ export const sozialdienstBaseMenuItems: NavItem[] = [
     icon: 'list',
     route: ['/dashboard'],
   },
+];
+
+export const sozialdienstAdminNavItems: NavItem[] = [
   {
     type: 'link',
     id: 'administration',
@@ -18,12 +21,30 @@ export const sozialdienstBaseMenuItems: NavItem[] = [
   },
 ];
 
-export const gesuchBaseMenuItems: NavItem[] = [
+export const sozialdienstBaseMenuItems: NavMenuItem[] = [
+  {
+    type: 'link',
+    id: 'profile',
+    route: ['/profile'],
+    label: { key: 'shared.menu.profile' },
+  },
+];
+
+export const gesuchBaseNavItems: NavItem[] = [
   {
     type: 'link',
     id: 'dashboard',
     icon: 'dashboard',
     label: { key: 'shared.dashboard.title' },
     route: ['/dashboard'],
+  },
+];
+
+export const gesuchBaseMenuItems: NavMenuItem[] = [
+  {
+    type: 'link',
+    id: 'profile',
+    route: ['/profile'],
+    label: { key: 'shared.menu.profile' },
   },
 ];

@@ -1,15 +1,21 @@
-<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-6">
+<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:dv-dialog-container" *dvTranslocoShared="let t">
   <button
     type="button"
     (click)="close()"
-    class="tw:dv-button-icon tw:absolute tw:end-0 tw:top-0 tw:!m-1"
-    [attr.aria-label]="'shared.close' | transloco"
+    class="tw:dv-button-icon tw:absolute tw:inset-e-0 tw:top-0 tw:m-1!"
+    [attr.aria-label]="t('shared.close')"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
   <h1 class="tw:mb-4 tw:flex tw:text-lg tw:xl:pr-5 tw:font-semibold">
     <span class="tw:text-dv-blue material-symbols-rounded tw:mr-2">info</span>
-    {{ dialogData.titleKey | transloco: dialogData.titleParams }}
+    {{ dialogData.type === 'plain' ? dialogData.title : t(dialogData.titleKey, dialogData.titleParams) }}
   </h1>
-  <p class="tw:mb-4" [innerHTML]="dialogData.messageKey | transloco: dialogData.messageParams"></p>
+  @if (dialogData.type === 'plain') {
+    <p class="tw:whitespace-pre-line">
+      {{ dialogData.message }}
+    </p>
+  } @else {
+    <p class="tw:mb-4" [innerHTML]="t(dialogData.messageKey, dialogData.messageParams)"></p>
+  }
 </section>

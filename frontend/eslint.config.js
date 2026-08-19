@@ -52,7 +52,7 @@ module.exports = [
         {
           enforceBuildableLibDependency: false,
           banTransitiveDependencies: true,
-          allow: ['@jscutlery/**', 'reflect-metadata'],
+          allow: ['@jscutlery/**', 'reflect-metadata', '@dv/contract/**'],
           depConstraints: [
             {
               sourceTag: 'scope:sachbearbeitung-app',
@@ -162,6 +162,7 @@ module.exports = [
             {
               sourceTag: 'type:dialog',
               onlyDependOnLibsWithTags: [
+                'type:dialog',
                 'type:assets',
                 'type:feature',
                 'type:data-access',

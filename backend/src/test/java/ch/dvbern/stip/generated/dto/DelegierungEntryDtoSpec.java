@@ -16,9 +16,8 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.DelegierungStatusDtoSpec;
-import ch.dvbern.stip.generated.dto.PersoenlicheAngabenDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheStatusDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -33,76 +32,80 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DelegierungEntryDtoSpec
  */
 @JsonPropertyOrder({
-  DelegierungEntryDtoSpec.JSON_PROPERTY_FALL_ID,
-  DelegierungEntryDtoSpec.JSON_PROPERTY_FALL_NUMMER,
-  DelegierungEntryDtoSpec.JSON_PROPERTY_TENANT,
   DelegierungEntryDtoSpec.JSON_PROPERTY_ID,
-  DelegierungEntryDtoSpec.JSON_PROPERTY_SOZIALDIENST,
-  DelegierungEntryDtoSpec.JSON_PROPERTY_DELEGIERTER_MITARBEITER,
-  DelegierungEntryDtoSpec.JSON_PROPERTY_PERSOENLICHE_ANGABEN,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_FALL_NUMMER,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_FALL_ID,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_NACHNAME,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_VORNAME,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_WOHNORT,
   DelegierungEntryDtoSpec.JSON_PROPERTY_STATUS,
-  DelegierungEntryDtoSpec.JSON_PROPERTY_START_DATE,
-  DelegierungEntryDtoSpec.JSON_PROPERTY_END_DATE
+  DelegierungEntryDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_AENDERUNG_STATUS,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_TOTAL_COUNT
 })
 @JsonTypeName("DelegierungEntry")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DelegierungEntryDtoSpec {
-  public static final String JSON_PROPERTY_FALL_ID = "fallId";
-  private UUID fallId;
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   private String fallNummer;
 
-  public static final String JSON_PROPERTY_TENANT = "tenant";
-  private String tenant;
+  public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  private UUID fallId;
 
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
+  public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  private String nachname;
 
-  public static final String JSON_PROPERTY_SOZIALDIENST = "sozialdienst";
-  private SozialdienstSlimDtoSpec sozialdienst;
+  public static final String JSON_PROPERTY_VORNAME = "vorname";
+  private String vorname;
 
-  public static final String JSON_PROPERTY_DELEGIERTER_MITARBEITER = "delegierterMitarbeiter";
-  private SozialdienstBenutzerDtoSpec delegierterMitarbeiter;
+  public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  private LocalDate geburtsdatum;
 
-  public static final String JSON_PROPERTY_PERSOENLICHE_ANGABEN = "persoenlicheAngaben";
-  private PersoenlicheAngabenDtoSpec persoenlicheAngaben;
+  public static final String JSON_PROPERTY_WOHNORT = "wohnort";
+  private String wohnort;
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private DelegierungStatusDtoSpec status;
 
-  public static final String JSON_PROPERTY_START_DATE = "startDate";
-  private LocalDate startDate;
+  public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  private GesuchstatusDtoSpec gesuchStatus;
 
-  public static final String JSON_PROPERTY_END_DATE = "endDate";
-  private LocalDate endDate;
+  public static final String JSON_PROPERTY_AENDERUNG_STATUS = "aenderungStatus";
+  private GesuchTrancheStatusDtoSpec aenderungStatus;
+
+  public static final String JSON_PROPERTY_TOTAL_COUNT = "totalCount";
+  private Integer totalCount;
 
   public DelegierungEntryDtoSpec() {
   }
 
-  public DelegierungEntryDtoSpec fallId(UUID fallId) {
+  public DelegierungEntryDtoSpec id(UUID id) {
     
-    this.fallId = fallId;
+    this.id = id;
     return this;
   }
 
    /**
-   * Get fallId
-   * @return fallId
+   * Get id
+   * @return id
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(JSON_PROPERTY_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public UUID getFallId() {
-    return fallId;
+  public UUID getId() {
+    return id;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(JSON_PROPERTY_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFallId(UUID fallId) {
-    this.fallId = fallId;
+  public void setId(UUID id) {
+    this.id = id;
   }
 
 
@@ -116,9 +119,9 @@ public class DelegierungEntryDtoSpec {
    * Get fallNummer
    * @return fallNummer
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
     return fallNummer;
@@ -126,139 +129,139 @@ public class DelegierungEntryDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
 
 
-  public DelegierungEntryDtoSpec tenant(String tenant) {
+  public DelegierungEntryDtoSpec fallId(UUID fallId) {
     
-    this.tenant = tenant;
+    this.fallId = fallId;
     return this;
   }
 
    /**
-   * Get tenant
-   * @return tenant
+   * Get fallId
+   * @return fallId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TENANT)
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getTenant() {
-    return tenant;
+  public UUID getFallId() {
+    return fallId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TENANT)
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTenant(String tenant) {
-    this.tenant = tenant;
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
   }
 
 
-  public DelegierungEntryDtoSpec id(UUID id) {
+  public DelegierungEntryDtoSpec nachname(String nachname) {
     
-    this.id = id;
+    this.nachname = nachname;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get nachname
+   * @return nachname
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_NACHNAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public UUID getId() {
-    return id;
+  public String getNachname() {
+    return nachname;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_NACHNAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
-    this.id = id;
+  public void setNachname(String nachname) {
+    this.nachname = nachname;
   }
 
 
-  public DelegierungEntryDtoSpec sozialdienst(SozialdienstSlimDtoSpec sozialdienst) {
+  public DelegierungEntryDtoSpec vorname(String vorname) {
     
-    this.sozialdienst = sozialdienst;
+    this.vorname = vorname;
     return this;
   }
 
    /**
-   * Get sozialdienst
-   * @return sozialdienst
+   * Get vorname
+   * @return vorname
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALDIENST)
+  @JsonProperty(JSON_PROPERTY_VORNAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public SozialdienstSlimDtoSpec getSozialdienst() {
-    return sozialdienst;
+  public String getVorname() {
+    return vorname;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOZIALDIENST)
+  @JsonProperty(JSON_PROPERTY_VORNAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialdienst(SozialdienstSlimDtoSpec sozialdienst) {
-    this.sozialdienst = sozialdienst;
+  public void setVorname(String vorname) {
+    this.vorname = vorname;
   }
 
 
-  public DelegierungEntryDtoSpec delegierterMitarbeiter(SozialdienstBenutzerDtoSpec delegierterMitarbeiter) {
+  public DelegierungEntryDtoSpec geburtsdatum(LocalDate geburtsdatum) {
     
-    this.delegierterMitarbeiter = delegierterMitarbeiter;
+    this.geburtsdatum = geburtsdatum;
     return this;
   }
 
    /**
-   * Get delegierterMitarbeiter
-   * @return delegierterMitarbeiter
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DELEGIERTER_MITARBEITER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public SozialdienstBenutzerDtoSpec getDelegierterMitarbeiter() {
-    return delegierterMitarbeiter;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_DELEGIERTER_MITARBEITER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDelegierterMitarbeiter(SozialdienstBenutzerDtoSpec delegierterMitarbeiter) {
-    this.delegierterMitarbeiter = delegierterMitarbeiter;
-  }
-
-
-  public DelegierungEntryDtoSpec persoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
-    
-    this.persoenlicheAngaben = persoenlicheAngaben;
-    return this;
-  }
-
-   /**
-   * Get persoenlicheAngaben
-   * @return persoenlicheAngaben
+   * Get geburtsdatum
+   * @return geburtsdatum
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
+  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public PersoenlicheAngabenDtoSpec getPersoenlicheAngaben() {
-    return persoenlicheAngaben;
+  public LocalDate getGeburtsdatum() {
+    return geburtsdatum;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
+  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
-    this.persoenlicheAngaben = persoenlicheAngaben;
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
+  }
+
+
+  public DelegierungEntryDtoSpec wohnort(String wohnort) {
+    
+    this.wohnort = wohnort;
+    return this;
+  }
+
+   /**
+   * Get wohnort
+   * @return wohnort
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_WOHNORT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getWohnort() {
+    return wohnort;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNORT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setWohnort(String wohnort) {
+    this.wohnort = wohnort;
   }
 
 
@@ -288,55 +291,81 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  public DelegierungEntryDtoSpec startDate(LocalDate startDate) {
+  public DelegierungEntryDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
     
-    this.startDate = startDate;
+    this.gesuchStatus = gesuchStatus;
     return this;
   }
 
    /**
-   * Get startDate
-   * @return startDate
+   * Get gesuchStatus
+   * @return gesuchStatus
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public LocalDate getStartDate() {
-    return startDate;
+  public GesuchstatusDtoSpec getGesuchStatus() {
+    return gesuchStatus;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStartDate(LocalDate startDate) {
-    this.startDate = startDate;
+  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+    this.gesuchStatus = gesuchStatus;
   }
 
 
-  public DelegierungEntryDtoSpec endDate(LocalDate endDate) {
+  public DelegierungEntryDtoSpec aenderungStatus(GesuchTrancheStatusDtoSpec aenderungStatus) {
     
-    this.endDate = endDate;
+    this.aenderungStatus = aenderungStatus;
     return this;
   }
 
    /**
-   * Get endDate
-   * @return endDate
+   * Get aenderungStatus
+   * @return aenderungStatus
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonProperty(JSON_PROPERTY_AENDERUNG_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public LocalDate getEndDate() {
-    return endDate;
+  public GesuchTrancheStatusDtoSpec getAenderungStatus() {
+    return aenderungStatus;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonProperty(JSON_PROPERTY_AENDERUNG_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEndDate(LocalDate endDate) {
-    this.endDate = endDate;
+  public void setAenderungStatus(GesuchTrancheStatusDtoSpec aenderungStatus) {
+    this.aenderungStatus = aenderungStatus;
+  }
+
+
+  public DelegierungEntryDtoSpec totalCount(Integer totalCount) {
+    
+    this.totalCount = totalCount;
+    return this;
+  }
+
+   /**
+   * Get totalCount
+   * @return totalCount
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TOTAL_COUNT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getTotalCount() {
+    return totalCount;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TOTAL_COUNT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTotalCount(Integer totalCount) {
+    this.totalCount = totalCount;
   }
 
   @Override
@@ -348,37 +377,39 @@ public class DelegierungEntryDtoSpec {
       return false;
     }
     DelegierungEntryDtoSpec delegierungEntry = (DelegierungEntryDtoSpec) o;
-    return Objects.equals(this.fallId, delegierungEntry.fallId) &&
+    return Objects.equals(this.id, delegierungEntry.id) &&
         Objects.equals(this.fallNummer, delegierungEntry.fallNummer) &&
-        Objects.equals(this.tenant, delegierungEntry.tenant) &&
-        Objects.equals(this.id, delegierungEntry.id) &&
-        Objects.equals(this.sozialdienst, delegierungEntry.sozialdienst) &&
-        Objects.equals(this.delegierterMitarbeiter, delegierungEntry.delegierterMitarbeiter) &&
-        Objects.equals(this.persoenlicheAngaben, delegierungEntry.persoenlicheAngaben) &&
+        Objects.equals(this.fallId, delegierungEntry.fallId) &&
+        Objects.equals(this.nachname, delegierungEntry.nachname) &&
+        Objects.equals(this.vorname, delegierungEntry.vorname) &&
+        Objects.equals(this.geburtsdatum, delegierungEntry.geburtsdatum) &&
+        Objects.equals(this.wohnort, delegierungEntry.wohnort) &&
         Objects.equals(this.status, delegierungEntry.status) &&
-        Objects.equals(this.startDate, delegierungEntry.startDate) &&
-        Objects.equals(this.endDate, delegierungEntry.endDate);
+        Objects.equals(this.gesuchStatus, delegierungEntry.gesuchStatus) &&
+        Objects.equals(this.aenderungStatus, delegierungEntry.aenderungStatus) &&
+        Objects.equals(this.totalCount, delegierungEntry.totalCount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, tenant, id, sozialdienst, delegierterMitarbeiter, persoenlicheAngaben, status, startDate, endDate);
+    return Objects.hash(id, fallNummer, fallId, nachname, vorname, geburtsdatum, wohnort, status, gesuchStatus, aenderungStatus, totalCount);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungEntryDtoSpec {\n");
-    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
-    sb.append("    tenant: ").append(toIndentedString(tenant)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
-    sb.append("    delegierterMitarbeiter: ").append(toIndentedString(delegierterMitarbeiter)).append("\n");
-    sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
+    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
+    sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    wohnort: ").append(toIndentedString(wohnort)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
-    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
+    sb.append("    aenderungStatus: ").append(toIndentedString(aenderungStatus)).append("\n");
+    sb.append("    totalCount: ").append(toIndentedString(totalCount)).append("\n");
     sb.append("}");
     return sb.toString();
   }

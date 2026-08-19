@@ -41,6 +41,7 @@ export class StatusprotokollStore extends signalStore(
   cachedStatusprotokollListViewSig = computed(() => {
     return fromCachedDataSig(this.cachedStatusprotokoll)?.map((entry) => ({
       ...entry,
+      hasMultilineKommentar: entry.kommentar?.includes('\n'),
       statusKey:
         entry.typ === StatusprotokollEntryTyp.GESUCH
           ? `sachbearbeitung-app.gesuch.status.${typMap[entry.typ]}.${entry.statusTo}`

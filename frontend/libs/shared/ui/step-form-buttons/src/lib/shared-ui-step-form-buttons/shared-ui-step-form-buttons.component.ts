@@ -7,5 +7,6 @@ import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiStepFormButtonsComponent {
-  @HostBinding('class') klass = 'testing-library-fix tw:flex tw:gap-3';
+  @HostBinding('class') klass =
+    'testing-library-fix tw:flex tw:flex-wrap tw:gap-3';
 }

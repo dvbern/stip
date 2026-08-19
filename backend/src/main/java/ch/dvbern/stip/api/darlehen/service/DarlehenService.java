@@ -29,7 +29,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.common.pdf.DarlehensVerfuegungPdfService;
+import ch.dvbern.stip.api.common.pdf.DarlehenVerfuegungPdfService;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.type.StipConfig;
@@ -112,7 +112,7 @@ public class DarlehenService {
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
-    private final DarlehensVerfuegungPdfService darlehensVerfuegungPdfService;
+    private final DarlehenVerfuegungPdfService darlehensVerfuegungPdfService;
     private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
     private final DarlehenBuchhaltungEntryMapper darlehenBuchhaltungEntryMapper;
     private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
@@ -369,6 +369,15 @@ public class DarlehenService {
         }
 
         return true;
+    }
+
+    @Transactional
+    public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenOfGesuchGs(final UUID gesuchId) {
+        final var darlehenList = freiwilligDarlehenRepository.findByGesuchId(gesuchId);
+        return darlehenList.stream()
+            .sorted(Comparator.comparing(FreiwilligDarlehen::getTimestampErstellt).reversed())
+            .map(freiwilligDarlehenMapper::toDtoGs)
+            .toList();
     }
 
     @Transactional

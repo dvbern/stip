@@ -18,14 +18,17 @@ import {
 import {
   Ausbildungsgang,
   FallDashboardItem,
+  FreiwilligDarlehen,
   GesuchDashboardItem,
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import {
+  byAppConfigKey,
   getGesuchPermissions,
   getTranchePermissions,
   isNotReadonly,
 } from '@dv/shared/model/permission-state';
+import { getGesuchState } from '@dv/shared/util/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -59,8 +62,7 @@ export class DashboardStore extends signalStore(
     if (!fallDashboardItem) {
       return undefined;
     }
-    const activeAusbildungen: SharedModelGsAusbildungView[] = [];
-    const inactiveAusbildungen: SharedModelGsAusbildungView[] = [];
+    const ausbildungen: SharedModelGsAusbildungView[] = [];
     const rolesMap = this.permissionStore.rolesMapSig();
 
     fallDashboardItem.ausbildungDashboardItems?.forEach(
@@ -100,10 +102,7 @@ export class DashboardStore extends signalStore(
           return `${name} - ${bezeichnung}`;
         };
 
-        (ausbildung.status !== 'AKTIV'
-          ? inactiveAusbildungen
-          : activeAusbildungen
-        ).push({
+        ausbildungen.push({
           ...ausbildung,
           bezeichnungDe: ausbildung.ausbildungNichtGefunden
             ? alternativeBezeichnung
@@ -129,13 +128,18 @@ export class DashboardStore extends signalStore(
         rolesMap,
         fallDashboardItem.currentDelegierung,
       ),
-      hasActiveAusbildungen: activeAusbildungen.length > 0,
-      activeAusbildungen,
-      inactiveAusbildungen,
+      ausbildungen,
     };
   });
 
-  loadDashboard$ = rxMethod<void>(
+  loadDashboard$(params: { fallId: string }) {
+    return byAppConfigKey(this.config.app, 'type', {
+      'gesuch-app': () => this.loadDashboardGS$(),
+      'sozialdienst-app': () => this.loadDashboardSoz$(params),
+    });
+  }
+
+  private loadDashboardGS$ = rxMethod<void>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -152,7 +156,7 @@ export class DashboardStore extends signalStore(
     ),
   );
 
-  loadSozialdienstDashboard$ = rxMethod<{ fallId: string }>(
+  private loadDashboardSoz$ = rxMethod<{ fallId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -191,8 +195,9 @@ const toGesuchDashboardItemView =
       hasMoreThanOneGesuche,
     } = data;
     const isErstgesuch = index === gesuchs.length - 1;
-    const isLastGesuch = index === 0;
-    const einreichefristAbgelaufen = isAfter(
+    const isLatestGesuch = index === 0;
+    const isActive = isAusbildungActive && isLatestGesuch;
+    const isEinreichefristAbgelaufen = isAfter(
       new Date(),
       endOfDay(new Date(gesuch.gesuchsperiode.einreichefristReduziert)),
     );
@@ -234,17 +239,30 @@ const toGesuchDashboardItemView =
     return {
       ...gesuch,
       fallId: fallItem.fall.id,
-      isActive: isAusbildungActive && isLastGesuch,
+      state: getGesuchState(gesuch, { isActive, isEinreichefristAbgelaufen }),
+      isActive,
       isErstgesuch,
       canEdit,
       canDelete: canEdit && hasMoreThanOneGesuche && canCurrentlyEditGesuch,
       canDeleteAenderung:
         !!aenderungPermission?.permissions.canWrite && canCurrentlyEditGesuch,
       canCreateAenderung: gesuch.canCreateAenderung && canCurrentlyEditGesuch,
+      freiwilligeDarlehenList: gesuch.freiwilligeDarlehenList.filter(
+        isDarlehenInitialized,
+      ),
       hasPendingAusbildungUnterbruchAntrag,
-      einreichefristAbgelaufen,
+      einreichefristAbgelaufen: isAfter(
+        new Date(),
+        endOfDay(new Date(gesuch.gesuchsperiode.einreichefristReduziert)),
+      ),
       reduzierterBeitrag,
       einreichefristDays,
       yearRange,
     };
   };
+
+const isDarlehenInitialized = (
+  darlehen: FreiwilligDarlehen,
+): darlehen is Required<FreiwilligDarlehen> => {
+  return !!darlehen.status;
+};

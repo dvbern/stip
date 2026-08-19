@@ -3,7 +3,6 @@
     <ng-template #navigation cdkPortal>
       <div class="sidenav tw:p-6">
         @for (option of options; track $index) {
-          @let isActive = route.isActive(option.route, false);
           <a
             *dvHasRoles="option.allowedRoles"
             type="button"
@@ -26,7 +25,7 @@
       <ng-container *ngTemplateOutlet="navigation"></ng-container>
     </div>
 
-    <div class="tw:w-full tw:dv-container tw:dv-pass-height tw:p-6 tw:pb-32">
+    <div class="tw:dv-container tw:dv-pass-height tw:dv-scroll-space">
       <!-- step header (mobile) -->
       <div
         class="tw:flex tw:items-center tw:justify-between border-bottom tw:lg:hidden tw:mt-4 tw:mb-6 border-1 tw:pb-4"

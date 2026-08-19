@@ -308,3 +308,30 @@ export function byAppConfig<R>(
   }
   return map[config.view]();
 }
+
+/**
+ * Used to define values that are accessed by any the AppConfig key
+ *
+ * The map is partial, unspecified apps default to `orElse`
+ *
+ * @example
+ * ```ts
+ * byAppConfigKey({} as AppConfig, 'type', {
+ *   "gesuch-app": () => store.loadForGs$(),
+ *   "sozialdienst-app": () => store.loadForSozialdienst$(),
+ * });
+ * ```
+ */
+export function byAppConfigKey<R, K extends keyof AppConfig>(
+  config: AppConfig,
+  key: K,
+  map: Partial<Record<AppConfig[K], () => R>>,
+  orElse: () => R = () => {
+    throw new Error('Not implemented for this app view');
+  },
+) {
+  if (config.type === 'demo-data-app') {
+    return orElse();
+  }
+  return map[config[key]]?.() ?? orElse();
+}

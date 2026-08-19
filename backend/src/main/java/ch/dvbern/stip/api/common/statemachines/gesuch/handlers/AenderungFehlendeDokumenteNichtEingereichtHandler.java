@@ -32,7 +32,7 @@ public class AenderungFehlendeDokumenteNichtEingereichtHandler implements Gesuch
 
     @Override
     @Transactional
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         if (!gesuch.isVerfuegt()) {
             illegalHandleCall();
         }

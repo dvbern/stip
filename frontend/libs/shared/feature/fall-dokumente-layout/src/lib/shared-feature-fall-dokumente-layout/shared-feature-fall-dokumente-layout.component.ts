@@ -30,7 +30,7 @@ const ALL_TABS = ['stipendien', 'darlehen'] as const;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureFallDokumenteLayoutComponent {
-  @HostBinding('class') class = 'tw:dv-pass-height tw:p-6';
+  @HostBinding('class') class = 'tw:dv-pass-height tw:dv-container';
 
   private router = inject(Router);
   private wndw = inject(DOCUMENT, { optional: true })?.defaultView;

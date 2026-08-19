@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
-import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -69,6 +68,13 @@ public class DelegierenResourceImpl implements DelegierenResource {
 
     @Override
     @RolesAllowed(DELEGIERUNG_READ)
+    public DelegierungDto getDelegierung(UUID delegierungId) {
+        delegierenAuthorizer.canRead(delegierungId);
+        return delegierenService.getDelegierung(delegierungId);
+    }
+
+    @Override
+    @RolesAllowed(DELEGIERUNG_READ)
     public PaginatedSozDashboardDto getDelegierungsOfSozialdienstMitarbeiter(
         GetDelegierungSozQueryTypeMitarbeiter getDelegierungSozQueryType,
         Integer page,
@@ -92,7 +98,6 @@ public class DelegierenResourceImpl implements DelegierenResource {
             vorname,
             geburtsdatum,
             wohnort,
-            DelegierungStatus.AKZEPTIERT.toString(),
             sortColumn,
             sortOrder
         );
@@ -133,7 +138,6 @@ public class DelegierenResourceImpl implements DelegierenResource {
         String vorname,
         LocalDate geburtsdatum,
         String wohnort,
-        String status,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -148,7 +152,6 @@ public class DelegierenResourceImpl implements DelegierenResource {
             vorname,
             geburtsdatum,
             wohnort,
-            status,
             sortColumn,
             sortOrder
         );

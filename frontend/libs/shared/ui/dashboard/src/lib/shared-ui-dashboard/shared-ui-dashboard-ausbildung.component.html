@@ -1,50 +1,208 @@
 @let ausbildung = ausbildungSig();
-<div class="tw:grid tw:grid-cols-[1fr_auto]" *dvTranslocoShared="let t">
-  <div>
-    <h2 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-2xl tw:font-semibold">
-      <dv-shared-ui-icon-chip style="background-color: var(--dv-success-subtle); color: #81be06e0">
-        <i class="material-symbols-rounded tw:text-2xl">school</i>
-      </dv-shared-ui-icon-chip>
-      {{ t('shared.dashboard.ausbildung.title', ausbildung) }}
-    </h2>
-    <p class="tw:mb-10 tw:ml-4">
-      {{
-        t('shared.dashboard.ausbildung.description', {
-          start: (ausbildung.ausbildungBegin | translatedDate: 'MMMM yyyy' | async),
-          end: (ausbildung.ausbildungEnd | translatedDate: 'MMMM yyyy' | async),
-        })
-      }}
-    </p>
-  </div>
-  <div class="tw:flex tw:flex-col tw:gap-2">
-    @if (ausbildung.canDelete) {
-      <button type="button" class="tw:dv-button-outline tw:ml-3 tw:h-min" (click)="deleteAusbildung.emit(ausbildung)">
-        {{ t('shared.dashboard.ausbildung.delete') }}
-      </button>
-    }
-    @if (
-      ausbildung.id && (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
-    ) {
-      <button
-        type="button"
-        class="tw:dv-button-outline tw:ml-3 tw:h-min"
-        (click)="ausbildungUnterbrechen.emit(ausbildung.id)"
-      >
-        {{ t('shared.dashboard.ausbildung.unterbruch') }}
-      </button>
-    }
-  </div>
-</div>
+<ng-container *dvTranslocoShared="let t">
+  <div class="tw:md:grid tw:md:grid-cols-[1fr_auto] tw:flex-wrap">
+    <div>
+      <h2 class="tw:mb-4 tw:flex tw:items-center tw:gap-4 tw:text-2xl tw:font-bold">
+        <dv-shared-ui-icon-chip
+          class="tw:text-base"
+          [ngClass]="{
+            'tw:text-[#81be06e0]': ausbildung.status === 'AKTIV',
+            'tw:text-dv-gray': ausbildung.status !== 'AKTIV',
+          }"
+        >
+          <i class="material-symbols-rounded tw:text-2xl">school</i>
+        </dv-shared-ui-icon-chip>
+        <span class="tw:w-full tw:min-w-0 tw:wrap-break-word">
+          {{ t('shared.dashboard.ausbildung.title', ausbildung) }}
+        </span>
+      </h2>
+    </div>
 
-<div class="tw:flex tw:flex-col tw:gap-6">
-  @for (gesuch of ausbildung.gesuchs; track gesuch.id) {
-    <dv-shared-ui-dashboard-gesuch
-      [gesuchSig]="gesuch"
-      [class.tw:bg-dv-gray-subtle]="!gesuch.isActive"
-      [class.tw:bg-dv-green-subtle]="gesuch.isActive"
-      (deleteGesuch)="deleteGesuch.emit($event)"
-      (aenderungMelden)="aenderungMelden.emit({ gesuch })"
-      (deleteAenderung)="deleteAenderung.emit($event)"
-    ></dv-shared-ui-dashboard-gesuch>
-  }
-</div>
+    @if (ausbildung.status === 'AKTIV') {
+      <div class="tw:flex tw:w-full tw:flex-col tw:gap-2 tw:md:w-full tw:justify-self-end tw:mb-4">
+        @if (ausbildung.canDelete) {
+          <button
+            type="button"
+            data-testid="shared-dashboard-ausbildung-delete"
+            class="tw:dv-button-outline tw:h-min"
+            (click)="output.emit({ typ: 'delete ausbildung', id: ausbildung.gesuchs[0].id })"
+          >
+            {{ t('shared.dashboard.ausbildung.delete') }}
+          </button>
+        }
+        @if (
+          ausbildung.id &&
+          (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
+        ) {
+          <button
+            type="button"
+            class="tw:dv-button-main-primary tw:h-min"
+            data-testid="shared-dashboard-ausbildung-unterbruch-edit-create"
+            (click)="
+              output.emit({
+                typ: 'ausbildung unterbrechen',
+                id: ausbildung.id,
+                unterbruchId: ausbildung.openAusbildungUnterbruchAntragId,
+              })
+            "
+          >
+            @if (!ausbildung.openAusbildungUnterbruchAntragId) {
+              {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
+            } @else {
+              {{ t('shared.dashboard.ausbildung.unterbruch.edit') }}
+            }
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="tw:flex tw:mb-6 tw:gap-2 tw:text-sm">
+    <!-- ausbildungsbeginn -->
+    <div class="tw:bg-dv-gray-light tw:rounded-lg tw:p-2">
+      <span class="tw:font-semibold"> {{ t('shared.dashboard.ausbildung.start') }}: </span>
+      <span>
+        {{ ausbildung.ausbildungBegin | date: 'MM.yyyy' }}
+      </span>
+    </div>
+
+    <!-- ausbildungsende -->
+    <div class="tw:bg-dv-gray-light tw:rounded-lg tw:p-2">
+      <span class="tw:font-semibold">
+        {{
+          t(
+            ausbildung.status === 'AKTIV'
+              ? 'shared.dashboard.ausbildung.voraussichtlichesEnde'
+              : 'shared.dashboard.ausbildung.ende'
+          )
+        }}:
+      </span>
+      <span>
+        {{ ausbildung.ausbildungEnd | date: 'MM.yyyy' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="tw:flex tw:flex-col tw:gap-6">
+    @for (gesuch of ausbildung.gesuchs; track gesuch.id) {
+      <div class="tw:flex tw:flex-col tw:gap-2">
+        <h2 class="tw:font-bold tw:text-2xl tw:mt-4">
+          {{ t('shared.dashboard.gesuch.title', { yearRange: gesuch.yearRange }) }}
+        </h2>
+        <dv-shared-ui-dashboard-gesuch
+          [gesuchSig]="gesuch"
+          [ngClass]="{
+            'tw:bg-dv-gray-light': gesuch.state === 'inactive',
+            'tw:bg-dv-green-subtle': gesuch.state === 'verfuegt',
+            'tw:bg-dv-blue-light': gesuch.state === 'in-ueberpruefung',
+            'tw:bg-dv-main-danger-subtle': gesuch.state === 'expired',
+            'tw:bg-dv-orange': gesuch.state === 'in-bearbeitung',
+          }"
+          (output)="output.emit($event)"
+        ></dv-shared-ui-dashboard-gesuch>
+
+        @if (gesuch.isActive) {
+          @if (gesuch.offeneAenderung; as aenderung) {
+            <dv-shared-ui-dashboard-gesuch-subitem
+              class="tw:bg-dv-blue-light"
+              [statusSig]="t(`shared.gesuch.status.tranche.${aenderung.status}`)"
+              [ngClass]="{
+                'tw:bg-dv-orange':
+                  aenderung.status === 'IN_BEARBEITUNG_GS' || aenderung.status === 'FEHLENDE_DOKUMENTE',
+              }"
+            >
+              <div dvItemInfo>
+                <dl class="tw:flex tw:flex-col">
+                  <dt class="tw:font-bold">
+                    {{ t('shared.dashboard.aenderung.title') }}
+                  </dt>
+                  <dd class="tw:text-sm tw:mt-1">
+                    {{ aenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
+                    {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+                  </dd>
+                </dl>
+              </div>
+              <div dvItemActions class="tw:flex tw:flex-wrap tw:gap-3">
+                <a
+                  class="tw:flex tw:dv-button-main-primary"
+                  data-testid="cockpit-gesuch-edit"
+                  [routerLink]="['/gesuch', gesuch.id, 'aenderung', aenderung.id]"
+                >
+                  {{
+                    t(
+                      aenderung.status === 'IN_BEARBEITUNG_GS'
+                        ? 'shared.dashboard.aenderung.edit'
+                        : 'shared.dashboard.aenderung.open'
+                    )
+                  }}
+                </a>
+                @if (gesuch.canDeleteAenderung) {
+                  <button
+                    type="button"
+                    class="tw:dv-button-outline"
+                    data-testid="shared-dashboard-aenderung-delete"
+                    (click)="output.emit({ typ: 'delete aenderung', id: aenderung.id })"
+                  >
+                    <span>{{ t('shared.dashboard.aenderung.delete') }}</span>
+                  </button>
+                }
+              </div>
+            </dv-shared-ui-dashboard-gesuch-subitem>
+          }
+        }
+        @for (darlehen of gesuch.freiwilligeDarlehenList; track darlehen.id) {
+          <dv-shared-ui-dashboard-gesuch-subitem
+            class="tw:bg-dv-blue-light"
+            [statusSig]="t(`shared.darlehen.status.${darlehen.status}`)"
+            [ngClass]="{
+              'tw:bg-dv-orange': darlehen.status === 'IN_BEARBEITUNG_GS',
+              'tw:bg-dv-gray-light': darlehen.status === 'AKZEPTIERT' || darlehen.status === 'ABGELEHNT',
+            }"
+          >
+            <div dvItemInfo>
+              <dl class="tw:flex tw:flex-col">
+                <dt class="tw:font-bold">
+                  {{ t('shared.dashboard.darlehen.title') }}
+                </dt>
+                <dd class="tw:text-sm tw:mt-1">
+                  @if (darlehen.gruende.length) {
+                    {{
+                      t('shared.dashboard.darlehen.timestampErstellt', {
+                        date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
+                      })
+                    }}
+                  }
+                </dd>
+              </dl>
+            </div>
+            <div dvItemActions class="tw:flex tw:flex-wrap tw:gap-3">
+              <a
+                class="tw:flex tw:dv-button-main-primary"
+                data-testid="cockpit-gesuch-edit"
+                [routerLink]="['/gesuch', darlehen.relatedGesuchId, 'darlehen', darlehen.id, 'fall', ausbildung.fallId]"
+              >
+                {{
+                  t(
+                    darlehen.status === 'IN_BEARBEITUNG_GS'
+                      ? 'shared.dashboard.darlehen.edit'
+                      : 'shared.dashboard.darlehen.open'
+                  )
+                }}
+              </a>
+              @if (darlehen.status === 'IN_BEARBEITUNG_GS') {
+                <button
+                  type="button"
+                  class="tw:dv-button-outline"
+                  data-testid="shared-dashboard-darlehen-delete"
+                  (click)="output.emit({ typ: 'delete darlehen', id: darlehen.id })"
+                >
+                  <span>{{ t('shared.dashboard.darlehen.delete') }}</span>
+                </button>
+              }
+            </div>
+          </dv-shared-ui-dashboard-gesuch-subitem>
+        }
+      </div>
+    }
+  </div>
+</ng-container>
