@@ -46,7 +46,7 @@ export interface NavItemAction extends NavItemBase {
   disabled?: boolean;
 }
 
-export interface NavItemGroup extends NavItemBase {
+export interface NavItemMenu extends NavItemBase {
   type: 'menu';
   children: NavItem[];
 }
@@ -59,8 +59,10 @@ export interface NavItemSeparator extends NavItemBase {
 export type NavItem =
   | NavItemLink
   | NavItemAction
-  | NavItemGroup
+  | NavItemMenu
   | NavItemSeparator;
+
+export type NavMenuItem = NavItemLink | NavItemAction | NavItemSeparator;
 
 export interface TabNavItem {
   key: 'verfuegung' | 'formular';

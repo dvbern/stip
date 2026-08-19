@@ -8,6 +8,7 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { NotificationStore } from '@dv/shared/data-access/notification';
@@ -28,6 +29,13 @@ import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 export class SharedFeatureNotificationComponent {
   private notificationStore = inject(NotificationStore);
   private fallHeaderStore = inject(FallHeaderStore);
+
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  goBack(): void {
+    this.router.navigate(['../'], { relativeTo: this.route });
+  }
 
   notificationId = input<string | undefined>(undefined, {
     alias: 'notificationId',

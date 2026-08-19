@@ -17,7 +17,6 @@ import {
 import { Subscription, fromEvent, throttleTime } from 'rxjs';
 
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { TranslocoHashMap } from '@dv/shared/model/type-util';
 import { DVBreakpoints } from '@dv/shared/model/ui-constants';
 
@@ -42,7 +41,6 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
   scrollStrategyOptions = inject(ScrollStrategyOptions);
   destroyRef = inject(DestroyRef);
   dialogRef: MatDialogRef<SharedUiInfoDialogComponent> | undefined;
-  config = inject(SharedModelCompileTimeConfig);
 
   scrollSub: Subscription | undefined;
 
@@ -74,6 +72,7 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
 
     let dialogConfig: MatDialogConfig<InfoDialogData> = {
       data: {
+        type: 'translated',
         titleKey: this.dialogTitleKeySig(),
         titleParams: this.dialogTitleParams,
         messageKey: this.dialogMessageKeySig(),
@@ -85,14 +84,11 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
     if (isColumnar) {
       const anchor: HTMLElement = this.containerRef.element.nativeElement;
       const anchorRect = anchor.getBoundingClientRect();
-      const isSachbearbeitungApp = this.config.app.view === 'sachbearbeiter';
 
       dialogConfig = {
         ...dialogConfig,
         position: {
-          top: isSachbearbeitungApp
-            ? `calc(var(--header-sub-size) + calc(var(--header-size) + var(--tw-spacing) * 6)`
-            : `calc(var(--header-size) + var(--tw-spacing) * 6)`,
+          top: `calc(var(--header-sub-size) + calc(var(--header-size) + var(--tw-spacing) * 6)`,
           left: `${anchorRect.left}px`,
         },
         width: `${anchor.offsetWidth}px`,
@@ -104,11 +100,10 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
         }),
       };
     }
-
-    this.dialogRef = this.dialog.open<
-      SharedUiInfoDialogComponent,
-      InfoDialogData
-    >(SharedUiInfoDialogComponent, dialogConfig);
+    this.dialogRef = SharedUiInfoDialogComponent.open(
+      this.dialog,
+      dialogConfig,
+    );
 
     if (isColumnar && (!this.scrollSub || this.scrollSub.closed)) {
       this.initPositionUpdates();

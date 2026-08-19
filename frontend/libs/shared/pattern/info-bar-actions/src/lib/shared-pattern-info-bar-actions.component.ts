@@ -50,6 +50,7 @@ import {
 } from '@dv/shared/model/ui-constants';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
@@ -61,7 +62,12 @@ import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 
 @Component({
   selector: 'dv-shared-pattern-info-bar-actions',
-  imports: [MatTooltipModule, MatMenuModule, SharedUiAdvTranslocoDirective],
+  imports: [
+    MatTooltipModule,
+    MatMenuModule,
+    SharedUiAdvTranslocoDirective,
+    SharedUiLoadingComponent,
+  ],
   templateUrl: './shared-pattern-info-bar-actions.component.html',
 })
 export class SharedPatternInfoBarActionsComponent {
@@ -210,7 +216,9 @@ export class SharedPatternInfoBarActionsComponent {
   isExportingSig = signal(false);
   isLoadingSig = computed(() => {
     return (
-      isPending(this.gesuchHeaderStore.header()) || this.additionalLoadingSig()
+      isPending(this.gesuchHeaderStore.header()) ||
+      isPending(this.gesuchAenderungStore.cachedGesuchAenderung()) ||
+      this.additionalLoadingSig()
     );
   });
   isAenderungUpdatingSig = computed(() => {
@@ -376,19 +384,19 @@ export class SharedPatternInfoBarActionsComponent {
       // A feature that is only called if SB App
       // eslint-disable-next-line @nx/enforce-module-boundaries
       await import('@dv/sachbearbeitung-app/util-data-access/gesuch-actions');
-    const exportTrancheService = runInInjectionContext(this.injector, () =>
-      inject(module.GesuchActionsService),
-    );
+    const gesuchtActionsService = runInInjectionContext(this.injector, () => {
+      const service = inject(module.GesuchActionsService);
+      effect(() => {
+        this.additionalLoadingSig.set(service.isLoadingSig());
+      });
+      return service;
+    });
 
-    exportTrancheService.setStatusUebergang(
+    gesuchtActionsService.setStatusUebergang(
       nextStatus,
       gesuchId,
       gesuchTrancheId,
     );
-
-    effect(() => exportTrancheService.isLoadingSig, {
-      injector: this.injector,
-    });
   }
 }
 

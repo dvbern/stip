@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +35,9 @@ import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidati
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import com.github.oxo42.stateless4j.transitions.Transition;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.validation.Validator;
 import jakarta.validation.groups.Default;
@@ -43,6 +46,9 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchTrancheValidatorService {
+    private static final EnumSet<GesuchTrancheStatusChangeEvent> IGNORED_CHANGE_EVENTS =
+        EnumSet.of(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT);
+
     private static final Map<Gesuchstatus, List<Class<?>>> gesuchStatusToValidationGroups =
         new EnumMap<>(Gesuchstatus.class);
     private static final Map<GesuchTrancheStatus, List<Class<?>>> trancheStatusToValidationGroups =
@@ -87,6 +93,17 @@ public class GesuchTrancheValidatorService {
 
     private final Validator validator;
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
+
+    public void validateGesuchTrancheForStatus(
+        final GesuchTranche toValidate,
+        final Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition
+    ) {
+        if (IGNORED_CHANGE_EVENTS.contains(transition.getTrigger())) {
+            return;
+        }
+
+        validateGesuchTrancheForStatus(toValidate, transition.getDestination());
+    }
 
     public void validateGesuchTrancheForStatus(
         final GesuchTranche toValidate,

@@ -409,6 +409,7 @@ export const redirectToGesuchFormNextStep = createEffect(
     return actions$.pipe(
       ofType(
         SharedDataAccessGesuchEvents.gesuchUpdatedSuccess,
+        SharedDataAccessGesuchEvents.nextTriggered,
         SharedEventGesuchFormEltern.nextTriggered,
         SharedEventGesuchFormGeschwister.nextTriggered,
         SharedEventGesuchFormKinder.nextTriggered,

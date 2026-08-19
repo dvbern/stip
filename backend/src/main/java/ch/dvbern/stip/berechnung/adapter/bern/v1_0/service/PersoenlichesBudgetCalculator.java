@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.berechnung.adapter.bern.util.BernCalculatorUtil;
 import ch.dvbern.stip.berechnung.domain.dto.PersonValueList;
 import ch.dvbern.stip.berechnung.domain.util.InputUtils;
+import ch.dvbern.stip.berechnung.domain.util.MathUtil;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDtoBuilder;
@@ -44,8 +45,6 @@ import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatKostenDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatKostenDtoBuilder;
 import lombok.experimental.UtilityClass;
 
-import static ch.dvbern.stip.berechnung.domain.util.InputUtils.toJahresWert;
-import static ch.dvbern.stip.berechnung.domain.util.MathUtil.divideByTranchen;
 import static ch.dvbern.stip.berechnung.domain.util.MathUtil.roundHalfUp;
 
 @UtilityClass
@@ -118,7 +117,7 @@ public class PersoenlichesBudgetCalculator {
                 totalNachProKopfTeilung = total;
             }
             if (anzahlMonateGueltigkeit != 12) {
-                total = divideByTranchen(total, anzahlMonateGueltigkeit);
+                total = MathUtil.divideByTrancheDuration(total, anzahlMonateGueltigkeit);
             }
         }
 
@@ -180,7 +179,7 @@ public class PersoenlichesBudgetCalculator {
         nettoerwerbseinkommen.setPersonValue(piaName, nettoerwerbseinkommenPia);
         einnahmenBGSA.setPersonValue(piaName, einnahmenKosten.getEinnahmenBGSA());
         kinderAusbildungszulagen.setPersonValue(piaName, einnahmenKosten.getZulagen());
-        unterhaltsbeitraege.setPersonValue(piaName, toJahresWert(einnahmenKosten.getUnterhaltsbeitraege()));
+        unterhaltsbeitraege.setPersonValue(piaName, einnahmenKosten.getUnterhaltsbeitraege());
         eoLeistungen.setPersonValue(piaName, einnahmenKosten.getEoLeistungen());
         taggelderAHVIV.setPersonValue(piaName, einnahmenKosten.getTaggelderAHVIV());
         renten.setPersonValue(piaName, einnahmenKosten.getRenten());
@@ -202,7 +201,7 @@ public class PersoenlichesBudgetCalculator {
             einnahmenBGSA.setPartnerValue(partnerName, einnahmenKostenPartner.getEinnahmenBGSA());
             kinderAusbildungszulagen.setPartnerValue(partnerName, einnahmenKostenPartner.getZulagen());
             unterhaltsbeitraege
-                .setPartnerValue(partnerName, toJahresWert(einnahmenKostenPartner.getUnterhaltsbeitraege()));
+                .setPartnerValue(partnerName, einnahmenKostenPartner.getUnterhaltsbeitraege());
             eoLeistungen.setPartnerValue(partnerName, einnahmenKostenPartner.getEoLeistungen());
             taggelderAHVIV.setPartnerValue(partnerName, einnahmenKostenPartner.getTaggelderAHVIV());
             renten.setPartnerValue(partnerName, einnahmenKostenPartner.getRenten());
@@ -215,9 +214,9 @@ public class PersoenlichesBudgetCalculator {
         for (final Kind kind : kindsImHaushalt) {
             kinderAusbildungszulagen.addKindValue(
                 kind,
-                toJahresWert(kind.getKinderUndAusbildungszulagen())
+                kind.getKinderUndAusbildungszulagen()
             );
-            unterhaltsbeitraege.addKindValue(kind, toJahresWert(kind.getUnterhaltsbeitraege()));
+            unterhaltsbeitraege.addKindValue(kind, kind.getUnterhaltsbeitraege());
             renten.addKindValue(kind, kind.getRenten());
             ergaenzungsleistungen.addKindValue(kind, kind.getErgaenzungsleistungen());
             andereEinnahmen.addKindValue(kind, kind.getAndereEinnahmen());
@@ -400,7 +399,7 @@ public class PersoenlichesBudgetCalculator {
         int wohnkosten = 0;
         if (einnahmenKosten.getWohnkosten() != null && anzahlPersonenImHaushalt > 0) {
             wohnkosten += BernCalculatorUtil.getEffektiveWohnkostenPersoenlich(
-                toJahresWert(einnahmenKosten.getWohnkosten()),
+                einnahmenKosten.getWohnkosten(),
                 gesuchsperiode,
                 anzahlPersonenImHaushalt
             );

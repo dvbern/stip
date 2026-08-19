@@ -37,6 +37,5 @@ public class GesuchTrancheFehlendeDokumenteNichtEingereichtHandler
         notificationService
             .createGesuchFehlendeDokumenteNichtEingereichtNotificationAndSendStdMail(gesuchTranche.getGesuch());
         gesuchTranche.getGesuch().setNachfristDokumente(null);
-        gesuchTranche.getGesuch().setEinreichedatum(null);
     }
 }

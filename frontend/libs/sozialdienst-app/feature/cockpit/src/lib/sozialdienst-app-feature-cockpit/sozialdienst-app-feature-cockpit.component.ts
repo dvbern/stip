@@ -29,12 +29,14 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { debounceTime } from 'rxjs';
 
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
   DelegierungEntry,
   DelegierungStatus,
+  GesuchTrancheTyp,
   SortOrder,
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
@@ -78,9 +80,12 @@ import {
 } from '@dv/sozialdienst-app/model/delegation';
 import { SozialdienstAppUiAdvTranslocoDirective } from '@dv/sozialdienst-app/ui/adv-transloco-directive';
 
+type EntryTyp = GesuchTrancheTyp | 'NONE';
+
 type DisplayColumns =
   | SozDashboardColumn
   | 'DELEGIERUNG_ANGENOMMEN'
+  | 'FALL_STATUS'
   | 'AKTIONEN';
 
 @Component({
@@ -165,6 +170,7 @@ export class SozialdienstAppFeatureCockpitComponent
       ...(roles['V0_Sozialdienst-Admin']
         ? ['DELEGIERUNG_ANGENOMMEN' as const]
         : []),
+      'FALL_STATUS',
       'AKTIONEN',
     ] satisfies DisplayColumns[];
   });
@@ -186,9 +192,9 @@ export class SozialdienstAppFeatureCockpitComponent
   defaultPageSize = DEFAULT_PAGE_SIZE;
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
-  private defaultQueryTypeSig = computed(() => {
+  private defaultQueryTypeSig = computed<GetDelegierungSozQueryType>(() => {
     const roles = this.permissionStore.rolesMapSig();
-    return roles['V0_Sozialdienst-Admin'] ? 'ALLE' : 'ALLE_BEARBEITBAR_MEINE';
+    return roles['V0_Sozialdienst-Admin'] ? 'OFFEN' : 'ALLE_BEARBEITBAR_MEINE';
   });
   showViewSig = computed<GetDelegierungSozQueryType>(() => {
     const defaultQueryType = this.defaultQueryTypeSig();
@@ -236,10 +242,14 @@ export class SozialdienstAppFeatureCockpitComponent
   );
 
   faelleDataSourceSig = computed(() => {
-    const faelle =
-      this.delegationStore.cockpitViewSig().paginatedSozDashboard?.entries;
+    const faelle = this.delegationStore
+      .cockpitViewSig()
+      .paginatedSozDashboard?.entries?.map((entry) => ({
+        ...entry,
+        ...getStatusData(entry),
+      }));
 
-    const dataSource = new MatTableDataSource<DelegierungEntry>(faelle);
+    const dataSource = new MatTableDataSource(faelle);
     return dataSource;
   });
   totalEntriesSig = computed(() => {
@@ -315,7 +325,13 @@ export class SozialdienstAppFeatureCockpitComponent
   }
 
   openDialog(delegierung: DelegierungEntry) {
-    DelegierungDialogComponent.open(this.dialog, { delegierung })
+    if (!delegierung.id) {
+      return;
+    }
+
+    DelegierungDialogComponent.open(this.dialog, {
+      delegierungId: delegierung.id,
+    })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
@@ -386,4 +402,22 @@ const createQuery = <T extends Partial<LoadPaginatedDashboardByRoles>>(
   value: T,
 ) => {
   return value;
+};
+
+const getStatusData = (
+  delegierung: DelegierungEntry,
+): { typ: EntryTyp; statusKey?: SharedTranslationKey } => {
+  if (delegierung.aenderungStatus) {
+    return {
+      typ: 'AENDERUNG',
+      statusKey: `shared.gesuch.status.tranche.${delegierung.aenderungStatus}`,
+    };
+  } else if (delegierung.gesuchStatus) {
+    return {
+      typ: 'TRANCHE',
+      statusKey: `gesuch-app.gesuch.status.contract.${delegierung.gesuchStatus}`,
+    };
+  }
+
+  return { typ: 'NONE' };
 };

@@ -1,14 +1,26 @@
-<ng-container *transloco="let t">
-  <div class="tw:relative tw:my-12 tw:justify-between tw:dv-container">
-    <h1 class="tw:flex tw:justify-between tw:items-center tw:w-1/2 tw:text-3xl tw:font-bold">
-      {{ t('shared.darlehen.title') }}
-      <dv-shared-ui-darlehen-verfuegung-download
-        [darlehenSig]="darlehenStore.cachedDarlehen().data"
-      ></dv-shared-ui-darlehen-verfuegung-download>
-    </h1>
-    <dv-shared-pattern-darlehen-form
-      (formIsUnsavedSig)="hasUnsavedChanges = $event"
-      (darlehenDeletedSig)="redirectToHome()"
-    ></dv-shared-pattern-darlehen-form>
+<div class="tw:flex tw:h-full" *dvTranslocoShared="let t">
+  <div
+    class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:p-6 tw:bg-white tw:w-[320px] tw:h-full tw:overflow-y-auto tw:shrink-0"
+  >
+    <dv-shared-ui-darlehen-menu
+      [darlehenListSig]="darlehenStore.darlehenListViewSig().list"
+      [fallIdSig]="fallIdSig()"
+    ></dv-shared-ui-darlehen-menu>
   </div>
-</ng-container>
+
+  <div class="tw:overflow-y-auto tw:w-full">
+    <div class="tw:relative tw:justify-between tw:dv-container tw:dv-scroll-space">
+      <h1 class="tw:flex tw:justify-between tw:items-center tw:w-1/2 tw:text-3xl tw:font-bold">
+        {{ t('shared.darlehen.title') }}
+        <dv-shared-ui-darlehen-verfuegung-download
+          [darlehenSig]="darlehenStore.cachedDarlehen().data"
+        ></dv-shared-ui-darlehen-verfuegung-download>
+      </h1>
+      <dv-shared-pattern-darlehen-form
+        (formIsUnsavedSig)="hasUnsavedChanges = $event"
+        (darlehenDeletedSig)="redirectToHome()"
+        (darlehenUpdatedSig)="reloadFallHeader()"
+      ></dv-shared-pattern-darlehen-form>
+    </div>
+  </div>
+</div>

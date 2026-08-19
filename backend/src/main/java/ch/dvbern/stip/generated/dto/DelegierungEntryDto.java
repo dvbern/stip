@@ -1,8 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.PersoenlicheAngabenDto;
-import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
-import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -24,28 +21,30 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierungEntryDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid SozialdienstSlimDto sozialdienst;
-  private @Valid PersoenlicheAngabenDto persoenlicheAngaben;
-  private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
-  private @Valid String tenant;
-  private @Valid SozialdienstBenutzerDto delegierterMitarbeiter;
-  private @Valid LocalDate startDate;
-  private @Valid LocalDate endDate;
-  private @Valid UUID fallId;
   private @Valid String fallNummer;
+  private @Valid UUID fallId;
+  private @Valid String nachname;
+  private @Valid String vorname;
+  private @Valid LocalDate geburtsdatum;
+  private @Valid String wohnort;
+  private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
+  private @Valid Integer totalCount;
+  private @Valid UUID id;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus aenderungStatus;
 
   protected DelegierungEntryDto(DelegierungEntryDtoBuilder<?, ?> b) {
-    this.id = b.id;
-    this.sozialdienst = b.sozialdienst;
-    this.persoenlicheAngaben = b.persoenlicheAngaben;
-    this.status = b.status;
-    this.tenant = b.tenant;
-    this.delegierterMitarbeiter = b.delegierterMitarbeiter;
-    this.startDate = b.startDate;
-    this.endDate = b.endDate;
-    this.fallId = b.fallId;
     this.fallNummer = b.fallNummer;
+    this.fallId = b.fallId;
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.geburtsdatum = b.geburtsdatum;
+    this.wohnort = b.wohnort;
+    this.status = b.status;
+    this.totalCount = b.totalCount;
+    this.id = b.id;
+    this.gesuchStatus = b.gesuchStatus;
+    this.aenderungStatus = b.aenderungStatus;
   }
 
   public DelegierungEntryDto() {
@@ -53,59 +52,116 @@ public class DelegierungEntryDto  implements Serializable {
 
   /**
    **/
-  public DelegierungEntryDto id(UUID id) {
-    this.id = id;
+  public DelegierungEntryDto fallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
     return this;
   }
 
   
-  @JsonProperty("id")
+  @JsonProperty("fallNummer")
   @NotNull
-  public UUID getId() {
-    return id;
+  public String getFallNummer() {
+    return fallNummer;
   }
 
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
+  @JsonProperty("fallNummer")
+  public void setFallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
   }
 
   /**
    **/
-  public DelegierungEntryDto sozialdienst(SozialdienstSlimDto sozialdienst) {
-    this.sozialdienst = sozialdienst;
+  public DelegierungEntryDto fallId(UUID fallId) {
+    this.fallId = fallId;
     return this;
   }
 
   
-  @JsonProperty("sozialdienst")
+  @JsonProperty("fallId")
   @NotNull
-  public SozialdienstSlimDto getSozialdienst() {
-    return sozialdienst;
+  public UUID getFallId() {
+    return fallId;
   }
 
-  @JsonProperty("sozialdienst")
-  public void setSozialdienst(SozialdienstSlimDto sozialdienst) {
-    this.sozialdienst = sozialdienst;
+  @JsonProperty("fallId")
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
   }
 
   /**
    **/
-  public DelegierungEntryDto persoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
-    this.persoenlicheAngaben = persoenlicheAngaben;
+  public DelegierungEntryDto nachname(String nachname) {
+    this.nachname = nachname;
     return this;
   }
 
   
-  @JsonProperty("persoenlicheAngaben")
+  @JsonProperty("nachname")
   @NotNull
-  public PersoenlicheAngabenDto getPersoenlicheAngaben() {
-    return persoenlicheAngaben;
+  public String getNachname() {
+    return nachname;
   }
 
-  @JsonProperty("persoenlicheAngaben")
-  public void setPersoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
-    this.persoenlicheAngaben = persoenlicheAngaben;
+  @JsonProperty("nachname")
+  public void setNachname(String nachname) {
+    this.nachname = nachname;
+  }
+
+  /**
+   **/
+  public DelegierungEntryDto vorname(String vorname) {
+    this.vorname = vorname;
+    return this;
+  }
+
+  
+  @JsonProperty("vorname")
+  @NotNull
+  public String getVorname() {
+    return vorname;
+  }
+
+  @JsonProperty("vorname")
+  public void setVorname(String vorname) {
+    this.vorname = vorname;
+  }
+
+  /**
+   **/
+  public DelegierungEntryDto geburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
+    return this;
+  }
+
+  
+  @JsonProperty("geburtsdatum")
+  @NotNull
+  public LocalDate getGeburtsdatum() {
+    return geburtsdatum;
+  }
+
+  @JsonProperty("geburtsdatum")
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
+  }
+
+  /**
+   **/
+  public DelegierungEntryDto wohnort(String wohnort) {
+    this.wohnort = wohnort;
+    return this;
+  }
+
+  
+  @JsonProperty("wohnort")
+  @NotNull
+  public String getWohnort() {
+    return wohnort;
+  }
+
+  @JsonProperty("wohnort")
+  public void setWohnort(String wohnort) {
+    this.wohnort = wohnort;
   }
 
   /**
@@ -129,111 +185,75 @@ public class DelegierungEntryDto  implements Serializable {
 
   /**
    **/
-  public DelegierungEntryDto tenant(String tenant) {
-    this.tenant = tenant;
+  public DelegierungEntryDto totalCount(Integer totalCount) {
+    this.totalCount = totalCount;
     return this;
   }
 
   
-  @JsonProperty("tenant")
+  @JsonProperty("totalCount")
   @NotNull
-  public String getTenant() {
-    return tenant;
+  public Integer getTotalCount() {
+    return totalCount;
   }
 
-  @JsonProperty("tenant")
-  public void setTenant(String tenant) {
-    this.tenant = tenant;
-  }
-
-  /**
-   **/
-  public DelegierungEntryDto delegierterMitarbeiter(SozialdienstBenutzerDto delegierterMitarbeiter) {
-    this.delegierterMitarbeiter = delegierterMitarbeiter;
-    return this;
-  }
-
-  
-  @JsonProperty("delegierterMitarbeiter")
-  public SozialdienstBenutzerDto getDelegierterMitarbeiter() {
-    return delegierterMitarbeiter;
-  }
-
-  @JsonProperty("delegierterMitarbeiter")
-  public void setDelegierterMitarbeiter(SozialdienstBenutzerDto delegierterMitarbeiter) {
-    this.delegierterMitarbeiter = delegierterMitarbeiter;
+  @JsonProperty("totalCount")
+  public void setTotalCount(Integer totalCount) {
+    this.totalCount = totalCount;
   }
 
   /**
    **/
-  public DelegierungEntryDto startDate(LocalDate startDate) {
-    this.startDate = startDate;
+  public DelegierungEntryDto id(UUID id) {
+    this.id = id;
     return this;
   }
 
   
-  @JsonProperty("startDate")
-  public LocalDate getStartDate() {
-    return startDate;
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
   }
 
-  @JsonProperty("startDate")
-  public void setStartDate(LocalDate startDate) {
-    this.startDate = startDate;
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
    **/
-  public DelegierungEntryDto endDate(LocalDate endDate) {
-    this.endDate = endDate;
+  public DelegierungEntryDto gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
+    this.gesuchStatus = gesuchStatus;
     return this;
   }
 
   
-  @JsonProperty("endDate")
-  public LocalDate getEndDate() {
-    return endDate;
+  @JsonProperty("gesuchStatus")
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
+    return gesuchStatus;
   }
 
-  @JsonProperty("endDate")
-  public void setEndDate(LocalDate endDate) {
-    this.endDate = endDate;
+  @JsonProperty("gesuchStatus")
+  public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
+    this.gesuchStatus = gesuchStatus;
   }
 
   /**
    **/
-  public DelegierungEntryDto fallId(UUID fallId) {
-    this.fallId = fallId;
+  public DelegierungEntryDto aenderungStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus aenderungStatus) {
+    this.aenderungStatus = aenderungStatus;
     return this;
   }
 
   
-  @JsonProperty("fallId")
-  public UUID getFallId() {
-    return fallId;
+  @JsonProperty("aenderungStatus")
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getAenderungStatus() {
+    return aenderungStatus;
   }
 
-  @JsonProperty("fallId")
-  public void setFallId(UUID fallId) {
-    this.fallId = fallId;
-  }
-
-  /**
-   **/
-  public DelegierungEntryDto fallNummer(String fallNummer) {
-    this.fallNummer = fallNummer;
-    return this;
-  }
-
-  
-  @JsonProperty("fallNummer")
-  public String getFallNummer() {
-    return fallNummer;
-  }
-
-  @JsonProperty("fallNummer")
-  public void setFallNummer(String fallNummer) {
-    this.fallNummer = fallNummer;
+  @JsonProperty("aenderungStatus")
+  public void setAenderungStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus aenderungStatus) {
+    this.aenderungStatus = aenderungStatus;
   }
 
 
@@ -246,21 +266,22 @@ public class DelegierungEntryDto  implements Serializable {
       return false;
     }
     DelegierungEntryDto delegierungEntry = (DelegierungEntryDto) o;
-    return Objects.equals(this.id, delegierungEntry.id) &&
-        Objects.equals(this.sozialdienst, delegierungEntry.sozialdienst) &&
-        Objects.equals(this.persoenlicheAngaben, delegierungEntry.persoenlicheAngaben) &&
-        Objects.equals(this.status, delegierungEntry.status) &&
-        Objects.equals(this.tenant, delegierungEntry.tenant) &&
-        Objects.equals(this.delegierterMitarbeiter, delegierungEntry.delegierterMitarbeiter) &&
-        Objects.equals(this.startDate, delegierungEntry.startDate) &&
-        Objects.equals(this.endDate, delegierungEntry.endDate) &&
+    return Objects.equals(this.fallNummer, delegierungEntry.fallNummer) &&
         Objects.equals(this.fallId, delegierungEntry.fallId) &&
-        Objects.equals(this.fallNummer, delegierungEntry.fallNummer);
+        Objects.equals(this.nachname, delegierungEntry.nachname) &&
+        Objects.equals(this.vorname, delegierungEntry.vorname) &&
+        Objects.equals(this.geburtsdatum, delegierungEntry.geburtsdatum) &&
+        Objects.equals(this.wohnort, delegierungEntry.wohnort) &&
+        Objects.equals(this.status, delegierungEntry.status) &&
+        Objects.equals(this.totalCount, delegierungEntry.totalCount) &&
+        Objects.equals(this.id, delegierungEntry.id) &&
+        Objects.equals(this.gesuchStatus, delegierungEntry.gesuchStatus) &&
+        Objects.equals(this.aenderungStatus, delegierungEntry.aenderungStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, sozialdienst, persoenlicheAngaben, status, tenant, delegierterMitarbeiter, startDate, endDate, fallId, fallNummer);
+    return Objects.hash(fallNummer, fallId, nachname, vorname, geburtsdatum, wohnort, status, totalCount, id, gesuchStatus, aenderungStatus);
   }
 
   @Override
@@ -268,16 +289,17 @@ public class DelegierungEntryDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungEntryDto {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
-    sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    tenant: ").append(toIndentedString(tenant)).append("\n");
-    sb.append("    delegierterMitarbeiter: ").append(toIndentedString(delegierterMitarbeiter)).append("\n");
-    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
-    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
-    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
+    sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    wohnort: ").append(toIndentedString(wohnort)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    totalCount: ").append(toIndentedString(totalCount)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
+    sb.append("    aenderungStatus: ").append(toIndentedString(aenderungStatus)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -312,58 +334,63 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   public static abstract class DelegierungEntryDtoBuilder<C extends DelegierungEntryDto, B extends DelegierungEntryDtoBuilder<C, B>>  {
-    private UUID id;
-    private SozialdienstSlimDto sozialdienst;
-    private PersoenlicheAngabenDto persoenlicheAngaben;
-    private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
-    private String tenant;
-    private SozialdienstBenutzerDto delegierterMitarbeiter;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private UUID fallId;
     private String fallNummer;
+    private UUID fallId;
+    private String nachname;
+    private String vorname;
+    private LocalDate geburtsdatum;
+    private String wohnort;
+    private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
+    private Integer totalCount;
+    private UUID id;
+    private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+    private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus aenderungStatus;
     protected abstract B self();
 
     public abstract C build();
 
-    public B id(UUID id) {
-      this.id = id;
-      return self();
-    }
-    public B sozialdienst(SozialdienstSlimDto sozialdienst) {
-      this.sozialdienst = sozialdienst;
-      return self();
-    }
-    public B persoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
-      this.persoenlicheAngaben = persoenlicheAngaben;
-      return self();
-    }
-    public B status(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
-      this.status = status;
-      return self();
-    }
-    public B tenant(String tenant) {
-      this.tenant = tenant;
-      return self();
-    }
-    public B delegierterMitarbeiter(SozialdienstBenutzerDto delegierterMitarbeiter) {
-      this.delegierterMitarbeiter = delegierterMitarbeiter;
-      return self();
-    }
-    public B startDate(LocalDate startDate) {
-      this.startDate = startDate;
-      return self();
-    }
-    public B endDate(LocalDate endDate) {
-      this.endDate = endDate;
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
       return self();
     }
     public B fallId(UUID fallId) {
       this.fallId = fallId;
       return self();
     }
-    public B fallNummer(String fallNummer) {
-      this.fallNummer = fallNummer;
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B wohnort(String wohnort) {
+      this.wohnort = wohnort;
+      return self();
+    }
+    public B status(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B totalCount(Integer totalCount) {
+      this.totalCount = totalCount;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
+      this.gesuchStatus = gesuchStatus;
+      return self();
+    }
+    public B aenderungStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus aenderungStatus) {
+      this.aenderungStatus = aenderungStatus;
       return self();
     }
   }

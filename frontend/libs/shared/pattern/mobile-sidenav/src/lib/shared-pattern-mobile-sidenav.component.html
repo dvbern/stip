@@ -1,33 +1,51 @@
-<div class="tw:p-4 tw:flex tw:justify-between">
-  <div>
-    <dv-shared-ui-language-selector [language]="languageSig()" (languageChange)="handleLanguageChangeHeader($event)" />
-  </div>
+<ng-container *transloco="let t">
   <button
     type="button"
-    class="tw:dv-button"
-    [attr.aria-label]="'shared.close' | transloco"
+    class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-1"
+    [attr.aria-label]="t('shared.close')"
     (click)="closeSidenav.emit()"
-  ></button>
-</div>
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
 
-<div class="tw:p-4 tw:flex tw:flex-col">
-  <div class="tw:flex tw:flex-col align-items-start">
-    <ul class="nav tw:flex-col tw:w-full tw:list-none">
-      <li class="tw:mb-6">
-        <span class="tw:py-2 tw:px-4">{{ benutzerNameSig() }}</span>
-      </li>
+  <div class="tw:py-2 tw:px-4 tw:font-bold">
+    {{ benutzerNameSig() }}
+  </div>
 
-      <li>
-        <a class="tw:py-2 tw:px-4">Profil</a>
-      </li>
-      <li>
-        <button type="button" class="tw:dv-button tw:py-2 tw:px-4" (click)="logout()">Logout</button>
-      </li>
-    </ul>
+  <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+  <div class="tw:px-4">
+    <dv-shared-ui-nav-items
+      [isMobileSig]="true"
+      [navItemsSig]="navItemsSig()"
+      (click)="closeSidenav.emit()"
+    ></dv-shared-ui-nav-items>
   </div>
-  <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
-  <div class="tw:mt-2" (keypress.enter)="closeSidenav.emit()" (click)="closeSidenav.emit()">
-    <ng-content></ng-content>
-    <ng-template [cdkPortalOutlet]="navigationStore.portalSig()"></ng-template>
+
+  @if (navigationStore.portalSig()) {
+    <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+    <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
+    <div class="tw:px-4 tw:mt-2" (keypress.enter)="closeSidenav.emit()" (click)="closeSidenav.emit()">
+      <ng-template [cdkPortalOutlet]="navigationStore.portalSig()"></ng-template>
+    </div>
+  }
+
+  <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+  <dv-shared-ui-nav-menu-items
+    [isMobileSig]="true"
+    [navMenuItemsSig]="menuItemsSig()"
+    (click)="closeSidenav.emit()"
+  ></dv-shared-ui-nav-menu-items>
+
+  <!-- Logout -->
+  <div class="tw:ml-4">
+    <button type="button" mat-menu-item data-testid="button-logout" (click)="logout()">
+      {{ t('shared.menu.logout') }}
+    </button>
   </div>
-</div>
+
+  <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+
+  <div class="tw:flex tw:justify-center">
+    <dv-shared-ui-language-selector [language]="languageSig()" (languageChange)="handleLanguageChangeHeader($event)" />
+  </div>
+</ng-container>

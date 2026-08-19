@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
+import ch.dvbern.stip.api.common.util.KommentarUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -51,7 +52,6 @@ import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
-import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -156,8 +156,9 @@ public class GesuchTrancheService {
         final var offeneAenderung = gesuchTrancheRepository.findOffeneAenderungGs(gesuch.getId())
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);;
-        final var eingereichteAenderung = gesuchTrancheRepository.findLatestAenderungGs(gesuch.getId())
-            .filter(_aenderung -> !GesuchStatusUtil.gsReceivesCurrentGesuch(gesuch.getGesuchStatus()))
+        final var latestAenderung = gesuchTrancheRepository.findLatestAenderungGs(gesuch.getId());
+        final var eingereichteAenderung = latestAenderung
+            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);
         return getHistorizedAenderungs(historizedGesuch)
@@ -572,7 +573,7 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEventWithComment(
             aenderung,
             GesuchTrancheStatusChangeEvent.ABLEHNEN,
-            kommentarDto
+            kommentarDto.getText()
         );
 
         final var lastFreigegebenTrancheRevisionTimestamp =
@@ -709,8 +710,16 @@ public class GesuchTrancheService {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheValidatorService
             .validateGesuchTrancheForStatus(aenderungsTranche, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        GesuchUtil.setDefaultNachfristDokumente(aenderungsTranche.getGesuch());
         gesuchTrancheStatusService
-            .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE);
+            .triggerStateMachineEventWithComment(
+                aenderungsTranche,
+                GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE,
+                KommentarUtil.createFehlendeDokumenteKommentar(
+                    aenderungsTranche.getGesuch(),
+                    gesuchDokumentKommentarService.getAllFehlendeDokumenteKommentarsForAenderung(aenderungsTranche)
+                )
+            );
     }
 
     @Transactional
@@ -727,7 +736,7 @@ public class GesuchTrancheService {
         var rawGueltigkeit =
             new DateRange(patchAenderungsInfoRequestDto.getStart(), patchAenderungsInfoRequestDto.getEnd());
         var gueltigkeit =
-            gesuchTrancheCopyService.validateAndCreateClampedDateRange(rawGueltigkeit, aenderungsTranche.getGesuch());
+            GesuchTrancheCopyService.validateAndCreateClampedDateRange(rawGueltigkeit, aenderungsTranche.getGesuch());
 
         aenderungsTranche.setGueltigkeit(gueltigkeit);
         aenderungsTranche.setComment(patchAenderungsInfoRequestDto.getComment());

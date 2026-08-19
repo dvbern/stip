@@ -1,0 +1,188 @@
+<section
+  class="tw:relative tw:flex tw:w-full tw:max-w-175 tw:flex-col tw:rounded-lg tw:dv-dialog-container tw:dv-scroll-space"
+  *dvTranslocoGs="let t"
+>
+  <button
+    type="button"
+    (click)="cancel()"
+    class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-1"
+    [attr.aria-label]="t('shared.close')"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+
+  <form [formGroup]="form" data-testid="form-delegieren-form" class="tw:dv-form-grid-one-col" novalidate>
+    <h1 class="tw:dv-page-title tw:mb-4">
+      {{ t('gesuch-app.delegieren-dialog.title') }}
+    </h1>
+
+    <p class="tw:dv-form-item tw:text-xl tw:mb-4">
+      {{ t('gesuch-app.delegieren-dialog.message') }}
+    </p>
+
+    @let sozialdienste = availableSozialdiensteSig();
+    <mat-form-field class="tw:dv-form-item">
+      <mat-label>{{ t('gesuch-app.delegieren-dialog.sozialdienst') }}</mat-label>
+      <mat-select
+        #sozialdienst
+        [formControl]="form.controls.sozialdienstId"
+        [placeholder]="t('shared.form.select.empty')"
+      >
+        @for (sozialdienst of sozialdienste; track sozialdienst.id) {
+          <mat-option [value]="sozialdienst.id" [disabled]="!sozialdienst.aktiv">
+            {{ sozialdienst.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <h2 class="tw:dv-form-title">
+      {{ t('shared.form.shared.section.personal-details') }}
+    </h2>
+    <!-- Anrede -->
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ t('shared.form.person.salutation.label') }}</mat-label>
+      <mat-select
+        [formControl]="form.controls.anrede"
+        data-testid="form-delegieren-anrede"
+        [placeholder]="t('shared.form.select.empty')"
+      >
+        @for (anrede of anredeValues; track $index) {
+          <mat-option [attr.data-testid]="anrede" [value]="anrede">
+            {{ t(`shared.form.select.salutation.${anrede}`) }}
+          </mat-option>
+        }
+      </mat-select>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- nachname -->
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ t('shared.form.shared.lastname.label') }}</mat-label>
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        [formControl]="form.controls.nachname"
+        data-testid="form-delegieren-nachname"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+    </mat-form-field>
+    <!-- Vorname -->
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ t('shared.form.shared.firstname.label') }}</mat-label>
+      <input
+        type="text"
+        matInput
+        dvMaxLength
+        [formControl]="form.controls.vorname"
+        data-testid="form-delegieren-vorname"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+    </mat-form-field>
+
+    <dv-shared-ui-form-address class="tw:dv-form-item" [group]="form.controls.adresse" [languageSig]="languageSig()" />
+
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ t('shared.form.shared.birthday.label') }}</mat-label>
+
+      <input
+        matInput
+        [dvMaxLength]="'small'"
+        placeholder="dd.mm.yyyy"
+        [formControl]="form.controls.geburtsdatum"
+        data-testid="form-delegieren-geburtsdatum"
+        (blur)="onGeburtsdatumBlur()"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+        {{ t('shared.form.error.dateFormat') }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'minDate'">
+        {{ t('shared.form.error.minDatePast') }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'maxDate'">
+        {{ t('shared.form.error.maxDatePast') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <!-- E-Mail -->
+      <mat-label>{{ t('shared.form.delegation.email.label') }}</mat-label>
+      <input
+        matInput
+        dvMaxLength
+        type="email"
+        [formControl]="form.controls.email"
+        data-testid="form-delegieren-email"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'pattern'">
+        {{ t('shared.form.error.email') }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="tw:dv-form-item">
+      <!-- Sprache -->
+      <label>{{ t('shared.form.delegation.sprache.label') }}</label>
+      <mat-radio-group
+        class="tw:flex tw:flex-col"
+        [formControl]="form.controls.sprache"
+        data-testid="form-delegieren-sprache"
+        dvSharedUiFormField
+      >
+        @for (sprache of spracheValues; track $index) {
+          <mat-radio-button [attr.data-testid]="sprache" [value]="sprache">{{
+            t(`shared.language.${sprache}`)
+          }}</mat-radio-button>
+        }
+        <div class="group-errors">
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ t('shared.form.error.required') }}
+          </mat-error>
+        </div>
+      </mat-radio-group>
+    </div>
+
+    <div class="tw:dv-form-item">
+      <mat-checkbox
+        [formControl]="form.controls.nutzungsbedingungenAkzeptiert"
+        data-testid="form-delegieren-nutzungsbedingungenAkzeptiert"
+        dvSharedUiFormField
+      >
+        {{ t('shared.form.delegation.nutzungsbedingungenAkzeptiert.label.prefix') }}
+        <button
+          class="tw:dv-button tw:p-0! tw:align-baseline! tw:inline tw:underline"
+          type="button"
+          (click)="showNutzungsbedingungen()"
+        >
+          {{ t('shared.form.delegation.nutzungsbedingungenAkzeptiert.label.link') }}</button
+        >{{ t('shared.form.delegation.nutzungsbedingungenAkzeptiert.label.suffix') }}
+        <div class="group-errors">
+          <mat-error class="tw:absolute tw:left-0" *dvSharedUiFormMessageError="'required'">
+            {{ t('shared.form.error.required') }}
+          </mat-error>
+        </div>
+      </mat-checkbox>
+    </div>
+
+    <div class="tw:dv-form-action tw:flex tw:justify-between tw:dv-button-container">
+      <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="cancel()">
+        {{ t('shared.cancel') }}
+      </button>
+      <button type="submit" data-testid="dialog-submit" class="tw:dv-button-main-primary" (click)="confirm()">
+        {{ t('gesuch-app.delegieren-dialog.submit') }}
+      </button>
+    </div>
+  </form>
+</section>

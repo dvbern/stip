@@ -21,22 +21,19 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 
-import {
-  SharedDataAccessBenutzerApiEvents,
-  selectSharedDataAccessBenutzer,
-} from '@dv/shared/data-access/benutzer';
+import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
-import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { Language } from '@dv/shared/model/language';
 import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiNavItemsComponent } from '@dv/shared/ui/nav-items';
+import { SharedUiNavMenuItemsComponent } from '@dv/shared/ui/nav-menu-items';
 import { SharedUiTenantStylesDvComponent } from '@dv/shared/ui/tenant-styles-dv';
-import { NavItem } from '@dv/shared/util/navigation';
+import { NavItem, NavMenuItem } from '@dv/shared/util/navigation';
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
 @Component({
@@ -50,6 +47,7 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
     SharedUiTenantStylesDvComponent,
     TranslocoDirective,
     SharedUiNavItemsComponent,
+    SharedUiNavMenuItemsComponent,
   ],
   templateUrl: './shared-pattern-global-header.component.html',
   styles: `
@@ -66,10 +64,11 @@ export class SharedPatternGlobalHeaderComponent {
   @Input() isScroll = false;
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
+
   staticNavItemsSig = input<NavItem[]>([]);
+  staticMenuItemsSig = input<NavMenuItem[]>([]);
 
   @Output() openSidenav = new EventEmitter<void>();
-  @Output() closeSidenav = new EventEmitter<void>();
 
   protected breakpointObserver = inject(BreakpointObserver);
   private oauthService = inject(OAuthService);
@@ -84,13 +83,23 @@ export class SharedPatternGlobalHeaderComponent {
   tenantSig = this.tenantCacheService.tenantInfoSig;
 
   navItemsSig = computed(() => {
-    const dynamicItems = this.navigationStore.navigationViewSig();
+    const navigationItems = this.navigationStore.navigationViewSig();
 
-    if (dynamicItems.length) {
-      return dynamicItems;
+    if (navigationItems.length) {
+      return navigationItems;
     }
 
     return this.staticNavItemsSig() ?? [];
+  });
+
+  menuItemsSig = computed(() => {
+    const menuItems = this.navigationStore.menuItemsViewSig();
+
+    if (menuItems.length) {
+      return menuItems;
+    }
+
+    return this.staticMenuItemsSig() ?? [];
   });
 
   benutzerNameSig = computed(() => {
@@ -130,29 +139,5 @@ export class SharedPatternGlobalHeaderComponent {
     this.store.dispatch(
       SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
     );
-  }
-
-  showNutzungsbedingungen() {
-    const benutzer = this.benutzerSig();
-    const nutzungsbedingungenAkzeptiert =
-      benutzer?.nutzungsbedingungenAkzeptiert;
-    const benutzerId = benutzer?.id;
-
-    if (!benutzerId) return;
-
-    SharedDialogNutzungsbedingungenComponent.open(
-      this.dialog,
-      nutzungsbedingungenAkzeptiert ?? false,
-    )
-      .afterClosed()
-      .subscribe((result) => {
-        if (result && benutzerId) {
-          this.store.dispatch(
-            SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren({
-              benutzerId,
-            }),
-          );
-        }
-      });
   }
 }

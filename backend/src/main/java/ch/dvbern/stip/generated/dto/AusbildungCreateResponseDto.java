@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,10 +23,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusbildungCreateResponseDto  implements Serializable {
   private @Valid AusbildungDto ausbildung;
+  private @Valid UUID gesuchId;
+  private @Valid UUID gesuchTrancheId;
   private @Valid GesuchsperiodeSelectErrorDto error;
 
   protected AusbildungCreateResponseDto(AusbildungCreateResponseDtoBuilder<?, ?> b) {
     this.ausbildung = b.ausbildung;
+    this.gesuchId = b.gesuchId;
+    this.gesuchTrancheId = b.gesuchTrancheId;
     this.error = b.error;
   }
 
@@ -48,6 +53,42 @@ public class AusbildungCreateResponseDto  implements Serializable {
   @JsonProperty("ausbildung")
   public void setAusbildung(AusbildungDto ausbildung) {
     this.ausbildung = ausbildung;
+  }
+
+  /**
+   **/
+  public AusbildungCreateResponseDto gesuchId(UUID gesuchId) {
+    this.gesuchId = gesuchId;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchId")
+  public UUID getGesuchId() {
+    return gesuchId;
+  }
+
+  @JsonProperty("gesuchId")
+  public void setGesuchId(UUID gesuchId) {
+    this.gesuchId = gesuchId;
+  }
+
+  /**
+   **/
+  public AusbildungCreateResponseDto gesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchTrancheId")
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+  @JsonProperty("gesuchTrancheId")
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
   }
 
   /**
@@ -79,12 +120,14 @@ public class AusbildungCreateResponseDto  implements Serializable {
     }
     AusbildungCreateResponseDto ausbildungCreateResponse = (AusbildungCreateResponseDto) o;
     return Objects.equals(this.ausbildung, ausbildungCreateResponse.ausbildung) &&
+        Objects.equals(this.gesuchId, ausbildungCreateResponse.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, ausbildungCreateResponse.gesuchTrancheId) &&
         Objects.equals(this.error, ausbildungCreateResponse.error);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, error);
+    return Objects.hash(ausbildung, gesuchId, gesuchTrancheId, error);
   }
 
   @Override
@@ -93,6 +136,8 @@ public class AusbildungCreateResponseDto  implements Serializable {
     sb.append("class AusbildungCreateResponseDto {\n");
     
     sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
+    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -129,6 +174,8 @@ public class AusbildungCreateResponseDto  implements Serializable {
 
   public static abstract class AusbildungCreateResponseDtoBuilder<C extends AusbildungCreateResponseDto, B extends AusbildungCreateResponseDtoBuilder<C, B>>  {
     private AusbildungDto ausbildung;
+    private UUID gesuchId;
+    private UUID gesuchTrancheId;
     private GesuchsperiodeSelectErrorDto error;
     protected abstract B self();
 
@@ -136,6 +183,14 @@ public class AusbildungCreateResponseDto  implements Serializable {
 
     public B ausbildung(AusbildungDto ausbildung) {
       this.ausbildung = ausbildung;
+      return self();
+    }
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B gesuchTrancheId(UUID gesuchTrancheId) {
+      this.gesuchTrancheId = gesuchTrancheId;
       return self();
     }
     public B error(GesuchsperiodeSelectErrorDto error) {

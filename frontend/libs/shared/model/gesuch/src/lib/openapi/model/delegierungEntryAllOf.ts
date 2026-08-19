@@ -9,10 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GesuchTrancheStatus } from './gesuchTrancheStatus';
+import { Gesuchstatus } from './gesuchstatus';
 
 export interface DelegierungEntryAllOf { 
     fallId?: string;
     fallNummer?: string;
     tenant: string;
+    gesuchStatus?: Gesuchstatus;
+    aenderungStatus?: GesuchTrancheStatus;
 }
+
+
 

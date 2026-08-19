@@ -6,28 +6,34 @@ import {
   effect,
   inject,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
+import {
+  SharedDataAccessBenutzerApiEvents,
+  selectSharedDataAccessBenutzer,
+} from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { TRANCHE } from '@dv/shared/model/gesuch-form';
+import { filterByAppRole } from '@dv/shared/model/benutzer';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import {
   NavItem,
-  buildDarlehenMenu,
-  buildGesuchNavItems,
+  NavMenuItem,
   createAllRouteParamsSig,
   createParamsIdSig,
-  getQueryParamValueSig,
+  sozialdienstAdminNavItems,
   sozialdienstBaseMenuItems,
+  sozialdienstBaseNavItems,
 } from '@dv/shared/util/navigation';
 
 /**
@@ -45,13 +51,16 @@ import {
   ],
   template: `<mat-sidenav-container>
     <mat-sidenav #sidenav mode="over" position="end">
-      <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
+      <dv-shared-pattern-mobile-sidenav
+        [staticNavItemsSig]="baseNavItems"
+        [staticMenuItemsSig]="baseMenuItems"
+        (closeSidenav)="sidenav.close()"
+      >
       </dv-shared-pattern-mobile-sidenav>
     </mat-sidenav>
     <mat-sidenav-content class="tw:flex tw:flex-col">
       <dv-shared-pattern-global-header
-        [staticNavItemsSig]="baseMenuItems"
-        (closeSidenav)="sidenav.close()"
+        [staticNavItemsSig]="baseNavItems"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
 
@@ -64,15 +73,16 @@ import {
 })
 export class SozialdienstAppPatternMainLayoutComponent {
   private fallStore = inject(FallStore);
-  private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private store = inject(Store);
   private fallHeaderStore = inject(FallHeaderStore);
+  private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
+  baseNavItems = sozialdienstBaseNavItems;
   baseMenuItems = sozialdienstBaseMenuItems;
 
   @HostBinding('class')
@@ -87,16 +97,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
 
   private allRouteParamsSig = createAllRouteParamsSig(this.router);
 
-  private darlehenIdSig = createParamsIdSig(
-    'darlehenId',
-    this.allRouteParamsSig,
-  );
-
-  private originStepSig = getQueryParamValueSig(this.route, 'originStep');
-
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
-
-  private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
 
   private routeParamsFallIdSig = createParamsIdSig(
     'fallId',
@@ -117,7 +118,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
       this.allRouteParamsSig();
       const fallId = this.fallIdSig();
       if (fallId) {
-        this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.fallHeaderStore.loadFallHeader$({ fallId });
       }
     });
@@ -126,16 +126,16 @@ export class SozialdienstAppPatternMainLayoutComponent {
     effect(() => {
       // Read allRouteParamsSig to re-run on every navigation
       this.allRouteParamsSig();
-      const darlehnen = this.darlehenStore.darlehenListViewSig();
       const fallId = this.fallIdSig();
-      const gesuchId = this.gesuchIdSig();
-      const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
-      const originStep = this.originStepSig();
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
-        this.navigationStore.setNavigationItems(sozialdienstBaseMenuItems);
+        this.navigationStore.setNavigationItems(
+          [...sozialdienstBaseNavItems, ...sozialdienstAdminNavItems].filter(
+            filterByAppRole(rolesMap),
+          ),
+        );
         return;
       }
 
@@ -183,44 +183,80 @@ export class SozialdienstAppPatternMainLayoutComponent {
         },
       ];
 
-      const tab = decodeURI(originStep ?? '') || TRANCHE.route;
-      const tabSegments = tab.split('/').filter(Boolean);
-
-      const gesuchNav = buildGesuchNavItems(
-        gesuchId,
-        this.gesuchHeaderStore.viewSig().currentTranches ?? [],
-        tabSegments,
-        this.trancheIdSig(),
-      );
-
-      const darlehenMenu = buildDarlehenMenu({
-        darlehen: darlehnen.list,
-        canCreateDarlehen: darlehnen.canCreateDarlehen,
-        fallId: fallId,
-        isDarlehenRoute: !!darlehenId,
-        createDarlehen: () =>
-          this.darlehenStore.createDarlehen$({
-            fallId: fallId,
-          }),
-      });
-
       const navItems: NavItem[] = [
         fallNav,
-        ...gesuchNav,
-        darlehenMenu,
         fallDokumente,
         auszahlung,
         ...nachrichten,
-        ...this.baseMenuItems,
-      ].filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      });
+        ...sozialdienstBaseNavItems,
+        ...sozialdienstAdminNavItems,
+      ].filter(filterByAppRole(rolesMap));
 
       this.navigationStore.setNavigationItems(navItems);
+    });
+
+    // menuItems items effect
+    effect(() => {
+      const fallId = this.fallStore.currentFallViewSig()?.id;
+      const rolesMap = this.permissionStore.rolesMapSig();
+
+      if (!fallId) {
+        return;
+      }
+
+      const allgemeineInformationen: NavMenuItem = {
+        type: 'action',
+        id: 'allgemeine-informationen',
+        label: { key: 'shared.menu.allgemeine-informationen' },
+        action: () => {
+          SharedUiInfoDialogComponent.open(this.dialog, {
+            data: {
+              type: 'translated',
+              titleKey: 'shared.allgemeine-informationen.title',
+              messageKey: 'shared.allgemeine-informationen.message',
+            },
+          });
+        },
+      };
+
+      const nutzungsbedingungen: NavMenuItem = {
+        type: 'action',
+        id: 'nutzungsbedingungen',
+        label: { key: 'shared.menu.nutzungsbedingungen' },
+        action: () => {
+          const benutzer = this.benutzerSig();
+          const nutzungsbedingungenAkzeptiert =
+            benutzer?.nutzungsbedingungenAkzeptiert;
+          const benutzerId = benutzer?.id;
+
+          if (!benutzerId) return;
+
+          SharedDialogNutzungsbedingungenComponent.open(
+            this.dialog,
+            nutzungsbedingungenAkzeptiert ?? false,
+          )
+            .afterClosed()
+            .subscribe((result) => {
+              if (result && benutzerId) {
+                this.store.dispatch(
+                  SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren(
+                    {
+                      benutzerId,
+                    },
+                  ),
+                );
+              }
+            });
+        },
+      };
+
+      const menuItems: NavMenuItem[] = [
+        ...sozialdienstBaseMenuItems,
+        allgemeineInformationen,
+        nutzungsbedingungen,
+      ].filter(filterByAppRole(rolesMap));
+
+      this.navigationStore.setMenuItems(menuItems);
     });
 
     effect(() => {

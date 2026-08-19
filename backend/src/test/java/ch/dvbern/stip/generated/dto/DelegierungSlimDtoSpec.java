@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.DelegierungStatusDtoSpec;
+import ch.dvbern.stip.generated.dto.PersoenlicheAngabenDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,7 +31,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DelegierungSlimDtoSpec.JSON_PROPERTY_STATUS,
-  DelegierungSlimDtoSpec.JSON_PROPERTY_SOZIALDIENST
+  DelegierungSlimDtoSpec.JSON_PROPERTY_SOZIALDIENST,
+  DelegierungSlimDtoSpec.JSON_PROPERTY_PERSOENLICHE_ANGABEN
 })
 @JsonTypeName("DelegierungSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -40,6 +42,9 @@ public class DelegierungSlimDtoSpec {
 
   public static final String JSON_PROPERTY_SOZIALDIENST = "sozialdienst";
   private SozialdienstSlimDtoSpec sozialdienst;
+
+  public static final String JSON_PROPERTY_PERSOENLICHE_ANGABEN = "persoenlicheAngaben";
+  private PersoenlicheAngabenDtoSpec persoenlicheAngaben;
 
   public DelegierungSlimDtoSpec() {
   }
@@ -95,6 +100,32 @@ public class DelegierungSlimDtoSpec {
     this.sozialdienst = sozialdienst;
   }
 
+
+  public DelegierungSlimDtoSpec persoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
+    
+    this.persoenlicheAngaben = persoenlicheAngaben;
+    return this;
+  }
+
+   /**
+   * Get persoenlicheAngaben
+   * @return persoenlicheAngaben
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public PersoenlicheAngabenDtoSpec getPersoenlicheAngaben() {
+    return persoenlicheAngaben;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPersoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
+    this.persoenlicheAngaben = persoenlicheAngaben;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -105,12 +136,13 @@ public class DelegierungSlimDtoSpec {
     }
     DelegierungSlimDtoSpec delegierungSlim = (DelegierungSlimDtoSpec) o;
     return Objects.equals(this.status, delegierungSlim.status) &&
-        Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst);
+        Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst) &&
+        Objects.equals(this.persoenlicheAngaben, delegierungSlim.persoenlicheAngaben);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, sozialdienst);
+    return Objects.hash(status, sozialdienst, persoenlicheAngaben);
   }
 
   @Override
@@ -119,6 +151,7 @@ public class DelegierungSlimDtoSpec {
     sb.append("class DelegierungSlimDtoSpec {\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
+    sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
     sb.append("}");
     return sb.toString();
   }

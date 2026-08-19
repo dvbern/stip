@@ -241,6 +241,7 @@ export class GesuchStore extends signalStore(
       ) => void;
     }>(
       pipe(
+        tap(() => patchState(this, { lastStatusChange: pending() })),
         switchMap(({ gesuchTrancheId, text, onSuccess }) =>
           this.gesuchService
             .gesuchZurueckweisenAenderungUndo$({
