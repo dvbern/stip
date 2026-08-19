@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuchformular.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -55,7 +54,6 @@ import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
 import ch.dvbern.stip.api.partner.entity.Partner;
@@ -193,32 +191,6 @@ class GesuchFormularMapperTest {
 
         // Assert
         assertThat(update.getEinnahmenKosten().getAuswaertigeMittagessenProWoche(), is(nullValue()));
-    }
-
-    @Test
-    void resetEinnahmenKostenClearsBetreuungskostenKinderTest() {
-        // Arrange
-        final var target = initTarget()
-            .setKinds(new HashSet<>() {
-                {
-                    add(new Kind());
-                }
-            });
-
-        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setBetreuungskostenKinder(1);
-
-        final var update = new GesuchFormularUpdateDto();
-        update.setEinnahmenKosten(updateEinnahmenKosten);
-        update.setKinds(new ArrayList<>());
-
-        final var mapper = createMapper();
-
-        // Act
-        mapper.partialUpdate(update, target);
-
-        // Assert
-        assertThat(target.getEinnahmenKosten().getBetreuungskostenKinder(), is(nullValue()));
     }
 
     @Test

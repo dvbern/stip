@@ -2009,7 +2009,8 @@ components:
         - wohnkosten
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungTotal
-        - betreuungskostenKinder
+        - betreuungskosten
+        - betreuungskostenTotal
         - steuern
         - anteilLebenshaltungskosten
       type: object
@@ -2040,7 +2041,11 @@ components:
           type: integer
         verpflegungPartner:
           type: integer
-        betreuungskostenKinder:
+        betreuungskosten:
+          type: array
+          items:
+            $ref: './components/common.yaml#/PersonValueItem'
+        betreuungskostenTotal:
           type: integer
         steuern:
           type: integer

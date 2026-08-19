@@ -36,7 +36,6 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setWohnkosten(2500);
             model.setWgWohnend(false);
             model.setAuswaertigeMittagessenProWoche(3);
-            model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setSteuerjahr(0);
             model.setVeranlagungsStatus("test");
             model.setAlternativeWohnformWohnend(false);
@@ -55,7 +54,6 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setBeitraege(Math.min(2500, 1));
             model.setFahrkosten(2500);
             model.setVerpflegungskosten(3);
-            model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setSteuerjahr(0);
             model.setVeranlagungsStatus("test");
         });

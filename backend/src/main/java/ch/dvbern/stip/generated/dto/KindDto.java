@@ -32,6 +32,7 @@ public class KindDto  implements Serializable {
   private @Valid Integer kinderUndAusbildungszulagen;
   private @Valid Integer renten;
   private @Valid Integer ergaenzungsleistungen;
+  private @Valid Integer betreuungskosten;
   private @Valid Integer andereEinnahmen;
 
   protected KindDto(KindDtoBuilder<?, ?> b) {
@@ -46,6 +47,7 @@ public class KindDto  implements Serializable {
     this.kinderUndAusbildungszulagen = b.kinderUndAusbildungszulagen;
     this.renten = b.renten;
     this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.betreuungskosten = b.betreuungskosten;
     this.andereEinnahmen = b.andereEinnahmen;
   }
 
@@ -259,6 +261,24 @@ public class KindDto  implements Serializable {
 
   /**
    **/
+  public KindDto betreuungskosten(Integer betreuungskosten) {
+    this.betreuungskosten = betreuungskosten;
+    return this;
+  }
+
+  
+  @JsonProperty("betreuungskosten")
+  public Integer getBetreuungskosten() {
+    return betreuungskosten;
+  }
+
+  @JsonProperty("betreuungskosten")
+  public void setBetreuungskosten(Integer betreuungskosten) {
+    this.betreuungskosten = betreuungskosten;
+  }
+
+  /**
+   **/
   public KindDto andereEinnahmen(Integer andereEinnahmen) {
     this.andereEinnahmen = andereEinnahmen;
     return this;
@@ -296,12 +316,13 @@ public class KindDto  implements Serializable {
         Objects.equals(this.kinderUndAusbildungszulagen, kind.kinderUndAusbildungszulagen) &&
         Objects.equals(this.renten, kind.renten) &&
         Objects.equals(this.ergaenzungsleistungen, kind.ergaenzungsleistungen) &&
+        Objects.equals(this.betreuungskosten, kind.betreuungskosten) &&
         Objects.equals(this.andereEinnahmen, kind.andereEinnahmen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, ausbildungssituation, wohnsitzAnteilPia, nachname, id, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
+    return Objects.hash(entryId, vorname, geburtsdatum, ausbildungssituation, wohnsitzAnteilPia, nachname, id, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, betreuungskosten, andereEinnahmen);
   }
 
   @Override
@@ -320,6 +341,7 @@ public class KindDto  implements Serializable {
     sb.append("    kinderUndAusbildungszulagen: ").append(toIndentedString(kinderUndAusbildungszulagen)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
+    sb.append("    betreuungskosten: ").append(toIndentedString(betreuungskosten)).append("\n");
     sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -366,6 +388,7 @@ public class KindDto  implements Serializable {
     private Integer kinderUndAusbildungszulagen;
     private Integer renten;
     private Integer ergaenzungsleistungen;
+    private Integer betreuungskosten;
     private Integer andereEinnahmen;
     protected abstract B self();
 
@@ -413,6 +436,10 @@ public class KindDto  implements Serializable {
     }
     public B ergaenzungsleistungen(Integer ergaenzungsleistungen) {
       this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B betreuungskosten(Integer betreuungskosten) {
+      this.betreuungskosten = betreuungskosten;
       return self();
     }
     public B andereEinnahmen(Integer andereEinnahmen) {

@@ -43,7 +43,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNG_PARTNER,
-  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
+  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN,
+  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_STEUERN,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN
 })
@@ -86,8 +87,11 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   public static final String JSON_PROPERTY_VERPFLEGUNG_PARTNER = "verpflegungPartner";
   private Integer verpflegungPartner;
 
-  public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
-  private Integer betreuungskostenKinder;
+  public static final String JSON_PROPERTY_BETREUUNGSKOSTEN = "betreuungskosten";
+  private List<PersonValueItemDtoSpec> betreuungskosten;
+
+  public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL = "betreuungskostenTotal";
+  private Integer betreuungskostenTotal;
 
   public static final String JSON_PROPERTY_STEUERN = "steuern";
   private Integer steuern;
@@ -418,29 +422,63 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatKostenDtoSpec betreuungskostenKinder(Integer betreuungskostenKinder) {
+  public PersoenlichesBudgetresultatKostenDtoSpec betreuungskosten(List<PersonValueItemDtoSpec> betreuungskosten) {
     
-    this.betreuungskostenKinder = betreuungskostenKinder;
+    this.betreuungskosten = betreuungskosten;
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatKostenDtoSpec addBetreuungskostenItem(PersonValueItemDtoSpec betreuungskostenItem) {
+    if (this.betreuungskosten == null) {
+      this.betreuungskosten = new ArrayList<>();
+    }
+    this.betreuungskosten.add(betreuungskostenItem);
     return this;
   }
 
    /**
-   * Get betreuungskostenKinder
-   * @return betreuungskostenKinder
+   * Get betreuungskosten
+   * @return betreuungskosten
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
+  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getBetreuungskostenKinder() {
-    return betreuungskostenKinder;
+  public List<PersonValueItemDtoSpec> getBetreuungskosten() {
+    return betreuungskosten;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
+  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetreuungskostenKinder(Integer betreuungskostenKinder) {
-    this.betreuungskostenKinder = betreuungskostenKinder;
+  public void setBetreuungskosten(List<PersonValueItemDtoSpec> betreuungskosten) {
+    this.betreuungskosten = betreuungskosten;
+  }
+
+
+  public PersoenlichesBudgetresultatKostenDtoSpec betreuungskostenTotal(Integer betreuungskostenTotal) {
+    
+    this.betreuungskostenTotal = betreuungskostenTotal;
+    return this;
+  }
+
+   /**
+   * Get betreuungskostenTotal
+   * @return betreuungskostenTotal
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getBetreuungskostenTotal() {
+    return betreuungskostenTotal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBetreuungskostenTotal(Integer betreuungskostenTotal) {
+    this.betreuungskostenTotal = betreuungskostenTotal;
   }
 
 
@@ -516,14 +554,15 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner) &&
-        Objects.equals(this.betreuungskostenKinder, persoenlichesBudgetresultatKosten.betreuungskostenKinder) &&
+        Objects.equals(this.betreuungskosten, persoenlichesBudgetresultatKosten.betreuungskosten) &&
+        Objects.equals(this.betreuungskostenTotal, persoenlichesBudgetresultatKosten.betreuungskostenTotal) &&
         Objects.equals(this.steuern, persoenlichesBudgetresultatKosten.steuern) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, steuern, anteilLebenshaltungskosten);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskosten, betreuungskostenTotal, steuern, anteilLebenshaltungskosten);
   }
 
   @Override
@@ -542,7 +581,8 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
-    sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
+    sb.append("    betreuungskosten: ").append(toIndentedString(betreuungskosten)).append("\n");
+    sb.append("    betreuungskostenTotal: ").append(toIndentedString(betreuungskostenTotal)).append("\n");
     sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("}");

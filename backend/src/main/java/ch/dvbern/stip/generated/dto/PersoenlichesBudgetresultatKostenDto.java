@@ -35,7 +35,8 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer wohnkosten;
   private @Valid List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
   private @Valid Integer medizinischeGrundversorgungTotal;
-  private @Valid Integer betreuungskostenKinder;
+  private @Valid List<PersonValueItemDto> betreuungskosten = new ArrayList<>();
+  private @Valid Integer betreuungskostenTotal;
   private @Valid Integer steuern;
   private @Valid Integer anteilLebenshaltungskosten;
   private @Valid Integer fahrkostenPartner;
@@ -52,7 +53,8 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     this.wohnkosten = b.wohnkosten;
     this.medizinischeGrundversorgung = b.medizinischeGrundversorgung;
     this.medizinischeGrundversorgungTotal = b.medizinischeGrundversorgungTotal;
-    this.betreuungskostenKinder = b.betreuungskostenKinder;
+    this.betreuungskosten = b.betreuungskosten;
+    this.betreuungskostenTotal = b.betreuungskostenTotal;
     this.steuern = b.steuern;
     this.anteilLebenshaltungskosten = b.anteilLebenshaltungskosten;
     this.fahrkostenPartner = b.fahrkostenPartner;
@@ -270,21 +272,56 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatKostenDto betreuungskostenKinder(Integer betreuungskostenKinder) {
-    this.betreuungskostenKinder = betreuungskostenKinder;
+  public PersoenlichesBudgetresultatKostenDto betreuungskosten(List<PersonValueItemDto> betreuungskosten) {
+    this.betreuungskosten = betreuungskosten;
     return this;
   }
 
   
-  @JsonProperty("betreuungskostenKinder")
+  @JsonProperty("betreuungskosten")
   @NotNull
-  public Integer getBetreuungskostenKinder() {
-    return betreuungskostenKinder;
+  public List<PersonValueItemDto> getBetreuungskosten() {
+    return betreuungskosten;
   }
 
-  @JsonProperty("betreuungskostenKinder")
-  public void setBetreuungskostenKinder(Integer betreuungskostenKinder) {
-    this.betreuungskostenKinder = betreuungskostenKinder;
+  @JsonProperty("betreuungskosten")
+  public void setBetreuungskosten(List<PersonValueItemDto> betreuungskosten) {
+    this.betreuungskosten = betreuungskosten;
+  }
+
+  public PersoenlichesBudgetresultatKostenDto addBetreuungskostenItem(PersonValueItemDto betreuungskostenItem) {
+    if (this.betreuungskosten == null) {
+      this.betreuungskosten = new ArrayList<>();
+    }
+
+    this.betreuungskosten.add(betreuungskostenItem);
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatKostenDto removeBetreuungskostenItem(PersonValueItemDto betreuungskostenItem) {
+    if (betreuungskostenItem != null && this.betreuungskosten != null) {
+      this.betreuungskosten.remove(betreuungskostenItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
+  public PersoenlichesBudgetresultatKostenDto betreuungskostenTotal(Integer betreuungskostenTotal) {
+    this.betreuungskostenTotal = betreuungskostenTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("betreuungskostenTotal")
+  @NotNull
+  public Integer getBetreuungskostenTotal() {
+    return betreuungskostenTotal;
+  }
+
+  @JsonProperty("betreuungskostenTotal")
+  public void setBetreuungskostenTotal(Integer betreuungskostenTotal) {
+    this.betreuungskostenTotal = betreuungskostenTotal;
   }
 
   /**
@@ -381,7 +418,8 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultatKosten.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultatKosten.medizinischeGrundversorgung) &&
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
-        Objects.equals(this.betreuungskostenKinder, persoenlichesBudgetresultatKosten.betreuungskostenKinder) &&
+        Objects.equals(this.betreuungskosten, persoenlichesBudgetresultatKosten.betreuungskosten) &&
+        Objects.equals(this.betreuungskostenTotal, persoenlichesBudgetresultatKosten.betreuungskostenTotal) &&
         Objects.equals(this.steuern, persoenlichesBudgetresultatKosten.steuern) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
@@ -390,7 +428,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, steuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskosten, betreuungskostenTotal, steuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
   }
 
   @Override
@@ -408,7 +446,8 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
-    sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
+    sb.append("    betreuungskosten: ").append(toIndentedString(betreuungskosten)).append("\n");
+    sb.append("    betreuungskostenTotal: ").append(toIndentedString(betreuungskostenTotal)).append("\n");
     sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
@@ -457,7 +496,8 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     private Integer wohnkosten;
     private List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
     private Integer medizinischeGrundversorgungTotal;
-    private Integer betreuungskostenKinder;
+    private List<PersonValueItemDto> betreuungskosten = new ArrayList<>();
+    private Integer betreuungskostenTotal;
     private Integer steuern;
     private Integer anteilLebenshaltungskosten;
     private Integer fahrkostenPartner;
@@ -506,8 +546,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
       this.medizinischeGrundversorgungTotal = medizinischeGrundversorgungTotal;
       return self();
     }
-    public B betreuungskostenKinder(Integer betreuungskostenKinder) {
-      this.betreuungskostenKinder = betreuungskostenKinder;
+    public B betreuungskosten(List<PersonValueItemDto> betreuungskosten) {
+      this.betreuungskosten = betreuungskosten;
+      return self();
+    }
+    public B betreuungskostenTotal(Integer betreuungskostenTotal) {
+      this.betreuungskostenTotal = betreuungskostenTotal;
       return self();
     }
     public B steuern(Integer steuern) {
