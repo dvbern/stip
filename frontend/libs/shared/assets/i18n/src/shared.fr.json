@@ -942,7 +942,7 @@
   "shared.eltern.title": "Parent",
   "shared.form.eltern.MUTTER.title": "Informations sur la mère",
   "shared.form.eltern.VATER.title": "Informations sur le père",
-  "shared.form.eltern.sichtbar": "Visible pour la personne en formation",
+  "shared.form.eltern.sichtbar": "Visible pour la PiA",
   "shared.form.eltern.sichtbar.success": "L'affichage des informations parentales a été mis à jour avec succès.",
   "shared.form.eltern.nichtSichtbar": "Données non visibles",
   "shared.form.eltern.unableToHide": "Les parents sont mariés ou vivent ensemble, ils ne peuvent donc pas être masqués.",

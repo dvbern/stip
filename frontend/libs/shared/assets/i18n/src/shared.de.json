@@ -942,7 +942,7 @@
   "shared.eltern.title": "Eltern",
   "shared.form.eltern.MUTTER.title": "Angaben Mutter",
   "shared.form.eltern.VATER.title": "Angaben Vater",
-  "shared.form.eltern.sichtbar": "Für Person in Ausbildung sichtbar",
+  "shared.form.eltern.sichtbar": "Für PiA sichtbar",
   "shared.form.eltern.sichtbar.success": "Die Anzeige der Elternangaben wurde erfolgreich aktualisiert.",
   "shared.form.eltern.nichtSichtbar": "Daten nicht sichtbar",
   "shared.form.eltern.unableToHide": "Die Eltern sind verheiratet oder zusammenlebend, daher können sie nicht versteckt werden.",
