@@ -43,13 +43,11 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.SolidBorder;
-import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
-import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -64,7 +62,7 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class DarlehensVerfuegungPdfService {
+public class DarlehenVerfuegungPdfService {
     private static final float[] TABLE_WIDTH_PERCENTAGES = { 30, 60 };
 
     private enum DarlehenArt {
@@ -134,35 +132,6 @@ public class DarlehensVerfuegungPdfService {
 
             final Link ausbildungsbeitraegeUri =
                 new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
-
-            if (gesuch.getAusbildung().getFall().isDelegiert()) {
-                addPositiveDarlehensVerfuegung(
-                    gesuch,
-                    darlehenNr,
-                    betrag,
-                    datum,
-                    translator,
-                    document,
-                    pdfDocument,
-                    leftMargin,
-                    pdfFont,
-                    pdfFontBold,
-                    pdfFontItalic,
-                    ausbildungsbeitraegeUri,
-                    darlehenArt
-                );
-                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-                PdfUtils.header(
-                    gesuch,
-                    document,
-                    pdfDocument,
-                    leftMargin,
-                    translator,
-                    true,
-                    pdfFont,
-                    ausbildungsbeitraegeUri
-                );
-            }
 
             addPositiveDarlehensVerfuegung(
                 gesuch,

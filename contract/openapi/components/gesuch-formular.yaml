@@ -368,6 +368,8 @@ KindUpdate:
       type: integer
     ergaenzungsleistungen:
       type: integer
+    betreuungskosten:
+      type: integer
     andereEinnahmen:
       type: integer
 
@@ -429,9 +431,6 @@ EinnahmenKostenUpdate:
       description: Required nur wenn die Person keinen eigenen Haushalt führt
       type: integer
     verpflegungskosten:
-      type: integer
-    betreuungskostenKinder:
-      description: Betreuungskosten eigener Kinder
       type: integer
     veranlagungsStatus:
       description: Veranlagungsstatus

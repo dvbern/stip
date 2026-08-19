@@ -515,15 +515,15 @@ public class BernCalculatorUtil {
                 .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
                 .toList();
 
-            BigDecimal teilzeitKindsDerPiaProzenteThisBerechnung =
+            BigDecimal teilzeitKindsDerPiaProzente =
                 BigDecimal.valueOf(
-                    kindsImPiaHaushalt.stream()
+                    teilzeitKindsDerPia.stream()
                         .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
                         .mapToInt(Kind::getWohnsitzAnteilPia)
                         .sum()
                 );
 
-            berechnungsanteilKindsPia = teilzeitKindsDerPiaProzenteThisBerechnung.divide(
+            berechnungsanteilKindsPia = teilzeitKindsDerPiaProzente.divide(
                 BigDecimal.valueOf(teilzeitKindsDerPia.size()),
                 2,
                 RoundingMode.HALF_UP

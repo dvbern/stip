@@ -197,7 +197,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
       case 'delete darlehen':
         return this.deleteDarlehen(output.id);
       case 'ausbildung unterbrechen':
-        return this.ausbildungUnterbrechen(output.id);
+        return this.ausbildungUnterbrechen(output.id, output.unterbruchId);
       case 'create aenderung':
         return this.aenderungMelden(output.melden);
       case 'create darlehen':
@@ -241,16 +241,9 @@ export class SharedFeatureGesuchstellerDashboardComponent {
       });
   }
 
-  private ausbildungUnterbrechen(
-    ausbildungId: string,
-    openAusbildungUnterbruchAntragId?: string,
-  ) {
-    if (openAusbildungUnterbruchAntragId) {
-      this.router.navigate([
-        '/',
-        'ausbildung-unterbrechen',
-        openAusbildungUnterbruchAntragId,
-      ]);
+  private ausbildungUnterbrechen(ausbildungId: string, unterbruchId?: string) {
+    if (unterbruchId) {
+      this.router.navigate(['/', 'ausbildung-unterbrechen', unterbruchId]);
     } else {
       this.ausbildungStore.createAusbildungUnterbruchAntrag$({
         ausbildungId,

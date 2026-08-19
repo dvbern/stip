@@ -86,10 +86,10 @@ public class TranchenSubBerechnungsresultatCalculatorBernV1_0Test {
             (gesuchsperiode, anzahlMonate) -> new BerechnungsStammdatenDto()
         );
 
-        assertThat(tranchenSubBerechnungsresultat.getTotal(), is(-6275));
+        assertThat(tranchenSubBerechnungsresultat.getTotal(), is(-1568));
         assertThat(tranchenSubBerechnungsresultat.getUngekuerztTotal(), is(-10459));
         assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderDerEltern().intValue(), is(60));
-        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderPia().intValue(), is(100));
+        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderPia().intValue(), is(25));
 
         assertThat(tranchenSubBerechnungsresultat.getPersonenHaushaltGroups(), hasSize(3));
     }

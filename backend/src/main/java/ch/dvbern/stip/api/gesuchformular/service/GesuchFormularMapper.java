@@ -251,17 +251,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         );
 
         resetFieldIf(
-            () -> GesuchFormularDiffUtil.hasKinderChanged(newFormular, targetFormular),
-            "Clear Betreuungskosten eigener Kinder because no Kinder",
-            () -> {
-                final var ek = newFormular.getEinnahmenKosten();
-                if (ek != null && newFormular.getKinds().isEmpty()) {
-                    ek.setBetreuungskostenKinder(null);
-                }
-            }
-        );
-
-        resetFieldIf(
             () -> (newFormular.getEinnahmenKosten() != null &&
             !GesuchFormularCalculationUtil
                 .wasGSOlderThan18(newFormular, targetFormular.getTranche().getGesuch().getGesuchsperiode())),

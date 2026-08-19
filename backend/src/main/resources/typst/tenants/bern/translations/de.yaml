@@ -129,7 +129,7 @@ berechnung:
     verpflegungPartner:
       label: Verpflegung der Partnerin / des Partners
       info: Nur wenn erwerbstätig und nicht in anerkannter Ausbildung.
-    betreuungskostenKinder:
+    betreuungskosten:
       label: Betreuungskosten für eigene Kinder
     steuern:
       label: Steuern
