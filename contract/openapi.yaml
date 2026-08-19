@@ -8295,6 +8295,7 @@ components:
         - kinderUndAusbildungszulagen
         - renten
         - ergaenzungsleistungen
+        - betreuungskosten
         - andereEinnahmen
       type: object
       properties:
@@ -8318,6 +8319,8 @@ components:
         renten:
           type: integer
         ergaenzungsleistungen:
+          type: integer
+        betreuungskosten:
           type: integer
         andereEinnahmen:
           type: integer
@@ -8359,8 +8362,6 @@ components:
         andereEinnahmen:
           type: integer
         ausbildungskosten:
-          type: integer
-        betreuungskostenKinder:
           type: integer
         fahrkosten:
           type: integer
@@ -9867,6 +9868,7 @@ components:
         - KINDER_ERGAENZUNGSLEISTUNGEN
         - KINDER_UND_AUSBILDUNGSZULAGEN
         - KINDER_RENTEN
+        - KINDER_BETREUUNGSKOSTEN
         - KINDER_ANDERE_EINNAHMEN
         - EK_BELEG_UNTERHALTSBEITRAEGE
         - EK_BELEG_EINNAHMEN_BGSA
@@ -9879,7 +9881,6 @@ components:
         - EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
         - EK_BELEG_OV_ABONNEMENT
         - EK_MIETVERTRAG
-        - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
         - EK_VERMOEGEN
         - EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE
@@ -9892,7 +9893,6 @@ components:
         - EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
         - EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
         - EK_PARTNER_BELEG_OV_ABONNEMENT
-        - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_PARTNER_LOHNABRECHNUNG
         - EK_PARTNER_VERMOEGEN
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
@@ -10828,7 +10828,8 @@ components:
         - wohnkosten
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungTotal
-        - betreuungskostenKinder
+        - betreuungskosten
+        - betreuungskostenTotal
         - steuern
         - anteilLebenshaltungskosten
       type: object
@@ -10859,7 +10860,11 @@ components:
           type: integer
         verpflegungPartner:
           type: integer
-        betreuungskostenKinder:
+        betreuungskosten:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonValueItem'
+        betreuungskostenTotal:
           type: integer
         steuern:
           type: integer
@@ -11350,6 +11355,8 @@ components:
           type: integer
         ergaenzungsleistungen:
           type: integer
+        betreuungskosten:
+          type: integer
         andereEinnahmen:
           type: integer
     EinnahmenKostenUpdate:
@@ -11405,9 +11412,6 @@ components:
           description: Required nur wenn die Person keinen eigenen Haushalt führt
           type: integer
         verpflegungskosten:
-          type: integer
-        betreuungskostenKinder:
-          description: Betreuungskosten eigener Kinder
           type: integer
         veranlagungsStatus:
           description: Veranlagungsstatus

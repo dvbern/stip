@@ -26,6 +26,7 @@ export interface Kind {
     kinderUndAusbildungszulagen?: number;
     renten?: number;
     ergaenzungsleistungen?: number;
+    betreuungskosten?: number;
     andereEinnahmen?: number;
 }
 

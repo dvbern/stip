@@ -21,7 +21,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -33,7 +33,7 @@ public class EinnahmeKostenPartnerRequiredDokumentsProducer implements RequiredD
     public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
         return ImmutablePair.of(
             "einnahmenKostenPartner",
-            EinnahmeKostenRequiredDokumentsProducerUtil.getRequiredDokuments(
+            EinnahmenKostenRequiredDokumentsProducerUtil.getRequiredDokuments(
                 formular,
                 EinnahmenKostenType.PARTNER
             )

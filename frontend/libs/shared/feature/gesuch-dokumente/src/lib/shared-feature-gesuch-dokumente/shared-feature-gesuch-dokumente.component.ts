@@ -157,7 +157,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     } = this.gesuchViewSig();
     const isSachbearbeitungApp = appConfig?.view === 'sachbearbeiter';
 
-    const { dokuments, requiredDocumentTypes, loading } =
+    const { dokuments, customDocumentTypes, loading } =
       this.dokumentsStore.customDokumenteViewSig();
 
     const kommentare = this.dokumentsStore.kommentareViewSig();
@@ -172,13 +172,13 @@ export class SharedFeatureGesuchDokumenteComponent {
       allowTypes,
       dokuments,
       kommentare,
-      requiredDocumentTypes,
+      customDocumentTypes,
       readonly,
       loading,
       gesuchStatus: gesuch?.gesuchStatus,
       showList:
         dokuments.length > 0 ||
-        requiredDocumentTypes.length > 0 ||
+        customDocumentTypes.length > 0 ||
         isSachbearbeitungApp,
     };
   });
