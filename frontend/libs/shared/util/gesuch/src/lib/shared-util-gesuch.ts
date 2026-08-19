@@ -365,17 +365,17 @@ export const getGesuchState = (
     isEinreichefristAbgelaufen: boolean;
   },
 ): GesuchState => {
-  const gsStatus: Gesuchstatus[] = ['IN_BEARBEITUNG_GS', 'FEHLENDE_DOKUMENTE'];
   const verfuegtStatus: Gesuchstatus[] = [
     'STIPENDIENANSPRUCH',
     'KEIN_STIPENDIENANSPRUCH',
   ];
   const checkers = [
     ['inactive', () => !flags.isActive],
-    ['expired', () => flags.isEinreichefristAbgelaufen],
-    ['in-bearbeitung', () => gsStatus.includes(gesuch.gesuchStatus)],
+    ['in-bearbeitung', () => gesuch.gesuchStatus === 'FEHLENDE_DOKUMENTE'],
     ['verfuegt', () => verfuegtStatus.includes(gesuch.gesuchStatus)],
-    ['in-ueberpruefung', () => true],
+    ['in-ueberpruefung', () => gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS'],
+    ['expired', () => flags.isEinreichefristAbgelaufen],
+    ['in-bearbeitung', () => true],
   ] satisfies [GesuchState, () => boolean][];
 
   return checkers.find(([, check]) => check())?.[0] ?? 'inactive';
