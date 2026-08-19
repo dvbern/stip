@@ -293,7 +293,7 @@
     },
     "gesuchStatus": "IN_BEARBEITUNG_GS",
     "gesuchNummer": "",
-    "gesuchStatusAenderungDatum": "2026-08-17T09:01:40.790403601",
+    "gesuchStatusAenderungDatum": "2026-08-19T13:49:39.871005848",
     "gesuchTranchen": [
       {
         "id": null,
@@ -528,9 +528,10 @@
               "wohnsitzAnteilMutter": 0,
               "wohnsitzAnteilVater": 100.0,
               "ausbildungssituation": "SCHULPFLICHTIG",
-              "entryId": "585068d9-5143-448c-a9f0-c9840e907567",
+              "entryId": "61a3d95b-faeb-4077-8d38-6a45c600adba",
               "hidden": false,
               "geschwisterTyp": "LEIBLICH",
+              "elternteilPiaOfStiefHalbGeschwister": null,
               "fullName": "geschwisters-vorname geschwisters-nachname"
             },
             {
@@ -550,9 +551,10 @@
               "wohnsitzAnteilMutter": 0,
               "wohnsitzAnteilVater": 100.0,
               "ausbildungssituation": "SCHULPFLICHTIG",
-              "entryId": "885b1b8d-7de5-4833-9358-8f4ae699d509",
+              "entryId": "abeab57c-9e16-45b4-9537-3b190fd80349",
               "hidden": false,
               "geschwisterTyp": "LEIBLICH",
+              "elternteilPiaOfStiefHalbGeschwister": null,
               "fullName": "geschwisters-vorname geschwisters-nachname"
             }
           ],
@@ -1032,9 +1034,10 @@
           "wohnsitzAnteilMutter": 0,
           "wohnsitzAnteilVater": 100.0,
           "ausbildungssituation": "SCHULPFLICHTIG",
-          "entryId": "585068d9-5143-448c-a9f0-c9840e907567",
+          "entryId": "61a3d95b-faeb-4077-8d38-6a45c600adba",
           "hidden": false,
           "geschwisterTyp": "LEIBLICH",
+          "elternteilPiaOfStiefHalbGeschwister": null,
           "fullName": "geschwisters-vorname geschwisters-nachname"
         },
         {
@@ -1054,9 +1057,10 @@
           "wohnsitzAnteilMutter": 0,
           "wohnsitzAnteilVater": 100.0,
           "ausbildungssituation": "SCHULPFLICHTIG",
-          "entryId": "885b1b8d-7de5-4833-9358-8f4ae699d509",
+          "entryId": "abeab57c-9e16-45b4-9537-3b190fd80349",
           "hidden": false,
           "geschwisterTyp": "LEIBLICH",
+          "elternteilPiaOfStiefHalbGeschwister": null,
           "fullName": "geschwisters-vorname geschwisters-nachname"
         }
       ],

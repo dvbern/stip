@@ -293,7 +293,7 @@
     },
     "gesuchStatus": "IN_BEARBEITUNG_GS",
     "gesuchNummer": "",
-    "gesuchStatusAenderungDatum": "2026-08-17T09:01:40.319942141",
+    "gesuchStatusAenderungDatum": "2026-08-19T13:49:39.506124684",
     "gesuchTranchen": [
       {
         "id": null,
@@ -572,9 +572,10 @@
               "wohnsitzAnteilMutter": null,
               "wohnsitzAnteilVater": null,
               "ausbildungssituation": "IN_AUSBILDUNG",
-              "entryId": "682867af-0af2-4280-91d0-ce0872a2be54",
+              "entryId": "27abece9-c70f-42a5-b1cd-ee8aee582fe5",
               "hidden": false,
               "geschwisterTyp": "LEIBLICH",
+              "elternteilPiaOfStiefHalbGeschwister": null,
               "fullName": "geschwisters-vorname geschwisters-nachname"
             }
           ],
@@ -720,7 +721,7 @@
               "geburtsdatum": "2027-03-01",
               "ausbildungssituation": "VORSCHULPFLICHTIG",
               "unterhaltsbeitraege": 0,
-              "entryId": "2a79253b-86d1-4755-9b93-b05d2de597f9",
+              "entryId": "cf31f544-cfcd-49f3-b4a3-0bf920fce26f",
               "wohnsitzAnteilPia": 100,
               "ergaenzungsleistungen": null,
               "kinderUndAusbildungszulagen": null,
@@ -1079,9 +1080,10 @@
           "wohnsitzAnteilMutter": null,
           "wohnsitzAnteilVater": null,
           "ausbildungssituation": "IN_AUSBILDUNG",
-          "entryId": "682867af-0af2-4280-91d0-ce0872a2be54",
+          "entryId": "27abece9-c70f-42a5-b1cd-ee8aee582fe5",
           "hidden": false,
           "geschwisterTyp": "LEIBLICH",
+          "elternteilPiaOfStiefHalbGeschwister": null,
           "fullName": "geschwisters-vorname geschwisters-nachname"
         }
       ],
@@ -1227,7 +1229,7 @@
           "geburtsdatum": "2027-03-01",
           "ausbildungssituation": "VORSCHULPFLICHTIG",
           "unterhaltsbeitraege": 0,
-          "entryId": "2a79253b-86d1-4755-9b93-b05d2de597f9",
+          "entryId": "cf31f544-cfcd-49f3-b4a3-0bf920fce26f",
           "wohnsitzAnteilPia": 100,
           "ergaenzungsleistungen": null,
           "kinderUndAusbildungszulagen": null,
