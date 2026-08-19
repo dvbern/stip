@@ -234,6 +234,16 @@ public class Gesuch extends AbstractTenantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();
 
+    @NotNull
+    @Column(name = "eingereicht_count", nullable = false)
+    @Audited(withModifiedFlag = true, modifiedColumnName = "eingereicht_count_mod")
+    private int eingereichtCount = 0;
+
+    public int incrementEingereichtCount() {
+        this.eingereichtCount += 1;
+        return eingereichtCount;
+    }
+
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))

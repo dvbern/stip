@@ -32,8 +32,10 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
+import org.jilt.Opt;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -232,6 +234,29 @@ public class GesuchHistoryRepository {
         final var revision = reader.getRevisionNumberForDate(Instant.ofEpochMilli(revisionTimestamp));
 
         return getGesuchAtRevision(gesuchId, revision.intValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<Gesuch> getLastEingereichtGesuchVersion(final UUID gesuchId) {
+        final var reader = AuditReaderFactory.get(entityManager);
+
+        final Optional<Long> revisionTimestampOpt = reader.
+            createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntityUtil.revisionTimestamp())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("eingereichtCount").hasChanged())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+        if (revisionTimestampOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        final var revisionTimestamp = revisionTimestampOpt.get();
+
+        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestamp - 1);
     }
 
 }

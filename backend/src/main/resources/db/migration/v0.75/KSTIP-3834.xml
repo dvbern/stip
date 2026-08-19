@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   <changeSet author="jafa (generated)" id="1787143462586-1">
+      <addColumn tableName="gesuch">
+         <column name="eingereicht_count" type="INTEGER">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="jafa (generated)" id="1787143462586-2">
+      <addColumn tableName="gesuch_aud">
+         <column name="eingereicht_count" type="INTEGER"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="jafa (generated)" id="1787143462586-3">
+      <addColumn tableName="gesuch_aud">
+         <column name="eingereicht_count_mod" type="BOOLEAN"/>
+      </addColumn>
+   </changeSet>
+</databaseChangeLog>
