@@ -169,8 +169,6 @@ class MailServiceTest {
         assertThat(actual.getSubject()).isNotBlank();
         assertThat(actual.getHtml()).contains(welcomeMailDto.getName());
         assertThat(actual.getHtml()).contains(welcomeMailDto.getVorname());
-        assertThat(actual.getHtml()).contains("client_id=stip-sachbearbeitung-app");
-        assertThat(actual.getHtml()).doesNotContain("<CLIENT_ID>");
     }
 
     @Test
@@ -187,8 +185,6 @@ class MailServiceTest {
         assertThat(actual.getSubject()).isNotBlank();
         assertThat(actual.getHtml()).contains(welcomeMailDto.getName());
         assertThat(actual.getHtml()).contains(welcomeMailDto.getVorname());
-        assertThat(actual.getHtml()).contains("client_id=stip-sozialdienst-app");
-        assertThat(actual.getHtml()).doesNotContain("<CLIENT_ID>");
     }
 
     @Test

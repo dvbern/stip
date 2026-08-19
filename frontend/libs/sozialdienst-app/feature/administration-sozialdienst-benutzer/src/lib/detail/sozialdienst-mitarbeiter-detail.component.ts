@@ -21,7 +21,6 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
-import { getCurrentUrl } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormMessageErrorDirective,
@@ -148,7 +147,6 @@ export class SozialdienstMitarbeiterDetailComponent
     this.store.createSozialdienstBenutzer$({
       sozialdienstBenutzerCreate: {
         ...values,
-        redirectUri: getCurrentUrl(this.document),
       },
       onAfterSave: (sozialdienstBenutzerId) => {
         this.router.navigate(['..', 'edit', sozialdienstBenutzerId], {

@@ -7965,11 +7965,6 @@ components:
         - ABGELEHNT
         - FEHLENDE_DOKUMENTE
     SozialdienstBenutzerCreate:
-      required:
-        - redirectUri
-      properties:
-        redirectUri:
-          type: string
       allOf:
         - $ref: '#/components/schemas/SozialdienstBenutzerBase'
     SozialdienstBenutzerUpdate:

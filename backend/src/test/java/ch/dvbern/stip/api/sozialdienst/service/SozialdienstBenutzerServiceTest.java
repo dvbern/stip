@@ -90,7 +90,6 @@ class SozialdienstBenutzerServiceTest {
     Zahlungsverbindung zahlungsverbindung;
 
     private static final String VALID_IBAN_1 = "CH5089144653587876648";
-    private static final String WELCOME_MAIL_REDIRECT_URI = "localhost:4200";
     private static final String SOZIALDIENST_ADMIN_EMAIL = "a@b.ch";
 
     @Order(1)
@@ -154,7 +153,6 @@ class SozialdienstBenutzerServiceTest {
         MailMessage actual = sent.get(0);
         assertThat(actual.getHtml(), containsString("a"));
         assertThat(actual.getHtml(), containsString("b"));
-        assertThat(actual.getHtml(), containsString(WELCOME_MAIL_REDIRECT_URI));
     }
 
     @Order(3)
@@ -197,7 +195,6 @@ class SozialdienstBenutzerServiceTest {
         createDto.setVorname(name);
         createDto.setNachname(name);
         createDto.setEmail(email);
-        createDto.setRedirectUri("");
 
         var sozialdienstbenutzer = sozialdienstBenutzerService
             .createSozialdienstMitarbeiterBenutzer(
