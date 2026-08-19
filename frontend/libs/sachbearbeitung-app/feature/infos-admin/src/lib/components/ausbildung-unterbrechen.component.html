@@ -4,12 +4,17 @@
     {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen') }}
   </h2>
 
+  @let view = infoViewSig();
   <button
     class="tw:dv-button-main-primary"
     type="button"
     data-testid="button-ausbildung-unterbrechen"
-    (click)="gesuchUnterbrechen()"
+    [disabled]="!view.gesuchInfo"
+    (click)="ausbildungUnterbrechen(view.gesuchInfo); $event.stopPropagation()"
   >
+    @if (view.loading) {
+      <dv-shared-ui-loading [type]="'icon'"></dv-shared-ui-loading>
+    }
     {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen') }}
   </button>
 
@@ -81,7 +86,7 @@
               class="tw:dv-button-icon tw:text-dv-blue"
               (click)="showInfo(unterbruch); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded tw:!text-2xl/none">info</span>
+              <span class="material-symbols-rounded tw:text-2xl/none!">info</span>
             </button>
           </div>
         </td>

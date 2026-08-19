@@ -30,28 +30,14 @@
             {{ t('shared.dashboard.ausbildung.delete') }}
           </button>
         }
-        @if (
-          ausbildung.id &&
-          (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
-        ) {
-          <button
-            type="button"
-            class="tw:dv-button-main-primary tw:h-min"
-            data-testid="shared-dashboard-ausbildung-unterbruch-edit-create"
-            (click)="
-              output.emit({
-                typ: 'ausbildung unterbrechen',
-                id: ausbildung.id,
-                unterbruchId: ausbildung.openAusbildungUnterbruchAntragId,
-              })
-            "
+        @if (ausbildung.id && ausbildung.canCreateAusbildungUnterbruchAntrag) {
+          <a
+            [routerLink]="['/', 'ausbildung-unterbrechen', ausbildung.id]"
+            [queryParams]="{ previousPage: router.url }"
+            class="tw:dv-button-main-primary"
           >
-            @if (!ausbildung.openAusbildungUnterbruchAntragId) {
-              {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
-            } @else {
-              {{ t('shared.dashboard.ausbildung.unterbruch.edit') }}
-            }
-          </button>
+            {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
+          </a>
         }
       </div>
     }

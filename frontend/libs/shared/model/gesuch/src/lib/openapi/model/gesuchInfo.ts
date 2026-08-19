@@ -15,6 +15,7 @@ export interface GesuchInfo {
     id: string;
     fallNummer: string;
     fallId: string;
+    ausbildungId: string;
     gesuchNummer: string;
     startDate: string;
     endDate: string;

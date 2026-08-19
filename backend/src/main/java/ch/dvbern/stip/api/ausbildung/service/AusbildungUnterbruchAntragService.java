@@ -35,7 +35,6 @@ import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -43,9 +42,9 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
-import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
-import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchLimitsDto;
+import ch.dvbern.stip.generated.dto.CreateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
@@ -54,10 +53,12 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
+@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class AusbildungUnterbruchAntragService {
@@ -110,21 +111,6 @@ public class AusbildungUnterbruchAntragService {
         final String comment
     ) {
         createStatusprotokollEntry(antrag, antrag.getStatus().toString(), statusFrom, comment);
-    }
-
-    @Transactional
-    public AusbildungUnterbruchAntrag createAntrag(final Gesuch gesuch) {
-        final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag = new AusbildungUnterbruchAntrag();
-        ausbildungUnterbruchAntrag.setGesuch(gesuch);
-        ausbildungUnterbruchAntrag.setAusbildung(gesuch.getAusbildung());
-        ausbildungUnterbruchAntragRepository.persistAndFlush(ausbildungUnterbruchAntrag);
-        return ausbildungUnterbruchAntrag;
-    }
-
-    @Transactional
-    public AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(UUID ausbildungId) {
-        final var ausbildung = ausbildungService.requireById(ausbildungId);
-        return ausbildungUnterbruchAntragMapper.toGsDto(createAntrag(ausbildung.getLatestGesuch()));
     }
 
     private void uploadDokument(
@@ -185,7 +171,6 @@ public class AusbildungUnterbruchAntragService {
         );
     }
 
-    @Transactional
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
 
@@ -203,26 +188,50 @@ public class AusbildungUnterbruchAntragService {
     }
 
     @Transactional
-    public AusbildungUnterbruchAntragGSDto einreichenAusbildungUnterbruchAntrag(
-        final UUID ausbildungUnterbruchAntragId,
-        final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto
+    public Uni<Response> createAusbildungUnterbruchAntragGs(
+        final UUID ausbildungId,
+        final CreateAusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntragGSDto
     ) {
-        final var antrag = requireById(ausbildungUnterbruchAntragId);
-        final var previousStatus = antrag.getStatus();
-        ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag);
-        notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
+        final var gesuch = ausbildung.getLatestGesuch();
+        final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag = new AusbildungUnterbruchAntrag();
+        ausbildungUnterbruchAntrag.setGesuch(gesuch);
+        ausbildungUnterbruchAntrag.setAusbildung(gesuch.getAusbildung());
+        ausbildungUnterbruchAntragMapper
+            .antragEinreichen(createAusbildungUnterbruchAntragGSDto, ausbildungUnterbruchAntrag);
+        ausbildungUnterbruchAntragRepository.persistAndFlush(ausbildungUnterbruchAntrag);
+        notificationService
+            .createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(ausbildungUnterbruchAntrag);
         createStatusprotokollEntry(
-            antrag,
+            ausbildungUnterbruchAntrag,
             AusbildungUnterbruchAntragStatus.EINGEGEBEN.toString(),
-            previousStatus.toString(),
-            antrag.getKommentarGS()
+            ausbildungUnterbruchAntrag.getStatus().toString(),
+            ausbildungUnterbruchAntrag.getKommentarGS()
         );
-        return ausbildungUnterbruchAntragMapper.toGsDto(antrag);
-    }
 
-    @Transactional
-    public AusbildungUnterbruchAntragGSDto getAusbildungUnterbruchAntrag(final UUID ausbildungUnterbruchAntragId) {
-        return ausbildungUnterbruchAntragMapper.toGsDto(requireById(ausbildungUnterbruchAntragId));
+        final var fileUploads = createAusbildungUnterbruchAntragGSDto.getFileUploads()
+            .stream()
+            .map(
+                fileUpload -> dokumentUploadService.validateScanUploadDokument(
+                    fileUpload,
+                    s3,
+                    config,
+                    antivirus,
+                    AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH,
+                    objectId -> uploadDokument(
+                        ausbildungUnterbruchAntrag.getId(),
+                        fileUpload,
+                        objectId
+                    ),
+                    throwable -> LOG.error(throwable.getMessage())
+                )
+            );
+
+        return Uni.join()
+            .all(fileUploads.toList())
+            .usingConcurrencyOf(1)
+            .andFailFast()
+            .replaceWith(Uni.createFrom().item(Response.created(null).build()));
     }
 
     @Transactional
@@ -294,5 +303,11 @@ public class AusbildungUnterbruchAntragService {
             AusbildungUnterbruchAntragUtil.openAusbildungUnterbruchAntragExists(ausbildung);
         return !openAenderungOnLatestGesuchExists && !openAusbildungUnterbruchAntragExists
         && !ausbildung.isUnterbrochen() && gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_GS;
+    }
+
+    @Transactional
+    public AusbildungUnterbruchLimitsDto getAusbildungUnterbruchLimits(UUID ausbildungId) {
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
+        return ausbildungUnterbruchAntragMapper.toLimitsDto(ausbildung.getLatestGesuch());
     }
 }

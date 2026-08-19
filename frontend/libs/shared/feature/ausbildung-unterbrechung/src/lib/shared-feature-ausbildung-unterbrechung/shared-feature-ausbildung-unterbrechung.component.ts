@@ -19,7 +19,7 @@ import {
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { addDays } from 'date-fns';
 
@@ -27,31 +27,27 @@ import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import {
-  SharedPatternDocumentUploadComponent,
-  createSimpleDokumentOptions,
-} from '@dv/shared/pattern/document-upload';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
-import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import { SharedUiFileUploadComponent } from '@dv/shared/ui/file-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
-  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import { getQueryParamValueSig } from '@dv/shared/util/navigation';
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
 @Component({
   selector: 'dv-shared-feature-ausbildung-unterbrechung',
   imports: [
     DatePipe,
+    RouterLink,
     ReactiveFormsModule,
     MatInputModule,
     MatDatepickerModule,
@@ -60,9 +56,7 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
     SharedUiFormMessageErrorDirective,
     SharedUiAdvTranslocoDirective,
     SharedUiInfoContainerComponent,
-    SharedPatternDocumentUploadComponent,
-    SharedUiLoadingComponent,
-    SharedUiFormReadonlyDirective,
+    SharedUiFileUploadComponent,
   ],
   templateUrl: './shared-feature-ausbildung-unterbrechung.component.html',
   providers: [provideDvDateAdapter()],
@@ -71,6 +65,7 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 export class SharedFeatureAusbildungUnterbrechungComponent {
   private store = inject(Store);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private elementRef = inject(ElementRef);
   private ausbildungStore = inject(AusbildungStore);
   private dialog = inject(MatDialog);
@@ -78,19 +73,22 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
   private formBuilder = inject(NonNullableFormBuilder);
 
   private formUtils = inject(SharedUtilFormService);
-  private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
+  deploymentConfigSig = this.store.selectSignal(
+    selectSharedDataAccessConfigsView,
+  );
 
-  fallIdSig = input<string | undefined>(undefined, { alias: 'fallId' });
-  ausbildungUnterbruchIdSig = input<string | undefined>(undefined, {
-    alias: 'ausbildungUnterbruchId',
+  ausbildungIdSig = input<string | undefined>(undefined, {
+    alias: 'ausbildungId',
   });
-  viewSig = this.ausbildungStore.ausbildungsUnterbruchViewSig;
-  hasMissingDocumentsSig = signal(true);
+  limitsSig = this.ausbildungStore.ausbildungUnterbruchLimits;
+  previousPageSig = getQueryParamValueSig(this.route, 'previousPage');
   form = this.formBuilder.group({
     startDate: [<string | undefined>undefined, Validators.required],
     endDate: [<string | undefined>undefined, Validators.required],
     kommentarGS: [<string | undefined>undefined, Validators.required],
+    fileUploads: [<File[] | undefined>undefined, Validators.required],
   });
+  selectedFileSig = signal<File[] | undefined>(undefined);
   private startDateChangedSig = toSignal(
     this.form.controls.startDate.valueChanges,
     {
@@ -104,95 +102,35 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
     }
     return addDays(gueltigAb, 1);
   });
-  formWasSubmittedSig = signal(false);
-  unterbruchDokumenteOptionsSig = computed(() => {
-    const allowTypes =
-      this.config().deploymentConfig?.allowedMimeTypes?.join(',');
-    const initialDokumente =
-      this.ausbildungStore.ausbildungsUnterbruchViewSig()?.dokuments;
-    const unterbruch = this.ausbildungStore.ausbildungsUnterbruchViewSig();
-
-    if (!unterbruch?.id || !allowTypes || !initialDokumente) {
-      return null;
-    }
-
-    return createSimpleDokumentOptions({
-      dokumentTyp: 'ausbildungUnterbruch',
-      id: unterbruch.id,
-      allowTypes,
-      initialDokumente,
-      info: {
-        type: 'TRANSLATABLE',
-        title: 'shared.ausbildung-unterbrechen.dokumente.title',
-        description: 'shared.ausbildung-unterbrechen.dokumente.description',
-      },
-      readonly: !unterbruch.canEdit,
-    });
-  });
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
     effect(() => {
-      const ausbildungUnterbruchAntragId = this.ausbildungUnterbruchIdSig();
-      if (!ausbildungUnterbruchAntragId) {
+      const ausbildungId = this.ausbildungIdSig();
+      if (!ausbildungId) {
         return;
       }
-      this.ausbildungStore.getAusbildungUnterbruch$({
-        ausbildungUnterbruchAntragId,
+      this.ausbildungStore.getAusbildungUnterbruchLimits$({
+        ausbildungId,
       });
     });
   }
 
-  deleteUnterbruch() {
-    const ausbildungUnterbruchAntragId = this.ausbildungUnterbruchIdSig();
-    if (!ausbildungUnterbruchAntragId) {
-      return;
-    }
-    SharedUiConfirmDialogComponent.open<SharedTranslationKey>(this.dialog, {
-      title: 'shared.ausbildung-unterbrechen.delete.dialog.title',
-      message: 'shared.ausbildung-unterbrechen.delete.dialog.message',
-      cancelText: 'shared.cancel',
-      confirmText: 'shared.ausbildung-unterbrechen.delete',
-    })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.ausbildungStore.deleteAusbildungUnterbruchAntrag$({
-            ausbildungUnterbruchAntragId,
-            onSuccess: () => {
-              this.globalNotificationStore.createSuccessNotification<SharedTranslationKey>(
-                {
-                  messageKey: 'shared.ausbildung-unterbrechen.delete.success',
-                },
-              );
-              this.navigateBack();
-            },
-          });
-        }
-      });
-  }
-
   unterbruchEinreichen() {
-    this.formWasSubmittedSig.set(true);
-    const hasMissingDocuments = this.hasMissingDocumentsSig();
-    const ausbildungUnterbruchAntragId = this.ausbildungUnterbruchIdSig();
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
-    if (
-      !ausbildungUnterbruchAntragId ||
-      this.form.invalid ||
-      hasMissingDocuments
-    ) {
+    const ausbildungId = this.ausbildungIdSig();
+    const fileUploads = this.selectedFileSig();
+    if (this.form.invalid || !ausbildungId || !fileUploads?.length) {
       return;
     }
     const values = convertTempFormToRealValues(this.form);
-    this.ausbildungStore.einreichenAusbildungUnterbruchAntrag$({
-      ausbildungUnterbruchAntragId,
-      updateAusbildungUnterbruchAntragGS: {
-        ...values,
-        startDate: toBackendLocalDate(values.startDate),
-        endDate: toBackendLocalDate(values.endDate),
-      },
+    this.ausbildungStore.createAusbildungUnterbruchAntragGs$({
+      ...values,
+      fileUploads,
+      ausbildungId,
+      startDate: toBackendLocalDate(values.startDate),
+      endDate: toBackendLocalDate(values.endDate),
       onSuccess: () => {
         this.globalNotificationStore.createSuccessNotification<SharedTranslationKey>(
           {
@@ -205,8 +143,8 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
   }
 
   private navigateBack() {
-    const fallId = this.fallIdSig();
+    const previousPage = this.previousPageSig();
     this.form.markAsPristine();
-    this.router.navigate(fallId ? ['/fall', fallId] : ['/']);
+    this.router.navigate(previousPage ? [previousPage] : ['/']);
   }
 }

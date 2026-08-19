@@ -62,6 +62,45 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void sbCanCreate(final UUID ausbildungId) {
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
+
+        if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
+            return;
+        }
+
+        if (
+            AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                ausbildung,
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            return;
+        }
+        forbidden();;
+    }
+
+    @Transactional
+    public void canGetUnterbruchLimits(final UUID ausbildungId) {
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
+        if (
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                ausbildung.getFall(),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+            && !isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())
+        ) {
+            forbidden();
+        }
+
+        if (!ausbildungUnterbruchAntragService.canCreateAusbildungUnterbruchAntrag(ausbildung)) {
+            forbidden();
+        }
+    }
+
+    @Transactional
     public void gsCanRead(final UUID ausbildungUnterbruchAntragId) {
         final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
         if (

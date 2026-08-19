@@ -2,13 +2,13 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
-import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchLimitsDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import java.time.LocalDate;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -35,20 +35,16 @@ public interface AusbildungResource {
     AusbildungCreateResponseDto createAusbildung(@Valid @NotNull AusbildungUpdateDto ausbildungUpdateDto);
 
     @POST
-    @Path("/unterbruch/{ausbildungId}")
+    @Path("/create-unterbruch/{ausbildungId}/gs")
+    @Consumes({ "multipart/form-data" })
     @Produces({ "application/json", "text/plain" })
-    AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(@PathParam("ausbildungId") UUID ausbildungId);
+    io.smallrye.mutiny.Uni<Response> createAusbildungUnterbruchAntragGs(@PathParam("ausbildungId") UUID ausbildungId,@FormParam(value = "kommentarGS")  String kommentarGS,@FormParam(value = "fileUploads")  List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads,@FormParam(value = "startDate")  LocalDate startDate,@FormParam(value = "endDate")  LocalDate endDate);
 
     @POST
-    @Path("/unterbruch/{ausbildungUnterbruchAntragId}/dokument")
+    @Path("/create-unterbruch/{ausbildungId}/sb")
     @Consumes({ "multipart/form-data" })
-    @Produces({ "text/plain" })
-    io.smallrye.mutiny.Uni<Response> createAusbildungUnterbruchAntragDokument(@PathParam("ausbildungUnterbruchAntragId") UUID ausbildungUnterbruchAntragId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
-
-    @DELETE
-    @Path("/unterbruch/gs/{ausbildungUnterbruchAntragId}")
-    @Produces({ "text/plain" })
-    void deleteAusbildungUnterbruchAntrag(@PathParam("ausbildungUnterbruchAntragId") UUID ausbildungUnterbruchAntragId);
+    @Produces({ "application/json", "text/plain" })
+    io.smallrye.mutiny.Uni<Response> createAusbildungUnterbruchSb(@PathParam("ausbildungId") UUID ausbildungId,@FormParam(value = "kommentarGS")  String kommentarGS,@FormParam(value = "fileUploads")  List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads,@FormParam(value = "startDate")  LocalDate startDate,@FormParam(value = "endDate")  LocalDate endDate,@FormParam(value = "status")  ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status,@FormParam(value = "kommentarSB")  String kommentarSB,@FormParam(value = "monateOhneAnspruch")  Integer monateOhneAnspruch);
 
     @DELETE
     @Path("/unterbruch/dokument/{dokumentId}")
@@ -57,14 +53,8 @@ public interface AusbildungResource {
 
     @GET
     @Path("/unterbruch/dokument/download")
-    @Produces({ "application/octet-stream", "application/json", "text/plain" })
+    @Produces({ "application/octet-stream" })
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadAusbildungUnterbruchAntragDokument(@QueryParam("token") @NotNull   String token);
-
-    @PATCH
-    @Path("/unterbruch/gs/{ausbildungUnterbruchAntragId}")
-    @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
-    AusbildungUnterbruchAntragGSDto einreichenAusbildungUnterbruchAntrag(@PathParam("ausbildungUnterbruchAntragId") UUID ausbildungUnterbruchAntragId,@Valid @NotNull UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto);
 
     @GET
     @Path("/{ausbildungId}")
@@ -77,14 +67,14 @@ public interface AusbildungResource {
     FileDownloadTokenDto getAusbildungUnterbruchAntragDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/unterbruch/gs/{ausbildungUnterbruchAntragId}")
-    @Produces({ "application/json", "text/plain" })
-    AusbildungUnterbruchAntragGSDto getAusbildungUnterbruchAntragGS(@PathParam("ausbildungUnterbruchAntragId") UUID ausbildungUnterbruchAntragId);
-
-    @GET
     @Path("/unterbruch/{gesuchId}/all")
     @Produces({ "application/json", "text/plain" })
     List<AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchAntragsByGesuchId(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/unterbruch-limits/{ausbildungId}")
+    @Produces({ "application/json", "text/plain" })
+    AusbildungUnterbruchLimitsDto getAusbildungUnterbruchLimits(@PathParam("ausbildungId") UUID ausbildungId);
 
     @PATCH
     @Path("/{ausbildungId}")
@@ -93,7 +83,7 @@ public interface AusbildungResource {
     AusbildungDto updateAusbildung(@PathParam("ausbildungId") UUID ausbildungId,@Valid @NotNull AusbildungUpdateDto ausbildungUpdateDto);
 
     @PATCH
-    @Path("/unterbruch/sb/{ausbildungUnterbruchAntragId}")
+    @Path("/unterbruch/{ausbildungUnterbruchAntragId}/sb")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     AusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSB(@PathParam("ausbildungUnterbruchAntragId") UUID ausbildungUnterbruchAntragId,@Valid @NotNull UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto);

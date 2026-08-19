@@ -73,6 +73,7 @@ public abstract class GesuchMapper {
 
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = "ausbildung.fall.id", target = "fallId")
+    @Mapping(source = "ausbildung.id", target = "ausbildungId")
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
     @Mapping(source = ".", target = "state")
@@ -82,6 +83,7 @@ public abstract class GesuchMapper {
 
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = "ausbildung.fall.id", target = "fallId")
+    @Mapping(source = "ausbildung.id", target = "ausbildungId")
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
     @Mapping(source = ".", target = "state")

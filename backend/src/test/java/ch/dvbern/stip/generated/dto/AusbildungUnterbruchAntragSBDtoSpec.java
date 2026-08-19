@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,16 +38,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_ID,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
-  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_KOMMENTAR_G_S,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_CAN_ANTRAG_AKZEPTIEREN,
-  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_DOKUMENTS,
-  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_GESUCH_ID,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE,
-  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_STATUS,
-  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_KOMMENTAR_S_B,
+  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_DOKUMENTS,
+  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_KOMMENTAR_G_S,
+  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_FILE_UPLOADS,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_START_DATE,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_END_DATE,
+  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_STATUS,
+  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_KOMMENTAR_S_B,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_MONATE_OHNE_ANSPRUCH
 })
 @JsonTypeName("AusbildungUnterbruchAntragSB")
@@ -61,17 +63,8 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
   private String userErstellt;
 
-  public static final String JSON_PROPERTY_KOMMENTAR_G_S = "kommentarGS";
-  private String kommentarGS;
-
   public static final String JSON_PROPERTY_CAN_ANTRAG_AKZEPTIEREN = "canAntragAkzeptieren";
   private Boolean canAntragAkzeptieren;
-
-  public static final String JSON_PROPERTY_DOKUMENTS = "dokuments";
-  private List<DokumentDtoSpec> dokuments;
-
-  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
-  private UUID gesuchId;
 
   public static final String JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE = "unterbruchLatestEndDate";
   private LocalDate unterbruchLatestEndDate;
@@ -79,17 +72,29 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
   public static final String JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE = "unterbruchEarliestStartDate";
   private LocalDate unterbruchEarliestStartDate;
 
-  public static final String JSON_PROPERTY_STATUS = "status";
-  private AusbildungUnterbruchAntragStatusDtoSpec status;
+  public static final String JSON_PROPERTY_DOKUMENTS = "dokuments";
+  private List<DokumentDtoSpec> dokuments;
 
-  public static final String JSON_PROPERTY_KOMMENTAR_S_B = "kommentarSB";
-  private String kommentarSB;
+  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  private UUID gesuchId;
+
+  public static final String JSON_PROPERTY_KOMMENTAR_G_S = "kommentarGS";
+  private String kommentarGS;
+
+  public static final String JSON_PROPERTY_FILE_UPLOADS = "fileUploads";
+  private List<File> fileUploads;
 
   public static final String JSON_PROPERTY_START_DATE = "startDate";
   private LocalDate startDate;
 
   public static final String JSON_PROPERTY_END_DATE = "endDate";
   private LocalDate endDate;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private AusbildungUnterbruchAntragStatusDtoSpec status;
+
+  public static final String JSON_PROPERTY_KOMMENTAR_S_B = "kommentarSB";
+  private String kommentarSB;
 
   public static final String JSON_PROPERTY_MONATE_OHNE_ANSPRUCH = "monateOhneAnspruch";
   private Integer monateOhneAnspruch;
@@ -175,32 +180,6 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
-  public AusbildungUnterbruchAntragSBDtoSpec kommentarGS(String kommentarGS) {
-    
-    this.kommentarGS = kommentarGS;
-    return this;
-  }
-
-   /**
-   * Get kommentarGS
-   * @return kommentarGS
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR_G_S)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getKommentarGS() {
-    return kommentarGS;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR_G_S)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKommentarGS(String kommentarGS) {
-    this.kommentarGS = kommentarGS;
-  }
-
-
   public AusbildungUnterbruchAntragSBDtoSpec canAntragAkzeptieren(Boolean canAntragAkzeptieren) {
     
     this.canAntragAkzeptieren = canAntragAkzeptieren;
@@ -224,6 +203,58 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCanAntragAkzeptieren(Boolean canAntragAkzeptieren) {
     this.canAntragAkzeptieren = canAntragAkzeptieren;
+  }
+
+
+  public AusbildungUnterbruchAntragSBDtoSpec unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    return this;
+  }
+
+   /**
+   * Get unterbruchLatestEndDate
+   * @return unterbruchLatestEndDate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getUnterbruchLatestEndDate() {
+    return unterbruchLatestEndDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  }
+
+
+  public AusbildungUnterbruchAntragSBDtoSpec unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    return this;
+  }
+
+   /**
+   * Get unterbruchEarliestStartDate
+   * @return unterbruchEarliestStartDate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getUnterbruchEarliestStartDate() {
+    return unterbruchEarliestStartDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
 
 
@@ -287,107 +318,63 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
-  public AusbildungUnterbruchAntragSBDtoSpec unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+  public AusbildungUnterbruchAntragSBDtoSpec kommentarGS(String kommentarGS) {
     
-    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    this.kommentarGS = kommentarGS;
     return this;
   }
 
    /**
-   * Get unterbruchLatestEndDate
-   * @return unterbruchLatestEndDate
+   * Get kommentarGS
+   * @return kommentarGS
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR_G_S)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getUnterbruchLatestEndDate() {
-    return unterbruchLatestEndDate;
+  public String getKommentarGS() {
+    return kommentarGS;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR_G_S)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
-    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  public void setKommentarGS(String kommentarGS) {
+    this.kommentarGS = kommentarGS;
   }
 
 
-  public AusbildungUnterbruchAntragSBDtoSpec unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+  public AusbildungUnterbruchAntragSBDtoSpec fileUploads(List<File> fileUploads) {
     
-    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    this.fileUploads = fileUploads;
+    return this;
+  }
+
+  public AusbildungUnterbruchAntragSBDtoSpec addFileUploadsItem(File fileUploadsItem) {
+    if (this.fileUploads == null) {
+      this.fileUploads = new ArrayList<>();
+    }
+    this.fileUploads.add(fileUploadsItem);
     return this;
   }
 
    /**
-   * Get unterbruchEarliestStartDate
-   * @return unterbruchEarliestStartDate
+   * Get fileUploads
+   * @return fileUploads
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonProperty(JSON_PROPERTY_FILE_UPLOADS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getUnterbruchEarliestStartDate() {
-    return unterbruchEarliestStartDate;
+  public List<File> getFileUploads() {
+    return fileUploads;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonProperty(JSON_PROPERTY_FILE_UPLOADS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
-    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
-  }
-
-
-  public AusbildungUnterbruchAntragSBDtoSpec status(AusbildungUnterbruchAntragStatusDtoSpec status) {
-    
-    this.status = status;
-    return this;
-  }
-
-   /**
-   * Get status
-   * @return status
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public AusbildungUnterbruchAntragStatusDtoSpec getStatus() {
-    return status;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(AusbildungUnterbruchAntragStatusDtoSpec status) {
-    this.status = status;
-  }
-
-
-  public AusbildungUnterbruchAntragSBDtoSpec kommentarSB(String kommentarSB) {
-    
-    this.kommentarSB = kommentarSB;
-    return this;
-  }
-
-   /**
-   * Get kommentarSB
-   * @return kommentarSB
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR_S_B)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getKommentarSB() {
-    return kommentarSB;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR_S_B)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKommentarSB(String kommentarSB) {
-    this.kommentarSB = kommentarSB;
+  public void setFileUploads(List<File> fileUploads) {
+    this.fileUploads = fileUploads;
   }
 
 
@@ -443,6 +430,58 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
+  public AusbildungUnterbruchAntragSBDtoSpec status(AusbildungUnterbruchAntragStatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public AusbildungUnterbruchAntragStatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStatus(AusbildungUnterbruchAntragStatusDtoSpec status) {
+    this.status = status;
+  }
+
+
+  public AusbildungUnterbruchAntragSBDtoSpec kommentarSB(String kommentarSB) {
+    
+    this.kommentarSB = kommentarSB;
+    return this;
+  }
+
+   /**
+   * Get kommentarSB
+   * @return kommentarSB
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR_S_B)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getKommentarSB() {
+    return kommentarSB;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR_S_B)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setKommentarSB(String kommentarSB) {
+    this.kommentarSB = kommentarSB;
+  }
+
+
   public AusbildungUnterbruchAntragSBDtoSpec monateOhneAnspruch(Integer monateOhneAnspruch) {
     
     this.monateOhneAnspruch = monateOhneAnspruch;
@@ -480,22 +519,23 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
     return Objects.equals(this.id, ausbildungUnterbruchAntragSB.id) &&
         Objects.equals(this.timestampErstellt, ausbildungUnterbruchAntragSB.timestampErstellt) &&
         Objects.equals(this.userErstellt, ausbildungUnterbruchAntragSB.userErstellt) &&
-        Objects.equals(this.kommentarGS, ausbildungUnterbruchAntragSB.kommentarGS) &&
         Objects.equals(this.canAntragAkzeptieren, ausbildungUnterbruchAntragSB.canAntragAkzeptieren) &&
-        Objects.equals(this.dokuments, ausbildungUnterbruchAntragSB.dokuments) &&
-        Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId) &&
         Objects.equals(this.unterbruchLatestEndDate, ausbildungUnterbruchAntragSB.unterbruchLatestEndDate) &&
         Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragSB.unterbruchEarliestStartDate) &&
-        Objects.equals(this.status, ausbildungUnterbruchAntragSB.status) &&
-        Objects.equals(this.kommentarSB, ausbildungUnterbruchAntragSB.kommentarSB) &&
+        Objects.equals(this.dokuments, ausbildungUnterbruchAntragSB.dokuments) &&
+        Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId) &&
+        Objects.equals(this.kommentarGS, ausbildungUnterbruchAntragSB.kommentarGS) &&
+        Objects.equals(this.fileUploads, ausbildungUnterbruchAntragSB.fileUploads) &&
         Objects.equals(this.startDate, ausbildungUnterbruchAntragSB.startDate) &&
         Objects.equals(this.endDate, ausbildungUnterbruchAntragSB.endDate) &&
+        Objects.equals(this.status, ausbildungUnterbruchAntragSB.status) &&
+        Objects.equals(this.kommentarSB, ausbildungUnterbruchAntragSB.kommentarSB) &&
         Objects.equals(this.monateOhneAnspruch, ausbildungUnterbruchAntragSB.monateOhneAnspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate, status, kommentarSB, startDate, endDate, monateOhneAnspruch);
+    return Objects.hash(id, timestampErstellt, userErstellt, canAntragAkzeptieren, unterbruchLatestEndDate, unterbruchEarliestStartDate, dokuments, gesuchId, kommentarGS, fileUploads, startDate, endDate, status, kommentarSB, monateOhneAnspruch);
   }
 
   @Override
@@ -505,16 +545,17 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
-    sb.append("    kommentarGS: ").append(toIndentedString(kommentarGS)).append("\n");
     sb.append("    canAntragAkzeptieren: ").append(toIndentedString(canAntragAkzeptieren)).append("\n");
-    sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
     sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    kommentarSB: ").append(toIndentedString(kommentarSB)).append("\n");
+    sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
+    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    kommentarGS: ").append(toIndentedString(kommentarGS)).append("\n");
+    sb.append("    fileUploads: ").append(toIndentedString(fileUploads)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    kommentarSB: ").append(toIndentedString(kommentarSB)).append("\n");
     sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");
     sb.append("}");
     return sb.toString();

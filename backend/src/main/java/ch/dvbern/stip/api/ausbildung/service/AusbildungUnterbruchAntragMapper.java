@@ -24,9 +24,9 @@ import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
-import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchLimitsDto;
+import ch.dvbern.stip.generated.dto.CreateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
 import jakarta.inject.Inject;
 import org.mapstruct.Mapper;
@@ -40,13 +40,6 @@ import org.mapstruct.Named;
 public abstract class AusbildungUnterbruchAntragMapper {
     @Inject
     AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
-
-    @Mapping(source = ".", target = "canEdit", qualifiedByName = "canEdit")
-    @Mapping(source = "gesuch", target = "unterbruchLatestEndDate", qualifiedByName = "getUnterbruchLatestEndDate")
-    @Mapping(
-        source = "gesuch", target = "unterbruchEarliestStartDate", qualifiedByName = "getUnterbruchEarliestStartDate"
-    )
-    abstract AusbildungUnterbruchAntragGSDto toGsDto(final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag);
 
     @Named("canEdit")
     protected boolean canEdit(final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag) {
@@ -62,6 +55,12 @@ public abstract class AusbildungUnterbruchAntragMapper {
     )
     @Mapping(source = "gesuch.id", target = "gesuchId")
     abstract AusbildungUnterbruchAntragSBDto toSbDto(final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag);
+
+    @Mapping(source = ".", target = "unterbruchLatestEndDate", qualifiedByName = "getUnterbruchLatestEndDate")
+    @Mapping(
+        source = ".", target = "unterbruchEarliestStartDate", qualifiedByName = "getUnterbruchEarliestStartDate"
+    )
+    abstract AusbildungUnterbruchLimitsDto toLimitsDto(final Gesuch gesuch);
 
     @Named("getUnterbruchLatestEndDate")
     protected LocalDate getUnterbruchLatestEndDate(final Gesuch gesuch) {
@@ -82,7 +81,7 @@ public abstract class AusbildungUnterbruchAntragMapper {
     @Mapping(source = "endDate", target = "gueltigkeit.gueltigBis")
     @Mapping(target = "status", constant = "EINGEGEBEN")
     public abstract AusbildungUnterbruchAntrag antragEinreichen(
-        final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto,
+        final CreateAusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntragGSDto,
         @MappingTarget final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag
     );
 
