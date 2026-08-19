@@ -27,43 +27,41 @@
 
       @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
       @if (gesuch.isActive) {
-        @if (!gesuch.einreichefristAbgelaufen) {
-          @if (gesuch.state === 'in-bearbeitung') {
-            @if (gesuch.reduzierterBeitrag) {
-              <dt class="tw:mt-6 tw:font-bold">
-                {{
-                  t('shared.dashboard.periode.einreichefrist.text', {
-                    date: periode.einreichefristReduziert | date: 'dd.MM.yyyy',
-                  })
-                }}
-              </dt>
-              <dd
-                class="tw:text-sm tw:mt-1"
-                [innerHTML]="
-                  t('shared.dashboard.periode.einreichefrist.remaining.reduziert', {
-                    days: gesuch.einreichefristDays,
-                  })
-                "
-              ></dd>
-            } @else {
-              <dt class="tw:mt-6 tw:font-bold">
-                {{
-                  t('shared.dashboard.periode.einreichefrist.text', {
-                    date: periode.einreichefristNormal | date: 'dd.MM.yyyy',
-                  })
-                }}
-              </dt>
-              <dd
-                class="tw:text-sm tw:mt-1"
-                [innerHTML]="
-                  t('shared.dashboard.periode.einreichefrist.remaining', {
-                    days: gesuch.einreichefristDays,
-                  })
-                "
-              ></dd>
-            }
+        @if (gesuch.state === 'in-bearbeitung') {
+          @if (gesuch.reduzierterBeitrag) {
+            <dt class="tw:mt-6 tw:font-bold">
+              {{
+                t('shared.dashboard.periode.einreichefrist.text', {
+                  date: periode.einreichefristReduziert | date: 'dd.MM.yyyy',
+                })
+              }}
+            </dt>
+            <dd
+              class="tw:text-sm tw:mt-1"
+              [innerHTML]="
+                t('shared.dashboard.periode.einreichefrist.remaining.reduziert', {
+                  days: gesuch.einreichefristDays,
+                })
+              "
+            ></dd>
+          } @else {
+            <dt class="tw:mt-6 tw:font-bold">
+              {{
+                t('shared.dashboard.periode.einreichefrist.text', {
+                  date: periode.einreichefristNormal | date: 'dd.MM.yyyy',
+                })
+              }}
+            </dt>
+            <dd
+              class="tw:text-sm tw:mt-1"
+              [innerHTML]="
+                t('shared.dashboard.periode.einreichefrist.remaining', {
+                  days: gesuch.einreichefristDays,
+                })
+              "
+            ></dd>
           }
-        } @else {
+        } @else if (gesuch.state === 'expired') {
           <div class="tw:mt-6 tw:font-bold">
             {{ t('shared.dashboard.periode.einreichefrist.abgelaufen.warning') }}
           </div>
