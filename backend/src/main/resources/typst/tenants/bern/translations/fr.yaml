@@ -165,7 +165,7 @@ berechnung:
       label: Découvert
       info: Revenus moins coûts
       proKopfTeilung: Répartition par tête lors du calcul avec une partenaire ou un partenaire
-    einnahmeUeberschuss:
-      label: Excédent de revenus
+    ueberschuss:
+      label: Excès
       info: Revenus moins dépenses.
       proKopfTeilung: Divisé par le nombre d’enfants en formation

@@ -432,7 +432,7 @@
   } else {
     table.einnahmen-kosten(
       {
-        let prefix = "berechnung.total.einnahmeUeberschuss."
+        let prefix = "berechnung.total.ueberschuss."
         let proKopfTeilung = safe-get(budget, "proKopfTeilung")
 
         table.entry(
