@@ -96,7 +96,7 @@
             'tw:bg-dv-green-subtle': gesuch.state === 'verfuegt',
             'tw:bg-dv-blue-light': gesuch.state === 'in-ueberpruefung',
             'tw:bg-dv-main-danger-subtle': gesuch.state === 'expired',
-            'tw:bg-dv-orange': gesuch.state === 'in-bearbeitung',
+            'tw:bg-dv-orange': gesuch.state === 'in-bearbeitung' || gesuch.state === 'fehlende-dokumente',
           }"
           (output)="output.emit($event)"
         ></dv-shared-ui-dashboard-gesuch>
