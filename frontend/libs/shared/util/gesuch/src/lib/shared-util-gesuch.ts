@@ -371,7 +371,7 @@ export const getGesuchState = (
   ];
   const checkers = [
     ['inactive', () => !flags.isActive],
-    ['in-bearbeitung', () => gesuch.gesuchStatus === 'FEHLENDE_DOKUMENTE'],
+    ['fehlende-dokumente', () => gesuch.gesuchStatus === 'FEHLENDE_DOKUMENTE'],
     ['verfuegt', () => verfuegtStatus.includes(gesuch.gesuchStatus)],
     ['in-ueberpruefung', () => gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS'],
     ['expired', () => flags.isEinreichefristAbgelaufen],

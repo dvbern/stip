@@ -68,7 +68,7 @@
             {{ t('shared.dashboard.periode.einreichefrist.abgelaufen.warning') }}
           </div>
         }
-        @if (missingDocTrancheId && gesuch.nachfristDokumente) {
+        @if (gesuch.state === 'fehlende-dokumente') {
           <dt class="tw:mt-6 tw:font-bold">
             {{ t('shared.dashboard.periode.nachfrist.text') }}
           </dt>
@@ -108,7 +108,7 @@
             >
               {{ t('shared.dashboard.gesuch.open') }}
             </a>
-          } @else if (missingDocTrancheId) {
+          } @else if (gesuch.state === 'fehlende-dokumente') {
             <a
               class="tw:dv-button-main-primary"
               data-testid="cockpit-gesuch-upload-missing-documents"
