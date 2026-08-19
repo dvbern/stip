@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   <changeSet author="jafa (generated)" id="1786458070105-1">
+      <addColumn tableName="kind">
+         <column name="betreuungskosten" type="INTEGER"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="jafa (generated)" id="1786458070105-2">
+      <addColumn tableName="kind_aud">
+         <column name="betreuungskosten" type="INTEGER"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="jafa (generated)" id="1786458070105-3">
+      <dropColumn columnName="betreuungskosten_kinder" tableName="einnahmen_kosten"/>
+   </changeSet>
+   <changeSet author="jafa (generated)" id="1786458070105-4">
+      <dropColumn columnName="betreuungskosten_kinder" tableName="einnahmen_kosten_aud"/>
+   </changeSet>
+</databaseChangeLog>

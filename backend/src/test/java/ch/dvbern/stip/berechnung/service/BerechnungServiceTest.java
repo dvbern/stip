@@ -270,7 +270,6 @@ class BerechnungServiceTest {
                 .setAusbildungskosten(3000)
                 .setFahrkosten(1000)
                 .setZulagen(0)
-                .setBetreuungskostenKinder(0)
                 .setSteuerjahr(2000)
                 .setRenten(0)
                 .setVermoegen(null)

@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.type.DemoDataParseContext;
 import ch.dvbern.stip.api.demo.util.ParseDemoDataUtil;
 import ch.dvbern.stip.api.demo.util.ParseDemoEnumUtil;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -416,6 +416,7 @@ public class ParseDemoDataService {
             updateList(kinds, ".*Unterhaltsbeiträge", 1, (c, o) -> o.get(index).ifPresent(d -> d.setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             updateList(kinds, ".*Ausbildungszulagen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setKinderUndAusbildungszulagen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             updateList(kinds, "Renten", 1, (c, o) -> o.get(index).ifPresent(d -> d.setRenten(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(kinds, "Betreuungskosten", 1, (c, o) -> o.get(index).ifPresent(d -> d.setBetreuungskosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             updateList(kinds, "Ergänzungsleistungen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setErgaenzungsleistungen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             updateList(kinds, "Andere Einnahmen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAndereEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             // spotless:on
@@ -451,7 +452,7 @@ public class ParseDemoDataService {
         if (type == EinnahmenKostenType.PERSON_IN_AUSBILDUNG) {
             updateList(list, "Ausbildungskosten", 1, (c, d) -> d.setAusbildungskosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         }
-        updateList(list, "Betreuungskosten Kinder", 1, (c, d) -> d.setBetreuungskostenKinder(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Betreuungskosten Kinder", 1, (c, d) -> {});
         updateList(list, "Fahrkosten", 1, (c, d) -> d.setFahrkosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         if (type == EinnahmenKostenType.PARTNER) {
             updateList(list, "Verpflegungskosten", 1, (c, d) -> d.setVerpflegungskosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
@@ -732,7 +733,8 @@ public class ParseDemoDataService {
             updateList(geschwisters, "bei Vater.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilVater(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
             updateList(geschwisters, "bei Mutter.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
             updateList(geschwisters, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.ausbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c.getCell()))));
-            // updateList(geschwisters, "GeschwisterTyp", 1, (c, o) -> o.get(index).ifPresent(d -> d.geschwisterTyp(ParseDemoEnumUtil.parseGeschwisterTyp(c.getCell()))));
+            updateList(geschwisters, "GeschwisterTyp", 1, (c, o) -> o.get(index).ifPresent(d -> d.geschwisterTyp(ParseDemoEnumUtil.parseGeschwisterTyp(c.getCell()))));
+            updateList(geschwisters, "ElternTyp", 1, (c, o) -> {});
             // spotless:on
         }
 

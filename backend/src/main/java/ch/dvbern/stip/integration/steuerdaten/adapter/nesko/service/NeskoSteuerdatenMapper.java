@@ -96,7 +96,7 @@ public class NeskoSteuerdatenMapper {
         portData.steuernBund(
             Objects.requireNonNullElse(steuerdatenNesko.getSteuerbetragBund(), BigDecimal.ZERO).intValue()
         );
-        portData.steuerJahr(getSteuerdatenResponse.getSteuerjahr());
+        portData.steuerjahr(getSteuerdatenResponse.getSteuerjahr());
         portData.veranlagungsStatus(getSteuerdatenResponse.getSteuerdaten().getStatusVeranlagung().value());
 
         var geschlechter =

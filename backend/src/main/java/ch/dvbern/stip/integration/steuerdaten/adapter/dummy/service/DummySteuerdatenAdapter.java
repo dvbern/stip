@@ -56,7 +56,7 @@ public class DummySteuerdatenAdapter implements SteuerdatenPort {
             .vermoegen(14152)
             .steuernKantonGemeinde(5019)
             .steuernBund(244)
-            .steuerJahr(jahr)
+            .steuerjahr(jahr)
             .veranlagungsStatus("Rechtskraeftig")
             .fahrkosten(700)
             .fahrkostenPartner(0)
