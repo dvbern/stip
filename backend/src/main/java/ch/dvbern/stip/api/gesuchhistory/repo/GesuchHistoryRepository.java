@@ -32,10 +32,8 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
-import org.jilt.Opt;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -240,8 +238,7 @@ public class GesuchHistoryRepository {
     public Optional<Gesuch> getLastEingereichtGesuchVersion(final UUID gesuchId) {
         final var reader = AuditReaderFactory.get(entityManager);
 
-        final Optional<Long> revisionTimestampOpt = reader.
-            createQuery()
+        final Optional<Long> revisionTimestampOpt = reader.createQuery()
             .forRevisionsOfEntity(Gesuch.class, false, true)
             .addProjection(AuditEntityUtil.revisionTimestamp())
             .add(AuditEntity.property("id").eq(gesuchId))

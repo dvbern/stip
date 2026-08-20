@@ -234,6 +234,8 @@ public class Gesuch extends AbstractTenantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();
 
+    // This serves as a audit marker to fetch the version of the Gesuch that is visible to
+    // the Gesuchsteller
     @NotNull
     @Column(name = "eingereicht_count", nullable = false)
     @Audited(withModifiedFlag = true, modifiedColumnName = "eingereicht_count_mod")
