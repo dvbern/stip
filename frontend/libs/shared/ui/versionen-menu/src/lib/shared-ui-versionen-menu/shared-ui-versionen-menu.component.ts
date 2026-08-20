@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   input,
+  signal,
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
@@ -14,6 +15,13 @@ import {
   VerfuegtGesuch,
 } from '@dv/shared/model/gesuch';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
+
+interface VersionenLink {
+  routerLink: (string | undefined)[];
+  queryParams: Record<string, unknown>;
+  labelKey: 'aktuell' | 'versionen' | 'initial' | 'eingereicht' | 'verfuegt';
+  labelTimestamp?: string;
+}
 
 @Component({
   selector: 'dv-shared-ui-versionen-menu',
@@ -66,4 +74,171 @@ export class SharedUiVersionenMenuComponent {
 
     return version;
   });
+
+  private defaultLinkSig = computed((): VersionenLink => {
+    const gesuchId = this.gesuchIdSig();
+    const tabSegments = this.tabRouteSegmentsSig();
+    const originStep = this.originStepSig();
+    const currentVersion = this.currentVersionSig();
+    const initial = this.initialSig();
+    const firstTrancheId = this.firstCurrentTrancheIdSig();
+
+    if (this.isInitialRouteSig() && initial?.verfuegtGesuch) {
+      const vg = initial.verfuegtGesuch;
+      return {
+        routerLink: [
+          '/',
+          'gesuch',
+          ...tabSegments,
+          gesuchId,
+          'initial',
+          vg.tranchen[0].id,
+        ],
+        queryParams: {
+          berechnungId: vg.berechnungId,
+          revision: vg.tranchen[0].revision,
+          originStep,
+        },
+        labelKey: 'verfuegt',
+      };
+    }
+    if (this.isEingereichtRouteSig() && initial?.eingereichtGesuch) {
+      const eg = initial.eingereichtGesuch;
+      return {
+        routerLink: [
+          '/',
+          'gesuch',
+          ...tabSegments,
+          gesuchId,
+          'eingereicht',
+          eg.id,
+        ],
+        queryParams: { revision: eg.revision, originStep },
+        labelKey: 'eingereicht',
+      };
+    }
+    if (currentVersion) {
+      return {
+        routerLink: [
+          '/',
+          'gesuch',
+          ...tabSegments,
+          gesuchId,
+          'tranche',
+          currentVersion.tranchen[0].id,
+        ],
+        queryParams: {
+          berechnungId: currentVersion.berechnungId,
+          revision: currentVersion.tranchen[0].revision,
+          originStep,
+        },
+        labelKey: 'versionen',
+        labelTimestamp: currentVersion.timestamp,
+      };
+    }
+    return {
+      routerLink: [
+        '/',
+        'gesuch',
+        ...tabSegments,
+        gesuchId,
+        'tranche',
+        firstTrancheId,
+      ],
+      queryParams: { originStep },
+      labelKey: 'aktuell',
+    };
+  });
+
+  selectedMenuLinkSig = signal<VersionenLink | null>(null);
+
+  effectiveLinkSig = computed(() => {
+    return this.selectedMenuLinkSig() ?? this.defaultLinkSig();
+  });
+
+  setAktuellLink(): void {
+    const gesuchId = this.gesuchIdSig();
+    const tabSegments = this.tabRouteSegmentsSig();
+    const originStep = this.originStepSig();
+    const firstTrancheId = this.firstCurrentTrancheIdSig();
+    this.selectedMenuLinkSig.set({
+      routerLink: [
+        '/',
+        'gesuch',
+        ...tabSegments,
+        gesuchId,
+        'tranche',
+        firstTrancheId,
+      ],
+      queryParams: { originStep },
+      labelKey: 'aktuell',
+    });
+  }
+
+  setVersionLink(version: VerfuegtGesuch): void {
+    const gesuchId = this.gesuchIdSig();
+    const tabSegments = this.tabRouteSegmentsSig();
+    const originStep = this.originStepSig();
+    this.selectedMenuLinkSig.set({
+      routerLink: [
+        '/',
+        'gesuch',
+        ...tabSegments,
+        gesuchId,
+        'tranche',
+        version.tranchen[0].id,
+      ],
+      queryParams: {
+        berechnungId: version.berechnungId,
+        revision: version.tranchen[0].revision,
+        originStep,
+      },
+      labelKey: 'versionen',
+      labelTimestamp: version.timestamp,
+    });
+  }
+
+  setVerfuegtLink(): void {
+    const vg = this.initialSig()?.verfuegtGesuch;
+    if (!vg) return;
+    const gesuchId = this.gesuchIdSig();
+    const tabSegments = this.tabRouteSegmentsSig();
+    const originStep = this.originStepSig();
+    this.selectedMenuLinkSig.set({
+      routerLink: [
+        '/',
+        'gesuch',
+        ...tabSegments,
+        gesuchId,
+        'initial',
+        vg.tranchen[0].id,
+      ],
+      queryParams: {
+        berechnungId: vg.berechnungId,
+        revision: vg.tranchen[0].revision,
+        originStep,
+      },
+      labelKey: 'verfuegt',
+    });
+  }
+
+  setEingereichtLink(): void {
+    const eg = this.initialSig()?.eingereichtGesuch;
+    if (!eg) return;
+    const gesuchId = this.gesuchIdSig();
+    const tabSegments = this.tabRouteSegmentsSig();
+    const originStep = this.originStepSig();
+    this.selectedMenuLinkSig.set({
+      routerLink: [
+        '/',
+        'gesuch',
+        ...tabSegments,
+        gesuchId,
+        'eingereicht',
+        eg.id,
+      ],
+      queryParams: { revision: eg.revision, originStep },
+      labelKey: 'eingereicht',
+    });
+  }
 }

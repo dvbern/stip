@@ -9,28 +9,38 @@
   @let eingereichtTranche = initial?.eingereichtGesuch;
 
   @if (versionen.length || verfuegtGesuch || eingereichtTranche) {
-    <button
-      type="button"
-      class="tw:dv-nav-button-outline tw:flex tw:items-center tw:px-2"
+    @let effectiveLink = effectiveLinkSig();
+    <div
+      class="tw:dv-nav-button-outline tw:p-0 tw:flex tw:gap-2 tw:items-center"
       data-testid="sb-gesuch-header-versionen-menu"
-      [matMenuTriggerFor]="versionenMenu"
       [class.active]="isGesuchRouteSig()"
     >
-      @if (currentVersionSig() && !isInitialRouteSig()) {
-        <span>
-          {{
-            t('shared.header.versionen.item', {
-              date: currentVersionSig()?.timestamp | date: 'dd.MM.yyyy',
-            })
-          }}
-        </span>
-      } @else if (isInitialRouteSig()) {
-        <span>{{ t('shared.header.versionen.initial') }}</span>
-      } @else {
-        <span>{{ t('shared.header.versionen') }}</span>
-      }
-      <i class="material-symbols-rounded tw:ml-2">expand_more</i>
-    </button>
+      <a
+        class="tw:flex tw:items-center tw:px-2 tw:py-2.5"
+        [routerLink]="effectiveLink.routerLink"
+        [queryParams]="effectiveLink.queryParams"
+      >
+        @if (effectiveLink.labelKey === 'versionen') {
+          <span>
+            {{
+              t('shared.header.versionen-menu.versionen', {
+                date: effectiveLink.labelTimestamp | date: 'dd.MM.yyyy',
+              })
+            }}
+          </span>
+        } @else {
+          {{ t(`shared.header.versionen-menu.${effectiveLink.labelKey}`) }}
+        }
+      </a>
+      <span class="tw:w-px tw:self-stretch tw:bg-current"></span>
+      <button
+        type="button"
+        class="tw:flex tw:cursor-pointer tw:py-2.5 tw:pr-2 tw:items-center"
+        [matMenuTriggerFor]="versionenMenu"
+      >
+        <i class="material-symbols-rounded">expand_more</i>
+      </button>
+    </div>
 
     <mat-menu #versionenMenu="matMenu" class="header-menu-panel tw:col-span-12 tw:mt-2 tw:rounded-lg">
       <div class="tw:flex tw:flex-col tw:gap-2">
@@ -40,6 +50,7 @@
           [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', firstTrancheId]"
           [queryParams]="{ originStep }"
           mat-menu-item
+          (click)="setAktuellLink()"
           [class.active]="
             trancheId === firstTrancheId &&
             isGesuchRouteSig() &&
@@ -48,7 +59,7 @@
             !isEingereichtRouteSig()
           "
         >
-          <span>{{ t('shared.header.versionen') }}</span>
+          <span>{{ t('shared.header.versionen-menu.aktuell') }}</span>
         </a>
         @if (versionen.length) {
           <hr class="tw:my-2 tw:border-t tw:border-dv-border" />
@@ -63,11 +74,12 @@
               class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
               data-testid="versionen-nav-menu-item"
               mat-menu-item
+              (click)="setVersionLink(version)"
               [class.active]="currentVersionSig()?.berechnungId === version.berechnungId && !isInitialRouteSig()"
             >
               <span>
                 {{
-                  t('shared.header.versionen.item', {
+                  t('shared.header.versionen-menu.versionen', {
                     date: version.timestamp | date: 'dd.MM.yyyy',
                   })
                 }}
@@ -95,9 +107,10 @@
               class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
               data-testid="versionen-nav-menu-verfuegt-item"
               mat-menu-item
+              (click)="setVerfuegtLink()"
               [class.active]="isInitialRouteSig()"
             >
-              <span>{{ t('shared.header.versionen.verfuegt') }}</span>
+              <span>{{ t('shared.header.versionen-menu.verfuegt') }}</span>
             </a>
           }
           <a
@@ -109,9 +122,10 @@
             class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="versionen-nav-menu-eingereicht-item"
             mat-menu-item
+            (click)="setEingereichtLink()"
             [class.active]="isEingereichtRouteSig()"
           >
-            <span>{{ t('shared.header.versionen.eingereicht') }}</span>
+            <span>{{ t('shared.header.versionen-menu.eingereicht') }}</span>
           </a>
         }
       </div>
@@ -126,7 +140,7 @@
       [queryParams]="{ originStep }"
       [class.active]="isGesuchRouteSig()"
     >
-      <span>{{ t('shared.header.versionen') }}</span>
+      <span>{{ t('shared.header.versionen-menu.aktuell') }}</span>
     </a>
   }
 </ng-container>
