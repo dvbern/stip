@@ -19,7 +19,6 @@ package ch.dvbern.stip.berechnung.adapter.bern.v1_0.service;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -42,12 +41,6 @@ public class BudgetsCalculator {
         final Gesuchsperiode gesuchsperiode,
         final int gesuchsjahr
     ) {
-        final int anzahlKinderDerElternInAusbildung = Math.toIntExact(
-            gesuchFormular.getGeschwisters()
-                .stream()
-                .filter(geschwister -> geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG)
-                .count()
-        ) + BernCalculatorUtil.PIA_COUNT;
         final boolean halbierungElternbeitrag = BernCalculatorUtil.getHalbierungElternbeitrag(
             gesuchFormular.getPersonInAusbildung().getGeburtsdatum(),
             gesuchsDateRange,

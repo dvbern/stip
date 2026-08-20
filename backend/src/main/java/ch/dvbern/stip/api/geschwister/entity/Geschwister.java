@@ -48,6 +48,7 @@ import org.jilt.BuilderStyle;
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
+@GeschwisterElternteilPiaOfStiefHalbGeschwisterRequiredConstraint
 @NoArgsConstructor
 @AllArgsConstructor
 public class Geschwister extends AbstractFamilieEntity {
