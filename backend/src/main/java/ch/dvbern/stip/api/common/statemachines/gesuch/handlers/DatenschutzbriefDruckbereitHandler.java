@@ -38,6 +38,5 @@ public class DatenschutzbriefDruckbereitHandler implements GesuchStatusChangeHan
         if (hasNoEltern || allAlreadyVersendet) {
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         }
-        gesuch.incrementEingereichtCount();
     }
 }

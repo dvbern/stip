@@ -239,6 +239,8 @@ public class Gesuch extends AbstractTenantEntity {
     @NotNull
     @Column(name = "eingereicht_count", nullable = false)
     @Audited(withModifiedFlag = true, modifiedColumnName = "eingereicht_count_mod")
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     private int eingereichtCount = 0;
 
     public int incrementEingereichtCount() {

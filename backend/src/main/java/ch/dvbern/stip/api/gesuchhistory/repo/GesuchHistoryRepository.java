@@ -248,12 +248,12 @@ public class GesuchHistoryRepository {
             .getResultList()
             .stream()
             .findFirst();
+
         if (revisionTimestampOpt.isEmpty()) {
             return Optional.empty();
         }
-        final var revisionTimestamp = revisionTimestampOpt.get();
 
-        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestamp - 1);
+        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestampOpt.get());
     }
 
 }
