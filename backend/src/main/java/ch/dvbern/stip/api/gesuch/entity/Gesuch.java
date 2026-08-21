@@ -234,8 +234,12 @@ public class Gesuch extends AbstractTenantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();
 
-    // This serves as a audit marker to fetch the version of the Gesuch that is visible to
-    // the Gesuchsteller
+    /**
+     * This serves as an audit marker to fetch the version of the Gesuch that is visible to
+     * the Gesuchsteller by marking eingereicht events which we can go back to with envers.<br>
+     * <br>
+     * Call {@link incrementEingereichtCount} to mark a new eingereicht event
+     */
     @NotNull
     @Column(name = "eingereicht_count", nullable = false)
     @Audited(withModifiedFlag = true, modifiedColumnName = "eingereicht_count_mod")
@@ -243,6 +247,9 @@ public class Gesuch extends AbstractTenantEntity {
     @Getter(AccessLevel.NONE)
     private int eingereichtCount = 0;
 
+    /**
+     * @see eingereichtCount
+     */
     public int incrementEingereichtCount() {
         this.eingereichtCount += 1;
         return eingereichtCount;
