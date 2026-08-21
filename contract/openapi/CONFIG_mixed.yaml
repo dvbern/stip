@@ -158,15 +158,12 @@ components:
         - name
         - vorname
         - email
-        - redirectUri
       properties:
         name:
           type: string
         vorname:
           type: string
         email:
-          type: string
-        redirectUri:
           type: string
     SteuerdatenPortError:
       required:

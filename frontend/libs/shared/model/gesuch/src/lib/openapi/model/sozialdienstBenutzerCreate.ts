@@ -14,6 +14,5 @@ export interface SozialdienstBenutzerCreate {
     vorname: string;
     nachname: string;
     email: string;
-    redirectUri: string;
 }
 
