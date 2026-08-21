@@ -94,7 +94,7 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
         width: `${anchor.offsetWidth}px`,
         height: 'auto',
         hasBackdrop: false,
-        panelClass: 'info-dialog-columnar',
+        panelClass: 'dv-info-dialog-panel-columnar',
         scrollStrategy: this.scrollStrategyOptions.reposition({
           autoClose: true,
         }),
