@@ -39,7 +39,7 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
 
     @Override
     @WithSpan
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         gesuchNotificationService.createStatusChangeToEingereichtNotificationAndSendStdMail(gesuch);
         gesuch.getGesuchTranchen()
             .stream()

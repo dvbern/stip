@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AusbildungUnterbruchAkzeptierenHandler implements GesuchStatusChangeHandler {
     @Override
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.UNTERBRUCH);
     }
 }

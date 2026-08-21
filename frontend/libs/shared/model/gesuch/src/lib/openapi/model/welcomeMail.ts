@@ -14,6 +14,5 @@ export interface WelcomeMail {
     name: string;
     vorname: string;
     email: string;
-    redirectUri: string;
 }
 

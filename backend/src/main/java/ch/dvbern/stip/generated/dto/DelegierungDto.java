@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class DelegierungDto  implements Serializable {
   private @Valid UUID id;
+  private @Valid String fallNummer;
   private @Valid SozialdienstSlimDto sozialdienst;
   private @Valid PersoenlicheAngabenDto persoenlicheAngaben;
   private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
@@ -34,6 +35,7 @@ public class DelegierungDto  implements Serializable {
 
   protected DelegierungDto(DelegierungDtoBuilder<?, ?> b) {
     this.id = b.id;
+    this.fallNummer = b.fallNummer;
     this.sozialdienst = b.sozialdienst;
     this.persoenlicheAngaben = b.persoenlicheAngaben;
     this.status = b.status;
@@ -62,6 +64,25 @@ public class DelegierungDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   **/
+  public DelegierungDto fallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
+    return this;
+  }
+
+  
+  @JsonProperty("fallNummer")
+  @NotNull
+  public String getFallNummer() {
+    return fallNummer;
+  }
+
+  @JsonProperty("fallNummer")
+  public void setFallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
   }
 
   /**
@@ -186,6 +207,7 @@ public class DelegierungDto  implements Serializable {
     }
     DelegierungDto delegierung = (DelegierungDto) o;
     return Objects.equals(this.id, delegierung.id) &&
+        Objects.equals(this.fallNummer, delegierung.fallNummer) &&
         Objects.equals(this.sozialdienst, delegierung.sozialdienst) &&
         Objects.equals(this.persoenlicheAngaben, delegierung.persoenlicheAngaben) &&
         Objects.equals(this.status, delegierung.status) &&
@@ -196,7 +218,7 @@ public class DelegierungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, sozialdienst, persoenlicheAngaben, status, delegierterMitarbeiter, startDate, endDate);
+    return Objects.hash(id, fallNummer, sozialdienst, persoenlicheAngaben, status, delegierterMitarbeiter, startDate, endDate);
   }
 
   @Override
@@ -205,6 +227,7 @@ public class DelegierungDto  implements Serializable {
     sb.append("class DelegierungDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
@@ -246,6 +269,7 @@ public class DelegierungDto  implements Serializable {
 
   public static abstract class DelegierungDtoBuilder<C extends DelegierungDto, B extends DelegierungDtoBuilder<C, B>>  {
     private UUID id;
+    private String fallNummer;
     private SozialdienstSlimDto sozialdienst;
     private PersoenlicheAngabenDto persoenlicheAngaben;
     private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
@@ -258,6 +282,10 @@ public class DelegierungDto  implements Serializable {
 
     public B id(UUID id) {
       this.id = id;
+      return self();
+    }
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
       return self();
     }
     public B sozialdienst(SozialdienstSlimDto sozialdienst) {

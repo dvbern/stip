@@ -8,6 +8,9 @@ old:
 kstip:
   oidc:
     url: ${STIP_OIDC_AUTH_SERVER}
+  welcome-mail:
+    client-id-sachbearbeiter: '${STIP_WELCOME_MAIL_CLIENT_ID_SACHBEARBEITER:stip-sachbearbeitung-app}'
+    client-id-sozialdienst: '${STIP_WELCOME_MAIL_CLIENT_ID_SOZIALDIENST:stip-sozialdienst-app}'
   s3:
     bucket-name: '${bucket.name}'
 
@@ -54,10 +57,6 @@ kstip:
       subdomains:
         - '^dev-.*'
         - '^feature-kstip.*'
-      welcome-mail:
-        kc-path: '${STIP_WELCOME_MAIL_PATH}'
-        kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
-        kc-scope: '${STIP_BERN_WELCOME_MAIL_SCOPE}'
       port:
         steuerdaten:
           enabled: true
@@ -87,10 +86,6 @@ kstip:
     dv:
       subdomains:
         - '^dv-.*'
-      welcome-mail:
-        kc-path: '${STIP_WELCOME_MAIL_PATH}'
-        kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
-        kc-scope: '${STIP_DV_WELCOME_MAIL_SCOPE}'
       port:
         steuerdaten:
           enabled: false
@@ -310,11 +305,18 @@ quarkus:
           binary: "typst"
           docker-enabled: true
           docker-image: "ghcr.io/typst/typst:0.15.1"
-
           # https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
           # `user.dir` is the directory from which the jvm was started
           root-path: "${user.dir}/src/main/resources/typst"
           fonts-path: "${user.dir}/src/main/resources/fonts"
+    tenant:
+      bern:
+        frontend:
+          urls:
+            gs: 'localhost:4200'
+            sb: 'localhost:4201'
+            soz: 'localhost:4202'
+            demo: 'localhost:4203'
 '%test':
   mp:
     jwt:

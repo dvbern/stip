@@ -389,6 +389,7 @@ public class GenerateDemoDataService {
                     .ergaenzungsleistungen(kindDto.getErgaenzungsleistungen())
                     .kinderUndAusbildungszulagen(kindDto.getKinderUndAusbildungszulagen())
                     .renten(kindDto.getRenten())
+                    .betreuungskosten(kindDto.getBetreuungskosten())
                     .andereEinnahmen(kindDto.getAndereEinnahmen()),
                 AbstractPersonBuilder.abstractPerson()
                     .nachname(kindDto.getNachname())
@@ -417,9 +418,6 @@ public class GenerateDemoDataService {
             .ausbildungskosten(ekDto.getAusbildungskosten())
             .auswaertigeMittagessenProWoche(ekDto.getAuswaertigeMittagessenProWoche())
             .verpflegungskosten(null)
-            .betreuungskostenKinder(
-                DemoDataDefaults.defaultByKindsIfNull(ekDto.getBetreuungskostenKinder(), demoDataDto)
-            )
             .veranlagungsStatus(DemoDataDefaults.STEUERDATEN_VERANLAGUNGSSTATUS)
             .steuerjahr(DemoDataDefaults.getSteuerjahr(ausbildungDto.getAusbildungBeginn()))
             .steuern(ekDto.getSteuernKantonGemeinde())
@@ -457,9 +455,6 @@ public class GenerateDemoDataService {
                         ekPartnerDto.getVerpflegungskosten(),
                         DemoDataDefaults.EK_VERPFLEGUNGSKOSTEN
                     )
-                )
-                .betreuungskostenKinder(
-                    DemoDataDefaults.defaultByKindsIfNull(ekDto.getBetreuungskostenKinder(), demoDataDto)
                 )
                 .veranlagungsStatus(DemoDataDefaults.STEUERDATEN_VERANLAGUNGSSTATUS)
                 .steuerjahr(DemoDataDefaults.getSteuerjahr(ausbildungDto.getAusbildungBeginn()))

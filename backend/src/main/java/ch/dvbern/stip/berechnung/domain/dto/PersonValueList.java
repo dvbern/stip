@@ -45,14 +45,10 @@ public class PersonValueList {
 
     public ArrayList<PersonValueItemDto> toList() {
         final var list = new ArrayList<PersonValueItemDto>();
-        if (Objects.isNull(person)) {
-            if (Objects.nonNull(partner) || !kinderValueList.isEmpty()) {
-                throw new IllegalStateException("No Person value given, but Partner or Kinds");
-            }
-            return list;
-        }
 
-        list.add(person);
+        if (Objects.nonNull(person)) {
+            list.add(person);
+        }
 
         if (Objects.nonNull(partner)) {
             list.add(partner);

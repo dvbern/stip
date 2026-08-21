@@ -67,6 +67,12 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   private dialog = inject(MatDialog);
   private gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
 
+  isReadonlySig = computed(() => {
+    const { gesuchInfo } = this.gesuchHeaderStore.viewSig();
+
+    return gesuchInfo?.state.gesuchStatus !== 'IN_BEARBEITUNG_SB';
+  });
+
   buchhaltungStore = inject(BuchhaltungStore);
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);

@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
+import ch.dvbern.stip.api.common.util.KommentarUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -572,7 +573,7 @@ public class GesuchTrancheService {
         gesuchTrancheStatusService.triggerStateMachineEventWithComment(
             aenderung,
             GesuchTrancheStatusChangeEvent.ABLEHNEN,
-            kommentarDto
+            kommentarDto.getText()
         );
 
         final var lastFreigegebenTrancheRevisionTimestamp =
@@ -709,8 +710,16 @@ public class GesuchTrancheService {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheValidatorService
             .validateGesuchTrancheForStatus(aenderungsTranche, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
+        GesuchUtil.setDefaultNachfristDokumente(aenderungsTranche.getGesuch());
         gesuchTrancheStatusService
-            .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE);
+            .triggerStateMachineEventWithComment(
+                aenderungsTranche,
+                GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE,
+                KommentarUtil.createFehlendeDokumenteKommentar(
+                    aenderungsTranche.getGesuch(),
+                    gesuchDokumentKommentarService.getAllFehlendeDokumenteKommentarsForAenderung(aenderungsTranche)
+                )
+            );
     }
 
     @Transactional
@@ -727,7 +736,7 @@ public class GesuchTrancheService {
         var rawGueltigkeit =
             new DateRange(patchAenderungsInfoRequestDto.getStart(), patchAenderungsInfoRequestDto.getEnd());
         var gueltigkeit =
-            gesuchTrancheCopyService.validateAndCreateClampedDateRange(rawGueltigkeit, aenderungsTranche.getGesuch());
+            GesuchTrancheCopyService.validateAndCreateClampedDateRange(rawGueltigkeit, aenderungsTranche.getGesuch());
 
         aenderungsTranche.setGueltigkeit(gueltigkeit);
         aenderungsTranche.setComment(patchAenderungsInfoRequestDto.getComment());

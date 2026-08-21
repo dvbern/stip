@@ -27,7 +27,8 @@ export interface PersoenlichesBudgetresultatKosten {
     medizinischeGrundversorgungTotal: number;
     fahrkostenPartner?: number;
     verpflegungPartner?: number;
-    betreuungskostenKinder: number;
+    betreuungskosten: Array<PersonValueItem>;
+    betreuungskostenTotal: number;
     steuern: number;
     anteilLebenshaltungskosten: number;
 }

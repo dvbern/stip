@@ -54,6 +54,14 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
             .findFirst();
     }
 
+    public Optional<GesuchTranche> findFehlendeDokumenteAenderung(final UUID gesuchId) {
+        return getFindAlleAenderungsQuery()
+            .where(gesuchTranche.gesuch.id.eq(gesuchId))
+            .where(gesuchTranche.status.eq(GesuchTrancheStatus.FEHLENDE_DOKUMENTE))
+            .stream()
+            .findFirst();
+    }
+
     public Optional<GesuchTranche> findLatestAenderungGs(final UUID gesuchId) {
         return getFindAlleAenderungsQuery()
             .where(gesuchTranche.gesuch.id.eq(gesuchId))

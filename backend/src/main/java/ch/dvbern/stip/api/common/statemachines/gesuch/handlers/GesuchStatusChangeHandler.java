@@ -17,8 +17,8 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
+import ch.dvbern.stip.api.common.statemachines.StateChangeWithCommentHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 
-public interface GesuchStatusChangeHandler extends StateChangeHandler<Gesuch> {
+public interface GesuchStatusChangeHandler extends StateChangeWithCommentHandler<Gesuch> {
 }

@@ -128,15 +128,21 @@
                 {{ t('shared.dokumente.table.noComment') }}
               </div>
             } @else {
-              <div class="tw:grid tw:grid-cols-[33px_1fr_1fr_3fr] tw:gap-4 tw:py-2">
+              <div class="tw:flex tw:flex-col tw:gap-4 tw:py-4">
                 @for (kommentar of dokument.kommentare; track $index) {
-                  <i class="material-symbols-rounded tw:text-dv-gray">person</i>
-                  <span>{{ kommentar.user_erstellt }}</span>
-                  <div class="tw:text-dv-gray">
-                    {{ kommentar.timestampErstellt | date: 'dd. MMMM yyyy' }}
-                  </div>
                   <div>
-                    {{ kommentar.kommentar }}
+                    <div class="tw:flex tw:items-center tw:justify-between tw:gap-4 tw:mb-2">
+                      <div class="tw:flex tw:items-center tw:gap-2">
+                        <i class="material-symbols-rounded tw:text-dv-gray">person</i>
+                        <span>{{ kommentar.user_erstellt }}</span>
+                      </div>
+                      <div class="tw:text-dv-gray">
+                        {{ kommentar.timestampErstellt | date: 'dd. MMMM yyyy' }}
+                      </div>
+                    </div>
+                    <div>
+                      {{ kommentar.kommentar }}
+                    </div>
                   </div>
                 }
               </div>

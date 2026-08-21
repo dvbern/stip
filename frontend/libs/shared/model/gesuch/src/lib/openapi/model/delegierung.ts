@@ -16,6 +16,7 @@ import { DelegierungStatus } from './delegierungStatus';
 
 export interface Delegierung { 
     id: string;
+    fallNummer: string;
     sozialdienst: SozialdienstSlim;
     delegierterMitarbeiter?: SozialdienstBenutzer;
     persoenlicheAngaben: PersoenlicheAngaben;

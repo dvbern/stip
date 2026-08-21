@@ -17,7 +17,12 @@
         </button>
       }
 
-      <button type="button" (click)="createBuchhaltungsKorrektur()" class="tw:dv-button-outline">
+      <button
+        type="button"
+        [disabled]="isReadonlySig()"
+        (click)="createBuchhaltungsKorrektur()"
+        class="tw:dv-button-outline"
+      >
         {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | transloco }}
       </button>
     </div>

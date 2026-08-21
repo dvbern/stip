@@ -38,6 +38,7 @@ export const getKinder = (
               ),
             ],
             ['kinder.unterhaltsbeitraege', kind.unterhaltsbeitraege],
+            ['kinder.betreuungskosten', kind.betreuungskosten],
             [
               'kinder.kinderUndAusbildungszulagen',
               kind.kinderUndAusbildungszulagen,

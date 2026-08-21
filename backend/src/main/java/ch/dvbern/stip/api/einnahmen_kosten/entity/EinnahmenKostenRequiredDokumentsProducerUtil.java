@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class EinnahmeKostenRequiredDokumentsProducerUtil {
+public class EinnahmenKostenRequiredDokumentsProducerUtil {
     public enum EinnahmenKostenType {
         PERSON_IN_AUSBILDUNG,
         PARTNER
@@ -37,13 +37,6 @@ public class EinnahmeKostenRequiredDokumentsProducerUtil {
         DokumentTyp.EK_LOHNABRECHNUNG,
         EinnahmenKostenType.PARTNER,
         DokumentTyp.EK_PARTNER_LOHNABRECHNUNG
-    );
-
-    private static final Map<EinnahmenKostenType, DokumentTyp> BETREUUNGSKOSTENKINDER = Map.of(
-        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
-        DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER,
-        EinnahmenKostenType.PARTNER,
-        DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
     );
 
     private static final Map<EinnahmenKostenType, DokumentTyp> FAHRKOSTEN = Map.of(
@@ -140,10 +133,6 @@ public class EinnahmeKostenRequiredDokumentsProducerUtil {
 
         if (greaterThanZero(ek.getNettoerwerbseinkommen())) {
             requiredDocs.add(NETTOERWERBSEINKOMMEN.get(einnahmenKostenType));
-        }
-
-        if (greaterThanZero(ek.getBetreuungskostenKinder())) {
-            requiredDocs.add(BETREUUNGSKOSTENKINDER.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getWohnkosten())) {

@@ -36,7 +36,6 @@ public class AenderungFehlendeDokumenteHandler implements StateChangeWithComment
         String comment
     ) {
         gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForAenderung(gesuchTranche);
-        gesuchService.setDefaultNachfristDokumente(gesuchTranche.getGesuch());
         gesuchService.sendFehlendeDokumenteNotifications(gesuchTranche.getGesuch());
     }
 }

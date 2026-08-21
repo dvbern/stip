@@ -22,7 +22,6 @@ export const sozialdienstAdminNavItems: NavItem[] = [
 ];
 
 export const sozialdienstBaseMenuItems: NavMenuItem[] = [
-  //  profile
   {
     type: 'link',
     id: 'profile',
@@ -42,7 +41,6 @@ export const gesuchBaseNavItems: NavItem[] = [
 ];
 
 export const gesuchBaseMenuItems: NavMenuItem[] = [
-  //  profile
   {
     type: 'link',
     id: 'profile',

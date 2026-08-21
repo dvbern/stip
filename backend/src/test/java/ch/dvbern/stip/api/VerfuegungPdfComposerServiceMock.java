@@ -17,61 +17,43 @@
 
 package ch.dvbern.stip.api;
 
-import java.io.ByteArrayOutputStream;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
-import ch.dvbern.stip.api.pdf.type.Anhangs;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.pdf.service.VerfuegungBriefPdfService;
+import ch.dvbern.stip.api.pdf.service.VerfuegungPdfComposerService;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
 import ch.dvbern.stip.integration.pdf.domain.service.BerechnungCopyMapper;
-import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
 
 @Mock
 @RequestScoped
-public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
-    public VerfuegungPdfServiceMock() {
-        super(null, null, null, null, null, null, null);
+public class VerfuegungPdfComposerServiceMock extends VerfuegungPdfComposerService {
+    public VerfuegungPdfComposerServiceMock() {
+        super(null, null, null, null, null);
     }
 
-    public VerfuegungPdfServiceMock(
-    StipDecisionTextRepository stipDecisionTextRepository,
-    BuchhaltungService buchhaltungService,
+    public VerfuegungPdfComposerServiceMock(
     VerfuegungService verfuegungService,
     DarlehenService darlehenService,
-    TenantService tenantService,
     PdfPortFactory pdfPortFactory,
-    BerechnungCopyMapper berechnungCopyMapper
+    BerechnungCopyMapper berechnungCopyMapper,
+    VerfuegungBriefPdfService verfuegungBriefPdfService
     ) {
         super(
-            stipDecisionTextRepository,
-            buchhaltungService,
             verfuegungService,
             darlehenService,
-            tenantService,
             pdfPortFactory,
-            berechnungCopyMapper
+            berechnungCopyMapper,
+            verfuegungBriefPdfService
         );
-    }
-
-    @Override
-    public ByteArrayOutputStream createVerfuegungOhneAnspruchPdf(
-        Verfuegung verfuegung,
-        List<Anhangs> anhangs
-    ) {
-        return new ByteArrayOutputStream();
     }
 
     @Override

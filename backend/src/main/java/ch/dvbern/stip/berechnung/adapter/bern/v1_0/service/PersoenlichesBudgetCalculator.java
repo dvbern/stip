@@ -306,6 +306,8 @@ public class PersoenlichesBudgetCalculator {
         final Abschluss abschluss = gesuchFormular.getAusbildung().getAusbildungsgang().getAbschluss();
 
         final PersonValueList medizinischeGrundversorgung = new PersonValueList();
+        final PersonValueList betreuungskosten = new PersonValueList();
+
         int grundbedarf = 0;
         int verpflegungskosten = 0;
 
@@ -394,7 +396,12 @@ public class PersoenlichesBudgetCalculator {
             }
         }
 
-        final int betreuungskostenKinder = BernCalculatorUtil.intOrZero(einnahmenKosten.getBetreuungskostenKinder());
+        kindsImHaushalt.forEach(
+            kind -> betreuungskosten.addKindValue(
+                kind,
+                kind.getBetreuungskosten()
+            )
+        );
 
         int wohnkosten = 0;
         if (einnahmenKosten.getWohnkosten() != null && anzahlPersonenImHaushalt > 0) {
@@ -406,6 +413,7 @@ public class PersoenlichesBudgetCalculator {
         }
 
         final int medizinischeGrundversorgungTotal = InputUtils.sumValues(medizinischeGrundversorgung.toList());
+        final int betreuungskostenTotal = InputUtils.sumValues(betreuungskosten.toList());
 
         final int anteilLebenshaltungskosten = familienBudgetresultats.stream()
             .filter(
@@ -429,7 +437,7 @@ public class PersoenlichesBudgetCalculator {
                 fahrkostenPartner,
                 verpflegungskosten,
                 verpflegungPartner,
-                betreuungskostenKinder,
+                betreuungskostenTotal,
                 anteilLebenshaltungskosten
             );
 
@@ -444,7 +452,8 @@ public class PersoenlichesBudgetCalculator {
             .wohnkosten(wohnkosten)
             .medizinischeGrundversorgung(medizinischeGrundversorgung.toList())
             .medizinischeGrundversorgungTotal(medizinischeGrundversorgungTotal)
-            .betreuungskostenKinder(betreuungskostenKinder)
+            .betreuungskosten(betreuungskosten.toList())
+            .betreuungskostenTotal(betreuungskostenTotal)
             .steuern(steuern)
             .anteilLebenshaltungskosten(anteilLebenshaltungskosten)
             .fahrkostenPartner(fahrkostenPartner)

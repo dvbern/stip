@@ -37,11 +37,6 @@ public class GetDocumentsForEinnahmenKostenArgumentsProvider implements Argument
                 DokumentTyp.EK_LOHNABRECHNUNG
             ),
             CreatePermutationUtil.createIntegerPermutations(
-                (val) -> new EinnahmenKostenUpdateDto().betreuungskostenKinder(val),
-                (val) -> new EinnahmenKosten().setBetreuungskostenKinder(val),
-                DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER
-            ),
-            CreatePermutationUtil.createIntegerPermutations(
                 (val) -> new EinnahmenKostenUpdateDto().wohnkosten(val),
                 (val) -> new EinnahmenKosten().setWohnkosten(val),
                 DokumentTyp.EK_MIETVERTRAG

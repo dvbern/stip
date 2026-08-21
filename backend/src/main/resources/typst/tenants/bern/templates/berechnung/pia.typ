@@ -459,13 +459,23 @@
       )
     },
     {
-      let prefix = "berechnung.kosten.betreuungskostenKinder."
+      let prefix = "berechnung.kosten.betreuungskosten."
 
       table.entry(
         t(prefix + "label"),
         format.chf(
-          safe-get(kosten, "betreuungskostenKinder"),
+          safe-get(kosten, "betreuungskostenTotal"),
           prefix: "positive",
+        ),
+        sub-table: (
+          safe-get(kosten, "betreuungskosten", default: ()).map(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
+            )),
+          )
         ),
       )
     },

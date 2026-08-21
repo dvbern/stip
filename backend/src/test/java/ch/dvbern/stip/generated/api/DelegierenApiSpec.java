@@ -70,6 +70,7 @@ public class DelegierenApiSpec {
                 delegierungAufloesen(),
                 fallDelegieren(),
                 getAllDelegierungsForGesuch(),
+                getDelegierung(),
                 getDelegierungsOfSozialdienstAdmin(),
                 getDelegierungsOfSozialdienstMitarbeiter()
         );
@@ -93,6 +94,10 @@ public class DelegierenApiSpec {
 
     public GetAllDelegierungsForGesuchOper getAllDelegierungsForGesuch() {
         return new GetAllDelegierungsForGesuchOper(createReqSpec());
+    }
+
+    public GetDelegierungOper getDelegierung() {
+        return new GetDelegierungOper(createReqSpec());
     }
 
     public GetDelegierungsOfSozialdienstAdminOper getDelegierungsOfSozialdienstAdmin() {
@@ -469,6 +474,79 @@ public class DelegierenApiSpec {
         }
     }
     /**
+     * Returns delegierung by id
+     * 
+     *
+     * @see #delegierungIdPath Die ID der Delegierung (required)
+     * return DelegierungDtoSpec
+     */
+    public static class GetDelegierungOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/delegierung/{delegierungId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDelegierungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /delegierung/{delegierungId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /delegierung/{delegierungId}
+         * @param handler handler
+         * @return DelegierungDtoSpec
+         */
+        public DelegierungDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DelegierungDtoSpec> type = new TypeRef<DelegierungDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DELEGIERUNG_ID_PATH = "delegierungId";
+
+        /**
+         * @param delegierungId (UUID) Die ID der Delegierung (required)
+         * @return operation
+         */
+        public GetDelegierungOper delegierungIdPath(Object delegierungId) {
+            reqSpec.addPathParam(DELEGIERUNG_ID_PATH, delegierungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDelegierungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDelegierungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Returns a list of all Faelle with Delegierung
      * 
      *
@@ -480,7 +558,6 @@ public class DelegierenApiSpec {
      * @see #vornameQuery  (optional)
      * @see #geburtsdatumQuery  (optional)
      * @see #wohnortQuery  (optional)
-     * @see #statusQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
      * return PaginatedSozDashboardDtoSpec
@@ -583,17 +660,6 @@ public class DelegierenApiSpec {
          */
         public GetDelegierungsOfSozialdienstAdminOper wohnortQuery(Object... wohnort) {
             reqSpec.addQueryParam(WOHNORT_QUERY, wohnort);
-            return this;
-        }
-
-        public static final String STATUS_QUERY = "status";
-
-        /**
-         * @param status (String)  (optional)
-         * @return operation
-         */
-        public GetDelegierungsOfSozialdienstAdminOper statusQuery(Object... status) {
-            reqSpec.addQueryParam(STATUS_QUERY, status);
             return this;
         }
 

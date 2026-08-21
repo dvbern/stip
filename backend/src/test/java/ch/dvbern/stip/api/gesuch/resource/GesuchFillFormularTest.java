@@ -397,7 +397,6 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
             DokumentTypDtoSpec.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
             DokumentTypDtoSpec.EK_BELEG_OV_ABONNEMENT,
-            DokumentTypDtoSpec.EK_BELEG_BETREUUNGSKOSTEN_KINDER,
         };
 
         var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumenteGS()

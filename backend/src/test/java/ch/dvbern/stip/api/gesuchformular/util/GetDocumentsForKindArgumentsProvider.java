@@ -54,6 +54,12 @@ public class GetDocumentsForKindArgumentsProvider implements ArgumentsProvider {
                 (val) -> new Kind().setErgaenzungsleistungen(val).setEntryId(entryId),
                 new GesuchDokumentRefDto().dokumentTyp(DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN).entryId(entryId)
             ),
+
+            CreatePermutationUtil.createIntegerPermutations(
+                (val) -> new KindUpdateDto().betreuungskosten(val).entryId(entryId),
+                (val) -> new Kind().setBetreuungskosten(val).setEntryId(entryId),
+                new GesuchDokumentRefDto().dokumentTyp(DokumentTyp.KINDER_BETREUUNGSKOSTEN).entryId(entryId)
+            ),
             CreatePermutationUtil.createIntegerPermutations(
                 (val) -> new KindUpdateDto().andereEinnahmen(val).entryId(entryId),
                 (val) -> new Kind().setAndereEinnahmen(val).setEntryId(entryId),

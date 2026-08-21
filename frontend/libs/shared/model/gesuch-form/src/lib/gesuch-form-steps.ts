@@ -382,7 +382,12 @@ export const isStepValid = (
     return undefined;
   }
 
-  return toStepState(field, isDefined(formular?.[field]), invalidProps);
+  const value = formular?.[field];
+  return toStepState(
+    field,
+    isDefined(value) && (!Array.isArray(value) || value.length > 0),
+    invalidProps,
+  );
 };
 
 export const getFormStepByDocumentType = (

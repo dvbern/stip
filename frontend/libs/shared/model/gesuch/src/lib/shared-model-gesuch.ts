@@ -81,4 +81,5 @@ export type GesuchState =
   | 'inactive'
   | 'in-bearbeitung'
   | 'in-ueberpruefung'
-  | 'verfuegt';
+  | 'verfuegt'
+  | 'fehlende-dokumente';

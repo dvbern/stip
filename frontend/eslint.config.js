@@ -52,7 +52,7 @@ module.exports = [
         {
           enforceBuildableLibDependency: false,
           banTransitiveDependencies: true,
-          allow: ['@jscutlery/**', 'reflect-metadata'],
+          allow: ['@jscutlery/**', 'reflect-metadata', '@dv/contract/**'],
           depConstraints: [
             {
               sourceTag: 'scope:sachbearbeitung-app',

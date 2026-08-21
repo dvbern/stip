@@ -1,6 +1,8 @@
 {
   "app-name": "Stipendien Online",
 
+  "gesuch-app.delegieren-dialog.title": "Gesuch an Sozialdienst oder Institution delegieren",
+  "gesuch-app.delegieren-dialog.message": "Wählen Sie einen Sozialdienst oder eine Institution aus und füllen Sie die benötigten Angaben aus, um das Gesuch zu delegieren.",
   "gesuch-app.delegieren-dialog.submit": "Delegieren",
   "gesuch-app.delegieren-dialog.sozialdienst": "Sozialdienst"
 }

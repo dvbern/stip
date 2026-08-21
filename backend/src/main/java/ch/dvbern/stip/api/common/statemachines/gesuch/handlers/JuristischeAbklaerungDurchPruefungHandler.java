@@ -39,7 +39,7 @@ public class JuristischeAbklaerungDurchPruefungHandler implements GesuchStatusCh
 
     @Override
     @Transactional
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         final var gesuchTranchen = gesuch.getGesuchTranchen();
 
         final var decision = gesuchService.getAnspruchDecision(gesuch);

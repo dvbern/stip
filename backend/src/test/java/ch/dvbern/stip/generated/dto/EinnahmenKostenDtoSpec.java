@@ -46,7 +46,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_STATUS,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERJAHR,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERMOEGEN,
@@ -111,9 +110,6 @@ public class EinnahmenKostenDtoSpec {
 
   public static final String JSON_PROPERTY_VERPFLEGUNGSKOSTEN = "verpflegungskosten";
   private Integer verpflegungskosten;
-
-  public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
-  private Integer betreuungskostenKinder;
 
   public static final String JSON_PROPERTY_VERANLAGUNGS_STATUS = "veranlagungsStatus";
   private String veranlagungsStatus;
@@ -624,32 +620,6 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec betreuungskostenKinder(Integer betreuungskostenKinder) {
-    
-    this.betreuungskostenKinder = betreuungskostenKinder;
-    return this;
-  }
-
-   /**
-   * Betreuungskosten eigener Kinder
-   * @return betreuungskostenKinder
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getBetreuungskostenKinder() {
-    return betreuungskostenKinder;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetreuungskostenKinder(Integer betreuungskostenKinder) {
-    this.betreuungskostenKinder = betreuungskostenKinder;
-  }
-
-
   public EinnahmenKostenDtoSpec veranlagungsStatus(String veranlagungsStatus) {
     
     this.veranlagungsStatus = veranlagungsStatus;
@@ -787,7 +757,6 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.alternativeWohnformWohnend, einnahmenKosten.alternativeWohnformWohnend) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.verpflegungskosten, einnahmenKosten.verpflegungskosten) &&
-        Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsStatus, einnahmenKosten.veranlagungsStatus) &&
         Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
         Objects.equals(this.vermoegen, einnahmenKosten.vermoegen) &&
@@ -796,7 +765,7 @@ public class EinnahmenKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, auswaertigeMittagessenProWoche, verpflegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuern);
+    return Objects.hash(nettoerwerbseinkommen, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, auswaertigeMittagessenProWoche, verpflegungskosten, veranlagungsStatus, steuerjahr, vermoegen, steuern);
   }
 
   @Override
@@ -822,7 +791,6 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    alternativeWohnformWohnend: ").append(toIndentedString(alternativeWohnformWohnend)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
-    sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");

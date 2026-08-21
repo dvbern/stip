@@ -180,6 +180,10 @@ public class DeleteChangedDocumentsUtil {
             toDelete.add(toRefDto(DokumentTyp.KINDER_ANDERE_EINNAHMEN, newKind.getEntryId()));
         }
 
+        if (hasChangedAndNewIsGreaterThanZero(newKind.getBetreuungskosten(), oldKind.getBetreuungskosten())) {
+            toDelete.add(toRefDto(DokumentTyp.KINDER_BETREUUNGSKOSTEN, newKind.getEntryId()));
+        }
+
         return toDelete;
     }
 
@@ -194,15 +198,6 @@ public class DeleteChangedDocumentsUtil {
         final var toDelete = new ArrayList<GesuchDokumentRefDto>();
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getNettoerwerbseinkommen(), newEk.getNettoerwerbseinkommen())) {
             toDelete.add(toRefDto(!isPartner ? DokumentTyp.EK_LOHNABRECHNUNG : DokumentTyp.EK_PARTNER_LOHNABRECHNUNG));
-        }
-
-        if (hasChangedAndNewIsGreaterThanZero(oldEk.getBetreuungskostenKinder(), newEk.getBetreuungskostenKinder())) {
-            toDelete.add(
-                toRefDto(
-                    !isPartner ? DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER
-                        : DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
-                )
-            );
         }
 
         if (!isPartner && hasChangedAndNewIsGreaterThanZero(oldEk.getWohnkosten(), newEk.getWohnkosten())) {

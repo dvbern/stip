@@ -22,13 +22,11 @@ public class WelcomeMailDto  implements Serializable {
   private @Valid String name;
   private @Valid String vorname;
   private @Valid String email;
-  private @Valid String redirectUri;
 
   protected WelcomeMailDto(WelcomeMailDtoBuilder<?, ?> b) {
     this.name = b.name;
     this.vorname = b.vorname;
     this.email = b.email;
-    this.redirectUri = b.redirectUri;
   }
 
   public WelcomeMailDto() {
@@ -91,25 +89,6 @@ public class WelcomeMailDto  implements Serializable {
     this.email = email;
   }
 
-  /**
-   **/
-  public WelcomeMailDto redirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-    return this;
-  }
-
-  
-  @JsonProperty("redirectUri")
-  @NotNull
-  public String getRedirectUri() {
-    return redirectUri;
-  }
-
-  @JsonProperty("redirectUri")
-  public void setRedirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -122,13 +101,12 @@ public class WelcomeMailDto  implements Serializable {
     WelcomeMailDto welcomeMail = (WelcomeMailDto) o;
     return Objects.equals(this.name, welcomeMail.name) &&
         Objects.equals(this.vorname, welcomeMail.vorname) &&
-        Objects.equals(this.email, welcomeMail.email) &&
-        Objects.equals(this.redirectUri, welcomeMail.redirectUri);
+        Objects.equals(this.email, welcomeMail.email);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, vorname, email, redirectUri);
+    return Objects.hash(name, vorname, email);
   }
 
   @Override
@@ -139,7 +117,6 @@ public class WelcomeMailDto  implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -177,7 +154,6 @@ public class WelcomeMailDto  implements Serializable {
     private String name;
     private String vorname;
     private String email;
-    private String redirectUri;
     protected abstract B self();
 
     public abstract C build();
@@ -192,10 +168,6 @@ public class WelcomeMailDto  implements Serializable {
     }
     public B email(String email) {
       this.email = email;
-      return self();
-    }
-    public B redirectUri(String redirectUri) {
-      this.redirectUri = redirectUri;
       return self();
     }
   }

@@ -17,9 +17,13 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -27,6 +31,24 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class GesuchUtil {
+    public void setDefaultNachfristDokumente(Gesuch gesuch) {
+        if (Objects.isNull(gesuch.getNachfristDokumente())) {
+            gesuch.setNachfristDokumente(
+                LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
+            );
+        }
+    }
+
+    public String getNachfristVerlaengerungKommentar(Gesuch gesuch) {
+        final var language = AppLanguages.fromLocale(LocaleUtil.getLocale(gesuch));
+        final var translator = TLProducer.defaultBundle().forAppLanguage(language);
+
+        return translator.translate(
+            "stip.dokument.fehlendeDokumente.nachfrist.verlaengerung",
+            "datum",
+            DateUtil.formatDate(gesuch.getNachfristDokumente())
+        );
+    }
 
     public boolean openAenderungAlreadyExists(final Gesuch gesuch) {
         final var allowedStates = Set.of(

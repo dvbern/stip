@@ -72,7 +72,7 @@ public class GesuchNotificationService {
     @Transactional
     public void createStatusChangeWithCommentNotificationAndSendStdMail(
         final Gesuch gesuch,
-        final KommentarDto kommentar
+        final String kommentar
     ) {
         final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), pia.getKorrespondenzSprache());
@@ -80,7 +80,7 @@ public class GesuchNotificationService {
 
         final String msg =
             Templates
-                .getStatusChangeWithKommentarText(anrede, nachname, kommentar.getText(), pia.getKorrespondenzSprache())
+                .getStatusChangeWithKommentarText(anrede, nachname, kommentar, pia.getKorrespondenzSprache())
                 .render();
 
         notificationService

@@ -47,6 +47,11 @@
           },
           {
             "glob": "**/*",
+            "input": "../contract/translations",
+            "output": "assets/i18n"
+          },
+          {
+            "glob": "**/*",
             "input": "libs/shared/assets/i18n/src",
             "output": "assets/i18n"
           },

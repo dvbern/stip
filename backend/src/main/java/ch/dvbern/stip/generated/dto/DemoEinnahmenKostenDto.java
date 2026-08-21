@@ -33,7 +33,6 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   private @Valid Integer vermoegen;
   private @Valid Integer steuernKantonGemeinde;
   private @Valid Integer ausbildungskosten;
-  private @Valid Integer betreuungskostenKinder;
   private @Valid Integer verpflegungskosten;
   private @Valid Integer auswaertigeMittagessenProWoche;
   private @Valid Integer wohnkosten;
@@ -55,7 +54,6 @@ public class DemoEinnahmenKostenDto  implements Serializable {
     this.vermoegen = b.vermoegen;
     this.steuernKantonGemeinde = b.steuernKantonGemeinde;
     this.ausbildungskosten = b.ausbildungskosten;
-    this.betreuungskostenKinder = b.betreuungskostenKinder;
     this.verpflegungskosten = b.verpflegungskosten;
     this.auswaertigeMittagessenProWoche = b.auswaertigeMittagessenProWoche;
     this.wohnkosten = b.wohnkosten;
@@ -333,24 +331,6 @@ public class DemoEinnahmenKostenDto  implements Serializable {
 
   /**
    **/
-  public DemoEinnahmenKostenDto betreuungskostenKinder(Integer betreuungskostenKinder) {
-    this.betreuungskostenKinder = betreuungskostenKinder;
-    return this;
-  }
-
-  
-  @JsonProperty("betreuungskostenKinder")
-  public Integer getBetreuungskostenKinder() {
-    return betreuungskostenKinder;
-  }
-
-  @JsonProperty("betreuungskostenKinder")
-  public void setBetreuungskostenKinder(Integer betreuungskostenKinder) {
-    this.betreuungskostenKinder = betreuungskostenKinder;
-  }
-
-  /**
-   **/
   public DemoEinnahmenKostenDto verpflegungskosten(Integer verpflegungskosten) {
     this.verpflegungskosten = verpflegungskosten;
     return this;
@@ -463,7 +443,6 @@ public class DemoEinnahmenKostenDto  implements Serializable {
         Objects.equals(this.vermoegen, demoEinnahmenKosten.vermoegen) &&
         Objects.equals(this.steuernKantonGemeinde, demoEinnahmenKosten.steuernKantonGemeinde) &&
         Objects.equals(this.ausbildungskosten, demoEinnahmenKosten.ausbildungskosten) &&
-        Objects.equals(this.betreuungskostenKinder, demoEinnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.verpflegungskosten, demoEinnahmenKosten.verpflegungskosten) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, demoEinnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.wohnkosten, demoEinnahmenKosten.wohnkosten) &&
@@ -473,7 +452,7 @@ public class DemoEinnahmenKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, fahrkosten, vermoegen, steuernKantonGemeinde, ausbildungskosten, betreuungskostenKinder, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten, wgWohnend, alternativeWohnformWohnend);
+    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, fahrkosten, vermoegen, steuernKantonGemeinde, ausbildungskosten, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten, wgWohnend, alternativeWohnformWohnend);
   }
 
   @Override
@@ -495,7 +474,6 @@ public class DemoEinnahmenKostenDto  implements Serializable {
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
     sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
-    sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
@@ -549,7 +527,6 @@ public class DemoEinnahmenKostenDto  implements Serializable {
     private Integer vermoegen;
     private Integer steuernKantonGemeinde;
     private Integer ausbildungskosten;
-    private Integer betreuungskostenKinder;
     private Integer verpflegungskosten;
     private Integer auswaertigeMittagessenProWoche;
     private Integer wohnkosten;
@@ -613,10 +590,6 @@ public class DemoEinnahmenKostenDto  implements Serializable {
     }
     public B ausbildungskosten(Integer ausbildungskosten) {
       this.ausbildungskosten = ausbildungskosten;
-      return self();
-    }
-    public B betreuungskostenKinder(Integer betreuungskostenKinder) {
-      this.betreuungskostenKinder = betreuungskostenKinder;
       return self();
     }
     public B verpflegungskosten(Integer verpflegungskosten) {

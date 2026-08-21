@@ -46,7 +46,6 @@ public final class EinnahmenKostenTestBuilder extends AbstractTestBuilder<Einnah
             .ausbildungskosten(500)
             .auswaertigeMittagessenProWoche(5)
             .verpflegungskosten(null)
-            .betreuungskostenKinder(null)
             .veranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE)
             .steuerjahr(referenceDate.minusYears(2).getDayOfYear())
             .steuern(null)

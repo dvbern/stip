@@ -137,3 +137,13 @@ export const mapToSachbearbeiterWithKnownRoles = (
 
 export const isKnownSachbearbeiterRole = (role: string): role is BenutzerRole =>
   BENUTZER_ROLES.includes(role as BenutzerRole);
+
+export const filterByAppRole =
+  (rolesMap: RolesMap) =>
+  (item: { rolesAllowed?: AvailableBenutzerRole[] }) => {
+    if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
+      return true;
+    }
+
+    return item.rolesAllowed.some((role) => rolesMap[role]);
+  };

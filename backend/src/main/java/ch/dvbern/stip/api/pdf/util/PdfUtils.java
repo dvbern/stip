@@ -198,6 +198,28 @@ public class PdfUtils {
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
     }
 
+    public ByteArrayOutputStream makePageNumberEven(final ByteArrayOutputStream pdf) {
+        if (pdf == null || pdf.size() == 0) {
+            return pdf;
+        }
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try (
+            PdfReader reader = new PdfReader(new ByteArrayInputStream(pdf.toByteArray()));
+            PdfWriter writer = new PdfWriter(out);
+            PdfDocument pdfDoc = new PdfDocument(reader, writer)
+        ) {
+            final Document document = new Document(pdfDoc);
+            makePageNumberEven(document);
+            document.close();
+        } catch (IOException e) {
+            throw new InternalServerErrorException("Failed to make page number even", e);
+        }
+
+        return out;
+    }
+
     public String formatAusbildungsjahr(final LocalDate von, final LocalDate bis) {
         return String.format(
             " %d/%d",
@@ -593,7 +615,6 @@ public class PdfUtils {
         document.add(headerTable);
 
         if (isDeckblatt) {
-            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
         }
     }

@@ -51,10 +51,6 @@ export const getEinnahmenKosten = (
                 einnahmenKosten.ausbildungskosten,
               ]
             : null,
-          [
-            'betreuungskostenKinder.label',
-            einnahmenKosten.betreuungskostenKinder,
-          ],
           ['fahrkosten.label', einnahmenKosten.fahrkosten],
           !isPartner ? ['wohnkosten.label', einnahmenKosten.wohnkosten] : null,
           isPartner

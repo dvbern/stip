@@ -253,7 +253,3 @@
 @utility dv-icon-chip-info {
   @apply tw:bg-dv-blue-subtle tw:text-dv-blue;
 }
-
-dv-shared-pattern-mobile-sidenav dv-shared-pattern-gesuch-step-nav {
-  @apply tw:p-0;
-}

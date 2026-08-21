@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.delegieren.service;
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
+import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository.DelegierungEntry;
 import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.DelegierungEntryDto;
 import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
@@ -31,11 +32,10 @@ import org.mapstruct.Mapping;
 public abstract class DelegierungMapper {
     public abstract Delegierung toEntity(final DelegierungDto delegierungDto);
 
+    @Mapping(source = "fall.fallNummer", target = "fallNummer")
     public abstract DelegierungDto toDto(final Delegierung delegierung);
 
     public abstract DelegierungSlimDto toSlimDto(final Delegierung delegierung);
 
-    @Mapping(source = "fall.id", target = "fallId")
-    @Mapping(source = "fall.fallNummer", target = "fallNummer")
-    public abstract DelegierungEntryDto toEntryDto(final Delegierung fall);
+    public abstract DelegierungEntryDto toEntryDto(final DelegierungEntry fall);
 }

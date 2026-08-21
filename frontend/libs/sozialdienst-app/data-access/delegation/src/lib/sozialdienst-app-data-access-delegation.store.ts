@@ -9,29 +9,34 @@ import {
   DelegierenServiceDelegierterMitarbeiterAendernRequestParams,
   DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
   DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams,
+  Delegierung,
   PaginatedSozDashboard,
   SozialdienstBenutzer,
   SozialdienstService,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
   isPending,
+  pending,
 } from '@dv/shared/util/remote-data';
 import { LoadPaginatedDashboardByRoles } from '@dv/sozialdienst-app/model/delegation';
 
 type DelegationState = {
   paginatedSozDashboard: CachedRemoteData<PaginatedSozDashboard>;
   sozialdienstBenutzerList: CachedRemoteData<SozialdienstBenutzer[]>;
+  delegierung: RemoteData<Delegierung>;
   delegierenState: CachedRemoteData<void>;
 };
 
 const initialState: DelegationState = {
   paginatedSozDashboard: initial(),
   sozialdienstBenutzerList: initial(),
+  delegierung: initial(),
   delegierenState: initial(),
 };
 
@@ -73,6 +78,23 @@ export class DelegationStore extends signalStore(
         this.sozialdienstService.getSozialdienstBenutzerList$().pipe(
           handleApiResponse((benutzer) => {
             patchState(this, { sozialdienstBenutzerList: benutzer });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  loadDelegierung$ = rxMethod<{ delegierungId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          delegierung: pending(),
+        });
+      }),
+      switchMap(({ delegierungId }) =>
+        this.delegierenService.getDelegierung$({ delegierungId }).pipe(
+          handleApiResponse((delegierung) => {
+            patchState(this, { delegierung });
           }),
         ),
       ),
@@ -187,6 +209,7 @@ export class DelegationStore extends signalStore(
   resetDelegierenState() {
     patchState(this, {
       delegierenState: initial(),
+      delegierung: initial(),
     });
   }
 }

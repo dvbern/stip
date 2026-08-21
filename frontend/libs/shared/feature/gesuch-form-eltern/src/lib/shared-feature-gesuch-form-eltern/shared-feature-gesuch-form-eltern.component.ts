@@ -145,16 +145,15 @@ export class SharedFeatureGesuchFormElternComponent {
     });
 
     effect(() => {
-      const { id: gesuchTrancheId, gesuchFormular } =
+      const { id: gesuchTrancheId } =
         this.viewSig().gesuch?.gesuchTrancheToWorkWith ?? {};
       const sichtbareEltern = this.sichtbareElternChangedSig()?.value;
 
       if (gesuchTrancheId && sichtbareEltern) {
-        // Convert visible eltern to hidden eltern (inverse)
-        const versteckteEltern =
-          gesuchFormular?.elterns
-            ?.map((e) => e.elternTyp)
-            ?.filter((e) => !sichtbareEltern.includes(e)) ?? [];
+        const versteckteEltern = allEltern.filter(
+          (e) => !sichtbareEltern.includes(e),
+        );
+
         this.versteckteElternStore.saveVersteckteEltern$({
           gesuchTrancheId,
           versteckteEltern: versteckteEltern,

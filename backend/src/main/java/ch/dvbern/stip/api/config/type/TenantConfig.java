@@ -26,9 +26,7 @@ import io.smallrye.config.WithDefault;
 public interface TenantConfig {
     Set<String> subdomains();
 
-    String frontendUri();
-
-    WelcomeMail welcomeMail();
+    Frontends frontend();
 
     Darlehen darlehen();
 
@@ -40,12 +38,8 @@ public interface TenantConfig {
 
     TenantAdapterConfig adapter();
 
-    interface WelcomeMail {
-        String kcPath();
-
-        String kcQueryParameter();
-
-        String kcScope();
+    interface Frontends {
+        Map<FrontendType, String> urls();
     }
 
     interface Darlehen {

@@ -335,33 +335,6 @@
           </mat-form-field>
         }
 
-        @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
-          <!-- BETREUUNGKOSTEN_KINDER -->
-          <div class="tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
-            <mat-form-field dvSharedUiFormField class="tw:grow">
-              <mat-label>{{ t('shared.form.einnahmenkosten.betreuungskostenKinder.label') }}</mat-label>
-              <input
-                [formControl]="form.controls.betreuungskostenKinder"
-                data-testid="form-einnahmen-kosten-betreuungskostenKinder"
-                matInput
-                type="text"
-                [maskito]="maskitoNumber"
-              />
-              <mat-hint *dvZuvorHint="formChanges.betreuungskostenKinder"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ t('shared.form.error.required') }}
-              </mat-error>
-            </mat-form-field>
-
-            @if (betreuungskostenKinderDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
-        }
-
         <!-- FAHRKOSTEN -->
         <div class="tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
           <mat-form-field dvSharedUiFormField class="tw:grow">

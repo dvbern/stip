@@ -278,7 +278,10 @@ async function validateTsconfigBaseJson(
     tsconfigBaseJsonPaths,
   ).filter((path) => {
     const projectNameFromPath = path.replace('@dv/', '').replace(/\//g, '-');
-    return !libProjectNames.includes(projectNameFromPath);
+    return (
+      !libProjectNames.includes(projectNameFromPath) &&
+      projectNameFromPath !== 'contract-translations'
+    );
   });
   if (tsconfigBaseJsonPathsWithoutProject.length > 0) {
     violations.push(

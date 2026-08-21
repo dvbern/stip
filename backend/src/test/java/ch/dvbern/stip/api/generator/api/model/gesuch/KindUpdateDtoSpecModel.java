@@ -40,6 +40,7 @@ public class KindUpdateDtoSpecModel {
             model.setEntryId(UUID.randomUUID());
             model.setAusbildungssituation(TestUtil.getRandomElementFromArray(AusbildungssituationDtoSpec.values()));
             model.setWohnsitzAnteilPia(TestUtil.getRandomInt(0, 100));
+            model.setBetreuungskosten(0);
         }, 1);
     }
 

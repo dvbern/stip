@@ -18,17 +18,23 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TL;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
-import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentKommentarCopyUtil;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
@@ -47,7 +53,6 @@ public class GesuchDokumentKommentarService {
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
-    private final CustomDokumentTypRepository customDokumentTypRepository;
 
     @Transactional
     public void deleteForGesuchDokument(UUID gesuchDokumentId) {
@@ -192,5 +197,46 @@ public class GesuchDokumentKommentarService {
             gesuchDokument.addGesuchKommentar(kommentar);
             gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
         }
+    }
+
+    private List<String> getAllFehlendeDokumenteKommentarsForGesuch(
+        final Gesuch gesuch,
+        final List<GesuchDokumentKommentarRepository.GesuchDokumentKommentarSlim> kommentarSlims
+    ) {
+        final Locale locale = LocaleUtil.getLocale(gesuch);
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
+        final TL translatorJson = TLProducer.defaultBundle().forAppLanguageJson(AppLanguages.fromLocale(locale));
+
+        return kommentarSlims.stream()
+            .map(
+                dokument -> {
+                    final String dokumentName = Optional.ofNullable(dokument.customDokumentTyp())
+                        .orElseGet(() -> translatorJson.translate("contract.file.%s".formatted(dokument.typ())));
+                    return "%s: %s"
+                        .formatted(
+                            dokumentName,
+                            Optional.ofNullable(dokument.kommentar())
+                                .orElse(translator.translate("stip.dokument.fehlendeDokumente.new"))
+                                .trim()
+                        );
+                }
+            )
+            .toList();
+    }
+
+    @Transactional
+    public List<String> getAllFehlendeDokumenteKommentarsForGesuch(final Gesuch gesuch) {
+        return getAllFehlendeDokumenteKommentarsForGesuch(
+            gesuch,
+            gesuchDokumentKommentarRepository.getAllNewestAbgelehntKommentarOfGesuch(gesuch.getId())
+        );
+    }
+
+    @Transactional
+    public List<String> getAllFehlendeDokumenteKommentarsForAenderung(final GesuchTranche aenderung) {
+        return getAllFehlendeDokumenteKommentarsForGesuch(
+            aenderung.getGesuch(),
+            gesuchDokumentKommentarRepository.getAllNewestAbgelehntKommentarOfAenderung(aenderung.getId())
+        );
     }
 }

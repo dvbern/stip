@@ -177,7 +177,7 @@ export class DokumentsStore extends signalStore(
     return {
       dokuments,
       loading: isPending(this.dokuments()),
-      requiredDocumentTypes:
+      customDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.customDokumentTyps?.filter(
           // A document can already be uploaded but later on get rejected. In this case the document list would contain
           // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter

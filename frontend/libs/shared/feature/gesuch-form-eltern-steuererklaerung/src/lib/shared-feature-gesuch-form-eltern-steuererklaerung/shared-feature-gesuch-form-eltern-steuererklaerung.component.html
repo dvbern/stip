@@ -56,14 +56,14 @@
           </mat-radio-group>
 
           @if (steuererklaerungInBernDocumentSig(); as options) {
-            <div class="tw:flex tw:gap-4 tw:items-center">
+            <div class="tw:flex tw:my-4 tw:gap-4">
               <p
                 class="tw:grow tw:mb-0"
                 [innerHTML]="t(`shared.form.eltern-steuererklaerung.file.AUSBILDUNGSBEITRAEGE_${typ}.label`)"
               ></p>
 
               <dv-shared-pattern-document-upload
-                class="flex-shrink-1 tw:mt-2"
+                class="flex-shrink-1 tw:mt-2 tw:self-end!"
                 [optionsSig]="options"
               ></dv-shared-pattern-document-upload>
             </div>

@@ -15,7 +15,7 @@
   <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
   <div class="tw:px-4">
     <dv-shared-ui-nav-items
-      [isMobile]="true"
+      [isMobileSig]="true"
       [navItemsSig]="navItemsSig()"
       (click)="closeSidenav.emit()"
     ></dv-shared-ui-nav-items>
@@ -31,7 +31,7 @@
 
   <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
   <dv-shared-ui-nav-menu-items
-    [isMobile]="true"
+    [isMobileSig]="true"
     [navMenuItemsSig]="menuItemsSig()"
     (click)="closeSidenav.emit()"
   ></dv-shared-ui-nav-menu-items>

@@ -44,6 +44,8 @@ import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
+import ch.dvbern.stip.api.common.util.KommentarUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
@@ -910,7 +912,16 @@ public class GesuchService {
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         ValidatorUtil.throwIfEntityNotValid(validator, gesuch);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+        GesuchUtil.setDefaultNachfristDokumente(gesuch);
+        gesuchStatusService.triggerStateMachineEventWithStatusProtokoll(
+            gesuch,
+            GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE,
+            KommentarUtil.createFehlendeDokumenteKommentar(
+                gesuch,
+                gesuchDokumentKommentarService.getAllFehlendeDokumenteKommentarsForGesuch(gesuch)
+            ),
+            false
+        );
     }
 
     @Transactional
@@ -995,6 +1006,26 @@ public class GesuchService {
         }
         var gesuch = gesuchRepository.requireById(gesuchId);
         gesuch.setNachfristDokumente(nachfristDokumente);
+
+        final var comment = GesuchUtil.getNachfristVerlaengerungKommentar(gesuch);
+        gesuchTrancheRepository.findFehlendeDokumenteAenderung(gesuch.getId())
+            .ifPresentOrElse((aenderung) -> {
+                statusprotokollService.createStatusprotokoll(
+                    aenderung.getStatus().toString(),
+                    aenderung.getStatus().toString(),
+                    StatusprotokollEntryTyp.AENDERUNG,
+                    comment,
+                    gesuch
+                );
+            }, () -> {
+                statusprotokollService.createStatusprotokoll(
+                    gesuch.getGesuchStatus().toString(),
+                    gesuch.getGesuchStatus().toString(),
+                    StatusprotokollEntryTyp.GESUCH,
+                    comment,
+                    gesuch
+                );
+            });
         gesuchNotificationService.createNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
     }
 
@@ -1216,14 +1247,6 @@ public class GesuchService {
 
     public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
         gesuchNotificationService.createStatusChangeToFehlendeDokumenteNotificationAndSendStdMail(gesuch);
-    }
-
-    public void setDefaultNachfristDokumente(Gesuch gesuch) {
-        if (Objects.isNull(gesuch.getNachfristDokumente())) {
-            gesuch.setNachfristDokumente(
-                LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
-            );
-        }
     }
 
     @Transactional

@@ -22,13 +22,11 @@ public class SozialdienstBenutzerCreateDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String email;
-  private @Valid String redirectUri;
 
   protected SozialdienstBenutzerCreateDto(SozialdienstBenutzerCreateDtoBuilder<?, ?> b) {
     this.vorname = b.vorname;
     this.nachname = b.nachname;
     this.email = b.email;
-    this.redirectUri = b.redirectUri;
   }
 
   public SozialdienstBenutzerCreateDto() {
@@ -91,25 +89,6 @@ public class SozialdienstBenutzerCreateDto  implements Serializable {
     this.email = email;
   }
 
-  /**
-   **/
-  public SozialdienstBenutzerCreateDto redirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-    return this;
-  }
-
-  
-  @JsonProperty("redirectUri")
-  @NotNull
-  public String getRedirectUri() {
-    return redirectUri;
-  }
-
-  @JsonProperty("redirectUri")
-  public void setRedirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -122,13 +101,12 @@ public class SozialdienstBenutzerCreateDto  implements Serializable {
     SozialdienstBenutzerCreateDto sozialdienstBenutzerCreate = (SozialdienstBenutzerCreateDto) o;
     return Objects.equals(this.vorname, sozialdienstBenutzerCreate.vorname) &&
         Objects.equals(this.nachname, sozialdienstBenutzerCreate.nachname) &&
-        Objects.equals(this.email, sozialdienstBenutzerCreate.email) &&
-        Objects.equals(this.redirectUri, sozialdienstBenutzerCreate.redirectUri);
+        Objects.equals(this.email, sozialdienstBenutzerCreate.email);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, email, redirectUri);
+    return Objects.hash(vorname, nachname, email);
   }
 
   @Override
@@ -139,7 +117,6 @@ public class SozialdienstBenutzerCreateDto  implements Serializable {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -177,7 +154,6 @@ public class SozialdienstBenutzerCreateDto  implements Serializable {
     private String vorname;
     private String nachname;
     private String email;
-    private String redirectUri;
     protected abstract B self();
 
     public abstract C build();
@@ -192,10 +168,6 @@ public class SozialdienstBenutzerCreateDto  implements Serializable {
     }
     public B email(String email) {
       this.email = email;
-      return self();
-    }
-    public B redirectUri(String redirectUri) {
-      this.redirectUri = redirectUri;
       return self();
     }
   }

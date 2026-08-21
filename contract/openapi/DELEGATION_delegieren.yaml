@@ -36,6 +36,29 @@ paths:
         500:
           $ref: './components/responses.yaml#/ServerError'
       operationId: fallDelegieren
+  /delegierung/{delegierungId}:
+    parameters:
+      - $ref: '#/components/parameters/delegierungId'
+    get:
+      tags:
+        - Delegieren
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Delegierung'
+          description: A delegierung and related entities
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDelegierung
+      summary: Returns delegierung by id
   /delegierung/{gesuchId}/all:
     parameters:
       - $ref: './components/parameters.yaml#/gesuchId'
@@ -136,7 +159,6 @@ paths:
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
-        - $ref: './components/parameters.yaml#/status'
         - $ref: './components/parameters.yaml#/page'
         - $ref: './components/parameters.yaml#/pageSize'
         - name: sortColumn
@@ -240,12 +262,15 @@ components:
       type: object
       required:
         - id
+        - fallNummer
         - sozialdienst
         - persoenlicheAngaben
         - status
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
+        fallNummer:
+          type: string
         sozialdienst:
           $ref: './components/common.yaml#/SozialdienstSlim'
         delegierterMitarbeiter:
@@ -260,17 +285,38 @@ components:
           $ref: './components/common.yaml#/LocalDate'
     DelegierungEntry:
       required:
-        - tenant
+        - fallNummer
+        - fallId
+        - nachname
+        - vorname
+        - geburtsdatum
+        - wohnort
+        - status
+        - totalCount
       type: object
-      allOf:
-        - $ref: '#/components/schemas/Delegierung'
       properties:
-        fallId:
+        id:
           $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string
-        tenant:
+        fallId:
+          $ref: './components/common.yaml#/UUID'
+        nachname:
           type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          $ref: './components/common.yaml#/LocalDate'
+        wohnort:
+          type: string
+        status:
+          $ref: './components/common.yaml#/DelegierungStatus'
+        gesuchStatus:
+          $ref: './components/common.yaml#/Gesuchstatus'
+        aenderungStatus:
+          $ref: './components/common.yaml#/GesuchTrancheStatus'
+        totalCount:
+          type: integer
     PaginatedSozDashboard:
       allOf:
         - $ref: './components/common.yaml#/PaginatedResult'

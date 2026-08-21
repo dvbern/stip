@@ -57,6 +57,9 @@ public class KindRequiredListDokumentsProducer implements RequiredRefDokumentsPr
             if (greaterThanZero(kind.getRenten())) {
                 requiredDocs.add(Pair.of(DokumentTyp.KINDER_RENTEN, kind.getEntryId()));
             }
+            if (greaterThanZero(kind.getBetreuungskosten())) {
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_BETREUUNGSKOSTEN, kind.getEntryId()));
+            }
             if (greaterThanZero(kind.getAndereEinnahmen())) {
                 requiredDocs.add(Pair.of(DokumentTyp.KINDER_ANDERE_EINNAHMEN, kind.getEntryId()));
             }

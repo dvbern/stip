@@ -1,7 +1,7 @@
 <form [formGroup]="form" class="tw:dv-form-grid" [dvSharedUiFormReadonly]="true" *dvTranslocoShared="let t">
   <aside class="tw:md:col-span-2 tw:lg:col-start-3 tw:lg:row-span-12">
     <h2 class="tw:text-xl tw:font-semibold">{{ t('shared.form.delegierung.list.label') }}</h2>
-    <mat-selection-list [multiple]="false" [formControl]="selectedDelegierung">
+    <mat-selection-list [multiple]="false" [formControl]="selectedDelegierung" [hideSingleSelectionIndicator]="true">
       @for (delegation of delegationStore.delegationenViewSig(); track delegation) {
         <mat-list-option [value]="delegation" class="tw:py-3! tw:pl-0! tw:h-auto! tw:max-w-fit tw:lg:max-w-full">
           <div class="tw:flex! tw:gap-4 tw:lg:max-xl:flex-col tw:lg:max-xl:gap-0 tw:md:max-xl:items-start">

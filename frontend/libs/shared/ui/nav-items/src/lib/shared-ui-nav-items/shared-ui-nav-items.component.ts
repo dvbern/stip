@@ -11,7 +11,7 @@ import { NavItem } from '@dv/shared/util/navigation';
 @Component({
   host: {
     '[class]':
-      'this.isMobile() ? "tw:flex tw:flex-col tw:items-start tw:gap-1" : "tw:flex tw:grow tw:items-center tw:gap-4"',
+      'this.isMobileSig() ? "tw:flex tw:flex-col tw:items-start tw:gap-1" : "tw:flex tw:grow tw:items-center tw:gap-4"',
   },
   selector: 'dv-shared-ui-nav-items',
   imports: [
@@ -27,7 +27,7 @@ import { NavItem } from '@dv/shared/util/navigation';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNavItemsComponent {
-  isMobile = input<boolean>(false);
+  isMobileSig = input<boolean>(false);
 
   navItemsSig = input.required<NavItem[]>();
 }

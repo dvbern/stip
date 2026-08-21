@@ -38,7 +38,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_TAGGELDER_A_H_V_I_V,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_ANDERE_EINNAHMEN,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN,
-  DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
@@ -83,9 +82,6 @@ public class DemoEinnahmenKostenDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN = "ausbildungskosten";
   private Integer ausbildungskosten;
-
-  public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
-  private Integer betreuungskostenKinder;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
   private Integer fahrkosten;
@@ -400,32 +396,6 @@ public class DemoEinnahmenKostenDtoSpec {
   }
 
 
-  public DemoEinnahmenKostenDtoSpec betreuungskostenKinder(Integer betreuungskostenKinder) {
-    
-    this.betreuungskostenKinder = betreuungskostenKinder;
-    return this;
-  }
-
-   /**
-   * Get betreuungskostenKinder
-   * @return betreuungskostenKinder
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getBetreuungskostenKinder() {
-    return betreuungskostenKinder;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetreuungskostenKinder(Integer betreuungskostenKinder) {
-    this.betreuungskostenKinder = betreuungskostenKinder;
-  }
-
-
   public DemoEinnahmenKostenDtoSpec fahrkosten(Integer fahrkosten) {
     
     this.fahrkosten = fahrkosten;
@@ -653,7 +623,6 @@ public class DemoEinnahmenKostenDtoSpec {
         Objects.equals(this.taggelderAHVIV, demoEinnahmenKosten.taggelderAHVIV) &&
         Objects.equals(this.andereEinnahmen, demoEinnahmenKosten.andereEinnahmen) &&
         Objects.equals(this.ausbildungskosten, demoEinnahmenKosten.ausbildungskosten) &&
-        Objects.equals(this.betreuungskostenKinder, demoEinnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.fahrkosten, demoEinnahmenKosten.fahrkosten) &&
         Objects.equals(this.verpflegungskosten, demoEinnahmenKosten.verpflegungskosten) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, demoEinnahmenKosten.auswaertigeMittagessenProWoche) &&
@@ -666,7 +635,7 @@ public class DemoEinnahmenKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, ausbildungskosten, betreuungskostenKinder, fahrkosten, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten, wgWohnend, alternativeWohnformWohnend, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, ausbildungskosten, fahrkosten, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten, wgWohnend, alternativeWohnformWohnend, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -684,7 +653,6 @@ public class DemoEinnahmenKostenDtoSpec {
     sb.append("    taggelderAHVIV: ").append(toIndentedString(taggelderAHVIV)).append("\n");
     sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
-    sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");

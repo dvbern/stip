@@ -337,6 +337,7 @@ export class SharedPatternDarlehenFormComponent {
               this.gsFormSavedSig.set(true);
               this.gsShowMissingDocsErrorSig.set(false);
               this.formGs.markAsPristine();
+              this.darlehenUpdatedSig.emit();
             },
           });
         }
@@ -477,7 +478,6 @@ export class SharedPatternDarlehenFormComponent {
             onSuccess: () => {
               this.formSb.markAsPristine();
               this.sbFormSavedSig.set(true);
-              this.darlehenUpdatedSig.emit();
             },
           });
         }

@@ -61,10 +61,6 @@ export interface EinnahmenKosten {
     auswaertigeMittagessenProWoche?: number;
     verpflegungskosten?: number;
     /**
-     * Betreuungskosten eigener Kinder
-     */
-    betreuungskostenKinder?: number;
-    /**
      * Veranlagungsstatus
      */
     veranlagungsStatus?: string;

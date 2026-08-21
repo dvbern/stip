@@ -1,0 +1,1 @@
+Die Delegationsanfrage für den Sozialdienst {sozialdienstName} wurde abgeschickt. Sie werden benachrichtigt, sobald die Anfrage angenommen oder abgelehnt wurde.

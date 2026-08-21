@@ -151,7 +151,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     ausbildungskosten: [<string | null>null, [Validators.required]],
     fahrkosten: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
-    betreuungskostenKinder: [<string | null>null, [Validators.required]],
     unterhaltsbeitraege: [<string | undefined>undefined],
     einnahmenBGSA: [<string | undefined>undefined],
     taggelderAHVIV: [<string | undefined>undefined],
@@ -377,12 +376,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   wgWohnendSig = toSignal(this.form.controls.wgWohnend.valueChanges);
 
-  betreuungskostenKinderDocumentSig = this.createFieldDocumentSig(
-    'betreuungskostenKinder',
-    'EK_BELEG_BETREUUNGSKOSTEN_KINDER',
-    'EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER',
-  );
-
   vermoegenDocumentSig = this.createFieldDocumentSig(
     'vermoegen',
     'EK_VERMOEGEN',
@@ -415,8 +408,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     );
     effect(() => {
       this.gotReenabledSig();
-      const { hasData, hatKinder, warErwachsenSteuerJahr } =
-        this.formStateSig();
+      const { hasData, warErwachsenSteuerJahr } = this.formStateSig();
 
       const isEKPartner = this.einkommenTyp() === 'PARTNER';
 
@@ -452,18 +444,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         this.form.controls.alternativeWohnformWohnend,
         wgWohnend !== false,
       );
-
-      if (isEKPartner) {
-        this.formUtils.setRequired(
-          this.form.controls.betreuungskostenKinder,
-          false,
-        );
-      } else {
-        this.setDisabledStateAndHide(
-          this.form.controls.betreuungskostenKinder,
-          !hatKinder,
-        );
-      }
 
       this.setDisabledStateAndHide(
         this.form.controls.vermoegen,
@@ -536,8 +516,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           fahrkosten: einnahmenKosten.fahrkosten.toString(),
           wohnkosten: einnahmenKosten.wohnkosten?.toString(),
           verpflegungskosten: einnahmenKosten.verpflegungskosten?.toString(),
-          betreuungskostenKinder:
-            einnahmenKosten.betreuungskostenKinder?.toString(),
           vermoegen: einnahmenKosten.vermoegen?.toString(),
           veranlagungsStatus: einnahmenKosten.veranlagungsStatus,
           wgAnzahlPersonen: einnahmenKosten.wgAnzahlPersonen?.toString(),
@@ -594,7 +572,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
-    const { hatKinder } = this.formStateSig();
     const isEKPartner = this.einkommenTyp() === 'PARTNER';
 
     const formValues = convertTempFormToRealValues(this.form, [
@@ -607,9 +584,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'auswaertigeMittagessenProWoche',
       'steuerjahr',
       'veranlagungsStatus',
-      ...(hatKinder && !isEKPartner
-        ? (['betreuungskostenKinder'] as const)
-        : []),
     ]);
 
     const update = {
@@ -636,9 +610,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       wohnkosten: fromFormatedNumber(formValues.wohnkosten),
       wgAnzahlPersonen: fromFormatedNumber(formValues.wgAnzahlPersonen),
       verpflegungskosten: fromFormatedNumber(formValues.verpflegungskosten),
-      betreuungskostenKinder: fromFormatedNumber(
-        formValues.betreuungskostenKinder,
-      ),
       vermoegen: fromFormatedNumber(formValues.vermoegen),
       steuern: fromFormatedNumber(formValues.steuern),
       steuerjahr: fromFormatedNumber(formValues.steuerjahr),

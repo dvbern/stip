@@ -342,11 +342,6 @@ components:
     $ref: './components/security.yaml#/securitySchemes'
   schemas:
     SozialdienstBenutzerCreate:
-      required:
-        - redirectUri
-      properties:
-        redirectUri:
-          type: string
       allOf:
         - $ref: './components/common.yaml#/SozialdienstBenutzerBase'
     SozialdienstBenutzerUpdate:

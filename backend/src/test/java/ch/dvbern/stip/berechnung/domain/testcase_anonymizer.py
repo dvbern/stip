@@ -5,7 +5,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-ROOT = Path("/Users/luca.fondo/dev/stip/stip/backend/src/test/resources/testcase/serialized-testcases")
+ROOT = Path(Path(__file__).parent.resolve(), "../../../../../../resources/testcase/serialized-testcases").resolve()
 ANONYMIZED_SOZIALVERSICHERUNGSNUMMER = "756.1111.1111.3"
 
 
@@ -47,6 +47,8 @@ def anonymize(node: Any, parent_key = None) -> None:
 
 if __name__ == "__main__":
     files = sorted(ROOT.rglob("*.json"))
+
+    print(ROOT)
 
     for file in files:
         with file.open("r", encoding="utf-8") as f:

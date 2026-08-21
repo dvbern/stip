@@ -8,15 +8,17 @@ import {
   viewChild,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
+import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
@@ -25,12 +27,12 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-protokoll',
   imports: [
-    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
     TypeSafeMatCellDefDirective,
     ReactiveFormsModule,
+    SachbearbeitungAppUiAdvTranslocoDirective,
     SharedUiTruncateTooltipDirective,
     SharedUiTooltipDateComponent,
   ],
@@ -40,6 +42,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 })
 export class SachbearbeitungAppFeatureInfosProtokollComponent {
   private gesuchHeaderStore = inject(GesuchHeaderStore);
+  private dialog = inject(MatDialog);
   displayedColumns = ['datum', 'typ', 'status', 'user', 'kommentar'];
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
@@ -68,6 +71,16 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
       this.gesuchHeaderStore.loadHeader$({
         gesuchId,
       });
+    });
+  }
+
+  showKommentar(title: string, message: string) {
+    SharedUiInfoDialogComponent.open(this.dialog, {
+      data: {
+        type: 'plain',
+        title,
+        message,
+      },
     });
   }
 }

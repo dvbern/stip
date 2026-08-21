@@ -63,10 +63,6 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetVerfuegungenByFallId(final UUID fallId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
-            return;
-        }
-
         final var fall = fallRepository.requireById(fallId);
         if (
             AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(

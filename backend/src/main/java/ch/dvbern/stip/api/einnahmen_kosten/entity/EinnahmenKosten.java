@@ -129,11 +129,6 @@ public class EinnahmenKosten extends AbstractTenantEntity {
     private Integer verpflegungskosten;
 
     @NullableUnlessGenerated
-    @Column(name = "betreuungskosten_kinder")
-    @Min(0)
-    private Integer betreuungskostenKinder;
-
-    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "status_veranlagung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String veranlagungsStatus;

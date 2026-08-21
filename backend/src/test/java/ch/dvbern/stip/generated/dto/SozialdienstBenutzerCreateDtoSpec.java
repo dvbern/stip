@@ -27,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * SozialdienstBenutzerCreateDtoSpec
  */
 @JsonPropertyOrder({
-  SozialdienstBenutzerCreateDtoSpec.JSON_PROPERTY_REDIRECT_URI,
   SozialdienstBenutzerCreateDtoSpec.JSON_PROPERTY_VORNAME,
   SozialdienstBenutzerCreateDtoSpec.JSON_PROPERTY_NACHNAME,
   SozialdienstBenutzerCreateDtoSpec.JSON_PROPERTY_EMAIL
@@ -35,9 +34,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("SozialdienstBenutzerCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class SozialdienstBenutzerCreateDtoSpec {
-  public static final String JSON_PROPERTY_REDIRECT_URI = "redirectUri";
-  private String redirectUri;
-
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
 
@@ -49,32 +45,6 @@ public class SozialdienstBenutzerCreateDtoSpec {
 
   public SozialdienstBenutzerCreateDtoSpec() {
   }
-
-  public SozialdienstBenutzerCreateDtoSpec redirectUri(String redirectUri) {
-    
-    this.redirectUri = redirectUri;
-    return this;
-  }
-
-   /**
-   * Get redirectUri
-   * @return redirectUri
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_REDIRECT_URI)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getRedirectUri() {
-    return redirectUri;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_REDIRECT_URI)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setRedirectUri(String redirectUri) {
-    this.redirectUri = redirectUri;
-  }
-
 
   public SozialdienstBenutzerCreateDtoSpec vorname(String vorname) {
     
@@ -162,22 +132,20 @@ public class SozialdienstBenutzerCreateDtoSpec {
       return false;
     }
     SozialdienstBenutzerCreateDtoSpec sozialdienstBenutzerCreate = (SozialdienstBenutzerCreateDtoSpec) o;
-    return Objects.equals(this.redirectUri, sozialdienstBenutzerCreate.redirectUri) &&
-        Objects.equals(this.vorname, sozialdienstBenutzerCreate.vorname) &&
+    return Objects.equals(this.vorname, sozialdienstBenutzerCreate.vorname) &&
         Objects.equals(this.nachname, sozialdienstBenutzerCreate.nachname) &&
         Objects.equals(this.email, sozialdienstBenutzerCreate.email);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(redirectUri, vorname, nachname, email);
+    return Objects.hash(vorname, nachname, email);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstBenutzerCreateDtoSpec {\n");
-    sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");

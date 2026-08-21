@@ -31,7 +31,7 @@ public class DatenschutzbriefDruckbereitHandler implements GesuchStatusChangeHan
     private final GesuchStatusService gesuchStatusService;
 
     @Override
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         final var hasNoEltern = gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty();
         final var allAlreadyVersendet = gesuch.getAllPendingDatenschutschbriefsForMassendruck().toList().isEmpty();
         // automatic status change, if no Datenschutzblaetter are required to set to versendet

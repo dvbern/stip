@@ -91,6 +91,7 @@ public class VerfuegungService {
     public List<VerfuegungFallDto> getVerfuegungenByFallId(final UUID fallId) {
         return gesuchRepository.findAllForFall(fallId)
             .flatMap(gesuch -> gesuch.getVerfuegungs().stream())
+            .filter(Verfuegung::isVersendet)
             .sorted(Comparator.comparing(Verfuegung::getTimestampErstellt).reversed())
             .map(verfuegungMapper::toFallDto)
             .toList();

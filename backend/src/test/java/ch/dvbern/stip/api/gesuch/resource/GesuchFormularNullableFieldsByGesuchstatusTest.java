@@ -368,7 +368,6 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
             DokumentTypDtoSpec.EK_PARTNER_BELEG_KINDERZULAGEN,
             DokumentTypDtoSpec.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
             DokumentTypDtoSpec.EK_PARTNER_BELEG_BEZAHLTE_RENTEN,
-            DokumentTypDtoSpec.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER,
             DokumentTypDtoSpec.EK_PARTNER_BELEG_OV_ABONNEMENT,
             DokumentTypDtoSpec.EK_PARTNER_VERMOEGEN,
             DokumentTypDtoSpec.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION,
