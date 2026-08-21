@@ -20,14 +20,13 @@ package ch.dvbern.stip.api.ausbildung.service;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungUnterbruchAntragRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -35,14 +34,16 @@ import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchDashboardSBDto;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchDashboardSBDtoBuilder;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchLimitsDto;
 import ch.dvbern.stip.generated.dto.CreateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
@@ -68,11 +69,10 @@ public class AusbildungUnterbruchAntragService {
     private final S3AsyncClient s3;
     private final StipConfig config;
     private final Antivirus antivirus;
+    private final GesuchRepository gesuchRepository;
     private final DokumentRepository dokumentRepository;
     private final DokumentDeleteService dokumentDeleteService;
     private final DokumentDownloadService dokumentDownloadService;
-    private final BenutzerService benutzerService;
-    private final SozialdienstService sozialdienstService;
     private final NotificationService notificationService;
     private final GesuchStatusService gesuchStatusService;
     private final AusbildungService ausbildungService;
@@ -209,8 +209,7 @@ public class AusbildungUnterbruchAntragService {
             ausbildungUnterbruchAntrag.getKommentarGS()
         );
 
-        final var fileUploads = createAusbildungUnterbruchAntragGSDto.getFileUploads()
-            .stream()
+        final var fileUploads = Stream.of(createAusbildungUnterbruchAntragGSDto.getFileUpload())
             .map(
                 fileUpload -> dokumentUploadService.validateScanUploadDokument(
                     fileUpload,
@@ -235,11 +234,18 @@ public class AusbildungUnterbruchAntragService {
     }
 
     @Transactional
-    public List<AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchAntragsByGesuchId(final UUID gesuchId) {
-        return ausbildungUnterbruchAntragRepository.getAusbildungUnterbruchAntragsByGesuchId(gesuchId)
-            .stream()
-            .map(ausbildungUnterbruchAntragMapper::toSbDto)
-            .toList();
+    public AusbildungUnterbruchDashboardSBDto getAusbildungUnterbruchAntragsByGesuchId(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var ausbildungUnterbruchs =
+            ausbildungUnterbruchAntragRepository.getAusbildungUnterbruchAntragsByGesuchId(gesuchId)
+                .stream()
+                .map(ausbildungUnterbruchAntragMapper::toSbDto)
+                .toList();
+
+        return AusbildungUnterbruchDashboardSBDtoBuilder.ausbildungUnterbruchDashboardSBDto()
+            .canCreateAusbildungUnterbruch(canCreateAusbildungUnterbruchAntrag(gesuch.getAusbildung()))
+            .ausbildungUnterbruchs(ausbildungUnterbruchs)
+            .build();
     }
 
     @Transactional
@@ -267,18 +273,6 @@ public class AusbildungUnterbruchAntragService {
 
         return ausbildungUnterbruchAntragMapper
             .toSbDto(antrag);
-    }
-
-    @Transactional
-    public boolean gsCanWrite(final AusbildungUnterbruchAntrag antrag) {
-        if (antrag.getStatus() != AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS) {
-            return false;
-        }
-        return AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-            antrag.getGesuch(),
-            benutzerService.getCurrentBenutzer(),
-            sozialdienstService
-        );
     }
 
     @Transactional

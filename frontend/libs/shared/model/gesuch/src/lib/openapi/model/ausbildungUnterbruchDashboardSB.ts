@@ -9,11 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AusbildungUnterbruchAntragSB } from './ausbildungUnterbruchAntragSB';
 
-export interface CreateAusbildungUnterbruchAntragGS { 
-    kommentarGS: string;
-    fileUpload: Blob;
-    startDate: string;
-    endDate: string;
+export interface AusbildungUnterbruchDashboardSB { 
+    canCreateAusbildungUnterbruch: boolean;
+    ausbildungUnterbruchs: Array<AusbildungUnterbruchAntragSB>;
 }
 

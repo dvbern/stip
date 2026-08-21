@@ -2,9 +2,6 @@ package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -24,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class CreateAusbildungUnterbruchSBDto  implements Serializable {
   private @Valid String kommentarGS;
-  private @Valid List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads = new ArrayList<>();
+  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
@@ -33,7 +30,7 @@ public class CreateAusbildungUnterbruchSBDto  implements Serializable {
 
   protected CreateAusbildungUnterbruchSBDto(CreateAusbildungUnterbruchSBDtoBuilder<?, ?> b) {
     this.kommentarGS = b.kommentarGS;
-    this.fileUploads = b.fileUploads;
+    this.fileUpload = b.fileUpload;
     this.startDate = b.startDate;
     this.endDate = b.endDate;
     this.status = b.status;
@@ -65,39 +62,23 @@ public class CreateAusbildungUnterbruchSBDto  implements Serializable {
 
   /**
    **/
-  public CreateAusbildungUnterbruchSBDto fileUploads(List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads) {
-    this.fileUploads = fileUploads;
+  public CreateAusbildungUnterbruchSBDto fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+    this.fileUpload = fileUpload;
     return this;
   }
 
   
-  @JsonProperty("fileUploads")
+  @JsonProperty("fileUpload")
   @NotNull
-  public List<org.jboss.resteasy.reactive.multipart.FileUpload> getFileUploads() {
-    return fileUploads;
+  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
+    return fileUpload;
   }
 
-  @JsonProperty("fileUploads")
-  public void setFileUploads(List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads) {
-    this.fileUploads = fileUploads;
+  @JsonProperty("fileUpload")
+  public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+    this.fileUpload = fileUpload;
   }
 
-  public CreateAusbildungUnterbruchSBDto addFileUploadsItem(org.jboss.resteasy.reactive.multipart.FileUpload fileUploadsItem) {
-    if (this.fileUploads == null) {
-      this.fileUploads = new ArrayList<>();
-    }
-
-    this.fileUploads.add(fileUploadsItem);
-    return this;
-  }
-
-  public CreateAusbildungUnterbruchSBDto removeFileUploadsItem(org.jboss.resteasy.reactive.multipart.FileUpload fileUploadsItem) {
-    if (fileUploadsItem != null && this.fileUploads != null) {
-      this.fileUploads.remove(fileUploadsItem);
-    }
-
-    return this;
-  }
   /**
    **/
   public CreateAusbildungUnterbruchSBDto startDate(LocalDate startDate) {
@@ -203,7 +184,7 @@ public class CreateAusbildungUnterbruchSBDto  implements Serializable {
     }
     CreateAusbildungUnterbruchSBDto createAusbildungUnterbruchSB = (CreateAusbildungUnterbruchSBDto) o;
     return Objects.equals(this.kommentarGS, createAusbildungUnterbruchSB.kommentarGS) &&
-        Objects.equals(this.fileUploads, createAusbildungUnterbruchSB.fileUploads) &&
+        Objects.equals(this.fileUpload, createAusbildungUnterbruchSB.fileUpload) &&
         Objects.equals(this.startDate, createAusbildungUnterbruchSB.startDate) &&
         Objects.equals(this.endDate, createAusbildungUnterbruchSB.endDate) &&
         Objects.equals(this.status, createAusbildungUnterbruchSB.status) &&
@@ -213,7 +194,7 @@ public class CreateAusbildungUnterbruchSBDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentarGS, fileUploads, startDate, endDate, status, kommentarSB, monateOhneAnspruch);
+    return Objects.hash(kommentarGS, fileUpload, startDate, endDate, status, kommentarSB, monateOhneAnspruch);
   }
 
   @Override
@@ -222,7 +203,7 @@ public class CreateAusbildungUnterbruchSBDto  implements Serializable {
     sb.append("class CreateAusbildungUnterbruchSBDto {\n");
     
     sb.append("    kommentarGS: ").append(toIndentedString(kommentarGS)).append("\n");
-    sb.append("    fileUploads: ").append(toIndentedString(fileUploads)).append("\n");
+    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
@@ -263,7 +244,7 @@ public class CreateAusbildungUnterbruchSBDto  implements Serializable {
 
   public static abstract class CreateAusbildungUnterbruchSBDtoBuilder<C extends CreateAusbildungUnterbruchSBDto, B extends CreateAusbildungUnterbruchSBDtoBuilder<C, B>>  {
     private String kommentarGS;
-    private List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads = new ArrayList<>();
+    private org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
     private LocalDate startDate;
     private LocalDate endDate;
     private ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
@@ -277,8 +258,8 @@ public class CreateAusbildungUnterbruchSBDto  implements Serializable {
       this.kommentarGS = kommentarGS;
       return self();
     }
-    public B fileUploads(List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads) {
-      this.fileUploads = fileUploads;
+    public B fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+      this.fileUpload = fileUpload;
       return self();
     }
     public B startDate(LocalDate startDate) {

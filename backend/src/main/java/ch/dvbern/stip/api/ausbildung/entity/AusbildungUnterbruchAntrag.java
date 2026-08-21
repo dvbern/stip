@@ -70,7 +70,7 @@ public class AusbildungUnterbruchAntrag extends AbstractTenantEntity {
     @NotNull
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private AusbildungUnterbruchAntragStatus status = AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS;
+    private AusbildungUnterbruchAntragStatus status;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)

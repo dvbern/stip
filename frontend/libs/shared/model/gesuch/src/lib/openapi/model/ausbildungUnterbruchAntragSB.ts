@@ -14,12 +14,9 @@ import { Dokument } from './dokument';
 
 export interface AusbildungUnterbruchAntragSB { 
     kommentarGS: string;
-    fileUploads: Array<Blob>;
+    fileUpload: Blob;
     startDate: string;
     endDate: string;
-    status: AusbildungUnterbruchAntragStatus;
-    kommentarSB: string;
-    monateOhneAnspruch?: number;
     id: string;
     timestampErstellt: string;
     userErstellt: string;
@@ -28,6 +25,9 @@ export interface AusbildungUnterbruchAntragSB {
     unterbruchEarliestStartDate: string;
     dokuments: Array<Dokument>;
     gesuchId: string;
+    status: AusbildungUnterbruchAntragStatus;
+    kommentarSB?: string;
+    monateOhneAnspruch?: number;
 }
 
 

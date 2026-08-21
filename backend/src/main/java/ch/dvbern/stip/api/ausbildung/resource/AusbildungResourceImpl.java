@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.ausbildung.resource;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.service.AusbildungService;
@@ -36,6 +35,7 @@ import ch.dvbern.stip.generated.api.AusbildungResource;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchDashboardSBDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchLimitsDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.CreateAusbildungUnterbruchAntragGSDtoBuilder;
@@ -54,7 +54,6 @@ import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_CREATE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UNTERBRUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UNTERBRUCH_READ;
@@ -96,13 +95,6 @@ public class AusbildungResourceImpl implements AusbildungResource {
         return ausbildungService.patchAusbildung(ausbildungId, ausbildungUpdateDto);
     }
 
-    @Override
-    @RolesAllowed(AUSBILDUNG_DELETE)
-    public void deleteAusbildungUnterbruchAntragDokument(UUID dokumentId) {
-        ausbildungUnterbruchAntragAuthorizer.gsCanDeleteDokument(dokumentId);
-        ausbildungUnterbruchAntragService.deleteAusbildungUnterbruchAntragDokument(dokumentId);
-    }
-
     @Blocking
     @Override
     @PermitAll
@@ -134,7 +126,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
     public Uni<Response> createAusbildungUnterbruchAntragGs(
         UUID ausbildungId,
         String kommentarGS,
-        List<FileUpload> fileUploads,
+        FileUpload fileUpload,
         LocalDate startDate,
         LocalDate endDate
     ) {
@@ -142,7 +134,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
         final var createAusbildungUnterbruchAntragGSDto =
             CreateAusbildungUnterbruchAntragGSDtoBuilder.createAusbildungUnterbruchAntragGSDto()
                 .kommentarGS(kommentarGS)
-                .fileUploads(fileUploads)
+                .fileUpload(fileUpload)
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
@@ -157,7 +149,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
     public Uni<Response> createAusbildungUnterbruchSb(
         UUID ausbildungId,
         String kommentarGS,
-        List<FileUpload> fileUploads,
+        FileUpload fileUpload,
         LocalDate startDate,
         LocalDate endDate,
         AusbildungUnterbruchAntragStatus status,
@@ -170,7 +162,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
 
     @Override
     @RolesAllowed(AUSBILDUNG_UNTERBRUCH_READ)
-    public List<AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchAntragsByGesuchId(UUID gesuchId) {
+    public AusbildungUnterbruchDashboardSBDto getAusbildungUnterbruchAntragsByGesuchId(UUID gesuchId) {
         ausbildungUnterbruchAntragAuthorizer.sbCanRead();
         return ausbildungUnterbruchAntragService.getAusbildungUnterbruchAntragsByGesuchId(gesuchId);
     }
@@ -189,7 +181,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
         UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto
     ) {
         ausbildungUnterbruchAntragAuthorizer
-            .sbCanWrite(ausbildungUnterbruchAntragId, updateAusbildungUnterbruchAntragSBDto);
+            .sbCanWrite(ausbildungUnterbruchAntragId);
         return ausbildungUnterbruchAntragService
             .updateAusbildungUnterbruchAntrag(ausbildungUnterbruchAntragId, updateAusbildungUnterbruchAntragSBDto);
     }

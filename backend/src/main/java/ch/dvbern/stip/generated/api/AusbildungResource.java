@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchDashboardSBDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchLimitsDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import java.io.File;
@@ -38,18 +39,13 @@ public interface AusbildungResource {
     @Path("/create-unterbruch/{ausbildungId}/gs")
     @Consumes({ "multipart/form-data" })
     @Produces({ "application/json", "text/plain" })
-    io.smallrye.mutiny.Uni<Response> createAusbildungUnterbruchAntragGs(@PathParam("ausbildungId") UUID ausbildungId,@FormParam(value = "kommentarGS")  String kommentarGS,@FormParam(value = "fileUploads")  List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads,@FormParam(value = "startDate")  LocalDate startDate,@FormParam(value = "endDate")  LocalDate endDate);
+    io.smallrye.mutiny.Uni<Response> createAusbildungUnterbruchAntragGs(@PathParam("ausbildungId") UUID ausbildungId,@FormParam(value = "kommentarGS")  String kommentarGS,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@FormParam(value = "startDate")  LocalDate startDate,@FormParam(value = "endDate")  LocalDate endDate);
 
     @POST
     @Path("/create-unterbruch/{ausbildungId}/sb")
     @Consumes({ "multipart/form-data" })
     @Produces({ "application/json", "text/plain" })
-    io.smallrye.mutiny.Uni<Response> createAusbildungUnterbruchSb(@PathParam("ausbildungId") UUID ausbildungId,@FormParam(value = "kommentarGS")  String kommentarGS,@FormParam(value = "fileUploads")  List<org.jboss.resteasy.reactive.multipart.FileUpload> fileUploads,@FormParam(value = "startDate")  LocalDate startDate,@FormParam(value = "endDate")  LocalDate endDate,@FormParam(value = "status")  ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status,@FormParam(value = "kommentarSB")  String kommentarSB,@FormParam(value = "monateOhneAnspruch")  Integer monateOhneAnspruch);
-
-    @DELETE
-    @Path("/unterbruch/dokument/{dokumentId}")
-    @Produces({ "text/plain" })
-    void deleteAusbildungUnterbruchAntragDokument(@PathParam("dokumentId") UUID dokumentId);
+    io.smallrye.mutiny.Uni<Response> createAusbildungUnterbruchSb(@PathParam("ausbildungId") UUID ausbildungId,@FormParam(value = "kommentarGS")  String kommentarGS,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@FormParam(value = "startDate")  LocalDate startDate,@FormParam(value = "endDate")  LocalDate endDate,@FormParam(value = "status")  ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status,@FormParam(value = "kommentarSB")  String kommentarSB,@FormParam(value = "monateOhneAnspruch")  Integer monateOhneAnspruch);
 
     @GET
     @Path("/unterbruch/dokument/download")
@@ -69,7 +65,7 @@ public interface AusbildungResource {
     @GET
     @Path("/unterbruch/{gesuchId}/all")
     @Produces({ "application/json", "text/plain" })
-    List<AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchAntragsByGesuchId(@PathParam("gesuchId") UUID gesuchId);
+    AusbildungUnterbruchDashboardSBDto getAusbildungUnterbruchAntragsByGesuchId(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/unterbruch-limits/{ausbildungId}")

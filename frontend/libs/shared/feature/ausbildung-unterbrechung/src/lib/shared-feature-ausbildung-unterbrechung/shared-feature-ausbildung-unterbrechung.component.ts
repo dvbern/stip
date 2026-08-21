@@ -88,7 +88,7 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
     kommentarGS: [<string | undefined>undefined, Validators.required],
     fileUploads: [<File[] | undefined>undefined, Validators.required],
   });
-  selectedFileSig = signal<File[] | undefined>(undefined);
+  selectedFileSig = signal<File | undefined>(undefined);
   private startDateChangedSig = toSignal(
     this.form.controls.startDate.valueChanges,
     {
@@ -120,14 +120,14 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     const ausbildungId = this.ausbildungIdSig();
-    const fileUploads = this.selectedFileSig();
-    if (this.form.invalid || !ausbildungId || !fileUploads?.length) {
+    const fileUpload = this.selectedFileSig();
+    if (this.form.invalid || !ausbildungId || !fileUpload) {
       return;
     }
     const values = convertTempFormToRealValues(this.form);
     this.ausbildungStore.createAusbildungUnterbruchAntragGs$({
       ...values,
-      fileUploads,
+      fileUpload,
       ausbildungId,
       startDate: toBackendLocalDate(values.startDate),
       endDate: toBackendLocalDate(values.endDate),

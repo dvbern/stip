@@ -17,6 +17,7 @@ import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragStatusDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchDashboardSBDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchLimitsDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
 import java.io.File;
@@ -70,7 +71,6 @@ public class AusbildungApiSpec {
                 createAusbildung(),
                 createAusbildungUnterbruchAntragGs(),
                 createAusbildungUnterbruchSb(),
-                deleteAusbildungUnterbruchAntragDokument(),
                 downloadAusbildungUnterbruchAntragDokument(),
                 getAusbildung(),
                 getAusbildungUnterbruchAntragDokumentDownloadToken(),
@@ -91,10 +91,6 @@ public class AusbildungApiSpec {
 
     public CreateAusbildungUnterbruchSbOper createAusbildungUnterbruchSb() {
         return new CreateAusbildungUnterbruchSbOper(createReqSpec());
-    }
-
-    public DeleteAusbildungUnterbruchAntragDokumentOper deleteAusbildungUnterbruchAntragDokument() {
-        return new DeleteAusbildungUnterbruchAntragDokumentOper(createReqSpec());
     }
 
     public DownloadAusbildungUnterbruchAntragDokumentOper downloadAusbildungUnterbruchAntragDokument() {
@@ -213,7 +209,7 @@ public class AusbildungApiSpec {
      *
      * @see #ausbildungIdPath  (required)
      * @see #kommentarGSForm  (required)
-     * @see #fileUploadsMultiPart  (required)
+     * @see #fileUploadMultiPart  (required)
      * @see #startDateForm  (required)
      * @see #endDateForm  (required)
      */
@@ -290,11 +286,11 @@ public class AusbildungApiSpec {
          /**
          * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
          * @see #reqSpec for customise
-         * @param fileUploads (List&lt;File&gt;)  (required)
+         * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateAusbildungUnterbruchAntragGsOper fileUploadsMultiPart(List<File> fileUploads) {
-            reqSpec.addMultiPart(fileUploads);
+         public CreateAusbildungUnterbruchAntragGsOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
             return this;
          }
 
@@ -324,7 +320,7 @@ public class AusbildungApiSpec {
      *
      * @see #ausbildungIdPath  (required)
      * @see #kommentarGSForm  (required)
-     * @see #fileUploadsMultiPart  (required)
+     * @see #fileUploadMultiPart  (required)
      * @see #startDateForm  (required)
      * @see #endDateForm  (required)
      * @see #statusForm  (required)
@@ -437,11 +433,11 @@ public class AusbildungApiSpec {
          /**
          * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
          * @see #reqSpec for customise
-         * @param fileUploads (List&lt;File&gt;)  (required)
+         * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateAusbildungUnterbruchSbOper fileUploadsMultiPart(List<File> fileUploads) {
-            reqSpec.addMultiPart(fileUploads);
+         public CreateAusbildungUnterbruchSbOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
             return this;
          }
 
@@ -461,68 +457,6 @@ public class AusbildungApiSpec {
          * @return operation
          */
         public CreateAusbildungUnterbruchSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * deletes a AusbildungUnterbruchAntrag Dokument
-     * 
-     *
-     * @see #dokumentIdPath  (required)
-     */
-    public static class DeleteAusbildungUnterbruchAntragDokumentOper implements Oper {
-
-        public static final Method REQ_METHOD = DELETE;
-        public static final String REQ_URI = "/ausbildung/unterbruch/dokument/{dokumentId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public DeleteAusbildungUnterbruchAntragDokumentOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("text/plain");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * DELETE /ausbildung/unterbruch/dokument/{dokumentId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        public static final String DOKUMENT_ID_PATH = "dokumentId";
-
-        /**
-         * @param dokumentId (UUID)  (required)
-         * @return operation
-         */
-        public DeleteAusbildungUnterbruchAntragDokumentOper dokumentIdPath(Object dokumentId) {
-            reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public DeleteAusbildungUnterbruchAntragDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public DeleteAusbildungUnterbruchAntragDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -751,7 +685,7 @@ public class AusbildungApiSpec {
      * 
      *
      * @see #gesuchIdPath Die ID vom Gesuch (required)
-     * return List&lt;AusbildungUnterbruchAntragSBDtoSpec&gt;
+     * return AusbildungUnterbruchDashboardSBDtoSpec
      */
     public static class GetAusbildungUnterbruchAntragsByGesuchIdOper implements Oper {
 
@@ -781,10 +715,10 @@ public class AusbildungApiSpec {
         /**
          * GET /ausbildung/unterbruch/{gesuchId}/all
          * @param handler handler
-         * @return List&lt;AusbildungUnterbruchAntragSBDtoSpec&gt;
+         * @return AusbildungUnterbruchDashboardSBDtoSpec
          */
-        public List<AusbildungUnterbruchAntragSBDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<AusbildungUnterbruchAntragSBDtoSpec>> type = new TypeRef<List<AusbildungUnterbruchAntragSBDtoSpec>>(){};
+        public AusbildungUnterbruchDashboardSBDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungUnterbruchDashboardSBDtoSpec> type = new TypeRef<AusbildungUnterbruchDashboardSBDtoSpec>(){};
             return execute(handler).as(type);
         }
 

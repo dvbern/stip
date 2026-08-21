@@ -14,6 +14,7 @@ export * from './ausbildungDashboardItemAllOf';
 export * from './ausbildungUnterbruchAntragSB';
 export * from './ausbildungUnterbruchAntragSBAllOf';
 export * from './ausbildungUnterbruchAntragStatus';
+export * from './ausbildungUnterbruchDashboardSB';
 export * from './ausbildungUnterbruchLimits';
 export * from './ausbildungUpdate';
 export * from './ausbildungUpdateAllOf';

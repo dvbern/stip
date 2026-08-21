@@ -30,7 +30,8 @@
             {{ t('shared.dashboard.ausbildung.delete') }}
           </button>
         }
-        @if (ausbildung.id && ausbildung.canCreateAusbildungUnterbruchAntrag) {
+        <!-- TODO: deactivated until KSTIP-3661 -->
+        <!-- @if (ausbildung.id && ausbildung.canCreateAusbildungUnterbruchAntrag) {
           <a
             [routerLink]="['/', 'ausbildung-unterbrechen', ausbildung.id]"
             [queryParams]="{ previousPage: router.url }"
@@ -38,7 +39,7 @@
           >
             {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
           </a>
-        }
+        } -->
       </div>
     }
   </div>

@@ -13,7 +13,7 @@ import { AusbildungUnterbruchAntragStatus } from './ausbildungUnterbruchAntragSt
 
 export interface CreateAusbildungUnterbruchSB { 
     kommentarGS: string;
-    fileUploads: Array<Blob>;
+    fileUpload: Blob;
     startDate: string;
     endDate: string;
     status: AusbildungUnterbruchAntragStatus;

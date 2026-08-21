@@ -11,7 +11,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
@@ -22,7 +22,6 @@ import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { GesuchInfo } from '@dv/shared/model/gesuch';
 import {
   SharedPatternDocumentUploadComponent,
   createSimpleDokumentOptions,
@@ -30,6 +29,7 @@ import {
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { isPending } from '@dv/shared/util/remote-data';
 
 import { AusbildungUnterbruchAntragEntry } from '../types';
 import { UnterbruchInfoDialogComponent } from './unterbruch-info-dialog/unterbruch-info-dialog.component';
@@ -39,6 +39,7 @@ import { UnterbruchInfoDialogComponent } from './unterbruch-info-dialog/unterbru
     CommonModule,
     TranslocoPipe,
     MatTableModule,
+    RouterLink,
     SachbearbeitungAppUiAdvTranslocoDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiLoadingComponent,
@@ -49,8 +50,6 @@ import { UnterbruchInfoDialogComponent } from './unterbruch-info-dialog/unterbru
 })
 export class AusbildungUnterbrechenComponent {
   private store = inject(Store);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   private globalNotificationStore = inject(GlobalNotificationStore);
@@ -58,6 +57,7 @@ export class AusbildungUnterbrechenComponent {
   private gesuchInfoStore = inject(GesuchInfoStore);
   private ausbildungAdminStore = inject(AusbildungAdminStore);
   private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
+  router = inject(Router);
   unterbruchListSig = computed<AusbildungUnterbruchAntragEntry[]>(() => {
     const allowTypes =
       this.config().deploymentConfig?.allowedMimeTypes?.join(',');
@@ -86,7 +86,18 @@ export class AusbildungUnterbrechenComponent {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
 
-  infoViewSig = computed(() => this.gesuchInfoStore.infoViewSig());
+  infoViewSig = computed(() => {
+    const info = this.gesuchInfoStore.infoViewSig();
+    const dashboard =
+      this.ausbildungAdminStore.ausbildungUnterbruchDaschboardSb();
+
+    return {
+      ...info.gesuchInfo,
+      canCreateAusbildungUnterbruch:
+        dashboard.data?.canCreateAusbildungUnterbruch,
+      loading: isPending(dashboard) || info.loading,
+    };
+  });
 
   gesuchTableColumns = ['timestamp', 'user', 'status', 'kommentar', 'actions'];
 
@@ -101,24 +112,9 @@ export class AusbildungUnterbrechenComponent {
         return;
       }
 
-      this.ausbildungAdminStore.loadAusbildungUnterbrueche$({ gesuchId });
+      this.ausbildungAdminStore.ausbildungUnterbruchDaschboardSb$({ gesuchId });
       this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
     });
-  }
-
-  ausbildungUnterbrechen(gesuchInfo?: GesuchInfo) {
-    if (!gesuchInfo) {
-      return;
-    }
-    // const { ausbildungId, fallId } = gesuchInfo;
-    // this.ausbildungStore.createAusbildungUnterbruchAntragGs$({
-    //   ausbildungId,
-    //   onSuccess: (unterbruchId) => {
-    //     this.router.navigate(['.', unterbruchId, 'fall', fallId], {
-    //       relativeTo: this.route,
-    //     });
-    //   },
-    // });
   }
 
   showInfo(unterbruch: AusbildungUnterbruchAntragEntry) {
@@ -142,7 +138,9 @@ export class AusbildungUnterbrechenComponent {
                 messageKey: `sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.${status}.success`,
               },
             );
-            this.ausbildungAdminStore.loadAusbildungUnterbrueche$({ gesuchId });
+            this.ausbildungAdminStore.ausbildungUnterbruchDaschboardSb$({
+              gesuchId,
+            });
           },
         });
       });

@@ -2456,9 +2456,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
+                $ref: '#/components/schemas/AusbildungUnterbruchDashboardSB'
           description: returniert alle AusbildungUnterbruchAntrag des Falls des Gesuchs
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -2502,25 +2500,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAusbildungUnterbruchAntragDokumentDownloadToken
       summary: get Token to downlaod AusbildungUnterbruchAntrag Dokument
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-    delete:
-      tags:
-        - Ausbildung
-      responses:
-        '200':
-          description: Dokument deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: deleteAusbildungUnterbruchAntragDokument
-      summary: deletes a AusbildungUnterbruchAntrag Dokument
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -9161,16 +9140,14 @@ components:
       type: object
       required:
         - kommentarGS
-        - fileUploads
+        - fileUpload
         - startDate
         - endDate
       properties:
         kommentarGS:
           type: string
-        fileUploads:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileUpload'
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
         startDate:
           type: string
           format: date
@@ -9179,7 +9156,6 @@ components:
           format: date
     AusbildungUnterbruchAntragStatus:
       enum:
-        - IN_BEARBEITUNG_GS
         - EINGEGEBEN
         - AKZEPTIERT
         - ABGELEHNT
@@ -9208,6 +9184,18 @@ components:
       allOf:
         - $ref: '#/components/schemas/CreateAusbildungUnterbruchAntragGS'
         - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
+    AusbildungUnterbruchDashboardSB:
+      required:
+        - canCreateAusbildungUnterbruch
+        - ausbildungUnterbruchs
+      type: object
+      properties:
+        canCreateAusbildungUnterbruch:
+          type: boolean
+        ausbildungUnterbruchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
     AusbildungUnterbruchAntragSB:
       type: object
       required:
@@ -9219,8 +9207,9 @@ components:
         - unterbruchEarliestStartDate
         - dokuments
         - gesuchId
+        - status
       allOf:
-        - $ref: '#/components/schemas/CreateAusbildungUnterbruchSB'
+        - $ref: '#/components/schemas/CreateAusbildungUnterbruchAntragGS'
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -9243,6 +9232,18 @@ components:
             $ref: '#/components/schemas/Dokument'
         gesuchId:
           $ref: '#/components/schemas/UUID'
+        status:
+          $ref: '#/components/schemas/AusbildungUnterbruchAntragStatus'
+        kommentarSB:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        monateOhneAnspruch:
+          type: integer
     AusbildungsStatus:
       enum:
         - AKTIV

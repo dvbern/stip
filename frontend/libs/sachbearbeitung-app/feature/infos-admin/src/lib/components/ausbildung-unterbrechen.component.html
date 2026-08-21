@@ -5,18 +5,21 @@
   </h2>
 
   @let view = infoViewSig();
-  <button
-    class="tw:dv-button-main-primary"
-    type="button"
-    data-testid="button-ausbildung-unterbrechen"
-    [disabled]="!view.gesuchInfo"
-    (click)="ausbildungUnterbrechen(view.gesuchInfo); $event.stopPropagation()"
-  >
-    @if (view.loading) {
-      <dv-shared-ui-loading [type]="'icon'"></dv-shared-ui-loading>
-    }
-    {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen') }}
-  </button>
+  <!-- TODO: deactivated until KSTIP-3661 -->
+  @if (false) {
+    <a
+      [routerLink]="['/', 'ausbildung-unterbrechen', view.ausbildungId]"
+      [queryParams]="{ previousPage: router.url }"
+      [class.disabled]="!view.canCreateAusbildungUnterbruch"
+      class="tw:dv-button-main-primary"
+      data-testid="button-ausbildung-unterbrechen"
+    >
+      @if (view.loading) {
+        <dv-shared-ui-loading [type]="'icon'"></dv-shared-ui-loading>
+      }
+      {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
+    </a>
+  }
 
   <!-- table for unterbrechen entries, with columns timestamp, user and kommentar  -->
   <div class="tw:dv-table tw:mb-6">

@@ -208,9 +208,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
+                $ref: '#/components/schemas/AusbildungUnterbruchDashboardSB'
           description: returniert alle AusbildungUnterbruchAntrag des Falls des Gesuchs
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -251,22 +249,6 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getAusbildungUnterbruchAntragDokumentDownloadToken
       summary: get Token to downlaod AusbildungUnterbruchAntrag Dokument
-    delete:
-      tags:
-        - Ausbildung
-      responses:
-        '200':
-          description: Dokument deleted
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '404':
-          $ref: './components/responses.yaml#/NotFound'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: deleteAusbildungUnterbruchAntragDokument
-      summary: deletes a AusbildungUnterbruchAntrag Dokument
   /ausbildung/unterbruch/dokument/download:
     parameters:
       - name: token
@@ -385,16 +367,14 @@ components:
       type: object
       required:
         - kommentarGS
-        - fileUploads
+        - fileUpload
         - startDate
         - endDate
       properties:
         kommentarGS:
           type: string
-        fileUploads:
-          type: array
-          items:
-            $ref: './components/common.yaml#/FileUpload'
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
         startDate:
           type: string
           format: date
@@ -403,7 +383,6 @@ components:
           format: date
     AusbildungUnterbruchAntragStatus:
       enum:
-        - IN_BEARBEITUNG_GS
         - EINGEGEBEN
         - AKZEPTIERT
         - ABGELEHNT
@@ -432,6 +411,18 @@ components:
       allOf:
         - $ref: '#/components/schemas/CreateAusbildungUnterbruchAntragGS'
         - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
+    AusbildungUnterbruchDashboardSB:
+      required:
+        - canCreateAusbildungUnterbruch
+        - ausbildungUnterbruchs
+      type: object
+      properties:
+        canCreateAusbildungUnterbruch:
+          type: boolean
+        ausbildungUnterbruchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
     AusbildungUnterbruchAntragSB:
       type: object
       required:
@@ -443,8 +434,9 @@ components:
         - unterbruchEarliestStartDate
         - dokuments
         - gesuchId
+        - status
       allOf:
-        - $ref: '#/components/schemas/CreateAusbildungUnterbruchSB'
+        - $ref: '#/components/schemas/CreateAusbildungUnterbruchAntragGS'
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
@@ -467,6 +459,18 @@ components:
             $ref: './components/common.yaml#/Dokument'
         gesuchId:
           $ref: './components/common.yaml#/UUID'
+        status:
+          $ref: '#/components/schemas/AusbildungUnterbruchAntragStatus'
+        kommentarSB:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        monateOhneAnspruch:
+          type: integer
 
 security:
   $ref: './components/security.yaml#/security'
