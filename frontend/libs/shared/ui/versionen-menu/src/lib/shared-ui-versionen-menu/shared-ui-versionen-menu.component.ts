@@ -130,7 +130,7 @@ export class SharedUiVersionenMenuComponent {
   }
 
   private buildLink(
-    kind: 'tranche' | 'initial' | 'eingereicht',
+    type: 'tranche' | 'initial' | 'eingereicht',
     trancheId: string | undefined,
     labelKey: VersionenLink['labelKey'],
     context?: {
@@ -144,7 +144,7 @@ export class SharedUiVersionenMenuComponent {
     const originStep = this.originStepSig();
 
     return {
-      routerLink: ['/', 'gesuch', ...tabSegments, gesuchId, kind, trancheId],
+      routerLink: ['/', 'gesuch', ...tabSegments, gesuchId, type, trancheId],
       queryParams: {
         ...(context?.berechnungId
           ? { berechnungId: context.berechnungId }

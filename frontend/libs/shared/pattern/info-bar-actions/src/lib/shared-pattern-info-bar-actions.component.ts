@@ -44,10 +44,7 @@ import {
   urlAfterNavigationEnd,
 } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
-import {
-  hideAktionenRoutes,
-  notGesuchRoute,
-} from '@dv/shared/model/ui-constants';
+import { notGesuchRoute } from '@dv/shared/model/ui-constants';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -56,7 +53,6 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
-import { getQueryParamValueSig } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
 import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 
@@ -232,17 +228,15 @@ export class SharedPatternInfoBarActionsComponent {
     this.router,
     `infos`,
     'darlehen',
+    'verfuegung',
     `${getTrancheRoute('aenderung')}`,
     `${getTrancheRoute('initial')}`,
     `${getTrancheRoute('eingereicht')}`,
   );
 
-  berechnungIdSig = getQueryParamValueSig(this.route, 'berechnungId');
   isActionRouteSig = computed(() => {
-    const url = this.routeUrlSig();
-    return !hideAktionenRoutes.some(
-      (route) => url?.includes(`/${route}/`) || this.berechnungIdSig(),
-    );
+    const routes = this.routeChecksSig();
+    return !(routes.isDarlehen || routes.isVerfuegung || routes.isInfos);
   });
 
   actionMenuOptionsSig = computed(() => {

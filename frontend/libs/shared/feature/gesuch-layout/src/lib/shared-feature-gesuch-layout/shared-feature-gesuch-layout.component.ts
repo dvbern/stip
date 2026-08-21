@@ -113,6 +113,7 @@ export class SharedFeatureGesuchLayoutComponent {
     `${getTrancheRoute('initial')}`,
     `${getTrancheRoute('eingereicht')}`,
   );
+
   isGesuchRouteSig = computed(() => {
     const routes = this.routeChecksSig();
     return !notGesuchRoute.some((route) => routes.matched.includes(route));
