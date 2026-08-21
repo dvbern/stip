@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.SapEndpointServiceMock;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
@@ -103,6 +104,9 @@ public class SapServiceTest {
 
     @InjectMock
     MailService mailServiceMock;
+
+    @InjectMock
+    AdresseRepository adresseRepository;
 
     @Transactional
     @BeforeAll
@@ -291,6 +295,7 @@ public class SapServiceTest {
             .setSaldo(stipendiumsBetrag)
             .setBuchhaltungType(BuchhaltungType.STIPENDIUM);
         lastEntryStipendiumBuchhaltung.setId(UUID.randomUUID());
+        lastEntryStipendiumBuchhaltung.setZahlungsverbindung(new Zahlungsverbindung().setAdresse(new Adresse()));
         Mockito.when(buchhaltungRepositoryMock.findStipendiumsEntrysForGesuch(any()))
             .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
 

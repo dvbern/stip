@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DOCUMENT,
   OnDestroy,
   effect,
   inject,
@@ -21,7 +20,6 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
 import { BENUTZER_ROLES, BenutzerRole } from '@dv/shared/model/benutzer';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
-import { getCurrentUrl } from '@dv/shared/model/router';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -55,7 +53,6 @@ export class BenutzeDetailComponent implements OnDestroy {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });
   private router = inject(Router);
-  private document = inject(DOCUMENT);
   private route = inject(ActivatedRoute);
 
   availableRoles = BENUTZER_ROLES;
@@ -133,7 +130,6 @@ export class BenutzeDetailComponent implements OnDestroy {
     this.store.registerUser$({
       user: {
         ...values,
-        redirectUri: getCurrentUrl(this.document),
       },
       onAfterSave: (userId) => {
         this.router.navigate(['..', 'edit', userId], {

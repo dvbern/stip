@@ -34,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DelegierungDtoSpec.JSON_PROPERTY_ID,
+  DelegierungDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   DelegierungDtoSpec.JSON_PROPERTY_SOZIALDIENST,
   DelegierungDtoSpec.JSON_PROPERTY_DELEGIERTER_MITARBEITER,
   DelegierungDtoSpec.JSON_PROPERTY_PERSOENLICHE_ANGABEN,
@@ -46,6 +47,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DelegierungDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  private String fallNummer;
 
   public static final String JSON_PROPERTY_SOZIALDIENST = "sozialdienst";
   private SozialdienstSlimDtoSpec sozialdienst;
@@ -91,6 +95,32 @@ public class DelegierungDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public DelegierungDtoSpec fallNummer(String fallNummer) {
+    
+    this.fallNummer = fallNummer;
+    return this;
+  }
+
+   /**
+   * Get fallNummer
+   * @return fallNummer
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getFallNummer() {
+    return fallNummer;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
   }
 
 
@@ -259,6 +289,7 @@ public class DelegierungDtoSpec {
     }
     DelegierungDtoSpec delegierung = (DelegierungDtoSpec) o;
     return Objects.equals(this.id, delegierung.id) &&
+        Objects.equals(this.fallNummer, delegierung.fallNummer) &&
         Objects.equals(this.sozialdienst, delegierung.sozialdienst) &&
         Objects.equals(this.delegierterMitarbeiter, delegierung.delegierterMitarbeiter) &&
         Objects.equals(this.persoenlicheAngaben, delegierung.persoenlicheAngaben) &&
@@ -269,7 +300,7 @@ public class DelegierungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, sozialdienst, delegierterMitarbeiter, persoenlicheAngaben, status, startDate, endDate);
+    return Objects.hash(id, fallNummer, sozialdienst, delegierterMitarbeiter, persoenlicheAngaben, status, startDate, endDate);
   }
 
   @Override
@@ -277,6 +308,7 @@ public class DelegierungDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("    delegierterMitarbeiter: ").append(toIndentedString(delegierterMitarbeiter)).append("\n");
     sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");

@@ -19,10 +19,11 @@
     </div>
 
     @if (ausbildung.status === 'AKTIV') {
-      <div class="tw:flex tw:flex-col tw:gap-2 tw:md:w-full tw:justify-self-end tw:mb-4">
+      <div class="tw:flex tw:w-full tw:flex-col tw:gap-2 tw:md:w-full tw:justify-self-end tw:mb-4">
         @if (ausbildung.canDelete) {
           <button
             type="button"
+            data-testid="shared-dashboard-ausbildung-delete"
             class="tw:dv-button-outline tw:h-min"
             (click)="output.emit({ typ: 'delete ausbildung', id: ausbildung.gesuchs[0].id })"
           >
@@ -36,7 +37,14 @@
           <button
             type="button"
             class="tw:dv-button-main-primary tw:h-min"
-            (click)="output.emit({ typ: 'ausbildung unterbrechen', id: ausbildung.id })"
+            data-testid="shared-dashboard-ausbildung-unterbruch-edit-create"
+            (click)="
+              output.emit({
+                typ: 'ausbildung unterbrechen',
+                id: ausbildung.id,
+                unterbruchId: ausbildung.openAusbildungUnterbruchAntragId,
+              })
+            "
           >
             @if (!ausbildung.openAusbildungUnterbruchAntragId) {
               {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
@@ -88,7 +96,7 @@
             'tw:bg-dv-green-subtle': gesuch.state === 'verfuegt',
             'tw:bg-dv-blue-light': gesuch.state === 'in-ueberpruefung',
             'tw:bg-dv-main-danger-subtle': gesuch.state === 'expired',
-            'tw:bg-dv-orange': gesuch.state === 'in-bearbeitung',
+            'tw:bg-dv-orange': gesuch.state === 'in-bearbeitung' || gesuch.state === 'fehlende-dokumente',
           }"
           (output)="output.emit($event)"
         ></dv-shared-ui-dashboard-gesuch>
@@ -116,7 +124,7 @@
               </div>
               <div dvItemActions class="tw:flex tw:flex-wrap tw:gap-3">
                 <a
-                  class="tw:flex tw:grow tw:dv-button-main-primary"
+                  class="tw:flex tw:dv-button-main-primary"
                   data-testid="cockpit-gesuch-edit"
                   [routerLink]="['/gesuch', gesuch.id, 'aenderung', aenderung.id]"
                 >
@@ -132,7 +140,7 @@
                   <button
                     type="button"
                     class="tw:dv-button-outline"
-                    data-testid="shared.dashboard.aenderung.delete"
+                    data-testid="shared-dashboard-aenderung-delete"
                     (click)="output.emit({ typ: 'delete aenderung', id: aenderung.id })"
                   >
                     <span>{{ t('shared.dashboard.aenderung.delete') }}</span>
@@ -169,7 +177,7 @@
             </div>
             <div dvItemActions class="tw:flex tw:flex-wrap tw:gap-3">
               <a
-                class="tw:flex tw:grow tw:dv-button-main-primary"
+                class="tw:flex tw:dv-button-main-primary"
                 data-testid="cockpit-gesuch-edit"
                 [routerLink]="['/gesuch', darlehen.relatedGesuchId, 'darlehen', darlehen.id, 'fall', ausbildung.fallId]"
               >
@@ -185,7 +193,7 @@
                 <button
                   type="button"
                   class="tw:dv-button-outline"
-                  data-testid="shared.dashboard.aenderung.delete"
+                  data-testid="shared-dashboard-darlehen-delete"
                   (click)="output.emit({ typ: 'delete darlehen', id: darlehen.id })"
                 >
                   <span>{{ t('shared.dashboard.darlehen.delete') }}</span>

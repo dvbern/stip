@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.config.type.FrontendType;
 import ch.dvbern.stip.generated.dto.SachbearbeiterDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterUpdateDto;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
@@ -78,9 +79,9 @@ public class SachbearbeiterService {
             new WelcomeMailDto(
                 sachbearbeiter.getNachname(),
                 sachbearbeiter.getVorname(),
-                sachbearbeiter.getEmail(),
-                sachbearbeiterUpdateDto.getRedirectUri()
-            )
+                sachbearbeiter.getEmail()
+            ),
+            FrontendType.SB
         );
 
         return sachbearbeiterMapper.toDto(sachbearbeiter);

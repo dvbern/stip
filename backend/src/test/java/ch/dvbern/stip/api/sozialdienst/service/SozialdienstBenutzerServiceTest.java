@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.sozialdienst.service;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
@@ -35,9 +37,11 @@ import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
+import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.vertx.ext.mail.MailMessage;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +55,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
@@ -78,10 +83,14 @@ class SozialdienstBenutzerServiceTest {
     @InjectMock
     ZahlungsverbindungService zahlungsverbindungServiceMock;
 
+    @Inject
+    MockMailbox mailbox;
+
     SozialdienstDto sozialdienstDto;
     Zahlungsverbindung zahlungsverbindung;
 
     private static final String VALID_IBAN_1 = "CH5089144653587876648";
+    private static final String SOZIALDIENST_ADMIN_EMAIL = "a@b.ch";
 
     @Order(1)
     @TestAsSozialdienstAdmin
@@ -109,6 +118,8 @@ class SozialdienstBenutzerServiceTest {
     @TestAsSozialdienstAdmin
     @Test
     void createSozialdienst() {
+        mailbox.clear();
+
         var sozialdienstCreateDto = new SozialdienstCreateDto();
 
         sozialdienstCreateDto.setName("a");
@@ -130,12 +141,18 @@ class SozialdienstBenutzerServiceTest {
         var sozialdienstAdminDto = new SozialdienstAdminDto();
         sozialdienstAdminDto.setVorname("a");
         sozialdienstAdminDto.setNachname("b");
-        sozialdienstAdminDto.setEmail("a@b.ch");
+        sozialdienstAdminDto.setEmail(SOZIALDIENST_ADMIN_EMAIL);
         sozialdienstCreateDto.setSozialdienstAdmin(sozialdienstAdminDto);
 
         sozialdienstDto = sozialdienstService.createSozialdienst(sozialdienstCreateDto);
 
         assertThat(sozialdienstDto.getId(), notNullValue());
+
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(SOZIALDIENST_ADMIN_EMAIL);
+        assertThat(sent.size(), equalTo(1));
+        MailMessage actual = sent.get(0);
+        assertThat(actual.getHtml(), containsString("a"));
+        assertThat(actual.getHtml(), containsString("b"));
     }
 
     @Order(3)
@@ -178,7 +195,6 @@ class SozialdienstBenutzerServiceTest {
         createDto.setVorname(name);
         createDto.setNachname(name);
         createDto.setEmail(email);
-        createDto.setRedirectUri("");
 
         var sozialdienstbenutzer = sozialdienstBenutzerService
             .createSozialdienstMitarbeiterBenutzer(

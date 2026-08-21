@@ -887,6 +887,32 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /delegierung/{delegierungId}:
+    parameters:
+      - $ref: '#/components/parameters/delegierungId'
+    get:
+      tags:
+        - Delegieren
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Delegierung'
+          description: A delegierung and related entities
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDelegierung
+      summary: Returns delegierung by id
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /delegierung/{gesuchId}/all:
     parameters:
       - $ref: '#/components/parameters/gesuchId'
@@ -999,7 +1025,6 @@ paths:
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
-        - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
@@ -7293,15 +7318,12 @@ components:
         - name
         - vorname
         - email
-        - redirectUri
       properties:
         name:
           type: string
         vorname:
           type: string
         email:
-          type: string
-        redirectUri:
           type: string
     SteuerdatenPortError:
       required:
@@ -7671,12 +7693,15 @@ components:
       type: object
       required:
         - id
+        - fallNummer
         - sozialdienst
         - persoenlicheAngaben
         - status
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
         delegierterMitarbeiter:
@@ -7691,17 +7716,38 @@ components:
           $ref: '#/components/schemas/LocalDate'
     DelegierungEntry:
       required:
-        - tenant
+        - fallNummer
+        - fallId
+        - nachname
+        - vorname
+        - geburtsdatum
+        - wohnort
+        - status
+        - totalCount
       type: object
-      allOf:
-        - $ref: '#/components/schemas/Delegierung'
       properties:
-        fallId:
+        id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
-        tenant:
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        nachname:
           type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          $ref: '#/components/schemas/LocalDate'
+        wohnort:
+          type: string
+        status:
+          $ref: '#/components/schemas/DelegierungStatus'
+        gesuchStatus:
+          $ref: '#/components/schemas/Gesuchstatus'
+        aenderungStatus:
+          $ref: '#/components/schemas/GesuchTrancheStatus'
+        totalCount:
+          type: integer
     PaginatedSozDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -7882,12 +7928,43 @@ components:
         - AKZEPTIERT
         - ABGELEHNT
         - BEENDET
+    Gesuchstatus:
+      enum:
+        - ABKLAERUNG_DURCH_RECHSTABTEILUNG
+        - VERFUEGT
+        - VERFUEGUNG_DRUCKBEREIT
+        - VERFUEGUNG_AM_GENERIEREN
+        - VERFUEGUNG_VERSANDBEREIT
+        - VERFUEGUNG_VERSENDET
+        - WARTEN_AUF_UNTERSCHRIFTENBLATT
+        - IN_BEARBEITUNG_SB
+        - IN_FREIGABE
+        - IN_BEARBEITUNG_GS
+        - ANSPRUCH_MANUELL_PRUEFEN
+        - ANSPRUCH_PRUEFEN
+        - BEREIT_FUER_BEARBEITUNG
+        - EINGEREICHT
+        - JURISTISCHE_ABKLAERUNG
+        - FEHLENDE_DOKUMENTE
+        - NICHT_ANSPRUCHSBERECHTIGT
+        - NICHT_BEITRAGSBERECHTIGT
+        - KEIN_STIPENDIENANSPRUCH
+        - STIPENDIENANSPRUCH
+        - GESUCH_ABGELEHNT
+        - NEGATIVE_VERFUEGUNG
+        - DATENSCHUTZBRIEF_DRUCKBEREIT
+        - DATENSCHUTZBRIEF_AM_GENERIEREN
+        - DATENSCHUTZBRIEF_VERSANDBEREIT
+      type: string
+    GesuchTrancheStatus:
+      enum:
+        - IN_BEARBEITUNG_GS
+        - UEBERPRUEFEN
+        - MANUELLE_AENDERUNG
+        - AKZEPTIERT
+        - ABGELEHNT
+        - FEHLENDE_DOKUMENTE
     SozialdienstBenutzerCreate:
-      required:
-        - redirectUri
-      properties:
-        redirectUri:
-          type: string
       allOf:
         - $ref: '#/components/schemas/SozialdienstBenutzerBase'
     SozialdienstBenutzerUpdate:
@@ -8268,6 +8345,7 @@ components:
         - kinderUndAusbildungszulagen
         - renten
         - ergaenzungsleistungen
+        - betreuungskosten
         - andereEinnahmen
       type: object
       properties:
@@ -8291,6 +8369,8 @@ components:
         renten:
           type: integer
         ergaenzungsleistungen:
+          type: integer
+        betreuungskosten:
           type: integer
         andereEinnahmen:
           type: integer
@@ -8332,8 +8412,6 @@ components:
         andereEinnahmen:
           type: integer
         ausbildungskosten:
-          type: integer
-        betreuungskostenKinder:
           type: integer
         fahrkosten:
           type: integer
@@ -8732,34 +8810,6 @@ components:
       enum:
         - AENDERUNG
         - TRANCHE
-    Gesuchstatus:
-      enum:
-        - ABKLAERUNG_DURCH_RECHSTABTEILUNG
-        - VERFUEGT
-        - VERFUEGUNG_DRUCKBEREIT
-        - VERFUEGUNG_AM_GENERIEREN
-        - VERFUEGUNG_VERSANDBEREIT
-        - VERFUEGUNG_VERSENDET
-        - WARTEN_AUF_UNTERSCHRIFTENBLATT
-        - IN_BEARBEITUNG_SB
-        - IN_FREIGABE
-        - IN_BEARBEITUNG_GS
-        - ANSPRUCH_MANUELL_PRUEFEN
-        - ANSPRUCH_PRUEFEN
-        - BEREIT_FUER_BEARBEITUNG
-        - EINGEREICHT
-        - JURISTISCHE_ABKLAERUNG
-        - FEHLENDE_DOKUMENTE
-        - NICHT_ANSPRUCHSBERECHTIGT
-        - NICHT_BEITRAGSBERECHTIGT
-        - KEIN_STIPENDIENANSPRUCH
-        - STIPENDIENANSPRUCH
-        - GESUCH_ABGELEHNT
-        - NEGATIVE_VERFUEGUNG
-        - DATENSCHUTZBRIEF_DRUCKBEREIT
-        - DATENSCHUTZBRIEF_AM_GENERIEREN
-        - DATENSCHUTZBRIEF_VERSANDBEREIT
-      type: string
     VerfuegungStatus:
       enum:
         - AUSSTEHEND
@@ -9459,8 +9509,6 @@ components:
           type: array
           items:
             type: string
-        redirectUri:
-          type: string
       allOf:
         - $ref: '#/components/schemas/BenutzerUpdate'
     Benutzereinstellungen:
@@ -9879,6 +9927,7 @@ components:
         - KINDER_ERGAENZUNGSLEISTUNGEN
         - KINDER_UND_AUSBILDUNGSZULAGEN
         - KINDER_RENTEN
+        - KINDER_BETREUUNGSKOSTEN
         - KINDER_ANDERE_EINNAHMEN
         - EK_BELEG_UNTERHALTSBEITRAEGE
         - EK_BELEG_EINNAHMEN_BGSA
@@ -9891,7 +9940,6 @@ components:
         - EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
         - EK_BELEG_OV_ABONNEMENT
         - EK_MIETVERTRAG
-        - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
         - EK_VERMOEGEN
         - EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE
@@ -9904,7 +9952,6 @@ components:
         - EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
         - EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
         - EK_PARTNER_BELEG_OV_ABONNEMENT
-        - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_PARTNER_LOHNABRECHNUNG
         - EK_PARTNER_VERMOEGEN
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
@@ -10839,7 +10886,8 @@ components:
         - wohnkosten
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungTotal
-        - betreuungskostenKinder
+        - betreuungskosten
+        - betreuungskostenTotal
         - steuern
         - anteilLebenshaltungskosten
       type: object
@@ -10870,7 +10918,11 @@ components:
           type: integer
         verpflegungPartner:
           type: integer
-        betreuungskostenKinder:
+        betreuungskosten:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonValueItem'
+        betreuungskostenTotal:
           type: integer
         steuern:
           type: integer
@@ -11361,6 +11413,8 @@ components:
           type: integer
         ergaenzungsleistungen:
           type: integer
+        betreuungskosten:
+          type: integer
         andereEinnahmen:
           type: integer
     EinnahmenKostenUpdate:
@@ -11416,9 +11470,6 @@ components:
           description: Required nur wenn die Person keinen eigenen Haushalt führt
           type: integer
         verpflegungskosten:
-          type: integer
-        betreuungskostenKinder:
-          description: Betreuungskosten eigener Kinder
           type: integer
         veranlagungsStatus:
           description: Veranlagungsstatus
@@ -11615,14 +11666,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SteuerdatenTyp'
-    GesuchTrancheStatus:
-      enum:
-        - IN_BEARBEITUNG_GS
-        - UEBERPRUEFEN
-        - MANUELLE_AENDERUNG
-        - AKZEPTIERT
-        - ABGELEHNT
-        - FEHLENDE_DOKUMENTE
     GesuchTranche:
       required:
         - id

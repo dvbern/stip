@@ -26,7 +26,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
@@ -76,7 +75,7 @@ public class SapService {
     private final NotificationService notificationService;
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
 
-    private boolean businessPartnerNeedsUpate(
+    private boolean businessPartnerNeedsUpdate(
         final Gesuch gesuch,
         final Integer businessPartnerId
     ) {
@@ -264,7 +263,6 @@ public class SapService {
                         String.format("Failed to send %s action", businessPartnerActionBuchhaltungType.name()),
                         e
                     );
-                    sapDelivery.setSapStatus(SapStatus.FAILURE);
                 }
 
                 sapDelivery.setBuchhaltung(businessPartnerActionBuchhaltung);
@@ -377,7 +375,6 @@ public class SapService {
                     SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
                 } catch (Exception e) {
                     LOG.error("Failed to send createVendorPosting action", e);
-                    newSapDelivery.setSapStatus(SapStatus.FAILURE);
                 }
             }
         }
@@ -394,32 +391,9 @@ public class SapService {
     }
 
     public Buchhaltung retryAuszahlungBuchhaltung(final Fall fall) {
-        final var gesuch = fall.getAusbildungs()
-            .stream()
-            .sorted(
-                Comparator.comparing(Ausbildung::getTimestampErstellt).reversed()
-            )
-            .findFirst()
-            .get()
-            .getGesuchs()
-            .stream()
-            .sorted(
-                Comparator.comparing(Gesuch::getTimestampErstellt).reversed()
-            )
-            .findFirst()
-            .get();
+        final var gesuch = fall.getLatestGesuch();
 
-        switch (fall.getFailedBuchhaltungAuszahlungType()) {
-            case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuch.getId());
-            case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuch.getId());
-            case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> {
-                gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
-                doBusinessPartnerActionOrGetStatus(gesuch, fall.getFailedBuchhaltungAuszahlungType());
-            }
-            case null, default -> throw new BadRequestException();
-        }
-
-        return buchhaltungService.getLatestBuchhaltungEntry(fall.getId());
+        return retryAuszahlungBuchhaltung(gesuch.getId());
     }
 
     @Transactional
@@ -431,12 +405,9 @@ public class SapService {
             case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuchId);
             case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> {
                 gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
-                doBusinessPartnerActionOrGetStatus(
-                    gesuch,
-                    gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()
-                );
+                getUpdateOrCreateBusinessPartner(gesuch);
             }
-            default -> throw new BadRequestException();
+            case null, default -> throw new BadRequestException();
         }
 
         final var buchhaltung = buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
@@ -477,7 +448,7 @@ public class SapService {
                 .setSapBusinessPartnerId(
                     Integer.valueOf(businesspartner.getHEADER().getBPARTNER())
                 );
-            if (businessPartnerNeedsUpate(gesuch, Integer.valueOf(businesspartner.getHEADER().getBPARTNER()))) {
+            if (businessPartnerNeedsUpdate(gesuch, Integer.valueOf(businesspartner.getHEADER().getBPARTNER()))) {
                 doBusinessPartnerActionOrGetStatus(gesuch, BUSINESSPARTNER_CHANGE);
             }
         } else {
@@ -518,9 +489,9 @@ public class SapService {
             final var lastBuchhaltungEntry =
                 buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
 
-            var auszahlungsBetrag = relevantStipendienBuchhaltung.getBetrag() / 2;
+            var auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo() / 2;
             if (isPastSecondPaymentDate(gesuch)) {
-                auszahlungsBetrag = relevantStipendienBuchhaltung.getBetrag();
+                auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo();
             }
 
             auszahlungsBetrag = Integer.min(auszahlungsBetrag, lastBuchhaltungEntry.getSaldo());

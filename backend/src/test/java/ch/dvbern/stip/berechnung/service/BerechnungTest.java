@@ -817,7 +817,6 @@ class BerechnungTest {
                 .setRenten(0)
                 .setZulagen(5520)
                 .setAusbildungskosten(500)
-                .setBetreuungskostenKinder(3333)
                 .setFahrkosten(790)
                 .setWohnkosten(18000)
                 .setWgWohnend(false)
@@ -884,6 +883,7 @@ class BerechnungTest {
             .setGeburtsdatum(LocalDate.of(2013, 9, 1));
         kind1.setWohnsitzAnteilPia(100);
         kind1.setAusbildungssituation(Ausbildungssituation.VORSCHULPFLICHTIG);
+        kind1.setBetreuungskosten(2000);
 
         Kind kind2 = (Kind) new Kind()
             .setNachname("Testfall5")
@@ -891,6 +891,7 @@ class BerechnungTest {
             .setGeburtsdatum(LocalDate.of(2019, 6, 1));
         kind2.setWohnsitzAnteilPia(100);
         kind2.setAusbildungssituation(Ausbildungssituation.VORSCHULPFLICHTIG);
+        kind2.setBetreuungskosten(1333);
 
         gesuchFormular.setKinds(
             Set.of(
@@ -957,7 +958,6 @@ class BerechnungTest {
                 .setRenten(0)
                 .setZulagen(0)
                 .setAusbildungskosten(2000)
-                .setBetreuungskostenKinder(0)
                 .setFahrkosten(800)
                 .setWohnkosten(11460)
                 .setWgWohnend(true)

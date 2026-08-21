@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
+import ch.dvbern.stip.api.config.type.FrontendType;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
@@ -403,7 +404,7 @@ public class VerfuegungBriefPdfService {
                         "DATUM_LETZTE_VERFUEGUNG",
                         DateUtil.formatDate(datumLetzteVerfuegung),
                         "LINK_TO_DASHBOARD",
-                        tenantService.getConfigForCurrentTenant().frontendUri()
+                        tenantService.getConfigForCurrentTenant().frontend().urls().get(FrontendType.GS)
                     )
                 )
             );

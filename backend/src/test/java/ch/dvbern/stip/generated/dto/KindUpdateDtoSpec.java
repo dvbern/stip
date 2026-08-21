@@ -41,6 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   KindUpdateDtoSpec.JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN,
   KindUpdateDtoSpec.JSON_PROPERTY_RENTEN,
   KindUpdateDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
+  KindUpdateDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN,
   KindUpdateDtoSpec.JSON_PROPERTY_ANDERE_EINNAHMEN
 })
 @JsonTypeName("KindUpdate")
@@ -78,6 +79,9 @@ public class KindUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
   private Integer ergaenzungsleistungen;
+
+  public static final String JSON_PROPERTY_BETREUUNGSKOSTEN = "betreuungskosten";
+  private Integer betreuungskosten;
 
   public static final String JSON_PROPERTY_ANDERE_EINNAHMEN = "andereEinnahmen";
   private Integer andereEinnahmen;
@@ -371,6 +375,32 @@ public class KindUpdateDtoSpec {
   }
 
 
+  public KindUpdateDtoSpec betreuungskosten(Integer betreuungskosten) {
+    
+    this.betreuungskosten = betreuungskosten;
+    return this;
+  }
+
+   /**
+   * Get betreuungskosten
+   * @return betreuungskosten
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getBetreuungskosten() {
+    return betreuungskosten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBetreuungskosten(Integer betreuungskosten) {
+    this.betreuungskosten = betreuungskosten;
+  }
+
+
   public KindUpdateDtoSpec andereEinnahmen(Integer andereEinnahmen) {
     
     this.andereEinnahmen = andereEinnahmen;
@@ -416,12 +446,13 @@ public class KindUpdateDtoSpec {
         Objects.equals(this.kinderUndAusbildungszulagen, kindUpdate.kinderUndAusbildungszulagen) &&
         Objects.equals(this.renten, kindUpdate.renten) &&
         Objects.equals(this.ergaenzungsleistungen, kindUpdate.ergaenzungsleistungen) &&
+        Objects.equals(this.betreuungskosten, kindUpdate.betreuungskosten) &&
         Objects.equals(this.andereEinnahmen, kindUpdate.andereEinnahmen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, ausbildungssituation, id, wohnsitzAnteilPia, nachname, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
+    return Objects.hash(entryId, vorname, geburtsdatum, ausbildungssituation, id, wohnsitzAnteilPia, nachname, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, betreuungskosten, andereEinnahmen);
   }
 
   @Override
@@ -439,6 +470,7 @@ public class KindUpdateDtoSpec {
     sb.append("    kinderUndAusbildungszulagen: ").append(toIndentedString(kinderUndAusbildungszulagen)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
+    sb.append("    betreuungskosten: ").append(toIndentedString(betreuungskosten)).append("\n");
     sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("}");
     return sb.toString();

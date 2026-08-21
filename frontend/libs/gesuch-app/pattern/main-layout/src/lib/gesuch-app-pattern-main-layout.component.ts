@@ -24,6 +24,7 @@ import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { filterByAppRole } from '@dv/shared/model/benutzer';
 import {
   SharedPatternGlobalHeaderComponent,
   SharedPatternGlobalHeaderPartsDirective,
@@ -146,6 +147,8 @@ export class GesuchAppPatternMainLayoutComponent {
       const fallId = this.fallStore.currentFallViewSig()?.id;
       const rolesMap = this.permissionStore.rolesMapSig();
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
+      const availableSozialdienste = this.availableSozialdiensteSig() ?? [];
+      const delegierung = fallHeader?.currentDelegierung;
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
@@ -181,29 +184,31 @@ export class GesuchAppPatternMainLayoutComponent {
           : undefined,
       };
 
+      const sozialdienstDelegieren: NavItem | undefined =
+        availableSozialdienste.length && fallHeader && !delegierung
+          ? {
+              type: 'action',
+              id: 'sozialdienst-delegieren',
+              label: { key: 'shared.menu.delegieren' },
+              action: () => this.delegiereSozialdienst(fallId),
+            }
+          : undefined;
+
       const navItems: NavItem[] = [
         ...gesuchBaseNavItems,
         fallDokumente,
         auszahlung,
         nachrichten,
-      ].filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      });
+        ...(sozialdienstDelegieren ? [sozialdienstDelegieren] : []),
+      ].filter(filterByAppRole(rolesMap));
 
       this.navigationStore.setNavigationItems(navItems);
     });
 
     // menuItems items effect
     effect(() => {
-      const availableSozialdienste = this.availableSozialdiensteSig() ?? [];
       const fallId = this.fallStore.currentFallViewSig()?.id;
       const rolesMap = this.permissionStore.rolesMapSig();
-      const delegierung =
-        this.fallHeaderStore.fallHeaderViewSig()?.currentDelegierung;
 
       if (!fallId) {
         return;
@@ -255,32 +260,11 @@ export class GesuchAppPatternMainLayoutComponent {
         },
       };
 
-      const sozialdienstMenu: NavMenuItem | undefined =
-        availableSozialdienste.length
-          ? {
-              type: 'action',
-              id: 'sozialdienst-delegieren',
-              disabled:
-                delegierung &&
-                (delegierung.status === 'AKZEPTIERT' ||
-                  delegierung.status === 'EINGEREICHT'),
-              label: { key: 'shared.menu.delegieren' },
-              action: () => this.delegiereSozialdienst(fallId),
-            }
-          : undefined;
-
       const menuItems: NavMenuItem[] = [
         ...gesuchBaseMenuItems,
-        ...(sozialdienstMenu ? [sozialdienstMenu] : []),
         allgemeineInformationen,
         nutzungsbedingungen,
-      ].filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      });
+      ].filter(filterByAppRole(rolesMap));
 
       this.navigationStore.setMenuItems(menuItems);
     });
