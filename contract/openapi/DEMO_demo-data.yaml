@@ -776,6 +776,8 @@ components:
           $ref: './components/gesuch-formular.yaml#/Ausbildungssituation'
         geschwisterTyp:
           $ref: './components/gesuch-formular.yaml#/GeschwisterTyp'
+        elternteilPiaOfStiefHalbGeschwister:
+          $ref: './components/common.yaml#/ElternTyp'
     DemoAuszahlung:
       required:
         - nachname

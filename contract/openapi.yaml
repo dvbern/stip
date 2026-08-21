@@ -8622,6 +8622,8 @@ components:
           $ref: '#/components/schemas/Ausbildungssituation'
         geschwisterTyp:
           $ref: '#/components/schemas/GeschwisterTyp'
+        elternteilPiaOfStiefHalbGeschwister:
+          $ref: '#/components/schemas/ElternTyp'
     DemoAuszahlung:
       required:
         - nachname
@@ -11338,6 +11340,8 @@ components:
           type: string
         geschwisterTyp:
           $ref: '#/components/schemas/GeschwisterTyp'
+        elternteilPiaOfStiefHalbGeschwister:
+          $ref: '#/components/schemas/ElternTyp'
         hidden:
           type: boolean
     LebenslaufItemUpdate:
