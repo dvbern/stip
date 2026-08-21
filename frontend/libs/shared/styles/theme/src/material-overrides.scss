@@ -165,8 +165,9 @@ $dv-all-colors: info, danger, success, warn, primary;
   max-height: 100vh !important;
 }
 
-.info-dialog-columnar {
+.dv-info-dialog-panel-columnar {
   &.cdk-overlay-pane.mat-mdc-dialog-panel {
+    padding: 0;
     min-width: unset;
   }
 }
