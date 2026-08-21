@@ -2,10 +2,6 @@ Guten Tag {vorname} {nachname}
 
 Die Frist für die Einreichung der fehlenden Dokumente/Angaben ist abgelaufen.
 
-Ihr Gesuch gilt als nicht eingereicht.
-
-Sie können Ihr Gesuch erneut einreichen, sofern die Einreichefrist für das Ausbildungsjahr noch nicht abgelaufen ist.
-
 Freundliche Grüsse
 
 Abteilung Ausbildungsbeiträge

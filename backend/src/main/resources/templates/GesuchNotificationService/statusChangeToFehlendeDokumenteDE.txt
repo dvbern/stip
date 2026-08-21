@@ -11,5 +11,4 @@ Benötigen Sie mehr Zeit? Dann können Sie vor Ablauf der Frist per E-Mail eine 
 
 Freundliche Grüsse
 
-{sbVorname} {sbNachname}
-{sbEmail}
+Abteilung Ausbildungsbeiträge

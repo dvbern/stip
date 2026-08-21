@@ -1,12 +1,15 @@
 Bonjour {vorname} {nachname}
 
-Le délai pour remettre les documents/informations manquants a été prolongé. Le nouveau délai expire le {fristende}.
+Le délai pour transmettre les documents/informations manquants a été prolongé. Le nouveau délai échoit le {fristende}.
 
-Veuillez remettre l'ensemble des documents/informations demandés au plus tard à cette date. Sans les documents/informations manquants, nous ne pouvons pas examiner votre demande.
+Veuillez transmettre l’intégralité des documents/informations demandés d’ici cette date. Sans les documents/informations manquants, nous ne pouvons pas examiner votre demande/votre annonce de modification.
 
-Si les documents/informations demandés sont remis dans le délai, mais de manière incomplète, à la Section des subsides de formation (SSF), la SSF refuse la demande faute d'éléments suffisants pour effectuer le calcul.
+Pour les demandes :
+Si les documents/informations demandés sont transmis à la Section des subsides de formation (SSF) dans le délai imparti, mais de manière incomplète, la SSF rejette la demande faute de base de calcul.
+Si les documents/informations demandés ne sont pas transmis à la SSF dans le délai imparti, la demande est considérée comme retirée.
 
-Si les documents/informations demandés ne sont pas remis à la SSF dans le délai imparti, la demande est considérée comme retirée.
+Pour les annonces de modification :
+L’annonce de modification est examinée sans les documents/informations demandés.
 
 Meilleures salutations
 

@@ -103,8 +103,11 @@ public class MailService {
 
         mailAlreadySentCheckerService.sentStandardNotification();
 
-        // TODO(KSTIP-3738): implement link
-        Templates.getStandardNotification(nachname, vorname, "", language)
+        var link = tenantService.getConfigForCurrentTenant().frontend().urls().get(FrontendType.GS);
+
+        link = String.format("https://%s", link);
+
+        Templates.getStandardNotification(nachname, vorname, link, language)
             .to(recipients.toArray(String[]::new))
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
             .send()

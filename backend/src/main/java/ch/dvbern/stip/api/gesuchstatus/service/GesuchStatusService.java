@@ -108,7 +108,8 @@ public class GesuchStatusService {
         baseTriggerStateMachineEventWithComments(gesuch, event, null, statusProtokollKommentar);
 
         if (statusProtokollKommentar != null && sendNotificationIfPossible) {
-            gesuchNotificationService.createStatusChangeWithCommentNotificationAndSendStdMail(gesuch, statusProtokollKommentar);
+            gesuchNotificationService
+                .createStatusChangeWithCommentNotificationAndSendStdMail(gesuch, statusProtokollKommentar);
         }
     }
 

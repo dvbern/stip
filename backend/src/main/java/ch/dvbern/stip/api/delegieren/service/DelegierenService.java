@@ -87,7 +87,7 @@ public class DelegierenService {
             .setPersoenlicheAngaben(persoenlicheAngabenMapper.toEntity(dto));
         fall.setCurrentDelegierung(newDelegierung);
         fall.getHistoricalDelegierungs().add(newDelegierung);
-//        delegierungNotificationService.createEingegebenNotificationAndSendStdMail(newDelegierung);
+        // delegierungNotificationService.createEingegebenNotificationAndSendStdMail(newDelegierung);
 
         delegierungRepository.persist(newDelegierung);
     }

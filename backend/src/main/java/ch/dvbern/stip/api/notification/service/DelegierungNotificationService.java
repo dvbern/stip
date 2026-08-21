@@ -32,6 +32,23 @@ public class DelegierungNotificationService {
     private final NotificationService notificationService;
 
     @Transactional
+    public void createEingegebenNotificationAndSendStdMail(final Delegierung delegierung) {
+        final var fall = delegierung.getFall();
+        final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
+        final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
+
+        final String msg = Templates.getEingereicht(persoenlicheAngaben.getSprache()).render();
+
+        notificationService.createNotificationAndSendStdMail(
+            NotificationType.DELEGIERUNG_EINGEGEBEN,
+            fall,
+            absender,
+            persoenlicheAngaben,
+            msg
+        );
+    }
+
+    @Transactional
     public void createAbgelehntNotificationAndSendStdMail(final Delegierung delegierung) {
         final var fall = delegierung.getFall();
         final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
@@ -108,6 +125,20 @@ public class DelegierungNotificationService {
 
     @CheckedTemplate
     private static class Templates {
+        public static TemplateInstance getEingereicht(
+            final Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return eingereichtFR();
+            }
+
+            return eingereichtDE();
+        }
+
+        public static native TemplateInstance eingereichtDE();
+
+        public static native TemplateInstance eingereichtFR();
+
         public static TemplateInstance getAbgelehnt(
             final String vorname,
             final String nachname,

@@ -11,5 +11,4 @@ Avez-vous besoin de plus de temps ? Vous pouvez demander une prolongation du dé
 
 Meilleures salutations
 
-{sbVorname} {sbNachname}
-{sbEmail}
+Section des subsides de formation

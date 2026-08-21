@@ -1,10 +1,6 @@
 Bonjour {vorname} {nachname}
 
-Le délai pour remettre les documents/informations manquants est expiré.
-
-<b>Votre demande est considérée comme non soumise.</b>
-
-Vous pouvez soumettre à nouveau votre demande, pour autant que le délai de dépôt pour l'année de formation ne soit pas encore expiré.
+Le délai pour transmettre les documents/informations manquants est arrivé à échéance.
 
 Meilleures salutations
 
