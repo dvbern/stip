@@ -507,27 +507,53 @@
     ),
   )
 
-  table.einnahmen-kosten(
-    {
-      let prefix = "berechnung.total.fehlbetrag."
-      let proKopfTeilung = safe-get(budget, "proKopfTeilung")
+  let fehlbetrag = safe-get(budget, "fehlbetrag")
 
-      table.entry(
-        t(prefix + "label"),
-        format.chf(safe-get(budget, "fehlbetrag"), prefix: "negative"),
-        info: t(prefix + "info"),
-        sub-table: if proKopfTeilung != none {
-          (
-            table.sub-entry(
-              t(prefix + "proKopfTeilung"),
-              proKopfTeilung,
-            ),
-          )
-        } else {
-          ()
-        },
-      )
+  table.einnahmen-kosten(
+    if fehlbetrag < 0 {
+      {
+        let prefix = "berechnung.total.fehlbetrag."
+        let proKopfTeilung = safe-get(budget, "proKopfTeilung")
+
+        table.entry(
+          t(prefix + "label"),
+          format.chf(fehlbetrag, prefix: "negative"),
+          info: t(prefix + "info"),
+          sub-table: if proKopfTeilung != none {
+            (
+              table.sub-entry(
+                t(prefix + "proKopfTeilung"),
+                proKopfTeilung,
+              ),
+            )
+          } else {
+            ()
+          },
+        )
+      }
+    } else {
+      {
+        let prefix = "berechnung.total.ueberschuss."
+        let proKopfTeilung = safe-get(budget, "proKopfTeilung")
+
+        table.entry(
+          t(prefix + "label"),
+          format.chf(fehlbetrag, prefix: "positive"),
+          info: t(prefix + "info"),
+          sub-table: if proKopfTeilung != none {
+            (
+              table.sub-entry(
+                t(prefix + "proKopfTeilung"),
+                proKopfTeilung,
+              ),
+            )
+          } else {
+            ()
+          },
+        )
+      }
     },
+
     table.entry(
       t("berechnung.total.anspruch.label", anzahlMonate: safe-get(
         payload,
