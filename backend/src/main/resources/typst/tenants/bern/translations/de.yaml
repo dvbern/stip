@@ -165,7 +165,7 @@ berechnung:
       label: Fehlbetrag
       info: Einnahmen minus Kosten
       proKopfTeilung: Pro Kopf Teilung bei Berechnung mit Partnerin oder Partner
-    einnahmeUeberschuss:
-      label: Einnahmeüberschuss
+    ueberschuss:
+      label: Überschuss
       info: Einnahmen minus Kosten.
       proKopfTeilung: Geteilt durch die Anzahl in Ausbildung stehender Kinder
