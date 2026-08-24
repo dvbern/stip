@@ -97,7 +97,9 @@
             <!-- fehlbetrag -->
             <dv-position
               class="tw:pb-4"
-              [titleSig]="t('persoenlich.fehlbetrag')"
+              [titleSig]="
+                berechnung.fehlbetrag > 0 ? t('persoenlich.einnahmeueberschuss') : t('persoenlich.fehlbetrag')
+              "
               [infoSig]="t('persoenlich.fehlbetrag.info')"
               [amountSig]="berechnung.fehlbetrag | formatChf: false"
             ></dv-position>
