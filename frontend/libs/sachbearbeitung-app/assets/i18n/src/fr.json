@@ -579,6 +579,7 @@
   "sachbearbeitung-app.infos.admin.verfuegung.table.dokument": "Document",
   "sachbearbeitung-app.infos.admin.ausbildung-abbrechen": "Annuler la formation",
   "sachbearbeitung-app.infos.admin.ausbildung-abbrechen.message": "Voulez-vous vraiment annuler la formation?",
+  "sachbearbeitung-app.infos.admin.ausbildung-unterbruch": "Interruptions de formation",
   "sachbearbeitung-app.infos.admin.ausbildung-unterbrechen": "Interrompre la formation",
   "sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.message": "Voulez-vous vraiment interrompre la formation?",
   "sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.title": "Interruption de la formation",

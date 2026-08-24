@@ -196,8 +196,6 @@ export class SharedFeatureGesuchstellerDashboardComponent {
         return this.deleteAenderung(output.id);
       case 'delete darlehen':
         return this.deleteDarlehen(output.id);
-      case 'ausbildung unterbrechen':
-        return this.ausbildungUnterbrechen(output.id, output.unterbruchId);
       case 'create aenderung':
         return this.aenderungMelden(output.melden);
       case 'create darlehen':
@@ -239,19 +237,6 @@ export class SharedFeatureGesuchstellerDashboardComponent {
           this.store.dispatch(SharedDataAccessGesuchEvents.reset());
         }
       });
-  }
-
-  private ausbildungUnterbrechen(ausbildungId: string, unterbruchId?: string) {
-    if (unterbruchId) {
-      this.router.navigate(['/', 'ausbildung-unterbrechen', unterbruchId]);
-    } else {
-      this.ausbildungStore.createAusbildungUnterbruchAntrag$({
-        ausbildungId,
-        onSuccess: (unterbruchId) => {
-          this.router.navigate(['/', 'ausbildung-unterbrechen', unterbruchId]);
-        },
-      });
-    }
   }
 
   deleteGesuch(gesuchId: string) {

@@ -742,6 +742,9 @@
                   <modelNameSuffix>Dto</modelNameSuffix>
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
+                  <globalProperties>
+                    <skipFormModel>false</skipFormModel>
+                  </globalProperties>
                   <schemaMappings>
                     FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
                     DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,

@@ -75,7 +75,7 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   demoDataStore = inject(DemoDataStore);
   fallStore = inject(FallStore);
   filterText = new FormControl<string | null>(null);
-  selectedFileSig = signal<File | null>(null);
+  selectedFileSig = signal<File[] | undefined>(undefined);
   tooltipDelay = TOOLTIP_DELAY;
 
   validateBerechnungSig = input<boolean>(false, {
@@ -157,11 +157,11 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
       .subscribe((result) => {
         if (result) {
           this.demoDataStore.createNewDemoDataImport$({
-            fileUpload,
+            fileUpload: fileUpload[0],
             ignoreBerechnungErrors: !this.validateBerechnungSig(),
             kommentar: result.kommentar,
             onSuccess: () => {
-              this.selectedFileSig.set(null);
+              this.selectedFileSig.set(undefined);
               this.demoDataStore.loadDemoData$();
             },
           });

@@ -1317,8 +1317,6 @@ components:
           type: boolean
         hasPendingAusbildungUnterbruchAntrag:
           type: boolean
-        openAusbildungUnterbruchAntragId:
-          $ref: './components/common.yaml#/UUID'
       allOf:
         - $ref: './components/common.yaml#/Ausbildung'
     SbGesucheDashboardColumn:
@@ -1571,6 +1569,7 @@ components:
         - id
         - fallNummer
         - fallId
+        - ausbildungId
         - gesuchNummer
         - startDate
         - endDate
@@ -1582,6 +1581,8 @@ components:
         fallNummer:
           type: string
         fallId:
+          type: string
+        ausbildungId:
           type: string
         gesuchNummer:
           type: string

@@ -293,7 +293,7 @@
     },
     "gesuchStatus": "IN_BEARBEITUNG_GS",
     "gesuchNummer": "",
-    "gesuchStatusAenderungDatum": "2026-08-17T09:01:39.744065884",
+    "gesuchStatusAenderungDatum": "2026-08-19T13:49:39.151115004",
     "gesuchTranchen": [
       {
         "id": null,
@@ -483,9 +483,10 @@
               "wohnsitzAnteilMutter": null,
               "wohnsitzAnteilVater": null,
               "ausbildungssituation": "IN_AUSBILDUNG",
-              "entryId": "d423fa25-d2df-4ecf-b3cc-3783917f9f6d",
+              "entryId": "4dd08014-e382-4319-85e7-074a91643709",
               "hidden": false,
               "geschwisterTyp": "LEIBLICH",
+              "elternteilPiaOfStiefHalbGeschwister": null,
               "fullName": "geschwisters-vorname geschwisters-nachname"
             }
           ],
@@ -876,9 +877,10 @@
           "wohnsitzAnteilMutter": null,
           "wohnsitzAnteilVater": null,
           "ausbildungssituation": "IN_AUSBILDUNG",
-          "entryId": "d423fa25-d2df-4ecf-b3cc-3783917f9f6d",
+          "entryId": "4dd08014-e382-4319-85e7-074a91643709",
           "hidden": false,
           "geschwisterTyp": "LEIBLICH",
+          "elternteilPiaOfStiefHalbGeschwister": null,
           "fullName": "geschwisters-vorname geschwisters-nachname"
         }
       ],

@@ -36,7 +36,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_GESUCHS,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG,
-  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_OPEN_AUSBILDUNG_UNTERBRUCH_ANTRAG_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG,
@@ -63,9 +62,6 @@ public class AusbildungDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG = "hasPendingAusbildungUnterbruchAntrag";
   private Boolean hasPendingAusbildungUnterbruchAntrag;
-
-  public static final String JSON_PROPERTY_OPEN_AUSBILDUNG_UNTERBRUCH_ANTRAG_ID = "openAusbildungUnterbruchAntragId";
-  private UUID openAusbildungUnterbruchAntragId;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -195,32 +191,6 @@ public class AusbildungDashboardItemDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
     this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec openAusbildungUnterbruchAntragId(UUID openAusbildungUnterbruchAntragId) {
-    
-    this.openAusbildungUnterbruchAntragId = openAusbildungUnterbruchAntragId;
-    return this;
-  }
-
-   /**
-   * Get openAusbildungUnterbruchAntragId
-   * @return openAusbildungUnterbruchAntragId
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_OPEN_AUSBILDUNG_UNTERBRUCH_ANTRAG_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public UUID getOpenAusbildungUnterbruchAntragId() {
-    return openAusbildungUnterbruchAntragId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_OPEN_AUSBILDUNG_UNTERBRUCH_ANTRAG_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setOpenAusbildungUnterbruchAntragId(UUID openAusbildungUnterbruchAntragId) {
-    this.openAusbildungUnterbruchAntragId = openAusbildungUnterbruchAntragId;
   }
 
 
@@ -599,7 +569,6 @@ public class AusbildungDashboardItemDtoSpec {
     return Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
         Objects.equals(this.canCreateAusbildungUnterbruchAntrag, ausbildungDashboardItem.canCreateAusbildungUnterbruchAntrag) &&
         Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, ausbildungDashboardItem.hasPendingAusbildungUnterbruchAntrag) &&
-        Objects.equals(this.openAusbildungUnterbruchAntragId, ausbildungDashboardItem.openAusbildungUnterbruchAntragId) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildungDashboardItem.fachrichtungBerufsbezeichnung) &&
@@ -618,7 +587,7 @@ public class AusbildungDashboardItemDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchs, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, openAusbildungUnterbruchAntragId, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
+    return Objects.hash(gesuchs, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
   }
 
   @Override
@@ -628,7 +597,6 @@ public class AusbildungDashboardItemDtoSpec {
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("    canCreateAusbildungUnterbruchAntrag: ").append(toIndentedString(canCreateAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    hasPendingAusbildungUnterbruchAntrag: ").append(toIndentedString(hasPendingAusbildungUnterbruchAntrag)).append("\n");
-    sb.append("    openAusbildungUnterbruchAntragId: ").append(toIndentedString(openAusbildungUnterbruchAntragId)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");

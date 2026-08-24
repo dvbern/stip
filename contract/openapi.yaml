@@ -2327,23 +2327,46 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /ausbildung/unterbruch/{ausbildungId}:
+  /ausbildung/unterbruch-limits/{ausbildungId}:
     parameters:
-      - name: ausbildungId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    post:
+      - $ref: '#/components/parameters/ausbildungId'
+    get:
       tags:
         - Ausbildung
       responses:
-        '201':
-          description: Created
+        '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AusbildungUnterbruchAntragGS'
+                $ref: '#/components/schemas/AusbildungUnterbruchLimits'
+          description: unterbruch date limits for given Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildungUnterbruchLimits
+      summary: get unterbruch date limits for given Ausbildung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/create-unterbruch/{ausbildungId}/gs:
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateAusbildungUnterbruchAntragGS'
+      parameters:
+        - $ref: '#/components/parameters/ausbildungId'
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          description: OK
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2354,8 +2377,71 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: createAusbildungUnterbruchAntrag
-      summary: Create a new AusbildungUnterbruchAntrag
+      operationId: createAusbildungUnterbruchAntragGs
+      summary: AusbildungUnterbruchAntrag erstellen
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/create-unterbruch/{ausbildungId}/sb:
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateAusbildungUnterbruchSB'
+      parameters:
+        - $ref: '#/components/parameters/ausbildungId'
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createAusbildungUnterbruchSb
+      summary: AusbildungUnterbruch erstellen und direkt abschliessen
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/sb:
+    parameters:
+      - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
+    patch:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateAusbildungUnterbruchAntragSB
+      summary: AusbildungUnterbruchAntrag abschliessen
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2370,9 +2456,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
+                $ref: '#/components/schemas/AusbildungUnterbruchDashboardSB'
           description: returniert alle AusbildungUnterbruchAntrag des Falls des Gesuchs
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -2384,34 +2468,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAusbildungUnterbruchAntragsByGesuchId
       summary: returniert alle AusbildungUnterbruchAntrag des Falls des Gesuchs
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument:
-    parameters:
-      - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
-    post:
-      tags:
-        - Ausbildung
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AusbildungUnterbruchAntragDokumentCreate'
-      responses:
-        '201':
-          description: Created
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      summary: Created a AusbildungUnterbruchAntrag Dokument
-      operationId: createAusbildungUnterbruchAntragDokument
-      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2447,25 +2503,6 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-    delete:
-      tags:
-        - Ausbildung
-      responses:
-        '200':
-          description: Dokument deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: deleteAusbildungUnterbruchAntragDokument
-      summary: deletes a AusbildungUnterbruchAntrag Dokument
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
   /ausbildung/unterbruch/dokument/download:
     parameters:
       - name: token
@@ -2484,126 +2521,10 @@ paths:
                 format: binary
                 type: string
           description: File returned
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
       operationId: downloadAusbildungUnterbruchAntragDokument
       summary: Download AusbildungUnterbruchAntrag Dokument
       x-quarkus-response-type: >-
         org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /ausbildung/unterbruch/gs/{ausbildungUnterbruchAntragId}:
-    parameters:
-      - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
-    get:
-      tags:
-        - Ausbildung
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AusbildungUnterbruchAntragGS'
-          description: AusbildungUnterbruchAntrag
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAusbildungUnterbruchAntragGS
-      summary: get a AusbildungUnterbruchAntrag
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-    delete:
-      tags:
-        - Ausbildung
-      responses:
-        '200':
-          description: AusbildungUnterbruchAntrag deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: deleteAusbildungUnterbruchAntrag
-      summary: deletes a AusbildungUnterbruchAntrag
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-    patch:
-      tags:
-        - Ausbildung
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragGS'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AusbildungUnterbruchAntragGS'
-          description: Returns the eingereicht AusbildungUnterbruchAntrag
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: einreichenAusbildungUnterbruchAntrag
-      summary: Reicht einen AusbildungUnterbruchAntrag ein
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /ausbildung/unterbruch/sb/{ausbildungUnterbruchAntragId}:
-    parameters:
-      - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
-    patch:
-      tags:
-        - Ausbildung
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
-          description: Returns the created Ausbildung
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: updateAusbildungUnterbruchAntragSB
-      summary: Updated einen AusbildungUnterbruchAntrag
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -8622,6 +8543,8 @@ components:
           $ref: '#/components/schemas/Ausbildungssituation'
         geschwisterTyp:
           $ref: '#/components/schemas/GeschwisterTyp'
+        elternteilPiaOfStiefHalbGeschwister:
+          $ref: '#/components/schemas/ElternTyp'
     DemoAuszahlung:
       required:
         - nachname
@@ -9195,45 +9118,30 @@ components:
             Required wenn andere ausbildungNichtGefunden = false
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
-    AusbildungUnterbruchAntragGS:
-      type: object
+    AusbildungUnterbruchLimits:
       required:
-        - id
-        - dokuments
-        - canEdit
         - unterbruchLatestEndDate
         - unterbruchEarliestStartDate
+      type: object
       properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        dokuments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Dokument'
-        canEdit:
-          type: boolean
         unterbruchLatestEndDate:
           format: date
           type: string
         unterbruchEarliestStartDate:
           format: date
           type: string
-    AusbildungUnterbruchAntragDokumentCreate:
-      type: object
-      required:
-        - fileUpload
-      properties:
-        fileUpload:
-          $ref: '#/components/schemas/FileUpload'
-    UpdateAusbildungUnterbruchAntragGS:
+    CreateAusbildungUnterbruchAntragGS:
       type: object
       required:
         - kommentarGS
+        - fileUpload
         - startDate
         - endDate
       properties:
         kommentarGS:
           type: string
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
         startDate:
           type: string
           format: date
@@ -9242,7 +9150,6 @@ components:
           format: date
     AusbildungUnterbruchAntragStatus:
       enum:
-        - IN_BEARBEITUNG_GS
         - EINGEGEBEN
         - AKZEPTIERT
         - ABGELEHNT
@@ -9266,18 +9173,37 @@ components:
           format: date
         monateOhneAnspruch:
           type: integer
+    CreateAusbildungUnterbruchSB:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateAusbildungUnterbruchAntragGS'
+        - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
+    AusbildungUnterbruchDashboardSB:
+      required:
+        - canCreateAusbildungUnterbruch
+        - ausbildungUnterbruchs
+      type: object
+      properties:
+        canCreateAusbildungUnterbruch:
+          type: boolean
+        ausbildungUnterbruchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
     AusbildungUnterbruchAntragSB:
       type: object
       required:
         - id
         - timestampErstellt
         - userErstellt
-        - kommentarGS
         - canAntragAkzeptieren
-        - dokuments
-        - gesuchId
         - unterbruchLatestEndDate
         - unterbruchEarliestStartDate
+        - dokuments
+        - gesuchId
+        - status
+      allOf:
+        - $ref: '#/components/schemas/CreateAusbildungUnterbruchAntragGS'
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -9286,24 +9212,32 @@ components:
           format: date-time
         userErstellt:
           type: string
-        kommentarGS:
-          type: string
         canAntragAkzeptieren:
           type: boolean
-        dokuments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Dokument'
-        gesuchId:
-          $ref: '#/components/schemas/UUID'
         unterbruchLatestEndDate:
           format: date
           type: string
         unterbruchEarliestStartDate:
           format: date
           type: string
-      allOf:
-        - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
+        dokuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        status:
+          $ref: '#/components/schemas/AusbildungUnterbruchAntragStatus'
+        kommentarSB:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        monateOhneAnspruch:
+          type: integer
     AusbildungsStatus:
       enum:
         - AKTIV
@@ -10179,8 +10113,6 @@ components:
           type: boolean
         hasPendingAusbildungUnterbruchAntrag:
           type: boolean
-        openAusbildungUnterbruchAntragId:
-          $ref: '#/components/schemas/UUID'
       allOf:
         - $ref: '#/components/schemas/Ausbildung'
     SbGesucheDashboardColumn:
@@ -10431,6 +10363,7 @@ components:
         - id
         - fallNummer
         - fallId
+        - ausbildungId
         - gesuchNummer
         - startDate
         - endDate
@@ -10442,6 +10375,8 @@ components:
         fallNummer:
           type: string
         fallId:
+          type: string
+        ausbildungId:
           type: string
         gesuchNummer:
           type: string
@@ -11338,6 +11273,8 @@ components:
           type: string
         geschwisterTyp:
           $ref: '#/components/schemas/GeschwisterTyp'
+        elternteilPiaOfStiefHalbGeschwister:
+          $ref: '#/components/schemas/ElternTyp'
         hidden:
           type: boolean
     LebenslaufItemUpdate:
@@ -12644,6 +12581,12 @@ components:
       schema:
         type: string
         format: date
+    ausbildungId:
+      name: ausbildungId
+      in: path
+      schema:
+        $ref: '#/components/schemas/UUID'
+      required: true
     ausbildungUnterbruchAntragId:
       name: ausbildungUnterbruchAntragId
       in: path

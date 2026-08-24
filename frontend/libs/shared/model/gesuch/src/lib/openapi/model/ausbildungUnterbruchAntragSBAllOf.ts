@@ -9,17 +9,24 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AusbildungUnterbruchAntragStatus } from './ausbildungUnterbruchAntragStatus';
 import { Dokument } from './dokument';
 
 export interface AusbildungUnterbruchAntragSBAllOf { 
     id: string;
     timestampErstellt: string;
     userErstellt: string;
-    kommentarGS: string;
     canAntragAkzeptieren: boolean;
-    dokuments: Array<Dokument>;
-    gesuchId: string;
     unterbruchLatestEndDate: string;
     unterbruchEarliestStartDate: string;
+    dokuments: Array<Dokument>;
+    gesuchId: string;
+    status: AusbildungUnterbruchAntragStatus;
+    kommentarSB?: string;
+    startDate?: string;
+    endDate?: string;
+    monateOhneAnspruch?: number;
 }
+
+
 

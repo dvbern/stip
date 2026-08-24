@@ -26,8 +26,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum AusbildungUnterbruchAntragStatusDtoSpec {
   
-  IN_BEARBEITUNG_GS("IN_BEARBEITUNG_GS"),
-  
   EINGEGEBEN("EINGEGEBEN"),
   
   AKZEPTIERT("AKZEPTIERT"),

@@ -6,7 +6,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 import {
   AusbildungService,
   AusbildungServiceUpdateAusbildungUnterbruchAntragSBRequestParams,
-  AusbildungUnterbruchAntragSB,
+  AusbildungUnterbruchDashboardSB,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -14,15 +14,16 @@ import {
   cachedPending,
   handleApiResponse,
   initial,
+  pending,
 } from '@dv/shared/util/remote-data';
 
 type AusbildungAdminState = {
-  ausbildungUnterbrueche: CachedRemoteData<AusbildungUnterbruchAntragSB[]>;
+  ausbildungUnterbruchDaschboardSb: CachedRemoteData<AusbildungUnterbruchDashboardSB>;
   lastUpdate: RemoteData<unknown>;
 };
 
 const initialState: AusbildungAdminState = {
-  ausbildungUnterbrueche: initial(),
+  ausbildungUnterbruchDaschboardSb: initial(),
   lastUpdate: initial(),
 };
 
@@ -34,15 +35,17 @@ export class AusbildungAdminStore extends signalStore(
   private ausbildungService = inject(AusbildungService);
 
   ausbildungUnterbruchListViewSig = computed(() => {
-    const unterbrueche = this.ausbildungUnterbrueche().data;
-    return unterbrueche ?? [];
+    const unterbrueche = this.ausbildungUnterbruchDaschboardSb().data;
+    return unterbrueche?.ausbildungUnterbruchs ?? [];
   });
 
-  loadAusbildungUnterbrueche$ = rxMethod<{ gesuchId: string }>(
+  ausbildungUnterbruchDaschboardSb$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          ausbildungUnterbrueche: cachedPending(state.ausbildungUnterbrueche),
+          ausbildungUnterbruchDaschboardSb: cachedPending(
+            state.ausbildungUnterbruchDaschboardSb,
+          ),
         }));
       }),
       switchMap(({ gesuchId }) =>
@@ -51,8 +54,8 @@ export class AusbildungAdminStore extends signalStore(
             gesuchId,
           })
           .pipe(
-            handleApiResponse((ausbildungUnterbrueche) =>
-              patchState(this, { ausbildungUnterbrueche }),
+            handleApiResponse((ausbildungUnterbruchDaschboardSb) =>
+              patchState(this, { ausbildungUnterbruchDaschboardSb }),
             ),
           ),
       ),
@@ -65,9 +68,9 @@ export class AusbildungAdminStore extends signalStore(
   }>(
     pipe(
       tap(() => {
-        patchState(this, (state) => ({
-          ausbildungUnterbrueche: cachedPending(state.ausbildungUnterbrueche),
-        }));
+        patchState(this, {
+          lastUpdate: pending(),
+        });
       }),
       switchMap(({ data, onSuccess }) =>
         this.ausbildungService
