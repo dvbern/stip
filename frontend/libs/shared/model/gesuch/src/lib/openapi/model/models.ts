@@ -262,7 +262,6 @@ export * from './sozialdienstBenutzer';
 export * from './sozialdienstBenutzerAllOf';
 export * from './sozialdienstBenutzerBase';
 export * from './sozialdienstBenutzerCreate';
-export * from './sozialdienstBenutzerCreateAllOf';
 export * from './sozialdienstBenutzerUpdate';
 export * from './sozialdienstCreate';
 export * from './sozialdienstSlim';

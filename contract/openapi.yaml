@@ -7318,15 +7318,12 @@ components:
         - name
         - vorname
         - email
-        - redirectUri
       properties:
         name:
           type: string
         vorname:
           type: string
         email:
-          type: string
-        redirectUri:
           type: string
     SteuerdatenPortError:
       required:
@@ -7968,11 +7965,6 @@ components:
         - ABGELEHNT
         - FEHLENDE_DOKUMENTE
     SozialdienstBenutzerCreate:
-      required:
-        - redirectUri
-      properties:
-        redirectUri:
-          type: string
       allOf:
         - $ref: '#/components/schemas/SozialdienstBenutzerBase'
     SozialdienstBenutzerUpdate:
@@ -8630,6 +8622,8 @@ components:
           $ref: '#/components/schemas/Ausbildungssituation'
         geschwisterTyp:
           $ref: '#/components/schemas/GeschwisterTyp'
+        elternteilPiaOfStiefHalbGeschwister:
+          $ref: '#/components/schemas/ElternTyp'
     DemoAuszahlung:
       required:
         - nachname
@@ -9517,8 +9511,6 @@ components:
           type: array
           items:
             type: string
-        redirectUri:
-          type: string
       allOf:
         - $ref: '#/components/schemas/BenutzerUpdate'
     Benutzereinstellungen:
@@ -11348,6 +11340,8 @@ components:
           type: string
         geschwisterTyp:
           $ref: '#/components/schemas/GeschwisterTyp'
+        elternteilPiaOfStiefHalbGeschwister:
+          $ref: '#/components/schemas/ElternTyp'
         hidden:
           type: boolean
     LebenslaufItemUpdate:

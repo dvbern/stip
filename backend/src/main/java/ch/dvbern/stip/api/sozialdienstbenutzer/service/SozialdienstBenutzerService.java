@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.config.type.FrontendType;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
@@ -122,11 +123,11 @@ public class SozialdienstBenutzerService {
         sozialdienstRepository.requireById(sozialdienst.getId())
             .getSozialdienstBenutzers()
             .add(sozialdienstBenutzer);
-        WelcomeMailDto welcomeMailDto = new WelcomeMailDto();
-        welcomeMailDto.setName(sozialdienstBenutzer.getNachname());
-        welcomeMailDto.setVorname(sozialdienstBenutzer.getVorname());
-        welcomeMailDto.setEmail(sozialdienstBenutzer.getEmail());
-        welcomeMailDto.setRedirectUri(sozialdienstBenutzerCreateDto.getRedirectUri());
+        WelcomeMailDto welcomeMailDto = new WelcomeMailDto(
+            sozialdienstBenutzer.getNachname(),
+            sozialdienstBenutzer.getVorname(),
+            sozialdienstBenutzer.getEmail()
+        );
 
         sozialdienstBenutzerRepository.persistAndFlush(sozialdienstBenutzer);
 
@@ -138,7 +139,7 @@ public class SozialdienstBenutzerService {
         );
 
         createdEvent.fire(new SozialdienstBenutzerCreated(keycloakId));
-        mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
+        mailService.sendBenutzerWelcomeEmail(welcomeMailDto, FrontendType.SOZ);
 
         sozialdienstBenutzer.setKeycloakId(keycloakId);
 

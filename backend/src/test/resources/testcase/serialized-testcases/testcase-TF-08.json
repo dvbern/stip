@@ -293,7 +293,7 @@
     },
     "gesuchStatus": "IN_BEARBEITUNG_GS",
     "gesuchNummer": "",
-    "gesuchStatusAenderungDatum": "2026-08-17T09:01:38.62066216",
+    "gesuchStatusAenderungDatum": "2026-08-19T13:49:38.423856799",
     "gesuchTranchen": [
       {
         "id": null,
@@ -549,9 +549,10 @@
               "wohnsitzAnteilMutter": 100.0,
               "wohnsitzAnteilVater": 0,
               "ausbildungssituation": "KEINE",
-              "entryId": "4f6784c9-5818-444e-84ce-1802db2325d0",
+              "entryId": "88a2c48a-8a92-4c43-b71c-864a542d0ef5",
               "hidden": false,
               "geschwisterTyp": "LEIBLICH",
+              "elternteilPiaOfStiefHalbGeschwister": null,
               "fullName": "geschwisters-vorname geschwisters-nachname"
             },
             {
@@ -571,9 +572,10 @@
               "wohnsitzAnteilMutter": 100.0,
               "wohnsitzAnteilVater": 0,
               "ausbildungssituation": "IN_AUSBILDUNG",
-              "entryId": "f90e25ad-5d7c-42e0-a35f-1350df5497e3",
+              "entryId": "3595d471-edbf-4453-a027-58644c5ff2df",
               "hidden": false,
               "geschwisterTyp": "LEIBLICH",
+              "elternteilPiaOfStiefHalbGeschwister": null,
               "fullName": "geschwisters-vorname geschwisters-nachname"
             }
           ],
@@ -657,7 +659,7 @@
               "geburtsdatum": "2022-01-01",
               "ausbildungssituation": "KEINE",
               "unterhaltsbeitraege": 0,
-              "entryId": "f89d8b19-c24d-402c-b4f8-359559ac9b15",
+              "entryId": "c878dcb6-b3ad-47cb-a946-a5ebdb0a7bf6",
               "wohnsitzAnteilPia": 100,
               "ergaenzungsleistungen": 50,
               "kinderUndAusbildungszulagen": null,
@@ -681,7 +683,7 @@
               "geburtsdatum": "2024-01-01",
               "ausbildungssituation": "KEINE",
               "unterhaltsbeitraege": 2400,
-              "entryId": "8fca4667-c0ba-44f2-b8dc-e20ef5e98b76",
+              "entryId": "4068ba91-ad83-4fc8-a1c6-99afa1dafa72",
               "wohnsitzAnteilPia": 100,
               "ergaenzungsleistungen": 50,
               "kinderUndAusbildungszulagen": 3000,
@@ -990,9 +992,10 @@
           "wohnsitzAnteilMutter": 100.0,
           "wohnsitzAnteilVater": 0,
           "ausbildungssituation": "KEINE",
-          "entryId": "4f6784c9-5818-444e-84ce-1802db2325d0",
+          "entryId": "88a2c48a-8a92-4c43-b71c-864a542d0ef5",
           "hidden": false,
           "geschwisterTyp": "LEIBLICH",
+          "elternteilPiaOfStiefHalbGeschwister": null,
           "fullName": "geschwisters-vorname geschwisters-nachname"
         },
         {
@@ -1012,9 +1015,10 @@
           "wohnsitzAnteilMutter": 100.0,
           "wohnsitzAnteilVater": 0,
           "ausbildungssituation": "IN_AUSBILDUNG",
-          "entryId": "f90e25ad-5d7c-42e0-a35f-1350df5497e3",
+          "entryId": "3595d471-edbf-4453-a027-58644c5ff2df",
           "hidden": false,
           "geschwisterTyp": "LEIBLICH",
+          "elternteilPiaOfStiefHalbGeschwister": null,
           "fullName": "geschwisters-vorname geschwisters-nachname"
         }
       ],
@@ -1098,7 +1102,7 @@
           "geburtsdatum": "2022-01-01",
           "ausbildungssituation": "KEINE",
           "unterhaltsbeitraege": 0,
-          "entryId": "f89d8b19-c24d-402c-b4f8-359559ac9b15",
+          "entryId": "c878dcb6-b3ad-47cb-a946-a5ebdb0a7bf6",
           "wohnsitzAnteilPia": 100,
           "ergaenzungsleistungen": 50,
           "kinderUndAusbildungszulagen": null,
@@ -1122,7 +1126,7 @@
           "geburtsdatum": "2024-01-01",
           "ausbildungssituation": "KEINE",
           "unterhaltsbeitraege": 2400,
-          "entryId": "8fca4667-c0ba-44f2-b8dc-e20ef5e98b76",
+          "entryId": "4068ba91-ad83-4fc8-a1c6-99afa1dafa72",
           "wohnsitzAnteilPia": 100,
           "ergaenzungsleistungen": 50,
           "kinderUndAusbildungszulagen": 3000,

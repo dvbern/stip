@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_GESCHWISTER_TYP,
+  GeschwisterUpdateDtoSpec.JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_HIDDEN
 })
 @JsonTypeName("GeschwisterUpdate")
@@ -77,6 +79,9 @@ public class GeschwisterUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_GESCHWISTER_TYP = "geschwisterTyp";
   private GeschwisterTypDtoSpec geschwisterTyp;
+
+  public static final String JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER = "elternteilPiaOfStiefHalbGeschwister";
+  private ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister;
 
   public static final String JSON_PROPERTY_HIDDEN = "hidden";
   private Boolean hidden;
@@ -344,6 +349,32 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
+  public GeschwisterUpdateDtoSpec elternteilPiaOfStiefHalbGeschwister(ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister) {
+    
+    this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
+    return this;
+  }
+
+   /**
+   * Get elternteilPiaOfStiefHalbGeschwister
+   * @return elternteilPiaOfStiefHalbGeschwister
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public ElternTypDtoSpec getElternteilPiaOfStiefHalbGeschwister() {
+    return elternteilPiaOfStiefHalbGeschwister;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setElternteilPiaOfStiefHalbGeschwister(ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister) {
+    this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
+  }
+
+
   public GeschwisterUpdateDtoSpec hidden(Boolean hidden) {
     
     this.hidden = hidden;
@@ -388,12 +419,13 @@ public class GeschwisterUpdateDtoSpec {
         Objects.equals(this.wohnsitzAnteilVater, geschwisterUpdate.wohnsitzAnteilVater) &&
         Objects.equals(this.nachname, geschwisterUpdate.nachname) &&
         Objects.equals(this.geschwisterTyp, geschwisterUpdate.geschwisterTyp) &&
+        Objects.equals(this.elternteilPiaOfStiefHalbGeschwister, geschwisterUpdate.elternteilPiaOfStiefHalbGeschwister) &&
         Objects.equals(this.hidden, geschwisterUpdate.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, geschwisterTyp, hidden);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, geschwisterTyp, elternteilPiaOfStiefHalbGeschwister, hidden);
   }
 
   @Override
@@ -410,6 +442,7 @@ public class GeschwisterUpdateDtoSpec {
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    geschwisterTyp: ").append(toIndentedString(geschwisterTyp)).append("\n");
+    sb.append("    elternteilPiaOfStiefHalbGeschwister: ").append(toIndentedString(elternteilPiaOfStiefHalbGeschwister)).append("\n");
     sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();

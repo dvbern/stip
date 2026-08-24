@@ -16,6 +16,5 @@ export interface SachbearbeiterUpdateAllOf {
     funktionDe: string;
     funktionFr: string;
     sachbearbeiterRollen: Array<string>;
-    redirectUri?: string;
 }
 

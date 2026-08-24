@@ -281,6 +281,8 @@ GeschwisterUpdate:
       type: string
     geschwisterTyp:
       $ref: '#/GeschwisterTyp'
+    elternteilPiaOfStiefHalbGeschwister:
+      $ref: './common.yaml#/ElternTyp'
     hidden:
       type: boolean
 LebenslaufItem:
