@@ -223,17 +223,15 @@
             (selectedFileSig)="selectedFileSig.set($event)"
           ></dv-shared-ui-file-upload>
 
-          @if (selectedFileSig()?.size) {
-            <button
-              type="button"
-              class="tw:dv-button-main-primary"
-              data-testid="button-save"
-              (click)="createDemoDataImport()"
-              [disabled]="selectedFileSig()?.size === 0"
-            >
-              {{ t('demo-data-app.overview.file-upload.confirm.button') }}
-            </button>
-          }
+          <button
+            type="button"
+            class="tw:dv-button-main-primary"
+            data-testid="button-save"
+            (click)="createDemoDataImport()"
+            [disabled]="!selectedFileSig()?.length"
+          >
+            {{ t('demo-data-app.overview.file-upload.confirm.button') }}
+          </button>
 
           @if (demoDataStore.lastDemoDataRunViewSig(); as lastApply) {
             <dv-shared-ui-info-container

@@ -30,19 +30,17 @@ public class AusbildungUnterbruchAntragRequiredFieldsConstraintValidator
         AusbildungUnterbruchAntrag antrag,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        final boolean inBearbeitungGsFieldsNonNull =
-            Objects.nonNull(antrag.getAusbildung()) && Objects.nonNull(antrag.getGesuch());
         final boolean eingegebenFieldsNonNull =
-            Objects.nonNull(antrag.getGueltigkeit()) && Objects.nonNull(antrag.getKommentarGS());
+            Objects.nonNull(antrag.getAusbildung()) && Objects.nonNull(antrag.getGesuch())
+            && Objects.nonNull(antrag.getGueltigkeit()) && Objects.nonNull(antrag.getKommentarGS());
         final boolean akzeptiertFieldsNonNull =
             Objects.nonNull(antrag.getKommentarSB()) && Objects.nonNull(antrag.getMonateOhneAnspruch());
         final boolean abgelehntFieldsNonNull = Objects.nonNull(antrag.getKommentarSB());
 
         return switch (antrag.getStatus()) {
-            case IN_BEARBEITUNG_GS -> inBearbeitungGsFieldsNonNull;
-            case EINGEGEBEN -> inBearbeitungGsFieldsNonNull && eingegebenFieldsNonNull;
-            case AKZEPTIERT -> inBearbeitungGsFieldsNonNull && eingegebenFieldsNonNull && akzeptiertFieldsNonNull;
-            case ABGELEHNT -> inBearbeitungGsFieldsNonNull && eingegebenFieldsNonNull && abgelehntFieldsNonNull;
+            case EINGEGEBEN -> eingegebenFieldsNonNull;
+            case AKZEPTIERT -> eingegebenFieldsNonNull && akzeptiertFieldsNonNull;
+            case ABGELEHNT -> eingegebenFieldsNonNull && abgelehntFieldsNonNull;
             case null -> false;
         };
     }

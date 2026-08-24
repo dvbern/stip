@@ -13,20 +13,21 @@ import { AusbildungUnterbruchAntragStatus } from './ausbildungUnterbruchAntragSt
 import { Dokument } from './dokument';
 
 export interface AusbildungUnterbruchAntragSB { 
-    status: AusbildungUnterbruchAntragStatus;
-    kommentarSB: string;
+    kommentarGS: string;
+    fileUpload: Blob;
     startDate: string;
     endDate: string;
-    monateOhneAnspruch?: number;
     id: string;
     timestampErstellt: string;
     userErstellt: string;
-    kommentarGS: string;
     canAntragAkzeptieren: boolean;
-    dokuments: Array<Dokument>;
-    gesuchId: string;
     unterbruchLatestEndDate: string;
     unterbruchEarliestStartDate: string;
+    dokuments: Array<Dokument>;
+    gesuchId: string;
+    status: AusbildungUnterbruchAntragStatus;
+    kommentarSB?: string;
+    monateOhneAnspruch?: number;
 }
 
 

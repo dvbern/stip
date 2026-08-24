@@ -25,35 +25,37 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungUnterbruchAntragSBDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
-  private @Valid String kommentarSB;
+  private @Valid String kommentarGS;
+  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
   private @Valid UUID id;
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid String userErstellt;
-  private @Valid String kommentarGS;
   private @Valid Boolean canAntragAkzeptieren;
-  private @Valid List<DokumentDto> dokuments = new ArrayList<>();
-  private @Valid UUID gesuchId;
   private @Valid LocalDate unterbruchLatestEndDate;
   private @Valid LocalDate unterbruchEarliestStartDate;
+  private @Valid List<DokumentDto> dokuments = new ArrayList<>();
+  private @Valid UUID gesuchId;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
+  private @Valid String kommentarSB;
   private @Valid Integer monateOhneAnspruch;
 
   protected AusbildungUnterbruchAntragSBDto(AusbildungUnterbruchAntragSBDtoBuilder<?, ?> b) {
-    this.status = b.status;
-    this.kommentarSB = b.kommentarSB;
+    this.kommentarGS = b.kommentarGS;
+    this.fileUpload = b.fileUpload;
     this.startDate = b.startDate;
     this.endDate = b.endDate;
     this.id = b.id;
     this.timestampErstellt = b.timestampErstellt;
     this.userErstellt = b.userErstellt;
-    this.kommentarGS = b.kommentarGS;
     this.canAntragAkzeptieren = b.canAntragAkzeptieren;
-    this.dokuments = b.dokuments;
-    this.gesuchId = b.gesuchId;
     this.unterbruchLatestEndDate = b.unterbruchLatestEndDate;
     this.unterbruchEarliestStartDate = b.unterbruchEarliestStartDate;
+    this.dokuments = b.dokuments;
+    this.gesuchId = b.gesuchId;
+    this.status = b.status;
+    this.kommentarSB = b.kommentarSB;
     this.monateOhneAnspruch = b.monateOhneAnspruch;
   }
 
@@ -62,40 +64,40 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUnterbruchAntragSBDto status(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
-    this.status = status;
+  public AusbildungUnterbruchAntragSBDto kommentarGS(String kommentarGS) {
+    this.kommentarGS = kommentarGS;
     return this;
   }
 
   
-  @JsonProperty("status")
+  @JsonProperty("kommentarGS")
   @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus getStatus() {
-    return status;
+  public String getKommentarGS() {
+    return kommentarGS;
   }
 
-  @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
-    this.status = status;
+  @JsonProperty("kommentarGS")
+  public void setKommentarGS(String kommentarGS) {
+    this.kommentarGS = kommentarGS;
   }
 
   /**
    **/
-  public AusbildungUnterbruchAntragSBDto kommentarSB(String kommentarSB) {
-    this.kommentarSB = kommentarSB;
+  public AusbildungUnterbruchAntragSBDto fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+    this.fileUpload = fileUpload;
     return this;
   }
 
   
-  @JsonProperty("kommentarSB")
+  @JsonProperty("fileUpload")
   @NotNull
-  public String getKommentarSB() {
-    return kommentarSB;
+  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
+    return fileUpload;
   }
 
-  @JsonProperty("kommentarSB")
-  public void setKommentarSB(String kommentarSB) {
-    this.kommentarSB = kommentarSB;
+  @JsonProperty("fileUpload")
+  public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+    this.fileUpload = fileUpload;
   }
 
   /**
@@ -195,25 +197,6 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUnterbruchAntragSBDto kommentarGS(String kommentarGS) {
-    this.kommentarGS = kommentarGS;
-    return this;
-  }
-
-  
-  @JsonProperty("kommentarGS")
-  @NotNull
-  public String getKommentarGS() {
-    return kommentarGS;
-  }
-
-  @JsonProperty("kommentarGS")
-  public void setKommentarGS(String kommentarGS) {
-    this.kommentarGS = kommentarGS;
-  }
-
-  /**
-   **/
   public AusbildungUnterbruchAntragSBDto canAntragAkzeptieren(Boolean canAntragAkzeptieren) {
     this.canAntragAkzeptieren = canAntragAkzeptieren;
     return this;
@@ -229,6 +212,44 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   @JsonProperty("canAntragAkzeptieren")
   public void setCanAntragAkzeptieren(Boolean canAntragAkzeptieren) {
     this.canAntragAkzeptieren = canAntragAkzeptieren;
+  }
+
+  /**
+   **/
+  public AusbildungUnterbruchAntragSBDto unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    return this;
+  }
+
+  
+  @JsonProperty("unterbruchLatestEndDate")
+  @NotNull
+  public LocalDate getUnterbruchLatestEndDate() {
+    return unterbruchLatestEndDate;
+  }
+
+  @JsonProperty("unterbruchLatestEndDate")
+  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  }
+
+  /**
+   **/
+  public AusbildungUnterbruchAntragSBDto unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    return this;
+  }
+
+  
+  @JsonProperty("unterbruchEarliestStartDate")
+  @NotNull
+  public LocalDate getUnterbruchEarliestStartDate() {
+    return unterbruchEarliestStartDate;
+  }
+
+  @JsonProperty("unterbruchEarliestStartDate")
+  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
 
   /**
@@ -287,40 +308,39 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
 
   /**
    **/
-  public AusbildungUnterbruchAntragSBDto unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
-    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  public AusbildungUnterbruchAntragSBDto status(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
+    this.status = status;
     return this;
   }
 
   
-  @JsonProperty("unterbruchLatestEndDate")
+  @JsonProperty("status")
   @NotNull
-  public LocalDate getUnterbruchLatestEndDate() {
-    return unterbruchLatestEndDate;
+  public ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus getStatus() {
+    return status;
   }
 
-  @JsonProperty("unterbruchLatestEndDate")
-  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
-    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  @JsonProperty("status")
+  public void setStatus(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
+    this.status = status;
   }
 
   /**
    **/
-  public AusbildungUnterbruchAntragSBDto unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
-    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+  public AusbildungUnterbruchAntragSBDto kommentarSB(String kommentarSB) {
+    this.kommentarSB = kommentarSB;
     return this;
   }
 
   
-  @JsonProperty("unterbruchEarliestStartDate")
-  @NotNull
-  public LocalDate getUnterbruchEarliestStartDate() {
-    return unterbruchEarliestStartDate;
+  @JsonProperty("kommentarSB")
+  public String getKommentarSB() {
+    return kommentarSB;
   }
 
-  @JsonProperty("unterbruchEarliestStartDate")
-  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
-    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+  @JsonProperty("kommentarSB")
+  public void setKommentarSB(String kommentarSB) {
+    this.kommentarSB = kommentarSB;
   }
 
   /**
@@ -351,25 +371,26 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
       return false;
     }
     AusbildungUnterbruchAntragSBDto ausbildungUnterbruchAntragSB = (AusbildungUnterbruchAntragSBDto) o;
-    return Objects.equals(this.status, ausbildungUnterbruchAntragSB.status) &&
-        Objects.equals(this.kommentarSB, ausbildungUnterbruchAntragSB.kommentarSB) &&
+    return Objects.equals(this.kommentarGS, ausbildungUnterbruchAntragSB.kommentarGS) &&
+        Objects.equals(this.fileUpload, ausbildungUnterbruchAntragSB.fileUpload) &&
         Objects.equals(this.startDate, ausbildungUnterbruchAntragSB.startDate) &&
         Objects.equals(this.endDate, ausbildungUnterbruchAntragSB.endDate) &&
         Objects.equals(this.id, ausbildungUnterbruchAntragSB.id) &&
         Objects.equals(this.timestampErstellt, ausbildungUnterbruchAntragSB.timestampErstellt) &&
         Objects.equals(this.userErstellt, ausbildungUnterbruchAntragSB.userErstellt) &&
-        Objects.equals(this.kommentarGS, ausbildungUnterbruchAntragSB.kommentarGS) &&
         Objects.equals(this.canAntragAkzeptieren, ausbildungUnterbruchAntragSB.canAntragAkzeptieren) &&
-        Objects.equals(this.dokuments, ausbildungUnterbruchAntragSB.dokuments) &&
-        Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId) &&
         Objects.equals(this.unterbruchLatestEndDate, ausbildungUnterbruchAntragSB.unterbruchLatestEndDate) &&
         Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragSB.unterbruchEarliestStartDate) &&
+        Objects.equals(this.dokuments, ausbildungUnterbruchAntragSB.dokuments) &&
+        Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId) &&
+        Objects.equals(this.status, ausbildungUnterbruchAntragSB.status) &&
+        Objects.equals(this.kommentarSB, ausbildungUnterbruchAntragSB.kommentarSB) &&
         Objects.equals(this.monateOhneAnspruch, ausbildungUnterbruchAntragSB.monateOhneAnspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, kommentarSB, startDate, endDate, id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate, monateOhneAnspruch);
+    return Objects.hash(kommentarGS, fileUpload, startDate, endDate, id, timestampErstellt, userErstellt, canAntragAkzeptieren, unterbruchLatestEndDate, unterbruchEarliestStartDate, dokuments, gesuchId, status, kommentarSB, monateOhneAnspruch);
   }
 
   @Override
@@ -377,19 +398,20 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungUnterbruchAntragSBDto {\n");
     
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    kommentarSB: ").append(toIndentedString(kommentarSB)).append("\n");
+    sb.append("    kommentarGS: ").append(toIndentedString(kommentarGS)).append("\n");
+    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
-    sb.append("    kommentarGS: ").append(toIndentedString(kommentarGS)).append("\n");
     sb.append("    canAntragAkzeptieren: ").append(toIndentedString(canAntragAkzeptieren)).append("\n");
-    sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
     sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
+    sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
+    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    kommentarSB: ").append(toIndentedString(kommentarSB)).append("\n");
     sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -425,30 +447,31 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   public static abstract class AusbildungUnterbruchAntragSBDtoBuilder<C extends AusbildungUnterbruchAntragSBDto, B extends AusbildungUnterbruchAntragSBDtoBuilder<C, B>>  {
-    private ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
-    private String kommentarSB;
+    private String kommentarGS;
+    private org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
     private LocalDate startDate;
     private LocalDate endDate;
     private UUID id;
     private java.time.LocalDateTime timestampErstellt;
     private String userErstellt;
-    private String kommentarGS;
     private Boolean canAntragAkzeptieren;
-    private List<DokumentDto> dokuments = new ArrayList<>();
-    private UUID gesuchId;
     private LocalDate unterbruchLatestEndDate;
     private LocalDate unterbruchEarliestStartDate;
+    private List<DokumentDto> dokuments = new ArrayList<>();
+    private UUID gesuchId;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
+    private String kommentarSB;
     private Integer monateOhneAnspruch;
     protected abstract B self();
 
     public abstract C build();
 
-    public B status(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
-      this.status = status;
+    public B kommentarGS(String kommentarGS) {
+      this.kommentarGS = kommentarGS;
       return self();
     }
-    public B kommentarSB(String kommentarSB) {
-      this.kommentarSB = kommentarSB;
+    public B fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+      this.fileUpload = fileUpload;
       return self();
     }
     public B startDate(LocalDate startDate) {
@@ -471,12 +494,16 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
       this.userErstellt = userErstellt;
       return self();
     }
-    public B kommentarGS(String kommentarGS) {
-      this.kommentarGS = kommentarGS;
-      return self();
-    }
     public B canAntragAkzeptieren(Boolean canAntragAkzeptieren) {
       this.canAntragAkzeptieren = canAntragAkzeptieren;
+      return self();
+    }
+    public B unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+      this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+      return self();
+    }
+    public B unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+      this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
       return self();
     }
     public B dokuments(List<DokumentDto> dokuments) {
@@ -487,12 +514,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
       this.gesuchId = gesuchId;
       return self();
     }
-    public B unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
-      this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    public B status(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
+      this.status = status;
       return self();
     }
-    public B unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
-      this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    public B kommentarSB(String kommentarSB) {
+      this.kommentarSB = kommentarSB;
       return self();
     }
     public B monateOhneAnspruch(Integer monateOhneAnspruch) {

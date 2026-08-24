@@ -43,11 +43,12 @@ export class SharedUiFileUploadComponent
   private injector = inject(Injector);
   ngControl = inject(NgControl, { optional: true });
   allowedFileTypesSig = input<string[]>();
-  selectedFileSig = output<File | null>();
+  multipleSig = input<boolean>();
+  selectedFileSig = output<File[] | undefined>();
 
   fileInputSig = viewChild<ElementRef<HTMLInputElement>>('fileInput');
-  latestValueSig = signal<File | null>(null);
-  fileControl = new FormControl<File | undefined>(undefined);
+  latestValueSig = signal<File[] | undefined>(undefined);
+  fileControl = new FormControl<File[] | undefined>(undefined);
 
   constructor() {
     // this is a workaround to get access to the NgControl instance and not run into circular dependency issues
@@ -75,7 +76,7 @@ export class SharedUiFileUploadComponent
     // Empty, not writable
   }
 
-  registerOnChange(fn: (value: File | null) => void): void {
+  registerOnChange(fn: (value: File[] | undefined) => void): void {
     this.onChange = fn;
   }
 
@@ -92,7 +93,7 @@ export class SharedUiFileUploadComponent
   }
 
   // ControlValueAccessor methods - only deals with string IDs
-  private onChange: (value: File | null) => void = () => {
+  private onChange: (value: File[] | undefined) => void = () => {
     // Default empty implementation
   };
   private onTouched: () => void = () => {
@@ -103,17 +104,17 @@ export class SharedUiFileUploadComponent
     const input = event.target as HTMLInputElement;
     const files = input.files;
 
-    const value = files && files.length > 0 ? files[0] : null;
-    this.onChange(value);
+    const values = files && files.length > 0 ? Array.from(files) : undefined;
+    this.onChange(values);
     this.onTouched();
-    this.selectedFileSig.emit(value);
-    this.latestValueSig.set(value);
+    this.selectedFileSig.emit(values);
+    this.latestValueSig.set(values);
   }
 
   resetSelectedFile() {
-    this.onChange(null);
-    this.selectedFileSig.emit(null);
-    this.latestValueSig.set(null);
+    this.onChange(undefined);
+    this.selectedFileSig.emit(undefined);
+    this.latestValueSig.set(undefined);
     this.fileControl.patchValue(undefined);
     const input = this.fileInputSig()?.nativeElement;
     if (input) {

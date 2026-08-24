@@ -13,11 +13,7 @@ export const sharedFeatureAusbildungUnterbrechungRoutes: Route[] = [
     providers: [AusbildungStore],
     children: [
       routeWithUnsavedChangesGuard({
-        path: ':ausbildungUnterbruchId',
-        component: SharedFeatureAusbildungUnterbrechungComponent,
-      }),
-      routeWithUnsavedChangesGuard({
-        path: ':ausbildungUnterbruchId/fall/:fallId',
+        path: ':ausbildungId',
         component: SharedFeatureAusbildungUnterbrechungComponent,
       }),
     ],
