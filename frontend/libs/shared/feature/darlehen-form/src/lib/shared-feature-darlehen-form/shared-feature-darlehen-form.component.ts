@@ -1,4 +1,5 @@
 /* eslint-disable @angular-eslint/no-input-rename */
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,6 +16,7 @@ import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { byAppConfig } from '@dv/shared/model/permission-state';
+import { DVBreakpoints } from '@dv/shared/model/ui-constants';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
@@ -24,6 +26,7 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
 @Component({
   selector: 'dv-shared-feature-darlehen-form-feature',
   imports: [
+    CommonModule,
     MatMenuModule,
     SharedPatternDarlehenFormComponent,
     SharedUiDarlehenVerfuegungDownloadComponent,
@@ -65,6 +68,22 @@ export class SharedFeatureDarlehenFormComponent {
     });
 
     effect(() => {
+      const fallId = this.fallIdSig();
+      const darlehenId = this.darlehenIdSig();
+      const gesuchId = this.gesuchIdSig();
+      const firstDarlehenId =
+        this.darlehenStore.darlehenListViewSig().list[0]?.id;
+
+      const isDesktop = window.innerWidth >= DVBreakpoints.LG;
+      if (!darlehenId && firstDarlehenId && gesuchId && fallId && isDesktop) {
+        this.router.navigate(
+          ['/gesuch', gesuchId, 'darlehen', firstDarlehenId, 'fall', fallId],
+          { replaceUrl: true },
+        );
+      }
+    });
+
+    effect(() => {
       const darlehenId = this.darlehenIdSig();
       if (darlehenId) {
         byAppConfig(this.config.app, {
@@ -102,6 +121,17 @@ export class SharedFeatureDarlehenFormComponent {
         sachbearbeiter: () => '/darlehen',
       }),
     ]);
+  }
+
+  toDarlehenOverview(): void {
+    const gesuchId = this.gesuchIdSig();
+    const fallId = this.fallIdSig();
+
+    if (!gesuchId || !fallId) {
+      return;
+    }
+
+    this.router.navigate(['/gesuch', gesuchId, 'darlehen', 'fall', fallId]);
   }
 
   reloadFallHeader() {

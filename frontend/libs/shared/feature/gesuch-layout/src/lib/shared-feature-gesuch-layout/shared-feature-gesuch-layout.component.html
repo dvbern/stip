@@ -74,9 +74,9 @@
       }
 
       <!-- Darlehen Link -->
-      @if (firstDarlehenIdSig(); as firstDarlehenId) {
+      @if (firstDarlehenIdSig()) {
         <a
-          [routerLink]="['/gesuch', gesuchIdSig(), 'darlehen', firstDarlehenId, 'fall', fallId]"
+          [routerLink]="['/gesuch', gesuchIdSig(), 'darlehen', 'fall', fallId]"
           class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           [class.disabled]="!fallId"
