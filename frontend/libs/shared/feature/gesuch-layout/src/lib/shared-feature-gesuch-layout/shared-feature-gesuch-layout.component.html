@@ -56,7 +56,7 @@
           [routerLink]="['/gesuch', ...tabRouteSegmentsSig(), gesuchIdSig(), 'aenderung', firstAenderung.id]"
           [queryParams]="{ revision: firstAenderung.revision, berechnungId: undefined }"
           [queryParamsHandling]="'merge'"
-          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline tw:w-fit fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           [class.active]="routes.isAenderung"
         >
@@ -65,7 +65,7 @@
       } @else {
         <button
           type="button"
-          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline tw:w-fit fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           disabled
         >
@@ -77,7 +77,7 @@
       @if (firstDarlehenIdSig()) {
         <a
           [routerLink]="['/gesuch', gesuchIdSig(), 'darlehen', 'fall', fallId]"
-          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline tw:w-fit fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           [class.disabled]="!fallId"
           [class.active]="routes.isDarlehen"
@@ -87,7 +87,7 @@
       } @else {
         <button
           type="button"
-          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline tw:w-fit fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           disabled
         >
@@ -99,7 +99,7 @@
       <div class="tw:relative tw:inline-flex" *dvIfSachbearbeiter>
         <a
           [routerLink]="['/gesuch', 'infos', gesuchId]"
-          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2 tw:relative"
+          class="tw:dv-nav-button-outline tw:w-fit fw-normal tw:flex tw:items-center tw:px-2 tw:relative"
           data-testid="sb-gesuch-header-infos-nav-link"
           [class.active]="routes.isInfos"
         >
