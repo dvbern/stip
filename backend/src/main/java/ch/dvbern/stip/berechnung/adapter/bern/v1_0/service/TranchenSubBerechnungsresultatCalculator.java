@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
@@ -29,6 +30,7 @@ import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -214,23 +216,26 @@ public class TranchenSubBerechnungsresultatCalculator {
                             )
                             .toList();
 
+                    Predicate<Geschwister> geschwisterLeiblichPredicate =
+                        geschwister -> geschwister.getGeschwisterTyp() == GeschwisterTyp.LEIBLICH;
+
                     final int anzahlKinderDerElternInAusbildung =
                         Math.toIntExact(
                             geschwisterInAusbildung
                                 .stream()
-                                .filter(
-                                    geschwister -> geschwister.getGeschwisterTyp() == GeschwisterTyp.LEIBLICH
-                                )
+                                .filter(geschwisterLeiblichPredicate)
                                 .count()
                         )
                         + Math.toIntExact(
                             geschwisterInAusbildung
                                 .stream()
+                                .filter(geschwisterLeiblichPredicate.negate())
                                 .filter(
-                                    geschwister -> geschwister.getGeschwisterTyp() != GeschwisterTyp.LEIBLICH
-                                    && (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE
-                                    || geschwister.getElternteilPiaOfStiefHalbGeschwister()
+                                    geschwister -> (Objects
+                                        .nonNull(geschwister.getElternteilPiaOfStiefHalbGeschwister())
+                                    && geschwister.getElternteilPiaOfStiefHalbGeschwister()
                                         .getSteuerdatenTyp() == steuerdaten.getSteuerdatenTyp())
+                                    || (geschwister.getWohnsitzAnteil(steuerdaten.getSteuerdatenTyp()).intValue() > 0)
                                 )
                                 .count()
                         )
