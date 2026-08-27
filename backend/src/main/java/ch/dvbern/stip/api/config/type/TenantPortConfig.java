@@ -20,11 +20,13 @@ package ch.dvbern.stip.api.config.type;
 import java.util.Optional;
 
 import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import io.smallrye.config.WithDefault;
 
-public interface TenantPortConfig {
+public interface TenantPortConfig extends StipConfig.Ports {
     Steuerdaten steuerdaten();
 
     Berechnung berechnung();
@@ -42,6 +44,14 @@ public interface TenantPortConfig {
 
     interface Pdf extends Port {
         Optional<PdfAdapterType> adapterType();
+    }
+
+    interface GemeindeLookup {
+        GemeindeLookupAdapterType adapterType();
+    }
+
+    interface PlzFetch {
+        PlzFetchAdapterType adapterType();
     }
 
     interface Berechnung extends Port {

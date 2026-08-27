@@ -18,7 +18,9 @@
 package ch.dvbern.stip.api.config.type;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
@@ -127,12 +129,21 @@ public interface StipConfig {
         String hashKey();
     }
 
-    interface GlobalPorts {
-
+    interface Ports {
         GemeindeLookup gemeindeLookup();
 
         PlzFetch plzFetch();
 
+        interface GemeindeLookup {
+            GemeindeLookupAdapterType adapterType();
+        }
+
+        interface PlzFetch {
+            PlzFetchAdapterType adapterType();
+        }
+    }
+
+    interface GlobalPorts extends Ports {
         interface GemeindeLookup {
             @WithDefault("swisstopo")
             GemeindeLookupAdapterType adapterType();
@@ -141,6 +152,17 @@ public interface StipConfig {
         interface PlzFetch {
             @WithDefault("swisstopo")
             PlzFetchAdapterType adapterType();
+        }
+    }
+
+    default <T> T getPortFromTenantOrGlobalConfig(
+        final TenantConfig tenantConfig,
+        final Function<Ports, T> getter
+    ) {
+        try {
+            return Optional.ofNullable(getter.apply(tenantConfig.port())).orElseGet(() -> getter.apply(globalPorts()));
+        } catch (NullPointerException e) {
+            return getter.apply(globalPorts());
         }
     }
 }

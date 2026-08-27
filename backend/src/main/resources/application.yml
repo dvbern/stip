@@ -88,7 +88,10 @@ kstip:
         - '^dv-.*'
       port:
         steuerdaten:
-          enabled: false
+          enabled: true
+          adapter-type: dummy
+        gemeinde-lookup:
+          adapter-type: dummy
         berechnung:
           enabled: true
           adapter-type: bern
