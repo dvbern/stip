@@ -216,7 +216,7 @@ public class GesuchHistoryRepository {
     }
 
     @SuppressWarnings("unchecked")
-    public Optional<Gesuch> getLastEingereichtGesuchVersion(final UUID gesuchId) {
+    public Optional<Gesuch> getLastEingereichtGesuchVersion(final UUID gesuchId, final boolean before) {
         final var reader = AuditReaderFactory.get(entityManager);
 
         final Optional<Long> revisionTimestampOpt = reader.createQuery()
@@ -234,7 +234,7 @@ public class GesuchHistoryRepository {
             return Optional.empty();
         }
 
-        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestampOpt.get());
+        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestampOpt.get() - (before ? 1 : 0));
     }
 
 }

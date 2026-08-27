@@ -55,7 +55,7 @@ public class GesuchHistoryService {
             return gesuch;
         }
 
-        return gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuchId).orElseThrow();
+        return gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuchId, gesuch.isVerfuegt()).orElseThrow();
     }
 
     public Optional<Integer> getHistoricalGesuchRevisionForGS(final UUID gesuchId) {
