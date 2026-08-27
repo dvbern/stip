@@ -200,11 +200,10 @@ quarkus:
       enabled: false
     admin-client:
       server-url: ${kstip.oidc.url}
-      grant-type: password
-      username: ${STIP_KEYCLOAK_ADMIN_USER}
-      password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
+      grant-type: client-credentials
       client-id: admin-cli
       realm: master
+      client-secret: ${STIP_KEYCLOAK_ADMIN_CLIENT_SECRET}
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
