@@ -117,6 +117,7 @@
   "shared.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.message": "Bitte geben Sie eine Begründung an:",
   "shared.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.confirm": "Negative Verfügung erstellen",
   "shared.header.status-uebergang.dokumente-offen": "Dokumente offen",
+  "shared.header.status-uebergang.success": "Der Gesuchstatus wurde erfolgreich geändert.",
   "shared.gesuch.tabs.verfuegung": "Berechnung",
   "shared.gesuch.tabs.formular": "Gesuch",
 

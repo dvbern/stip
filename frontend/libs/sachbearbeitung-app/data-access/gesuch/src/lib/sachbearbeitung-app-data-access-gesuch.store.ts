@@ -4,8 +4,10 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { Observable, pipe, switchMap, tap } from 'rxjs';
 
+import { translatableShared } from '@dv/shared/assets/i18n';
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   GesuchService,
   GesuchServiceGetGesucheSbRequestParams,
@@ -45,6 +47,7 @@ export class GesuchStore extends signalStore(
   private store = inject(Store);
   private gesuchInfoStore = inject(GesuchInfoStore);
   private gesuchService = inject(GesuchService);
+  private globalNotificationStore = inject(GlobalNotificationStore);
   private handleStatusChange =
     <T, R extends SharedModelGesuch>(handler$: (params: T) => Observable<R>) =>
     (source$: Observable<T & { onSuccess?: (data?: R) => void }>) => {
@@ -58,6 +61,11 @@ export class GesuchStore extends signalStore(
               },
               {
                 onSuccess: (data) => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: translatableShared(
+                      'shared.header.status-uebergang.success',
+                    ),
+                  });
                   this.store.dispatch(
                     SharedDataAccessGesuchEvents.gesuchSetReturned({
                       gesuch: data,
@@ -293,6 +301,11 @@ export class GesuchStore extends signalStore(
               },
               {
                 onSuccess: (data) => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: translatableShared(
+                      'shared.header.status-uebergang.success',
+                    ),
+                  });
                   this.store.dispatch(
                     SharedDataAccessGesuchEvents.gesuchSetReturned({
                       gesuch: data,

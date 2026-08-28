@@ -197,6 +197,10 @@ export class SharedPatternInfoBarActionsComponent {
   });
 
   private additionalLoadingSig = signal(false);
+  // Eagerly loaded at construction so the loading state can react instantly on
+  // the first status transition (component is deferred and SB-App only anyways).
+  // Why not import the service directly? Because this component is shared and the service is SB-App only.
+  private gesuchActionsServiceRef = this.loadGesuchActionsService();
 
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
@@ -205,7 +209,8 @@ export class SharedPatternInfoBarActionsComponent {
     return (
       isPending(this.gesuchHeaderStore.header()) ||
       isPending(this.gesuchAenderungStore.cachedGesuchAenderung()) ||
-      this.additionalLoadingSig()
+      this.additionalLoadingSig() ||
+      this.isExportingSig()
     );
   });
   isAenderungUpdatingSig = computed(() => {
@@ -357,31 +362,35 @@ export class SharedPatternInfoBarActionsComponent {
     gesuchId?: string,
     gesuchTrancheId?: string,
   ) {
-    if (
-      !gesuchId ||
-      !gesuchTrancheId ||
-      this.config.app.view !== 'sachbearbeiter'
-    ) {
+    if (!gesuchId || !gesuchTrancheId) {
       return;
     }
 
+    const gesuchtActionsService = await this.gesuchActionsServiceRef;
+    gesuchtActionsService?.setStatusUebergang(
+      nextStatus,
+      gesuchId,
+      gesuchTrancheId,
+    );
+  }
+
+  private async loadGesuchActionsService() {
+    if (this.config.app.view !== 'sachbearbeiter') {
+      return null;
+    }
+
     const module =
-      // A feature that is only called if SB App
+      // A feature that is only available in the SB App
       // eslint-disable-next-line @nx/enforce-module-boundaries
       await import('@dv/sachbearbeitung-app/util-data-access/gesuch-actions');
-    const gesuchtActionsService = runInInjectionContext(this.injector, () => {
+
+    return runInInjectionContext(this.injector, () => {
       const service = inject(module.GesuchActionsService);
       effect(() => {
         this.additionalLoadingSig.set(service.isLoadingSig());
       });
       return service;
     });
-
-    gesuchtActionsService.setStatusUebergang(
-      nextStatus,
-      gesuchId,
-      gesuchTrancheId,
-    );
   }
 }
 

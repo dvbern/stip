@@ -117,6 +117,7 @@
   "shared.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.message": "Veuillez fournir une justification:",
   "shared.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.confirm": "Créer une décision négative",
   "shared.header.status-uebergang.dokumente-offen": "Documents ouverts",
+  "shared.header.status-uebergang.success": "Le statut de la demande a été modifié avec succès.",
   "shared.gesuch.tabs.verfuegung": "Calcul",
   "shared.gesuch.tabs.formular": "Demande",
 
