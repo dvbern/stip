@@ -57,9 +57,11 @@
                 id: dokument.dokument.id,
               }"
             >
-              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.dokument.filename">{{
-                t('shared.fallDokumente.stipendien.table.dokument')
-              }}</span>
+              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.dokument.filename"
+                >{{ t('shared.fallDokumente.stipendien.table.dokument') }}_{{
+                  dokument.timestampErstellt | date: 'yyyyMMdd'
+                }}</span
+              >
               <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
             </button>
           } @else {
