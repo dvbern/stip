@@ -15,25 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.integration.zahlung.domain.qualifier;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.integration.zahlung.domain.port.ZahlungPortFactory;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@ApplicationScoped
-@Slf4j
-@RequiredArgsConstructor
-public class StipendienAnspruchHandler implements GesuchStatusChangeHandler {
-    private final ZahlungPortFactory zahlungPortFactory;
+import ch.dvbern.stip.integration.zahlung.domain.model.ZahlungAdapterType;
+import jakarta.inject.Qualifier;
 
-    @Override
-    public void handle(Gesuch gesuch, String comment) {
-        zahlungPortFactory.getZahlungAdapter()
-            .createInitialAuszahlungOrGetStatus(
-                gesuch.getId()
-            );
-    }
+@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface ZahlungQualifier {
+    ZahlungAdapterType value();
 }

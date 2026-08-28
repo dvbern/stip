@@ -62,13 +62,13 @@ kstip:
           enabled: true
           adapter-type: nesko
         berechnung:
-          enabled: true
           adapter-type: bern
           major-version: 1
           minor-version: 0
         pdf:
-          enabled: true
           adapter-type: typst
+        zahlung:
+          adapter-type: sap-bern
       adapter:
         pdf:
           typst:
@@ -90,13 +90,18 @@ kstip:
         steuerdaten:
           enabled: true
           adapter-type: dummy
-        gemeinde-lookup:
-          adapter-type: dummy
         berechnung:
-          enabled: true
           adapter-type: bern
           major-version: 1
           minor-version: 0
+        pdf:
+          adapter-type: typst
+        gemeinde-lookup:
+          adapter-type: dummy
+        plz-fetch:
+          adapter-type: dummy
+        zahlung:
+          adapter-type: dummy
   seeding:
     seed-on-profile:
       - 'prod'

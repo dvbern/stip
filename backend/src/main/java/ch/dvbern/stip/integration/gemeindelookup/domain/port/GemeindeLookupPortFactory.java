@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.integration.gemeindelookup.domain.port;
 
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.gemeindelookup.domain.qualifier.GemeindeLookupQualifierLiteral;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,12 +36,9 @@ public class GemeindeLookupPortFactory {
     Instance<GemeindeLookupPort> gemeindeLookupPorts;
 
     private final TenantService tenantService;
-    private final StipConfig config;
 
     public GemeindeLookupPort getGemeindeLookupAdapter() {
-        final var tenantConfig = tenantService.getConfigForCurrentTenant();
-        final var adapterType = config
-            .getPortFromTenantOrGlobalConfig(tenantConfig, globalPorts -> globalPorts.gemeindeLookup().adapterType());
+        final var adapterType = tenantService.getConfigForCurrentTenant().port().gemeindeLookup().adapterType();
         return gemeindeLookupPorts.select(new GemeindeLookupQualifierLiteral(adapterType)).get();
     }
 }

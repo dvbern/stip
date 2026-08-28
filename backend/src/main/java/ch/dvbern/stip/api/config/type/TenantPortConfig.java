@@ -24,44 +24,52 @@ import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdap
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
 import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
+import ch.dvbern.stip.integration.zahlung.domain.model.ZahlungAdapterType;
 import io.smallrye.config.WithDefault;
 
-public interface TenantPortConfig extends StipConfig.Ports {
+public interface TenantPortConfig {
     Steuerdaten steuerdaten();
 
     Berechnung berechnung();
 
     Pdf pdf();
 
-    interface Port {
+    GemeindeLookup gemeindeLookup();
+
+    PlzFetch plzFetch();
+
+    Zahlung zahlung();
+
+    interface Steuerdaten {
         @WithDefault("false")
         Boolean enabled();
-    }
 
-    interface Steuerdaten extends Port {
         Optional<SteuerdatenAdapterType> adapterType();
     }
 
-    interface Pdf extends Port {
-        Optional<PdfAdapterType> adapterType();
+    interface Berechnung {
+        BerechnungAdapterType adapterType();
+
+        int majorVersion();
+
+        int minorVersion();
+    }
+
+    interface Pdf {
+        PdfAdapterType adapterType();
     }
 
     interface GemeindeLookup {
+        @WithDefault("swisstopo")
         GemeindeLookupAdapterType adapterType();
     }
 
     interface PlzFetch {
+        @WithDefault("swisstopo")
         PlzFetchAdapterType adapterType();
     }
 
-    interface Berechnung extends Port {
-        @WithDefault("bern")
-        BerechnungAdapterType adapterType();
-
-        @WithDefault("1")
-        int majorVersion();
-
-        @WithDefault("0")
-        int minorVersion();
+    interface Zahlung {
+        ZahlungAdapterType adapterType();
     }
 }

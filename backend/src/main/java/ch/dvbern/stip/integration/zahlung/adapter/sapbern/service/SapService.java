@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.sap.service;
+package ch.dvbern.stip.integration.zahlung.adapter.sapbern.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -74,6 +74,259 @@ public class SapService {
     private final AdresseRepository adresseRepository;
     private final NotificationService notificationService;
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
+
+    @Transactional
+    public Buchhaltung retryAuszahlungBuchhaltung(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        switch (gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()) {
+            case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuchId);
+            case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuchId);
+            case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> {
+                gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
+                getUpdateOrCreateBusinessPartner(gesuch);
+            }
+            case null, default -> throw new BadRequestException();
+        }
+
+        final var buchhaltung = buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
+        buchhaltung.getZahlungsverbindung()
+            .setAdresse(adresseRepository.requireById(buchhaltung.getZahlungsverbindung().getAdresse().getId()));
+        return buchhaltung;
+    }
+
+    public Buchhaltung retryAuszahlungBuchhaltung(final Fall fall) {
+        final var gesuch = fall.getLatestGesuch();
+
+        return retryAuszahlungBuchhaltung(gesuch.getId());
+    }
+
+    @Transactional
+    public void processPendingCreateVendorPostingActions() {
+        final var pendingBuchhaltungs =
+            buchhaltungRepository.findAuszahlungBuchhaltungWithPendingSapDelivery().toList();
+        for (var buchhaltung : pendingBuchhaltungs) {
+            try {
+                processPendingCreateVendorPostingAction(buchhaltung);
+            } catch (Exception e) {
+                LOG.error(
+                    String.format(
+                        "processPendingCreateVendorPostingActions: Error during processing of Buchaltung %s",
+                        buchhaltung.getId()
+                    ),
+                    e
+                );
+            }
+        }
+    }
+
+    @Transactional
+    public void processRemainderAuszahlungActions() {
+        gesuchsperiodeRepository.listAll()
+            .stream()
+            .filter(
+                gesuchsperiode -> gesuchsperiode.getZweiterAuszahlungsterminTag() == LocalDate.now().getDayOfMonth()
+            )
+            .flatMap(
+                gesuchsperiode -> gesuchRepository
+                    .findGesuchsByGesuchsperiodeIdWithPendingRemainderPayment(gesuchsperiode.getId())
+                    .stream()
+            )
+            .filter(Gesuch::isVerfuegt)
+            .filter(this::isPastSecondPaymentDate)
+            .forEach(gesuch -> {
+                try {
+                    createRemainderAuszahlungOrGetStatus(
+                        gesuch.getId()
+                    );
+                } catch (Exception e) {
+                    LOG.error(
+                        String.format(
+                            "processRemainderAuszahlungActions: Error during processing of gesuch %s",
+                            gesuch.getId()
+                        ),
+                        e
+                    );
+                }
+            }
+            );
+    }
+
+    @Transactional
+    public void processRetryFailedAuszahlungsBuchhaltung() {
+        buchhaltungRepository.findAuszahlungBuchhaltungWithFailedSapDelivery()
+            .toList()
+            .forEach(
+                buchhaltung -> {
+                    try {
+                        retryOngoingBuchhaltungAuszahlungWithFailures(buchhaltung);
+                    } catch (Exception e) {
+                        LOG.error(
+                            String.format(
+                                "processRetryFailedAuszahlungsBuchhaltung: Error during processing of buchhaltung %s",
+                                buchhaltung.getId()
+                            ),
+                            e
+                        );
+                    }
+                }
+            );
+    }
+
+    @Transactional
+    public void createInitialAuszahlungOrGetStatus(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var fall = gesuch.getAusbildung().getFall();
+        fall.setFailedBuchhaltungAuszahlungType(null);
+
+        if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
+            gesuch.setPendingSapAction(AUSZAHLUNG_INITIAL);
+            if (
+                Objects.nonNull(fall.getAuszahlung().getBuchhaltung())
+                && fall.getAuszahlung().getBuchhaltung().getSapStatus() == SapStatus.IN_PROGRESS
+            ) {
+                return;
+            }
+            getUpdateOrCreateBusinessPartner(gesuch);
+            return;
+        }
+        final var pendingAuszahlungOpt =
+            buchhaltungService
+                .findLatestPendingBuchhaltungAuszahlungOpt(
+                    gesuch.getAusbildung().getFall().getId(),
+                    AUSZAHLUNG_INITIAL
+                );
+        Buchhaltung relevantBuchhaltung = null;
+
+        gesuch.setPendingSapAction(null);
+
+        if (pendingAuszahlungOpt.isEmpty()) {
+            final var relevantStipendienBuchhaltung =
+                buchhaltungService.getLastEntryStipendiumOpt(gesuch.getId()).orElseThrow(NotFoundException::new);
+            final var lastBuchhaltungEntry =
+                buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
+
+            var auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo() / 2;
+            if (isPastSecondPaymentDate(gesuch)) {
+                auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo();
+            }
+
+            auszahlungsBetrag = Integer.min(auszahlungsBetrag, lastBuchhaltungEntry.getSaldo());
+
+            if (auszahlungsBetrag <= 0) {
+                return;
+            }
+
+            relevantBuchhaltung =
+                buchhaltungService.createAuszahlungBuchhaltungForGesuch(
+                    gesuch,
+                    auszahlungsBetrag,
+                    AUSZAHLUNG_INITIAL
+                );
+        } else {
+            relevantBuchhaltung = pendingAuszahlungOpt.get();
+        }
+        createVendorPostingOrGetStatus(gesuch, fall.getAuszahlung(), relevantBuchhaltung);
+    }
+
+    @Transactional
+    public void createRemainderAuszahlungOrGetStatus(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var fall = gesuch.getAusbildung().getFall();
+        fall.setFailedBuchhaltungAuszahlungType(null);
+
+        if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
+            gesuch.setPendingSapAction(BuchhaltungType.AUSZAHLUNG_REMAINDER);
+            if (
+                Objects.nonNull(fall.getAuszahlung().getBuchhaltung())
+                && fall.getAuszahlung().getBuchhaltung().getSapStatus() == SapStatus.IN_PROGRESS
+            ) {
+                return;
+            }
+            getUpdateOrCreateBusinessPartner(gesuch);
+            return;
+        }
+        gesuch.setRemainderPaymentExecuted(true);
+
+        final var pendingAuszahlungOpt =
+            buchhaltungService
+                .findLatestPendingBuchhaltungAuszahlungOpt(
+                    gesuch.getAusbildung().getFall().getId(),
+                    BuchhaltungType.AUSZAHLUNG_REMAINDER
+                );
+        Buchhaltung relevantBuchhaltung = null;
+
+        gesuch.setPendingSapAction(null);
+
+        if (pendingAuszahlungOpt.isEmpty()) {
+            final var lastBuchhaltungEntry =
+                buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
+            if (lastBuchhaltungEntry.getSaldo() <= 0) {
+                return;
+            }
+            relevantBuchhaltung =
+                buchhaltungService.createAuszahlungBuchhaltungForGesuch(
+                    gesuch,
+                    lastBuchhaltungEntry.getSaldo(),
+                    BuchhaltungType.AUSZAHLUNG_REMAINDER
+                );
+        } else {
+            relevantBuchhaltung = pendingAuszahlungOpt.get();
+        }
+        createVendorPostingOrGetStatus(gesuch, fall.getAuszahlung(), relevantBuchhaltung);
+    }
+
+    public void processPendingBusinessPartnerActions() {
+        final var pendingBusinessPartnerActionBuchhaltungs =
+            buchhaltungRepository.findPendingBusinesspartnerActionBuchhaltung().toList();
+
+        for (final var pendingBusinessPartnerActionBuchhaltung : pendingBusinessPartnerActionBuchhaltungs) {
+            try {
+                LOG.info(
+                    String.format(
+                        "Processing pendingBusinessPartnerCreateBuchhaltung: %s",
+                        pendingBusinessPartnerActionBuchhaltung.getId()
+                    )
+                );
+                final var gesuch = pendingBusinessPartnerActionBuchhaltung.getGesuch();
+                switch (pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType()) {
+                    case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> doBusinessPartnerActionOrGetStatus(
+                        gesuch,
+                        pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType()
+                    );
+                    case null, default -> throw new IllegalStateException(
+                        "Invalid pending action: " + pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType().name()
+                    );
+                }
+            } catch (Exception e) {
+                LOG.error(
+                    String.format(
+                        "processPendingBusinessPartnerActions: Error during processing of pendingBusinessPartnerActionBuchhaltung %s",
+                        pendingBusinessPartnerActionBuchhaltung.getId()
+                    ),
+                    e
+                );
+            }
+        }
+
+        final var gesuchsWithPendingSapActions = gesuchRepository.findGesuchWithPendingSapAction().toList();
+        for (var gesuch : gesuchsWithPendingSapActions) {
+            try {
+                LOG.info(
+                    String.format("processPendingCreateBusinessPartnerActions: for gesuchId: %s", gesuch.getId())
+                );
+                processPendingSapAction(gesuch.getId());
+            } catch (Exception e) {
+                LOG.error(
+                    String.format(
+                        "processPendingCreateBusinessPartnerActions: Error during processing of Pending SAP action Gesuch %s",
+                        gesuch.getId()
+                    ),
+                    e
+                );
+            }
+        }
+    }
 
     private boolean businessPartnerNeedsUpdate(
         final Gesuch gesuch,
@@ -206,8 +459,7 @@ public class SapService {
         return businessPartnerActionBuchhaltung;
     }
 
-    @Transactional
-    public void doBusinessPartnerActionOrGetStatus(
+    private void doBusinessPartnerActionOrGetStatus(
         final Gesuch gesuch,
         final BuchhaltungType businessPartnerActionBuchhaltungType
     ) {
@@ -390,33 +642,7 @@ public class SapService {
         }
     }
 
-    public Buchhaltung retryAuszahlungBuchhaltung(final Fall fall) {
-        final var gesuch = fall.getLatestGesuch();
-
-        return retryAuszahlungBuchhaltung(gesuch.getId());
-    }
-
-    @Transactional
-    public Buchhaltung retryAuszahlungBuchhaltung(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        switch (gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()) {
-            case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuchId);
-            case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuchId);
-            case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> {
-                gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
-                getUpdateOrCreateBusinessPartner(gesuch);
-            }
-            case null, default -> throw new BadRequestException();
-        }
-
-        final var buchhaltung = buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
-        buchhaltung.getZahlungsverbindung()
-            .setAdresse(adresseRepository.requireById(buchhaltung.getZahlungsverbindung().getAdresse().getId()));
-        return buchhaltung;
-    }
-
-    public boolean isPastSecondPaymentDate(final Gesuch gesuch) {
+    private boolean isPastSecondPaymentDate(final Gesuch gesuch) {
         final var startDateFirstTranche = gesuch.getGesuchTranchen()
             .stream()
             .min(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb()))
@@ -456,109 +682,6 @@ public class SapService {
         }
     }
 
-    @Transactional
-    public void createInitialAuszahlungOrGetStatus(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var fall = gesuch.getAusbildung().getFall();
-        fall.setFailedBuchhaltungAuszahlungType(null);
-
-        if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
-            gesuch.setPendingSapAction(AUSZAHLUNG_INITIAL);
-            if (
-                Objects.nonNull(fall.getAuszahlung().getBuchhaltung())
-                && fall.getAuszahlung().getBuchhaltung().getSapStatus() == SapStatus.IN_PROGRESS
-            ) {
-                return;
-            }
-            getUpdateOrCreateBusinessPartner(gesuch);
-            return;
-        }
-        final var pendingAuszahlungOpt =
-            buchhaltungService
-                .findLatestPendingBuchhaltungAuszahlungOpt(
-                    gesuch.getAusbildung().getFall().getId(),
-                    AUSZAHLUNG_INITIAL
-                );
-        Buchhaltung relevantBuchhaltung = null;
-
-        gesuch.setPendingSapAction(null);
-
-        if (pendingAuszahlungOpt.isEmpty()) {
-            final var relevantStipendienBuchhaltung =
-                buchhaltungService.getLastEntryStipendiumOpt(gesuch.getId()).orElseThrow(NotFoundException::new);
-            final var lastBuchhaltungEntry =
-                buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
-
-            var auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo() / 2;
-            if (isPastSecondPaymentDate(gesuch)) {
-                auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo();
-            }
-
-            auszahlungsBetrag = Integer.min(auszahlungsBetrag, lastBuchhaltungEntry.getSaldo());
-
-            if (auszahlungsBetrag <= 0) {
-                return;
-            }
-
-            relevantBuchhaltung =
-                buchhaltungService.createAuszahlungBuchhaltungForGesuch(
-                    gesuch,
-                    auszahlungsBetrag,
-                    AUSZAHLUNG_INITIAL
-                );
-        } else {
-            relevantBuchhaltung = pendingAuszahlungOpt.get();
-        }
-        createVendorPostingOrGetStatus(gesuch, fall.getAuszahlung(), relevantBuchhaltung);
-    }
-
-    @Transactional
-    public void createRemainderAuszahlungOrGetStatus(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var fall = gesuch.getAusbildung().getFall();
-        fall.setFailedBuchhaltungAuszahlungType(null);
-
-        if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
-            gesuch.setPendingSapAction(BuchhaltungType.AUSZAHLUNG_REMAINDER);
-            if (
-                Objects.nonNull(fall.getAuszahlung().getBuchhaltung())
-                && fall.getAuszahlung().getBuchhaltung().getSapStatus() == SapStatus.IN_PROGRESS
-            ) {
-                return;
-            }
-            getUpdateOrCreateBusinessPartner(gesuch);
-            return;
-        }
-        gesuch.setRemainderPaymentExecuted(true);
-
-        final var pendingAuszahlungOpt =
-            buchhaltungService
-                .findLatestPendingBuchhaltungAuszahlungOpt(
-                    gesuch.getAusbildung().getFall().getId(),
-                    BuchhaltungType.AUSZAHLUNG_REMAINDER
-                );
-        Buchhaltung relevantBuchhaltung = null;
-
-        gesuch.setPendingSapAction(null);
-
-        if (pendingAuszahlungOpt.isEmpty()) {
-            final var lastBuchhaltungEntry =
-                buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
-            if (lastBuchhaltungEntry.getSaldo() <= 0) {
-                return;
-            }
-            relevantBuchhaltung =
-                buchhaltungService.createAuszahlungBuchhaltungForGesuch(
-                    gesuch,
-                    lastBuchhaltungEntry.getSaldo(),
-                    BuchhaltungType.AUSZAHLUNG_REMAINDER
-                );
-        } else {
-            relevantBuchhaltung = pendingAuszahlungOpt.get();
-        }
-        createVendorPostingOrGetStatus(gesuch, fall.getAuszahlung(), relevantBuchhaltung);
-    }
-
     @Transactional(TxType.REQUIRES_NEW)
     public void processPendingSapAction(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
@@ -585,138 +708,14 @@ public class SapService {
         }
     }
 
-    public void processPendingBusinessPartnerActions() {
-        final var pendingBusinessPartnerActionBuchhaltungs =
-            buchhaltungRepository.findPendingBusinesspartnerActionBuchhaltung().toList();
-
-        for (final var pendingBusinessPartnerActionBuchhaltung : pendingBusinessPartnerActionBuchhaltungs) {
-            try {
-                LOG.info(
-                    String.format(
-                        "Processing pendingBusinessPartnerCreateBuchhaltung: %s",
-                        pendingBusinessPartnerActionBuchhaltung.getId()
-                    )
-                );
-                final var gesuch = pendingBusinessPartnerActionBuchhaltung.getGesuch();
-                switch (pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType()) {
-                    case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> doBusinessPartnerActionOrGetStatus(
-                        gesuch,
-                        pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType()
-                    );
-                    case null, default -> throw new IllegalStateException(
-                        "Invalid pending action: " + pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType().name()
-                    );
-                }
-            } catch (Exception e) {
-                LOG.error(
-                    String.format(
-                        "processPendingBusinessPartnerActions: Error during processing of pendingBusinessPartnerActionBuchhaltung %s",
-                        pendingBusinessPartnerActionBuchhaltung.getId()
-                    ),
-                    e
-                );
-            }
-        }
-
-        final var gesuchsWithPendingSapActions = gesuchRepository.findGesuchWithPendingSapAction().toList();
-        for (var gesuch : gesuchsWithPendingSapActions) {
-            try {
-                LOG.info(
-                    String.format("processPendingCreateBusinessPartnerActions: for gesuchId: %s", gesuch.getId())
-                );
-                processPendingSapAction(gesuch.getId());
-            } catch (Exception e) {
-                LOG.error(
-                    String.format(
-                        "processPendingCreateBusinessPartnerActions: Error during processing of Pending SAP action Gesuch %s",
-                        gesuch.getId()
-                    ),
-                    e
-                );
-            }
-        }
-    }
-
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Transactional(TxType.REQUIRES_NEW)
     public void processPendingCreateVendorPostingAction(Buchhaltung buchhaltung) {
         getVendorPostingCreateStatus(buchhaltungRepository.requireById(buchhaltung.getId()));
     }
 
-    @Transactional
-    public void processPendingCreateVendorPostingActions() {
-        final var pendingBuchhaltungs =
-            buchhaltungRepository.findAuszahlungBuchhaltungWithPendingSapDelivery().toList();
-        for (var buchhaltung : pendingBuchhaltungs) {
-            try {
-                processPendingCreateVendorPostingAction(buchhaltung);
-            } catch (Exception e) {
-                LOG.error(
-                    String.format(
-                        "processPendingCreateVendorPostingActions: Error during processing of Buchaltung %s",
-                        buchhaltung.getId()
-                    ),
-                    e
-                );
-            }
-        }
-    }
-
-    @Transactional
-    public void processRemainderAuszahlungActions() {
-        gesuchsperiodeRepository.listAll()
-            .stream()
-            .filter(
-                gesuchsperiode -> gesuchsperiode.getZweiterAuszahlungsterminTag() == LocalDate.now().getDayOfMonth()
-            )
-            .flatMap(
-                gesuchsperiode -> gesuchRepository
-                    .findGesuchsByGesuchsperiodeIdWithPendingRemainderPayment(gesuchsperiode.getId())
-                    .stream()
-            )
-            .filter(Gesuch::isVerfuegt)
-            .filter(this::isPastSecondPaymentDate)
-            .forEach(gesuch -> {
-                try {
-                    createRemainderAuszahlungOrGetStatus(
-                        gesuch.getId()
-                    );
-                } catch (Exception e) {
-                    LOG.error(
-                        String.format(
-                            "processRemainderAuszahlungActions: Error during processing of gesuch %s",
-                            gesuch.getId()
-                        ),
-                        e
-                    );
-                }
-            }
-            );
-    }
-
     @Transactional(TxType.REQUIRES_NEW)
-    void retryOngoingBuchhaltungAuszahlungWithFailures(final Buchhaltung buchhaltung) {
+    public void retryOngoingBuchhaltungAuszahlungWithFailures(final Buchhaltung buchhaltung) {
         assert buchhaltung.getZahlungsverbindung() != null;
         createVendorPostingOrGetStatus(buchhaltung.getGesuch(), buchhaltung.getFall().getAuszahlung(), buchhaltung);
-    }
-
-    @Transactional
-    public void processRetryFailedAuszahlungsBuchhaltung() {
-        buchhaltungRepository.findAuszahlungBuchhaltungWithFailedSapDelivery()
-            .toList()
-            .forEach(
-                buchhaltung -> {
-                    try {
-                        retryOngoingBuchhaltungAuszahlungWithFailures(buchhaltung);
-                    } catch (Exception e) {
-                        LOG.error(
-                            String.format(
-                                "processRetryFailedAuszahlungsBuchhaltung: Error during processing of buchhaltung %s",
-                                buchhaltung.getId()
-                            ),
-                            e
-                        );
-                    }
-                }
-            );
     }
 }

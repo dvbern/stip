@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.domain.port;
+package ch.dvbern.stip.integration.zahlung.domain.port;
 
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.integration.plzfetch.domain.qualifier.PlzFetchQualifierLiteral;
+import ch.dvbern.stip.integration.zahlung.domain.qualifier.ZahlungQualifierLiteral;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
@@ -30,15 +30,15 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
-public class PlzFetchPortFactory {
+public class ZahlungPortFactory {
     @Any
     @Inject
-    Instance<PlzFetchPort> plzFetchPorts;
+    Instance<ZahlungPort> zahlungPorts;
 
     private final TenantService tenantService;
 
-    public PlzFetchPort getPlzFetchAdapter() {
-        final var adapterType = tenantService.getConfigForCurrentTenant().port().plzFetch().adapterType();
-        return plzFetchPorts.select(new PlzFetchQualifierLiteral(adapterType)).get();
+    public ZahlungPort getZahlungAdapter() {
+        final var adapterType = tenantService.getConfigForCurrentTenant().port().zahlung().adapterType();
+        return zahlungPorts.select(new ZahlungQualifierLiteral(adapterType)).get();
     }
 }

@@ -15,25 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.integration.zahlung.domain.model;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.integration.zahlung.domain.port.ZahlungPortFactory;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-@ApplicationScoped
-@Slf4j
-@RequiredArgsConstructor
-public class StipendienAnspruchHandler implements GesuchStatusChangeHandler {
-    private final ZahlungPortFactory zahlungPortFactory;
-
-    @Override
-    public void handle(Gesuch gesuch, String comment) {
-        zahlungPortFactory.getZahlungAdapter()
-            .createInitialAuszahlungOrGetStatus(
-                gesuch.getId()
-            );
-    }
+public enum ZahlungAdapterType {
+    DUMMY,
+    SAP_BERN
 }

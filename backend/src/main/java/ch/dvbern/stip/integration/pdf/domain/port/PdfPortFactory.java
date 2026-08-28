@@ -38,7 +38,7 @@ public class PdfPortFactory {
     private final TenantService tenantService;
 
     public PdfPort getPdfAdapter() {
-        final var adapterType = tenantService.getConfigForCurrentTenant().port().pdf().adapterType().orElseThrow();
+        final var adapterType = tenantService.getConfigForCurrentTenant().port().pdf().adapterType();
 
         return pdfPorts.select(new PdfQualifierLiteral(adapterType)).get();
     }

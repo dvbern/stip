@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
+// TODO KSTIP-3640: remove SAP references, use Zahlung or something
 public enum SapStatus {
     /**
      * Initial: Die Delivery wurde noch nicht vollständig verarbeitet.

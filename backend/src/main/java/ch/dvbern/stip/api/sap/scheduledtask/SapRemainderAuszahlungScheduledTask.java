@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.sap.scheduledtask;
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
 import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import ch.dvbern.stip.api.sap.service.SapService;
+import ch.dvbern.stip.integration.zahlung.domain.port.ZahlungPortFactory;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @UnlessBuildProfile("test")
 public class SapRemainderAuszahlungScheduledTask extends RunForTenantsScheduledTask {
     @Inject
-    SapService sapService;
+    ZahlungPortFactory zahlungPortFactory;
 
     public SapRemainderAuszahlungScheduledTask() {
         super(ScheduledTaskCronKey.SAP_REMAINDER_AUSZAHLUNG, TenantIdentifier.values());
@@ -43,7 +43,7 @@ public class SapRemainderAuszahlungScheduledTask extends RunForTenantsScheduledT
     protected void run() {
         try {
             LOG.info("processRemainderAuszahlungActions from scheduled task");
-            sapService.processRemainderAuszahlungActions();
+            zahlungPortFactory.getZahlungAdapter().processRemainderAuszahlungActions();
         } catch (Exception e) {
             LOG.error(e.toString(), e);
         }

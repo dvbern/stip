@@ -18,14 +18,10 @@
 package ch.dvbern.stip.api.config.type;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 
 import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
-import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
@@ -62,8 +58,6 @@ public interface StipConfig {
     Map<ScheduledTaskCronKey, SchedulerConfig> scheduler();
 
     PlzData plzData();
-
-    GlobalPorts globalPorts();
 
     GlobalAdapterConfig globalAdapter();
 
@@ -127,42 +121,5 @@ public interface StipConfig {
 
         @WithDefault("checksum:multihash")
         String hashKey();
-    }
-
-    interface Ports {
-        GemeindeLookup gemeindeLookup();
-
-        PlzFetch plzFetch();
-
-        interface GemeindeLookup {
-            GemeindeLookupAdapterType adapterType();
-        }
-
-        interface PlzFetch {
-            PlzFetchAdapterType adapterType();
-        }
-    }
-
-    interface GlobalPorts extends Ports {
-        interface GemeindeLookup {
-            @WithDefault("swisstopo")
-            GemeindeLookupAdapterType adapterType();
-        }
-
-        interface PlzFetch {
-            @WithDefault("swisstopo")
-            PlzFetchAdapterType adapterType();
-        }
-    }
-
-    default <T> T getPortFromTenantOrGlobalConfig(
-        final TenantConfig tenantConfig,
-        final Function<Ports, T> getter
-    ) {
-        try {
-            return Optional.ofNullable(getter.apply(tenantConfig.port())).orElseGet(() -> getter.apply(globalPorts()));
-        } catch (NullPointerException e) {
-            return getter.apply(globalPorts());
-        }
     }
 }

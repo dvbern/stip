@@ -20,9 +20,16 @@ package ch.dvbern.stip.integration.plzfetch.adapter.dummy.service;
 import java.util.Optional;
 import java.util.Set;
 
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchData;
 import ch.dvbern.stip.integration.plzfetch.domain.port.PlzFetchPort;
+import ch.dvbern.stip.integration.plzfetch.domain.qualifier.PlzFetchQualifier;
+import jakarta.enterprise.context.RequestScoped;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@RequestScoped
+@PlzFetchQualifier(PlzFetchAdapterType.DUMMY)
 public class DummyPlzFetchAdapter implements PlzFetchPort {
 
     @Override
