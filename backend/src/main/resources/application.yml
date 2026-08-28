@@ -102,6 +102,14 @@ kstip:
           adapter-type: dummy
         zahlung:
           adapter-type: dummy
+      adapter:
+        pdf:
+          typst:
+            root-template-path: tenants/bern
+            template-path:
+              berechnungsblatt-uebersicht: /tenants/bern/templates/berechnung/uebersicht.typ
+              berechnungsblatt-pia: /tenants/bern/templates/berechnung/pia.typ
+              berechnungsblatt-familie: /tenants/bern/templates/berechnung/familie.typ
   seeding:
     seed-on-profile:
       - 'prod'
