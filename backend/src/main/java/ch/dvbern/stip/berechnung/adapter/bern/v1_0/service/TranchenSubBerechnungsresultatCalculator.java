@@ -216,26 +216,29 @@ public class TranchenSubBerechnungsresultatCalculator {
                             )
                             .toList();
 
-                    Predicate<Geschwister> geschwisterLeiblichPredicate =
+                    final Predicate<Geschwister> isGeschwisterLeiblichPredicate =
                         geschwister -> geschwister.getGeschwisterTyp() == GeschwisterTyp.LEIBLICH;
+                    final Predicate<Geschwister> isEigenerHaushaltHalbGeschwisterSteuerdatenTypPredicate =
+                        geschwister -> Objects.nonNull(geschwister.getElternteilPiaOfStiefHalbGeschwister())
+                        && geschwister.getElternteilPiaOfStiefHalbGeschwister()
+                            .getSteuerdatenTyp() == steuerdaten.getSteuerdatenTyp();
+                    final Predicate<Geschwister> isGeschwisterTeilzeitPredicate =
+                        geschwister -> geschwister.getWohnsitzAnteil(steuerdaten.getSteuerdatenTyp()).intValue() > 0;
 
                     final int anzahlKinderDerElternInAusbildung =
                         Math.toIntExact(
                             geschwisterInAusbildung
                                 .stream()
-                                .filter(geschwisterLeiblichPredicate)
+                                .filter(isGeschwisterLeiblichPredicate)
                                 .count()
                         )
                         + Math.toIntExact(
                             geschwisterInAusbildung
                                 .stream()
-                                .filter(geschwisterLeiblichPredicate.negate())
+                                .filter(isGeschwisterLeiblichPredicate.negate())
                                 .filter(
-                                    geschwister -> (Objects
-                                        .nonNull(geschwister.getElternteilPiaOfStiefHalbGeschwister())
-                                    && geschwister.getElternteilPiaOfStiefHalbGeschwister()
-                                        .getSteuerdatenTyp() == steuerdaten.getSteuerdatenTyp())
-                                    || (geschwister.getWohnsitzAnteil(steuerdaten.getSteuerdatenTyp()).intValue() > 0)
+                                    isEigenerHaushaltHalbGeschwisterSteuerdatenTypPredicate
+                                        .or(isGeschwisterTeilzeitPredicate)
                                 )
                                 .count()
                         )
