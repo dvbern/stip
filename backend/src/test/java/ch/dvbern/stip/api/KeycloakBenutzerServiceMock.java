@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.KeycloakAdminClient;
 import ch.dvbern.stip.api.benutzer.service.KeycloakBenutzerService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import io.quarkus.test.Mock;
@@ -34,15 +33,14 @@ public class KeycloakBenutzerServiceMock extends KeycloakBenutzerService {
     private static final HashSet<String> USED_KC_IDS = new HashSet<>();
 
     public KeycloakBenutzerServiceMock() {
-        super(null, null);
+        super(null);
     }
 
     @Inject
     public KeycloakBenutzerServiceMock(
-    TenantService tenantService,
-    KeycloakAdminClient keycloakAdminClient
+    TenantService tenantService
     ) {
-        super(tenantService, keycloakAdminClient);
+        super(tenantService);
     }
 
     @Override
