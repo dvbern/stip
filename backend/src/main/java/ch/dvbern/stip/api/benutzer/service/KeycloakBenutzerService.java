@@ -31,7 +31,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.UserRepresentation;
 
 @RequestScoped
@@ -40,7 +39,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 @Slf4j
 public class KeycloakBenutzerService {
     private final TenantService tenantService;
-    private final Keycloak keycloak;
+    private final KeycloakAdminClient keycloakAdminClient;
 
     public String createKeycloakBenutzer(
         final String vorname,
@@ -60,7 +59,8 @@ public class KeycloakBenutzerService {
         userRep.setEmail(eMail);
         userRep.setEmailVerified(true);
 
-        final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
+        final var keycloakUsersResource =
+            keycloakAdminClient.getKeycloak().realm(tenantService.getCurrentTenant().getIdentifier()).users();
 
         String keycloakUserId;
         try (
@@ -117,7 +117,8 @@ public class KeycloakBenutzerService {
         final String nachname,
         final List<String> roles
     ) {
-        final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
+        final var keycloakUsersResource =
+            keycloakAdminClient.getKeycloak().realm(tenantService.getCurrentTenant().getIdentifier()).users();
 
         var userRep = new UserRepresentation();
         userRep.setFirstName(vorname);
@@ -155,7 +156,8 @@ public class KeycloakBenutzerService {
     public void deleteKeycloakBenutzer(
         final String keycloakId
     ) {
-        final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
+        final var keycloakUsersResource =
+            keycloakAdminClient.getKeycloak().realm(tenantService.getCurrentTenant().getIdentifier()).users();
         try (
             Response response = keycloakUsersResource.delete(keycloakId);
         ) {

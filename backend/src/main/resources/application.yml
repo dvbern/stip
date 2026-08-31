@@ -82,7 +82,10 @@ kstip:
             url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
             username: '${NESKO_TECHNICAL_USER_NAME}'
             password: '${NESKO_TECHNICAL_USER_PASSWORD}'
-
+      keycloak-admin-client-config:
+        server-url: ${kstip.oidc.url}
+        client-id: stip-api
+        client-secret: ${STIP_BERN_KEYCLOAK_ADMIN_CLIENT_CLIENT_SECRET}
     dv:
       subdomains:
         - '^dv-.*'
@@ -94,6 +97,10 @@ kstip:
           adapter-type: bern
           major-version: 1
           minor-version: 0
+      keycloak-admin-client-config:
+        server-url: ${kstip.oidc.url}
+        client-id: stip-api
+        client-secret: ${STIP_DV_KEYCLOAK_ADMIN_CLIENT_CLIENT_SECRET}
   seeding:
     seed-on-profile:
       - 'prod'
@@ -198,12 +205,12 @@ quarkus:
   keycloak:
     devservices:
       enabled: false
-    admin-client:
-      server-url: ${kstip.oidc.url}
-      grant-type: client-credentials
-      client-id: admin-cli
-      realm: master
-      client-secret: ${STIP_KEYCLOAK_ADMIN_CLIENT_SECRET}
+#    admin-client:
+#      server-url: ${kstip.oidc.url}
+#      grant-type: client-credentials
+#      client-id: admin-cli
+#      realm: master
+#      client-secret: ${STIP_KEYCLOAK_ADMIN_CLIENT_SECRET}
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
