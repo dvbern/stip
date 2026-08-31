@@ -21,12 +21,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.KeycloakAdminClient;
 import ch.dvbern.stip.api.benutzer.service.KeycloakBenutzerService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import org.keycloak.admin.client.Keycloak;
 
 @Mock
 @RequestScoped
@@ -40,9 +40,9 @@ public class KeycloakBenutzerServiceMock extends KeycloakBenutzerService {
     @Inject
     public KeycloakBenutzerServiceMock(
     TenantService tenantService,
-    Keycloak keycloak
+    KeycloakAdminClient keycloakAdminClient
     ) {
-        super(tenantService, keycloak);
+        super(tenantService, keycloakAdminClient);
     }
 
     @Override
