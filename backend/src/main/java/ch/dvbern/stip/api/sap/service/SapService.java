@@ -560,7 +560,18 @@ public class SapService {
     }
 
     @Transactional(TxType.REQUIRES_NEW)
-    public void processPendingSapAction(final UUID gesuchId) {
+    void processPendingBusinessPartnerAction(
+        final UUID gesuchId,
+        final BuchhaltungType businessPartnerActionBuchhaltungType
+    ) {
+        doBusinessPartnerActionOrGetStatus(
+            gesuchRepository.requireById(gesuchId),
+            businessPartnerActionBuchhaltungType
+        );
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    void processPendingSapAction(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
 
@@ -599,8 +610,8 @@ public class SapService {
                 );
                 final var gesuch = pendingBusinessPartnerActionBuchhaltung.getGesuch();
                 switch (pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType()) {
-                    case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> doBusinessPartnerActionOrGetStatus(
-                        gesuch,
+                    case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> processPendingBusinessPartnerAction(
+                        gesuch.getId(),
                         pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType()
                     );
                     case null, default -> throw new IllegalStateException(
@@ -642,7 +653,6 @@ public class SapService {
         getVendorPostingCreateStatus(buchhaltungRepository.requireById(buchhaltung.getId()));
     }
 
-    @Transactional
     public void processPendingCreateVendorPostingActions() {
         final var pendingBuchhaltungs =
             buchhaltungRepository.findAuszahlungBuchhaltungWithPendingSapDelivery().toList();
@@ -661,7 +671,11 @@ public class SapService {
         }
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
+    void processRemainderAuszahlungAction(final UUID gesuchId) {
+        createRemainderAuszahlungOrGetStatus(gesuchId);
+    }
+
     public void processRemainderAuszahlungActions() {
         gesuchsperiodeRepository.listAll()
             .stream()
@@ -677,7 +691,7 @@ public class SapService {
             .filter(this::isPastSecondPaymentDate)
             .forEach(gesuch -> {
                 try {
-                    createRemainderAuszahlungOrGetStatus(
+                    processRemainderAuszahlungAction(
                         gesuch.getId()
                     );
                 } catch (Exception e) {
@@ -699,7 +713,6 @@ public class SapService {
         createVendorPostingOrGetStatus(buchhaltung.getGesuch(), buchhaltung.getFall().getAuszahlung(), buchhaltung);
     }
 
-    @Transactional
     public void processRetryFailedAuszahlungsBuchhaltung() {
         buchhaltungRepository.findAuszahlungBuchhaltungWithFailedSapDelivery()
             .toList()
