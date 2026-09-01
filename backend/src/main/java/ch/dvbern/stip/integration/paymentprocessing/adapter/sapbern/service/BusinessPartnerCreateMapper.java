@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.adapter.sapbern.service;
+package ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRequest;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery;
 import ch.dvbern.stip.api.sap.util.SapMapperUtil;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
@@ -36,13 +36,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
-public abstract class BusinessPartnerChangeMapper {
-    @Mapping(source = "businessPartnerId", target = "BPARTNER")
-    public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER getHeader(Integer businessPartnerId);
+public abstract class BusinessPartnerCreateMapper {
+    public BusinessPartnerCreateRequest.BUSINESSPARTNER.HEADER getHeader() {
+        final var header = new BusinessPartnerCreateRequest.BUSINESSPARTNER.HEADER();
+        header.setPARTNCAT("1");
+        return header;
+    }
 
     @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
     @Mapping(source = ".", target = "AHVNR", qualifiedByName = "getAhvNr")
-    public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
         Fall fall
     );
 
@@ -61,7 +64,7 @@ public abstract class BusinessPartnerChangeMapper {
     @Mapping(source = "nationalitaet.iso2code", target = "NATIONALITYISO")
     @Mapping(source = "geburtsdatum", target = "BIRTHDATE")
     @Mapping(target = "CORRESPONDLANGUAGEISO", constant = "DE")
-    public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.PERSDATA toPersData(
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PERSDATA toPersData(
         PersonInAusbildung pia
     );
 
@@ -72,7 +75,7 @@ public abstract class BusinessPartnerChangeMapper {
     @Mapping(source = "adresse.strasse", target = "STREET")
     @Mapping(source = "adresse.hausnummer", target = "HOUSENO")
     @Mapping(source = "adresse.plz", target = "POSTLCOD1")
-    public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.ADDRESS toAddress(
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS toAddress(
         PersonInAusbildung pia
     );
 
@@ -81,10 +84,9 @@ public abstract class BusinessPartnerChangeMapper {
         return land.getIso2code();
     }
 
-    @Mapping(target = "BANKID", constant = "0001")
     @Mapping(source = "iban", target = "IBAN", qualifiedByName = "getIban")
     @Mapping(source = ".", target = "ACCOUNTHOLDER", qualifiedByName = "getAccountHolder")
-    public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(
         Zahlungsverbindung zahlungsverbindung
     );
 
@@ -99,28 +101,27 @@ public abstract class BusinessPartnerChangeMapper {
     }
 
     @Mapping(source = ".", target = "IDKEYS")
-    @Mapping(source = "auszahlung.sapBusinessPartnerId", target = "HEADER")
     @Mapping(source = ".", target = "PERSDATA", qualifiedByName = "setPersdata")
     @Mapping(source = ".", target = "ADDRESS", qualifiedByName = "setAdress")
     @Mapping(source = ".", target = "PAYMENTDETAIL", qualifiedByName = "setPaymentDetail")
-    public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER toBusinessPartner(
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER toBusinessPartner(
         Fall fall
     );
 
     @Named("setPersdata")
-    public BusinessPartnerChangeRequest.BUSINESSPARTNER.PERSDATA setPersdata(
+    public BusinessPartnerCreateRequest.BUSINESSPARTNER.PERSDATA setPersdata(
         Fall fall
     ) {
         return toPersData(SapMapperUtil.getPia(fall));
     }
 
     @Named("setAdress")
-    public List<BusinessPartnerChangeRequest.BUSINESSPARTNER.ADDRESS> setAdress(Fall fall) {
+    public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS> setAdress(Fall fall) {
         return List.of(toAddress(SapMapperUtil.getPia(fall)));
     }
 
     @Named("setPaymentDetail")
-    public List<BusinessPartnerChangeRequest.BUSINESSPARTNER.PAYMENTDETAIL> setPaymentDetail(
+    public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL> setPaymentDetail(
         Fall fall
     ) {
         final var paymentdetail =
@@ -147,7 +148,7 @@ public abstract class BusinessPartnerChangeMapper {
 
     @Mapping(source = ".", target = "BUSINESSPARTNER")
     @Mapping(source = ".", target = "SENDER", qualifiedByName = "getSenderParmsDelivery")
-    public abstract BusinessPartnerChangeRequest toBusinessPartnerChangeRequest(
+    public abstract BusinessPartnerCreateRequest toBusinessPartnerCreateRequest(
         @Context BigInteger sysid,
         @Context BigDecimal deliveryid,
         Fall fall

@@ -15,14 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.domain.port;
+package ch.dvbern.stip.integration.paymentprocessing.domain.port;
 
 import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 
-public interface ZahlungPort {
+public interface PaymentProcessingPort {
     Buchhaltung retryAuszahlungBuchhaltung(final UUID gesuchId);
 
     default Buchhaltung retryAuszahlungBuchhaltung(final Fall fall) {

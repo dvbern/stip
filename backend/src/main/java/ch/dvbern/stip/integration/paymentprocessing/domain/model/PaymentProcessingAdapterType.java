@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.domain.model;
+package ch.dvbern.stip.integration.paymentprocessing.domain.model;
 
-public enum ZahlungAdapterType {
+public enum PaymentProcessingAdapterType {
     DUMMY,
     SAP_BERN
 }

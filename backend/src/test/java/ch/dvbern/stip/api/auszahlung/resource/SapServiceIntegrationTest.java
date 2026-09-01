@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.integration.zahlung.adapter.sapbern.service.SapEndpointService;
+import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.SapEndpointService;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.jetbrains.annotations.NotNull;

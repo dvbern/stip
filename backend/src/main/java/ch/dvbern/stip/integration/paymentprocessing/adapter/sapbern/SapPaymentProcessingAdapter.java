@@ -15,15 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.adapter.sapbern;
+package ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern;
 
 import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
-import ch.dvbern.stip.integration.zahlung.adapter.sapbern.service.SapService;
-import ch.dvbern.stip.integration.zahlung.domain.model.ZahlungAdapterType;
-import ch.dvbern.stip.integration.zahlung.domain.port.ZahlungPort;
-import ch.dvbern.stip.integration.zahlung.domain.qualifier.ZahlungQualifier;
+import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.SapService;
+import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessingAdapterType;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPort;
+import ch.dvbern.stip.integration.paymentprocessing.domain.qualifier.PaymentProcessingQualifier;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import lombok.AccessLevel;
@@ -33,10 +33,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequestScoped
-@ZahlungQualifier(ZahlungAdapterType.SAP_BERN)
+@PaymentProcessingQualifier(PaymentProcessingAdapterType.SAP_BERN)
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
-public class SapZahlungAdapter implements ZahlungPort {
+public class SapPaymentProcessingAdapter implements PaymentProcessingPort {
     final SapService sapService;
 
     @Override

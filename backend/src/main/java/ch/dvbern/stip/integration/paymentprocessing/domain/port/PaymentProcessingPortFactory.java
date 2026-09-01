@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.domain.port;
+package ch.dvbern.stip.integration.paymentprocessing.domain.port;
 
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.integration.zahlung.domain.qualifier.ZahlungQualifierLiteral;
+import ch.dvbern.stip.integration.paymentprocessing.domain.qualifier.PaymentProcessingQualifierLiteral;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
@@ -30,15 +30,15 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
-public class ZahlungPortFactory {
+public class PaymentProcessingPortFactory {
     @Any
     @Inject
-    Instance<ZahlungPort> zahlungPorts;
+    Instance<PaymentProcessingPort> paymentProcessingPorts;
 
     private final TenantService tenantService;
 
-    public ZahlungPort getZahlungAdapter() {
-        final var adapterType = tenantService.getConfigForCurrentTenant().port().zahlung().adapterType();
-        return zahlungPorts.select(new ZahlungQualifierLiteral(adapterType)).get();
+    public PaymentProcessingPort getPaymentProcessingAdapter() {
+        final var adapterType = tenantService.getConfigForCurrentTenant().port().paymentProcessing().adapterType();
+        return paymentProcessingPorts.select(new PaymentProcessingQualifierLiteral(adapterType)).get();
     }
 }

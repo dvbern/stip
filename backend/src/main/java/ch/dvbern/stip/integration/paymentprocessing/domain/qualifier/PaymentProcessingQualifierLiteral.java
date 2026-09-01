@@ -15,19 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.domain.qualifier;
+package ch.dvbern.stip.integration.paymentprocessing.domain.qualifier;
 
-import ch.dvbern.stip.integration.zahlung.domain.model.ZahlungAdapterType;
+import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessingAdapterType;
 import jakarta.enterprise.util.AnnotationLiteral;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ZahlungQualifierLiteral extends AnnotationLiteral<ZahlungQualifier> implements ZahlungQualifier {
+public class PaymentProcessingQualifierLiteral extends AnnotationLiteral<PaymentProcessingQualifier> implements
+    PaymentProcessingQualifier {
 
-    private final ZahlungAdapterType value;
+    private final PaymentProcessingAdapterType value;
 
     @Override
-    public ZahlungAdapterType value() {
+    public PaymentProcessingAdapterType value() {
         return this.value;
     }
 }

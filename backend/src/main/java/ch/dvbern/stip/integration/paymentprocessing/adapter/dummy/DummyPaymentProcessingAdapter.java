@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.adapter.dummy;
+package ch.dvbern.stip.integration.paymentprocessing.adapter.dummy;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -29,9 +29,9 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
-import ch.dvbern.stip.integration.zahlung.domain.model.ZahlungAdapterType;
-import ch.dvbern.stip.integration.zahlung.domain.port.ZahlungPort;
-import ch.dvbern.stip.integration.zahlung.domain.qualifier.ZahlungQualifier;
+import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessingAdapterType;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPort;
+import ch.dvbern.stip.integration.paymentprocessing.domain.qualifier.PaymentProcessingQualifier;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
@@ -45,10 +45,10 @@ import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.BUSINESSPARTNE
 
 @Slf4j
 @RequestScoped
-@ZahlungQualifier(ZahlungAdapterType.DUMMY)
+@PaymentProcessingQualifier(PaymentProcessingAdapterType.DUMMY)
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
-public class DummyZahlungAdapter implements ZahlungPort {
+public class DummyPaymentProcessingAdapter implements PaymentProcessingPort {
     final GesuchService gesuchService;
     final GesuchRepository gesuchRepository;
     final BuchhaltungService buchhaltungService;

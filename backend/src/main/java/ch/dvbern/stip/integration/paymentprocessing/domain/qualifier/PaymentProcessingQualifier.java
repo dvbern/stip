@@ -15,19 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.domain.qualifier;
+package ch.dvbern.stip.integration.paymentprocessing.domain.qualifier;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import ch.dvbern.stip.integration.zahlung.domain.model.ZahlungAdapterType;
+import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessingAdapterType;
 import jakarta.inject.Qualifier;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface ZahlungQualifier {
-    ZahlungAdapterType value();
+public @interface PaymentProcessingQualifier {
+    PaymentProcessingAdapterType value();
 }

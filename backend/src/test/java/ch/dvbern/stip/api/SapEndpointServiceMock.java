@@ -34,12 +34,12 @@ import ch.dvbern.stip.api.sap.generated.general.ReturnCodeID;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse.DELIVERY;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
-import ch.dvbern.stip.integration.zahlung.adapter.sapbern.service.BusinessPartnerChangeMapper;
-import ch.dvbern.stip.integration.zahlung.adapter.sapbern.service.BusinessPartnerCreateMapper;
-import ch.dvbern.stip.integration.zahlung.adapter.sapbern.service.BusinessPartnerReadMapper;
-import ch.dvbern.stip.integration.zahlung.adapter.sapbern.service.BusinessPartnerSearchMapper;
-import ch.dvbern.stip.integration.zahlung.adapter.sapbern.service.SapEndpointService;
-import ch.dvbern.stip.integration.zahlung.adapter.sapbern.service.VendorPostingCreateMapper;
+import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.BusinessPartnerChangeMapper;
+import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.BusinessPartnerCreateMapper;
+import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.BusinessPartnerReadMapper;
+import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.BusinessPartnerSearchMapper;
+import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.SapEndpointService;
+import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.VendorPostingCreateMapper;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
 

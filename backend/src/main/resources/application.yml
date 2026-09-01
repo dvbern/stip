@@ -67,7 +67,7 @@ kstip:
           minor-version: 0
         pdf:
           adapter-type: typst
-        zahlung:
+        payment-processing:
           adapter-type: sap-bern
       adapter:
         pdf:
@@ -100,7 +100,7 @@ kstip:
           adapter-type: dummy
         plz-fetch:
           adapter-type: dummy
-        zahlung:
+        payment-processing:
           adapter-type: dummy
       adapter:
         pdf:

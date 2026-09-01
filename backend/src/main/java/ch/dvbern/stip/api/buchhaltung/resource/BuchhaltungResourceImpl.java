@@ -29,7 +29,7 @@ import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
 import ch.dvbern.stip.generated.dto.PaginatedFailedAuszahlungBuchhaltungDto;
-import ch.dvbern.stip.integration.zahlung.domain.port.ZahlungPortFactory;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPortFactory;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class BuchhaltungResourceImpl implements BuchhaltungResource {
     private final BuchhaltungAuthorizer buchhaltungAuthorizer;
     private final BuchhaltungService buchhaltungService;
     private final BuchhaltungMapper buchhaltungMapper;
-    private final ZahlungPortFactory zahlungPortFactory;
+    private final PaymentProcessingPortFactory paymentProcessingPortFactory;
 
     @Override
     @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
@@ -78,6 +78,7 @@ public class BuchhaltungResourceImpl implements BuchhaltungResource {
     @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
     public BuchhaltungEntryDto retryFailedAuszahlungBuchhaltungForGesuch(UUID gesuchId) {
         buchhaltungAuthorizer.canRetryFailedAuszahlungBuchhaltung(gesuchId);
-        return buchhaltungMapper.toDto(zahlungPortFactory.getZahlungAdapter().retryAuszahlungBuchhaltung(gesuchId));
+        return buchhaltungMapper
+            .toDto(paymentProcessingPortFactory.getPaymentProcessingAdapter().retryAuszahlungBuchhaltung(gesuchId));
     }
 }

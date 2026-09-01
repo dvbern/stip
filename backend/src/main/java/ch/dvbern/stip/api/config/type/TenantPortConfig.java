@@ -21,10 +21,10 @@ import java.util.Optional;
 
 import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
+import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessingAdapterType;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
 import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
-import ch.dvbern.stip.integration.zahlung.domain.model.ZahlungAdapterType;
 import io.smallrye.config.WithDefault;
 
 public interface TenantPortConfig {
@@ -38,7 +38,7 @@ public interface TenantPortConfig {
 
     PlzFetch plzFetch();
 
-    Zahlung zahlung();
+    PaymentProcessing paymentProcessing();
 
     interface Steuerdaten {
         @WithDefault("false")
@@ -69,7 +69,7 @@ public interface TenantPortConfig {
         PlzFetchAdapterType adapterType();
     }
 
-    interface Zahlung {
-        ZahlungAdapterType adapterType();
+    interface PaymentProcessing {
+        PaymentProcessingAdapterType adapterType();
     }
 }

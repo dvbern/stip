@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.zahlung.adapter.sapbern.service;
+package ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service;
 
 import java.math.BigInteger;
 
