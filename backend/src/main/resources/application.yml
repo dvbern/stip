@@ -377,6 +377,15 @@ quarkus:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
+    tenant:
+      bern:
+        keycloak-admin-client-config:
+          server-url: "test"
+          client-secret: "test"
+      dv:
+        keycloak-admin-client-config:
+          server-url: "test"
+          client-secret: "test"
 '%prod':
   quarkus:
     s3:
