@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -56,17 +55,7 @@ public class GesuchHistoryService {
             return gesuch;
         }
 
-        if (gesuch.isVerfuegt()) {
-            return gesuchHistoryRepository
-                .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
-                // There is a range where the gesuch is verfügt but did not reach GESUCH_VERFUEGUNG_ABGESCHLOSSEN yet
-                // return the eingereicht version instead in this case
-                .or(() -> gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT))
-                .orElseThrow(NotFoundException::new);
-        }
-
-        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT)
-            .orElseThrow(NotFoundException::new);
+        return gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuchId, gesuch.isVerfuegt()).orElseThrow();
     }
 
     public Optional<Integer> getHistoricalGesuchRevisionForGS(final UUID gesuchId) {
