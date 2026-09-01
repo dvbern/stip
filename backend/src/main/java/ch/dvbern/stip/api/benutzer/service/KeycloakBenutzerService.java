@@ -35,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.UserRepresentation;
 
 @RequestScoped
@@ -46,7 +47,7 @@ public class KeycloakBenutzerService {
 
     private Keycloak keycloak = null;
 
-    Keycloak getKeycloak() {
+    RealmResource getKeycloakRealm() {
         final KeycloakAdminClientConfig keycloakAdminClientConfig =
             tenantService.getConfigForCurrentTenant().keycloakAdminClientConfig();
         if (Objects.isNull(keycloak)) {
@@ -58,7 +59,7 @@ public class KeycloakBenutzerService {
                 .clientSecret(keycloakAdminClientConfig.clientSecret())
                 .build();
         }
-        return keycloak;
+        return keycloak.realm(tenantService.getCurrentStringIdentifier());
     }
 
     public String createKeycloakBenutzer(
@@ -80,7 +81,7 @@ public class KeycloakBenutzerService {
         userRep.setEmailVerified(true);
 
         final var keycloakUsersResource =
-            getKeycloak().realm(tenantService.getCurrentTenant().getIdentifier()).users();
+            getKeycloakRealm().users();
 
         String keycloakUserId;
         try (
@@ -138,7 +139,7 @@ public class KeycloakBenutzerService {
         final List<String> roles
     ) {
         final var keycloakUsersResource =
-            getKeycloak().realm(tenantService.getCurrentTenant().getIdentifier()).users();
+            getKeycloakRealm().users();
 
         var userRep = new UserRepresentation();
         userRep.setFirstName(vorname);
@@ -177,7 +178,7 @@ public class KeycloakBenutzerService {
         final String keycloakId
     ) {
         final var keycloakUsersResource =
-            getKeycloak().realm(tenantService.getCurrentTenant().getIdentifier()).users();
+            getKeycloakRealm().users();
         try (
             Response response = keycloakUsersResource.delete(keycloakId);
         ) {
