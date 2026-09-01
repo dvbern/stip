@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.config.type.TenantConfig.KeycloakAdminClientConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
@@ -31,7 +32,10 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.UserRepresentation;
 
 @RequestScoped
@@ -40,7 +44,23 @@ import org.keycloak.representations.idm.UserRepresentation;
 @Slf4j
 public class KeycloakBenutzerService {
     private final TenantService tenantService;
-    private final Keycloak keycloak;
+
+    private Keycloak keycloak = null;
+
+    RealmResource getKeycloakRealm() {
+        final KeycloakAdminClientConfig keycloakAdminClientConfig =
+            tenantService.getConfigForCurrentTenant().keycloakAdminClientConfig();
+        if (Objects.isNull(keycloak)) {
+            keycloak = KeycloakBuilder.builder()
+                .serverUrl(keycloakAdminClientConfig.serverUrl())
+                .realm(tenantService.getCurrentStringIdentifier())
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .clientId(keycloakAdminClientConfig.clientId())
+                .clientSecret(keycloakAdminClientConfig.clientSecret())
+                .build();
+        }
+        return keycloak.realm(tenantService.getCurrentStringIdentifier());
+    }
 
     public String createKeycloakBenutzer(
         final String vorname,
@@ -60,7 +80,8 @@ public class KeycloakBenutzerService {
         userRep.setEmail(eMail);
         userRep.setEmailVerified(true);
 
-        final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
+        final var keycloakUsersResource =
+            getKeycloakRealm().users();
 
         String keycloakUserId;
         try (
@@ -117,7 +138,8 @@ public class KeycloakBenutzerService {
         final String nachname,
         final List<String> roles
     ) {
-        final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
+        final var keycloakUsersResource =
+            getKeycloakRealm().users();
 
         var userRep = new UserRepresentation();
         userRep.setFirstName(vorname);
@@ -155,7 +177,8 @@ public class KeycloakBenutzerService {
     public void deleteKeycloakBenutzer(
         final String keycloakId
     ) {
-        final var keycloakUsersResource = keycloak.realm(tenantService.getCurrentTenant().getIdentifier()).users();
+        final var keycloakUsersResource =
+            getKeycloakRealm().users();
         try (
             Response response = keycloakUsersResource.delete(keycloakId);
         ) {
