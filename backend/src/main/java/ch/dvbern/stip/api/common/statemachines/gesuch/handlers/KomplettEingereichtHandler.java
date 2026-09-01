@@ -53,6 +53,7 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
         final var todayInZuerich = ZonedDateTime.now(BusinessDateConstants.ZUERICH_ZONE).toLocalDate();
         gesuch.setEinreichedatum(todayInZuerich);
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.INITIAL);
+        gesuch.incrementEingereichtCount();
     }
 
 }

@@ -18,18 +18,15 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-@Slf4j
 @RequiredArgsConstructor
-public class BeschwerdeErfolgreichAkzeptierenHandler implements GesuchStatusChangeHandler {
+public class NegativVerfuegtHandler implements GesuchStatusChangeHandler {
     @Override
     public void handle(Gesuch gesuch, String comment) {
-        gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.BESCHWERDE);
-        gesuch.incrementEingereichtCount();
+        gesuch.setVerfuegt(true);
+        gesuch.setInBearbeitungSbReason(null);
     }
 }

@@ -30,5 +30,6 @@ public class AusbildungUnterbruchAkzeptierenHandler implements GesuchStatusChang
     @Override
     public void handle(Gesuch gesuch, String comment) {
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.UNTERBRUCH);
+        gesuch.incrementEingereichtCount();
     }
 }
