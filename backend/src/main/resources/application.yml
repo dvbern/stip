@@ -85,7 +85,7 @@ kstip:
 
     dv:
       subdomains:
-        - '^(uat-)?dv-.*'
+        - '^dv-.*'
       port:
         steuerdaten:
           enabled: true
