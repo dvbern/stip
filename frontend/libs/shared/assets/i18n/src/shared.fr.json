@@ -538,7 +538,7 @@
   "shared.darlehen.status.AKZEPTIERT": "Accepté",
   "shared.darlehen.status.ABGELEHNT": "Refusé",
 
-  "shared.verfuegung.title": "Décision",
+  "shared.verfuegung.title": "Calcul",
   "shared.verfuegung.option.zusammenfassung": "Résumé",
   "shared.verfuegung.option.berechnung.title": "Calcul",
   "shared.verfuegung.option.berechnung.tranche": "Tranche {{ startDate }} - {{ endDate }}",
