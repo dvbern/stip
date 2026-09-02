@@ -11,15 +11,6 @@
 
   <div class="tw:overflow-y-auto tw:w-full" [ngClass]="{ 'tw:hidden tw:lg:block': !darlehenIdSig() }">
     <div class="tw:relative tw:justify-between tw:dv-container tw:dv-scroll-space">
-      <!-- <button
-        type="button"
-        class="tw:lg:hidden tw:dv-button-ghost tw:flex tw:items-center tw:gap-1 tw:mb-4"
-        (click)="toDarlehenOverview()"
-      >
-        <i class="material-symbols-rounded">arrow_back</i>
-        {{ t('shared.form.back') }}
-      </button> -->
-      <!-- link -->
       <a
         class="tw:lg:hidden tw:dv-button-ghost tw:flex tw:items-center tw:gap-1 tw:mb-4"
         [routerLink]="['/gesuch', gesuchIdSig(), 'darlehen', 'fall', fallIdSig()]"
