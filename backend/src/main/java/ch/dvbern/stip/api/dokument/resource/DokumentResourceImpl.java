@@ -105,8 +105,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(CUSTOM_DOKUMENT_CREATE)
     public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
         customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(customDokumentTypCreateDto.getTrancheId());
-        final var createdCustomTyp = customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
-        return gesuchDokumentService.findGesuchDokumentForCustomTypSB(createdCustomTyp.getId()).getValue();
+        return customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
     }
 
     @Blocking

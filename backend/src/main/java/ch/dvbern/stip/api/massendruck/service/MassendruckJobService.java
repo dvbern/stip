@@ -134,6 +134,15 @@ public class MassendruckJobService {
         );
     }
 
+    public MassendruckJobDto createAndCombineMassendruckJobForQueryType(
+        final GetGesucheSBQueryType getGesucheSBQueryType,
+        final Boolean zugewiesen
+    ) {
+        final var massendruckJob = createMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
+        combineDocument(massendruckJob.getId());
+        return massendruckJob;
+    }
+
     @Transactional
     public MassendruckJobDto createMassendruckJobForQueryType(
         final GetGesucheSBQueryType getGesucheSBQueryType,
@@ -179,6 +188,14 @@ public class MassendruckJobService {
 
         gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, changeEvent);
         massendruckJobRepository.deleteMassendruckJobById(massendruckId);
+    }
+
+    public MassendruckJobDetailDto retryAndCombineMassendruckJob(
+        final UUID massendruckId
+    ) {
+        final var massendruckJobDetail = retryMassendruckJob(massendruckId);
+        combineDocument(massendruckId);
+        return massendruckJobDetail;
     }
 
     @Transactional

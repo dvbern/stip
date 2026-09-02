@@ -74,10 +74,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
         Boolean zugewiesen
     ) {
         authorizer.canCreateMassendruckJob(getGesucheSBQueryType);
-        final var massendruckJob =
-            massendruckJobService.createMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
-        massendruckJobService.combineDocument(massendruckJob.getId());
-        return massendruckJob;
+        return massendruckJobService.createAndCombineMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
     }
 
     @Override
@@ -165,8 +162,6 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckJobDetailDto retryMassendruckJob(UUID massendruckId) {
         authorizer.canRetryMassendruckJob(massendruckId);
-        final var massendruckJobDetail = massendruckJobService.retryMassendruckJob(massendruckId);
-        massendruckJobService.combineDocument(massendruckId);
-        return massendruckJobDetail;
+        return massendruckJobService.retryAndCombineMassendruckJob(massendruckId);
     }
 }

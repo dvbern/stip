@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.api.notiz.repo.GesuchNotizRepository;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
@@ -43,6 +44,7 @@ public class GesuchNotizService {
     private final GesuchRepository gesuchRepository;
     private final GesuchNotizRepository gesuchNotizRepository;
     private final GesuchNotizMapper gesuchNotizMapper;
+    private final GesuchService gesuchService;
 
     private List<GesuchNotizDto> getAllByFall(final Fall fall) {
         final var ausbildungs = fall.getAusbildungs();
@@ -136,6 +138,7 @@ public class GesuchNotizService {
     ) {
         final var juristischeNotiz = gesuchNotizRepository.requireById(notizId);
         final var entity = gesuchNotizMapper.partialUpdate(dto, juristischeNotiz);
+        gesuchService.gesuchStatusToBereitFuerBearbeitung(juristischeNotiz.getGesuch().getId());
         return gesuchNotizMapper.toDto(entity);
     }
 }

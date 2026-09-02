@@ -96,13 +96,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
         DatenschutzbriefCreateDto datenschutzbriefCreateDto
     ) {
         authorizer.canGetDokumentDownloadToken();
-        final var datenschutzbriefId =
-            datenschutzbriefService.createDatenschutzbrief(gesuchId, datenschutzbriefCreateDto.getElternId());
-        return dokumentDownloadService.getFileDownloadToken(
-            datenschutzbriefId,
-            DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
-            benutzerService,
-            config
-        );
+
+        return datenschutzbriefService.createDatenschutzbrief(gesuchId, datenschutzbriefCreateDto.getElternId());
     }
 }

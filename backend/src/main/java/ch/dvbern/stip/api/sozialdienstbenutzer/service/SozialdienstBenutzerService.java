@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.config.type.FrontendType;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
@@ -59,6 +60,7 @@ public class SozialdienstBenutzerService {
     private final KeycloakBenutzerService keycloakBenutzerService;
     private final Event<SozialdienstBenutzerCreated> createdEvent;
     private final DelegierungRepository delegierungRepository;
+    private final SozialdienstService sozialdienstService;
 
     public Optional<SozialdienstBenutzer> getCurrentSozialdienstBenutzer() {
         final var keycloakId = jsonWebToken.getSubject();
