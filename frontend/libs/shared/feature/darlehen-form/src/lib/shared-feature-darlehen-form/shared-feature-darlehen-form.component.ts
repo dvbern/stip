@@ -9,7 +9,7 @@ import {
   input,
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
@@ -32,6 +32,7 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
     SharedUiDarlehenVerfuegungDownloadComponent,
     SharedUiDarlehenMenuComponent,
     SharedUiAdvTranslocoDirective,
+    RouterModule,
   ],
   templateUrl: './shared-feature-darlehen-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -121,17 +122,6 @@ export class SharedFeatureDarlehenFormComponent {
         sachbearbeiter: () => '/darlehen',
       }),
     ]);
-  }
-
-  toDarlehenOverview(): void {
-    const gesuchId = this.gesuchIdSig();
-    const fallId = this.fallIdSig();
-
-    if (!gesuchId || !fallId) {
-      return;
-    }
-
-    this.router.navigate(['/gesuch', gesuchId, 'darlehen', 'fall', fallId]);
   }
 
   reloadFallHeader() {

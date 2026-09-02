@@ -8,7 +8,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { NotificationStore } from '@dv/shared/data-access/notification';
@@ -22,6 +22,7 @@ import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
     SharedUiAdvTranslocoDirective,
     SharedUiTooltipDateComponent,
     SharedUiDownloadButtonDirective,
+    RouterModule,
   ],
   templateUrl: './shared-feature-notification.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,23 +31,16 @@ export class SharedFeatureNotificationComponent {
   private notificationStore = inject(NotificationStore);
   private fallHeaderStore = inject(FallHeaderStore);
 
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-
-  goBack(): void {
-    this.router.navigate(['../'], { relativeTo: this.route });
-  }
-
-  notificationId = input<string | undefined>(undefined, {
+  notificationIdSig = input<string | undefined>(undefined, {
     alias: 'notificationId',
   });
 
-  fallId = input<string | undefined>(undefined, {
+  fallIdSig = input<string | undefined>(undefined, {
     alias: 'fallId',
   });
 
   notificationSig = computed(() => {
-    const notificationId = this.notificationId();
+    const notificationId = this.notificationIdSig();
 
     const notifications = this.notificationStore.notificationListViewSig();
     return notifications.find((n) => n.id === notificationId) ?? null;
@@ -54,7 +48,7 @@ export class SharedFeatureNotificationComponent {
 
   constructor() {
     effect(() => {
-      const notificationId = this.notificationId();
+      const notificationId = this.notificationIdSig();
       if (notificationId) {
         this.notificationStore.setSelectedNotificationId(notificationId);
       }
@@ -63,7 +57,7 @@ export class SharedFeatureNotificationComponent {
     // mark as read
     effect(() => {
       const notification = this.notificationSig();
-      const fallId = this.fallId();
+      const fallId = this.fallIdSig();
       if (notification && !notification.read && fallId) {
         this.notificationStore.markNotificationAsRead$({
           req: { notificationId: notification.id },

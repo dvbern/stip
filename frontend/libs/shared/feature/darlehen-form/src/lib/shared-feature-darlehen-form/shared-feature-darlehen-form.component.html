@@ -11,14 +11,22 @@
 
   <div class="tw:overflow-y-auto tw:w-full" [ngClass]="{ 'tw:hidden tw:lg:block': !darlehenIdSig() }">
     <div class="tw:relative tw:justify-between tw:dv-container tw:dv-scroll-space">
-      <button
+      <!-- <button
         type="button"
         class="tw:lg:hidden tw:dv-button-ghost tw:flex tw:items-center tw:gap-1 tw:mb-4"
         (click)="toDarlehenOverview()"
       >
         <i class="material-symbols-rounded">arrow_back</i>
         {{ t('shared.form.back') }}
-      </button>
+      </button> -->
+      <!-- link -->
+      <a
+        class="tw:lg:hidden tw:dv-button-ghost tw:flex tw:items-center tw:gap-1 tw:mb-4"
+        [routerLink]="['/gesuch', gesuchIdSig(), 'darlehen', 'fall', fallIdSig()]"
+      >
+        <i class="material-symbols-rounded">arrow_back</i>
+        {{ t('shared.form.back') }}
+      </a>
 
       <h1 class="tw:flex tw:justify-between tw:items-center tw:w-1/2 tw:text-3xl tw:font-bold">
         {{ t('shared.darlehen.title') }}

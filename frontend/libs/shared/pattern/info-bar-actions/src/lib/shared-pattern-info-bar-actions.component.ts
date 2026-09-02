@@ -200,7 +200,7 @@ export class SharedPatternInfoBarActionsComponent {
   // Eagerly loaded at construction so the loading state can react instantly on
   // the first status transition (component is deferred and SB-App only anyways).
   // Why not import the service directly? Because this component is shared and the service is SB-App only.
-  private gesuchActionsServiceRef = this.loadGesuchActionsService();
+  private gesuchActionsServicePromise = this.loadGesuchActionsService();
 
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
@@ -366,7 +366,7 @@ export class SharedPatternInfoBarActionsComponent {
       return;
     }
 
-    const gesuchtActionsService = await this.gesuchActionsServiceRef;
+    const gesuchtActionsService = await this.gesuchActionsServicePromise;
     gesuchtActionsService?.setStatusUebergang(
       nextStatus,
       gesuchId,
@@ -375,10 +375,6 @@ export class SharedPatternInfoBarActionsComponent {
   }
 
   private async loadGesuchActionsService() {
-    if (this.config.app.view !== 'sachbearbeiter') {
-      return null;
-    }
-
     const module =
       // A feature that is only available in the SB App
       // eslint-disable-next-line @nx/enforce-module-boundaries
