@@ -17,8 +17,18 @@
 
 package ch.dvbern.stip.arch;
 
+import java.util.List;
+
+import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
 import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.AccessTarget.MethodCallTarget;
+import com.tngtech.archunit.core.domain.JavaMethod;
+import com.tngtech.archunit.core.domain.JavaMethodCall;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.tngtech.archunit.library.Architectures;
 import com.tngtech.archunit.library.dependencies.Slice;
 import jakarta.transaction.Transactional;
@@ -30,6 +40,7 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPac
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
+import static java.util.stream.Collectors.joining;
 
 @Execution(ExecutionMode.CONCURRENT)
 class ArchitectureTest {
@@ -102,6 +113,41 @@ class ArchitectureTest {
             .resideOutsideOfPackages("..service..", "..repo..")
             .should()
             .notBeAnnotatedWith(Transactional.class);
+
+        rule.check(ArchTestUtil.API_CLASSES);
+    }
+
+    @Test
+    void resources_should_call_a_service_only_once() {
+        var rule = ArchRuleDefinition.methods()
+            .that()
+            .areDeclaredInClassesThat()
+            .resideInAPackage("..resource..")
+            .and()
+            .areNotAnnotatedWith(ReadOnlyEndpoint.class)
+            .should(new ArchCondition<JavaMethod>("call exactly one service method") {
+                @Override
+                public void check(JavaMethod item, ConditionEvents events) {
+                    List<JavaMethodCall> serviceCalls = item.getMethodCallsFromSelf()
+                        .stream()
+                        .filter(call -> call.getTargetOwner().getPackageName().contains(".service"))
+                        .toList();
+
+                    if (serviceCalls.size() > 1) {
+                        String callsMessage = serviceCalls.stream()
+                            .map(JavaMethodCall::getTarget)
+                            .map(MethodCallTarget::getDescription)
+                            .collect(joining(" and "));
+                        events.add(
+                            SimpleConditionEvent.violated(
+                                item,
+                                "%s calls [%s]"
+                                    .formatted(serviceCalls.getFirst().getOwner().getDescription(), callsMessage)
+                            )
+                        );
+                    }
+                }
+            });
 
         rule.check(ArchTestUtil.API_CLASSES);
     }
