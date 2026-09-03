@@ -82,7 +82,10 @@ kstip:
             url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
             username: '${NESKO_TECHNICAL_USER_NAME}'
             password: '${NESKO_TECHNICAL_USER_PASSWORD}'
-
+      keycloak-admin-client-config:
+        server-url: ${kstip.oidc.url}
+        client-id: stip-api
+        client-secret: ${STIP_BERN_KEYCLOAK_ADMIN_CLIENT_CLIENT_SECRET}
     dv:
       subdomains:
         - '^dv-.*'
@@ -110,6 +113,10 @@ kstip:
               berechnungsblatt-uebersicht: /tenants/bern/templates/berechnung/uebersicht.typ
               berechnungsblatt-pia: /tenants/bern/templates/berechnung/pia.typ
               berechnungsblatt-familie: /tenants/bern/templates/berechnung/familie.typ
+      keycloak-admin-client-config:
+        server-url: ${kstip.oidc.url}
+        client-id: stip-api
+        client-secret: ${STIP_DV_KEYCLOAK_ADMIN_CLIENT_CLIENT_SECRET}
   seeding:
     seed-on-profile:
       - 'prod'
@@ -214,13 +221,6 @@ quarkus:
   keycloak:
     devservices:
       enabled: false
-    admin-client:
-      server-url: ${kstip.oidc.url}
-      grant-type: password
-      username: ${STIP_KEYCLOAK_ADMIN_USER}
-      password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
-      client-id: admin-cli
-      realm: master
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
@@ -387,6 +387,15 @@ quarkus:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
+    tenant:
+      bern:
+        keycloak-admin-client-config:
+          server-url: "test"
+          client-secret: "test"
+      dv:
+        keycloak-admin-client-config:
+          server-url: "test"
+          client-secret: "test"
 '%prod':
   quarkus:
     s3:
