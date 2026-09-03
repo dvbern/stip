@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuchhistory.repo;
 
 import java.time.Instant;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,24 +37,6 @@ import org.hibernate.envers.query.AuditEntity;
 public class GesuchHistoryRepository {
     private final EntityManager entityManager;
     private static final QGesuch Q_GESUCH = QGesuch.gesuch;
-
-    public List<Gesuch> getStatusHistory(final UUID gesuchId) {
-        final var reader = AuditReaderFactory.get(entityManager);
-        @SuppressWarnings("unchecked")
-        // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
-        final List<Gesuch> revisions = reader
-            .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, true, true)
-            .add(AuditEntity.property("id").eq(gesuchId))
-            .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntity.property("timestampMutiert").desc())
-            .getResultList()
-            .stream()
-            .map(Gesuch.class::cast)
-            .toList();
-
-        return revisions;
-    }
 
     @SuppressWarnings("unchecked")
     public Optional<UUID> getUserMutiertOfLatestToInFreigabeChange(final UUID gesuchId) {

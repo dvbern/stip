@@ -1501,16 +1501,7 @@ class GesuchServiceTest {
         when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(gesuch.getGesuchTranchen().get(0));
-        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
-            List.of(
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB),
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE),
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT),
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB)
-            )
-        );
+
         final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
 
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
@@ -1579,13 +1570,7 @@ class GesuchServiceTest {
             .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
             .thenReturn(eingereichtesGesuch.getGesuchTranchen().get(0));
-        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
-            List.of(
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
-                eingereichtesGesuch,
-                gesuchInBearbeitungSB
-            )
-        );
+
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any(), any()))
             .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
         var gesuchGS = gesuchService
@@ -1662,13 +1647,7 @@ class GesuchServiceTest {
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSpy);
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
-            List.of(
-                GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),
-                eingereichtesGesuch,
-                gesuchInBearbeitungSpy
-            )
-        );
+
         when(gesuchHistoryRepository.getLastEingereichtGesuchVersion(any(), anyBoolean()))
             .thenReturn(Optional.of(eingereichtesGesuch));
 
