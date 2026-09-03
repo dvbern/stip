@@ -201,12 +201,6 @@ public class Gesuch extends AbstractTenantEntity {
     private boolean remainderPaymentExecuted = false;
 
     /**
-     * Gesuch was verfuegt at least once in the past
-     */
-    @Column(name = "verfuegt", nullable = false)
-    private boolean verfuegt = false;
-
-    /**
      * Gesuch was BEREIT_FUER_BEARBEITUNG at least once in the past
      */
     @Column(name = "was_in_bereit_fuer_bearbeitung", nullable = false)
@@ -248,11 +242,33 @@ public class Gesuch extends AbstractTenantEntity {
     private int eingereichtCount = 0;
 
     /**
+     * This serves as an audit marker to fetch the version of the Gesuch that is visible to
+     * the GS/SB by marking verfuegt events which we can go back to with envers.<br>
+     * <br>
+     * Call {@link incrementEingereichtCount} to mark a new eingereicht event
+     */
+    @NotNull
+    @Column(name = "verfuegt_count", nullable = false)
+    @Audited(withModifiedFlag = true, modifiedColumnName = "verfuegt_count_mod")
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private int verfuegtCount = 0;
+
+    /**
      * @see eingereichtCount
      */
     public int incrementEingereichtCount() {
         this.eingereichtCount += 1;
         return eingereichtCount;
+    }
+
+    public int incrementVerfuegtCount() {
+        this.verfuegtCount += 1;
+        return verfuegtCount;
+    }
+
+    public boolean isVerfuegt() {
+        return verfuegtCount > 0;
     }
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {

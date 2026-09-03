@@ -125,6 +125,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD_SB)
+    @ReadOnlyEndpoint
     public Uni<Response> createDokumentSB(
         DokumentTyp dokumentTyp,
         UUID gesuchTrancheId,
@@ -166,6 +167,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD_SB)
+    @ReadOnlyEndpoint
     public Uni<Response> uploadCustomGesuchDokumentSB(UUID customDokumentTypId, FileUpload fileUpload) {
         customGesuchDokumentTypAuthorizer.assertSbCanModifyCustomDokumentOfTranche(customDokumentTypId);
         gesuchDokumentService.setGesuchDokumentOfCustomDokumentTypToAusstehend(customDokumentTypId);

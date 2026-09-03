@@ -32,4 +32,7 @@
   <include file="/db/migration/v0.75/KSTIP-3811.xml"/>
   <!-- </editor-fold> -->
 
+  <!-- <editor-fold desc="v0.76" defaultstate="collapsed"> -->
+  <include file="/db/migration/v0.76/KSTIP-3895.xml"/>
+  <!-- </editor-fold> -->
 </databaseChangeLog>

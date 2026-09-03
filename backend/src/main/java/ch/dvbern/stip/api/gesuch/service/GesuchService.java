@@ -126,6 +126,7 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import ch.dvbern.stip.generated.dto.InitialGesuchsDto;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDto;
 import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
@@ -1115,9 +1116,12 @@ public class GesuchService {
         final var gesuch = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch();
 
         final var eingereichtTranche =
-            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+            getLatestEingereichtVersion(gesuch.getId())
                 .flatMap(eingereichtGesuch -> eingereichtGesuch.getTranchenTranchen().findFirst())
                 .orElseThrow(NotFoundException::new);
+        // gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+        // .flatMap(eingereichtGesuch -> eingereichtGesuch.getTranchenTranchen().findFirst())
+        // .orElseThrow(NotFoundException::new);
 
         return gesuchMapperUtil.mapWithTranche(
             eingereichtTranche.getGesuch(),
@@ -1132,7 +1136,8 @@ public class GesuchService {
         final var gesuch = tranche.getGesuch();
 
         final var requestedTrancheFromGesuchInStatusEingereicht =
-            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+            gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuch.getId(), false)
+                // gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
                 .orElseThrow(ForbiddenException::new)
                 .getGesuchTranchen()
                 .stream()
@@ -1140,7 +1145,7 @@ public class GesuchService {
                 .findFirst();
 
         var requestedTrancheFromGesuchInStatusVerfuegt =
-            gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT)
+            gesuchHistoryRepository.getFirstVerfuegtGesuchVersion(gesuch.getId())
                 .orElseThrow(NotFoundException::new)
                 .getGesuchTranchen()
                 .stream()
@@ -1317,7 +1322,7 @@ public class GesuchService {
     }
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
-        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+        return gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuchId, false);
     }
 
     public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
@@ -1554,9 +1559,9 @@ public class GesuchService {
     @Transactional
     public InitialGesuchsDto getInitialGesuchTranches(final Gesuch gesuch) {
         final var verfuegtGesuchOpt =
-            gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
+            gesuchHistoryRepository.getFirstVerfuegtGesuchVersion(gesuch.getId());
         final var eingerichtGesuchOpt =
-            gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT);
+            gesuchHistoryRepository.getFirstEingereichtGesuchVersion(gesuch.getId());
         if (verfuegtGesuchOpt.isEmpty() && eingerichtGesuchOpt.isEmpty()) {
             return null;
         }
@@ -1626,5 +1631,16 @@ public class GesuchService {
 
     public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {
         return verfuegungService.requireById(verfuegungId).parseBerechnungData();
+    }
+
+    @Transactional
+    public GesuchNotizDto answerJuristischeNotiz(
+        final JuristischeAbklaerungNotizAntwortDto dto,
+        final UUID notizId
+    ) {
+        final var notizDto = gesuchNotizService.answerJuristischeNotiz(dto, notizId);
+
+        gesuchStatusToBereitFuerBearbeitung(gesuchNotizService.getGesuchOfNotiz(notizId).getId());
+        return notizDto;
     }
 }

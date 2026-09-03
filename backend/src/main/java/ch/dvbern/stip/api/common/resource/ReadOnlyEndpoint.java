@@ -22,7 +22,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import ch.dvbern.stip.api.common.interceptors.Validated;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
+@Validated
 public @interface ReadOnlyEndpoint {
 }

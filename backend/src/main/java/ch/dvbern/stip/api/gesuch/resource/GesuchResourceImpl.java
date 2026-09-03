@@ -23,9 +23,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
+import ch.dvbern.stip.api.common.authorization.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;

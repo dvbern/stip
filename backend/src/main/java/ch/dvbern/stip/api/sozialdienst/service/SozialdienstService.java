@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.zahlungsverbindung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
@@ -143,5 +144,15 @@ public class SozialdienstService {
         sozialdienst.setAktiv(aktiv);
 
         return sozialdienstMapper.toDto(sozialdienst);
+    }
+
+    @Transactional
+    public SozialdienstBenutzerDto createSozialdienstMitarbeiterBenutzer(
+        final SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
+    ) {
+        return sozialdienstBenutzerService.createSozialdienstMitarbeiterBenutzer(
+            getSozialdienstOfCurrentSozialdienstBenutzer(),
+            sozialdienstBenutzerCreateDto
+        );
     }
 }

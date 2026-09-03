@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class NegativVerfuegtHandler implements GesuchStatusChangeHandler {
     @Override
     public void handle(Gesuch gesuch, String comment) {
-        gesuch.setVerfuegt(true);
+        gesuch.incrementVerfuegtCount();
         gesuch.setInBearbeitungSbReason(null);
     }
 }

@@ -119,7 +119,6 @@ import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
@@ -972,6 +971,9 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(fallRepository.requireById(any())).thenReturn(gesuch.getAusbildung().getFall());
 
         assertDoesNotThrow(
             () -> gesuchService.gesuchStatusToBearbeitungAsAenderung(
@@ -994,6 +996,9 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(fallRepository.requireById(any())).thenReturn(gesuch.getAusbildung().getFall());
 
         assertDoesNotThrow(
             () -> gesuchService.gesuchStatusToBearbeitungAsAenderung(
@@ -1138,6 +1143,9 @@ class GesuchServiceTest {
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(fallRepository.requireById(any())).thenReturn(fall);
 
         // act
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getLatestGesuchTranche().getId());
@@ -1216,6 +1224,10 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(gesuchTrancheService.getGesuchTrancheOrHistorical(any()))
+            .thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(fallRepository.requireById(any())).thenReturn(fall);
+        when(fallRepository.requireById(any())).thenReturn(gesuch.getAusbildung().getFall());
 
         assertDoesNotThrow(
             () -> gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getLatestGesuchTranche().getId())
@@ -1288,6 +1300,9 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(gesuchTrancheService.getGesuchTrancheOrHistorical(any()))
+            .thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(fallRepository.requireById(any())).thenReturn(fall);
 
         assertDoesNotThrow(
             () -> gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getLatestGesuchTranche().getId())
@@ -1321,6 +1336,10 @@ class GesuchServiceTest {
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuch.getGesuchTranchen().get(0));
 
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getLatestGesuchTranche().getId());
 
@@ -1367,6 +1386,10 @@ class GesuchServiceTest {
         QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuch.getGesuchTranchen().get(0));
 
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getLatestGesuchTranche().getId());
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.FEHLENDE_DOKUMENTE));
@@ -1439,8 +1462,6 @@ class GesuchServiceTest {
         final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any(), any()))
             .thenReturn(gesuchToReturn.getNewestGesuchTranche());
-        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
-            .thenReturn(Optional.of(gesuchToReturn));
         when(gesuchTrancheHistoryService.getLatestTranche(any()))
             .thenReturn(gesuchToReturn.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
@@ -1491,8 +1512,6 @@ class GesuchServiceTest {
             )
         );
         final var gesuchToReturn = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.EINGEREICHT);
-        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
-            .thenReturn(Optional.of(gesuchToReturn));
 
         final var gesuchGS = gesuchService.getGesuchGS(gesuch.getGesuchTranchen().get(0).getId());
         // assert that gesuchHistory is NOT queried, but the actual gesuch is returned
@@ -1569,8 +1588,6 @@ class GesuchServiceTest {
         );
         when(gesuchTrancheHistoryRepository.getLatestWhereGesuchStatusChangedToEingereicht(any(), any()))
             .thenReturn(Optional.ofNullable(eingereichtesGesuch.getGesuchTranchen().get(0)));
-        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
-            .thenReturn(Optional.of(eingereichtesGesuch));
         var gesuchGS = gesuchService
             .getGesuchGS(gesuchInBearbeitungSB.getGesuchTranchen().get(0).getId());
         assertThat(gesuchGS.getGesuchStatus(), is(eingereichtesGesuch.getGesuchStatus()));
@@ -1652,7 +1669,7 @@ class GesuchServiceTest {
                 gesuchInBearbeitungSpy
             )
         );
-        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+        when(gesuchHistoryRepository.getLastEingereichtGesuchVersion(any(), anyBoolean()))
             .thenReturn(Optional.of(eingereichtesGesuch));
 
         // gesuch gets rejected
@@ -1702,17 +1719,13 @@ class GesuchServiceTest {
         Mockito.doNothing().when(gesuchTrancheValidatorServiceMock).validateGesuchTrancheForEinreichen(any());
         QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(fallRepository.requireById(any())).thenReturn(gesuch.getAusbildung().getFall());
 
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getLatestGesuchTranche().getId());
         gesuch.setNachfristDokumente(LocalDate.now().minusDays(1));
-        when(
-            gesuchHistoryRepository
-                .getLatestWhereStatusChangedTo(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE))
-        ).thenReturn(
-            Optional.of(gesuch)
-        );
 
-        when(gesuchHistoryRepository.getLatestWhereStatusChangedTo(any(), any()))
+        when(gesuchHistoryRepository.getLastEingereichtGesuchVersion(any(), anyBoolean()))
             .thenReturn(Optional.of(gesuch));
 
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
@@ -1738,7 +1751,7 @@ class GesuchServiceTest {
         Fall fall = new Fall();
         fall.setSachbearbeiterZuordnung(zuordnung);
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE);
-        gesuch.setVerfuegt(true);
+        gesuch.incrementVerfuegtCount();
         gesuch.getAusbildung().setFall(fall);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -1767,6 +1780,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+        when(fallRepository.requireById(any())).thenReturn(gesuch.getAusbildung().getFall());
 
         gesuchService.gesuchManuellPruefenSbJur(gesuch.getId());
 

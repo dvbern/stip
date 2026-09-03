@@ -169,7 +169,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchWithChangesDto aenderungFehlendeDokumenteUebermitteln(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         gesuchTrancheAuthorizer.canFehlendeDokumenteUebermitteln(gesuchTrancheId);
 
         return gesuchTrancheService.aenderungFehlendeDokumenteUebermitteln(gesuchTrancheId);

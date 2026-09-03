@@ -18,12 +18,10 @@
 package ch.dvbern.stip.api.gesuchhistory.repo;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.util.AuditEntityUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -71,66 +69,6 @@ public class GesuchHistoryRepository {
             .add(AuditEntity.property(Q_GESUCH.gesuchStatus.getMetadata().getName()).eq(Gesuchstatus.IN_FREIGABE))
             .add(AuditEntity.property(Q_GESUCH.gesuchStatus.getMetadata().getName()).hasChanged())
             .addOrder(AuditEntityUtil.revisionTimestamp().desc())
-            .setMaxResults(1)
-            .getResultList()
-            .stream()
-            .findFirst();
-    }
-
-    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
-    @SuppressWarnings("unchecked")
-    public Stream<Gesuch> getWhereStatusChangeHappenedBefore(
-        final List<UUID> ids,
-        final Gesuchstatus gesuchstatus,
-        final LocalDateTime dueDate
-    ) {
-        final var reader = AuditReaderFactory.get(entityManager);
-        return reader
-            .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, true, true)
-            .add(AuditEntity.property("id").in(ids))
-            .add(AuditEntity.property("gesuchStatus").eq(gesuchstatus))
-            .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .add(AuditEntity.property("gesuchStatusAenderungDatum").lt(dueDate))
-            .setMaxResults(1)
-            .getResultList()
-            .stream();
-    }
-
-    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
-    @SuppressWarnings("unchecked")
-    public Optional<Gesuch> getLatestWhereStatusChangedTo(
-        final UUID gesuchId,
-        final Gesuchstatus gesuchStatus
-    ) {
-        final var reader = AuditReaderFactory.get(entityManager);
-        return reader
-            .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, true, false)
-            .add(AuditEntity.property("id").eq(gesuchId))
-            .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
-            .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
-            .setMaxResults(1)
-            .getResultList()
-            .stream()
-            .findFirst();
-    }
-
-    // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
-    @SuppressWarnings("unchecked")
-    public Optional<Gesuch> getFirstWhereStatusChangedTo(
-        final UUID gesuchId,
-        final Gesuchstatus gesuchStatus
-    ) {
-        final var reader = AuditReaderFactory.get(entityManager);
-        return reader
-            .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, true, true)
-            .add(AuditEntity.property("id").eq(gesuchId))
-            .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
-            .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
             .setMaxResults(1)
             .getResultList()
             .stream()
@@ -224,6 +162,7 @@ public class GesuchHistoryRepository {
             .addProjection(AuditEntityUtil.revisionTimestamp())
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("eingereichtCount").hasChanged())
+            .add(AuditEntity.property("eingereichtCount").gt(0))
             .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
@@ -237,4 +176,98 @@ public class GesuchHistoryRepository {
         return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestampOpt.get() - (before ? 1 : 0));
     }
 
+    @SuppressWarnings("unchecked")
+    public Optional<Gesuch> getFirstEingereichtGesuchVersion(final UUID gesuchId) {
+        final var reader = AuditReaderFactory.get(entityManager);
+
+        final Optional<Long> revisionTimestampOpt = reader.createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntityUtil.revisionTimestamp())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("eingereichtCount").hasChanged())
+            .add(AuditEntity.property("eingereichtCount").gt(0))
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+
+        if (revisionTimestampOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestampOpt.get());
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<Gesuch> getFirstVerfuegtGesuchVersion(final UUID gesuchId) {
+        final var reader = AuditReaderFactory.get(entityManager);
+
+        final Optional<Long> revisionTimestampOpt = reader.createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntityUtil.revisionTimestamp())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("verfuegtCount").hasChanged())
+            .add(AuditEntity.property("verfuegtCount").gt(0))
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+
+        if (revisionTimestampOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestampOpt.get());
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<Gesuch> getLastVerfuegtGesuchVersion(final UUID gesuchId) {
+        final var reader = AuditReaderFactory.get(entityManager);
+
+        final Optional<Long> revisionTimestampOpt = reader.createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntityUtil.revisionTimestamp())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("verfuegtCount").hasChanged())
+            .add(AuditEntity.property("verfuegtCount").gt(0))
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+
+        if (revisionTimestampOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestampOpt.get());
+    }
+
+    @SuppressWarnings("unchecked")
+    public Optional<Integer> getLastEingereichtGesuchRevision(final UUID gesuchId) {
+        final var reader = AuditReaderFactory.get(entityManager);
+
+        final Optional<Long> revisionTimestampOpt = reader.createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntityUtil.revisionTimestamp())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("eingereichtCount").hasChanged())
+            .add(AuditEntity.property("eingereichtCount").gt(0))
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+
+        if (revisionTimestampOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(
+            reader.getRevisionNumberForDate(Instant.ofEpochSecond(revisionTimestampOpt.get()))
+                .intValue()
+        );
+    }
 }
