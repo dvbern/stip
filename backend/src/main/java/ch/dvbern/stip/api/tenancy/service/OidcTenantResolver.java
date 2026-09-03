@@ -22,9 +22,7 @@ import io.quarkus.oidc.TenantResolver;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor
 public class OidcTenantResolver implements TenantResolver {
@@ -37,11 +35,7 @@ public class OidcTenantResolver implements TenantResolver {
     public String resolve(RoutingContext context) {
         final var authority = context.request().authority().host();
         final var parts = authority.split("\\.");
-        LOG.info("Headers [{}]", context.request().headers().entries().toString());
-        LOG.info("Absolute AUTHORITY [{}]", context.request().authority().host());
-        LOG.info("Checking parts [{}]", parts[0]);
         final var tenant = tenantService.resolveTenant(parts[0]);
-        LOG.info("Got Tenant [{}]", parts[0]);
 
         context.put(TENANT_IDENTIFIER_CONTEXT_NAME, tenant.getIdentifier());
 
