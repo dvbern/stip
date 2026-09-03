@@ -32,9 +32,11 @@ import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENTIFIER_CONTEXT_NAME;
 
+@Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @UnlessBuildProfile("test")
@@ -88,6 +90,12 @@ public class TenantService {
                 final var pattern = Pattern.compile(subdomainPattern, Pattern.CASE_INSENSITIVE);
                 return pattern.matcher(subdomain).matches();
             });
+            LOG.info(
+                "Checked Tenant [{}] with Patterns [{}], matched: [{}]",
+                tenant,
+                String.join(", ", subdomainPatterns),
+                matches
+            );
             if (matches) {
                 return tenant;
             }
