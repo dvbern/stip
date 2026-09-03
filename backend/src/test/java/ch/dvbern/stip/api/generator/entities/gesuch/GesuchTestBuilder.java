@@ -49,6 +49,7 @@ public final class GesuchTestBuilder extends AbstractTestBuilder<Gesuch, GesuchT
             .wasInBereitFuerBearbeitung(false)
             .verfuegungs(new ArrayList<>())
             .sachbearbeiterGesuchDokuments(new ArrayList<>())
+            .eingereichtCount(0)
             .einreichedatum(referenceDate)
             .build();
 
@@ -70,6 +71,7 @@ public final class GesuchTestBuilder extends AbstractTestBuilder<Gesuch, GesuchT
             .wasInBereitFuerBearbeitung(false)
             .verfuegungs(new ArrayList<>())
             .sachbearbeiterGesuchDokuments(new ArrayList<>())
+            .eingereichtCount(0)
             .einreichedatum(referenceDate)
             .build();
 

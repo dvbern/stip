@@ -38,6 +38,8 @@ public interface TenantConfig {
 
     TenantAdapterConfig adapter();
 
+    KeycloakAdminClientConfig keycloakAdminClientConfig();
+
     interface Frontends {
         Map<FrontendType, String> urls();
     }
@@ -53,5 +55,13 @@ public interface TenantConfig {
 
     interface Seeding {
         Optional<String> sozialdienste();
+    }
+
+    interface KeycloakAdminClientConfig {
+        String serverUrl();
+
+        String clientId();
+
+        String clientSecret();
     }
 }

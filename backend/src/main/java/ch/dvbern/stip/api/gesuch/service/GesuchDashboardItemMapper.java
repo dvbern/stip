@@ -44,6 +44,8 @@ import org.mapstruct.Named;
 @Mapper(config = MappingConfig.class, uses = GesuchsperiodeMapper.class)
 public abstract class GesuchDashboardItemMapper {
     @Inject
+    GesuchService gesuchService;
+    @Inject
     GesuchHistoryService gesuchHistoryService;
 
     @Inject
@@ -70,12 +72,14 @@ public abstract class GesuchDashboardItemMapper {
 
     @Named("canCreateAenderung")
     protected boolean canCreateAenderung(final Gesuch gesuch) {
-        return GesuchUtil.canCreateAenderung(gesuch);
+        final var unhistorizedGesuch = gesuchService.getGesuchById(gesuch.getId());
+        return GesuchUtil.canCreateAenderung(unhistorizedGesuch);
     }
 
     @Named("canCreateDarlehen")
     protected boolean canCreateDarlehen(final Gesuch gesuch) {
-        return darlehenService.canCreateDarlehen(gesuch.getAusbildung().getFall().getId());
+        final var unhistorizedGesuch = gesuchService.getGesuchById(gesuch.getId());
+        return darlehenService.canCreateDarlehen(unhistorizedGesuch.getAusbildung().getFall().getId());
     }
 
     GesuchDashboardItemMissingDocumentsDto map(

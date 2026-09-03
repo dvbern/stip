@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDok
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativVerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.SbInitialisiertAenderungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
@@ -70,6 +71,7 @@ public class GesuchStatusConfigProducer {
     private final StatusprotokollService statusprotokollService;
     private final AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandler;
     private final VerfuegtHandler verfuegtHandler;
+    private final NegativVerfuegtHandler negativVerfuegtHandler;
     private final AenderungAkzeptierenHandler aenderungAkzeptierenHandler;
     private final AusbildungUnterbruchAkzeptierenHandler ausbildungUnterbruchAkzeptierenHandler;
     private final BeschwerdeErfolgreichAkzeptierenHandler beschwerdeErfolgreichAkzeptierenHandler;
@@ -252,6 +254,10 @@ public class GesuchStatusConfigProducer {
             );
 
         config.configure(Gesuchstatus.NEGATIVE_VERFUEGUNG)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
+                negativVerfuegtHandler::handle
+            )
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
         // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
         config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
