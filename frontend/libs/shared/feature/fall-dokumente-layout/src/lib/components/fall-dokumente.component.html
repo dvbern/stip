@@ -50,6 +50,7 @@
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.dokument) {
             <button
+              [matTooltip]="dokument.dokument.filename"
               type="button"
               class="tw:dv-button tw:flex tw:max-w-full tw:p-0 tw:items-center"
               [dvDownloadButton]="{
@@ -57,10 +58,8 @@
                 id: dokument.dokument.id,
               }"
             >
-              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.dokument.filename">{{
-                t('shared.fallDokumente.stipendien.table.dokument')
-              }}</span>
-              <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
+              <span class="tw:truncate tw:text-sm">{{ t('shared.fallDokumente.stipendien.table.dokument') }} </span>
+              <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg/none!">download</span>
             </button>
           } @else {
             <span class="tw:text-gray-400">-</span>

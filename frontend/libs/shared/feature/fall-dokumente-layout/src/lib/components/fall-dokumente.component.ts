@@ -43,7 +43,7 @@ export class FallDokumenteComponent {
   fallDokumenteStore = inject(FallDokumenteStore);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  fallId = input.required<string>({ alias: 'fallId' });
+  fallIdSig = input.required<string>({ alias: 'fallId' });
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
@@ -73,7 +73,7 @@ export class FallDokumenteComponent {
 
   constructor() {
     effect(() => {
-      const fallId = this.fallId();
+      const fallId = this.fallIdSig();
       if (fallId) {
         this.fallDokumenteStore.loadVerfuegungDokumente$({ fallId });
       }

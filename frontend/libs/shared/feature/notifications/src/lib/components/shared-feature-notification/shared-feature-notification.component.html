@@ -1,12 +1,12 @@
 <div *dvTranslocoShared="let t">
-  <button
-    type="button"
+  <a
     class="tw:md:hidden tw:dv-button-ghost tw:flex tw:items-center tw:gap-1 tw:mb-4"
-    (click)="goBack()"
+    [routerLink]="['/nachrichten', fallIdSig()]"
   >
     <i class="material-symbols-rounded">arrow_back</i>
     {{ t('shared.form.back') }}
-  </button>
+  </a>
+
   @let notification = notificationSig();
   @if (notification) {
     <dl class="tw:flex tw:flex-wrap tw:gap-4">
