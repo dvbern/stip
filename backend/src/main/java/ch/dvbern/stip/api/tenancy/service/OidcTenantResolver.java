@@ -37,7 +37,10 @@ public class OidcTenantResolver implements TenantResolver {
     public String resolve(RoutingContext context) {
         final var authority = context.request().authority().host();
         final var parts = authority.split("\\.");
-        LOG.info("Checking HOST [{}]", parts[0]);
+        LOG.info("Headers [{}]", context.request().headers().entries().toString());
+        LOG.info("Absolute URI [{}]", context.request().absoluteURI());
+        LOG.info("Absolute AUTHORITY [{}]", context.request().authority().host());
+        LOG.info("Checking parts [{}]", parts[0]);
         final var tenant = tenantService.resolveTenant(parts[0]);
         LOG.info("Got Tenant [{}]", tenant.getIdentifier());
 
