@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.authorization.SachbearbeiterGesuchDokumentAutho
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
@@ -237,6 +238,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
@@ -252,7 +254,8 @@ public class DokumentResourceImpl implements DokumentResource {
     }
 
     @Override
-    @RolesAllowed({ CUSTOM_DOKUMENT_READ, DOKUMENT_READ, UNTERSCHRIFTENBLATT_READ })
+    @RolesAllowed(value = { CUSTOM_DOKUMENT_READ, DOKUMENT_READ, UNTERSCHRIFTENBLATT_READ })
+    @ReadOnlyEndpoint
     public FileDownloadTokenDto getDokumentDownloadToken(UUID dokumentId) {
         dokumentAuthorizer.canGetDokumentDownloadToken(dokumentId);
         gesuchDokumentService.checkIfDokumentExists(dokumentId);
@@ -352,6 +355,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> getSachbearbeiterGesuchDokumentDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,

@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.datenschutzbrief.auth.DatenschutzbriefAuthorizer;
@@ -66,6 +67,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     @Blocking
     @PermitAll
     @Override
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> getDatenschutzbrief(final String token) {
         final var datenschutzbriefId = dokumentDownloadService.getClaimId(
             jwtParser,

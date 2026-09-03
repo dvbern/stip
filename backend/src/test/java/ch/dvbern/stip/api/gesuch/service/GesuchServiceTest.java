@@ -1660,9 +1660,12 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
         when(gesuchTrancheService.getGesuchTrancheOrHistorical(any()))
             .thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
-        gesuchService.gesuchZurueckweisen(gesuchInBearbeitungSpy.getId(), new KommentarDto("test"));
+        gesuchService.gesuchOfTrancheZurueckweisen(
+            gesuchInBearbeitungSpy.getLatestGesuchTranche().getId(),
+            new KommentarDto("test")
+        );
         final var gesuchSB = gesuchTrancheService
-            .getGesuchSB(gesuchInBearbeitungSpy.getId(), gesuchInBearbeitungSpy.getGesuchTranchen().get(0).getId());
+            .getGesuchSB(gesuchInBearbeitungSpy.getGesuchTranchen().get(0).getId());
         assertThat(gesuchSB.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
         assertThat(
             gesuchSB.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getWohnkosten(),
@@ -1763,8 +1766,10 @@ class GesuchServiceTest {
         gesuch.setEinreichedatum(LocalDate.now());
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
-        gesuchService.setGesuchStatusToAnspruchPruefen(gesuch.getId());
-        gesuchService.stipendienAnspruchPruefen(gesuch.getId());
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getLatestGesuchTranche());
+
+        gesuchService.gesuchManuellPruefenSbJur(gesuch.getId());
+
         verify(mailService, never()).sendStandardNotificationEmail(any(), any(), any(), any());
         verify(notificationRepository, never()).persistAndFlush(any(Notification.class));
     }
