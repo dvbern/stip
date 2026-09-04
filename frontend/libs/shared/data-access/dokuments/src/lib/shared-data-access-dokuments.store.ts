@@ -147,7 +147,8 @@ export class DokumentsStore extends signalStore(
     return {
       dokuments,
       entrys,
-      loading: isPending(this.dokuments()),
+      loading:
+        isPending(this.dokuments()) || isPending(this.documentsToUpload()),
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.required?.filter(
           // A document can already be uploaded but later on get rejected. In this case the document list would contain

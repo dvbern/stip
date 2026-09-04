@@ -1,6 +1,7 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Eltern } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   expectFormToBeValid,
   selectMatRadio,
@@ -25,6 +26,7 @@ export class ElternEditorPO {
     geburtsdatum: Locator;
     telefonnummer: Locator;
     ausweisbFluechtlingRadio: Locator;
+    wiederverheiratetRadio: Locator;
 
     buttonSave: Locator;
     buttonCancel: Locator;
@@ -59,6 +61,7 @@ export class ElternEditorPO {
       ausweisbFluechtlingRadio: page.getByTestId(
         'form-eltern-ausweisFluechtling',
       ),
+      wiederverheiratetRadio: page.getByTestId('form-eltern-wiederverheiratet'),
 
       buttonSave: page.getByTestId('button-save'),
       buttonCancel: page.getByTestId('button-cancel'),
@@ -88,6 +91,13 @@ export class ElternEditorPO {
       this.elems.ausweisbFluechtlingRadio,
       item.ausweisbFluechtling,
     );
+
+    if (isDefined(item.wiederverheiratet)) {
+      await selectMatRadio(
+        this.elems.wiederverheiratetRadio,
+        item.wiederverheiratet,
+      );
+    }
 
     await expectFormToBeValid(this.elems.form);
 

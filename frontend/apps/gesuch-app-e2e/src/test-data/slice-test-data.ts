@@ -1,9 +1,9 @@
 import {
   Adresse,
-  Darlehen,
   EinnahmenKosten,
   Eltern,
   Familiensituation,
+  FreiwilligDarlehen,
   Geschwister,
   LebenslaufItem,
   PersonInAusbildung,
@@ -100,7 +100,6 @@ export const familienlsituation: Familiensituation = {
   gerichtlicheAlimentenregelung: false,
   elternteilUnbekanntVerstorben: true,
   mutterUnbekanntVerstorben: 'WEDER_NOCH',
-  mutterWiederverheiratet: false,
   vaterUnbekanntVerstorben: 'VERSTORBEN',
 };
 
@@ -112,6 +111,7 @@ export const mutter = (seed: string): Eltern => ({
   identischerZivilrechtlicherWohnsitz: true,
   telefonnummer: '0316338355',
   sozialhilfebeitraege: false,
+  wiederverheiratet: false,
   wohnkosten: 16260,
   geburtsdatum: `01.01.${specificYearsAgo(44)}`,
   ausweisbFluechtling: false,
@@ -151,11 +151,13 @@ export const bruder: Geschwister = {
   geburtsdatum: `01.01.${specificYearsAgo(19)}`,
   wohnsitz: 'MUTTER_VATER',
   ausbildungssituation: 'IN_AUSBILDUNG',
-  id: '',
+  geschwisterTyp: 'LEIBLICH',
+  entryId: '',
 };
 
 export const einnahmenKosten: EinnahmenKosten = {
   nettoerwerbseinkommen: 10000,
+  arbeitspensumProzent: 50,
   zulagen: 0,
   renten: 1200,
   eoLeistungen: 0,
@@ -163,13 +165,16 @@ export const einnahmenKosten: EinnahmenKosten = {
   beitraege: 3000,
   ausbildungskosten: 1980,
   fahrkosten: 798,
+  // wohnkosten: 15000,
   auswaertigeMittagessenProWoche: 5,
-  vermoegen: 6,
+  // wgWohnend: false,
+  // alternativeWohnformWohnend: false,
+  vermoegen: 2000,
   steuerjahr: +specificYearsAgo(1),
   veranlagungsStatus: 'Provisorisch Veranlagt',
   steuern: 0,
 };
 
-export const darlehen: Darlehen = {
-  willDarlehen: false,
+export const darlehen: FreiwilligDarlehen = {
+  id: '',
 };

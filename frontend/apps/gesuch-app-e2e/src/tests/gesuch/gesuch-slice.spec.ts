@@ -8,7 +8,6 @@ import {
 
 import { initializeMultiUserTest } from '../../initialize-test';
 import { AuszahlungPO } from '../../po/auszahlung.po';
-import { DarlehenPO } from '../../po/darlehen.po';
 import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
 import { ElternPO } from '../../po/eltern.po';
 import { FamilyPO } from '../../po/familiy.po';
@@ -23,7 +22,6 @@ import { SteruererklaerungPO } from '../../po/steuererklaerung.po';
 import {
   ausbildung,
   bruder,
-  darlehen,
   einnahmenKosten,
   familienlsituation,
   mutter,
@@ -42,12 +40,14 @@ test.describe('Neues gesuch erstellen', () => {
     const seed = `${testInfo.title}-${testInfo.workerIndex}`;
 
     await gsPage.bringToFront();
-    await gsPage.getByTestId('cockpit-gesuch-edit').click();
 
     // Step 1: Person ============================================================
-    await expect(gsPage.getByTestId('step-title')).toBeAttached({
+    await expect(gsPage.getByTestId('step-title').first()).toBeAttached({
       timeout: 10000,
     });
+
+    await gsPage.locator('.mat-expansion-panel-header').first().click();
+
     await gsPage.getByTestId('step-nav-person').first().click();
     await expectStepTitleToContainText('Person in Ausbildung', gsPage);
     const personPO = new PersonPO(gsPage);
@@ -66,68 +66,19 @@ test.describe('Neues gesuch erstellen', () => {
 
     await lebenslaufPO.elems.buttonContinue.click();
 
-    // Step 3: Familiensituation ===================================================
-    await expectStepTitleToContainText('Familiensituation', gsPage);
-    const familiyPO = new FamilyPO(gsPage);
-    await expect(familiyPO.elems.loading).toBeHidden();
+    // Step 3 Eigene Kinder =========================================================
+    await expectStepTitleToContainText('Eigene Kinder', gsPage);
 
-    await familiyPO.fillUnbekanntOderVerstorben(familienlsituation);
-
-    await familiyPO.elems.buttonSaveContinue.click();
-
-    // Step 4.1: Eltern =============================================================
-    await expectStepTitleToContainText('Eltern', gsPage);
-    const elternPO = new ElternPO(gsPage);
-    await expect(elternPO.elems.loading).toBeHidden();
-
-    await elternPO.addMutter(mutter(seed));
-
-    await elternPO.elems.buttonContinue.click();
-
-    // Step 4.2: Steuererklaerung Mutter  ==========================================
-    await expectStepTitleToContainText('Steuererklärung Mutter', gsPage);
-    const steuererklaerungPO = new SteruererklaerungPO(gsPage);
-    await expect(steuererklaerungPO.elems.loading).toBeHidden();
-
-    await steuererklaerungPO.fillSteuererklaerung(steuererklaerung);
-
-    await steuererklaerungPO.elems.buttonSaveContinue.click();
-
-    // Step 5: Geschwister  ========================================================
-    await expectStepTitleToContainText('Geschwister', gsPage);
-    const geschwisterPO = new GeschwisterPO(gsPage);
-    await expect(geschwisterPO.elems.loading).toBeHidden();
-
-    await geschwisterPO.addGeschwister(bruder);
-
-    await geschwisterPO.elems.buttonContinue.click();
-
-    // Step 6: Kinder =============================================================
-    await expectStepTitleToContainText('Kinder', gsPage);
     const kinderPO = new KinderPO(gsPage);
-    await kinderPO.elems.buttonContinue.click();
-
-    // Step 7: Auszahlung ===========================================================
-
-    await expectStepTitleToContainText('Auszahlung', gsPage);
-    const auszahlungPO = new AuszahlungPO(gsPage);
-    await expect(auszahlungPO.elems.loading).toBeHidden();
-
-    // go to Auszahlung edit
-    await auszahlungPO.elems.goToAuszahlungEdit.click();
-
-    await auszahlungPO.fillAuszahlungEigenesKonto(zahlungsverbindung);
 
     // // hotfix for flaky test of Einnahmen & Kosten form
     const ausbildungPromise = gsPage.waitForResponse(
       '**/api/v1/ausbildungsstaette/slim',
     );
+    await kinderPO.elems.buttonContinue.click();
 
-    await auszahlungPO.elems.buttonSave.click();
-    await auszahlungPO.elems.buttonBack.click();
-    await auszahlungPO.elems.buttonNext.click();
+    // Step 4: Einnahmen und Kosten =================================================
 
-    // Step 8: Einnahmen und Kosten =================================================
     await expectStepTitleToContainText('Einnahmen & Kosten', gsPage);
     const einnahmenKostenPO = new EinnahmenKostenPO(gsPage);
     await expect(einnahmenKostenPO.elems.loading).toBeHidden();
@@ -138,25 +89,79 @@ test.describe('Neues gesuch erstellen', () => {
 
     await einnahmenKostenPO.elems.buttonSaveContinue.click();
 
-    // Step 9: Darlehen =============================================================
-    await expectStepTitleToContainText('Darlehen', gsPage);
-    const darlehenPO = new DarlehenPO(gsPage);
-    await expect(darlehenPO.elems.loading).toBeHidden();
+    // Step 5: Familiensituation ===================================================
+    await expectStepTitleToContainText('Familiensituation', gsPage);
+    const familiyPO = new FamilyPO(gsPage);
+    await expect(familiyPO.elems.loading).toBeHidden();
 
-    await darlehenPO.fillDarlehenForm(darlehen);
+    await familiyPO.fillUnbekanntOderVerstorben(familienlsituation);
+
+    await familiyPO.elems.buttonSaveContinue.click();
+
+    // Step 6.1: Eltern =============================================================
+    await expectStepTitleToContainText('Eltern', gsPage);
+    const elternPO = new ElternPO(gsPage);
+    await expect(elternPO.elems.loading).toBeHidden();
+
+    await elternPO.addMutter(mutter(seed));
+
+    await elternPO.elems.buttonContinue.click();
+
+    // Step 6.2: Weitere Angaben Mutter  ==========================================
+    await expectStepTitleToContainText('Weitere Angaben Mutter', gsPage);
+    const steuererklaerungPO = new SteruererklaerungPO(gsPage);
+    await expect(steuererklaerungPO.elems.loading).toBeHidden();
+
+    await steuererklaerungPO.fillSteuererklaerung(steuererklaerung);
+
+    await steuererklaerungPO.elems.buttonSaveContinue.click();
+
+    // Step 7: Geschwister  ========================================================
+    await expectStepTitleToContainText('Geschwister', gsPage);
+    const geschwisterPO = new GeschwisterPO(gsPage);
+    await expect(geschwisterPO.elems.loading).toBeHidden();
+
+    const validateResponse = gsPage.waitForResponse(
+      // '**/api/v1/gesuchtranche/validatePages/*/gs',
+      '**/api/v1/gesuch/gs/header/*',
+    );
+
+    await geschwisterPO.addGeschwister(bruder);
+
+    await validateResponse;
 
     const requiredDokumenteResponse = gsPage.waitForResponse(
-      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/gs',
     );
-    await darlehenPO.elems.buttonSaveContinue.click();
 
-    // Step 10: Dokumente ===========================================================
-    await expectStepTitleToContainText('Dokumente', gsPage);
+    await geschwisterPO.elems.buttonContinue.click();
+
+    // Step 9: Dokumente ===========================================================
     await requiredDokumenteResponse;
+
+    await expect(gsPage.getByTestId('loading-required-dokumente')).toBeHidden();
+
+    await expectStepTitleToContainText('Dokumente', gsPage);
+
     await uploadFiles(gsPage);
+
     await gsPage.getByTestId('button-continue').click();
 
-    // Step 11: Freigabe ===========================================================
+    // Step 8: Auszahlung ===========================================================
+
+    await expectStepTitleToContainText('Auszahlung', gsPage);
+    const auszahlungPO = new AuszahlungPO(gsPage);
+    await expect(auszahlungPO.elems.loading).toBeHidden();
+
+    // go to Auszahlung edit
+    await auszahlungPO.elems.goToAuszahlungEdit.click();
+
+    await auszahlungPO.fillAuszahlungEigenesKonto(zahlungsverbindung);
+
+    await auszahlungPO.elems.buttonSaveContinue.click();
+    await auszahlungPO.elems.buttonNext.click();
+
+    // Step 10: Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', gsPage);
     await gsPage.getByTestId('button-abschluss').click();
     const freigabeResponse = gsPage.waitForResponse(

@@ -13,6 +13,7 @@ export class EinnahmenKostenPO {
     loading: Locator;
     form: Locator;
     nettoerwerbseinkommen: Locator;
+    arbeitspensumProzent: Locator;
     unterhaltsbeitraege: Locator;
     zulagen: Locator;
     renten: Locator;
@@ -51,6 +52,9 @@ export class EinnahmenKostenPO {
 
       nettoerwerbseinkommen: page.getByTestId(
         'form-einnahmen-kosten-nettoerwerbseinkommen',
+      ),
+      arbeitspensumProzent: page.getByTestId(
+        'form-einnahmen-kosten-arbeitspensumProzent',
       ),
       unterhaltsbeitraege: page.getByTestId(
         'form-einnahmen-kosten-unterhaltsbeitraege',
@@ -97,6 +101,12 @@ export class EinnahmenKostenPO {
       `${einnahmenKosten.nettoerwerbseinkommen ?? 0}`,
     );
 
+    if (isDefined(einnahmenKosten.arbeitspensumProzent)) {
+      await this.elems.arbeitspensumProzent.fill(
+        `${einnahmenKosten.arbeitspensumProzent}`,
+      );
+    }
+
     if (isDefined(einnahmenKosten.zulagen)) {
       await this.elems.zulagen.fill(`${einnahmenKosten.zulagen}`);
     }
@@ -122,14 +132,11 @@ export class EinnahmenKostenPO {
     await this.elems.ausbildungskosten.fill(
       `${einnahmenKosten.ausbildungskosten}`,
     );
-    if (isDefined(einnahmenKosten.betreuungskostenKinder)) {
-      await this.elems.betreuungskostenKinder.fill(
-        `${einnahmenKosten.betreuungskostenKinder}`,
-      );
-    }
+
     if (isDefined(einnahmenKosten.einnahmenBGSA)) {
       await this.elems.einnahmenBGSA.fill(`${einnahmenKosten.einnahmenBGSA}`);
     }
+
     if (isDefined(einnahmenKosten.andereEinnahmen)) {
       await this.elems.andereEinnahmen.fill(
         `${einnahmenKosten.andereEinnahmen}`,

@@ -1,4 +1,7 @@
-import { FallDashboardItem } from '@dv/shared/model/gesuch';
+import {
+  AusbildungCreateResponse,
+  FallDashboardItem,
+} from '@dv/shared/model/gesuch';
 import {
   E2eUser,
   MultiUserTestContexts,
@@ -20,6 +23,7 @@ import { CockpitPO } from './po/cockpit.po';
  *
  * It also registers a beforeAll to initialize the API Contexts and afterAll hook to delete the created gesuch
  */
+// not in use
 export const initializeTest = (
   authType: E2eUser,
   ausbildung: AusbildungValues,
@@ -95,14 +99,14 @@ export const initializeTest = (
     });
   });
 
-  test.afterAll(async () => {
-    if (contexts) {
-      if (gesuchId) {
-        await deleteGesuch(contexts.api, gesuchId);
-      }
-      await contexts.dispose();
-    }
-  });
+  // test.afterAll(async () => {
+  //   if (contexts) {
+  //     if (gesuchId) {
+  //       await deleteGesuch(contexts.api, gesuchId);
+  //     }
+  //     await contexts.dispose();
+  //   }
+  // });
 
   return {
     getGesuchId: () => gesuchId,
@@ -158,17 +162,16 @@ export const initializeMultiUserTest = (
       // Get new gesuch ID
       const response = await gsPage.waitForResponse((response) => {
         return (
-          response.url().includes('/api/v1/gesuch/benutzer/me/gs-dashboard') &&
+          response.url().includes('/api/v1/ausbildung') &&
           response.status() === 200 &&
-          response.request().method() === 'GET'
+          response.request().method() === 'POST'
         );
       });
 
-      const body: FallDashboardItem | undefined = await response.json();
-      const fallId = body?.fall.id;
-      gesuchId = body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
-      trancheId =
-        body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
+      const body: AusbildungCreateResponse | undefined = await response.json();
+      const fallId = body?.ausbildung?.fallId;
+      gesuchId = body?.gesuchId;
+      trancheId = body?.gesuchTrancheId;
 
       if (!gesuchId || !trancheId || !fallId) {
         throw new Error('Failed to create new gesuch');
