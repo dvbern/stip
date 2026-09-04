@@ -35,7 +35,7 @@ import {
 const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(ausbildung);
 
 test.describe('Neues gesuch erstellen', () => {
-  test('Neues gesuch erstellen', async ({ gsPage, sbPage }, testInfo) => {
+  test('Neues gesuch erstellen', async ({ gsPage, createSbPage }, testInfo) => {
     test.slow();
     const seed = `${testInfo.title}-${testInfo.workerIndex}`;
 
@@ -173,6 +173,7 @@ test.describe('Neues gesuch erstellen', () => {
     const urls = getE2eUrls();
 
     // Go to SB App ===============================================================
+    const sbPage = await createSbPage();
     await sbPage.bringToFront();
     await sbPage.goto(
       `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,

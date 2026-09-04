@@ -29,7 +29,7 @@ const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
   setupGesuchWithApi(gesuchFormularUpdateFn, createZahlungsverbindungUpdateFn),
 );
 
-test('Aenderung erstellen', async ({ gsPage, sbPage }) => {
+test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   test.slow();
   const urls = getE2eUrls();
 
@@ -60,6 +60,7 @@ test('Aenderung erstellen', async ({ gsPage, sbPage }) => {
   // Go to Info (SB-App) ===============================================
 
   // SB User Actions - Switch to SB page
+  const sbPage = await createSbPage();
   await sbPage.bringToFront();
   await sbPage.goto(
     `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,

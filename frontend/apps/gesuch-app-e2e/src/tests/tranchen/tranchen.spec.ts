@@ -24,7 +24,7 @@ const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
 );
 
 test.describe('Tranche erstellen', () => {
-  test('Tranche erstellen', async ({ gsPage, sbPage }) => {
+  test('Tranche erstellen', async ({ gsPage, createSbPage }) => {
     test.slow();
 
     const urls = getE2eUrls();
@@ -54,6 +54,7 @@ test.describe('Tranche erstellen', () => {
     await freigabeResponse;
 
     // Go to Info (SB-App) ===============================================
+    const sbPage = await createSbPage();
     await sbPage.bringToFront();
     await sbPage.goto(
       `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,

@@ -65,7 +65,6 @@ export const baseConfig = defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 1,
-  // workers: 2,
 });
 
 export const compress = async (value: string) => {

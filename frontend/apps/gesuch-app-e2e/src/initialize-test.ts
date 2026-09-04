@@ -13,6 +13,8 @@ import {
   createTest,
   createTestContexts,
   deleteGesuch,
+  gsStorageStatePath,
+  sbStorageStatePath,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { AusbildungValues } from './po/ausbildung.po';
@@ -24,97 +26,97 @@ import { CockpitPO } from './po/cockpit.po';
  * It also registers a beforeAll to initialize the API Contexts and afterAll hook to delete the created gesuch
  */
 // not in use
-export const initializeTest = (
-  authType: E2eUser,
-  ausbildung: AusbildungValues,
-  setupFn?: SetupFn,
-) => {
-  let contexts: TestContexts;
-  let gesuchId: string | undefined;
-  let trancheId: string | undefined;
-  const test = createTest(authType).extend<{ cockpit: CockpitPO }>({
-    cockpit: async ({ page }, use, testInfo) => {
-      const cockpit = new CockpitPO(page);
+// export const initializeTest = (
+//   authType: E2eUser,
+//   ausbildung: AusbildungValues,
+//   setupFn?: SetupFn,
+// ) => {
+//   let contexts: TestContexts;
+//   let gesuchId: string | undefined;
+//   let trancheId: string | undefined;
+//   const test = createTest(authType).extend<{ cockpit: CockpitPO }>({
+//     cockpit: async ({ page }, use, testInfo) => {
+//       const cockpit = new CockpitPO(page);
 
-      // delete if existing gesuch
-      const dashboardPromise = page.waitForResponse(
-        '**/api/v1/gesuch/benutzer/me/gs-dashboard',
-      );
-      await cockpit.goToDashBoard();
-      const dashboardResponse = await dashboardPromise;
+//       // delete if existing gesuch
+//       const dashboardPromise = page.waitForResponse(
+//         '**/api/v1/gesuch/benutzer/me/gs-dashboard',
+//       );
+//       await cockpit.goToDashBoard();
+//       const dashboardResponse = await dashboardPromise;
 
-      const dashboardBody: FallDashboardItem | undefined =
-        await dashboardResponse.json();
-      gesuchId = dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
-      trancheId =
-        dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
-          .currentTrancheId;
+//       const dashboardBody: FallDashboardItem | undefined =
+//         await dashboardResponse.json();
+//       gesuchId = dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
+//       trancheId =
+//         dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
+//           .currentTrancheId;
 
-      if (gesuchId) {
-        const response = await deleteGesuch(contexts.api, gesuchId);
-        if (response.status() >= 400) {
-          throw new Error(
-            `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
-          );
-        }
-        await page.reload();
-      }
+//       if (gesuchId) {
+//         const response = await deleteGesuch(contexts.api, gesuchId);
+//         if (response.status() >= 400) {
+//           throw new Error(
+//             `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
+//           );
+//         }
+//         await page.reload();
+//       }
 
-      await cockpit.createNewStipendium(ausbildung);
+//       await cockpit.createNewStipendium(ausbildung);
 
-      // extract gesuch new gesuchid
-      const response = await page.waitForResponse((response) => {
-        return (
-          response.url().includes('/api/v1/gesuch/benutzer/me/gs-dashboard') &&
-          response.status() === 200 &&
-          response.request().method() === 'GET'
-        );
-      });
+//       // extract gesuch new gesuchid
+//       const response = await page.waitForResponse((response) => {
+//         return (
+//           response.url().includes('/api/v1/gesuch/benutzer/me/gs-dashboard') &&
+//           response.status() === 200 &&
+//           response.request().method() === 'GET'
+//         );
+//       });
 
-      const body: FallDashboardItem | undefined = await response.json();
-      const fallId = body?.fall.id;
-      gesuchId = body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
-      trancheId =
-        body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
+//       const body: FallDashboardItem | undefined = await response.json();
+//       const fallId = body?.fall.id;
+//       gesuchId = body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
+//       trancheId =
+//         body?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].currentTrancheId;
 
-      if (!gesuchId || !trancheId || !fallId) {
-        throw new Error('Failed to create new gesuch');
-      }
+//       if (!gesuchId || !trancheId || !fallId) {
+//         throw new Error('Failed to create new gesuch');
+//       }
 
-      if (setupFn) {
-        const seed = `${testInfo.title}-${testInfo.workerIndex}`;
-        await setupFn({ contexts, gesuchId, trancheId, fallId, seed });
-      }
+//       if (setupFn) {
+//         const seed = `${testInfo.title}-${testInfo.workerIndex}`;
+//         await setupFn({ contexts, gesuchId, trancheId, fallId, seed });
+//       }
 
-      await use(cockpit);
-    },
-  });
+//       await use(cockpit);
+//     },
+//   });
 
-  test.beforeAll(async ({ playwright, baseURL, browser, storageState }) => {
-    contexts = await createTestContexts({
-      browser,
-      playwright,
-      storageState,
-      baseURL,
-    });
-  });
+//   test.beforeAll(async ({ playwright, baseURL, browser, storageState }) => {
+//     contexts = await createTestContexts({
+//       browser,
+//       playwright,
+//       storageState,
+//       baseURL,
+//     });
+//   });
 
-  // test.afterAll(async () => {
-  //   if (contexts) {
-  //     if (gesuchId) {
-  //       await deleteGesuch(contexts.api, gesuchId);
-  //     }
-  //     await contexts.dispose();
-  //   }
-  // });
+//   // test.afterAll(async () => {
+//   //   if (contexts) {
+//   //     if (gesuchId) {
+//   //       await deleteGesuch(contexts.api, gesuchId);
+//   //     }
+//   //     await contexts.dispose();
+//   //   }
+//   // });
 
-  return {
-    getGesuchId: () => gesuchId,
-    getTrancheId: () => trancheId,
-    getContext: () => contexts,
-    test,
-  };
-};
+//   return {
+//     getGesuchId: () => gesuchId,
+//     getTrancheId: () => trancheId,
+//     getContext: () => contexts,
+//     test,
+//   };
+// };
 
 export const initializeMultiUserTest = (
   ausbildung: AusbildungValues,
@@ -126,9 +128,10 @@ export const initializeMultiUserTest = (
 
   const test = createMultiUserTest().extend<{
     gsPage: Page;
-    sbPage: Page;
+    createSbPage: () => Promise<Page>;
   }>({
-    gsPage: async ({ browser, gsContext }, use, testInfo) => {
+    gsPage: async ({ browser }, use, testInfo) => {
+      const gsContext = gsStorageStatePath(testInfo, testInfo.parallelIndex);
       // Create GS page with GS context
       const gsPage = await browser.newPage({ storageState: gsContext });
       const cockpit = new CockpitPO(gsPage);
@@ -198,23 +201,28 @@ export const initializeMultiUserTest = (
       await use(gsPage);
     },
 
-    sbPage: async ({ browser, sbContext }, use) => {
-      const sbPage = await browser.newPage({ storageState: sbContext });
-      await use(sbPage);
+    // Lazily create the SB page only when a test needs it, so the SB browser
+    // window doesn't open (and steal focus) during the GS part of the flow.
+    createSbPage: async ({ browser }, use, testInfo) => {
+      const sbContext = sbStorageStatePath(testInfo);
+      let sbPage: Page | undefined;
+      await use(async () => {
+        sbPage ??= await browser.newPage({ storageState: sbContext });
+        return sbPage;
+      });
+      await sbPage?.close();
     },
   });
 
-  test.beforeAll(
-    async ({ playwright, baseURL, browser, gsContext, sbContext }) => {
-      multiContexts = await createMultiUserTestContexts({
-        browser,
-        playwright,
-        gsStorageState: gsContext,
-        sbStorageState: sbContext,
-        baseURL,
-      });
-    },
-  );
+  test.beforeAll(async ({ playwright, baseURL, browser }, testInfo) => {
+    multiContexts = await createMultiUserTestContexts({
+      browser,
+      playwright,
+      gsStorageState: gsStorageStatePath(testInfo, testInfo.parallelIndex),
+      sbStorageState: sbStorageStatePath(testInfo),
+      baseURL,
+    });
+  });
 
   test.afterAll(async () => {
     if (multiContexts) {
