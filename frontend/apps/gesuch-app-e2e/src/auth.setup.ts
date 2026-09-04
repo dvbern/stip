@@ -2,6 +2,7 @@ import { test as setup } from '@playwright/test';
 
 import {
   authenticateAndSaveStorageState,
+  getE2eUrls,
   gsStorageStatePath,
   sbStorageStatePath,
 } from '@dv/shared/util-fn/e2e-util';
@@ -17,7 +18,7 @@ import {
 setup('authenticate users', async ({ browser }, testInfo) => {
   setup.setTimeout(120_000);
 
-  const baseURL = testInfo.project.use.baseURL;
+  const urls = getE2eUrls();
   const workerCount = testInfo.config.workers;
 
   for (let workerIndex = 0; workerIndex < workerCount; workerIndex++) {
@@ -34,7 +35,7 @@ setup('authenticate users', async ({ browser }, testInfo) => {
     await authenticateAndSaveStorageState(browser, {
       username,
       password,
-      baseURL,
+      baseURL: urls.gs,
       storagePath: gsStorageStatePath(testInfo, workerIndex),
     });
   }
@@ -51,7 +52,7 @@ setup('authenticate users', async ({ browser }, testInfo) => {
   await authenticateAndSaveStorageState(browser, {
     username: sbUsername,
     password: sbPassword,
-    baseURL,
+    baseURL: urls.sb,
     storagePath: sbStorageStatePath(testInfo),
   });
 });

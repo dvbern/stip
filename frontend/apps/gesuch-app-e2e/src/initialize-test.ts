@@ -3,17 +3,16 @@ import {
   FallDashboardItem,
 } from '@dv/shared/model/gesuch';
 import {
-  E2eUser,
   MultiUserTestContexts,
   Page,
   SetupFn,
   TestContexts,
   createMultiUserTest,
   createMultiUserTestContexts,
-  createTest,
-  createTestContexts,
   deleteGesuch,
+  getE2eUrls,
   gsStorageStatePath,
+  restoreSessionStorage,
   sbStorageStatePath,
 } from '@dv/shared/util-fn/e2e-util';
 
@@ -101,14 +100,14 @@ import { CockpitPO } from './po/cockpit.po';
 //     });
 //   });
 
-//   // test.afterAll(async () => {
-//   //   if (contexts) {
-//   //     if (gesuchId) {
-//   //       await deleteGesuch(contexts.api, gesuchId);
-//   //     }
-//   //     await contexts.dispose();
-//   //   }
-//   // });
+//   test.afterAll(async () => {
+//     if (contexts) {
+//       if (gesuchId) {
+//         await deleteGesuch(contexts.api, gesuchId);
+//       }
+//       await contexts.dispose();
+//     }
+//   });
 
 //   return {
 //     getGesuchId: () => gesuchId,
@@ -134,6 +133,11 @@ export const initializeMultiUserTest = (
       const gsContext = gsStorageStatePath(testInfo, testInfo.parallelIndex);
       // Create GS page with GS context
       const gsPage = await browser.newPage({ storageState: gsContext });
+      await restoreSessionStorage(
+        gsPage,
+        gsContext,
+        new URL(getE2eUrls().gs).origin,
+      );
       const cockpit = new CockpitPO(gsPage);
 
       // Initialize gesuch as GS user
@@ -146,9 +150,6 @@ export const initializeMultiUserTest = (
       const dashboardBody: FallDashboardItem | undefined =
         await dashboardResponse.json();
       gesuchId = dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
-      trancheId =
-        dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0]
-          .currentTrancheId;
 
       if (gesuchId) {
         const response = await deleteGesuch(multiContexts.gs.api, gesuchId);
@@ -207,7 +208,14 @@ export const initializeMultiUserTest = (
       const sbContext = sbStorageStatePath(testInfo);
       let sbPage: Page | undefined;
       await use(async () => {
-        sbPage ??= await browser.newPage({ storageState: sbContext });
+        if (!sbPage) {
+          sbPage = await browser.newPage({ storageState: sbContext });
+          await restoreSessionStorage(
+            sbPage,
+            sbContext,
+            new URL(getE2eUrls().sb).origin,
+          );
+        }
         return sbPage;
       });
       await sbPage?.close();
@@ -224,14 +232,14 @@ export const initializeMultiUserTest = (
     });
   });
 
-  test.afterAll(async () => {
-    if (multiContexts) {
-      if (gesuchId) {
-        await deleteGesuch(multiContexts.gs.api, gesuchId);
-      }
-      await multiContexts.dispose();
-    }
-  });
+  // test.afterAll(async () => {
+  //   if (multiContexts) {
+  //     if (gesuchId) {
+  //       await deleteGesuch(multiContexts.gs.api, gesuchId);
+  //     }
+  //     await multiContexts.dispose();
+  //   }
+  // });
 
   return {
     getGesuchId: () => gesuchId,
