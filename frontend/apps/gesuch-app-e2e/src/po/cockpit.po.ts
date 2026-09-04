@@ -32,7 +32,17 @@ export class CockpitPO {
   public async createNewStipendium(ausbildung: AusbildungValues) {
     await this.elems.createAusbildung.click();
 
-    // todo: why is accepting ULA not required here?
+    const hasULAialog = await this.elems.page.isVisible(
+      '[data-testid="shared-dialog-nutzungsbedingungen"]',
+    );
+    if (hasULAialog) {
+      const ulaPromise = this.elems.page.waitForResponse(
+        '**/api/v1/benutzer/nutzungsbedingungenAkzeptieren/*',
+      );
+      await this.elems.buttonAcceptULA.click();
+      await ulaPromise;
+      await this.elems.createAusbildung.click();
+    }
 
     const ausbildungPO = new AusbildungPO(this.elems.page);
 

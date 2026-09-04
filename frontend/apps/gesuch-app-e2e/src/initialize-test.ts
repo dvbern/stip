@@ -232,14 +232,14 @@ export const initializeMultiUserTest = (
     });
   });
 
-  // test.afterAll(async () => {
-  //   if (multiContexts) {
-  //     if (gesuchId) {
-  //       await deleteGesuch(multiContexts.gs.api, gesuchId);
-  //     }
-  //     await multiContexts.dispose();
-  //   }
-  // });
+  test.afterAll(async () => {
+    if (multiContexts) {
+      if (gesuchId) {
+        await deleteGesuch(multiContexts.gs.api, gesuchId);
+      }
+      await multiContexts.dispose();
+    }
+  });
 
   return {
     getGesuchId: () => gesuchId,

@@ -121,14 +121,17 @@ test.describe('Neues gesuch erstellen', () => {
     const geschwisterPO = new GeschwisterPO(gsPage);
     await expect(geschwisterPO.elems.loading).toBeHidden();
 
-    const validateResponse = gsPage.waitForResponse(
-      // '**/api/v1/gesuchtranche/validatePages/*/gs',
-      '**/api/v1/gesuch/gs/header/*',
+    const patchResponse = gsPage.waitForResponse(
+      (response) =>
+        response.url().includes('/api/v1/gesuch/') &&
+        response.request().method() === 'PATCH',
     );
 
     await geschwisterPO.addGeschwister(bruder);
 
-    await validateResponse;
+    await patchResponse;
+
+    await expect(gsPage.getByTestId('form-geschwister-loading')).toBeHidden();
 
     const requiredDokumenteResponse = gsPage.waitForResponse(
       '**/api/v1/gesuchtranche/*/dokumenteToUpload/gs',
@@ -136,7 +139,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await geschwisterPO.elems.buttonContinue.click();
 
-    // Step 9: Dokumente ===========================================================
+    // Step 8: Dokumente ===========================================================
     await requiredDokumenteResponse;
 
     await expect(gsPage.getByTestId('loading-required-dokumente')).toBeHidden();
@@ -147,7 +150,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     await gsPage.getByTestId('button-continue').click();
 
-    // Step 8: Auszahlung ===========================================================
+    // Step 9: Auszahlung ===========================================================
 
     await expectStepTitleToContainText('Auszahlung', gsPage);
     const auszahlungPO = new AuszahlungPO(gsPage);
@@ -181,7 +184,7 @@ test.describe('Neues gesuch erstellen', () => {
 
     // add testid to dynamic title later
     await expect(sbPage.getByRole('heading').nth(1)).toContainText(
-      'Tranche 1',
+      'Berechnung vom',
       {
         ignoreCase: true,
         timeout: 10000,
@@ -191,7 +194,7 @@ test.describe('Neues gesuch erstellen', () => {
     // check if the i element in steuerdaten steps has the correct icon
     const stepsNavPO = new StepsNavPO(sbPage);
     const icon = stepsNavPO.elems.steuerdatenMutter
-      .locator('.text-danger')
+      .locator('.validator-indicator')
       .first();
     await expect(icon).toContainText('error');
 
