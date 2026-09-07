@@ -22,10 +22,10 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPortFactory;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class AuszahlungService {
     private final AuszahlungMapper auszahlungMapper;
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
     private final BuchhaltungService buchhaltungService;
-    private final SapService sapService;
+    private final PaymentProcessingPortFactory paymentProcessingPortFactory;
 
     @Transactional
     public FallAuszahlungDto createAuszahlungForGesuch(UUID fallId, AuszahlungUpdateDto auszahlungUpdateDto) {
@@ -66,7 +66,7 @@ public class AuszahlungService {
         auszahlungMapper.partialUpdate(auszahlungUpdateDto, fall.getAuszahlung());
 
         if (buchhaltungService.canRetryAuszahlungBuchhaltung(fall)) {
-            sapService.retryAuszahlungBuchhaltung(fall);
+            paymentProcessingPortFactory.getPaymentProcessingAdapter().retryAuszahlungBuchhaltung(fall);
         }
 
         return auszahlungMapper.toDto(fall);
