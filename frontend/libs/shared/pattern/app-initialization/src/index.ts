@@ -1,8 +1,8 @@
 import { inject, provideAppInitializer } from '@angular/core';
 import { Router } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { lastValueFrom, of } from 'rxjs';
-import { delay, switchMap, tap } from 'rxjs/operators';
+import { OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
+import { lastValueFrom } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { TenantService } from '@dv/shared/model/gesuch';
@@ -19,7 +19,6 @@ function goBackToPreviousUrlIfAvailable(
   }
 }
 
-const TIME_TO_WAIT_BEFORE_RELOAD = 5000;
 function initializeOidc(
   router: Router,
   tenantConfigService: SharedUtilTenantConfigService,
@@ -37,63 +36,52 @@ function initializeOidc(
           switchMap((tenantInfo) => {
             tenantConfigService.setTenantInfo(tenantInfo);
             const { clientAuth } = tenantInfo;
+            oauthService.setStorage(sessionStorage);
             oauthService.configure({
               issuer: `${clientAuth.authServerUrl}/realms/${clientAuth.realm}`,
               redirectUri: window.location.origin + window.location.pathname,
+              postLogoutRedirectUri: window.location.origin + '/',
               clientId: compileTimeConfig.authClientId,
               scope: 'openid profile email offline_access',
               responseType: 'code',
+              disablePKCE: false,
               showDebugInformation: false,
-              silentRefreshRedirectUri:
-                window.location.origin + '/assets/auth/silent-refresh.html',
-              sessionChecksEnabled: true,
+              sessionChecksEnabled: false,
               clearHashAfterLogin: false,
-              useSilentRefresh: true,
+              useSilentRefresh: false,
               nonceStateSeparator: 'semicolon',
             });
             return oauthService
               .loadDiscoveryDocumentAndTryLogin()
               .then((success) => {
-                let nextStep = Promise.resolve(true);
+                const nextStep = Promise.resolve(true);
                 // perform a silent refresh when the access token is expired
                 if (!oauthService.hasValidAccessToken()) {
-                  nextStep = oauthService
-                    .silentRefresh()
-                    .then(() => true)
-                    .catch(() => {
-                      // if the silent refresh fails, redirect to the login page
-                      oauthService.initLoginFlow();
-                      return false;
-                    });
+                  oauthService.setupAutomaticSilentRefresh();
+                  return false;
                 }
 
                 goBackToPreviousUrlIfAvailable(oauthService, router);
-                oauthService.setupAutomaticSilentRefresh();
+                oauthService.setupAutomaticSilentRefresh(
+                  undefined,
+                  'access_token',
+                );
 
                 return nextStep.then(
                   (nextStepSuccess) => success && nextStepSuccess,
                 );
               });
           }),
-          switchMap((success) =>
-            !success
-              ? // If the login check fails and the silent refresh also failed
-                of().pipe(
-                  // wait for the oauthService.initLoginFlow to redirect to the login page
-                  delay(TIME_TO_WAIT_BEFORE_RELOAD),
-                  tap(() => {
-                    // reload the page if everything failed after the delay
-                    window.location.reload();
-                  }),
-                )
-              : [success],
-          ),
         ),
     );
 }
 
 export const provideSharedPatternAppInitialization = () => {
   return [
+    {
+      provide: OAuthStorage,
+      useFactory: oauthStorageFactory,
+    },
     provideAppInitializer(() => {
       const initializerFn = initializeOidc(
         inject(Router),
@@ -106,3 +94,7 @@ export const provideSharedPatternAppInitialization = () => {
     }),
   ];
 };
+
+export function oauthStorageFactory(): OAuthStorage {
+  return sessionStorage;
+}
