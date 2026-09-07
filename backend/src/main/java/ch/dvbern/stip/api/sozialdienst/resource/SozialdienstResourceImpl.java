@@ -23,7 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.api.SozialdienstResource;
@@ -146,11 +145,10 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     @Override
     @RolesAllowed(SOZIALDIENSTBENUTZER_READ)
-    @ReadOnlyEndpoint
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzerList() {
         sozialdienstAuthorizer.canGetSozialdienstBenutzer();
         return sozialdienstBenutzerService
-            .getSozialdienstBenutzers(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer());
+            .getSozialdienstBenutzersOfSozialdienstOfCurrentSozialdienstBenutzer();
     }
 
     @Override

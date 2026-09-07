@@ -942,8 +942,7 @@ public class GesuchService {
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
-    @Transactional
-    public void changeGesuchStatusToVerfuegungDruckbereit(UUID gesuchId) {
+    private void changeGesuchStatusToVerfuegungDruckbereit(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
     }

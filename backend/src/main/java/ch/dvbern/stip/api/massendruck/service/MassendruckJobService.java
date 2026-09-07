@@ -173,7 +173,7 @@ public class MassendruckJobService {
         return massendruckJobMapper.toDto(massendruckJob);
     }
 
-    public void combineDocument(final UUID massendruckJobId) {
+    private void combineDocument(final UUID massendruckJobId) {
         massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentTenantIdentifier());
     }
 
@@ -190,6 +190,7 @@ public class MassendruckJobService {
         massendruckJobRepository.deleteMassendruckJobById(massendruckId);
     }
 
+    @Transactional
     public MassendruckJobDetailDto retryAndCombineMassendruckJob(
         final UUID massendruckId
     ) {
@@ -198,8 +199,7 @@ public class MassendruckJobService {
         return massendruckJobDetail;
     }
 
-    @Transactional
-    public MassendruckJobDetailDto retryMassendruckJob(final UUID massendruckId) {
+    private MassendruckJobDetailDto retryMassendruckJob(final UUID massendruckId) {
         final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
         massendruckJob.setStatus(MassendruckJobStatus.IN_PROGRESS);
         return massendruckJobMapper.toDetailDto(massendruckJob);

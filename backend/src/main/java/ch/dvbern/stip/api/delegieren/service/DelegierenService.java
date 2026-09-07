@@ -178,7 +178,8 @@ public class DelegierenService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var sozialdienstId = sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer().getId();
+        final var sozialdienstId =
+            sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer().getId();
         final var me = benutzerService.getCurrentBenutzer();
         final var sozialdienstBenutzerId =
             getDelegierungSozQueryType == GetDelegierungSozQueryTypeAdmin.ALLE_BEARBEITBAR_MEINE

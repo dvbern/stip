@@ -245,7 +245,7 @@ public class Gesuch extends AbstractTenantEntity {
      * This serves as an audit marker to fetch the version of the Gesuch that is visible to
      * the GS/SB by marking verfuegt events which we can go back to with envers.<br>
      * <br>
-     * Call {@link incrementEingereichtCount} to mark a new eingereicht event
+     * Call {@link incrementVerfuegtCount} to mark a new verfuegt event
      */
     @NotNull
     @Column(name = "verfuegt_count", nullable = false)

@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.type.FrontendType;
-import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
@@ -37,7 +36,6 @@ import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -45,15 +43,9 @@ import lombok.RequiredArgsConstructor;
 public class SozialdienstService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
-    private final SozialdienstBenutzerService sozialdienstBenutzerService;
+    public final SozialdienstBenutzerService sozialdienstBenutzerService;
     private final ZahlungsverbindungService zahlungsverbindungService;
     private final MailService mailService;
-
-    public Sozialdienst getSozialdienstOfCurrentSozialdienstBenutzer() {
-        final var sozialdienstBenutzer =
-            sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow(NotFoundException::new);
-        return sozialdienstRepository.getSozialdienstByBenutzer(sozialdienstBenutzer);
-    }
 
     @Transactional
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto dto) {
@@ -151,7 +143,7 @@ public class SozialdienstService {
         final SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
     ) {
         return sozialdienstBenutzerService.createSozialdienstMitarbeiterBenutzer(
-            getSozialdienstOfCurrentSozialdienstBenutzer(),
+            sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(),
             sozialdienstBenutzerCreateDto
         );
     }

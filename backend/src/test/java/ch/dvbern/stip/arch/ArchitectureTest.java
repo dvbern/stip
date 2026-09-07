@@ -19,6 +19,7 @@ package ch.dvbern.stip.arch;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.common.resource.NonSingleServiceEntrypointEndpoint;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
 import com.tngtech.archunit.base.DescribedPredicate;
@@ -125,6 +126,8 @@ class ArchitectureTest {
             .resideInAPackage("..resource..")
             .and()
             .areNotAnnotatedWith(ReadOnlyEndpoint.class)
+            .and()
+            .areNotAnnotatedWith(NonSingleServiceEntrypointEndpoint.class)
             .should(new ArchCondition<JavaMethod>("call exactly one service method") {
                 @Override
                 public void check(JavaMethod item, ConditionEvents events) {

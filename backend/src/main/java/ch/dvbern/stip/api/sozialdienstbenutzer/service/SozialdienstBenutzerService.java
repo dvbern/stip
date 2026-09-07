@@ -101,6 +101,10 @@ public class SozialdienstBenutzerService {
         return sozialdienstAdmin;
     }
 
+    public List<SozialdienstBenutzerDto> getSozialdienstBenutzersOfSozialdienstOfCurrentSozialdienstBenutzer() {
+        return getSozialdienstBenutzers(getSozialdienstOfCurrentSozialdienstBenutzer());
+    }
+
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzers(Sozialdienst sozialdienst) {
         return sozialdienst.getSozialdienstBenutzers()
             .stream()
@@ -204,5 +208,11 @@ public class SozialdienstBenutzerService {
         sozialdienst.getSozialdienstBenutzers()
             .forEach(sozialdienstBenutzer -> deleteSozialdienstBenutzer(sozialdienstBenutzer.getId()));
         sozialdienst.getSozialdienstBenutzers().clear();
+    }
+
+    public Sozialdienst getSozialdienstOfCurrentSozialdienstBenutzer() {
+        final var sozialdienstBenutzer =
+            getCurrentSozialdienstBenutzer().orElseThrow(NotFoundException::new);
+        return sozialdienstRepository.getSozialdienstByBenutzer(sozialdienstBenutzer);
     }
 }
