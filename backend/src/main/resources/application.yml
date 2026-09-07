@@ -196,6 +196,8 @@ quarkus:
     excludes: 'ch/dvbern/stip/generated/**,ch/dvbern/stip/**/Q*,ch/dvbern/stip/**/*MapperImpl*'
   application:
     name: 'stip-api'
+  quartz:
+    table-prefix: public.QRTZ_
   keycloak:
     devservices:
       enabled: false
