@@ -215,4 +215,26 @@ public class GesuchHistoryRepository {
         return getGesuchAtRevision(gesuchId, revision.intValue());
     }
 
+    @SuppressWarnings("unchecked")
+    public Optional<Gesuch> getLastEingereichtGesuchVersion(final UUID gesuchId, final boolean before) {
+        final var reader = AuditReaderFactory.get(entityManager);
+
+        final Optional<Long> revisionTimestampOpt = reader.createQuery()
+            .forRevisionsOfEntity(Gesuch.class, false, true)
+            .addProjection(AuditEntityUtil.revisionTimestamp())
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("eingereichtCount").hasChanged())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+
+        if (revisionTimestampOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return getGesuchAtRevisionTimestamp(gesuchId, revisionTimestampOpt.get() - (before ? 1 : 0));
+    }
+
 }

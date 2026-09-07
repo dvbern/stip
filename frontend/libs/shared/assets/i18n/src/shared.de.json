@@ -117,6 +117,7 @@
   "shared.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.message": "Bitte geben Sie eine Begründung an:",
   "shared.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.confirm": "Negative Verfügung erstellen",
   "shared.header.status-uebergang.dokumente-offen": "Dokumente offen",
+  "shared.header.status-uebergang.success": "Der Gesuchstatus wurde erfolgreich geändert.",
   "shared.gesuch.tabs.verfuegung": "Berechnung",
   "shared.gesuch.tabs.formular": "Gesuch",
 
@@ -290,7 +291,7 @@
   "shared.fallDokumente.stipendien.table.timestampErstellt": "Datum",
   "shared.fallDokumente.stipendien.table.yearRange": "Ausbildungsjahr",
   "shared.fallDokumente.stipendien.table.description": "Übersicht aller Verfügungen pro Fall",
-  "shared.fallDokumente.stipendien.table.dokument": "Download",
+  "shared.fallDokumente.stipendien.table.dokument": "Verfügung",
   "shared.fallDokumente.stipendien.table.totalbetragStipendium": "Stipendienbetrag",
   "shared.fallDokumente.darlehen.table.description": "Übersicht aller Darlehensdokumente pro Fall",
   "shared.fallDokumente.darlehen.table.timestampErstellt": "Datum",
@@ -537,7 +538,7 @@
   "shared.darlehen.status.AKZEPTIERT": "Akzeptiert",
   "shared.darlehen.status.ABGELEHNT": "Abgelehnt",
 
-  "shared.verfuegung.title": "Verfügung",
+  "shared.verfuegung.title": "Berechnung",
   "shared.verfuegung.option.zusammenfassung": "Zusammenfassung",
   "shared.verfuegung.option.berechnung.title": "Berechnung",
   "shared.verfuegung.option.berechnung.tranche": "Tranche {{ startDate }} - {{ endDate }}",

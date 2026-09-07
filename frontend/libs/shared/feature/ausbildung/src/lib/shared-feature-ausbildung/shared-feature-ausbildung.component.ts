@@ -589,6 +589,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         startWith(this.form.value.ausbildungsstaetteId),
       ),
     );
+    let previousStaetteValue: string | null = null;
     effect(() => {
       const isWritable = this.isEditableSig();
       const staette = staetteSig();
@@ -598,14 +599,21 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         isWritable,
       );
 
-      if (!staette) {
-        this.form.controls.ausbildungsgangId.reset();
-        this.form.controls.besuchtBMS.reset();
-        if (!this.form.controls.ausbildungNichtGefunden.value) {
-          this.form.controls.fachrichtungBerufsbezeichnung.reset();
-          this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
-          this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
-        }
+      if (previousStaetteValue === staette) {
+        return;
+      }
+      if (!previousStaetteValue) {
+        previousStaetteValue = staette ?? null;
+        return;
+      }
+      previousStaetteValue = staette ?? null;
+
+      this.form.controls.ausbildungsgangId.reset();
+      this.form.controls.besuchtBMS.reset();
+      if (!this.form.controls.ausbildungNichtGefunden.value) {
+        this.form.controls.fachrichtungBerufsbezeichnung.reset();
+        this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
+        this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
       }
     });
 

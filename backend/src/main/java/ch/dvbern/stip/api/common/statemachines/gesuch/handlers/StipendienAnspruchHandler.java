@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.sap.service.SapService;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPortFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +27,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class StipendienAnspruchHandler implements GesuchStatusChangeHandler {
-    private final SapService sapService;
+    private final PaymentProcessingPortFactory paymentProcessingPortFactory;
 
     @Override
     public void handle(Gesuch gesuch, String comment) {
-        sapService.createInitialAuszahlungOrGetStatus(
-            gesuch.getId()
-        );
+        paymentProcessingPortFactory.getPaymentProcessingAdapter()
+            .createInitialAuszahlungOrGetStatus(
+                gesuch.getId()
+            );
     }
 }

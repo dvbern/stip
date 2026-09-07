@@ -54,6 +54,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -106,6 +107,7 @@ public class GesuchTrancheService {
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchHistoryService gesuchHistoryService;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final BenutzerService benutzerService;
@@ -152,13 +154,11 @@ public class GesuchTrancheService {
 
     @Transactional
     public GesuchAenderungsDto getHistorizedAenderungsGs(final Gesuch historizedGesuch, final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
         final var offeneAenderung = gesuchTrancheRepository.findOffeneAenderungGs(gesuch.getId())
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);;
-        final var latestAenderung = gesuchTrancheRepository.findLatestAenderungGs(gesuch.getId());
-        final var eingereichteAenderung = latestAenderung
-            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
+        final var eingereichteAenderung = gesuchTrancheHistoryService.findLatestEingereichtAenderungGs(gesuchId)
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);
         return getHistorizedAenderungs(historizedGesuch)

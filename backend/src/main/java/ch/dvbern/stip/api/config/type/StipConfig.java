@@ -22,8 +22,6 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
-import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
@@ -60,8 +58,6 @@ public interface StipConfig {
     Map<ScheduledTaskCronKey, SchedulerConfig> scheduler();
 
     PlzData plzData();
-
-    GlobalPorts globalPorts();
 
     GlobalAdapterConfig globalAdapter();
 
@@ -125,22 +121,5 @@ public interface StipConfig {
 
         @WithDefault("checksum:multihash")
         String hashKey();
-    }
-
-    interface GlobalPorts {
-
-        GemeindeLookup gemeindeLookup();
-
-        PlzFetch plzFetch();
-
-        interface GemeindeLookup {
-            @WithDefault("swisstopo")
-            GemeindeLookupAdapterType adapterType();
-        }
-
-        interface PlzFetch {
-            @WithDefault("swisstopo")
-            PlzFetchAdapterType adapterType();
-        }
     }
 }

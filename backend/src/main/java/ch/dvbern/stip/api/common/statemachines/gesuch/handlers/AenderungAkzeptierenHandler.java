@@ -30,5 +30,6 @@ public class AenderungAkzeptierenHandler implements GesuchStatusChangeHandler {
     @Override
     public void handle(Gesuch gesuch, String comment) {
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.AENDERUNG);
+        gesuch.incrementEingereichtCount();
     }
 }

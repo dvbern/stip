@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.tenancy.service.TenantService;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import org.keycloak.admin.client.Keycloak;
 
 @Mock
 @RequestScoped
@@ -34,15 +33,14 @@ public class KeycloakBenutzerServiceMock extends KeycloakBenutzerService {
     private static final HashSet<String> USED_KC_IDS = new HashSet<>();
 
     public KeycloakBenutzerServiceMock() {
-        super(null, null);
+        super(null);
     }
 
     @Inject
     public KeycloakBenutzerServiceMock(
-    TenantService tenantService,
-    Keycloak keycloak
+    TenantService tenantService
     ) {
-        super(tenantService, keycloak);
+        super(tenantService);
     }
 
     @Override
