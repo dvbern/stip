@@ -129,7 +129,7 @@ class AuszahlungAuthorizerTest {
         fall.setGesuchsteller(new Benutzer());
 
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
             .thenReturn(sozialdienst);
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -157,7 +157,7 @@ class AuszahlungAuthorizerTest {
         setupDelegierung();
 
         // arrange
-        when(sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
             .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
@@ -175,7 +175,7 @@ class AuszahlungAuthorizerTest {
         setupGesuchWithoutDelegierung();
 
         // arrange
-        when(sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
             .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
@@ -259,7 +259,7 @@ class AuszahlungAuthorizerTest {
         setFallAndGesuchstellerOfGesuch();
 
         // arrange
-        when(sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
             .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 

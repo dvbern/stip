@@ -163,28 +163,28 @@ class SozialdienstServiceTest {
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstA_ForSozialdienstMitarbeiterOfSozialdienstA() {
         when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(benutzerOfSozialdienstA));
         assertThat(
-		        sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstA));
+		        sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstA));
     }
 
     @Test
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstA_ForSozialdienstAdminOfSozialdienstA() {
         when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(sozialdienstAdminOfSozialdienstA));
         assertThat(
-		        sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstA));
+		        sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstA));
     }
 
     @Test
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstB_ForSozialdienstMitarbeiterOfSozialdienstB() {
         when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(benutzerOfSozialdienstB));
         assertThat(
-		        sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstB));
+		        sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstB));
     }
 
     @Test
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstB_ForSozialdienstAdminOfSozialdienstB() {
         when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(sozialdienstAdminOfSozialdienstB));
         assertThat(
-		        sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstB));
+		        sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstB));
     }
 
     @Test

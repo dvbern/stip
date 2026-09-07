@@ -103,7 +103,7 @@ class DelegierenAuthorizerTest {
         fall.setCurrentDelegierung(delegierung);
 
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
             .thenReturn(sozialdienst);
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
     }
@@ -111,7 +111,7 @@ class DelegierenAuthorizerTest {
     @Test
     void canReadDelegierung_shouldWork_asSozialdienstMitarbeiterOfSozialdienst() {
         // arrange
-        when(sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
@@ -124,7 +124,7 @@ class DelegierenAuthorizerTest {
         setupSozialdienstMitarbeiter();
         setupDelegierung();
 
-        when(sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
             .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
@@ -141,7 +141,7 @@ class DelegierenAuthorizerTest {
         when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer())
             .thenReturn(Optional.of(new SozialdienstBenutzer()));
 
-        when(sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
             .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
