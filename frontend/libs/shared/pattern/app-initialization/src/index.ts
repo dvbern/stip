@@ -1,8 +1,8 @@
 import { inject, provideAppInitializer } from '@angular/core';
 import { Router } from '@angular/router';
 import { OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
-import { lastValueFrom, of } from 'rxjs';
-import { delay, switchMap, tap } from 'rxjs/operators';
+import { lastValueFrom } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { TenantService } from '@dv/shared/model/gesuch';
@@ -19,7 +19,6 @@ function goBackToPreviousUrlIfAvailable(
   }
 }
 
-const TIME_TO_WAIT_BEFORE_RELOAD = 5000;
 function initializeOidc(
   router: Router,
   tenantConfigService: SharedUtilTenantConfigService,
