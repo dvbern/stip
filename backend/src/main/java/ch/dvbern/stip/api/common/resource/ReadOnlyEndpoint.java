@@ -24,6 +24,10 @@ import java.lang.annotation.Target;
 
 import ch.dvbern.stip.api.common.interceptors.Validated;
 
+/**
+ * Used for marking Resource Endpoints as read only. This is used in the resources_should_call_a_service_only_once
+ * architecture test. Has no influence on endpoint behaviour but they are allowed to have more than one service call.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Validated

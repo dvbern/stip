@@ -256,7 +256,7 @@ public class DokumentResourceImpl implements DokumentResource {
     }
 
     @Override
-    @RolesAllowed(value = { CUSTOM_DOKUMENT_READ, DOKUMENT_READ, UNTERSCHRIFTENBLATT_READ })
+    @RolesAllowed({ CUSTOM_DOKUMENT_READ, DOKUMENT_READ, UNTERSCHRIFTENBLATT_READ })
     @ReadOnlyEndpoint
     public FileDownloadTokenDto getDokumentDownloadToken(UUID dokumentId) {
         dokumentAuthorizer.canGetDokumentDownloadToken(dokumentId);

@@ -106,8 +106,7 @@ public class DatenschutzbriefService {
         );
     }
 
-    @Transactional
-    public Datenschutzbrief createDatenschutzbrief(
+    private Datenschutzbrief createDatenschutzbrief(
         final UUID gesuchId,
         final Eltern elternteil,
         final boolean isVersendet

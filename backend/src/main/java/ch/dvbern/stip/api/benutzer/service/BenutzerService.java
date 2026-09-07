@@ -252,6 +252,11 @@ public class BenutzerService {
         worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
     }
 
+    /**
+     * This is marked @Transactional and public in order for createOrUpdateSachbearbeiterStammdatenEntrypoint
+     * worker.updateZuordnung(tenantService.getCurrentTenantIdentifier()) to not spawn a transaction inside the current
+     * one but after that one. Otherwise the worker does not work.
+     */
     @Transactional
     public void createOrUpdateSachbearbeiterStammdaten(
         List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdaten
