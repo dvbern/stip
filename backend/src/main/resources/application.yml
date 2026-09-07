@@ -155,7 +155,8 @@ quarkus:
     detection-mode: WARN
   liquibase:
     migrate-at-start: true
-    change-log: 'db/migration/changelog.xml'
+    # Only tenant independent changelogs against the "public"
+    change-log: 'db/migration/changelog-public.xml'
     validate-on-migrate: true
   oidc:
     bern:
@@ -204,7 +205,7 @@ quarkus:
       queries-slower-than-ms: 20
       jdbc-warnings: true
     #      sql: true
-    multitenant: 'DISCRIMINATOR'
+    multitenant: 'SCHEMA'
     jdbc:
       timezone: 'Europe/Zurich'
     mapping:
@@ -218,6 +219,8 @@ quarkus:
     excludes: 'ch/dvbern/stip/generated/**,ch/dvbern/stip/**/Q*,ch/dvbern/stip/**/*MapperImpl*'
   application:
     name: 'stip-api'
+  quartz:
+    table-prefix: public.QRTZ_
   keycloak:
     devservices:
       enabled: false
@@ -354,7 +357,8 @@ quarkus:
           enabled: false
     hibernate-orm:
       database:
-        generation: 'drop-and-create'
+        # Hibernate Schema Generation does not work with SCHEMA multi-tenancy
+        generation: 'none'
     oidc:
       auth-server-url: '${kstip.oidc.url:replaced-by-test-resource}/realms/quarkus/'
       client-id: '${kstip.oidc.client-id}'
