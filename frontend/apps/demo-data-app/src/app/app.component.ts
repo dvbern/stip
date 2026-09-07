@@ -15,8 +15,11 @@ export class AppComponent {
   constructor() {
     const router = inject(Router);
     const storeUtilService = inject(StoreUtilService);
-    storeUtilService.loadAndGetBenutzerData().then(() => {
-      router.initialNavigation();
-    });
+    storeUtilService
+      .loadAndGetBenutzerData()
+      .catch(() => undefined)
+      .then(() => {
+        router.initialNavigation();
+      });
   }
 }
