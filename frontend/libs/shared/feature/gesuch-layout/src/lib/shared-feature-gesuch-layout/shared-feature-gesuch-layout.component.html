@@ -148,6 +148,7 @@
           class="tw:dv-nav-button tw:bg-white! tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0!"
           [active]="tab.active"
           [class.active]="tab.active"
+          [attr.data-testid]="tab.testId"
         >
           {{ t(`shared.gesuch.tabs.${tab.key}`) }}
         </a>

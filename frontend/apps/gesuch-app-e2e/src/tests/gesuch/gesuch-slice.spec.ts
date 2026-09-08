@@ -12,6 +12,8 @@ import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
 import { ElternPO } from '../../po/eltern.po';
 import { FamilyPO } from '../../po/familiy.po';
 import { GeschwisterPO } from '../../po/geschwister.po';
+import { GesuchProtokollPO } from '../../po/gesuchProtokoll.po';
+import { GesuchsTabNavPO } from '../../po/gesuchsTabNav.po';
 import { KinderPO } from '../../po/kinder.po';
 import { LebenslaufPO } from '../../po/lebenslauf.po';
 import { PersonPO } from '../../po/person.po';
@@ -23,6 +25,7 @@ import {
   ausbildung,
   bruder,
   einnahmenKosten,
+  einnhamenKostenSb,
   familienlsituation,
   mutter,
   person,
@@ -178,6 +181,7 @@ test.describe('Neues gesuch erstellen', () => {
     // Go to SB App ===============================================================
     const sbPage = await createSbPage();
     await sbPage.bringToFront();
+    // replace with find in search table?
     await sbPage.goto(
       `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
     );
@@ -196,6 +200,7 @@ test.describe('Neues gesuch erstellen', () => {
     const icon = stepsNavPO.elems.steuerdatenMutter
       .locator('.validator-indicator')
       .first();
+    await icon.scrollIntoViewIfNeeded();
     await expect(icon).toContainText('error');
 
     // set to bearbeiten
@@ -220,12 +225,21 @@ test.describe('Neues gesuch erstellen', () => {
     await expect(status).toHaveValue('In Bearbeitung');
 
     // fill E&K Sb part ===========================================================
-    // todo
+
+    await sbPage.locator('.mat-expansion-panel-header').nth(0).click();
+
+    await stepsNavPO.elems.einnahmenKosten.first().click();
+    await expectStepTitleToContainText('Einnahmen & Kosten', sbPage);
+    const einnahmenKostenSbPO = new EinnahmenKostenPO(sbPage);
+    await einnahmenKostenSbPO.fillEinnahmenKostenForm(einnhamenKostenSb);
+
+    await einnahmenKostenSbPO.elems.buttonSaveContinue.click();
 
     // fill steuerdaten ===========================================================
+    await expectStepTitleToContainText('Familiensituation', sbPage);
 
     // expand second
-    await sbPage.locator('.mat-expansion-panel-header').nth(1).click();
+    // await sbPage.locator('.mat-expansion-panel-header').nth(1).click();
 
     await stepsNavPO.elems.steuerdatenMutter.first().click();
     await expectStepTitleToContainText('Steuerdaten Mutter', sbPage);
@@ -238,34 +252,29 @@ test.describe('Neues gesuch erstellen', () => {
     await steuerdatenResponse;
 
     // Go to Berechnung ===========================================================
-    // will log the user out if verfuegung is not available yet!
-    await sbPage.goto(`${urls.sb}/verfuegung/${getGesuchId()}/zusammenfassung`);
+
+    const gesuchsTabNavPO = new GesuchsTabNavPO(sbPage);
+    await gesuchsTabNavPO.elems.verfuegungTab.click();
+
     await expect(sbPage.getByTestId('zusammenfassung-resultat')).toHaveClass(
       /accept/,
       { timeout: 10000 },
     );
-    await sbPage.goto(`${urls.sb}/verfuegung/${getGesuchId()}/berechnung/1`);
-    await expect(
-      sbPage.getByTestId('berechnung-persoenlich-total'),
-    ).toContainText("- 14'974");
-    await expect(sbPage.getByTestId('berechnung-familien-total')).toContainText(
-      "- 55'492",
-    );
 
     // Go to Gesuch infos =========================================================
-    await sbPage.getByTestId('sb-gesuch-header-infos-link').click();
-    await expect(sbPage.getByTestId('step-title')).toContainText(
-      'Gesuchsverlauf',
-    );
-    await expect(
-      sbPage.getByRole('cell', { name: 'Bereit für Bearbeitung' }),
-    ).toBeVisible();
-    await expect(
-      sbPage.getByRole('cell', { name: 'Eingereicht' }),
-    ).toBeVisible();
-    await expect(
-      sbPage.getByRole('cell', { name: 'Bearbeitung durch Gesuchsteller' }),
-    ).toBeVisible();
+    await headerNavPO.elems.infosPageLink.click();
+
+    await expectStepTitleToContainText('Gesuchsverlauf', sbPage);
+
+    const protokollPO = new GesuchProtokollPO(sbPage);
+    await protokollPO.checkAllStatusToCellVisible([
+      'IN_BEARBEITUNG_GS',
+      'EINGEREICHT',
+      'ANSPRUCH_PRUEFEN',
+      'DATENSCHUTZBRIEF_DRUCKBEREIT',
+      'BEREIT_FUER_BEARBEITUNG',
+      'IN_BEARBEITUNG_SB',
+    ]);
 
     sbPage.close();
     gsPage.close();

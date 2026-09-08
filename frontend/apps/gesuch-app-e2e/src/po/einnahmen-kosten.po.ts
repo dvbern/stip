@@ -24,12 +24,12 @@ export class EinnahmenKostenPO {
     fahrkosten: Locator;
     wohnkosten: Locator;
     auswaertigeMittagessenProWoche: Locator;
-    wgWohnend: Locator;
+    wgWohnendRadio: Locator;
+    alternativeWohnformWohnendRadio: Locator;
     betreuungskostenKinder: Locator;
     steuerjahr: Locator;
     vermoegen: Locator;
     veranlagungsStatus: Locator;
-
     einnahmenBGSA: Locator;
     andereEinnahmen: Locator;
     taggelderAHVIV: Locator;
@@ -74,8 +74,10 @@ export class EinnahmenKostenPO {
       auswaertigeMittagessenProWoche: page.getByTestId(
         'form-einnahmen-kosten-auswaertigeMittagessenProWoche',
       ),
-      wgWohnend: page.getByTestId('form-einnahmen-kosten-wgWohnend'),
-
+      wgWohnendRadio: page.getByTestId('form-einnahmen-kosten-wgWohnend'),
+      alternativeWohnformWohnendRadio: page.getByTestId(
+        'form-einnahmen-kosten-alternativeWohnformWohnend',
+      ),
       betreuungskostenKinder: page.getByTestId(
         'form-einnahmen-kosten-betreuungskostenKinder',
       ),
@@ -86,20 +88,24 @@ export class EinnahmenKostenPO {
       ),
 
       steuerjahr: page.getByTestId('form-einnahmen-kosten-steuerjahr'),
-      vermoegen: page.getByTestId('form-einnahmen-kosten-vermoegen'),
       veranlagungsStatus: page.getByTestId(
         'form-einnahmen-kosten-veranlagungsStatus',
       ),
+      vermoegen: page.getByTestId('form-einnahmen-kosten-vermoegen'),
 
       buttonSaveContinue: page.getByTestId('button-save-continue'),
       buttonNext: page.getByTestId('button-next'),
     };
   }
 
-  public async fillEinnahmenKostenForm(einnahmenKosten: EinnahmenKosten) {
-    await this.elems.nettoerwerbseinkommen.fill(
-      `${einnahmenKosten.nettoerwerbseinkommen ?? 0}`,
-    );
+  public async fillEinnahmenKostenForm(
+    einnahmenKosten: Partial<EinnahmenKosten>,
+  ) {
+    if (isDefined(einnahmenKosten.nettoerwerbseinkommen)) {
+      await this.elems.nettoerwerbseinkommen.fill(
+        `${einnahmenKosten.nettoerwerbseinkommen ?? 0}`,
+      );
+    }
 
     if (isDefined(einnahmenKosten.arbeitspensumProzent)) {
       await this.elems.arbeitspensumProzent.fill(
@@ -158,14 +164,29 @@ export class EinnahmenKostenPO {
       );
     }
 
+    if (isDefined(einnahmenKosten.wgWohnend)) {
+      await selectMatRadio(
+        this.elems.wgWohnendRadio,
+        einnahmenKosten.wgWohnend,
+      );
+    }
+
+    if (isDefined(einnahmenKosten.alternativeWohnformWohnend)) {
+      await selectMatRadio(
+        this.elems.alternativeWohnformWohnendRadio,
+        einnahmenKosten.alternativeWohnformWohnend,
+      );
+    }
+
+    if (isDefined(einnahmenKosten.veranlagungsStatus)) {
+      await this.elems.veranlagungsStatus.fill(
+        einnahmenKosten.veranlagungsStatus,
+      );
+    }
+
     if (isDefined(einnahmenKosten.vermoegen)) {
       await this.elems.vermoegen.fill(`${einnahmenKosten.vermoegen}`);
     }
-
-    if (isDefined(einnahmenKosten.wgWohnend)) {
-      await selectMatRadio(this.elems.wgWohnend, einnahmenKosten.wgWohnend);
-    }
-
     await expectFormToBeValid(this.elems.form);
   }
 }

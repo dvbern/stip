@@ -52,7 +52,7 @@ export class StepsNavPO {
       partner: page.getByTestId('step-nav-partner'),
       kinder: page.getByTestId('step-nav-kinder'),
       auszahlung: page.getByTestId('step-nav-auszahlung'),
-      einnahmenKosten: page.getByTestId('step-nav-einkommenkosten'),
+      einnahmenKosten: page.getByTestId('step-nav-einnahmenkosten'),
       darlehen: page.getByTestId('step-nav-darlehen'),
       dokumente: page.getByTestId('step-nav-dokumente'),
       abschluss: page.getByTestId('step-nav-abschluss'),

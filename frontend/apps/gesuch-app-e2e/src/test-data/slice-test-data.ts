@@ -165,12 +165,15 @@ export const einnahmenKosten: EinnahmenKosten = {
   beitraege: 3000,
   ausbildungskosten: 1980,
   fahrkosten: 798,
-  // wohnkosten: 15000,
   auswaertigeMittagessenProWoche: 5,
-  // wgWohnend: false,
-  // alternativeWohnformWohnend: false,
   vermoegen: 2000,
   steuerjahr: +specificYearsAgo(1),
+};
+
+export const einnhamenKostenSb: Omit<
+  EinnahmenKosten,
+  'nettoerwerbseinkommen' | 'fahrkosten'
+> = {
   veranlagungsStatus: 'Provisorisch Veranlagt',
   steuern: 0,
 };

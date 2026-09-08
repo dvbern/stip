@@ -27,7 +27,7 @@ export class SachbearbeiterGesuchHeaderPO {
         'sb-gesuch-header-aenderungen-nav-menu',
       ),
       aenderungenMenuItems: page.getByTestId('aenderungen-nav-menu-item'),
-      infosPageLink: page.getByTestId('sb-gesuch-header-infos-link'),
+      infosPageLink: page.getByTestId('sb-gesuch-header-infos-nav-link'),
       aktionMenu: page.getByTestId('sb-gesuch-header-aktion-menu'),
       actionLoading: page.getByTestId('loading-action-menu'),
       aktionTrancheErstellen: page.getByTestId('aktion-tranche-erstellen'),
