@@ -1118,9 +1118,6 @@ public class GesuchService {
             getLatestEingereichtVersion(gesuch.getId())
                 .flatMap(eingereichtGesuch -> eingereichtGesuch.getTranchenTranchen().findFirst())
                 .orElseThrow(NotFoundException::new);
-        // gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
-        // .flatMap(eingereichtGesuch -> eingereichtGesuch.getTranchenTranchen().findFirst())
-        // .orElseThrow(NotFoundException::new);
 
         return gesuchMapperUtil.mapWithTranche(
             eingereichtTranche.getGesuch(),
@@ -1136,7 +1133,6 @@ public class GesuchService {
 
         final var requestedTrancheFromGesuchInStatusEingereicht =
             gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuch.getId(), false)
-                // gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
                 .orElseThrow(ForbiddenException::new)
                 .getGesuchTranchen()
                 .stream()
