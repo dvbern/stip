@@ -12,6 +12,7 @@ export class SachbearbeiterGesuchHeaderPO {
     aenderungenMenuItems: Locator;
     infosPageLink: Locator;
     aktionMenu: Locator;
+    actionLoading: Locator;
     aktionTrancheErstellen: Locator;
     getAktionStatusUebergangItem: (status: StatusUebergang) => Locator;
   };
@@ -28,6 +29,7 @@ export class SachbearbeiterGesuchHeaderPO {
       aenderungenMenuItems: page.getByTestId('aenderungen-nav-menu-item'),
       infosPageLink: page.getByTestId('sb-gesuch-header-infos-link'),
       aktionMenu: page.getByTestId('sb-gesuch-header-aktion-menu'),
+      actionLoading: page.getByTestId('loading-action-menu'),
       aktionTrancheErstellen: page.getByTestId('aktion-tranche-erstellen'),
       getAktionStatusUebergangItem: (status: StatusUebergang) =>
         page.getByTestId(`sb-gesuch-header-aktion-status-uebergang-${status}`),

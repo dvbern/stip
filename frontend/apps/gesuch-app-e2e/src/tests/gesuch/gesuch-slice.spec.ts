@@ -203,14 +203,30 @@ test.describe('Neues gesuch erstellen', () => {
 
     await headerNavPO.elems.aktionMenu.click();
     await headerNavPO.elems
+      .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
+      .click();
+
+    await expect(headerNavPO.elems.actionLoading).toBeHidden();
+
+    await headerNavPO.elems.aktionMenu.click();
+    await headerNavPO.elems
       .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
       .click();
+
+    await expect(headerNavPO.elems.actionLoading).toBeHidden();
 
     // create trancheInfoPO later
     const status = sbPage.getByTestId('form-tranche-status');
     await expect(status).toHaveValue('In Bearbeitung');
 
+    // fill E&K Sb part ===========================================================
+    // todo
+
     // fill steuerdaten ===========================================================
+
+    // expand second
+    await sbPage.locator('.mat-expansion-panel-header').nth(1).click();
+
     await stepsNavPO.elems.steuerdatenMutter.first().click();
     await expectStepTitleToContainText('Steuerdaten Mutter', sbPage);
     const steuerDatenPO = new SteuerdatenPO(sbPage);
