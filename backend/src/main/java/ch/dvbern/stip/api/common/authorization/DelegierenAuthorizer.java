@@ -55,7 +55,7 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
             forbidden();
         }
         if (
-            sozialdienstService.sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer()
+            sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer()
                 .isBenutzerAdmin(currentBenutzer.get())
         ) {
             return;

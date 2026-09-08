@@ -33,9 +33,9 @@ import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
-import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -46,11 +46,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 import static ch.dvbern.stip.api.util.TestConstants.IBAN_CH_NUMMER_VALID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -81,7 +81,7 @@ class SozialdienstServiceTest {
     @Inject
     LandService landService;
 
-    @InjectMock
+    @InjectSpy
     SozialdienstBenutzerService sozialdienstBenutzerService;
 
     @Transactional
@@ -161,39 +161,59 @@ class SozialdienstServiceTest {
 
     @Test
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstA_ForSozialdienstMitarbeiterOfSozialdienstA() {
-        when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(benutzerOfSozialdienstA));
+        Mockito.doReturn(Optional.ofNullable(benutzerOfSozialdienstA))
+            .when(sozialdienstBenutzerService)
+            .getCurrentSozialdienstBenutzer();
         assertThat(
-		        sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstA));
+            sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(),
+            is(sozialdienstA)
+        );
     }
 
     @Test
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstA_ForSozialdienstAdminOfSozialdienstA() {
-        when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(sozialdienstAdminOfSozialdienstA));
+        Mockito.doReturn(Optional.ofNullable(sozialdienstAdminOfSozialdienstA))
+            .when(sozialdienstBenutzerService)
+            .getCurrentSozialdienstBenutzer();
         assertThat(
-		        sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstA));
+            sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(),
+            is(sozialdienstA)
+        );
     }
 
     @Test
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstB_ForSozialdienstMitarbeiterOfSozialdienstB() {
-        when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(benutzerOfSozialdienstB));
+        Mockito.doReturn(Optional.ofNullable(benutzerOfSozialdienstB))
+            .when(sozialdienstBenutzerService)
+            .getCurrentSozialdienstBenutzer();
         assertThat(
-		        sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstB));
+            sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(),
+            is(sozialdienstB)
+        );
     }
 
     @Test
     void getSozialdienstOfCurrentSozialdienstBenutzer_ShouldReturn_SozialdienstB_ForSozialdienstAdminOfSozialdienstB() {
-        when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(sozialdienstAdminOfSozialdienstB));
+        Mockito.doReturn(Optional.ofNullable(sozialdienstAdminOfSozialdienstB))
+            .when(sozialdienstBenutzerService)
+            .getCurrentSozialdienstBenutzer();
         assertThat(
-		        sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(), is(sozialdienstB));
+            sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(),
+            is(sozialdienstB)
+        );
     }
 
     @Test
-    void isCurrentBenutzerMitarbeiterOfSozialdienst_shouldReturnTrue_whenCurrentBenutzerIsOfSameSozialdienst(){
-        when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(benutzerOfSozialdienstA));
+    void isCurrentBenutzerMitarbeiterOfSozialdienst_shouldReturnTrue_whenCurrentBenutzerIsOfSameSozialdienst() {
+        Mockito.doReturn(Optional.ofNullable(benutzerOfSozialdienstA))
+            .when(sozialdienstBenutzerService)
+            .getCurrentSozialdienstBenutzer();
         assertThat(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(sozialdienstA.getId()), is(true));
         assertThat(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(sozialdienstB.getId()), is(false));
 
-        when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.ofNullable(sozialdienstAdminOfSozialdienstA));
+        Mockito.doReturn(Optional.ofNullable(sozialdienstAdminOfSozialdienstA))
+            .when(sozialdienstBenutzerService)
+            .getCurrentSozialdienstBenutzer();
         assertThat(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(sozialdienstA.getId()), is(true));
         assertThat(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(sozialdienstB.getId()), is(false));
 

@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 public class SozialdienstService {
     private final SozialdienstRepository sozialdienstRepository;
     private final SozialdienstMapper sozialdienstMapper;
-    public final SozialdienstBenutzerService sozialdienstBenutzerService;
+    private final SozialdienstBenutzerService sozialdienstBenutzerService;
     private final ZahlungsverbindungService zahlungsverbindungService;
     private final MailService mailService;
 

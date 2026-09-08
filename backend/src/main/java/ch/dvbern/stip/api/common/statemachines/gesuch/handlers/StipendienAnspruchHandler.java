@@ -31,6 +31,7 @@ public class StipendienAnspruchHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch, String comment) {
+        gesuch.incrementVerfuegtCount();
         sapService.createInitialAuszahlungOrGetStatus(
             gesuch.getId()
         );
