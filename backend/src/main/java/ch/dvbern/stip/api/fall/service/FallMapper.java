@@ -73,8 +73,7 @@ public interface FallMapper {
     default LocalDateTime getLastTryDate(Fall fall) {
         return getLastFailedBuchhaltungAuszahlung(fall).getSapDeliverys()
             .stream()
-            .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
-            .findFirst()
+            .max(Comparator.comparing(SapDelivery::getTimestampErstellt))
             .orElseThrow()
             .getTimestampErstellt();
     }
