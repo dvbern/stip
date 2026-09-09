@@ -100,9 +100,11 @@ import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.unterschriftenblatt.util.UnterschriftenblattUtil;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
@@ -1543,7 +1545,30 @@ public class GesuchService {
             .aenderungs(aenderungs);
     }
 
-    public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {
+    public BerechnungsresultatDto getBerechnungForVerfuegungSb(UUID verfuegungId) {
         return verfuegungService.requireById(verfuegungId).parseBerechnungData();
+    }
+
+    @Transactional
+    public BerechnungsresultatDto getBerechnungForVerfuegungGs(UUID verfuegungId) {
+        final var verfuegung = verfuegungService.requireById(verfuegungId);
+        final Set<SteuerdatenTyp> uploadedSteuerdatenTypes =
+            UnterschriftenblattUtil.getGsVisibleSteuerdatenTyps(verfuegung.getGesuch());
+        final BerechnungsresultatDto berechnungsData = verfuegung.parseBerechnungData();
+
+        berechnungsData.getTranchenBerechnungsresultate()
+            .forEach(
+                tranchenBerechnungsresultatDto -> tranchenBerechnungsresultatDto.setFamilienBudgetresultate(
+                    tranchenBerechnungsresultatDto.getFamilienBudgetresultate()
+                        .stream()
+                        .filter(
+                            familienBudgetresultatDto -> uploadedSteuerdatenTypes
+                                .contains(familienBudgetresultatDto.getSteuerdatenTyp())
+                        )
+                        .toList()
+                )
+            );
+
+        return berechnungsData;
     }
 }

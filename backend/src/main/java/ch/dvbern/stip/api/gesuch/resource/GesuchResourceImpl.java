@@ -430,10 +430,17 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ, GS_GESUCH_READ })
-    public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {
-        gesuchAuthorizer.canGetBerechnungOfVerfuegung(verfuegungId);
-        return gesuchService.getBerechnungForVerfuegung(verfuegungId);
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public BerechnungsresultatDto getBerechnungForVerfuegungSb(UUID verfuegungId) {
+        gesuchAuthorizer.sbOrFreigabestelleOrJuristCanRead();
+        return gesuchService.getBerechnungForVerfuegungSb(verfuegungId);
+    }
+
+    @Override
+    @RolesAllowed({ GS_GESUCH_READ })
+    public BerechnungsresultatDto getBerechnungForVerfuegungGs(UUID verfuegungId) {
+        gesuchAuthorizer.canGetBerechnungOfVerfuegungGs(verfuegungId);
+        return gesuchService.getBerechnungForVerfuegungGs(verfuegungId);
     }
 
     @Override
