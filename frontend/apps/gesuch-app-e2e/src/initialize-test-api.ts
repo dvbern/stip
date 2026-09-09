@@ -1,4 +1,4 @@
-import { APIRequestContext, expect } from '@playwright/test';
+import { APIRequestContext } from '@playwright/test';
 
 import {
   AbschlussSlim,
@@ -62,11 +62,14 @@ const setGesuchApi = async (
   );
 
   if (!setZahlungsverbindungResponse.ok()) {
+    const text = await setZahlungsverbindungResponse.text();
     console.error(
       `Failed to set zahlungsverbindung for fallId ${fallId}:`,
-      await setZahlungsverbindungResponse.text(),
+      text,
     );
-    throw new Error('Failed to set zahlungsverbindung');
+    throw new Error(
+      `Failed to set zahlungsverbindung for fallId ${fallId}: ${text}`,
+    );
   }
 
   const requestBody = {
@@ -76,12 +79,16 @@ const setGesuchApi = async (
     },
   };
 
-  const response = await apiContext.patch(`/api/v1/gesuch/${gesuchId}`, {
+  const response = await apiContext.patch(`/api/v1/gesuch/${gesuchId}/gs`, {
     data: requestBody,
   });
 
-  expect(response.ok(), {
-    message: `Failed to update gesuch with id ${gesuchId}: ${await response.text()}`,
-  }).toBeTruthy();
+  if (!response.ok()) {
+    const responseText = await response.text();
+    console.error(`Failed to update gesuch with id ${gesuchId}:`, responseText);
+    throw new Error(
+      `Failed to update gesuch with id ${gesuchId}: ${responseText}`,
+    );
+  }
   return response;
 };

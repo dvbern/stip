@@ -46,7 +46,7 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await expectStepTitleToContainText('Dokumente', gsPage);
   await requiredDokumenteResponse;
   await uploadFiles(gsPage);
-  await gsPage.getByTestId('button-continue').click();
+  await gsPage.getByTestId('step-nav-abschluss').first().click();
 
   // Freigabe ===========================================================
   await expectStepTitleToContainText('Freigabe', gsPage);
@@ -66,24 +66,27 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
     `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
   );
 
-  const headerNav = new SachbearbeiterGesuchHeaderPO(sbPage);
-  await headerNav.elems.trancheMenu.click();
-  await expect(headerNav.elems.trancheMenuItems).toHaveCount(1);
-  await sbPage.locator('.cdk-overlay-backdrop').click();
+  const gesuchHeader = new SachbearbeiterGesuchHeaderPO(sbPage);
 
   // set tranche to bearbeitung ===============================================
-  await headerNav.elems.aktionMenu.click();
-  await headerNav.elems
-    .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
+  await gesuchHeader.elems.aktionMenu.click();
+  await gesuchHeader.elems
+    .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
     .click();
+
+  const kommentarField = sbPage.getByTestId('form-kommentar-dialog-kommentar');
+  await kommentarField.fill('E2E Antrag genemigen kommentar');
   await sbPage.getByTestId('dialog-confirm').click();
 
-  await headerNav.elems.aktionMenu.click();
-  await headerNav.elems
+  await expect(gesuchHeader.elems.actionLoading).toBeHidden();
+
+  await gesuchHeader.elems.aktionMenu.click();
+  await gesuchHeader.elems
     .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
     .click();
 
   // accept all documents =================================================
+  // todo: put into utils function
   const sbStepsNavPO = new StepsNavPO(sbPage);
   const requiredDokumenteResp = sbPage.waitForResponse(
     '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
@@ -114,22 +117,22 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   const abschliesenPromise = sbPage.waitForResponse(
     '**/api/v1/gesuch/*/bearbeitungAbschliessen',
   );
-  await headerNav.elems.aktionMenu.click();
-  await headerNav.elems
+  await gesuchHeader.elems.aktionMenu.click();
+  await gesuchHeader.elems
     .getAktionStatusUebergangItem('BEARBEITUNG_ABSCHLIESSEN')
     .click();
   await abschliesenPromise;
   const verfuegtPromise = sbPage.waitForResponse(
     '**/api/v1/gesuch/status/verfuegt/*',
   );
-  await headerNav.elems.aktionMenu.click();
-  await headerNav.elems.getAktionStatusUebergangItem('VERFUEGT').click();
+  await gesuchHeader.elems.aktionMenu.click();
+  await gesuchHeader.elems.getAktionStatusUebergangItem('VERFUEGT').click();
   await verfuegtPromise;
   const versendetPromise = sbPage.waitForResponse(
     '**/api/v1/gesuch/status/versendet/*',
   );
-  await headerNav.elems.aktionMenu.click();
-  await headerNav.elems.getAktionStatusUebergangItem('VERSENDET').click();
+  await gesuchHeader.elems.aktionMenu.click();
+  await gesuchHeader.elems.getAktionStatusUebergangItem('VERSENDET').click();
   const versendetResponse = await versendetPromise;
 
   expect(versendetResponse.ok(), {
@@ -192,9 +195,9 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await sbPage.goto(
     `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
   );
-  await headerNav.elems.aenderungenMenu.click();
-  await expect(headerNav.elems.aenderungenMenuItems).toHaveCount(2);
-  await headerNav.elems.aenderungenMenuItems.first().click();
+  await gesuchHeader.elems.aenderungenMenu.click();
+  await expect(gesuchHeader.elems.aenderungenMenuItems).toHaveCount(2);
+  await gesuchHeader.elems.aenderungenMenuItems.first().click();
   await expectInfoTitleToContainText('Änderung 1', sbPage);
 
   // change the nachname again on SB App
@@ -245,8 +248,8 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   expect(acceptResponse.status()).toBe(200);
 
   // assert that a second tranche was created
-  await headerNav.elems.trancheMenu.click();
-  await expect(headerNav.elems.trancheMenuItems).toHaveCount(2);
+  await gesuchHeader.elems.trancheMenu.click();
+  await expect(gesuchHeader.elems.trancheMenuItems).toHaveCount(2);
 
   sbPage.close();
   gsPage.close();

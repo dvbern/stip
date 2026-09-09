@@ -11,4 +11,6 @@ export const bruder: Geschwister = {
   wohnsitz: 'EIGENER_HAUSHALT',
   ausbildungssituation: 'KEINE',
   id: '',
+  entryId: '',
+  geschwisterTyp: 'LEIBLICH',
 };

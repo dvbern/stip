@@ -143,11 +143,9 @@ test.describe('Neues gesuch erstellen', () => {
     await geschwisterPO.elems.buttonContinue.click();
 
     // Step 8: Dokumente ===========================================================
-    await requiredDokumenteResponse;
-
-    await expect(gsPage.getByTestId('loading-required-dokumente')).toBeHidden();
-
     await expectStepTitleToContainText('Dokumente', gsPage);
+    await requiredDokumenteResponse;
+    await expect(gsPage.getByTestId('loading-required-dokumente')).toBeHidden();
 
     await uploadFiles(gsPage);
 
