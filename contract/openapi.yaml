@@ -9713,23 +9713,6 @@ components:
           type: string
         read:
           type: boolean
-    GesuchDokumentKommentar:
-      description: Kommentar zu einem (abgelehnten) GesuchDokument
-      type: object
-      required:
-        - gesuchTrancheId
-        - gesuchDokumentId
-      properties:
-        gesuchTrancheId:
-          $ref: '#/components/schemas/UUID'
-        gesuchDokumentId:
-          $ref: '#/components/schemas/UUID'
-        kommentar:
-          type: string
-        user_erstellt:
-          type: string
-        timestampErstellt:
-          $ref: '#/components/schemas/LocalDate'
     GesuchDokumentAblehnenRequest:
       description: Meta information um ein GesuchDokument abzulehnen
       type: object
@@ -9925,6 +9908,23 @@ components:
         - AUSSTEHEND
         - ABGELEHNT
         - AKZEPTIERT
+    GesuchDokumentKommentar:
+      required:
+        - gesuchTrancheId
+        - gesuchDokumentId
+      description: Kommentar zu einem (abgelehnten) GesuchDokument
+      type: object
+      properties:
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
+        gesuchDokumentId:
+          $ref: '#/components/schemas/UUID'
+        kommentar:
+          type: string
+        user_erstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
     GesuchDokument:
       required:
         - id
@@ -9949,6 +9949,10 @@ components:
             $ref: '#/components/schemas/Dokument'
         status:
           $ref: '#/components/schemas/Dokumentstatus'
+        kommentars:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentKommentar'
     UnterschriftenblattDokumentTyp:
       type: string
       enum:

@@ -337,7 +337,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GesuchDokumentKommentar'
+                  $ref: './components/common.yaml#/GesuchDokumentKommentar'
           description: Returns an Array of GesuchDokumentKommentar for a given GesuchDokuemntId
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -366,7 +366,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GesuchDokumentKommentar'
+                  $ref: './components/common.yaml#/GesuchDokumentKommentar'
           description: Returns an Array of GesuchDokumentKommentar for a given GesuchDokuemntId
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -774,29 +774,13 @@ components:
       in: path
       required: true
   schemas:
-    GesuchDokumentKommentar:
-      description: 'Kommentar zu einem (abgelehnten) GesuchDokument'
-      type: object
-      required:
-        - gesuchTrancheId
-        - gesuchDokumentId
-      properties:
-        gesuchTrancheId:
-          $ref: './components/common.yaml#/UUID'
-        gesuchDokumentId:
-          $ref: './components/common.yaml#/UUID'
-        kommentar:
-          type: string
-        user_erstellt:
-          type: string
-        timestampErstellt:
-          $ref: './components/common.yaml#/LocalDate'
+    
     GesuchDokumentAblehnenRequest:
       description: 'Meta information um ein GesuchDokument abzulehnen'
       type: object
       properties:
         kommentar:
-          $ref: '#/components/schemas/GesuchDokumentKommentar'
+          $ref: './components/common.yaml#/GesuchDokumentKommentar'
     CustomDokumentTypCreate:
       type: object
       required:
