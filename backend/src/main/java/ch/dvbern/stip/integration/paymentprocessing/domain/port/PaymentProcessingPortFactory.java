@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.domain.port;
+package ch.dvbern.stip.integration.paymentprocessing.domain.port;
 
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.integration.plzfetch.domain.qualifier.PlzFetchQualifierLiteral;
+import ch.dvbern.stip.integration.paymentprocessing.domain.qualifier.PaymentProcessingQualifierLiteral;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
@@ -30,15 +30,15 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
-public class PlzFetchPortFactory {
+public class PaymentProcessingPortFactory {
     @Any
     @Inject
-    Instance<PlzFetchPort> plzFetchPorts;
+    Instance<PaymentProcessingPort> paymentProcessingPorts;
 
     private final TenantService tenantService;
 
-    public PlzFetchPort getPlzFetchAdapter() {
-        final var adapterType = tenantService.getConfigForCurrentTenant().port().plzFetch().adapterType();
-        return plzFetchPorts.select(new PlzFetchQualifierLiteral(adapterType)).get();
+    public PaymentProcessingPort getPaymentProcessingAdapter() {
+        final var adapterType = tenantService.getConfigForCurrentTenant().port().paymentProcessing().adapterType();
+        return paymentProcessingPorts.select(new PaymentProcessingQualifierLiteral(adapterType)).get();
     }
 }

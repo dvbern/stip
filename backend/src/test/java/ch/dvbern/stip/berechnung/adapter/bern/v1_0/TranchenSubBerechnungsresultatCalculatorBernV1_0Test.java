@@ -17,16 +17,20 @@
 
 package ch.dvbern.stip.berechnung.adapter.bern.v1_0;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.kind.entity.Kind;
-import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.adapter.bern.v1_0.service.TranchenSubBerechnungsresultatCalculator;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
@@ -57,10 +61,55 @@ public class TranchenSubBerechnungsresultatCalculatorBernV1_0Test {
 
         gesuchTranche.getGesuchFormular().setKinds(Set.of(kind1, kind2));
 
+        Geschwister geschwister1 = (Geschwister) new Geschwister()
+            .setNachname("Testfall5")
+            .setVorname("Geschwister1")
+            .setGeburtsdatum(LocalDate.of(2000, 1, 1));
+        geschwister1
+            .setGeschwisterTyp(GeschwisterTyp.HALB)
+            .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
+            .setWohnsitz(Wohnsitz.MUTTER_VATER)
+            .setWohnsitzAnteilVater(BigDecimal.valueOf(50));
+
+        Geschwister geschwister2 = (Geschwister) new Geschwister()
+            .setNachname("Testfall5")
+            .setVorname("Geschwister2")
+            .setGeburtsdatum(LocalDate.of(2000, 1, 1));
+        geschwister2
+            .setGeschwisterTyp(GeschwisterTyp.HALB)
+            .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
+            .setElternteilPiaOfStiefHalbGeschwister(ElternTyp.VATER)
+            .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+
+        Geschwister geschwister3 = (Geschwister) new Geschwister()
+            .setNachname("Testfall5")
+            .setVorname("Geschwister3")
+            .setGeburtsdatum(LocalDate.of(2000, 1, 1));
+        geschwister3
+            .setGeschwisterTyp(GeschwisterTyp.HALB)
+            .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
+            .setElternteilPiaOfStiefHalbGeschwister(ElternTyp.MUTTER)
+            .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+
+        Geschwister geschwister4 = (Geschwister) new Geschwister()
+            .setNachname("Testfall5")
+            .setVorname("Geschwister4")
+            .setGeburtsdatum(LocalDate.of(2000, 1, 1));
+        geschwister4
+            .setGeschwisterTyp(GeschwisterTyp.HALB)
+            .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
+            .setWohnsitz(Wohnsitz.MUTTER_VATER)
+            .setWohnsitzAnteilMutter(BigDecimal.valueOf(20));
+
+        gesuchTranche.getGesuchFormular()
+            .setGeschwisters(
+                Set.of(geschwister1, geschwister2, geschwister3, geschwister4)
+            );
+
         var tranchenSubBerechnungsresultat = TranchenSubBerechnungsresultatCalculator.getTranchenSubBerechnungsresultat(
             gesuchTranche,
-            SteuerdatenTyp.VATER,
             null,
+            true,
             true,
             DateUtil.getGesuchDateRange(gesuch),
             gesuch.getGesuchsperiode(),
@@ -68,17 +117,25 @@ public class TranchenSubBerechnungsresultatCalculatorBernV1_0Test {
             (gesuchsperiode, anzahlMonate) -> new BerechnungsStammdatenDto()
         );
 
-        assertThat(tranchenSubBerechnungsresultat.getTotal(), is(-2940));
+        assertThat(tranchenSubBerechnungsresultat.getTotal(), is(-2572));
         assertThat(tranchenSubBerechnungsresultat.getUngekuerztTotal(), is(-9800));
-        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderDerEltern().intValue(), is(40));
+        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderDerEltern().intValue(), is(35));
         assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderPia().intValue(), is(75));
+        assertThat(
+            tranchenSubBerechnungsresultat.getFamilienBudgetresultate().get(0).getAnzahlKinderInAusbildung(),
+            is(3)
+        );
+        assertThat(
+            tranchenSubBerechnungsresultat.getFamilienBudgetresultate().get(1).getAnzahlKinderInAusbildung(),
+            is(3)
+        );
 
         assertThat(tranchenSubBerechnungsresultat.getPersonenHaushaltGroups(), hasSize(3));
 
         tranchenSubBerechnungsresultat = TranchenSubBerechnungsresultatCalculator.getTranchenSubBerechnungsresultat(
             gesuchTranche,
-            SteuerdatenTyp.MUTTER,
             null,
+            false,
             false,
             DateUtil.getGesuchDateRange(gesuch),
             gesuch.getGesuchsperiode(),
@@ -86,9 +143,9 @@ public class TranchenSubBerechnungsresultatCalculatorBernV1_0Test {
             (gesuchsperiode, anzahlMonate) -> new BerechnungsStammdatenDto()
         );
 
-        assertThat(tranchenSubBerechnungsresultat.getTotal(), is(-1568));
+        assertThat(tranchenSubBerechnungsresultat.getTotal(), is(-1699));
         assertThat(tranchenSubBerechnungsresultat.getUngekuerztTotal(), is(-10459));
-        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderDerEltern().intValue(), is(60));
+        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderDerEltern().intValue(), is(65));
         assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderPia().intValue(), is(25));
 
         assertThat(tranchenSubBerechnungsresultat.getPersonenHaushaltGroups(), hasSize(3));

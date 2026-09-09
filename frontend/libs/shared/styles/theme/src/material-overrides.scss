@@ -265,3 +265,8 @@ dv-shared-feature-verfuegung {
     margin: 0 0.5rem 0 0;
   }
 }
+
+.mat-mdc-tab-header.mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link.mdc-tab {
+  flex-grow: 0;
+  width: fit-content;
+}

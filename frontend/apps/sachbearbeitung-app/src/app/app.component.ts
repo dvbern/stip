@@ -21,9 +21,14 @@ export class AppComponent {
     const globalGrundStore = inject(AblehnungGrundStore);
     const router = inject(Router);
     const storeUtilService = inject(StoreUtilService);
-    storeUtilService.loadAndGetBenutzerData().then(() => {
-      router.initialNavigation();
-      globalGrundStore.loadAblehnungsGruende$();
-    });
+    storeUtilService
+      .loadAndGetBenutzerData()
+      .then(() => {
+        globalGrundStore.loadAblehnungsGruende$();
+      })
+      .catch(() => undefined)
+      .then(() => {
+        router.initialNavigation();
+      });
   }
 }

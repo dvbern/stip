@@ -100,7 +100,8 @@
 
     --mat-dialog-container-min-width: min(500px, 100%);
     --mat-tooltip-supporting-text-line-height: 1.5;
-    --mat-tooltip-supporting-text-size: 14px;
+    --mat-tooltip-supporting-text-size: 0.875rem;
+    --mat-snack-bar-supporting-text-size: 1rem;
     --mat-badge-background-color: var(--tw-color-black);
     --mat-badge-text-size: 0.875rem;
     --mat-badge-container-size: 1.25rem;
