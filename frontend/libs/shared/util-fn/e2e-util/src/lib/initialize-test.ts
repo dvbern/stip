@@ -163,8 +163,7 @@ export const initializeMultiUserTest = (
 
 /**
  * Resolve the pre-authenticated storage state and app origin for a single-user
- * role. The storage states are written once by the `setup` project, so tests
- * only read them here — no login happens inside the test.
+ * role.
  */
 const singleUserStorage = (authType: E2eUser, testInfo: TestInfo) => {
   const urls = getE2eUrls();

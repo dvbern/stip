@@ -11,7 +11,7 @@ import {
  * Authenticate all e2e users once, before the parallel workers start.
  *
  * One Gesuchsteller account per worker (to avoid interference on shared
- * server-side state) plus two shared Sachbearbeiter accounts. Now more reliable than previous setup with auth handling inside individual tests.
+ * server-side state) plus two shared Sachbearbeiter accounts.
  */
 // todo: make users configurable as well?
 setup('authenticate users', async ({ browser }, testInfo) => {

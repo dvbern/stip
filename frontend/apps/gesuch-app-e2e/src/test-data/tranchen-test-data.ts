@@ -4,14 +4,13 @@ import {
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import {
+  AusbildungValues,
   ExplicitNull,
   fruehlingOrHerbst,
   generateSVN,
   specificMonthPlusYears,
   specificYearsAgo,
 } from '@dv/shared/util-fn/e2e-util';
-
-import { AusbildungValues } from '../po/ausbildung.po';
 
 export const ausbildungValues: AusbildungValues = {
   fallId: '',
