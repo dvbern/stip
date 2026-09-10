@@ -1,4 +1,4 @@
-import { Page, test as baseTest } from '@playwright/test';
+import { Page, TestInfo, test as baseTest } from '@playwright/test';
 
 import {
   AusbildungCreateResponse,
@@ -9,8 +9,9 @@ import {
   gsStorageStatePath,
   restoreSessionStorage,
   sbStorageStatePath,
+  sozStorageStatePath,
 } from './authenticate';
-import { E2eUser, getE2eUrls } from './playwright.config.base';
+import { E2eUser, ExtendedTest, getE2eUrls } from './playwright.config.base';
 import { AusbildungValues, CockpitPO } from './po';
 import {
   MultiUserTestContexts,
@@ -20,6 +21,8 @@ import {
   deleteGesuch,
 } from './utils';
 
+// todo: make users configurable as well? => reconsider, since the setup is quite individual
+// for gs-app and full livecyle of gesuche with delete functionality
 export const initializeMultiUserTest = (
   ausbildung: AusbildungValues,
   setupFn?: SetupFn,
@@ -158,4 +161,57 @@ export const initializeMultiUserTest = (
   };
 };
 
-export const initializeSingleUserTest = (authType: E2eUser) => {};
+/**
+ * Resolve the pre-authenticated storage state and app origin for a single-user
+ * role. The storage states are written once by the `setup` project, so tests
+ * only read them here — no login happens inside the test.
+ */
+const singleUserStorage = (authType: E2eUser, testInfo: TestInfo) => {
+  const urls = getE2eUrls();
+
+  switch (authType) {
+    case 'GESUCHSTELLER':
+      return {
+        storagePath: gsStorageStatePath(testInfo, testInfo.parallelIndex),
+        origin: new URL(urls.gs).origin,
+      };
+    case 'SACHBEARBEITER':
+    case 'SACHBEARBEITER_ADMIN':
+      return {
+        storagePath: sbStorageStatePath(testInfo),
+        origin: new URL(urls.sb).origin,
+      };
+    case 'SOZIALDIENST':
+    case 'SOZIALDIENST_ADMIN':
+      return {
+        storagePath: sozStorageStatePath(testInfo),
+        origin: new URL(urls.soz).origin,
+      };
+  }
+};
+
+/**
+ * Initialize a single-user e2e test.
+ *
+ * The returned `test` provides the
+ * built-in `page` already signed in as `testUser` and can be further extended
+ * by the caller.
+ */
+export const initializeSingleUserTest = (test: ExtendedTest) => {
+  return test.extend({
+    page: async ({ browser, testUser }, use, testInfo) => {
+      const { storagePath, origin } = singleUserStorage(testUser, testInfo);
+
+      const page = await browser.newPage({
+        storageState: storagePath,
+        baseURL: testInfo.project.use.baseURL,
+        ignoreHTTPSErrors: true,
+      });
+      await restoreSessionStorage(page, storagePath, origin);
+
+      await use(page);
+
+      await page.close();
+    },
+  });
+};

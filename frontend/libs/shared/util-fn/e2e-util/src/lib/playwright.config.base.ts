@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import test, { defineConfig } from '@playwright/test';
 import { zstdCompress, zstdDecompress } from 'http-encoding';
 
 export const BEARER_COOKIE = 'access_cookie';
@@ -39,8 +39,19 @@ export interface KeycloakResponse {
 export type E2eUser =
   | 'GESUCHSTELLER'
   | 'SACHBEARBEITER'
-  | 'ADMIN'
+  | 'SACHBEARBEITER_ADMIN'
+  | 'SOZIALDIENST'
   | 'SOZIALDIENST_ADMIN';
+
+export type CustomTestOptions = {
+  testUser: E2eUser;
+};
+
+export const extendedTest = test.extend<CustomTestOptions>({
+  testUser: ['GESUCHSTELLER', { option: true }],
+});
+
+export type ExtendedTest = typeof extendedTest;
 
 /**
  * Some default configuration for e2e tests
