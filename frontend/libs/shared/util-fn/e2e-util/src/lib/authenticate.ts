@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { Browser, Page, TestInfo, test as baseTest } from '@playwright/test';
+import { Browser, Page, TestInfo } from '@playwright/test';
 import { addSeconds } from 'date-fns';
 
 import {
@@ -25,8 +25,8 @@ export const getAuthDir = (info: TestInfo) =>
 export const gsStorageStatePath = (info: TestInfo, workerIndex: number) =>
   path.join(getAuthDir(info), `gs_${workerIndex}.json`);
 
-export const sbStorageStatePath = (info: TestInfo) =>
-  path.join(getAuthDir(info), 'sb.json');
+export const sbStorageStatePath = (info: TestInfo, index = 0) =>
+  path.join(getAuthDir(info), `sb_${index}.json`);
 
 const sessionStatePath = (storagePath: string) =>
   storagePath.replace(/\.json$/, '.session.json');
@@ -157,6 +157,8 @@ export const authenticateAndSaveStorageState = async (
  *
  * @see https://playwright.dev/docs/auth#moderate-one-account-per-parallel-worker
  */
+// deprecated implementation of test creation with authentication
+// authentication now happens in setup.
 export const createTest = (
   authType: E2eUser,
   options?: { contextPerTest?: boolean },
@@ -262,13 +264,3 @@ export const createTest = (
   });
   return test;
 };
-
-/**
- * The base test for multi-user (Gesuchsteller + Sachbearbeiter) e2e flows.
- *
- * Authentication is performed once by the `setup` project via
- * {@link authenticateAndSaveStorageState}; the per-role storage-state paths are
- * resolved with {@link gsStorageStatePath} / {@link sbStorageStatePath}, so no
- * login happens here.
- */
-export const createMultiUserTest = () => baseTest;

@@ -1,26 +1,26 @@
 import { expect } from '@playwright/test';
 
 import {
+  AuszahlungPO,
+  EinnahmenKostenPO,
+  ElternPO,
+  FamilyPO,
+  GeschwisterPO,
+  GesuchProtokollPO,
+  GesuchsTabNavPO,
+  KinderPO,
+  LebenslaufPO,
+  PersonPO,
+  SachbearbeiterGesuchHeaderPO,
+  StepsNavPO,
+  SteruererklaerungPO,
+  SteuerdatenPO,
   expectStepTitleToContainText,
   getE2eUrls,
+  initializeMultiUserTest,
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { initializeMultiUserTest } from '../../initialize-test';
-import { AuszahlungPO } from '../../po/auszahlung.po';
-import { EinnahmenKostenPO } from '../../po/einnahmen-kosten.po';
-import { ElternPO } from '../../po/eltern.po';
-import { FamilyPO } from '../../po/familiy.po';
-import { GeschwisterPO } from '../../po/geschwister.po';
-import { GesuchProtokollPO } from '../../po/gesuchProtokoll.po';
-import { GesuchsTabNavPO } from '../../po/gesuchsTabNav.po';
-import { KinderPO } from '../../po/kinder.po';
-import { LebenslaufPO } from '../../po/lebenslauf.po';
-import { PersonPO } from '../../po/person.po';
-import { SachbearbeiterGesuchHeaderPO } from '../../po/sachbearbeiter-gesuch-header.po';
-import { StepsNavPO } from '../../po/steps-nav.po';
-import { SteuerdatenPO } from '../../po/steuerdaten.po';
-import { SteruererklaerungPO } from '../../po/steuererklaerung.po';
 import {
   ausbildung,
   bruder,

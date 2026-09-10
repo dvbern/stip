@@ -1,13 +1,9 @@
 import { Locator, Page } from '@playwright/test';
 
 import { PersonInAusbildung } from '@dv/shared/model/gesuch';
-import {
-  expectFormToBeValid,
-  selectMatOption,
-  selectMatRadio,
-} from '@dv/shared/util-fn/e2e-util';
 
 import { AddressPO } from './adresse.po';
+import { expectFormToBeValid, selectMatOption, selectMatRadio } from '../utils';
 
 export class PersonPO {
   public elems: {

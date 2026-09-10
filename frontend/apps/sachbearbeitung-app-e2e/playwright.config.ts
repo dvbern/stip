@@ -20,11 +20,19 @@ export default defineConfig({
   },
   projects: [
     {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+    },
+    {
       name: 'sachbearbeitung-app-e2e',
       testDir: `src/tests`,
       use: {
         ...devices['Desktop Chrome'],
       },
+      dependencies: ['setup'],
     },
   ],
 });

@@ -15,8 +15,8 @@ import {
   Kanton,
   PaginatedSbGesucheDashboard,
   SharedModelGesuch,
+  StatusUebergang,
 } from '@dv/shared/model/gesuch';
-import { StatusUebergang } from '@dv/shared/util/gesuch';
 import {
   CachedRemoteData,
   RemoteData,

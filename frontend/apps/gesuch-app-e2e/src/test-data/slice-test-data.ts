@@ -12,13 +12,12 @@ import {
   Zahlungsverbindung,
 } from '@dv/shared/model/gesuch';
 import {
+  AusbildungValues,
   fruehlingOrHerbst,
   generateSVN,
   specificMonthPlusYears,
   specificYearsAgo,
 } from '@dv/shared/util-fn/e2e-util';
-
-import { AusbildungValues } from '../po/ausbildung.po';
 
 export const ausbildung: AusbildungValues = {
   fallId: '',

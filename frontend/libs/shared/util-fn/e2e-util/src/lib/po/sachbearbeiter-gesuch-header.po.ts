@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-import { StatusUebergang } from '@dv/shared/util/gesuch';
+import { StatusUebergang } from '@dv/shared/model/gesuch';
 
 export class SachbearbeiterGesuchHeaderPO {
   public elems: {
@@ -8,6 +8,7 @@ export class SachbearbeiterGesuchHeaderPO {
     trancheMenu: Locator;
     trancheMenuItems: Locator;
     verfuegungLink: Locator;
+    aenderungenLink: Locator;
     aenderungenMenu: Locator;
     aenderungenMenuItems: Locator;
     infosPageLink: Locator;
@@ -15,6 +16,9 @@ export class SachbearbeiterGesuchHeaderPO {
     actionLoading: Locator;
     aktionTrancheErstellen: Locator;
     getAktionStatusUebergangItem: (status: StatusUebergang) => Locator;
+    aenderungAccept: Locator;
+    aenderungReject: Locator;
+    aenderungManuallyChange: Locator;
   };
 
   constructor(page: Page) {
@@ -23,6 +27,9 @@ export class SachbearbeiterGesuchHeaderPO {
       trancheMenu: page.getByTestId('sb-gesuch-header-tranche-nav-menu'),
       trancheMenuItems: page.getByTestId('tranche-nav-menu-item'),
       verfuegungLink: page.getByTestId('sb-gesuch-header-verfuegung-link'),
+      aenderungenLink: page.getByTestId(
+        'sb-gesuch-header-aenderungen-nav-link',
+      ),
       aenderungenMenu: page.getByTestId(
         'sb-gesuch-header-aenderungen-nav-menu',
       ),
@@ -33,6 +40,9 @@ export class SachbearbeiterGesuchHeaderPO {
       aktionTrancheErstellen: page.getByTestId('aktion-tranche-erstellen'),
       getAktionStatusUebergangItem: (status: StatusUebergang) =>
         page.getByTestId(`sb-gesuch-header-aktion-status-uebergang-${status}`),
+      aenderungAccept: page.getByTestId('aenderung-accept'),
+      aenderungReject: page.getByTestId('aenderung-reject'),
+      aenderungManuallyChange: page.getByTestId('aenderung-manually-change'),
     };
   }
 }

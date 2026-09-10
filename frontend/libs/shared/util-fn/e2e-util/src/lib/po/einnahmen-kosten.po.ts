@@ -2,10 +2,8 @@ import { Locator, Page } from '@playwright/test';
 
 import { EinnahmenKosten } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
-import {
-  expectFormToBeValid,
-  selectMatRadio,
-} from '@dv/shared/util-fn/e2e-util';
+
+import { expectFormToBeValid, selectMatRadio } from '../utils';
 
 export class EinnahmenKostenPO {
   public elems: {

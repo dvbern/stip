@@ -36,6 +36,7 @@ import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   InBearbeitungSbReason,
+  StatusUebergang,
   getTrancheRoute,
 } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
@@ -48,7 +49,6 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
-  StatusUebergang,
 } from '@dv/shared/util/gesuch';
 import { isPending } from '@dv/shared/util/remote-data';
 import type { ExportView } from '@dv/shared/util-data-access/export-tranche';

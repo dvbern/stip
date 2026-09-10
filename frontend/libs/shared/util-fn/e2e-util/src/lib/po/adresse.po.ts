@@ -1,7 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Adresse } from '@dv/shared/model/gesuch';
-import { selectMatOption } from '@dv/shared/util-fn/e2e-util';
+
+import { selectMatOption } from '../utils';
 
 export class AddressPO {
   public elems: {

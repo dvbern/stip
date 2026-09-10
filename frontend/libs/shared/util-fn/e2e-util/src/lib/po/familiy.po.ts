@@ -1,11 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Familiensituation } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/model/type-util';
-import {
-  expectFormToBeValid,
-  selectMatRadio,
-} from '@dv/shared/util-fn/e2e-util';
+
+import { expectFormToBeValid, selectMatRadio } from '../utils';
 
 export class FamilyPO {
   public elems: {
@@ -20,8 +17,6 @@ export class FamilyPO {
     mutterUnbekanntGrundRadio: Locator;
     vaterUnbekanntVerstorbenRadio: Locator;
     vaterUnbekanntGrundRadio: Locator;
-    mutterWiederVerheiratetRadio: Locator;
-    vaterWiederverheiratetRadio: Locator;
 
     buttonNext: Locator;
     buttonPrevious: Locator;
@@ -58,12 +53,7 @@ export class FamilyPO {
       vaterUnbekanntGrundRadio: page.getByTestId(
         'form-family-vaterUnbekanntGrund',
       ),
-      mutterWiederVerheiratetRadio: page.getByTestId(
-        'form-family-mutterWiederverheiratet',
-      ),
-      vaterWiederverheiratetRadio: page.getByTestId(
-        'form-family-vaterWiederverheiratet',
-      ),
+
       buttonNext: page.getByTestId('stepper-next'),
       buttonPrevious: page.getByTestId('stepper-previous'),
       buttonSaveContinue: page.getByTestId('button-save-continue'),
@@ -100,18 +90,6 @@ export class FamilyPO {
       this.elems.vaterUnbekanntVerstorbenRadio,
       item.vaterUnbekanntVerstorben ?? 'WEDER_NOCH',
     );
-    if (isDefined(item.mutterWiederverheiratet)) {
-      await selectMatRadio(
-        this.elems.mutterWiederVerheiratetRadio,
-        item.mutterWiederverheiratet,
-      );
-    }
-    if (isDefined(item.vaterWiederverheiratet)) {
-      await selectMatRadio(
-        this.elems.vaterWiederverheiratetRadio,
-        item.vaterWiederverheiratet,
-      );
-    }
 
     await expectFormToBeValid(this.elems.form);
   }

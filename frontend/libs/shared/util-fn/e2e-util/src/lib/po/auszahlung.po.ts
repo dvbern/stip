@@ -1,9 +1,9 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Zahlungsverbindung } from '@dv/shared/model/gesuch';
-import { expectFormToBeValid } from '@dv/shared/util-fn/e2e-util';
 
 import { AddressPO } from './adresse.po';
+import { expectFormToBeValid } from '../utils';
 
 export class AuszahlungPO {
   public elems: {

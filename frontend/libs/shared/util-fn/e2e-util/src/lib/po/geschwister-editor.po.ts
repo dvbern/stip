@@ -1,11 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Geschwister } from '@dv/shared/model/gesuch';
-import {
-  expectFormToBeValid,
-  selectMatOption,
-  selectMatRadio,
-} from '@dv/shared/util-fn/e2e-util';
+
+import { expectFormToBeValid, selectMatOption, selectMatRadio } from '../utils';
 
 export class GeschwisterEditorPO {
   public elems: {

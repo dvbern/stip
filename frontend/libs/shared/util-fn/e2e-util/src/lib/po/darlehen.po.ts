@@ -1,21 +1,16 @@
 import { Locator, Page } from '@playwright/test';
 
-import { Darlehen } from '@dv/shared/model/gesuch';
+import { FreiwilligDarlehen } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
-import {
-  expectFormToBeValid,
-  handleCheckbox,
-  selectMatRadio,
-} from '@dv/shared/util-fn/e2e-util';
+
+import { expectFormToBeValid } from '../utils';
 
 export class DarlehenPO {
   public elems: {
     page: Page;
     loading: Locator;
     form: Locator;
-    willDarlehenRadio: Locator;
     betragDarlehen: Locator;
-    betragBezogenKanton: Locator;
     schulden: Locator;
     fieldSetGrund: Locator;
     anzahlBetreibungen: Locator;
@@ -34,11 +29,7 @@ export class DarlehenPO {
       page,
       loading: page.getByTestId('form-darlehen-loading'),
       form: page.getByTestId('form-darlehen-form'),
-      willDarlehenRadio: page.getByTestId('form-darlehen-willDarlehen'),
       betragDarlehen: page.getByTestId('form-darlehen-betragDarlehen'),
-      betragBezogenKanton: page.getByTestId(
-        'form-darlehen-betragBezogenKanton',
-      ),
       schulden: page.getByTestId('form-darlehen-schulden'),
       fieldSetGrund: page.getByTestId('form-darlehen-gruende'),
       anzahlBetreibungen: page.getByTestId('form-darlehen-anzahlBetreibungen'),
@@ -62,17 +53,11 @@ export class DarlehenPO {
     };
   }
 
-  public async fillDarlehenForm(darlehen: Darlehen) {
-    await selectMatRadio(this.elems.willDarlehenRadio, darlehen.willDarlehen);
+  public async fillDarlehenForm(darlehen: FreiwilligDarlehen) {
+    if (isDefined(darlehen.betragGewuenscht)) {
+      await this.elems.betragDarlehen.fill(`${darlehen.betragGewuenscht}`);
+    }
 
-    if (isDefined(darlehen.betragDarlehen)) {
-      await this.elems.betragDarlehen.fill(`${darlehen.betragDarlehen}`);
-    }
-    if (isDefined(darlehen.betragBezogenKanton)) {
-      await this.elems.betragBezogenKanton.fill(
-        `${darlehen.betragBezogenKanton}`,
-      );
-    }
     if (isDefined(darlehen.schulden)) {
       await this.elems.schulden.fill(`${darlehen.schulden}`);
     }
@@ -82,26 +67,27 @@ export class DarlehenPO {
       );
     }
 
-    await handleCheckbox(
-      this.elems.grundNichtBerechtigtCheckbox,
-      darlehen.grundNichtBerechtigt,
-    );
-    await handleCheckbox(
-      this.elems.grundAusbildungZwoelfJahreCheckbox,
-      darlehen.grundAusbildungZwoelfJahre,
-    );
-    await handleCheckbox(
-      this.elems.grundHoheGebuehrenCheckbox,
-      darlehen.grundHoheGebuehren,
-    );
-    await handleCheckbox(
-      this.elems.grundAnschaffungenFuerAusbildungCheckbox,
-      darlehen.grundAnschaffungenFuerAusbildung,
-    );
-    await handleCheckbox(
-      this.elems.grundZweitausbildungCheckbox,
-      darlehen.grundZweitausbildung,
-    );
+    // todo: fix in within new darlehen E2E
+    // await handleCheckbox(
+    //   this.elems.grundNichtBerechtigtCheckbox,
+    //   darlehen.gruende[0],
+    // );
+    // await handleCheckbox(
+    //   this.elems.grundAusbildungZwoelfJahreCheckbox,
+    //   darlehen.grundAusbildungZwoelfJahre,
+    // );
+    // await handleCheckbox(
+    //   this.elems.grundHoheGebuehrenCheckbox,
+    //   darlehen.grundHoheGebuehren,
+    // );
+    // await handleCheckbox(
+    //   this.elems.grundAnschaffungenFuerAusbildungCheckbox,
+    //   darlehen.grundAnschaffungenFuerAusbildung,
+    // );
+    // await handleCheckbox(
+    //   this.elems.grundZweitausbildungCheckbox,
+    //   darlehen.grundZweitausbildung,
+    // );
     await expectFormToBeValid(this.elems.form);
   }
 }

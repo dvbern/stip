@@ -1,13 +1,9 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Partner } from '@dv/shared/model/gesuch';
-import {
-  expectFormToBeValid,
-  handleCheckbox,
-  selectMatOption,
-} from '@dv/shared/util-fn/e2e-util';
 
 import { AddressPO } from './adresse.po';
+import { expectFormToBeValid, handleCheckbox, selectMatOption } from '../utils';
 
 export class PartnerPO {
   public elems: {
@@ -19,7 +15,6 @@ export class PartnerPO {
     vorname: Locator;
     adresse: AddressPO;
     geburtsdatum: Locator;
-
     inAusbildungCheckbox: Locator;
     ausbildungspensumSelect: Locator;
 

@@ -1,10 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Kind } from '@dv/shared/model/gesuch';
-import {
-  expectFormToBeValid,
-  selectMatOption,
-} from '@dv/shared/util-fn/e2e-util';
+
+import { expectFormToBeValid, selectMatOption } from '../utils';
 
 export class KinderEditorPO {
   public elems: {

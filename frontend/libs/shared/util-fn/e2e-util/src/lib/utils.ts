@@ -32,48 +32,47 @@ export const expectInfoTitleToContainText = async (
   text: string,
   page: Page,
 ) => {
-  return expect(page.getByTestId('dynamic-tranche-step-title')).toContainText(
-    text,
-    {
-      ignoreCase: true,
-      timeout: 10000,
-    },
-  );
+  return expect(
+    page.getByTestId('dynamic-tranche-step-title').first(),
+  ).toContainText(text, {
+    ignoreCase: true,
+    timeout: 10000,
+  });
 };
 
-// export const uploadFiles = async (page: Page) => {
-//   const uploadButtons = page.getByTestId(/^button-document-upload-/);
+export const uploadFilesById = async (page: Page) => {
+  const uploadButtons = page.getByTestId(/^button-document-upload-/);
 
-//   // The required-documents table renders rows asynchronously; wait for the
-//   // first button before reading the set.
-//   await expect(uploadButtons.first()).toBeVisible({ timeout: 10000 });
+  // The required-documents table renders rows asynchronously; wait for the
+  // first button before reading the set.
+  await expect(uploadButtons.first()).toBeVisible({ timeout: 10000 });
 
-//   // Resolve the stable, unique per-dokumentTyp testids up front. Iterating over
-//   // these strings (rather than element handles) keeps the loop immune to the
-//   // Angular table re-rendering after every upload.
-//   const testIds = await uploadButtons.evaluateAll((els) =>
-//     els
-//       .map((el) => el.getAttribute('data-testid'))
-//       .filter((id): id is string => !!id),
-//   );
+  // Resolve the stable, unique per-dokumentTyp testids up front. Iterating over
+  // these strings (rather than element handles) keeps the loop immune to the
+  // Angular table re-rendering after every upload.
+  const testIds = await uploadButtons.evaluateAll((els) =>
+    els
+      .map((el) => el.getAttribute('data-testid'))
+      .filter((id): id is string => !!id),
+  );
 
-//   for (const testId of testIds) {
-//     const upload = page.getByTestId(testId);
-//     const uploadCall = page.waitForResponse(
-//       (response) =>
-//         response.url().includes('/api/v1/gesuchDokument') &&
-//         response.request().method() === 'POST',
-//     );
-//     await upload.scrollIntoViewIfNeeded();
-//     await upload.click();
-//     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-//     // Wait for the POST to complete before closing the dialog; the file is
-//     // merged asynchronously, so closing early can cancel the in-flight upload.
-//     await uploadCall;
-//     await page.keyboard.press('Escape');
-//     await expect(page.getByTestId('file-input')).toHaveCount(0);
-//   }
-// };
+  for (const testId of testIds) {
+    const upload = page.getByTestId(testId);
+    const uploadCall = page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/v1/gesuchDokument') &&
+        response.request().method() === 'POST',
+    );
+    await upload.scrollIntoViewIfNeeded();
+    await upload.click();
+    await page.getByTestId('file-input').setInputFiles(SmallImageFile);
+    // Wait for the POST to complete before closing the dialog; the file is
+    // merged asynchronously, so closing early can cancel the in-flight upload.
+    await uploadCall;
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('file-input')).toHaveCount(0);
+  }
+};
 
 export const uploadFiles = async (page: Page) => {
   const fristButton = page.getByTestId(/^button-document-upload-/).first();

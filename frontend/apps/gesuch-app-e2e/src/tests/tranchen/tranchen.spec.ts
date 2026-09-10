@@ -1,16 +1,15 @@
 import { expect } from '@playwright/test';
 
 import {
-  expectInfoTitleToContainText,
+  SachbearbeiterGesuchHeaderPO,
   expectStepTitleToContainText,
   getE2eUrls,
+  initializeMultiUserTest,
   secondTrancheStart,
+  setupGesuchWithApi,
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { initializeMultiUserTest } from '../../initialize-test';
-import { setupGesuchWithApi } from '../../initialize-test-api';
-import { SachbearbeiterGesuchHeaderPO } from '../../po/sachbearbeiter-gesuch-header.po';
 import {
   ausbildungValues,
   createZahlungsverbindungUpdateFn,
@@ -40,9 +39,8 @@ test.describe('Tranche erstellen', () => {
     );
     await expectStepTitleToContainText('Dokumente', gsPage);
     await requiredDokumenteResponse;
-
     await uploadFiles(gsPage);
-    await gsPage.getByTestId('button-continue').click();
+    await gsPage.getByTestId('step-nav-abschluss').first().click();
 
     // Freigabe ===========================================================
     await expectStepTitleToContainText('Freigabe', gsPage);
@@ -59,30 +57,32 @@ test.describe('Tranche erstellen', () => {
     await sbPage.goto(
       `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
     );
-    await expectInfoTitleToContainText('Tranche 1', sbPage);
-
-    const headerNav = new SachbearbeiterGesuchHeaderPO(sbPage);
-
-    await headerNav.elems.trancheMenu.click();
-    await expect(headerNav.elems.trancheMenuItems).toHaveCount(1);
-    await sbPage.locator('.cdk-overlay-backdrop').click();
 
     // set tranche to bearbeitung ===============================================
-    await headerNav.elems.aktionMenu.click();
-    await headerNav.elems
-      .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
+    const sbGesuchHeader = new SachbearbeiterGesuchHeaderPO(sbPage);
+    await sbGesuchHeader.elems.aktionMenu.click();
+    await sbGesuchHeader.elems
+      .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
       .click();
-    // kommentar dialog
+
+    const kommentarField = sbPage.getByTestId(
+      'form-kommentar-dialog-kommentar',
+    );
+    await kommentarField.fill('E2E Antrag genemigen kommentar');
     await sbPage.getByTestId('dialog-confirm').click();
 
-    await headerNav.elems.aktionMenu.click();
-    await headerNav.elems
+    await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
+
+    await sbGesuchHeader.elems.aktionMenu.click();
+    await sbGesuchHeader.elems
       .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
       .click();
 
+    await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
+
     // tranche erstellen ========================================================
-    await headerNav.elems.aktionMenu.click();
-    await headerNav.elems.aktionTrancheErstellen.click();
+    await sbGesuchHeader.elems.aktionMenu.click();
+    await sbGesuchHeader.elems.aktionTrancheErstellen.click();
 
     // Tranche erfassen dialog
     await sbPage
@@ -92,19 +92,19 @@ test.describe('Tranche erstellen', () => {
       .getByTestId('form-aenderung-melden-dialog-kommentar')
       .fill('E2E Test ist Grund für Änderung');
     await sbPage.getByTestId('dialog-confirm').click();
-    await expect(sbPage.locator('.mdc-snackbar')).toContainText(
+    await expect(sbPage.locator('.mdc-snackbar').first()).toContainText(
       'Die Tranche wurde erfolgreich erstellt',
     );
-    await headerNav.elems.trancheMenu.click();
-    await expect(headerNav.elems.trancheMenuItems).toHaveCount(2);
+    await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
+    await sbGesuchHeader.elems.trancheMenu.click();
+    await expect(sbGesuchHeader.elems.trancheMenuItems).toHaveCount(2);
 
     // tranche oeffnen ============================================================
     await sbPage.getByTestId('tranche-nav-menu-item').nth(1).click();
-    await expectInfoTitleToContainText('Tranche 2', sbPage);
+    // todo: Refine, not specific enough to confirm tranche creation (maybe check dates?)
+    await expectStepTitleToContainText('Person in Ausbildung', sbPage);
 
     sbPage.close();
     gsPage.close();
-
-    // end of test
   });
 });

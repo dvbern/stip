@@ -5,8 +5,7 @@ export class TrancheInfoPO {
     page: Page;
     loading: Locator;
     form: Locator;
-    buttonSaveContinue: Locator;
-    buttonNext: Locator;
+    buttonContinue: Locator;
     title: Locator;
     status: Locator;
     pia: Locator;
@@ -19,20 +18,14 @@ export class TrancheInfoPO {
     bis: Locator;
     bemerkung: Locator;
     sachbearbeiter: Locator;
-    alertWarning: Locator;
-    alertDanger: Locator;
-    aenderungReject: Locator;
-    aenderungAccept: Locator;
-    aenderungManuallyChange: Locator;
   };
 
   constructor(page: Page) {
     this.elems = {
       page,
-      loading: page.getByTestId('form-tranche-info-loading'),
-      form: page.getByTestId('form-tranche-info-form'),
-      buttonSaveContinue: page.getByTestId('button-save-continue'),
-      buttonNext: page.getByTestId('button-next'),
+      loading: page.getByTestId('form-tranche-loading'),
+      form: page.getByTestId('form-tranche-form'),
+      buttonContinue: page.getByTestId('button-continue'),
       title: page.getByTestId('dynamic-tranche-step-title'),
       status: page.getByTestId('form-tranche-status'),
       pia: page.getByTestId('form-tranche-pia'),
@@ -45,11 +38,6 @@ export class TrancheInfoPO {
       bis: page.getByTestId('form-tranche-bis'),
       bemerkung: page.getByTestId('form-tranche-bemerkung'),
       sachbearbeiter: page.getByTestId('form-tranche-sachbearbeiter'),
-      alertWarning: page.getByTestId('alert-warning'),
-      alertDanger: page.getByTestId('alert-danger'),
-      aenderungReject: page.getByTestId('aenderung-reject'),
-      aenderungAccept: page.getByTestId('aenderung-accept'),
-      aenderungManuallyChange: page.getByTestId('aenderung-manually-change'),
     };
   }
 }

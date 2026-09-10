@@ -6,7 +6,8 @@ import {
   GesuchFormularUpdate,
   Land,
 } from '@dv/shared/model/gesuch';
-import { ExplicitNull, SetupFn } from '@dv/shared/util-fn/e2e-util';
+
+import { ExplicitNull, SetupFn } from './utils';
 
 export const setupGesuchWithApi: (
   createFomularUpdateFn: (

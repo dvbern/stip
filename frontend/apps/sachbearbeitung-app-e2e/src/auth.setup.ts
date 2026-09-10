@@ -11,9 +11,10 @@ import {
  * Authenticate all e2e users once, before the parallel workers start.
  *
  * One Gesuchsteller account per worker (to avoid interference on shared
- * server-side state) plus two shared Sachbearbeiter accounts. Now more reliable than previous setup with auth handling inside individual tests.
+ * server-side state) plus a single shared Sachbearbeiter account. Running this
+ * as a `setup` project dependency makes the login count deterministic and
+ * removes the per-worker authentication race.
  */
-// todo: make users configurable as well?
 setup('authenticate users', async ({ browser }, testInfo) => {
   const urls = getE2eUrls();
   const workerCount = testInfo.config.workers;
