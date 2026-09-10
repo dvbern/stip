@@ -416,7 +416,6 @@ class GesuchTrancheAenderungTest {
                 final var kommentarDto = new GesuchDokumentKommentarDtoSpec();
                 kommentarDto.setKommentar("asdasd");
                 kommentarDto.setGesuchDokumentId(gesuchDokument.getId());
-                // kommentarDto.setGesuchTrancheId(aenderungId);
                 kommentarRequestDto.setKommentar(kommentarDto);
 
                 dokumentApiSpec.gesuchDokumentAblehnen()
