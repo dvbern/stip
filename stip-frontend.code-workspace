@@ -165,5 +165,6 @@
     "nxConsole.nxWorkspacePath": "frontend",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "eslint.codeActionsOnSave.mode": "problems",
+    "js/ts.tsdk.path": "stip/frontend/node_modules/typescript/lib",
   },
 }
