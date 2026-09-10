@@ -56,6 +56,7 @@ import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -186,9 +187,10 @@ class GesuchDokumentServiceTest {
     void deleteFilesOfAbgelehnteDokumenteForGesuchTest() {
         final var dokumentMapper = new DokumentMapperImpl();
         final var customDokumentMapper = new CustomDocumentTypMapperImpl();
+        final var gesuchDokumentKommentarMapper = Mappers.getMapper(GesuchDokumentKommentarMapper.class);
         // Arrange
         final var gsDokService = new GesuchDokumentServiceMock(
-            new GesuchDokumentMapperImpl(dokumentMapper, customDokumentMapper),
+            new GesuchDokumentMapperImpl(dokumentMapper, customDokumentMapper, gesuchDokumentKommentarMapper),
             dokumentRepository,
             gesuchDokumentRepository,
             null,

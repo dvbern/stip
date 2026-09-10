@@ -9910,13 +9910,10 @@ components:
         - AKZEPTIERT
     GesuchDokumentKommentar:
       required:
-        - gesuchTrancheId
         - gesuchDokumentId
       description: Kommentar zu einem (abgelehnten) GesuchDokument
       type: object
       properties:
-        gesuchTrancheId:
-          $ref: '#/components/schemas/UUID'
         gesuchDokumentId:
           $ref: '#/components/schemas/UUID'
         kommentar:

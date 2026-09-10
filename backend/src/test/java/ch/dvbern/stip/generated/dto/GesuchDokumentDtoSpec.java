@@ -19,6 +19,7 @@ import ch.dvbern.stip.generated.dto.CustomDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,7 +41,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
   GesuchDokumentDtoSpec.JSON_PROPERTY_CUSTOM_DOKUMENT_TYP,
   GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENTE,
-  GesuchDokumentDtoSpec.JSON_PROPERTY_STATUS
+  GesuchDokumentDtoSpec.JSON_PROPERTY_STATUS,
+  GesuchDokumentDtoSpec.JSON_PROPERTY_KOMMENTARS
 })
 @JsonTypeName("GesuchDokument")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -62,6 +64,9 @@ public class GesuchDokumentDtoSpec {
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private DokumentstatusDtoSpec status;
+
+  public static final String JSON_PROPERTY_KOMMENTARS = "kommentars";
+  private List<GesuchDokumentKommentarDtoSpec> kommentars;
 
   public GesuchDokumentDtoSpec() {
   }
@@ -229,6 +234,40 @@ public class GesuchDokumentDtoSpec {
     this.status = status;
   }
 
+
+  public GesuchDokumentDtoSpec kommentars(List<GesuchDokumentKommentarDtoSpec> kommentars) {
+    
+    this.kommentars = kommentars;
+    return this;
+  }
+
+  public GesuchDokumentDtoSpec addKommentarsItem(GesuchDokumentKommentarDtoSpec kommentarsItem) {
+    if (this.kommentars == null) {
+      this.kommentars = new ArrayList<>();
+    }
+    this.kommentars.add(kommentarsItem);
+    return this;
+  }
+
+   /**
+   * Get kommentars
+   * @return kommentars
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KOMMENTARS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<GesuchDokumentKommentarDtoSpec> getKommentars() {
+    return kommentars;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KOMMENTARS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKommentars(List<GesuchDokumentKommentarDtoSpec> kommentars) {
+    this.kommentars = kommentars;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -243,12 +282,13 @@ public class GesuchDokumentDtoSpec {
         Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
         Objects.equals(this.customDokumentTyp, gesuchDokument.customDokumentTyp) &&
         Objects.equals(this.dokumente, gesuchDokument.dokumente) &&
-        Objects.equals(this.status, gesuchDokument.status);
+        Objects.equals(this.status, gesuchDokument.status) &&
+        Objects.equals(this.kommentars, gesuchDokument.kommentars);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, entryId, dokumentTyp, customDokumentTyp, dokumente, status);
+    return Objects.hash(id, entryId, dokumentTyp, customDokumentTyp, dokumente, status, kommentars);
   }
 
   @Override
@@ -261,6 +301,7 @@ public class GesuchDokumentDtoSpec {
     sb.append("    customDokumentTyp: ").append(toIndentedString(customDokumentTyp)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    kommentars: ").append(toIndentedString(kommentars)).append("\n");
     sb.append("}");
     return sb.toString();
   }

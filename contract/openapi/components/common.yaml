@@ -302,13 +302,10 @@ Dokument:
       type: string
 GesuchDokumentKommentar:
   required:
-    - gesuchTrancheId
     - gesuchDokumentId
   description: 'Kommentar zu einem (abgelehnten) GesuchDokument'
   type: object
   properties:
-    gesuchTrancheId:
-      $ref: '#/UUID'
     gesuchDokumentId:
       $ref: '#/UUID'
     kommentar:
