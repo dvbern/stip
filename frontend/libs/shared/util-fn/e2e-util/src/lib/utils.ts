@@ -83,12 +83,13 @@ export const uploadFiles = async (page: Page) => {
     .locator('[data-testid^="button-document-upload"]')
     .all();
   for (const upload of uploads) {
-    const uploadCall = page.waitForResponse(
-      (response) =>
-        response.url().includes('/api/v1/gesuchDokument') &&
-        response.request().method() === 'POST',
-    );
     await upload.click();
+    const uploadCall = page.waitForResponse(
+      async (response) =>
+        response.url().includes('/api/v1/gesuchtranche') &&
+        response.url().includes('/dokumenteToUpload/gs') &&
+        response.request().method() === 'GET',
+    );
     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
     await uploadCall;
     await page.keyboard.press('Escape');
