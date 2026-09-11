@@ -143,7 +143,7 @@ export class BerechnungStore extends signalStore(
           sachbearbeiter: () => {
             if (verfuegungId) {
               // case mit verfuegungId => versionierte Berechnung für Verfuegung
-              return this.gesuchService.getBerechnungForVerfuegung$({
+              return this.gesuchService.getBerechnungForVerfuegungSb$({
                 verfuegungId,
               });
             }
@@ -151,12 +151,12 @@ export class BerechnungStore extends signalStore(
           },
           gesuchsteller: () => {
             if (latestVerfuegungId) {
-              return this.gesuchService.getBerechnungForVerfuegung$({
+              return this.gesuchService.getBerechnungForVerfuegungGs$({
                 verfuegungId: latestVerfuegungId,
               });
             } else if (verfuegungId) {
               // case mit verfuegungId => versionierte Berechnung für Verfuegung
-              return this.gesuchService.getBerechnungForVerfuegung$({
+              return this.gesuchService.getBerechnungForVerfuegungGs$({
                 verfuegungId,
               });
             } else {

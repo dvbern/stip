@@ -177,7 +177,11 @@ export interface GesuchServiceGetBerechnungForGesuchSbRequestParams {
     gesuchId: string;
 }
 
-export interface GesuchServiceGetBerechnungForVerfuegungRequestParams {
+export interface GesuchServiceGetBerechnungForVerfuegungGsRequestParams {
+    verfuegungId: string;
+}
+
+export interface GesuchServiceGetBerechnungForVerfuegungSbRequestParams {
     verfuegungId: string;
 }
 
@@ -2853,12 +2857,12 @@ export class GesuchService {
         );
     }
 
-    public getBerechnungForVerfuegungPath = (requestParameters: GesuchServiceGetBerechnungForVerfuegungRequestParams) => {
+    public getBerechnungForVerfuegungGsPath = (requestParameters: GesuchServiceGetBerechnungForVerfuegungGsRequestParams) => {
         const verfuegungId = requestParameters.verfuegungId;
         if (verfuegungId === null || verfuegungId === undefined) {
-            throw new Error('Required parameter verfuegungId was null or undefined when calling getBerechnungForVerfuegung$.');
+            throw new Error('Required parameter verfuegungId was null or undefined when calling getBerechnungForVerfuegungGs$.');
         }
-        let path = `/api/v1/gesuch/berechnung/${this.configuration.encodeParam({name: "verfuegungId", value: verfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let path = `/api/v1/gesuch/berechnung/${this.configuration.encodeParam({name: "verfuegungId", value: verfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gs`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -2870,18 +2874,18 @@ export class GesuchService {
     }
 
     /**
-     * Holt die Berechnung für die angegebene Verfügung
+     * Holt die Berechnung für die angegebene Verfügung für GS
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getBerechnungForVerfuegung$(requestParameters: GesuchServiceGetBerechnungForVerfuegungRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Berechnungsresultat>;
-     public getBerechnungForVerfuegung$(requestParameters: GesuchServiceGetBerechnungForVerfuegungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Berechnungsresultat>>;
-     public getBerechnungForVerfuegung$(requestParameters: GesuchServiceGetBerechnungForVerfuegungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Berechnungsresultat>>;
-     public getBerechnungForVerfuegung$(requestParameters: GesuchServiceGetBerechnungForVerfuegungRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getBerechnungForVerfuegungGs$(requestParameters: GesuchServiceGetBerechnungForVerfuegungGsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Berechnungsresultat>;
+     public getBerechnungForVerfuegungGs$(requestParameters: GesuchServiceGetBerechnungForVerfuegungGsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Berechnungsresultat>>;
+     public getBerechnungForVerfuegungGs$(requestParameters: GesuchServiceGetBerechnungForVerfuegungGsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Berechnungsresultat>>;
+     public getBerechnungForVerfuegungGs$(requestParameters: GesuchServiceGetBerechnungForVerfuegungGsRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const verfuegungId = requestParameters.verfuegungId;
         if (verfuegungId === null || verfuegungId === undefined) {
-            throw new Error('Required parameter verfuegungId was null or undefined when calling getBerechnungForVerfuegung$.');
+            throw new Error('Required parameter verfuegungId was null or undefined when calling getBerechnungForVerfuegungGs$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2929,7 +2933,96 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/berechnung/${this.configuration.encodeParam({name: "verfuegungId", value: verfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/berechnung/${this.configuration.encodeParam({name: "verfuegungId", value: verfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gs`;
+        return this.httpClient.request<Berechnungsresultat>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public getBerechnungForVerfuegungSbPath = (requestParameters: GesuchServiceGetBerechnungForVerfuegungSbRequestParams) => {
+        const verfuegungId = requestParameters.verfuegungId;
+        if (verfuegungId === null || verfuegungId === undefined) {
+            throw new Error('Required parameter verfuegungId was null or undefined when calling getBerechnungForVerfuegungSb$.');
+        }
+        let path = `/api/v1/gesuch/berechnung/${this.configuration.encodeParam({name: "verfuegungId", value: verfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/sb`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Holt die Berechnung für die angegebene Verfügung für SB
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getBerechnungForVerfuegungSb$(requestParameters: GesuchServiceGetBerechnungForVerfuegungSbRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Berechnungsresultat>;
+     public getBerechnungForVerfuegungSb$(requestParameters: GesuchServiceGetBerechnungForVerfuegungSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Berechnungsresultat>>;
+     public getBerechnungForVerfuegungSb$(requestParameters: GesuchServiceGetBerechnungForVerfuegungSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Berechnungsresultat>>;
+     public getBerechnungForVerfuegungSb$(requestParameters: GesuchServiceGetBerechnungForVerfuegungSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const verfuegungId = requestParameters.verfuegungId;
+        if (verfuegungId === null || verfuegungId === undefined) {
+            throw new Error('Required parameter verfuegungId was null or undefined when calling getBerechnungForVerfuegungSb$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuch/berechnung/${this.configuration.encodeParam({name: "verfuegungId", value: verfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/sb`;
         return this.httpClient.request<Berechnungsresultat>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
