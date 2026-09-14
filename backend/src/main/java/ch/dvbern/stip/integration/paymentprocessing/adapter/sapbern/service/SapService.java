@@ -489,9 +489,9 @@ public class SapService {
             final var lastBuchhaltungEntry =
                 buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
 
-            var auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo() / 2;
+            var auszahlungsBetrag = relevantStipendienBuchhaltung.getBetrag() / 2;
             if (isPastSecondPaymentDate(gesuch)) {
-                auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo();
+                auszahlungsBetrag = relevantStipendienBuchhaltung.getBetrag();
             }
 
             auszahlungsBetrag = Integer.min(auszahlungsBetrag, lastBuchhaltungEntry.getSaldo());
