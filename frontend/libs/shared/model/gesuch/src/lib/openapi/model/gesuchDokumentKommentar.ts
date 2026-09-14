@@ -14,7 +14,6 @@
  * Kommentar zu einem (abgelehnten) GesuchDokument
  */
 export interface GesuchDokumentKommentar { 
-    gesuchTrancheId: string;
     gesuchDokumentId: string;
     kommentar?: string;
     user_erstellt?: string;
