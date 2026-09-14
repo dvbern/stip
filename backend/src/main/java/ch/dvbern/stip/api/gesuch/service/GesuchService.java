@@ -108,6 +108,7 @@ import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -1653,7 +1654,8 @@ public class GesuchService {
                         tranchenBerechnungsresultatDto.getPersonenHaushaltGroups()
                             .stream()
                             .filter(
-                                personenHaushaltGruppeDto -> visibleSteuerdatenTyps
+                                personenHaushaltGruppeDto -> personenHaushaltGruppeDto.getTyp() == PersonenHaushalt.PIA
+                                || visibleSteuerdatenTyps
                                     .contains(personenHaushaltGruppeDto.getTyp().toSteuerdatenTyp())
                             )
                             .toList()
