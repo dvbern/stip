@@ -436,7 +436,9 @@ public class PdfUtils {
         final Table headerTable = PdfUtils.createTable(columnWidths, leftMargin);
 
         final GesuchFormular gesuchFormular =
-            gesuch.getGesuchTrancheValidOnDate(LocalDate.now()).orElseThrow().getGesuchFormular();
+            gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+                .orElse(gesuch.getLatestGesuchTranche())
+                .getGesuchFormular();
 
         final Sachbearbeiter sachbearbeiterBenutzer = gesuch
             .getAusbildung()
