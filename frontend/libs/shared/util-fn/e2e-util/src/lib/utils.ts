@@ -131,7 +131,7 @@ export const handleCheckbox = async (
 };
 
 export const selectMatOption = async (locator: Locator, value: string) => {
-  locator.click();
+  await locator.click();
 
   return locator.page().getByTestId(value).first().click();
 };
