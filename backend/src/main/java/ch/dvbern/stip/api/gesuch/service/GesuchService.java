@@ -1552,21 +1552,32 @@ public class GesuchService {
     @Transactional
     public BerechnungsresultatDto getBerechnungForVerfuegungGs(UUID verfuegungId) {
         final var verfuegung = verfuegungService.requireById(verfuegungId);
-        final Set<SteuerdatenTyp> uploadedSteuerdatenTypes =
+        final Set<SteuerdatenTyp> visibleSteuerdatenTyps =
             UnterschriftenblattUtil.getGsVisibleSteuerdatenTyps(verfuegung.getGesuch());
         final BerechnungsresultatDto berechnungsData = verfuegung.parseBerechnungData();
 
         berechnungsData.getTranchenBerechnungsresultate()
             .forEach(
-                tranchenBerechnungsresultatDto -> tranchenBerechnungsresultatDto.setFamilienBudgetresultate(
-                    tranchenBerechnungsresultatDto.getFamilienBudgetresultate()
-                        .stream()
-                        .filter(
-                            familienBudgetresultatDto -> uploadedSteuerdatenTypes
-                                .contains(familienBudgetresultatDto.getSteuerdatenTyp())
-                        )
-                        .toList()
-                )
+                tranchenBerechnungsresultatDto -> {
+                    tranchenBerechnungsresultatDto.setFamilienBudgetresultate(
+                        tranchenBerechnungsresultatDto.getFamilienBudgetresultate()
+                            .stream()
+                            .filter(
+                                familienBudgetresultatDto -> visibleSteuerdatenTyps
+                                    .contains(familienBudgetresultatDto.getSteuerdatenTyp())
+                            )
+                            .toList()
+                    );
+                    tranchenBerechnungsresultatDto.setPersonenHaushaltGroups(
+                        tranchenBerechnungsresultatDto.getPersonenHaushaltGroups()
+                            .stream()
+                            .filter(
+                                personenHaushaltGruppeDto -> visibleSteuerdatenTyps
+                                    .contains(personenHaushaltGruppeDto.getTyp().toSteuerdatenTyp())
+                            )
+                            .toList()
+                    );
+                }
             );
 
         return berechnungsData;
