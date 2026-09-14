@@ -104,6 +104,8 @@ public class VerfuegungPdfComposerService {
         final var versendeteMerged =
             PdfUtils.makePageNumberEven(PdfUtils.addPageNumbers(PdfUtils.mergePdfs(versendetePdfs)));
 
+        storeVerfuegungsDokument(verfuegung, VerfuegungDokumentTyp.VERFUEGUNG_GS, versendeteMerged);
+
         return mergeWithSozialdienstDeckblattIfDelegiert(gesuch, versendeteMerged);
     }
 

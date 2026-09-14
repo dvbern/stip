@@ -83,7 +83,7 @@ paths:
           description: Returns a file
       operationId: getVerfuegungDokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-  /verfuegung/dokument/{verfuegungDokumentId}/token:
+  /verfuegung/dokument/{verfuegungDokumentId}/token/sb:
     parameters:
       - name: verfuegungDokumentId
         schema:
@@ -106,8 +106,33 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getVerfuegungDokumentDownloadToken
-      summary: get Token to download Verfuegung
+      operationId: getVerfuegungDokumentDownloadTokenSb
+      summary: get Token to download Verfuegung for SB
+  /verfuegung/dokument/{verfuegungDokumentId}/token/gs:
+    parameters:
+      - name: verfuegungDokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: Returns a download token
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getVerfuegungDokumentDownloadTokenGs
+      summary: get Token to download Verfuegung for GS
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'

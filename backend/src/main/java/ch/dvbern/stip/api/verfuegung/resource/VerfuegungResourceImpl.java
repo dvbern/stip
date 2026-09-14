@@ -75,9 +75,22 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public FileDownloadTokenDto getVerfuegungDokumentDownloadToken(UUID verfuegungDokumentId) {
-        verfuegungAuthorizer.canGetVerfuegungDownloadToken(verfuegungDokumentId);
+    @RolesAllowed({ GS_GESUCH_READ })
+    public FileDownloadTokenDto getVerfuegungDokumentDownloadTokenGs(UUID verfuegungDokumentId) {
+        verfuegungAuthorizer.canGetVerfuegungDownloadTokenGs(verfuegungDokumentId);
+
+        return dokumentDownloadService.getFileDownloadToken(
+            verfuegungDokumentId,
+            DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM,
+            benutzerService,
+            config
+        );
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public FileDownloadTokenDto getVerfuegungDokumentDownloadTokenSb(UUID verfuegungDokumentId) {
+        verfuegungAuthorizer.canGetVerfuegungDownloadTokenSb(verfuegungDokumentId);
 
         return dokumentDownloadService.getFileDownloadToken(
             verfuegungDokumentId,

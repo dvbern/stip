@@ -90,7 +90,7 @@
       "activityBarTop.inactiveForeground": "#e7e7e799",
       "commandCenter.foreground": "#e7e7e7",
       "statusBar.debuggingBackground": "#075fa4",
-      "statusBar.debuggingForeground": "#e7e7e7"
+      "statusBar.debuggingForeground": "#e7e7e7",
     },
     "peacock.color": "#075fa4",
     "prettier.configPath": "frontend/.prettierrc",
@@ -163,5 +163,6 @@
     "nxConsole.nxWorkspacePath": "frontend",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "eslint.codeActionsOnSave.mode": "problems",
+    "js/ts.tsdk.path": "stip/frontend/node_modules/typescript/lib",
   },
 }
