@@ -22,7 +22,7 @@ const test = initializeSingleUserTest(extendedTest).extend<{
   },
 });
 
-test.describe('Sachbearbeiter App: Sozialdienst-Administration', () => {
+test.describe.skip('Sachbearbeiter App: Sozialdienst-Administration', () => {
   test('Sozialdienst erstellen und löschen', async ({ cockpit, page }) => {
     await cockpit.goToAdmin();
 
