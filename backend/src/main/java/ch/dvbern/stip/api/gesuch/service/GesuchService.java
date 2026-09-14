@@ -71,7 +71,6 @@ import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
-import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
@@ -102,7 +101,6 @@ import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.util.UnterschriftenblattUtil;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
@@ -130,6 +128,7 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import ch.dvbern.stip.generated.dto.InitialGesuchsDto;
+import ch.dvbern.stip.generated.dto.JuristischeAbklaerungNotizAntwortDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDto;
 import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
@@ -178,7 +177,6 @@ public class GesuchService {
     private final FallRepository fallRepository;
     private final FallDashboardItemMapper fallDashboardItemMapper;
     private final StipConfig config;
-    private final TenantService tenantService;
     private final GesuchNotizService gesuchNotizService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
@@ -212,32 +210,6 @@ public class GesuchService {
     public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
-    }
-
-    @Transactional
-    public GesuchWithChangesDto getGesuchSB(UUID gesuchId, UUID gesuchTrancheId) {
-        final var actualGesuch = gesuchRepository.requireById(gesuchId);
-        final var targetGueltigAb = gesuchTrancheService.getGesuchTrancheOrHistorical(gesuchTrancheId)
-            .getGueltigkeit()
-            .getGueltigAb();
-        Optional<GesuchTranche> changes = Optional.empty();
-        if (GesuchStatusUtil.sbReceivesChanges(actualGesuch)) {
-            changes = gesuchTrancheHistoryRepository
-                .getLatestWhereGesuchStatusChangedToVerfuegt(gesuchId, targetGueltigAb)
-                .or(
-                    () -> gesuchTrancheHistoryRepository
-                        .getLatestWhereGesuchStatusChangedToEingereicht(gesuchId, targetGueltigAb)
-                );
-        }
-        // bis eingereicht: changes: empty/null
-        // ab eingereicht bis verfügt: tranche: db, changes: envers changedToEingereicht
-        // ab verfügt: changes: empty/null
-        return gesuchMapperUtil.toWithChangesDto(
-            actualGesuch,
-            gesuchTrancheRepository.requireById(gesuchTrancheId),
-            changes.orElse(null),
-            true
-        );
     }
 
     @Transactional
@@ -708,7 +680,17 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchEinreichen(UUID gesuchId) {
+    public GesuchDto gesuchOfTrancheEinreichenGs(final UUID gesuchTrancheId) {
+        final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final UUID gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+
+        gesuchEinreichen(gesuchId);
+        setGesuchStatusToAnspruchPruefen(gesuchId);
+        stipendienAnspruchPruefen(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
+    }
+
+    private void gesuchEinreichen(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (gesuch.getGesuchTranchen().size() != 1) {
             throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
@@ -720,14 +702,24 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
     }
 
-    @Transactional
-    public void setGesuchStatusToAnspruchPruefen(final UUID gesuchId) {
+    public GesuchDto gesuchManuellPruefenSbJur(
+        final UUID gesuchTrancheId
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+
+        setGesuchStatusToAnspruchPruefen(gesuchId);
+        stipendienAnspruchPruefen(gesuchId);
+
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
+    }
+
+    private void setGesuchStatusToAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN);
     }
 
-    @Transactional
-    public void stipendienAnspruchPruefen(final UUID gesuchId) {
+    private void stipendienAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final var decision = getAnspruchDecision(gesuch);
@@ -769,10 +761,10 @@ public class GesuchService {
     }
 
     @Transactional
-    public void bearbeitungAbschliessen(final UUID gesuchId) {
+    public GesuchWithChangesDto bearbeitungAbschliessen(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        final var tenantConfig = tenantService.getConfigForCurrentTenant();
 
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
             gesuch
@@ -785,10 +777,17 @@ public class GesuchService {
             // Yes Stipendien, next Status = In Freigabe
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
         }
+        gesuchStatusCheckUnterschriftenblatt(gesuchId);
+        return gesuchTrancheService.getGesuchSB(gesuchTrancheId);
     }
 
     @Transactional
-    public GesuchZurueckweisenResponseDto gesuchZurueckweisen(final UUID gesuchId, final KommentarDto kommentarDto) {
+    public GesuchZurueckweisenResponseDto gesuchOfTrancheZurueckweisen(
+        final UUID gesuchTrancheId,
+        final KommentarDto kommentarDto
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         // TODO KSTIP-1130: Juristische GesuchNotiz erstellen anhand Kommentar
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var gesuchStatusChangeEvent = GesuchStatusChangeEvent.GESUCH_ZURUECKWEISEN;
@@ -821,13 +820,29 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToInBearbeitung(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public GesuchWithChangesDto gesuchStatusToInBearbeitung(
+        final UUID gesuchTrancheId
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
+        return gesuchTrancheService.getGesuchSB(gesuchTrancheId);
     }
 
     @Transactional
-    public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
+    public GesuchWithChangesDto gesuchOfTrancheStatusToBereitFuerBearbeitung(
+        final UUID gesuchTrancheId
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchStatusToBereitFuerBearbeitung(gesuchId);
+        return gesuchTrancheService.getGesuchSB(gesuchTrancheId);
+    }
+
+    @Transactional
+    public void gesuchStatusToBereitFuerBearbeitung(
+        final UUID gesuchId
+    ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
         if (
@@ -845,7 +860,12 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToDatenschutzbriefDruckbereit(final UUID gesuchId, final KommentarDto kommentar) {
+    public GesuchWithChangesDto gesuchStatusToDatenschutzbriefDruckbereit(
+        final UUID gesuchTrancheId,
+        final KommentarDto kommentar
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
@@ -853,11 +873,17 @@ public class GesuchService {
             kommentar,
             false
         );
+        return gesuchTrancheService.getGesuchSB(gesuchTrancheId);
     }
 
     @Transactional
-    public void gesuchStatusToBearbeitungAsAenderung(final UUID gesuchId, final KommentarDto kommentar) {
+    public GesuchWithChangesDto gesuchStatusToBearbeitungAsAenderung(
+        final UUID gesuchTrancheId,
+        final KommentarDto kommentar
+    ) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final Locale locale = LocaleUtil.getLocale(gesuch);
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
@@ -874,6 +900,16 @@ public class GesuchService {
             false
         );
         notificationService.createGesuchToBearbeitungAsAenderungNotificationAndSendStdMail(gesuch, kommentar);
+        return gesuchTrancheService.getGesuchSB(gesuchTrancheId);
+    }
+
+    @Transactional
+    public GesuchDto changeGesuchOfTrancheStatusToVerfuegt(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchStatusToVerfuegt(gesuchId);
+        gesuchStatusCheckUnterschriftenblatt(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Transactional
@@ -901,13 +937,24 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeGesuchStatusToVerfuegungDruckbereit(UUID gesuchId) {
+    public GesuchDto changeGesuchOfTrancheStatusToVerfuegungDruckbereit(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        gesuchStatusService
+            .triggerStateMachineEvent(gesuchTranche.getGesuch(), GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
+    }
+
+    private void changeGesuchStatusToVerfuegungDruckbereit(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
     }
 
     @Transactional
-    public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
+    public GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(
+        final UUID gesuchTrancheId
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         final var gesuch = gesuchRepository.requireById(gesuchId);
         ValidatorUtil.throwIfEntityNotValid(validator, gesuch);
         GesuchUtil.setDefaultNachfristDokumente(gesuch);
@@ -920,10 +967,26 @@ public class GesuchService {
             ),
             false
         );
+        return gesuchTrancheService.getGesuchSB(gesuchTrancheId);
     }
 
     @Transactional
-    public void changeGesuchStatusToNegativeVerfuegungWithDecision(
+    public GesuchDto changeGesuchStatusToNegativeVerfuegung(
+        final UUID gesuchTrancheId,
+        final AusgewaehlterGrundDto ausgewaehlterGrundDto
+    ) {
+        final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final UUID gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+
+        changeGesuchStatusToNegativeVerfuegungWithDecision(
+            gesuchId,
+            ausgewaehlterGrundDto
+        );
+        changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
+    }
+
+    private void changeGesuchStatusToNegativeVerfuegungWithDecision(
         final UUID gesuchId,
         final AusgewaehlterGrundDto ausgewaehlterGrundDto
     ) {
@@ -947,7 +1010,23 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeGesuchStatusToNegativeVerfuegungManuell(
+    public GesuchWithChangesDto createManuelleVerfuegung(
+        final UUID gesuchTrancheId,
+        final FileUpload fileUpload,
+        final String kommentar
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        changeGesuchStatusToNegativeVerfuegungManuell(
+            gesuchId,
+            fileUpload,
+            kommentar
+        );
+        changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
+        return gesuchTrancheService.getGesuchSB(gesuchTrancheId);
+    }
+
+    private void changeGesuchStatusToNegativeVerfuegungManuell(
         final UUID gesuchId,
         final FileUpload fileUpload,
         final String kommentar
@@ -1038,7 +1117,7 @@ public class GesuchService {
         final var gesuch = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch();
 
         final var eingereichtTranche =
-            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+            getLatestEingereichtVersion(gesuch.getId())
                 .flatMap(eingereichtGesuch -> eingereichtGesuch.getTranchenTranchen().findFirst())
                 .orElseThrow(NotFoundException::new);
 
@@ -1055,7 +1134,7 @@ public class GesuchService {
         final var gesuch = tranche.getGesuch();
 
         final var requestedTrancheFromGesuchInStatusEingereicht =
-            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+            gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuch.getId(), false)
                 .orElseThrow(ForbiddenException::new)
                 .getGesuchTranchen()
                 .stream()
@@ -1063,7 +1142,7 @@ public class GesuchService {
                 .findFirst();
 
         var requestedTrancheFromGesuchInStatusVerfuegt =
-            gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT)
+            gesuchHistoryRepository.getFirstVerfuegtGesuchVersion(gesuch.getId())
                 .orElseThrow(NotFoundException::new)
                 .getGesuchTranchen()
                 .stream()
@@ -1155,7 +1234,7 @@ public class GesuchService {
                 break;
             }
         }
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
+        return getGesuchGS(gesuchTrancheId);
     }
 
     @Transactional
@@ -1240,7 +1319,7 @@ public class GesuchService {
     }
 
     public Optional<Gesuch> getLatestEingereichtVersion(final UUID gesuchId) {
-        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+        return gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuchId, false);
     }
 
     public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
@@ -1448,9 +1527,11 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeToVersendentAndAnspruchOrKeinAnspruch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public GesuchDto changeToVersendentAndAnspruchOrKeinAnspruch(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
         bulkChangeToVersendentAndAnspruchOrKeinAnspruch(List.of(gesuch));
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Transactional
@@ -1475,9 +1556,9 @@ public class GesuchService {
     @Transactional
     public InitialGesuchsDto getInitialGesuchTranches(final Gesuch gesuch) {
         final var verfuegtGesuchOpt =
-            gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
+            gesuchHistoryRepository.getFirstVerfuegtGesuchVersion(gesuch.getId());
         final var eingerichtGesuchOpt =
-            gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT);
+            gesuchHistoryRepository.getFirstEingereichtGesuchVersion(gesuch.getId());
         if (verfuegtGesuchOpt.isEmpty() && eingerichtGesuchOpt.isEmpty()) {
             return null;
         }
@@ -1581,5 +1662,16 @@ public class GesuchService {
             );
 
         return berechnungsData;
+    }
+
+    @Transactional
+    public GesuchNotizDto answerJuristischeNotiz(
+        final JuristischeAbklaerungNotizAntwortDto dto,
+        final UUID notizId
+    ) {
+        final var notizDto = gesuchNotizService.answerJuristischeNotiz(dto, notizId);
+
+        gesuchStatusToBereitFuerBearbeitung(gesuchNotizService.getGesuchOfNotiz(notizId).getId());
+        return notizDto;
     }
 }

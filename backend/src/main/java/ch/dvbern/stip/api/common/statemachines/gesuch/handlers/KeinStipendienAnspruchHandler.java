@@ -20,12 +20,15 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
+@Slf4j
 @RequiredArgsConstructor
-public class NegativVerfuegtHandler implements GesuchStatusChangeHandler {
+public class KeinStipendienAnspruchHandler implements GesuchStatusChangeHandler {
+
     @Override
     public void handle(Gesuch gesuch, String comment) {
-        gesuch.setInBearbeitungSbReason(null);
+        gesuch.incrementVerfuegtCount();
     }
 }

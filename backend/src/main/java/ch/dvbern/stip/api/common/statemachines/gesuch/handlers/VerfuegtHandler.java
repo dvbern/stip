@@ -29,7 +29,6 @@ public class VerfuegtHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch, String comment) {
-        gesuch.setVerfuegt(true);
         gesuch.setInBearbeitungSbReason(null);
         gemeindeLookupService.createFetchGemeindeDataScheduledJob(gesuch);
     }

@@ -103,14 +103,15 @@ class DelegierenAuthorizerTest {
         fall.setCurrentDelegierung(delegierung);
 
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(sozialdienst);
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+            .thenReturn(sozialdienst);
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
     }
 
     @Test
     void canReadDelegierung_shouldWork_asSozialdienstMitarbeiterOfSozialdienst() {
         // arrange
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
@@ -123,7 +124,8 @@ class DelegierenAuthorizerTest {
         setupSozialdienstMitarbeiter();
         setupDelegierung();
 
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+            .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
@@ -139,7 +141,8 @@ class DelegierenAuthorizerTest {
         when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer())
             .thenReturn(Optional.of(new SozialdienstBenutzer()));
 
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+            .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert

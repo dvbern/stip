@@ -24,7 +24,6 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.AuditEntityUtil;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -166,7 +165,7 @@ public class GesuchTrancheHistoryRepository {
         final UUID gesuchId,
         final LocalDate gueltigAb
     ) {
-        return gesuchHistoryService.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.VERFUEGT)
+        return gesuchHistoryService.getLastVerfuegtGesuchVersion(gesuchId)
             .flatMap(gesuch -> gesuch.getEingereichteGesuchTrancheValidOnDate(gueltigAb))
             .stream()
             .findFirst();
@@ -177,9 +176,9 @@ public class GesuchTrancheHistoryRepository {
         final UUID gesuchId,
         final LocalDate gueltigAb
     ) {
-        return gesuchHistoryService.getLatestWhereStatusChangedTo(
+        return gesuchHistoryService.getLastEingereichtGesuchVersion(
             gesuchId,
-            Gesuchstatus.EINGEREICHT
+            false
         )
             .flatMap(gesuch -> gesuch.getEingereichteGesuchTrancheValidOnDate(gueltigAb))
             .stream()

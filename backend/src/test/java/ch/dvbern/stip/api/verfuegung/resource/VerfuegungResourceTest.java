@@ -175,7 +175,7 @@ public class VerfuegungResourceTest {
     @TestAsFreigabestelle
     @Order(6)
     @Test
-    void changeGesuchToVerfuegt() {
+    void gesuchFreigeben() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -185,6 +185,18 @@ public class VerfuegungResourceTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
+    }
+
+    @TestAsSachbearbeiter
+    @Order(7)
+    @Test
+    void changeGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVersendet()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
 
         final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -194,18 +206,6 @@ public class VerfuegungResourceTest {
             .body()
             .as(GesuchWithChangesDtoSpec.class);
         assertThat(gesuchWithChanges.getChanges()).hasSize(1);
-    }
-
-    @TestAsSachbearbeiter
-    @Order(7)
-    @Test
-    void changeGesuchToVersendet() {
-        gesuchApiSpec.changeGesuchStatusToVersendet()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @TestAsSachbearbeiter

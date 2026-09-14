@@ -165,7 +165,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
     @TestAsFreigabestelle
     @Order(7)
     @Test
-    void changeGesuchToVerfuegt() {
+    void gesuchFreigeben() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -175,6 +175,18 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(9)
+    void changeGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVersendet()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
 
         gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -188,7 +200,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(10)
     void shouldReturnListOfInitialTranches() {
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
