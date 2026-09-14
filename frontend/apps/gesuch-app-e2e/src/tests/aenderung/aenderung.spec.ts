@@ -182,7 +182,13 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await expect(gsPersonPO.elems.loading).toBeHidden();
   await gsPersonPO.elems.nachname.fill('E2E-Changed');
   await expectFormToBeValid(gsPersonPO.elems.form);
+  const personGsSaveResponse = gsPage.waitForResponse(
+    (r) =>
+      r.url().includes('/api/v1/gesuch') && r.request().method() === 'PATCH',
+  );
   await gsPersonPO.elems.buttonSaveContinue.click();
+  await gsPersonPO.elems.loading.waitFor({ state: 'hidden' });
+  await personGsSaveResponse;
 
   const lebenslaufPO = new LebenslaufPO(gsPage);
   await lebenslaufPO.elems.loading.waitFor({ state: 'hidden' });
