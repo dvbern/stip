@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.buchhaltung.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungMapper;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.authorization.BuchhaltungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
@@ -44,7 +43,6 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHHALTUNG_ENTRY_R
 public class BuchhaltungResourceImpl implements BuchhaltungResource {
     private final BuchhaltungAuthorizer buchhaltungAuthorizer;
     private final BuchhaltungService buchhaltungService;
-    private final BuchhaltungMapper buchhaltungMapper;
     private final PaymentProcessingPortFactory paymentProcessingPortFactory;
 
     @Override
@@ -78,7 +76,6 @@ public class BuchhaltungResourceImpl implements BuchhaltungResource {
     @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
     public BuchhaltungEntryDto retryFailedAuszahlungBuchhaltungForGesuch(UUID gesuchId) {
         buchhaltungAuthorizer.canRetryFailedAuszahlungBuchhaltung(gesuchId);
-        return buchhaltungMapper
-            .toDto(paymentProcessingPortFactory.getPaymentProcessingAdapter().retryAuszahlungBuchhaltung(gesuchId));
+        return paymentProcessingPortFactory.getPaymentProcessingAdapter().retryAuszahlungBuchhaltung(gesuchId);
     }
 }

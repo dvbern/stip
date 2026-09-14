@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumente
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KeinStipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativVerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.SbInitialisiertAenderungHandler;
@@ -67,6 +68,7 @@ public class GesuchStatusConfigProducer {
     private final AenderungZurueckweisenHandler aenderungZurueckweisenHandler;
     private final AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandler;
     private final StipendienAnspruchHandler stipendienAnspruchHandler;
+    private final KeinStipendienAnspruchHandler keinStipendienAnspruchHandler;
     private final JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandler;
     private final StatusprotokollService statusprotokollService;
     private final AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandler;
@@ -270,6 +272,10 @@ public class GesuchStatusConfigProducer {
             )
             .permit(GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG, Gesuchstatus.IN_BEARBEITUNG_SB)
             .permit(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH),
+                keinStipendienAnspruchHandler::handle
+            )
             .onEntryFrom(
                 triggers.get(
                     GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH

@@ -134,6 +134,15 @@ public class MassendruckJobService {
         );
     }
 
+    public MassendruckJobDto createAndCombineMassendruckJobForQueryType(
+        final GetGesucheSBQueryType getGesucheSBQueryType,
+        final Boolean zugewiesen
+    ) {
+        final var massendruckJob = createMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
+        combineDocument(massendruckJob.getId());
+        return massendruckJob;
+    }
+
     @Transactional
     public MassendruckJobDto createMassendruckJobForQueryType(
         final GetGesucheSBQueryType getGesucheSBQueryType,
@@ -164,7 +173,7 @@ public class MassendruckJobService {
         return massendruckJobMapper.toDto(massendruckJob);
     }
 
-    public void combineDocument(final UUID massendruckJobId) {
+    private void combineDocument(final UUID massendruckJobId) {
         massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentTenantIdentifier());
     }
 
@@ -182,7 +191,15 @@ public class MassendruckJobService {
     }
 
     @Transactional
-    public MassendruckJobDetailDto retryMassendruckJob(final UUID massendruckId) {
+    public MassendruckJobDetailDto retryAndCombineMassendruckJob(
+        final UUID massendruckId
+    ) {
+        final var massendruckJobDetail = retryMassendruckJob(massendruckId);
+        combineDocument(massendruckId);
+        return massendruckJobDetail;
+    }
+
+    private MassendruckJobDetailDto retryMassendruckJob(final UUID massendruckId) {
         final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
         massendruckJob.setStatus(MassendruckJobStatus.IN_PROGRESS);
         return massendruckJobMapper.toDetailDto(massendruckJob);
