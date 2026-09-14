@@ -12,7 +12,7 @@ export class SbCockpitPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      adminLink: page.getByTestId('gesuch-step-nav-administration'),
+      adminLink: page.getByTestId('admin-nav-item'),
       title: page.getByTestId('cockpit-title'),
       list: page.getByTestId('cockpit-table'),
       rows: page.getByTestId('cockpit-row-sv'),

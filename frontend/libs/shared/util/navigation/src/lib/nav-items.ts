@@ -18,6 +18,7 @@ export const sozialdienstAdminNavItems: NavItem[] = [
     icon: 'settings',
     route: ['/administration'],
     rolesAllowed: ['V0_Sozialdienst-Admin'],
+    testId: 'admin-nav-item',
   },
 ];
 
