@@ -45,7 +45,6 @@ import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentCreateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentDto;
@@ -264,20 +263,6 @@ public class DokumentResourceImpl implements DokumentResource {
             benutzerService,
             config
         );
-    }
-
-    @Override
-    @RolesAllowed(DOKUMENT_READ)
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareGS(UUID gesuchDokumentId) {
-        gesuchDokumentAuthorizer.canGetGesuchDokumentKommentar(gesuchDokumentId);
-        return gesuchDokumentKommentarService.getAllKommentareForGesuchDokumentGS(gesuchDokumentId);
-    }
-
-    @Override
-    @RolesAllowed(DOKUMENT_READ)
-    public List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareSB(UUID gesuchDokumentId) {
-        gesuchDokumentAuthorizer.canGetGesuchDokumentKommentar(gesuchDokumentId);
-        return gesuchDokumentKommentarService.getAllKommentareForGesuchDokumentSB(gesuchDokumentId);
     }
 
     @Override
