@@ -13,9 +13,7 @@ import {
  * One Gesuchsteller account per worker (to avoid interference on shared
  * server-side state) plus two shared Sachbearbeiter accounts.
  */
-// todo: make users configurable as well?
 setup('authenticate users', async ({ browser }, testInfo) => {
-  setup.setTimeout(10_000);
   const urls = getE2eUrls();
   const workerCount = testInfo.config.workers;
 

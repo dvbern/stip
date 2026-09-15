@@ -5,7 +5,7 @@ import {
   extendedTest as setup,
 } from '@dv/shared/util-fn/e2e-util';
 
-// todo: remove duplicate authentication setup across e2e tests
+// todo-e2e-next: remove duplicate authentication setup across e2e tests
 setup('authenticate users', async ({ browser, testUser }, testInfo) => {
   const urls = getE2eUrls();
 

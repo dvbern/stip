@@ -5,7 +5,7 @@ import {
   sozStorageStatePath,
 } from '@dv/shared/util-fn/e2e-util';
 
-// todo: remove duplicate authentication setup across e2e tests
+// todo-e2e-next: remove duplicate authentication setup across e2e tests
 setup('authenticate users', async ({ browser, testUser }, testInfo) => {
   const urls = getE2eUrls();
 
@@ -25,7 +25,7 @@ setup('authenticate users', async ({ browser, testUser }, testInfo) => {
   await authenticateAndSaveStorageState(browser, {
     username,
     password,
-    baseURL: urls.sb,
+    baseURL: urls.soz,
     storagePath: sozStorageStatePath(testInfo, 0),
   });
 });
