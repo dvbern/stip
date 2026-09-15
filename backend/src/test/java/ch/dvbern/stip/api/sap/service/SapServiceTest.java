@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.SapEndpointServiceMock;
@@ -57,6 +58,7 @@ import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.SapS
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
@@ -85,8 +87,8 @@ public class SapServiceTest {
     @Inject
     SapEndpointServiceMock sapEndpointServiceMock;
 
-    @InjectMock
-    BuchhaltungRepository buchhaltungRepositoryMock;
+    @InjectSpy
+    BuchhaltungRepository buchhaltungRepositorySpy;
 
     @InjectMock
     GesuchRepository gesuchRepositoryMock;
@@ -113,7 +115,7 @@ public class SapServiceTest {
     @BeforeAll
     void setUp() {
         QuarkusMock.installMockForType(sapDeliveryRepositoryMock, SapDeliveryRepository.class);
-        QuarkusMock.installMockForType(buchhaltungRepositoryMock, BuchhaltungRepository.class);
+        QuarkusMock.installMockForType(buchhaltungRepositorySpy, BuchhaltungRepository.class);
         QuarkusMock.installMockForType(gesuchRepositoryMock, GesuchRepository.class);
         QuarkusMock.installMockForType(fallRepositoryMock, FallRepository.class);
         QuarkusMock.installMockForType(zahlungsverbindungRepositoryMock, ZahlungsverbindungRepository.class);
@@ -128,7 +130,7 @@ public class SapServiceTest {
             buchhaltung.setId(UUID.randomUUID());
             return buchhaltung;
         }
-        ).when(buchhaltungRepositoryMock).persistAndFlush(any());
+        ).when(buchhaltungRepositorySpy).persistAndFlush(any());
 
         Mockito.doAnswer(invocationOnMock -> {
             final var sapDelivery = invocationOnMock.getArgument(0, SapDelivery.class);
@@ -142,8 +144,9 @@ public class SapServiceTest {
         // Arrange
         final var gesuch = prepareGesuchForSapService();
 
-        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
-            .thenReturn(Optional.empty());
+        Mockito.doReturn(Optional.empty())
+            .when(buchhaltungRepositorySpy)
+            .findPendingBuchhaltungEntryOfFall(any(), any());
 
         final var stipendiumsBetrag = 1000;
         final var lastEntryStipendiumBuchhaltung = new Buchhaltung()
@@ -151,11 +154,13 @@ public class SapServiceTest {
             .setSaldo(stipendiumsBetrag)
             .setBuchhaltungType(BuchhaltungType.STIPENDIUM);
         lastEntryStipendiumBuchhaltung.setId(UUID.randomUUID());
-        Mockito.when(buchhaltungRepositoryMock.findStipendiumsEntrysForGesuch(any()))
-            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+        Mockito.doReturn(Stream.of(lastEntryStipendiumBuchhaltung))
+            .when(buchhaltungRepositorySpy)
+            .findStipendiumsEntrysForGesuch(any());
 
-        Mockito.when(buchhaltungRepositoryMock.findAllForFallId(any()))
-            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+        Mockito.doReturn(Stream.of(lastEntryStipendiumBuchhaltung))
+            .when(buchhaltungRepositorySpy)
+            .findAllForFallId(any());
 
         gesuch.getAusbildung().getFall().setBuchhaltungs(new ArrayList<>());
         gesuch.getAusbildung().getFall().getBuchhaltungs().add(lastEntryStipendiumBuchhaltung);
@@ -180,8 +185,9 @@ public class SapServiceTest {
         // Arrange
         final var gesuch = prepareGesuchForSapService();
 
-        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
-            .thenReturn(Optional.empty());
+        Mockito.doReturn(Optional.empty())
+            .when(buchhaltungRepositorySpy)
+            .findPendingBuchhaltungEntryOfFall(any(), any());
 
         final var stipendiumsBetrag = 1000;
         final var lastEntryStipendiumBuchhaltung = new Buchhaltung()
@@ -189,11 +195,13 @@ public class SapServiceTest {
             .setSaldo(stipendiumsBetrag)
             .setBuchhaltungType(BuchhaltungType.STIPENDIUM);
         lastEntryStipendiumBuchhaltung.setId(UUID.randomUUID());
-        Mockito.when(buchhaltungRepositoryMock.findStipendiumsEntrysForGesuch(any()))
-            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+        Mockito.doReturn(Stream.of(lastEntryStipendiumBuchhaltung))
+            .when(buchhaltungRepositorySpy)
+            .findStipendiumsEntrysForGesuch(any());
 
-        Mockito.when(buchhaltungRepositoryMock.findAllForFallId(any()))
-            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+        Mockito.doReturn(Stream.of(lastEntryStipendiumBuchhaltung))
+            .when(buchhaltungRepositorySpy)
+            .findAllForFallId(any());
 
         final var auszahlungBuchhaltungForGesuch =
             new Buchhaltung().setBuchhaltungType(BuchhaltungType.AUSZAHLUNG_INITIAL);
@@ -214,7 +222,7 @@ public class SapServiceTest {
         assertThat(relevantBuchhaltung.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(1));
 
         // Arrange
-        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
+        Mockito.when(buchhaltungRepositorySpy.findPendingBuchhaltungEntryOfFall(any(), any()))
             .thenReturn(Optional.of(relevantBuchhaltung));
 
         relevantBuchhaltung.getSapDeliverys().get(0).setTimestampErstellt(LocalDateTime.now());
@@ -287,8 +295,9 @@ public class SapServiceTest {
         // Arrange
         final var gesuch = prepareGesuchForSapService();
 
-        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
-            .thenReturn(Optional.empty());
+        Mockito.doReturn(Optional.empty())
+            .when(buchhaltungRepositorySpy)
+            .findPendingBuchhaltungEntryOfFall(any(), any());
 
         final var stipendiumsBetrag = 1000;
         final var lastEntryStipendiumBuchhaltung = new Buchhaltung()
@@ -297,11 +306,12 @@ public class SapServiceTest {
             .setBuchhaltungType(BuchhaltungType.STIPENDIUM);
         lastEntryStipendiumBuchhaltung.setId(UUID.randomUUID());
         lastEntryStipendiumBuchhaltung.setZahlungsverbindung(new Zahlungsverbindung().setAdresse(new Adresse()));
-        Mockito.when(buchhaltungRepositoryMock.findStipendiumsEntrysForGesuch(any()))
-            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+        Mockito.doReturn(Stream.of(lastEntryStipendiumBuchhaltung))
+            .when(buchhaltungRepositorySpy)
+            .findStipendiumsEntrysForGesuch(any());
 
         Mockito.doAnswer(invocation -> Stream.of(lastEntryStipendiumBuchhaltung))
-            .when(buchhaltungRepositoryMock)
+            .when(buchhaltungRepositorySpy)
             .findAllForFallId(any());
 
         gesuch.getAusbildung().getFall().setBuchhaltungs(new ArrayList<>());
@@ -321,7 +331,7 @@ public class SapServiceTest {
             .getBuchhaltungs()
             .get(gesuch.getAusbildung().getFall().getBuchhaltungs().size() - 1);
 
-        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
+        Mockito.when(buchhaltungRepositorySpy.findPendingBuchhaltungEntryOfFall(any(), any()))
             .thenReturn(Optional.of(relevantBuchhaltung));
 
         relevantBuchhaltung.getSapDeliverys().get(0).setTimestampErstellt(LocalDateTime.now());
@@ -362,10 +372,12 @@ public class SapServiceTest {
 
         sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
 
-        Mockito.when(buchhaltungRepositoryMock.findPendingBuchhaltungEntryOfFall(any(), any()))
-            .thenReturn(Optional.empty());
-        Mockito.when(buchhaltungRepositoryMock.findStipendiumsEntrysForGesuch(any()))
-            .thenReturn(Stream.of(lastEntryStipendiumBuchhaltung));
+        Mockito.doReturn(Optional.empty())
+            .when(buchhaltungRepositorySpy)
+            .findPendingBuchhaltungEntryOfFall(any(), any());
+        Mockito.doReturn(Stream.of(lastEntryStipendiumBuchhaltung))
+            .when(buchhaltungRepositorySpy)
+            .findStipendiumsEntrysForGesuch(any());
         final var noBuchhaltungBefore = gesuch.getAusbildung().getFall().getBuchhaltungs().size();
 
         // Act
@@ -373,6 +385,54 @@ public class SapServiceTest {
 
         // Assert
         assertEquals(gesuch.getAusbildung().getFall().getBuchhaltungs().size(), noBuchhaltungBefore + 1);
+    }
+
+    @Test
+    void testAenderungVerfuegenResultsInProperPayment() {
+        // Arrange
+        final var gesuch = prepareGesuchForSapService();
+
+        Mockito.doReturn(Optional.empty())
+            .when(buchhaltungRepositorySpy)
+            .findPendingBuchhaltungEntryOfFall(any(), any());
+
+        final var stipendiumsBetrag = 1000;
+        final var saldo = 2000;
+        final var lastEntryStipendiumBuchhaltung = new Buchhaltung()
+            .setBetrag(stipendiumsBetrag)
+            .setSaldo(stipendiumsBetrag + saldo)
+            .setBuchhaltungType(BuchhaltungType.STIPENDIUM);
+        lastEntryStipendiumBuchhaltung.setId(UUID.randomUUID());
+        lastEntryStipendiumBuchhaltung.setZahlungsverbindung(new Zahlungsverbindung().setAdresse(new Adresse()));
+        Mockito.doReturn(Stream.of(lastEntryStipendiumBuchhaltung))
+            .when(buchhaltungRepositorySpy)
+            .findStipendiumsEntrysForGesuch(any());
+
+        Mockito.doReturn(Stream.of(lastEntryStipendiumBuchhaltung))
+            .when(buchhaltungRepositorySpy)
+            .findAllForFallId(any());
+
+        ArrayList<Buchhaltung> buchhaltungs = new ArrayList<>();
+        buchhaltungs.add(lastEntryStipendiumBuchhaltung);
+        gesuch.getAusbildung().getFall().setBuchhaltungs(buchhaltungs);
+
+        AtomicReference<Buchhaltung> buchhaltung = new AtomicReference<>();
+
+        Mockito.doAnswer(invocation -> {
+            buchhaltung.set(invocation.getArgument(0, Buchhaltung.class));
+            buchhaltung.get().setId(UUID.randomUUID());
+            return buchhaltung;
+
+        }).when(buchhaltungRepositorySpy).persistAndFlush(any());
+
+        // Act
+
+        sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
+
+        // Assert
+
+        assertThat(buchhaltung.get().getSaldo(), Matchers.is(2500));
+        assertThat(buchhaltung.get().getBetrag(), Matchers.is(500));
     }
 
     private Gesuch prepareGesuchForSapService() {
