@@ -14,6 +14,7 @@ import {
  * server-side state) plus two shared Sachbearbeiter accounts.
  */
 setup('authenticate users', async ({ browser }, testInfo) => {
+  setup.slow();
   const urls = getE2eUrls();
   const workerCount = testInfo.config.workers;
 
