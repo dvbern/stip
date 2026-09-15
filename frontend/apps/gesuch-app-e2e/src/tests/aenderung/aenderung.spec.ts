@@ -221,9 +221,16 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
 
   // Go to Aenderung on SB App ==========================================================
   await sbPage.bringToFront();
+
+  const gesuchHeaderResponse = sbPage.waitForResponse(
+    '**/api/v1/gesuch/sb/header/*',
+  );
+
   await sbPage.goto(
     `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
   );
+
+  await gesuchHeaderResponse;
 
   const sbTrancheInfoPO = new TrancheInfoPO(sbPage);
 

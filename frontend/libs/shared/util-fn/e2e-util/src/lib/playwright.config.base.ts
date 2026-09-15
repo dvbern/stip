@@ -4,8 +4,13 @@ import { zstdCompress, zstdDecompress } from 'http-encoding';
 export const BEARER_COOKIE = 'access_cookie';
 export const REFRESH_COOKIE = 'refresh_cookie';
 
-const gsURL = process.env['E2E_BASEURL_GS'];
-const sbURL = process.env['E2E_BASEURL_SB'];
+// const gsURL = process.env['E2E_BASEURL_GS'];
+const gsURL =
+  'https://feature-kstip-3927-2-refactor-stip.apps.mercury.ocp.dvbern.ch/';
+// const sbURL = process.env['E2E_BASEURL_SB'];
+const sbURL =
+  'https://feature-kstip-3927-2-refactor-sb-stip.apps.mercury.ocp.dvbern.ch/';
+
 const sozURL = process.env['E2E_BASEURL_SOZ'];
 export const getE2eUrls = () => {
   return {
@@ -63,19 +68,20 @@ export const baseConfig = defineConfig({
     screenshot: {
       mode: 'only-on-failure',
     },
+    viewport: { width: 1440, height: 980 },
     video: {
-      mode: 'on',
-      // size: { width: 1920, height: 1080 },
-      // smaller video size to reduce file size
+      mode: 'off',
       size: { width: 1280, height: 720 },
     },
     contextOptions: {
       ignoreHTTPSErrors: true,
     },
-    actionTimeout: !process.env.CI ? 5_000 : undefined,
+    // actionTimeout: !process.env.CI ? 5_000 : undefined,
+    actionTimeout: 10_000,
   },
   expect: {
-    timeout: process.env.CI ? 20_000 : undefined,
+    // timeout: process.env.CI ? 20_000 : undefined,
+    timeout: 20_000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
