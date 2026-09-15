@@ -175,7 +175,6 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
 
   // make a change in the form
   const gsPersonPO = new PersonPO(gsPage);
-  await gsPersonPO.elems.actionLoading.waitFor({ state: 'hidden' });
   await gsPersonPO.elems.nachname.fill('E2E-Changed');
   await expectFormToBeValid(gsPersonPO.elems.form);
   const personGsSaveResponse = gsPage.waitForResponse(

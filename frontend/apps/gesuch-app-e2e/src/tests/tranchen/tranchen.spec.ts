@@ -101,7 +101,7 @@ test.describe('Tranche erstellen', () => {
 
     // tranche oeffnen ============================================================
     await sbPage.getByTestId('tranche-nav-menu-item').nth(1).click();
-    // todo: Refine, not specific enough to confirm tranche creation (maybe check dates?)
+    // todo-e2e-next: Refine, not specific enough to confirm tranche creation (maybe check dates?)
     await expectStepTitleToContainText('Person in Ausbildung', sbPage);
 
     sbPage.close();
