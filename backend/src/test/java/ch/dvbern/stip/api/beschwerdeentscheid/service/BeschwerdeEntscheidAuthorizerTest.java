@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -68,7 +69,7 @@ class BeschwerdeEntscheidAuthorizerTest {
         final var gesuchTrancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchDokument.getGesuchTranche());
 
-        authorizer = new BeschwerdeEntscheidAuthorizer(benutzerService, gesuchRepository);
+        authorizer = new BeschwerdeEntscheidAuthorizer(gesuchRepository);
     }
 
     @Test

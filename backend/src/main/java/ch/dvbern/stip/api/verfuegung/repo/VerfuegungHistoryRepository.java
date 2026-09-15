@@ -47,7 +47,6 @@ public class VerfuegungHistoryRepository {
             .forRevisionsOfEntity(Verfuegung.class, false, true)
             .add(AuditEntity.property("gesuch_id").eq(gesuchId))
             .add(AuditEntity.revisionType().ne(RevisionType.DEL))
-            .add(AuditEntity.revisionType().ne(RevisionType.ADD))
             .add(AuditEntity.property("verfuegungStatus").in(VerfuegungStatus.FINAL_STATUS))
             .add(AuditEntity.property("verfuegungStatus").hasChanged())
             .addOrder(AuditEntityUtil.revisionTimestamp().desc())

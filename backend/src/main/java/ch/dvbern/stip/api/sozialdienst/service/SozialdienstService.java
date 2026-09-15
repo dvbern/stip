@@ -22,12 +22,12 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.type.FrontendType;
-import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.api.zahlungsverbindung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
+import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
@@ -36,7 +36,6 @@ import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -47,12 +46,6 @@ public class SozialdienstService {
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
     private final ZahlungsverbindungService zahlungsverbindungService;
     private final MailService mailService;
-
-    public Sozialdienst getSozialdienstOfCurrentSozialdienstBenutzer() {
-        final var sozialdienstBenutzer =
-            sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow(NotFoundException::new);
-        return sozialdienstRepository.getSozialdienstByBenutzer(sozialdienstBenutzer);
-    }
 
     @Transactional
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto dto) {
@@ -143,5 +136,15 @@ public class SozialdienstService {
         sozialdienst.setAktiv(aktiv);
 
         return sozialdienstMapper.toDto(sozialdienst);
+    }
+
+    @Transactional
+    public SozialdienstBenutzerDto createSozialdienstMitarbeiterBenutzer(
+        final SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
+    ) {
+        return sozialdienstBenutzerService.createSozialdienstMitarbeiterBenutzer(
+            sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer(),
+            sozialdienstBenutzerCreateDto
+        );
     }
 }

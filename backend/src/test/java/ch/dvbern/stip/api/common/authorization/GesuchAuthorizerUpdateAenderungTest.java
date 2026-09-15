@@ -124,25 +124,25 @@ class GesuchAuthorizerUpdateAenderungTest {
             .forEach(trancheStatus -> {
                 aenderung.setStatus(trancheStatus);
                 assertThrows(ForbiddenException.class, () -> {
-                    gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung);
+                    gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung.getId());
                 });
             });
 
         SACHBEARBEITER_CAN_EDIT.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
             assertDoesNotThrow(() -> {
-                gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung);
+                gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung.getId());
             });
         });
 
         aenderung.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         assertThrows(ForbiddenException.class, () -> {
-            gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung);
+            gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung.getId());
         });
 
         aenderung.setStatus(GesuchTrancheStatus.ABGELEHNT);
         assertThrows(ForbiddenException.class, () -> {
-            gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung);
+            gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung.getId());
         });
     }
 
@@ -166,7 +166,7 @@ class GesuchAuthorizerUpdateAenderungTest {
 
         aenderung.setStatus(IN_BEARBEITUNG_GS);
         assertDoesNotThrow(() -> {
-            gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung);
+            gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung.getId());
         });
     }
 
@@ -192,7 +192,7 @@ class GesuchAuthorizerUpdateAenderungTest {
 
         aenderung.setStatus(IN_BEARBEITUNG_GS);
         assertThrows(ForbiddenException.class, () -> {
-            gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung);
+            gesuchTrancheAuthorizer.canUpdateTrancheSB(aenderung.getId());
         });
     }
 
@@ -204,7 +204,7 @@ class GesuchAuthorizerUpdateAenderungTest {
         GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN.forEach(trancheStatus -> {
             aenderung.setStatus(trancheStatus);
             assertDoesNotThrow(() -> {
-                gesuchTrancheAuthorizer.canUpdateTrancheGS(aenderung);
+                gesuchTrancheAuthorizer.canUpdateTrancheGS(aenderung.getId());
             });
         });
 
@@ -216,18 +216,18 @@ class GesuchAuthorizerUpdateAenderungTest {
             .forEach(trancheStatus -> {
                 aenderung.setStatus(trancheStatus);
                 assertThrows(ForbiddenException.class, () -> {
-                    gesuchTrancheAuthorizer.canUpdateTrancheGS(aenderung);
+                    gesuchTrancheAuthorizer.canUpdateTrancheGS(aenderung.getId());
                 });
             });
 
         aenderung.setStatus(GesuchTrancheStatus.AKZEPTIERT);
         assertThrows(ForbiddenException.class, () -> {
-            gesuchTrancheAuthorizer.canUpdateTrancheGS(aenderung);
+            gesuchTrancheAuthorizer.canUpdateTrancheGS(aenderung.getId());
         });
 
         aenderung.setStatus(GesuchTrancheStatus.ABGELEHNT);
         assertThrows(ForbiddenException.class, () -> {
-            gesuchTrancheAuthorizer.canUpdateTrancheGS(aenderung);
+            gesuchTrancheAuthorizer.canUpdateTrancheGS(aenderung.getId());
         });
     }
 
