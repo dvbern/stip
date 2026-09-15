@@ -42,6 +42,7 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -52,6 +53,7 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.generated.api.DokumentResource;
+import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -70,6 +72,8 @@ import static org.mockito.Mockito.when;
 class DokumentResourceImplTest {
     @Inject
     DokumentResource dokumentResource;
+    @Inject
+    GesuchTrancheResource gesuchTrancheResource;
     @InjectMock
     GesuchDokumentKommentarRepository dokumentKommentarRepository;
     @InjectMock
@@ -94,6 +98,8 @@ class DokumentResourceImplTest {
     DokumentAuthorizer dokumentAuthorizer;
     @InjectMock
     GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
+    @Inject
+    GesuchService gesuchService;
 
     @BeforeEach
     void setUp() {
@@ -146,7 +152,7 @@ class DokumentResourceImplTest {
         );
 
         assertNotNull(
-            dokumentResource.getGesuchDokumentKommentareGS(UUID.randomUUID())
+            gesuchTrancheResource.getGesuchDokumenteGS(UUID.randomUUID())
         );
     }
 
