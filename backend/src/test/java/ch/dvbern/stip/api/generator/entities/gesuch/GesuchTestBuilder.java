@@ -45,11 +45,11 @@ public final class GesuchTestBuilder extends AbstractTestBuilder<Gesuch, GesuchT
             .beschwerdeVerlauf(new ArrayList<>())
             .beschwerdeHaengig(false)
             .beschwerdeEntscheids(new ArrayList<>())
-            .verfuegt(false)
             .wasInBereitFuerBearbeitung(false)
             .verfuegungs(new ArrayList<>())
             .sachbearbeiterGesuchDokuments(new ArrayList<>())
             .eingereichtCount(0)
+            .verfuegtCount(0)
             .einreichedatum(referenceDate)
             .build();
 
@@ -67,11 +67,11 @@ public final class GesuchTestBuilder extends AbstractTestBuilder<Gesuch, GesuchT
             .beschwerdeVerlauf(new ArrayList<>())
             .beschwerdeHaengig(false)
             .beschwerdeEntscheids(new ArrayList<>())
-            .verfuegt(false)
             .wasInBereitFuerBearbeitung(false)
             .verfuegungs(new ArrayList<>())
             .sachbearbeiterGesuchDokuments(new ArrayList<>())
             .eingereichtCount(0)
+            .verfuegtCount(0)
             .einreichedatum(referenceDate)
             .build();
 

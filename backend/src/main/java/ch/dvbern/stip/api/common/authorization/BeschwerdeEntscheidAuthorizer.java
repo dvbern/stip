@@ -15,13 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.beschwerdeentscheid.service;
+package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.common.authorization.Authorizer;
-import ch.dvbern.stip.api.common.authorization.BaseAuthorizer;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class BeschwerdeEntscheidAuthorizer extends BaseAuthorizer {
-    private final BenutzerService benutzerService;
     private final GesuchRepository gesuchRepository;
 
     @Transactional

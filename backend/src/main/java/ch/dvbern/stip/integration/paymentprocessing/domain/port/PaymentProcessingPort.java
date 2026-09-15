@@ -19,13 +19,13 @@ package ch.dvbern.stip.integration.paymentprocessing.domain.port;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 
 public interface PaymentProcessingPort {
-    Buchhaltung retryAuszahlungBuchhaltung(final UUID gesuchId);
+    BuchhaltungEntryDto retryAuszahlungBuchhaltung(final UUID gesuchId);
 
-    default Buchhaltung retryAuszahlungBuchhaltung(final Fall fall) {
+    default BuchhaltungEntryDto retryAuszahlungBuchhaltung(final Fall fall) {
         return retryAuszahlungBuchhaltung(fall.getLatestGesuch().getId());
     }
 

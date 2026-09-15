@@ -145,9 +145,10 @@ public class TranchenBerechnungsresultatCalculator {
                         );
                     }
                 }
-            } else {
-                steuerdatenTypsToPrioritize.add(null);
             }
+        }
+        if (steuerdatenTypsToPrioritize.isEmpty()) {
+            steuerdatenTypsToPrioritize.add(null);
         }
         return steuerdatenTypsToPrioritize;
     }

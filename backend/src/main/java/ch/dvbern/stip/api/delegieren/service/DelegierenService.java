@@ -37,8 +37,8 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
-import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import ch.dvbern.stip.generated.dto.DelegierungDto;
@@ -57,7 +57,7 @@ public class DelegierenService {
     private final DelegierungRepository delegierungRepository;
     private final FallRepository fallRepository;
     private final SozialdienstRepository sozialdienstRepository;
-    private final SozialdienstService sozialdienstService;
+    private final SozialdienstBenutzerService sozialdienstBenutzerService;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final PersoenlicheAngabenMapper persoenlicheAngabenMapper;
     private final StipConfig config;
@@ -178,7 +178,8 @@ public class DelegierenService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var sozialdienstId = sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer().getId();
+        final var sozialdienstId =
+            sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer().getId();
         final var me = benutzerService.getCurrentBenutzer();
         final var sozialdienstBenutzerId =
             getDelegierungSozQueryType == GetDelegierungSozQueryTypeAdmin.ALLE_BEARBEITBAR_MEINE

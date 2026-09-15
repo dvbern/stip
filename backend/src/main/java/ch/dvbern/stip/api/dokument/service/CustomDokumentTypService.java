@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDto;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -44,14 +45,14 @@ public class CustomDokumentTypService {
     private final GesuchDokumentService gesuchDokumentService;
 
     @Transactional
-    public CustomDokumentTypDto createCustomDokumentTyp(CustomDokumentTypCreateDto dto) {
+    public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto dto) {
         final var gesuchTranche = trancheRepository.requireById(dto.getTrancheId());
         var customDokumentTyp = customDocumentTypMapper.toEntity(dto);
         var emptyGesuchDokument = gesuchDokumentService
             .createGesuchDokument(gesuchTranche, customDokumentTyp);
         customDokumentTyp.setGesuchDokument(emptyGesuchDokument);
         customDocumentTypRepository.persistAndFlush(customDokumentTyp);
-        return customDocumentTypMapper.toDto(customDokumentTyp);
+        return gesuchDokumentService.findGesuchDokumentForCustomTypSB(customDokumentTyp.getId()).getValue();
     }
 
     @Transactional
