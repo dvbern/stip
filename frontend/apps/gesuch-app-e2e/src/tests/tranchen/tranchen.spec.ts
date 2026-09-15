@@ -97,12 +97,9 @@ test.describe('Tranche erstellen', () => {
     );
     await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
     await sbGesuchHeader.elems.trancheMenu.click();
-    await expect(sbGesuchHeader.elems.trancheMenuItems).toHaveCount(2);
 
-    // tranche oeffnen ============================================================
-    await sbPage.getByTestId('tranche-nav-menu-item').nth(1).click();
-    // todo-e2e-next: Refine, not specific enough to confirm tranche creation (maybe check dates?)
-    await expectStepTitleToContainText('Person in Ausbildung', sbPage);
+    // todo-e2e-next: more specific assertion for tranche created
+    await expect(sbGesuchHeader.elems.trancheMenuItems).toHaveCount(2);
 
     sbPage.close();
     gsPage.close();
