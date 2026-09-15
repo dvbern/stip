@@ -72,7 +72,10 @@ export const baseConfig = defineConfig({
     contextOptions: {
       ignoreHTTPSErrors: true,
     },
-    actionTimeout: 5000,
+    actionTimeout: !process.env.CI ? 5_000 : undefined,
+  },
+  expect: {
+    timeout: process.env.CI ? 20_000 : undefined,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
