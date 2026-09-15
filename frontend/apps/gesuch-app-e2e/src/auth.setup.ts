@@ -15,6 +15,7 @@ import {
  */
 // todo: make users configurable as well?
 setup('authenticate users', async ({ browser }, testInfo) => {
+  setup.setTimeout(10_000);
   const urls = getE2eUrls();
   const workerCount = testInfo.config.workers;
 

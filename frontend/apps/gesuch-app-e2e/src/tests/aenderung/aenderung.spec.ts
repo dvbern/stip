@@ -39,7 +39,6 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   );
 
   // Upload all GS-Dokumente =================================================
-
   await gsPage.bringToFront();
   await gsPage.goto(
     `${urls.gs}/gesuch/dokumente/${getGesuchId()}/tranche/${getTrancheId()}`,
@@ -76,7 +75,7 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await kommentarField.fill('E2E Antrag genemigen kommentar');
   await sbPage.getByTestId('dialog-confirm').click();
 
-  await expect(sbGesuchHeader.elems.actionLoading).toBeHidden();
+  await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
 
   await sbGesuchHeader.elems.aktionMenu.click();
   await sbGesuchHeader.elems
@@ -139,11 +138,9 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
 
   if (!verfuegtResponse.ok()) {
     const text = await verfuegtResponse.text();
-    console.log(`Verfuegt response failed with status ${text}`);
     throw new Error(`Verfuegt response failed with status ${text}`);
   }
 
-  // todo: testing different approaches for loading
   await verfuegtGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
 
   const versendetPromise = sbVerfuegtPage.waitForResponse(
@@ -157,7 +154,6 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
 
   if (!versendetResponse.ok()) {
     const text = await versendetResponse.text();
-    console.log(`Versendet response failed with status ${text}`);
     throw new Error(`Versendet response failed with status ${text}`);
   }
 
@@ -179,7 +175,7 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
 
   // make a change in the form
   const gsPersonPO = new PersonPO(gsPage);
-  await expect(gsPersonPO.elems.loading).toBeHidden();
+  await gsPersonPO.elems.actionLoading.waitFor({ state: 'hidden' });
   await gsPersonPO.elems.nachname.fill('E2E-Changed');
   await expectFormToBeValid(gsPersonPO.elems.form);
   const personGsSaveResponse = gsPage.waitForResponse(
@@ -239,7 +235,7 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await sbTrancheInfoPO.elems.loading.waitFor({ state: 'hidden' });
 
   await sbGesuchHeader.elems.aenderungenMenu.click();
-  // todo: make more specific by aenderung status reject / accept / manually change?
+  // todo-e2e-next: make more specific by aenderung status reject / accept / manually change?
   await expect(sbGesuchHeader.elems.aenderungenMenuItems).toHaveCount(1);
   await sbPage.locator('.cdk-overlay-backdrop').click();
   await expectInfoTitleToContainText('Änderung vom', sbPage);
@@ -253,7 +249,7 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await sbPersonPO.elems.loading.waitFor({ state: 'hidden' });
   await sbPersonPO.elems.nachname.fill('E2E-Changed-2');
 
-  // todo: could all these waitForResponse calls be replaced with awaiting loading?
+  // todo-e2e-next: could all these waitForResponse calls be replaced with awaiting loading?
   const personSaveResponse = sbPage.waitForResponse(
     (r) =>
       r.url().includes('/api/v1/gesuch') && r.request().method() === 'PATCH',
@@ -281,7 +277,7 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await expect(geschwisterPO.elems.geschwisterRow).toHaveCount(1);
   await geschwisterPO.elems.buttonContinue.click();
 
-  // todo: more generic approach for spinners hidden (form and action menu)
+  // todo-e2e-next: more generic approach for spinners hidden (form and action menu)
   const sbLoading = await sbPage.getByRole('status', { name: 'Loading' }).all();
   for (const loading of sbLoading) {
     await loading.waitFor({ state: 'hidden' });
@@ -298,7 +294,6 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await sbStepsNavPO.elems.info.first().click();
   await expectInfoTitleToContainText('Änderung vom', sbPage);
 
-  // todo: use loading indicator instead of waitForResponse?
   const aenderungAcceptResponse = sbPage.waitForResponse(
     '**/api/v1/gesuchtranche/*/aenderung/akzeptieren',
   );
@@ -309,7 +304,8 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
 
   // assert that a second tranche was created
   await sbGesuchHeader.elems.trancheMenu.click();
-  // todo: more specific?
+
+  // todo-e2e-next: more specific test to verify tranche was created correctly?
   await expect(sbGesuchHeader.elems.trancheMenuItems).toHaveCount(2);
 
   sbVerfuegtPage.close();

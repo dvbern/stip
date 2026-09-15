@@ -64,10 +64,6 @@ const setGesuchApi = async (
 
   if (!setZahlungsverbindungResponse.ok()) {
     const text = await setZahlungsverbindungResponse.text();
-    console.error(
-      `Failed to set zahlungsverbindung for fallId ${fallId}:`,
-      text,
-    );
     throw new Error(
       `Failed to set zahlungsverbindung for fallId ${fallId}: ${text}`,
     );
@@ -86,7 +82,6 @@ const setGesuchApi = async (
 
   if (!response.ok()) {
     const responseText = await response.text();
-    console.error(`Failed to update gesuch with id ${gesuchId}:`, responseText);
     throw new Error(
       `Failed to update gesuch with id ${gesuchId}: ${responseText}`,
     );
