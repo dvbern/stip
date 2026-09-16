@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
@@ -231,6 +232,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> downloadDarlehenDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtPar,
@@ -278,6 +280,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> downloadDarlehenNegativVerfuegung(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtPar,

@@ -19,7 +19,7 @@ package ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
+import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service.SapService;
 import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessingAdapterType;
 import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPort;
@@ -40,7 +40,7 @@ public class SapPaymentProcessingAdapter implements PaymentProcessingPort {
     final SapService sapService;
 
     @Override
-    public Buchhaltung retryAuszahlungBuchhaltung(UUID gesuchId) {
+    public BuchhaltungEntryDto retryAuszahlungBuchhaltung(UUID gesuchId) {
         return sapService.retryAuszahlungBuchhaltung(gesuchId);
     }
 

@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DemoDataAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.api.config.type.StipConfig;
@@ -107,6 +108,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> getDemoDataDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,

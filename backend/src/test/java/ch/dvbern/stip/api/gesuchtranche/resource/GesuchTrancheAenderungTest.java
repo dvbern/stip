@@ -191,7 +191,7 @@ class GesuchTrancheAenderungTest {
     @TestAsFreigabestelle
     @Order(7)
     @Test
-    void changeGesuchToVerfuegt() {
+    void gesuchFreigeben() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -201,21 +201,13 @@ class GesuchTrancheAenderungTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-
-        final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
-        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test
     @Order(8)
     @TestAsSachbearbeiter
-    void changeToFinalState() {
+    void changeGesuchToVerfuegt() {
+
         gesuchApiSpec.changeGesuchStatusToVersendet()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -223,7 +215,16 @@ class GesuchTrancheAenderungTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
-        var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+        var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+
+        gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
