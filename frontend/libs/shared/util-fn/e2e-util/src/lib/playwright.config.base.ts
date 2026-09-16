@@ -73,6 +73,7 @@ export const baseConfig = defineConfig({
     },
     actionTimeout: !process.env.CI ? 5_000 : undefined,
   },
+  timeout: process.env.CI ? 60_000 : undefined,
   expect: {
     timeout: process.env.CI ? 20_000 : undefined,
   },
