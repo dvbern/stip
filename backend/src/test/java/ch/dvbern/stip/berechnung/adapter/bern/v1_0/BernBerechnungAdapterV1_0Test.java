@@ -32,7 +32,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.notNullValue;
 
 public class BernBerechnungAdapterV1_0Test {
     final BernBerechnungAdapterV1_0 adapterV1 = new BernBerechnungAdapterV1_0(
@@ -57,7 +56,7 @@ public class BernBerechnungAdapterV1_0Test {
             .getAbschluss()
             .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_A);
         gesuch.getAusbildung().setAusbildungBegin(gesuch.getAusbildung().getAusbildungBegin().minusYears(3));
-        gesuch.setEinreichedatum(gesuch.getEinreichedatum().plusMonths(4));
+        gesuch.setEinreichedatum(gesuch.getGesuchGueltigkeitBis().minusMonths(4));
 
         gesuch.getAusbildung()
             .getAusbildungUnterbruchAntrags()
@@ -73,7 +72,7 @@ public class BernBerechnungAdapterV1_0Test {
         assertThat(berechnungsresultatDto.getMonateMitDarlehen(), is(12));
         assertThat(berechnungsresultatDto.getUngekuerztStipendien(), is(6972));
         assertThat(berechnungsresultatDto.getUngekuerztDarlehen(), is(3500));
-        assertThat(berechnungsresultatDto.getAnzahlMonateEinreichefrist(), notNullValue());
+        assertThat(berechnungsresultatDto.getAnzahlMonateEinreichefrist(), is(8));
         assertThat(
             berechnungsresultatDto.getTotalNachKuerzungNachEinreichefrist(),
             lessThan(berechnungsresultatDto.getUngekuerztDarlehen())
