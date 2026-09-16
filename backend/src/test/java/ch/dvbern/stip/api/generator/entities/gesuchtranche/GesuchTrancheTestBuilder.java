@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.generator.entities.gesuchtranche;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.generator.AbstractTestBuilder;
 import ch.dvbern.stip.api.generator.entities.gesuchformular.GesuchFormularTestBuilder;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -28,6 +27,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTrancheBuilder;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.util.TestUtil;
 
 public final class GesuchTrancheTestBuilder extends AbstractTestBuilder<GesuchTranche, GesuchTrancheTestBuilder> {
     GesuchTrancheTestBuilder(GesuchTranche entity, LocalDate referenceDate) {
@@ -36,7 +36,7 @@ public final class GesuchTrancheTestBuilder extends AbstractTestBuilder<GesuchTr
 
     public static GesuchTrancheTestBuilder empty(LocalDate referenceDate) {
         GesuchTranche gesuchTranche = GesuchTrancheBuilder.gesuchTranche()
-            .gueltigkeit(DateRange.getFruehlingOrHerbst(referenceDate.minusMonths(1)))
+            .gueltigkeit(TestUtil.getFruehlingOrHerbstYearRange(referenceDate.minusMonths(1)))
             .gesuchFormular(null)
             .gesuch(null)
             .status(GesuchTrancheStatus.UEBERPRUEFEN)
@@ -49,7 +49,7 @@ public final class GesuchTrancheTestBuilder extends AbstractTestBuilder<GesuchTr
 
     public static GesuchTrancheTestBuilder standardDirectDeps(LocalDate referenceDate) {
         GesuchTranche gesuchTranche = GesuchTrancheBuilder.gesuchTranche()
-            .gueltigkeit(DateRange.getFruehlingOrHerbst(referenceDate.minusMonths(1)))
+            .gueltigkeit(TestUtil.getFruehlingOrHerbstYearRange(referenceDate.minusMonths(1)))
             .gesuchFormular(GesuchFormularTestBuilder.empty(referenceDate).build())
             .gesuch(null)
             .status(GesuchTrancheStatus.UEBERPRUEFEN)
@@ -62,7 +62,7 @@ public final class GesuchTrancheTestBuilder extends AbstractTestBuilder<GesuchTr
 
     public static GesuchTrancheTestBuilder standardNestedDeps(LocalDate referenceDate) {
         GesuchTranche gesuchTranche = GesuchTrancheBuilder.gesuchTranche()
-            .gueltigkeit(DateRange.getFruehlingOrHerbst(referenceDate.minusMonths(1)))
+            .gueltigkeit(TestUtil.getFruehlingOrHerbstYearRange(referenceDate.minusMonths(1)))
             .gesuchFormular(null)
             .gesuch(null)
             .status(GesuchTrancheStatus.UEBERPRUEFEN)
