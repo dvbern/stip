@@ -43,13 +43,9 @@ export const expectInfoTitleToContainText = async (
 export const uploadFilesById = async (page: Page) => {
   const uploadButtons = page.getByTestId(/^button-document-upload-/);
 
-  // The required-documents table renders rows asynchronously; wait for the
-  // first button before reading the set.
   await expect(uploadButtons.first()).toBeVisible({ timeout: 10000 });
 
-  // Resolve the stable, unique per-dokumentTyp testids up front. Iterating over
-  // these strings (rather than element handles) keeps the loop immune to the
-  // Angular table re-rendering after every upload.
+  // Resolve the stable, unique per-dokumentTyp testids up front.
   const testIds = await uploadButtons.evaluateAll((els) =>
     els
       .map((el) => el.getAttribute('data-testid'))
@@ -66,8 +62,6 @@ export const uploadFilesById = async (page: Page) => {
     await upload.scrollIntoViewIfNeeded();
     await upload.click();
     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-    // Wait for the POST to complete before closing the dialog; the file is
-    // merged asynchronously, so closing early can cancel the in-flight upload.
     await uploadCall;
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('file-input')).toHaveCount(0);
@@ -94,6 +88,27 @@ export const uploadFiles = async (page: Page) => {
     await uploadCall;
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('file-input')).toHaveCount(0);
+  }
+};
+
+export const acceptDocuments = async (page: Page) => {
+  const acceptButtons = page.getByTestId('dokument-akzeptieren');
+
+  await expect(acceptButtons.first()).toBeVisible({ timeout: 10000 });
+
+  const count = await acceptButtons.count();
+
+  for (let i = 0; i < count; i++) {
+    const accept = page.getByTestId('dokument-akzeptieren').first();
+    const documentsToUploadReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/sb',
+    );
+    const dokumenteReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumente/sb',
+    );
+    await accept.scrollIntoViewIfNeeded();
+    await accept.click();
+    await Promise.all([documentsToUploadReq, dokumenteReq]);
   }
 };
 

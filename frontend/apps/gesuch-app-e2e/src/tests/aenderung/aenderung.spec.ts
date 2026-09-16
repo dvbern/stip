@@ -8,6 +8,7 @@ import {
   SachbearbeiterGesuchHeaderPO,
   StepsNavPO,
   TrancheInfoPO,
+  acceptDocuments,
   expectFormToBeValid,
   expectInfoTitleToContainText,
   expectStepTitleToContainText,
@@ -92,23 +93,7 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await expectStepTitleToContainText('Dokumente', sbPage);
   await requiredDokumenteResp;
 
-  await expect(
-    sbPage.getByTestId('dokument-akzeptieren').first(),
-  ).toBeVisible();
-  const acceptDocumentsButtons = await sbPage
-    .getByTestId('dokument-akzeptieren')
-    .count();
-  expect(acceptDocumentsButtons).toBeGreaterThan(0);
-  for (let i = 0; i < acceptDocumentsButtons; i++) {
-    const documentsToUploadReq = sbPage.waitForResponse(
-      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
-    );
-    const dokumenteReq = sbPage.waitForResponse(
-      '**/api/v1/gesuchtranche/*/dokumente/*',
-    );
-    await sbPage.getByTestId('dokument-akzeptieren').first().click();
-    await Promise.all([documentsToUploadReq, dokumenteReq]);
-  }
+  await acceptDocuments(sbPage);
 
   // bearbeitung abschliessen ===============================================
   const abschliesenPromise = sbPage.waitForResponse(

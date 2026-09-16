@@ -90,9 +90,9 @@ export const authenticateAndSaveStorageState = async (
     ignoreHTTPSErrors: true,
   });
 
-  await page.goto('/');
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-  await page.waitForLoadState('networkidle');
+  // await page.waitForLoadState('networkidle');
 
   await page.getByLabel('Username or email').fill(username);
   await page.getByLabel('Password', { exact: true }).fill(password);

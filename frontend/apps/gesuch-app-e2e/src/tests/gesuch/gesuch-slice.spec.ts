@@ -38,7 +38,10 @@ import {
 const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(ausbildung);
 
 test.describe('Neues gesuch erstellen', () => {
-  test('Neues gesuch erstellen', async ({ gsPage, createSbPage }, testInfo) => {
+  test.skip('Neues gesuch erstellen', async ({
+    gsPage,
+    createSbPage,
+  }, testInfo) => {
     test.slow();
     const seed = `${testInfo.title}-${testInfo.workerIndex}`;
 

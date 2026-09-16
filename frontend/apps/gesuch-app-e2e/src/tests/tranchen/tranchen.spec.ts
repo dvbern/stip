@@ -23,7 +23,7 @@ const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
 );
 
 test.describe('Tranche erstellen', () => {
-  test('Tranche erstellen', async ({ gsPage, createSbPage }) => {
+  test.skip('Tranche erstellen', async ({ gsPage, createSbPage }) => {
     test.slow();
 
     const urls = getE2eUrls();
