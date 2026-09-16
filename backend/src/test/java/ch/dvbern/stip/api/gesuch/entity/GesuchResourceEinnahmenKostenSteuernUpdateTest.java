@@ -195,7 +195,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
     @TestAsFreigabestelle
     @Order(22)
     @Test
-    void gesuchToVerfuegt() {
+    void gesuchFreigeben() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -206,20 +206,12 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .body()
             .as(GesuchDtoSpec.class);
 
-        final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
-        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test
     @Order(24)
     @TestAsSachbearbeiter
-    void setupGesuchVersenden() {
+    void gesuchToVerfuegt() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -227,7 +219,16 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
-        var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+        var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+
+        gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

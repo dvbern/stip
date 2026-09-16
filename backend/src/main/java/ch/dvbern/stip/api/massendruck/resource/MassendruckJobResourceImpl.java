@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.MassendruckJobAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -74,10 +75,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
         Boolean zugewiesen
     ) {
         authorizer.canCreateMassendruckJob(getGesucheSBQueryType);
-        final var massendruckJob =
-            massendruckJobService.createMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
-        massendruckJobService.combineDocument(massendruckJob.getId());
-        return massendruckJob;
+        return massendruckJobService.createAndCombineMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
     }
 
     @Override
@@ -122,6 +120,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> downloadMassendruckDocument(String token) {
         final var massendruckJobId = dokumentDownloadService.getClaimId(
             jwtParser,
@@ -165,8 +164,6 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckJobDetailDto retryMassendruckJob(UUID massendruckId) {
         authorizer.canRetryMassendruckJob(massendruckId);
-        final var massendruckJobDetail = massendruckJobService.retryMassendruckJob(massendruckId);
-        massendruckJobService.combineDocument(massendruckId);
-        return massendruckJobDetail;
+        return massendruckJobService.retryAndCombineMassendruckJob(massendruckId);
     }
 }

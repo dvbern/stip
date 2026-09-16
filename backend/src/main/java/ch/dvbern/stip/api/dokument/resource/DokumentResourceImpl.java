@@ -29,6 +29,8 @@ import ch.dvbern.stip.api.common.authorization.SachbearbeiterGesuchDokumentAutho
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.resource.NonSingleServiceEntrypointEndpoint;
+import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
@@ -105,8 +107,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(CUSTOM_DOKUMENT_CREATE)
     public GesuchDokumentDto createCustomDokumentTyp(CustomDokumentTypCreateDto customDokumentTypCreateDto) {
         customGesuchDokumentTypAuthorizer.canCreateCustomDokumentTyp(customDokumentTypCreateDto.getTrancheId());
-        final var createdCustomTyp = customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
-        return gesuchDokumentService.findGesuchDokumentForCustomTypSB(createdCustomTyp.getId()).getValue();
+        return customDokumentTypService.createCustomDokumentTyp(customDokumentTypCreateDto);
     }
 
     @Blocking
@@ -125,6 +126,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD_SB)
+    @NonSingleServiceEntrypointEndpoint
     public Uni<Response> createDokumentSB(
         DokumentTyp dokumentTyp,
         UUID gesuchTrancheId,
@@ -166,6 +168,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD_SB)
+    @NonSingleServiceEntrypointEndpoint
     public Uni<Response> uploadCustomGesuchDokumentSB(UUID customDokumentTypId, FileUpload fileUpload) {
         customGesuchDokumentTypAuthorizer.assertSbCanModifyCustomDokumentOfTranche(customDokumentTypId);
         gesuchDokumentService.setGesuchDokumentOfCustomDokumentTypToAusstehend(customDokumentTypId);
@@ -238,6 +241,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
@@ -254,6 +258,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @Override
     @RolesAllowed({ CUSTOM_DOKUMENT_READ, DOKUMENT_READ, UNTERSCHRIFTENBLATT_READ })
+    @ReadOnlyEndpoint
     public FileDownloadTokenDto getDokumentDownloadToken(UUID dokumentId) {
         dokumentAuthorizer.canGetDokumentDownloadToken(dokumentId);
         gesuchDokumentService.checkIfDokumentExists(dokumentId);
@@ -353,6 +358,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @PermitAll
+    @ReadOnlyEndpoint
     public RestMulti<Buffer> getSachbearbeiterGesuchDokumentDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,

@@ -34,20 +34,6 @@ public class GesuchHistoryService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final GesuchRepository gesuchRepository;
 
-    public Optional<Gesuch> getFirstWhereStatusChangedTo(
-        final UUID gesuchId,
-        final Gesuchstatus gesuchStatus
-    ) {
-        return gesuchHistoryRepository.getFirstWhereStatusChangedTo(gesuchId, gesuchStatus);
-    }
-
-    public Optional<Gesuch> getLatestWhereStatusChangedTo(
-        final UUID gesuchId,
-        final Gesuchstatus gesuchStatus
-    ) {
-        return gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, gesuchStatus);
-    }
-
     public Gesuch getCurrentOrHistoricalGesuchForGS(final UUID gesuchId) {
         var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -75,7 +61,15 @@ public class GesuchHistoryService {
         if (gesuchTrancheFehlendeDokumentRevisionOpt.isPresent()) {
             return gesuchTrancheFehlendeDokumentRevisionOpt;
         }
-        return gesuchHistoryRepository.getRevisionWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT);
+        return gesuchHistoryRepository.getLastEingereichtGesuchRevision(gesuchId);
+    }
+
+    public Optional<Gesuch> getLastEingereichtGesuchVersion(final UUID gesuchId, final boolean before) {
+        return gesuchHistoryRepository.getLastEingereichtGesuchVersion(gesuchId, before);
+    }
+
+    public Optional<Gesuch> getLastVerfuegtGesuchVersion(final UUID gesuchId) {
+        return gesuchHistoryRepository.getLastVerfuegtGesuchVersion(gesuchId);
     }
 
 }

@@ -129,7 +129,8 @@ class AuszahlungAuthorizerTest {
         fall.setGesuchsteller(new Benutzer());
 
         when(fallRepository.requireById(any())).thenReturn(fall);
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(sozialdienst);
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+            .thenReturn(sozialdienst);
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
     }
@@ -156,7 +157,8 @@ class AuszahlungAuthorizerTest {
         setupDelegierung();
 
         // arrange
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+            .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         var updateDto = new AuszahlungUpdateDto();
@@ -173,7 +175,8 @@ class AuszahlungAuthorizerTest {
         setupGesuchWithoutDelegierung();
 
         // arrange
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+            .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         var updateDto = new AuszahlungUpdateDto();
@@ -256,7 +259,8 @@ class AuszahlungAuthorizerTest {
         setFallAndGesuchstellerOfGesuch();
 
         // arrange
-        when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
+        when(sozialdienstBenutzerService.getSozialdienstOfCurrentSozialdienstBenutzer())
+            .thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert

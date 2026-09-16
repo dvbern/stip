@@ -118,6 +118,7 @@ import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_VATER;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -739,11 +740,18 @@ public class TestUtil {
         return getBaseGesuchForBerechnungWithReferenceDate(trancheUuid, LocalDate.now());
     }
 
+    public static DateRange getFruehlingOrHerbstYearRange(final LocalDate date) {
+        final var partialRange = DateRange.getFruehlingOrHerbst(date);
+        return new DateRange(
+            partialRange.getGueltigAb(), partialRange.getGueltigBis().plusMonths(6).with(lastDayOfMonth())
+        );
+    }
+
     public static Gesuch getBaseGesuchForBerechnungWithReferenceDate(
         final UUID trancheUuid,
         final LocalDate referenceDate
     ) {
-        final var gueltigkeit = DateRange.getFruehlingOrHerbst(referenceDate);
+        final var gueltigkeit = getFruehlingOrHerbstYearRange(referenceDate);
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()
                 .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(referenceDate.getYear()))
@@ -852,7 +860,7 @@ public class TestUtil {
         final LocalDate referenceDate
     ) {
         final var baseGesuch = getBaseGesuchForBerechnungWithReferenceDate(trancheUuid, referenceDate);
-        final var baseRange = DateRange.getFruehlingOrHerbst(referenceDate);
+        final var baseRange = getFruehlingOrHerbstYearRange(referenceDate);
         baseGesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(

@@ -22,11 +22,9 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterService;
-import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.authorization.BenutzerAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterDto;
@@ -55,8 +53,6 @@ public class BenutzerResourceImpl implements BenutzerResource {
     private final BenutzerAuthorizer benutzerAuthorizer;
     private final BenutzerService benutzerService;
     private final SachbearbeiterService sachbearbeiterService;
-    private final SachbearbeiterZuordnungStammdatenWorker worker;
-    private final TenantService tenantService;
 
     @Override
     @RolesAllowed({ BUCHSTABENZUWEISUNG_CREATE, BUCHSTABENZUWEISUNG_UPDATE })
@@ -65,8 +61,8 @@ public class BenutzerResourceImpl implements BenutzerResource {
         SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto
     ) {
         benutzerAuthorizer.canCreateOrUpdateBuchstabenzuweisung();
-        benutzerService.createOrUpdateSachbearbeiterStammdaten(benutzerId, sachbearbeiterZuordnungStammdatenDto);
-        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
+        benutzerService
+            .createOrUpdateSachbearbeiterStammdatenEntrypoint(benutzerId, sachbearbeiterZuordnungStammdatenDto);
     }
 
     @Override
@@ -75,16 +71,14 @@ public class BenutzerResourceImpl implements BenutzerResource {
         List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdatenListDto
     ) {
         benutzerAuthorizer.canCreateOrUpdateBuchstabenzuweisung();
-        benutzerService.createOrUpdateSachbearbeiterStammdaten(sachbearbeiterZuordnungStammdatenListDto);
-        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
+        benutzerService.createOrUpdateSachbearbeiterStammdatenEntrypoint(sachbearbeiterZuordnungStammdatenListDto);
     }
 
     @Override
     @RolesAllowed(BENUTZER_DELETE)
     public void deleteBenutzer(String benutzerId) {
         benutzerAuthorizer.canDeleteBenutzer();
-        benutzerService.deleteBenutzer(benutzerId);
-        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
+        benutzerService.deleteBenutzerEntrypoint(benutzerId);
     }
 
     @Override

@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungMapper;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
@@ -46,6 +47,7 @@ import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchRe
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.sap.util.SapMapperUtil;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
+import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -74,6 +76,7 @@ public class SapService {
     private final AdresseRepository adresseRepository;
     private final NotificationService notificationService;
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
+    private final BuchhaltungMapper buchhaltungMapper;
 
     private boolean businessPartnerNeedsUpdate(
         final Gesuch gesuch,
@@ -393,14 +396,14 @@ public class SapService {
         }
     }
 
-    public Buchhaltung retryAuszahlungBuchhaltung(final Fall fall) {
+    public void retryAuszahlungBuchhaltung(final Fall fall) {
         final var gesuch = fall.getLatestGesuch();
 
-        return retryAuszahlungBuchhaltung(gesuch.getId());
+        retryAuszahlungBuchhaltung(gesuch.getId());
     }
 
     @Transactional
-    public Buchhaltung retryAuszahlungBuchhaltung(final UUID gesuchId) {
+    public BuchhaltungEntryDto retryAuszahlungBuchhaltung(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         switch (gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()) {
@@ -416,7 +419,7 @@ public class SapService {
         final var buchhaltung = buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
         buchhaltung.getZahlungsverbindung()
             .setAdresse(adresseRepository.requireById(buchhaltung.getZahlungsverbindung().getAdresse().getId()));
-        return buchhaltung;
+        return buchhaltungMapper.toDto(buchhaltung);
     }
 
     public boolean isPastSecondPaymentDate(final Gesuch gesuch) {

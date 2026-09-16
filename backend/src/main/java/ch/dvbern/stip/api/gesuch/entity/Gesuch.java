@@ -201,12 +201,6 @@ public class Gesuch extends AbstractTenantEntity {
     private boolean remainderPaymentExecuted = false;
 
     /**
-     * Gesuch was verfuegt at least once in the past
-     */
-    @Column(name = "verfuegt", nullable = false)
-    private boolean verfuegt = false;
-
-    /**
      * Gesuch was BEREIT_FUER_BEARBEITUNG at least once in the past
      */
     @Column(name = "was_in_bereit_fuer_bearbeitung", nullable = false)
@@ -248,11 +242,33 @@ public class Gesuch extends AbstractTenantEntity {
     private int eingereichtCount = 0;
 
     /**
+     * This serves as an audit marker to fetch the version of the Gesuch that is visible to
+     * the GS/SB by marking verfuegt events which we can go back to with envers.<br>
+     * <br>
+     * Call {@link incrementVerfuegtCount} to mark a new verfuegt event
+     */
+    @NotNull
+    @Column(name = "verfuegt_count", nullable = false)
+    @Audited(withModifiedFlag = true, modifiedColumnName = "verfuegt_count_mod")
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private int verfuegtCount = 0;
+
+    /**
      * @see eingereichtCount
      */
     public int incrementEingereichtCount() {
         this.eingereichtCount += 1;
         return eingereichtCount;
+    }
+
+    public int incrementVerfuegtCount() {
+        this.verfuegtCount += 1;
+        return verfuegtCount;
+    }
+
+    public boolean isVerfuegt() {
+        return verfuegtCount > 0;
     }
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
@@ -262,18 +278,14 @@ public class Gesuch extends AbstractTenantEntity {
     }
 
     public Optional<GesuchTranche> getEingereichteGesuchTrancheValidOnDate(LocalDate date) {
-        return gesuchTranchenValidOnDateStream(date)
-            .filter(tranche -> (tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS))
-            .findFirst();
+        return getGesuchTrancheValidOnDate(date)
+            .filter(tranche -> (tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS));
     }
 
     public Optional<GesuchTranche> getGesuchTrancheValidOnDate(LocalDate date) {
-        return gesuchTranchenValidOnDateStream(date).findFirst();
-    }
-
-    private Stream<GesuchTranche> gesuchTranchenValidOnDateStream(LocalDate date) {
         return gesuchTranchen.stream()
-            .filter(tranche -> tranche.getGueltigkeit().contains(date) && tranche.getTyp() == GesuchTrancheTyp.TRANCHE);
+            .filter(tranche -> tranche.getGueltigkeit().contains(date) && tranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .findFirst();
     }
 
     public Optional<GesuchTranche> getNewestGesuchTranche() {

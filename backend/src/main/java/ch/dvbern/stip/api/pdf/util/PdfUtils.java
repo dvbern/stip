@@ -435,7 +435,10 @@ public class PdfUtils {
         final float[] columnWidths = { 50, 50 };
         final Table headerTable = PdfUtils.createTable(columnWidths, leftMargin);
 
-        final GesuchFormular gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
+        final GesuchFormular gesuchFormular =
+            gesuch.getGesuchTrancheValidOnDate(LocalDate.now())
+                .orElse(gesuch.getLatestGesuchTranche())
+                .getGesuchFormular();
 
         final Sachbearbeiter sachbearbeiterBenutzer = gesuch
             .getAusbildung()
@@ -508,10 +511,16 @@ public class PdfUtils {
                 1,
                 1,
                 gesuchFormular.getPersonInAusbildung().getFullName(),
-                gesuchFormular.getPersonInAusbildung().getAdresse().getStrasse(),
-                gesuchFormular.getPersonInAusbildung().getAdresse().getPlz() +
-                " " +
-                gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
+                String.format(
+                    "%s %s",
+                    gesuchFormular.getPersonInAusbildung().getAdresse().getStrasse(),
+                    gesuchFormular.getPersonInAusbildung().getAdresse().getHausnummer()
+                ),
+                String.format(
+                    "%s %s",
+                    gesuchFormular.getPersonInAusbildung().getAdresse().getPlz(),
+                    gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
+                )
             ).setPaddingTop(SPACING_MEDIUM);
             headerTable.addCell(receiver);
         }

@@ -130,8 +130,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
         SozialdienstBenutzerCreateDto sozialdienstBenutzerCreateDto
     ) {
         sozialdienstAuthorizer.canCreateSozialdienstBenutzer();
-        return sozialdienstBenutzerService.createSozialdienstMitarbeiterBenutzer(
-            sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer(),
+        return sozialdienstService.createSozialdienstMitarbeiterBenutzer(
             sozialdienstBenutzerCreateDto
         );
     }
@@ -149,7 +148,7 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
     public List<SozialdienstBenutzerDto> getSozialdienstBenutzerList() {
         sozialdienstAuthorizer.canGetSozialdienstBenutzer();
         return sozialdienstBenutzerService
-            .getSozialdienstBenutzers(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer());
+            .getSozialdienstBenutzersOfSozialdienstOfCurrentSozialdienstBenutzer();
     }
 
     @Override
