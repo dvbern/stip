@@ -312,10 +312,13 @@ public class SapService {
         final var sapDelivery = sapDeliveryOpt.get();
         final var deliveryid = sapDelivery.getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(buchhaltung.getFall(), deliveryid);
-        SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
 
-        sapDelivery
-            .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+        var status = SapStatus.FAILURE;
+        if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE())) {
+            status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        }
+
+        sapDelivery.setSapStatus(status);
 
     }
 
