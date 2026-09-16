@@ -200,7 +200,8 @@ public class AusbildungUnterbruchAntragService {
         ausbildungUnterbruchAntragMapper
             .antragEinreichen(createAusbildungUnterbruchAntragGSDto, ausbildungUnterbruchAntrag);
         ausbildungUnterbruchAntragRepository.persistAndFlush(ausbildungUnterbruchAntrag);
-        ausbildungNotificationService.createUnterbruchAntragEingereichtNotificationAndSendStdMail(ausbildungUnterbruchAntrag);
+        ausbildungNotificationService
+            .createUnterbruchAntragEingereichtNotificationAndSendStdMail(ausbildungUnterbruchAntrag);
         createStatusprotokollEntry(
             ausbildungUnterbruchAntrag,
             AusbildungUnterbruchAntragStatus.EINGEGEBEN.toString(),

@@ -40,7 +40,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchResponse.BUSINESSPARTNER;
@@ -74,7 +74,7 @@ public class SapService {
     private final GesuchRepository gesuchRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final AdresseRepository adresseRepository;
-    private final NotificationService notificationService;
+    private final GesuchNotificationService gesuchNotificationService;
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
     private final BuchhaltungMapper buchhaltungMapper;
 
@@ -282,7 +282,7 @@ public class SapService {
 
         if (businessPartnerActionBuchhaltung.getSapStatus() == SapStatus.FAILURE) {
             fall.setFailedBuchhaltungAuszahlungType(businessPartnerActionBuchhaltungType);
-            notificationService.createFailedAuszahlungBuchhaltungNotificationAndSendStdMail(gesuch);
+            gesuchNotificationService.createAuszahlungFailedNotificationAndSendStdMail(gesuch);
         }
     }
 
@@ -389,7 +389,7 @@ public class SapService {
 
         if (buchhaltung.getSapStatus() == SapStatus.FAILURE) {
             gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(buchhaltung.getBuchhaltungType());
-            notificationService.createFailedAuszahlungBuchhaltungNotificationAndSendStdMail(gesuch);
+            gesuchNotificationService.createAuszahlungFailedNotificationAndSendStdMail(gesuch);
         }
     }
 
