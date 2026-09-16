@@ -278,18 +278,14 @@ public class Gesuch extends AbstractTenantEntity {
     }
 
     public Optional<GesuchTranche> getEingereichteGesuchTrancheValidOnDate(LocalDate date) {
-        return gesuchTranchenValidOnDateStream(date)
-            .filter(tranche -> (tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS))
-            .findFirst();
+        return getGesuchTrancheValidOnDate(date)
+            .filter(tranche -> (tranche.getStatus() != GesuchTrancheStatus.IN_BEARBEITUNG_GS));
     }
 
     public Optional<GesuchTranche> getGesuchTrancheValidOnDate(LocalDate date) {
-        return gesuchTranchenValidOnDateStream(date).findFirst();
-    }
-
-    private Stream<GesuchTranche> gesuchTranchenValidOnDateStream(LocalDate date) {
         return gesuchTranchen.stream()
-            .filter(tranche -> tranche.getGueltigkeit().contains(date) && tranche.getTyp() == GesuchTrancheTyp.TRANCHE);
+            .filter(tranche -> tranche.getGueltigkeit().contains(date) && tranche.getTyp() == GesuchTrancheTyp.TRANCHE)
+            .findFirst();
     }
 
     public Optional<GesuchTranche> getNewestGesuchTranche() {
