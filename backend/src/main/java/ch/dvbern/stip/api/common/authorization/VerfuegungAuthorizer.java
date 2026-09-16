@@ -56,7 +56,7 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
         final var gesuch = verfuegungDokument.getVerfuegung().getGesuch();
 
         if (
-            verfuegungDokument.getTyp() == VerfuegungDokumentTyp.VERFUEGUNG_GS &&
+            VerfuegungDokumentTyp.VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG.contains(verfuegungDokument.getTyp()) &&
             AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuch.getAusbildung().getFall(),
                 currentBenutzer,
