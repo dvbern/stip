@@ -91,6 +91,9 @@ export const authenticateAndSaveStorageState = async (
   });
 
   await page.goto('/');
+
+  await page.waitForLoadState('networkidle');
+
   await page.getByLabel('Username or email').fill(username);
   await page.getByLabel('Password', { exact: true }).fill(password);
 
