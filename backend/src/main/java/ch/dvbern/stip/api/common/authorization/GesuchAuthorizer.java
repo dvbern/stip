@@ -32,6 +32,8 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
@@ -54,24 +56,40 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final GesuchService gesuchService;
     private final RequiredDokumentService requiredDokumentService;
     private final VerfuegungService verfuegungService;
+    private final GesuchTrancheService gesuchTrancheService;
 
-    @Transactional
-    public void sbCanChangeGesuchStatusToInBearbeitung(final UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.IN_BEARBEITUNG_SB);
+    private UUID getGesuchIdByTrancheId(final UUID gesuchTrancheId) {
+        final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        return gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
     }
 
     @Transactional
-    public void sbCanChangeGesuchStatusToNegativeVerfuegung(final UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG);
+    public void sbCanChangeGesuchOfTrancheStatusToInBearbeitung(final UUID gesuchTrancheId) {
+        assertCanPerformStatusChange(
+            getGesuchIdByTrancheId(gesuchTrancheId),
+            GesuchStatusChangeEvent.IN_BEARBEITUNG_SB
+        );
     }
 
     @Transactional
-    public void sbCanCreateManuelleVerfuegung(final UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG);
+    public void sbCanChangeGesuchStatusToNegativeVerfuegung(final UUID gesuchTrancheId) {
+        assertCanPerformStatusChange(
+            getGesuchIdByTrancheId(gesuchTrancheId),
+            GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG
+        );
     }
 
     @Transactional
-    public void freigabestelleCanChangeGesuchStatusToVerfuegt(final UUID gesuchId) {
+    public void sbCanCreateManuelleVerfuegungForGesuchOfTranche(final UUID gesuchTrancheId) {
+        assertCanPerformStatusChange(
+            getGesuchIdByTrancheId(gesuchTrancheId),
+            GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG
+        );
+    }
+
+    @Transactional
+    public void freigabestelleCanChangeGesuchOfTrancheStatusToVerfuegt(final UUID gesuchTrancheId) {
+        final var gesuchId = getGesuchIdByTrancheId(gesuchTrancheId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_FREIGABE);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGT);
 
@@ -83,46 +101,61 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void sbCanChangeGesuchStatusToVerfuegungDruckbereit(final UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
+    public void sbCanChangeGesuchOfTrancheStatusToVerfuegungDruckbereit(final UUID gesuchTrancheId) {
+        assertCanPerformStatusChange(
+            getGesuchIdByTrancheId(gesuchTrancheId),
+            GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT
+        );
     }
 
     @Transactional
-    public void sbCanChangeGesuchStatusToVersendet(final UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET);
+    public void sbCanChangeGesuchOfTrancheStatusToVersendet(final UUID gesuchTrancheId) {
+        assertCanPerformStatusChange(
+            getGesuchIdByTrancheId(gesuchTrancheId),
+            GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET
+        );
     }
 
     @Transactional
-    public void sbCanGesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
+    public void sbCanGesuchOfTrancheFehlendeDokumenteUebermitteln(final UUID gesuchTrancheId) {
+        final var gesuchId = getGesuchIdByTrancheId(gesuchTrancheId);
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
     @Transactional
-    public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public void sbCanChangeGesuchOfTrancheStatusToBereitFuerBearbeitung(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
         if (gesuch.getGesuchStatus() == Gesuchstatus.IN_FREIGABE) {
             assertBenutzerIsFreigabestelle();
         }
 
         assertGesuchIsInOneOfGesuchStatus(
-            gesuchId,
+            gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche),
             Set.of(
                 Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT,
                 Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT,
                 Gesuchstatus.IN_FREIGABE
             )
         );
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        assertCanPerformStatusChange(
+            gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche),
+            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG
+        );
     }
 
     @Transactional
-    public void sbCanGesuchZurueckweisen(final UUID gesuchId) {
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
+    public void sbCanGesuchOfTrancheZurueckweisen(final UUID gesuchTrancheId) {
+        assertGesuchIsInOneOfGesuchStatus(
+            getGesuchIdByTrancheId(gesuchTrancheId),
+            Gesuchstatus.SACHBEARBEITER_CAN_EDIT
+        );
     }
 
     @Transactional
-    public void gsCanFehlendeDokumenteEinreichen(final UUID gesuchId) {
+    public void gsCanFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
+        final var gesuchId = getGesuchIdByTrancheId(gesuchTrancheId);
         assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.FEHLENDE_DOKUMENTE);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN);
@@ -157,6 +190,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void gsCanReadGesuchOfTranche(final UUID gesuchTrancheId) {
+        assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(getGesuchIdByTrancheId(gesuchTrancheId));
+    }
+
+    @Transactional
     public void gsCanRead(final UUID gesuchId) {
         assertIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
     }
@@ -182,8 +220,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void sbCanChangeGesuchsperiodeForGesuch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public void sbCanChangeGesuchsperiodeForGesuchOfTranche(final UUID gesuchTrancheId) {
+        final var gesuch = gesuchRepository.requireById(getGesuchIdByTrancheId(gesuchTrancheId));
 
         if (!gesuchStatusService.canChangeGesuchsperiode(gesuch)) {
             forbidden();
@@ -191,38 +229,45 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void gsCanGesuchEinreichen(final UUID gesuchId) {
+    public void gsCanGesuchOfTrancheEinreichen(final UUID gesuchTrancheId) {
+        final var gesuchId = getGesuchIdByTrancheId(gesuchTrancheId);
         assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.EINGEREICHT);
     }
 
     @Transactional
-    public void sbCanGesuchManuellPruefen(final UUID gesuchId) {
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK);
+    public void sbCanGesuchOfTrancheManuellPruefen(final UUID gesuchTrancheId) {
+        assertGesuchIsInOneOfGesuchStatus(
+            getGesuchIdByTrancheId(gesuchTrancheId),
+            Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK
+        );
     }
 
     @Transactional
-    public void juristCanGesuchManuellPruefen(final UUID gesuchId) {
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.JURIST_CAN_EDIT);
+    public void juristCanGesuchOfTrancheManuellPruefen(final UUID gesuchTrancheId) {
+        assertGesuchIsInOneOfGesuchStatus(getGesuchIdByTrancheId(gesuchTrancheId), Gesuchstatus.JURIST_CAN_EDIT);
     }
 
     @Transactional
-    public void sbCanChangeGesuchStatusToDatenschutzBriefDruckbereitIfStatusChangeRequired(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public void sbCanChangeGesuchOfTrancheStatusToDatenschutzBriefDruckbereitIfStatusChangeRequired(
+        UUID gesuchTrancheId
+    ) {
+        final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
         if (gesuch.getGesuchStatus() == Gesuchstatus.BEREIT_FUER_BEARBEITUNG) {
             return;
         }
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
+        assertCanPerformStatusChange(gesuch.getId(), GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
     }
 
     @Transactional
-    public void sbCanChangeGesuchStatusToBearbeitungAsAenderungIfStatusChangeRequired(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public void sbCanChangeGesuchOfTrancheStatusToBearbeitungAsAenderungIfStatusChangeRequired(UUID gesuchTrancheId) {
+        final var gesuch = gesuchRepository.requireById(getGesuchIdByTrancheId(gesuchTrancheId));
         if (!GesuchUtil.canSbInitAendererung(gesuch)) {
             forbidden();
         }
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG);
+        assertCanPerformStatusChange(gesuch.getId(), GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG);
     }
 
     @Transactional
@@ -294,9 +339,9 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void sbCanBearbeitungAbschliessen(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (!gesuchStatusService.canBearbeitungAbschliessen(gesuch)) {
+    public void sbCanBearbeitungAbschliessenByTranche(final UUID gesuchTrancheId) {
+        final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        if (!gesuchStatusService.canBearbeitungAbschliessen(gesuchTranche.getGesuch())) {
             forbidden();
         }
     }

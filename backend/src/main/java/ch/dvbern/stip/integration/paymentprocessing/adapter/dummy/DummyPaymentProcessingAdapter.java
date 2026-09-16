@@ -23,12 +23,14 @@ import java.util.UUID;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungMapper;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
+import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessingAdapterType;
 import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPort;
 import ch.dvbern.stip.integration.paymentprocessing.domain.qualifier.PaymentProcessingQualifier;
@@ -52,13 +54,15 @@ public class DummyPaymentProcessingAdapter implements PaymentProcessingPort {
     final GesuchService gesuchService;
     final GesuchRepository gesuchRepository;
     final BuchhaltungService buchhaltungService;
+    final BuchhaltungMapper buchhaltungMapper;
     final BuchhaltungRepository buchhaltungRepository;
     final SapDeliveryRepository sapDeliveryRepository;
 
     @Override
-    public Buchhaltung retryAuszahlungBuchhaltung(UUID gesuchId) {
+    public BuchhaltungEntryDto retryAuszahlungBuchhaltung(UUID gesuchId) {
         final var gesuch = gesuchService.getGesuchById(gesuchId);
-        return buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
+        return buchhaltungMapper
+            .toDto(buchhaltungService.getLatestBuchhaltungEntry(gesuch.getAusbildung().getFall().getId()));
     }
 
     @Override

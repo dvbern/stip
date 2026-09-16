@@ -62,7 +62,10 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
         final var gesuchForDokument = unterschriftenblattRepository.requireByDokumentId(dokumentId).getGesuch();
 
         // Only SBs can delete a Unterschriftenblatt Dokument if the Gesuch was never verfuegt
-        if (isSachbearbeiter(currentBenutzer) && !gesuchForDokument.isVerfuegt()) {
+        if (
+            isSachbearbeiter(currentBenutzer) && !gesuchForDokument.isVerfuegt()
+            && Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuchForDokument.getGesuchStatus())
+        ) {
             return;
         }
 

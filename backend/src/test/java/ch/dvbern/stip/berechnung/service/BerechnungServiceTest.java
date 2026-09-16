@@ -213,7 +213,7 @@ class BerechnungServiceTest {
     @Test
     void testSubtractionOfEinkommensFreibetrag() {
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        final var gueltigkeit = DateRange.getFruehlingOrHerbst(LocalDate.now());
+        final var gueltigkeit = TestUtil.getFruehlingOrHerbstYearRange(LocalDate.now());
 
         gesuch.setAusbildung(
             new Ausbildung()

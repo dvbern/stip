@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,12 +48,14 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
     private GesuchRepository gesuchRepository;
     private GesuchService gesuchService;
     private GesuchStatusService gesuchStatusService;
+    private GesuchTrancheService gesuchTrancheService;
 
     @BeforeEach
     public void setup() {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchService = Mockito.mock(GesuchService.class);
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
+        gesuchTrancheService = Mockito.mock(GesuchTrancheService.class);
         gesuchAuthorizer =
             new GesuchAuthorizer(
                 null,
@@ -62,7 +65,8 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
                 null,
                 gesuchService,
                 null,
-                null
+                null,
+                gesuchTrancheService
             );
     }
 
@@ -72,7 +76,7 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         for (Gesuchstatus gesuchStatusToSucceed : Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK) {
             gesuch.setGesuchStatus(gesuchStatusToSucceed);
-            assertDoesNotThrow(() -> gesuchAuthorizer.sbCanGesuchManuellPruefen(UUID.randomUUID()));
+            assertDoesNotThrow(() -> gesuchAuthorizer.sbCanGesuchOfTrancheManuellPruefen(UUID.randomUUID()));
         }
 
         final var otherGesuchStatus = Arrays.stream(Gesuchstatus.values())
@@ -85,7 +89,7 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
             final var uuid = UUID.randomUUID();
             assertThrows(
                 ForbiddenException.class,
-                () -> gesuchAuthorizer.sbCanGesuchManuellPruefen(uuid)
+                () -> gesuchAuthorizer.sbCanGesuchOfTrancheManuellPruefen(uuid)
             );
         }
     }
@@ -94,9 +98,10 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
     void juristCanTriggerManuellPruefenTest() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheService.getGesuchTranche(any())).thenReturn(gesuch.getLatestGesuchTranche());
         for (Gesuchstatus gesuchStatusToSucceed : Gesuchstatus.JURIST_CAN_EDIT) {
             gesuch.setGesuchStatus(gesuchStatusToSucceed);
-            assertDoesNotThrow(() -> gesuchAuthorizer.juristCanGesuchManuellPruefen(UUID.randomUUID()));
+            assertDoesNotThrow(() -> gesuchAuthorizer.juristCanGesuchOfTrancheManuellPruefen(UUID.randomUUID()));
         }
 
         final var otherGesuchStatus = Arrays.stream(Gesuchstatus.values())
@@ -109,7 +114,7 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
             final var uuid = UUID.randomUUID();
             assertThrows(
                 ForbiddenException.class,
-                () -> gesuchAuthorizer.juristCanGesuchManuellPruefen(uuid)
+                () -> gesuchAuthorizer.juristCanGesuchOfTrancheManuellPruefen(uuid)
             );
         }
     }

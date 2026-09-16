@@ -109,7 +109,7 @@ public class GesuchTestUtil {
             var verfuegungen = new ArrayList<Verfuegung>();
             verfuegungen.add(new Verfuegung());
             gesuch.setVerfuegungs(verfuegungen);
-            gesuch.setVerfuegt(true);
+            gesuch.incrementVerfuegtCount();
         }
         return gesuch.setGesuchStatus(status);
     }

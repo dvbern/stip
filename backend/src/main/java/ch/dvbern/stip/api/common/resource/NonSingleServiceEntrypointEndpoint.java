@@ -15,17 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.common.resource;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-public class NegativVerfuegtHandler implements GesuchStatusChangeHandler {
-    @Override
-    public void handle(Gesuch gesuch, String comment) {
-        gesuch.setInBearbeitungSbReason(null);
-    }
+import ch.dvbern.stip.api.common.interceptors.Validated;
+
+/**
+ * Used for marking Resource Endpoints as delibaretly not single service entrypoint. This is used in the
+ * resources_should_call_a_service_only_once
+ * architecture test. Has no influence on endpoint behaviour but they are allowed to have more than one service call.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Validated
+public @interface NonSingleServiceEntrypointEndpoint {
 }
