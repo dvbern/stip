@@ -116,6 +116,7 @@ class GesuchAuthorizerCanDeleteTest {
             sozialdienstService,
             null,
             null,
+            null,
             null
         );
 
@@ -145,7 +146,7 @@ class GesuchAuthorizerCanDeleteTest {
         gesuchTranche.setGesuch(gesuch);
 
         // assert
-        assertDoesNotThrow(() -> trancheAuthorizer.canUpdateTrancheGS(gesuchTranche));
+        assertDoesNotThrow(() -> trancheAuthorizer.canUpdateTrancheGS(gesuchTranche.getId()));
     }
 
     @Test

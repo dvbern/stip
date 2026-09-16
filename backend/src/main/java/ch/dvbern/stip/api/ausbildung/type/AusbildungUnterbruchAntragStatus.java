@@ -22,14 +22,12 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public enum AusbildungUnterbruchAntragStatus {
-    IN_BEARBEITUNG_GS,
     EINGEGEBEN,
     AKZEPTIERT,
     ABGELEHNT;
 
     public static final Set<AusbildungUnterbruchAntragStatus> IS_OPEN = Collections.unmodifiableSet(
         EnumSet.of(
-            IN_BEARBEITUNG_GS,
             EINGEGEBEN
         )
     );

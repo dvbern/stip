@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import jakarta.inject.Inject;
@@ -42,6 +43,15 @@ public class SteuerdatenTabsRequiredConstraintValidator
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext context) {
         if (gesuchFormular.getFamiliensituation() == null) {
+            return true;
+        }
+        if (
+            gesuchFormular.getTranche() != null
+            && gesuchFormular.getTranche().getGesuch() != null
+            && gesuchFormular.getTranche()
+                .getGesuch()
+                .getGesuchStatus() == Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
+        ) {
             return true;
         }
 

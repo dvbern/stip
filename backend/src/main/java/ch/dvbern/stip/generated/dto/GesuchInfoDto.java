@@ -25,6 +25,7 @@ public class GesuchInfoDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String fallNummer;
   private @Valid String fallId;
+  private @Valid String ausbildungId;
   private @Valid String gesuchNummer;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
@@ -36,6 +37,7 @@ public class GesuchInfoDto  implements Serializable {
     this.id = b.id;
     this.fallNummer = b.fallNummer;
     this.fallId = b.fallId;
+    this.ausbildungId = b.ausbildungId;
     this.gesuchNummer = b.gesuchNummer;
     this.startDate = b.startDate;
     this.endDate = b.endDate;
@@ -102,6 +104,25 @@ public class GesuchInfoDto  implements Serializable {
   @JsonProperty("fallId")
   public void setFallId(String fallId) {
     this.fallId = fallId;
+  }
+
+  /**
+   **/
+  public GesuchInfoDto ausbildungId(String ausbildungId) {
+    this.ausbildungId = ausbildungId;
+    return this;
+  }
+
+  
+  @JsonProperty("ausbildungId")
+  @NotNull
+  public String getAusbildungId() {
+    return ausbildungId;
+  }
+
+  @JsonProperty("ausbildungId")
+  public void setAusbildungId(String ausbildungId) {
+    this.ausbildungId = ausbildungId;
   }
 
   /**
@@ -229,6 +250,7 @@ public class GesuchInfoDto  implements Serializable {
     return Objects.equals(this.id, gesuchInfo.id) &&
         Objects.equals(this.fallNummer, gesuchInfo.fallNummer) &&
         Objects.equals(this.fallId, gesuchInfo.fallId) &&
+        Objects.equals(this.ausbildungId, gesuchInfo.ausbildungId) &&
         Objects.equals(this.gesuchNummer, gesuchInfo.gesuchNummer) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
@@ -239,7 +261,7 @@ public class GesuchInfoDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, fallId, gesuchNummer, startDate, endDate, state, piaVorname, piaNachname);
+    return Objects.hash(id, fallNummer, fallId, ausbildungId, gesuchNummer, startDate, endDate, state, piaVorname, piaNachname);
   }
 
   @Override
@@ -250,6 +272,7 @@ public class GesuchInfoDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
@@ -293,6 +316,7 @@ public class GesuchInfoDto  implements Serializable {
     private UUID id;
     private String fallNummer;
     private String fallId;
+    private String ausbildungId;
     private String gesuchNummer;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -313,6 +337,10 @@ public class GesuchInfoDto  implements Serializable {
     }
     public B fallId(String fallId) {
       this.fallId = fallId;
+      return self();
+    }
+    public B ausbildungId(String ausbildungId) {
+      this.ausbildungId = ausbildungId;
       return self();
     }
     public B gesuchNummer(String gesuchNummer) {

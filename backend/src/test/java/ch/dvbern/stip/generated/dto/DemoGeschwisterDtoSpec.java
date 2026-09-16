@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +39,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_AUSBILDUNGSSITUATION,
-  DemoGeschwisterDtoSpec.JSON_PROPERTY_GESCHWISTER_TYP
+  DemoGeschwisterDtoSpec.JSON_PROPERTY_GESCHWISTER_TYP,
+  DemoGeschwisterDtoSpec.JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER
 })
 @JsonTypeName("DemoGeschwister")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -69,6 +71,9 @@ public class DemoGeschwisterDtoSpec {
 
   public static final String JSON_PROPERTY_GESCHWISTER_TYP = "geschwisterTyp";
   private GeschwisterTypDtoSpec geschwisterTyp;
+
+  public static final String JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER = "elternteilPiaOfStiefHalbGeschwister";
+  private ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister;
 
   public DemoGeschwisterDtoSpec() {
   }
@@ -306,6 +311,32 @@ public class DemoGeschwisterDtoSpec {
     this.geschwisterTyp = geschwisterTyp;
   }
 
+
+  public DemoGeschwisterDtoSpec elternteilPiaOfStiefHalbGeschwister(ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister) {
+    
+    this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
+    return this;
+  }
+
+   /**
+   * Get elternteilPiaOfStiefHalbGeschwister
+   * @return elternteilPiaOfStiefHalbGeschwister
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public ElternTypDtoSpec getElternteilPiaOfStiefHalbGeschwister() {
+    return elternteilPiaOfStiefHalbGeschwister;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setElternteilPiaOfStiefHalbGeschwister(ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister) {
+    this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -323,12 +354,13 @@ public class DemoGeschwisterDtoSpec {
         Objects.equals(this.wohnsitzAnteilVater, demoGeschwister.wohnsitzAnteilVater) &&
         Objects.equals(this.wohnsitzAnteilMutter, demoGeschwister.wohnsitzAnteilMutter) &&
         Objects.equals(this.ausbildungssituation, demoGeschwister.ausbildungssituation) &&
-        Objects.equals(this.geschwisterTyp, demoGeschwister.geschwisterTyp);
+        Objects.equals(this.geschwisterTyp, demoGeschwister.geschwisterTyp) &&
+        Objects.equals(this.elternteilPiaOfStiefHalbGeschwister, demoGeschwister.elternteilPiaOfStiefHalbGeschwister);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachname, vorname, geburtsdatum, alter, wohnsitzBei, wohnsitzAnteilVater, wohnsitzAnteilMutter, ausbildungssituation, geschwisterTyp);
+    return Objects.hash(nachname, vorname, geburtsdatum, alter, wohnsitzBei, wohnsitzAnteilVater, wohnsitzAnteilMutter, ausbildungssituation, geschwisterTyp, elternteilPiaOfStiefHalbGeschwister);
   }
 
   @Override
@@ -344,6 +376,7 @@ public class DemoGeschwisterDtoSpec {
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
     sb.append("    geschwisterTyp: ").append(toIndentedString(geschwisterTyp)).append("\n");
+    sb.append("    elternteilPiaOfStiefHalbGeschwister: ").append(toIndentedString(elternteilPiaOfStiefHalbGeschwister)).append("\n");
     sb.append("}");
     return sb.toString();
   }

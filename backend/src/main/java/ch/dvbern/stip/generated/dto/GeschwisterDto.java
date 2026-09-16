@@ -32,6 +32,7 @@ public class GeschwisterDto  implements Serializable {
   private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
+  private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternteilPiaOfStiefHalbGeschwister;
   private @Valid Boolean hidden;
 
   protected GeschwisterDto(GeschwisterDtoBuilder<?, ?> b) {
@@ -45,6 +46,7 @@ public class GeschwisterDto  implements Serializable {
     this.id = b.id;
     this.wohnsitzAnteilMutter = b.wohnsitzAnteilMutter;
     this.wohnsitzAnteilVater = b.wohnsitzAnteilVater;
+    this.elternteilPiaOfStiefHalbGeschwister = b.elternteilPiaOfStiefHalbGeschwister;
     this.hidden = b.hidden;
   }
 
@@ -243,6 +245,24 @@ public class GeschwisterDto  implements Serializable {
 
   /**
    **/
+  public GeschwisterDto elternteilPiaOfStiefHalbGeschwister(ch.dvbern.stip.api.eltern.type.ElternTyp elternteilPiaOfStiefHalbGeschwister) {
+    this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
+    return this;
+  }
+
+  
+  @JsonProperty("elternteilPiaOfStiefHalbGeschwister")
+  public ch.dvbern.stip.api.eltern.type.ElternTyp getElternteilPiaOfStiefHalbGeschwister() {
+    return elternteilPiaOfStiefHalbGeschwister;
+  }
+
+  @JsonProperty("elternteilPiaOfStiefHalbGeschwister")
+  public void setElternteilPiaOfStiefHalbGeschwister(ch.dvbern.stip.api.eltern.type.ElternTyp elternteilPiaOfStiefHalbGeschwister) {
+    this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
+  }
+
+  /**
+   **/
   public GeschwisterDto hidden(Boolean hidden) {
     this.hidden = hidden;
     return this;
@@ -279,12 +299,13 @@ public class GeschwisterDto  implements Serializable {
         Objects.equals(this.id, geschwister.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwister.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater) &&
+        Objects.equals(this.elternteilPiaOfStiefHalbGeschwister, geschwister.elternteilPiaOfStiefHalbGeschwister) &&
         Objects.equals(this.hidden, geschwister.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, geschwisterTyp, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, hidden);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, geschwisterTyp, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, elternteilPiaOfStiefHalbGeschwister, hidden);
   }
 
   @Override
@@ -302,6 +323,7 @@ public class GeschwisterDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
+    sb.append("    elternteilPiaOfStiefHalbGeschwister: ").append(toIndentedString(elternteilPiaOfStiefHalbGeschwister)).append("\n");
     sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -347,6 +369,7 @@ public class GeschwisterDto  implements Serializable {
     private UUID id;
     private BigDecimal wohnsitzAnteilMutter;
     private BigDecimal wohnsitzAnteilVater;
+    private ch.dvbern.stip.api.eltern.type.ElternTyp elternteilPiaOfStiefHalbGeschwister;
     private Boolean hidden;
     protected abstract B self();
 
@@ -390,6 +413,10 @@ public class GeschwisterDto  implements Serializable {
     }
     public B wohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
       this.wohnsitzAnteilVater = wohnsitzAnteilVater;
+      return self();
+    }
+    public B elternteilPiaOfStiefHalbGeschwister(ch.dvbern.stip.api.eltern.type.ElternTyp elternteilPiaOfStiefHalbGeschwister) {
+      this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
       return self();
     }
     public B hidden(Boolean hidden) {

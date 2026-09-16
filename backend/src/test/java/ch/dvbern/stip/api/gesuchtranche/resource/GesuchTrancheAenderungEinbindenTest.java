@@ -204,8 +204,20 @@ class GesuchTrancheAenderungEinbindenTest {
     @TestAsFreigabestelle
     @Order(7)
     @Test
-    void changeGesuchToVerfuegt() {
+    void gesuchFreigeben() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    @Order(8)
+    @TestAsSachbearbeiter
+    void changeGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVersendet()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -220,18 +232,6 @@ class GesuchTrancheAenderungEinbindenTest {
             .body()
             .as(GesuchWithChangesDtoSpec.class);
         assertThat(gesuchWithChanges.getChanges()).hasSize(1);
-    }
-
-    @Test
-    @Order(8)
-    @TestAsSachbearbeiter
-    void changeToFinalState() {
-        gesuchApiSpec.changeGesuchStatusToVersendet()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
 
         gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())

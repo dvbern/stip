@@ -32,7 +32,8 @@ List<Eltern> elterns,
 Steuerdaten steuerdaten,
 Steuererklaerung steuererklaerung,
 Gesuchsperiode gesuchsperiode,
-List<AbstractFamilieEntity> kinderImHaushalt
+List<AbstractFamilieEntity> kinderImHaushalt,
+int anzahlKinderDerElternInAusbildung
 ) {
     public FamilienBudgetInput {
         if (

@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   input,
+  signal,
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
@@ -14,6 +15,13 @@ import {
   VerfuegtGesuch,
 } from '@dv/shared/model/gesuch';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
+
+interface VersionenLink {
+  routerLink: (string | undefined)[];
+  queryParams: Record<string, unknown>;
+  labelKey: 'aktuell' | 'versionen' | 'initial' | 'eingereicht' | 'verfuegt';
+  labelTimestamp?: string;
+}
 
 @Component({
   selector: 'dv-shared-ui-versionen-menu',
@@ -56,14 +64,98 @@ export class SharedUiVersionenMenuComponent {
     const versionen = this.versionenSig();
     const berechnungId = this.berechnungIdSig();
 
-    if (!versionen || versionen.length === 0) {
-      return undefined;
-    }
-
-    const version = versionen.find(
-      (version) => version.berechnungId === berechnungId,
-    );
-
-    return version;
+    return versionen.find((version) => version.berechnungId === berechnungId);
   });
+
+  private selectedMenuLinkSig = signal<VersionenLink | null>(null);
+
+  effectiveLinkSig = computed(
+    () => this.selectedMenuLinkSig() ?? this.defaultLinkSig(),
+  );
+
+  linksSig = computed(() => {
+    const versionen = this.versionenSig();
+    const initial = this.initialSig();
+    const firstTrancheId = this.firstCurrentTrancheIdSig();
+    const vg = initial?.verfuegtGesuch;
+    const eg = initial?.eingereichtGesuch;
+
+    return {
+      aktuell: this.buildLink('tranche', firstTrancheId, 'aktuell'),
+      versionen: versionen.map((version) => ({
+        version,
+        link: this.buildLink('tranche', version.tranchen[0].id, 'versionen', {
+          berechnungId: version.berechnungId,
+          revision: version.tranchen[0].revision,
+          labelTimestamp: version.timestamp,
+        }),
+      })),
+      verfuegt: vg
+        ? this.buildLink('initial', vg.tranchen[0].id, 'verfuegt', {
+            berechnungId: vg.berechnungId,
+            revision: vg.tranchen[0].revision,
+          })
+        : undefined,
+      eingereicht: eg
+        ? this.buildLink('eingereicht', eg.id, 'eingereicht', {
+            revision: eg.revision,
+          })
+        : undefined,
+    };
+  });
+
+  private defaultLinkSig = computed((): VersionenLink => {
+    const links = this.linksSig();
+    const currentVersion = this.currentVersionSig();
+
+    if (this.isInitialRouteSig() && links.verfuegt) {
+      return links.verfuegt;
+    }
+    if (this.isEingereichtRouteSig() && links.eingereicht) {
+      return links.eingereicht;
+    }
+    if (currentVersion) {
+      const match = links.versionen.find(
+        (item) => item.version.berechnungId === currentVersion.berechnungId,
+      );
+      if (match) {
+        return match.link;
+      }
+    }
+    return links.aktuell;
+  });
+
+  select(link: VersionenLink): void {
+    this.selectedMenuLinkSig.set(link);
+  }
+
+  private buildLink(
+    type: 'tranche' | 'initial' | 'eingereicht',
+    trancheId: string | undefined,
+    labelKey: VersionenLink['labelKey'],
+    context?: {
+      berechnungId?: string;
+      revision?: number;
+      labelTimestamp?: string;
+    },
+  ): VersionenLink {
+    const gesuchId = this.gesuchIdSig();
+    const tabSegments = this.tabRouteSegmentsSig();
+    const originStep = this.originStepSig();
+
+    return {
+      routerLink: ['/', 'gesuch', ...tabSegments, gesuchId, type, trancheId],
+      queryParams: {
+        ...(context?.berechnungId
+          ? { berechnungId: context.berechnungId }
+          : {}),
+        ...(context?.revision !== undefined
+          ? { revision: context.revision }
+          : {}),
+        originStep,
+      },
+      labelKey,
+      labelTimestamp: context?.labelTimestamp,
+    };
+  }
 }

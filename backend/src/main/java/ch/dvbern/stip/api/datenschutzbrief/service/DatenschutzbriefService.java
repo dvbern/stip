@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefBuilder;
@@ -44,6 +46,7 @@ import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -72,6 +75,7 @@ public class DatenschutzbriefService {
     private final ElternRepository elternRepository;
     private final GesuchRepository gesuchRepository;
     private final DatenschutzbriefMapper datenschutzbriefMapper;
+    private final BenutzerService benutzerService;
 
     public RestMulti<Buffer> getDatenschutzbriefDokument(final UUID datenschutzbriefId) {
         final var dokument = datenschutzbriefRepository.requireById(datenschutzbriefId).getDokument();
@@ -85,17 +89,24 @@ public class DatenschutzbriefService {
     }
 
     @Transactional
-    public UUID createDatenschutzbrief(final UUID gesuchId, final UUID elternteilId) {
+    public FileDownloadTokenDto createDatenschutzbrief(final UUID gesuchId, final UUID elternteilId) {
         final var elternteil = elternRepository.requireById(elternteilId);
         // Do not create a Datenschutzbrief for Eltern living outside Switzerland
         if (!livesInSwitzerland(elternteil)) {
             throw new BadRequestException("No Datenschutzbrief for Elternteil in Ausland");
         }
-        return createDatenschutzbrief(gesuchId, elternteil, true).getId();
+
+        final var datenschutzbriefId = createDatenschutzbrief(gesuchId, elternteil, true).getId();
+
+        return dokumentDownloadService.getFileDownloadToken(
+            datenschutzbriefId,
+            DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
+            benutzerService,
+            config
+        );
     }
 
-    @Transactional
-    public Datenschutzbrief createDatenschutzbrief(
+    private Datenschutzbrief createDatenschutzbrief(
         final UUID gesuchId,
         final Eltern elternteil,
         final boolean isVersendet

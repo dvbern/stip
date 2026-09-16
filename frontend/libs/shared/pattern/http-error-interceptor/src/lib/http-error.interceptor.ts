@@ -111,28 +111,40 @@ const handleUnknownHttpError = (
       }
       case 'unknownHttpError': {
         if (
+          // BAD REQUEST
           error.status === 400 &&
           req.context.get(IGNORE_BAD_REQUEST_ERRORS)
         ) {
           return handledError(throwError(() => error));
         }
-        if (error.status === 401) {
-          const unauthorizedHandler = req.context.get(HANDLE_UNAUTHORIZED);
-          if (unauthorizedHandler) {
-            unauthorizedHandler(error);
-          } else {
-            // Redirect to the login page and use the root URL as the redirect URI
-            // to prevent the user being redirected back to the login page after a successful login
-            // because of another unhandled 401 error
-            oauth.redirectUri = location.origin + '/';
-            oauth.logOut();
+        switch (error.status) {
+          // UNAUTHORIZED
+          case 401: {
+            const unauthorizedHandler = req.context.get(HANDLE_UNAUTHORIZED);
+            if (unauthorizedHandler) {
+              unauthorizedHandler(error);
+            } else {
+              // Redirect to the login page and use the root URL as the redirect URI
+              // to prevent the user being redirected back to the login page after a successful login
+              // because of another unhandled 401 error
+              oauth.redirectUri = location.origin + '/';
+              oauth.logOut();
+            }
+            return handledError(EMPTY);
           }
-          return handledError(EMPTY);
-        }
-        // Check for 403 FORBIDDEN
-        if (error.status === 403) {
-          notificationStore.handleForbiddenError(error);
-          return handledError();
+          // FORBIDDEN
+          case 403: {
+            notificationStore.handleForbiddenError(error);
+            return handledError();
+          }
+          // REQUEST ENTITY TOO LARGE
+          case 413: {
+            notificationStore.createNotification({
+              type: 'ERROR_PERMANENT',
+              messageKey: 'shared.genericError.request-entity-too-large',
+            });
+            return handledError();
+          }
         }
         // Check for 404 NOT FOUND if a handler is provided
         const notFoundHandler = req.context.get(HANDLE_NOT_FOUND);

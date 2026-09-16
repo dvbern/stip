@@ -15,6 +15,5 @@ export interface AusbildungDashboardItemAllOf {
     gesuchs?: Array<GesuchDashboardItem>;
     canCreateAusbildungUnterbruchAntrag: boolean;
     hasPendingAusbildungUnterbruchAntrag: boolean;
-    openAusbildungUnterbruchAntragId?: string;
 }
 

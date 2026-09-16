@@ -20,7 +20,10 @@ package ch.dvbern.stip.api.config.type;
 import java.util.Optional;
 
 import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
+import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessingAdapterType;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import io.smallrye.config.WithDefault;
 
@@ -31,27 +34,42 @@ public interface TenantPortConfig {
 
     Pdf pdf();
 
-    interface Port {
+    GemeindeLookup gemeindeLookup();
+
+    PlzFetch plzFetch();
+
+    PaymentProcessing paymentProcessing();
+
+    interface Steuerdaten {
         @WithDefault("false")
         Boolean enabled();
-    }
 
-    interface Steuerdaten extends Port {
         Optional<SteuerdatenAdapterType> adapterType();
     }
 
-    interface Pdf extends Port {
-        Optional<PdfAdapterType> adapterType();
-    }
-
-    interface Berechnung extends Port {
-        @WithDefault("bern")
+    interface Berechnung {
         BerechnungAdapterType adapterType();
 
-        @WithDefault("1")
         int majorVersion();
 
-        @WithDefault("0")
         int minorVersion();
+    }
+
+    interface Pdf {
+        PdfAdapterType adapterType();
+    }
+
+    interface GemeindeLookup {
+        @WithDefault("swisstopo")
+        GemeindeLookupAdapterType adapterType();
+    }
+
+    interface PlzFetch {
+        @WithDefault("swisstopo")
+        PlzFetchAdapterType adapterType();
+    }
+
+    interface PaymentProcessing {
+        PaymentProcessingAdapterType adapterType();
     }
 }

@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchInfoDtoSpec.JSON_PROPERTY_ID,
   GesuchInfoDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   GesuchInfoDtoSpec.JSON_PROPERTY_FALL_ID,
+  GesuchInfoDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID,
   GesuchInfoDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
   GesuchInfoDtoSpec.JSON_PROPERTY_START_DATE,
   GesuchInfoDtoSpec.JSON_PROPERTY_END_DATE,
@@ -51,6 +52,9 @@ public class GesuchInfoDtoSpec {
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
   private String fallId;
+
+  public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
+  private String ausbildungId;
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
   private String gesuchNummer;
@@ -148,6 +152,32 @@ public class GesuchInfoDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFallId(String fallId) {
     this.fallId = fallId;
+  }
+
+
+  public GesuchInfoDtoSpec ausbildungId(String ausbildungId) {
+    
+    this.ausbildungId = ausbildungId;
+    return this;
+  }
+
+   /**
+   * Get ausbildungId
+   * @return ausbildungId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungId() {
+    return ausbildungId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungId(String ausbildungId) {
+    this.ausbildungId = ausbildungId;
   }
 
 
@@ -318,6 +348,7 @@ public class GesuchInfoDtoSpec {
     return Objects.equals(this.id, gesuchInfo.id) &&
         Objects.equals(this.fallNummer, gesuchInfo.fallNummer) &&
         Objects.equals(this.fallId, gesuchInfo.fallId) &&
+        Objects.equals(this.ausbildungId, gesuchInfo.ausbildungId) &&
         Objects.equals(this.gesuchNummer, gesuchInfo.gesuchNummer) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
@@ -328,7 +359,7 @@ public class GesuchInfoDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, fallId, gesuchNummer, startDate, endDate, piaVorname, piaNachname, state);
+    return Objects.hash(id, fallNummer, fallId, ausbildungId, gesuchNummer, startDate, endDate, piaVorname, piaNachname, state);
   }
 
   @Override
@@ -338,6 +369,7 @@ public class GesuchInfoDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");

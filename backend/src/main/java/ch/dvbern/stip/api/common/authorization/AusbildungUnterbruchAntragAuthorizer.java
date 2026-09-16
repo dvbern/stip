@@ -25,12 +25,9 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -39,12 +36,14 @@ import lombok.RequiredArgsConstructor;
 public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
-    private final GesuchService gesuchService;
     private final SozialdienstService sozialdienstService;
     private final AusbildungService ausbildungService;
 
     @Transactional
     public void gsCanCreate(final UUID ausbildungId) {
+        // TODO: temporarily deactivated until KSTIP-3661
+        forbidden();
+
         final var ausbildung = ausbildungService.requireById(ausbildungId);
         if (
             !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
@@ -52,6 +51,45 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService
             )
+        ) {
+            forbidden();
+        }
+
+        if (!ausbildungUnterbruchAntragService.canCreateAusbildungUnterbruchAntrag(ausbildung)) {
+            forbidden();
+        }
+    }
+
+    @Transactional
+    public void sbCanCreate(final UUID ausbildungId) {
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
+
+        if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
+            return;
+        }
+
+        if (
+            AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                ausbildung,
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            return;
+        }
+        forbidden();;
+    }
+
+    @Transactional
+    public void canGetUnterbruchLimits(final UUID ausbildungId) {
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
+        if (
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                ausbildung.getFall(),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+            && !isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())
         ) {
             forbidden();
         }
@@ -71,22 +109,6 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
                 sozialdienstService
             )
         ) {
-            forbidden();
-        }
-    }
-
-    @Transactional
-    public void gsCanUpdate(final UUID ausbildungUnterbruchAntragId) {
-        final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
-        if (!ausbildungUnterbruchAntragService.gsCanWrite(antrag)) {
-            forbidden();
-        }
-    }
-
-    @Transactional
-    public void gsCanDeleteDokument(final UUID dokumentId) {
-        final var antrag = ausbildungUnterbruchAntragService.requireByDokumentId(dokumentId);
-        if (!ausbildungUnterbruchAntragService.gsCanWrite(antrag)) {
             forbidden();
         }
     }
@@ -115,13 +137,7 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
         permitAll();
     }
 
-    public void sbCanWrite(
-        final UUID ausbildungUnterbruchAntragId,
-        final UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto
-    ) {
-        if (updateAusbildungUnterbruchAntragSBDto.getStatus() == AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS) {
-            throw new BadRequestException("Cannot update Unterbruchantrag to Status IN_BEARBEITUNG_GS");
-        }
+    public void sbCanWrite(final UUID ausbildungUnterbruchAntragId) {
         final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
 
         assertAusbildungUnterbruchAntragIsInState(antrag, AusbildungUnterbruchAntragStatus.EINGEGEBEN);

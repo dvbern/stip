@@ -138,7 +138,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @TestAsFreigabestelle
     @Order(4)
     @Test
-    void setupGesuchToVerfuegt() {
+    void setupGesuchFreigeben() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -148,21 +148,12 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-
-        final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
-        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test
     @Order(5)
     @TestAsSachbearbeiter
-    void setupGesuchVersenden() {
+    void gesuchToVerfuegt() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -170,7 +161,18 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
-        var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+        var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+
+        gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

@@ -8,14 +8,14 @@ import {
   runInInjectionContext,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { format } from 'date-fns';
-import { firstValueFrom, map, startWith } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { translatableShared } from '@dv/shared/assets/i18n';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -39,15 +39,9 @@ import {
   getTrancheRoute,
 } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
-import {
-  createUrlChecksSig,
-  urlAfterNavigationEnd,
-} from '@dv/shared/model/router';
+import { createUrlChecksSig } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
-import {
-  hideAktionenRoutes,
-  notGesuchRoute,
-} from '@dv/shared/model/ui-constants';
+import { notGesuchRoute } from '@dv/shared/model/ui-constants';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -56,7 +50,6 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
-import { getQueryParamValueSig } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
 import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 
@@ -74,7 +67,6 @@ export class SharedPatternInfoBarActionsComponent {
   private config = inject(SharedModelCompileTimeConfig);
   private store = inject(Store);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private injector = inject(Injector);
   private dialog = inject(MatDialog);
@@ -83,12 +75,7 @@ export class SharedPatternInfoBarActionsComponent {
   private einreichenStore = inject(EinreichenStore);
   private gesuchAenderungStore = inject(GesuchAenderungStore);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
-  private routeUrlSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map(() => this.router.routerState.snapshot.url),
-      startWith(this.router.routerState.snapshot.url),
-    ),
-  );
+
   private gesuchCacheSig = this.store.selectSignal(
     selectSharedDataAccessGesuchCache,
   );
@@ -210,6 +197,10 @@ export class SharedPatternInfoBarActionsComponent {
   });
 
   private additionalLoadingSig = signal(false);
+  // Eagerly loaded at construction so the loading state can react instantly on
+  // the first status transition (component is deferred and SB-App only anyways).
+  // Why not import the service directly? Because this component is shared and the service is SB-App only.
+  private gesuchActionsServicePromise = this.loadGesuchActionsService();
 
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
@@ -218,7 +209,8 @@ export class SharedPatternInfoBarActionsComponent {
     return (
       isPending(this.gesuchHeaderStore.header()) ||
       isPending(this.gesuchAenderungStore.cachedGesuchAenderung()) ||
-      this.additionalLoadingSig()
+      this.additionalLoadingSig() ||
+      this.isExportingSig()
     );
   });
   isAenderungUpdatingSig = computed(() => {
@@ -232,17 +224,15 @@ export class SharedPatternInfoBarActionsComponent {
     this.router,
     `infos`,
     'darlehen',
+    'verfuegung',
     `${getTrancheRoute('aenderung')}`,
     `${getTrancheRoute('initial')}`,
     `${getTrancheRoute('eingereicht')}`,
   );
 
-  berechnungIdSig = getQueryParamValueSig(this.route, 'berechnungId');
   isActionRouteSig = computed(() => {
-    const url = this.routeUrlSig();
-    return !hideAktionenRoutes.some(
-      (route) => url?.includes(`/${route}/`) || this.berechnungIdSig(),
-    );
+    const routes = this.routeChecksSig();
+    return !(routes.isDarlehen || routes.isVerfuegung || routes.isInfos);
   });
 
   actionMenuOptionsSig = computed(() => {
@@ -372,31 +362,31 @@ export class SharedPatternInfoBarActionsComponent {
     gesuchId?: string,
     gesuchTrancheId?: string,
   ) {
-    if (
-      !gesuchId ||
-      !gesuchTrancheId ||
-      this.config.app.view !== 'sachbearbeiter'
-    ) {
+    if (!gesuchId || !gesuchTrancheId) {
       return;
     }
 
+    const gesuchtActionsService = await this.gesuchActionsServicePromise;
+    gesuchtActionsService?.setStatusUebergang(
+      nextStatus,
+      gesuchId,
+      gesuchTrancheId,
+    );
+  }
+
+  private async loadGesuchActionsService() {
     const module =
-      // A feature that is only called if SB App
+      // A feature that is only available in the SB App
       // eslint-disable-next-line @nx/enforce-module-boundaries
       await import('@dv/sachbearbeitung-app/util-data-access/gesuch-actions');
-    const gesuchtActionsService = runInInjectionContext(this.injector, () => {
+
+    return runInInjectionContext(this.injector, () => {
       const service = inject(module.GesuchActionsService);
       effect(() => {
         this.additionalLoadingSig.set(service.isLoadingSig());
       });
       return service;
     });
-
-    gesuchtActionsService.setStatusUebergang(
-      nextStatus,
-      gesuchId,
-      gesuchTrancheId,
-    );
   }
 }
 

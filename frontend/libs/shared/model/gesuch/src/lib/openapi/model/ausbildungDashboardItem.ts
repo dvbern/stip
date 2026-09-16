@@ -57,7 +57,6 @@ export interface AusbildungDashboardItem {
     gesuchs?: Array<GesuchDashboardItem>;
     canCreateAusbildungUnterbruchAntrag: boolean;
     hasPendingAusbildungUnterbruchAntrag: boolean;
-    openAusbildungUnterbruchAntragId?: string;
 }
 
 

@@ -92,7 +92,7 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   readonly kantone = Object.values(Kanton);
-  selectedFileSig = signal<File | null>(null);
+  selectedFileSig = signal<File | undefined>(undefined);
   dialogData = inject<GrundAuswahlDialogData>(MAT_DIALOG_DATA);
   store = inject(AblehnungGrundStore);
   grundManuell = GRUND_MANUELL;
@@ -102,7 +102,7 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
     return [...(ablehnungsGruende.data ?? []), GRUND_MANUELL];
   });
   form = this.formBuilder.group({
-    fileUpload: [<File | undefined>undefined],
+    fileUpload: [<File[] | undefined>undefined],
     kommentar: [<string | undefined>undefined],
     grund: [
       <StipDecisionText | typeof GRUND_MANUELL | undefined>undefined,
@@ -160,7 +160,7 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
     if (files && files.length > 0) {
       this.selectedFileSig.set(files[0]);
     } else {
-      this.selectedFileSig.set(null);
+      this.selectedFileSig.set(undefined);
     }
     this.form.controls.fileUpload.markAsTouched();
   }

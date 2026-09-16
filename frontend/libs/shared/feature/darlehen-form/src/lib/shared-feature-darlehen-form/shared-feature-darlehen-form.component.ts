@@ -1,4 +1,5 @@
 /* eslint-disable @angular-eslint/no-input-rename */
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,13 +9,14 @@ import {
   input,
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { byAppConfig } from '@dv/shared/model/permission-state';
+import { DVBreakpoints } from '@dv/shared/model/ui-constants';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
@@ -24,11 +26,13 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
 @Component({
   selector: 'dv-shared-feature-darlehen-form-feature',
   imports: [
+    CommonModule,
     MatMenuModule,
     SharedPatternDarlehenFormComponent,
     SharedUiDarlehenVerfuegungDownloadComponent,
     SharedUiDarlehenMenuComponent,
     SharedUiAdvTranslocoDirective,
+    RouterModule,
   ],
   templateUrl: './shared-feature-darlehen-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,6 +65,22 @@ export class SharedFeatureDarlehenFormComponent {
             this.darlehenStore.getAllDarlehen$({ fallId });
           },
         });
+      }
+    });
+
+    effect(() => {
+      const fallId = this.fallIdSig();
+      const darlehenId = this.darlehenIdSig();
+      const gesuchId = this.gesuchIdSig();
+      const firstDarlehenId =
+        this.darlehenStore.darlehenListViewSig().list[0]?.id;
+
+      const isDesktop = window.innerWidth >= DVBreakpoints.LG;
+      if (!darlehenId && firstDarlehenId && gesuchId && fallId && isDesktop) {
+        this.router.navigate(
+          ['/gesuch', gesuchId, 'darlehen', firstDarlehenId, 'fall', fallId],
+          { replaceUrl: true },
+        );
       }
     });
 

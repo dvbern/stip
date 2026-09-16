@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.sap.scheduledtask;
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
 import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import ch.dvbern.stip.api.sap.service.SapService;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPortFactory;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @UnlessBuildProfile("test")
 public class SapBusinessPartnerScheduledTask extends RunForTenantsScheduledTask {
     @Inject
-    SapService sapService;
+    PaymentProcessingPortFactory paymentProcessingPortFactory;
 
     SapBusinessPartnerScheduledTask() {
         super(ScheduledTaskCronKey.SAP_BUSINESS_PARTNER, TenantIdentifier.values());
@@ -43,7 +43,7 @@ public class SapBusinessPartnerScheduledTask extends RunForTenantsScheduledTask 
     protected void run() {
         try {
             LOG.info("processPendingBusinessPartnerActions from scheduled task");
-            sapService.processPendingBusinessPartnerActions();
+            paymentProcessingPortFactory.getPaymentProcessingAdapter().processPendingBusinessPartnerActions();
         } catch (Exception e) {
             LOG.error(e.toString(), e);
         }

@@ -1,6 +1,7 @@
 <ng-container *dvTranslocoShared="let t">
+  @let limits = limitsSig().data;
   <div class="tw:relative tw:justify-between tw:dv-container tw:dv-scroll-space">
-    <form class="tw:dv-form-grid" [formGroup]="form" [dvSharedUiFormReadonly]="!viewSig().canEdit">
+    <form class="tw:dv-form-grid" [formGroup]="form">
       <dv-shared-ui-info-container [type]="'warning'" class="tw:col-span-2">
         <span class="tw:text-dv-yellow material-symbols-rounded">warning</span>
         <div>{{ t('shared.ausbildung-unterbrechen.warning') }}</div>
@@ -13,8 +14,8 @@
           [formControl]="form.controls.startDate"
           data-testid="form-ausbildung-unterbrechung-startDate"
           matInput
-          [min]="viewSig().unterbruchEarliestStartDate"
-          [max]="viewSig().unterbruchLatestEndDate"
+          [min]="limits?.unterbruchEarliestStartDate"
+          [max]="limits?.unterbruchLatestEndDate"
           [matDatepicker]="startDatepicker"
         />
         <mat-datepicker-toggle matIconSuffix [for]="startDatepicker"></mat-datepicker-toggle>
@@ -23,10 +24,10 @@
           {{ t('shared.form.error.required') }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
-          {{ t('shared.form.error.minDate', { date: viewSig().unterbruchEarliestStartDate | date: 'dd.MM.yyyy' }) }}
+          {{ t('shared.form.error.minDate', { date: limits?.unterbruchEarliestStartDate | date: 'dd.MM.yyyy' }) }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
-          {{ t('shared.form.error.maxDate', { date: viewSig().unterbruchLatestEndDate | date: 'dd.MM.yyyy' }) }}
+          {{ t('shared.form.error.maxDate', { date: limits?.unterbruchLatestEndDate | date: 'dd.MM.yyyy' }) }}
         </mat-error>
       </mat-form-field>
 
@@ -37,8 +38,8 @@
           [formControl]="form.controls.endDate"
           data-testid="form-ausbildung-unterbrechung-endDate"
           matInput
-          [min]="oneDayAfterStartDateSig() ?? viewSig().unterbruchEarliestStartDate"
-          [max]="viewSig().unterbruchLatestEndDate"
+          [min]="oneDayAfterStartDateSig() ?? limits?.unterbruchEarliestStartDate"
+          [max]="limits?.unterbruchLatestEndDate"
           [matDatepicker]="endDatepicker"
         />
         <mat-datepicker-toggle matIconSuffix [for]="endDatepicker"></mat-datepicker-toggle>
@@ -49,12 +50,12 @@
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
           {{
             t('shared.form.error.minDate', {
-              date: oneDayAfterStartDateSig() ?? viewSig().unterbruchEarliestStartDate | date: 'dd.MM.yyyy',
+              date: oneDayAfterStartDateSig() ?? limits?.unterbruchEarliestStartDate | date: 'dd.MM.yyyy',
             })
           }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
-          {{ t('shared.form.error.maxDate', { date: viewSig().unterbruchLatestEndDate | date: 'dd.MM.yyyy' }) }}
+          {{ t('shared.form.error.maxDate', { date: limits?.unterbruchLatestEndDate | date: 'dd.MM.yyyy' }) }}
         </mat-error>
       </mat-form-field>
 
@@ -75,40 +76,24 @@
         </mat-error>
       </mat-form-field>
 
-      <div class="tw:col-span-2 tw:col-start-1 tw:flex">
-        <label class="tw:flex! tw:w-full tw:items-center tw:gap-6">
-          <span class="tw:flex-1">
-            {{ t('shared.ausbildung-unterbrechen.dokumente.title') }}
-          </span>
-          @if (unterbruchDokumenteOptionsSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="tw:shrink"
-              [optionsSig]="options"
-              (hasDocuments)="hasMissingDocumentsSig.set(!$event)"
-            ></dv-shared-pattern-document-upload>
-          } @else {
-            <dv-shared-ui-loading [type]="'icon'" class="tw:w-14 tw:h-14"></dv-shared-ui-loading>
-          }
+      <div class="tw:col-span-2 tw:col-start-1 tw:flex tw:flex-col tw:gap-2">
+        <label>
+          {{ t('shared.ausbildung-unterbrechen.dokumente.title') }}
         </label>
+
+        <dv-shared-ui-file-upload
+          [formControl]="form.controls.fileUploads"
+          [allowedFileTypesSig]="deploymentConfigSig().deploymentConfig?.allowedMimeTypes"
+          (selectedFileSig)="selectedFileSig.set($event?.[0])"
+        ></dv-shared-ui-file-upload>
       </div>
-      @if (form.touched && formWasSubmittedSig() && hasMissingDocumentsSig()) {
-        <mat-error class="tw:block! tw:col-span-2 tw:col-start-1">
-          {{ t('shared.form.darlehen.error.missingDocuments') }}
-        </mat-error>
-      }
 
       <div class="tw:col-span-2 tw:dv-button-container">
-        <button
-          type="button"
-          (click)="deleteUnterbruch()"
-          class="tw:dv-button-main-danger"
-          data-testid="button-delete-darlehen"
-        >
+        <a [routerLink]="[previousPageSig()]" class="tw:dv-button-outline-primary" data-testid="button-delete-darlehen">
           {{ t('shared.cancel') }}
-        </button>
+        </a>
 
         <button
-          [disabled]="!ausbildungUnterbruchIdSig()"
           type="button"
           (click)="unterbruchEinreichen()"
           class="tw:dv-button-main-primary"

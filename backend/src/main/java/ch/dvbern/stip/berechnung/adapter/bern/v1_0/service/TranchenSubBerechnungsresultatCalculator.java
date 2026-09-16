@@ -21,13 +21,17 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
+import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -203,13 +207,51 @@ public class TranchenSubBerechnungsresultatCalculator {
                         .concat(leiblichKinderDerElternImHaushalt.stream(), stiefHalbKinderDerElternImHaushalt.stream())
                         .toList();
 
+                    final var geschwisterInAusbildung =
+                        gesuchFormular.getGeschwisters()
+                            .stream()
+                            .filter(
+                                geschwister -> geschwister
+                                    .getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG
+                            )
+                            .toList();
+
+                    final Predicate<Geschwister> isGeschwisterLeiblichPredicate =
+                        geschwister -> geschwister.getGeschwisterTyp() == GeschwisterTyp.LEIBLICH;
+                    final Predicate<Geschwister> isEigenerHaushaltHalbGeschwisterSteuerdatenTypPredicate =
+                        geschwister -> Objects.nonNull(geschwister.getElternteilPiaOfStiefHalbGeschwister())
+                        && geschwister.getElternteilPiaOfStiefHalbGeschwister()
+                            .getSteuerdatenTyp() == steuerdaten.getSteuerdatenTyp();
+                    final Predicate<Geschwister> isGeschwisterTeilzeitPredicate =
+                        geschwister -> geschwister.getWohnsitzAnteil(steuerdaten.getSteuerdatenTyp()).intValue() > 0;
+
+                    final int anzahlKinderDerElternInAusbildung =
+                        Math.toIntExact(
+                            geschwisterInAusbildung
+                                .stream()
+                                .filter(isGeschwisterLeiblichPredicate)
+                                .count()
+                        )
+                        + Math.toIntExact(
+                            geschwisterInAusbildung
+                                .stream()
+                                .filter(isGeschwisterLeiblichPredicate.negate())
+                                .filter(
+                                    isEigenerHaushaltHalbGeschwisterSteuerdatenTypPredicate
+                                        .or(isGeschwisterTeilzeitPredicate)
+                                )
+                                .count()
+                        )
+                        + BernCalculatorUtil.PIA_COUNT;
+
                     return new FamilienBudgetInput(
                         steuerdaten.getSteuerdatenTyp(),
                         elterns,
                         steuerdaten,
                         steuererklaerungOfSteuerdaten,
                         gesuchsperiode,
-                        kinderImHaushalt
+                        kinderImHaushalt,
+                        anzahlKinderDerElternInAusbildung
                     );
                 }
             )

@@ -34,7 +34,9 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumente
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KeinStipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativVerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.SbInitialisiertAenderungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
@@ -59,21 +61,23 @@ import static org.mockito.Mockito.verify;
 
 @Execution(ExecutionMode.CONCURRENT)
 class GesuchStatusStateMachineTest {
-    private GesuchFehlendeDokumenteNichtEingereichtHandler gesuchFehlendeDokumenteNichtEingereichtHandlerSpy;
-    private GesuchZurueckweisenHandler gesuchZurueckweisenHandlerSpy;
-    private KomplettEingereichtHandler komplettEingereichtHandlerSpy;
+    private GesuchFehlendeDokumenteNichtEingereichtHandler gesuchFehlendeDokumenteNichtEingereichtHandlerMock;
+    private GesuchZurueckweisenHandler gesuchZurueckweisenHandlerMock;
+    private KomplettEingereichtHandler komplettEingereichtHandlerMock;
     private DatenschutzbriefDruckbereitHandler datenschutzbriefDruckbereitHandlerMock;
-    private FehlendeDokumenteEinreichenHandler fehlendeDokumenteEinreichenHandlerSpy;
-    private FehlendeDokumenteHandler fehlendeDokumenteHandlerSpy;
-    private VerfuegungDruckbereitHandler verfuegungDruckbereitHandlerSpy;
-    private VerfuegungVersendetHandler verfuegungVersendetHandlerSpy;
-    private AenderungZurueckweisenHandler aenderungZurueckweisenHandlerSpy;
-    private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
+    private FehlendeDokumenteEinreichenHandler fehlendeDokumenteEinreichenHandlerMock;
+    private FehlendeDokumenteHandler fehlendeDokumenteHandlerMock;
+    private VerfuegungDruckbereitHandler verfuegungDruckbereitHandlerMock;
+    private VerfuegungVersendetHandler verfuegungVersendetHandlerMock;
+    private AenderungZurueckweisenHandler aenderungZurueckweisenHandlerMock;
+    private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerMock;
     private AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandlerMock;
-    private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
-    private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
+    private StipendienAnspruchHandler stipendienAnspruchHandlerMock;
+    private KeinStipendienAnspruchHandler keinStipendienAnspruchHandlerMock;
+    private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerMock;
     private StatusprotokollService statusprotokollService;
     private VerfuegtHandler verfuegtHandlerMock;
+    private NegativVerfuegtHandler negativVerfuegtHandlerMock;
     private AenderungAkzeptierenHandler aenderungAkzeptierenHandler;
     private AusbildungUnterbruchAkzeptierenHandler ausbildungUnterbruchAkzeptierenHandler;
     private BeschwerdeErfolgreichAkzeptierenHandler beschwerdeErfolgreichAkzeptierenHandler;
@@ -82,45 +86,49 @@ class GesuchStatusStateMachineTest {
 
     @BeforeEach
     public void createStateMachineConfig() {
-        gesuchFehlendeDokumenteNichtEingereichtHandlerSpy =
+        gesuchFehlendeDokumenteNichtEingereichtHandlerMock =
             Mockito.mock(GesuchFehlendeDokumenteNichtEingereichtHandler.class);
-        gesuchZurueckweisenHandlerSpy = Mockito.mock(GesuchZurueckweisenHandler.class);
-        komplettEingereichtHandlerSpy = Mockito.mock(KomplettEingereichtHandler.class);
+        gesuchZurueckweisenHandlerMock = Mockito.mock(GesuchZurueckweisenHandler.class);
+        komplettEingereichtHandlerMock = Mockito.mock(KomplettEingereichtHandler.class);
         datenschutzbriefDruckbereitHandlerMock = Mockito.mock(DatenschutzbriefDruckbereitHandler.class);
-        fehlendeDokumenteEinreichenHandlerSpy = Mockito.mock(FehlendeDokumenteEinreichenHandler.class);
-        fehlendeDokumenteHandlerSpy = Mockito.mock(FehlendeDokumenteHandler.class);
-        verfuegungDruckbereitHandlerSpy = Mockito.mock(VerfuegungDruckbereitHandler.class);
-        verfuegungVersendetHandlerSpy = Mockito.mock(VerfuegungVersendetHandler.class);
-        aenderungZurueckweisenHandlerSpy = Mockito.mock(AenderungZurueckweisenHandler.class);
-        aenderungFehlendeDokumenteNichtEingereichtHandlerSpy =
+        fehlendeDokumenteEinreichenHandlerMock = Mockito.mock(FehlendeDokumenteEinreichenHandler.class);
+        fehlendeDokumenteHandlerMock = Mockito.mock(FehlendeDokumenteHandler.class);
+        verfuegungDruckbereitHandlerMock = Mockito.mock(VerfuegungDruckbereitHandler.class);
+        verfuegungVersendetHandlerMock = Mockito.mock(VerfuegungVersendetHandler.class);
+        aenderungZurueckweisenHandlerMock = Mockito.mock(AenderungZurueckweisenHandler.class);
+        aenderungFehlendeDokumenteNichtEingereichtHandlerMock =
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class);
-        stipendienAnspruchHandlerSpy = Mockito.mock(StipendienAnspruchHandler.class);
-        juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
+        stipendienAnspruchHandlerMock = Mockito.mock(StipendienAnspruchHandler.class);
+        keinStipendienAnspruchHandlerMock = Mockito.mock(KeinStipendienAnspruchHandler.class);
+        juristischeAbklaerungDurchPruefungHandlerMock = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
         statusprotokollService = Mockito.mock(StatusprotokollService.class);
         aenderungFehlendeDokumenteZurueckweisenHandlerMock =
             Mockito.mock(AenderungFehlendeDokumenteZurueckweisenHandler.class);
         verfuegtHandlerMock = Mockito.mock(VerfuegtHandler.class);
+        negativVerfuegtHandlerMock = Mockito.mock(NegativVerfuegtHandler.class);
         aenderungAkzeptierenHandler = Mockito.mock(AenderungAkzeptierenHandler.class);
         ausbildungUnterbruchAkzeptierenHandler = Mockito.mock(AusbildungUnterbruchAkzeptierenHandler.class);
         beschwerdeErfolgreichAkzeptierenHandler = Mockito.mock(BeschwerdeErfolgreichAkzeptierenHandler.class);
         sbInitialisiertAenderungHandler = Mockito.mock(SbInitialisiertAenderungHandler.class);
 
         config = new GesuchStatusConfigProducer(
-            gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
-            gesuchZurueckweisenHandlerSpy,
-            komplettEingereichtHandlerSpy,
+            gesuchFehlendeDokumenteNichtEingereichtHandlerMock,
+            gesuchZurueckweisenHandlerMock,
+            komplettEingereichtHandlerMock,
             datenschutzbriefDruckbereitHandlerMock,
-            fehlendeDokumenteEinreichenHandlerSpy,
-            fehlendeDokumenteHandlerSpy,
-            verfuegungDruckbereitHandlerSpy,
-            verfuegungVersendetHandlerSpy,
-            aenderungZurueckweisenHandlerSpy,
-            aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
-            stipendienAnspruchHandlerSpy,
-            juristischeAbklaerungDurchPruefungHandlerSpy,
+            fehlendeDokumenteEinreichenHandlerMock,
+            fehlendeDokumenteHandlerMock,
+            verfuegungDruckbereitHandlerMock,
+            verfuegungVersendetHandlerMock,
+            aenderungZurueckweisenHandlerMock,
+            aenderungFehlendeDokumenteNichtEingereichtHandlerMock,
+            stipendienAnspruchHandlerMock,
+            keinStipendienAnspruchHandlerMock,
+            juristischeAbklaerungDurchPruefungHandlerMock,
             statusprotokollService,
             aenderungFehlendeDokumenteZurueckweisenHandlerMock,
             verfuegtHandlerMock,
+            negativVerfuegtHandlerMock,
             aenderungAkzeptierenHandler,
             ausbildungUnterbruchAkzeptierenHandler,
             beschwerdeErfolgreichAkzeptierenHandler,
@@ -156,18 +164,18 @@ class GesuchStatusStateMachineTest {
         );
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(GesuchStatusChangeEvent.EINGEREICHT), gesuch, null);
 
-        verify(komplettEingereichtHandlerSpy).handle(Mockito.any(), Mockito.any());
+        verify(komplettEingereichtHandlerMock).handle(Mockito.any(), Mockito.any());
 
         final var handlerList = Arrays.asList(
-            gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
-            gesuchZurueckweisenHandlerSpy,
-            fehlendeDokumenteEinreichenHandlerSpy,
-            fehlendeDokumenteHandlerSpy,
-            verfuegungDruckbereitHandlerSpy,
-            verfuegungVersendetHandlerSpy,
-            aenderungZurueckweisenHandlerSpy,
-            aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
-            stipendienAnspruchHandlerSpy
+            gesuchFehlendeDokumenteNichtEingereichtHandlerMock,
+            gesuchZurueckweisenHandlerMock,
+            fehlendeDokumenteEinreichenHandlerMock,
+            fehlendeDokumenteHandlerMock,
+            verfuegungDruckbereitHandlerMock,
+            verfuegungVersendetHandlerMock,
+            aenderungZurueckweisenHandlerMock,
+            aenderungFehlendeDokumenteNichtEingereichtHandlerMock,
+            stipendienAnspruchHandlerMock
         );
         handlerList.forEach(handler -> {
             verify(handler, times(0)).handle(Mockito.any(), Mockito.any());

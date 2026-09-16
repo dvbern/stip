@@ -10,10 +10,9 @@
  * Do not edit the class manually.
  */
 
-export type AusbildungUnterbruchAntragStatus = 'IN_BEARBEITUNG_GS' | 'EINGEGEBEN' | 'AKZEPTIERT' | 'ABGELEHNT';
+export type AusbildungUnterbruchAntragStatus = 'EINGEGEBEN' | 'AKZEPTIERT' | 'ABGELEHNT';
 
 export const AusbildungUnterbruchAntragStatus = {
-    IN_BEARBEITUNG_GS: 'IN_BEARBEITUNG_GS' as AusbildungUnterbruchAntragStatus,
     EINGEGEBEN: 'EINGEGEBEN' as AusbildungUnterbruchAntragStatus,
     AKZEPTIERT: 'AKZEPTIERT' as AusbildungUnterbruchAntragStatus,
     ABGELEHNT: 'ABGELEHNT' as AusbildungUnterbruchAntragStatus

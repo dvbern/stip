@@ -54,7 +54,6 @@ export type GsDashboardActions =
       typ: `delete ${'ausbildung' | 'gesuch' | 'aenderung' | 'darlehen'}`;
       id: string;
     }
-  | { typ: 'ausbildung unterbrechen'; id: string; unterbruchId?: string }
   | { typ: 'create darlehen'; gesuchId: string; fallId: string }
   | {
       typ: 'create aenderung';

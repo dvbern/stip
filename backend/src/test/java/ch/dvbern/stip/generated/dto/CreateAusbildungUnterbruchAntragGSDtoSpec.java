@@ -20,23 +20,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.File;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * UpdateAusbildungUnterbruchAntragGSDtoSpec
+ * CreateAusbildungUnterbruchAntragGSDtoSpec
  */
 @JsonPropertyOrder({
-  UpdateAusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_KOMMENTAR_G_S,
-  UpdateAusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_START_DATE,
-  UpdateAusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_END_DATE
+  CreateAusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_KOMMENTAR_G_S,
+  CreateAusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_FILE_UPLOAD,
+  CreateAusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_START_DATE,
+  CreateAusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_END_DATE
 })
-@JsonTypeName("UpdateAusbildungUnterbruchAntragGS")
+@JsonTypeName("CreateAusbildungUnterbruchAntragGS")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class UpdateAusbildungUnterbruchAntragGSDtoSpec {
+public class CreateAusbildungUnterbruchAntragGSDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR_G_S = "kommentarGS";
   private String kommentarGS;
+
+  public static final String JSON_PROPERTY_FILE_UPLOAD = "fileUpload";
+  private File fileUpload;
 
   public static final String JSON_PROPERTY_START_DATE = "startDate";
   private LocalDate startDate;
@@ -44,10 +49,10 @@ public class UpdateAusbildungUnterbruchAntragGSDtoSpec {
   public static final String JSON_PROPERTY_END_DATE = "endDate";
   private LocalDate endDate;
 
-  public UpdateAusbildungUnterbruchAntragGSDtoSpec() {
+  public CreateAusbildungUnterbruchAntragGSDtoSpec() {
   }
 
-  public UpdateAusbildungUnterbruchAntragGSDtoSpec kommentarGS(String kommentarGS) {
+  public CreateAusbildungUnterbruchAntragGSDtoSpec kommentarGS(String kommentarGS) {
     
     this.kommentarGS = kommentarGS;
     return this;
@@ -73,7 +78,33 @@ public class UpdateAusbildungUnterbruchAntragGSDtoSpec {
   }
 
 
-  public UpdateAusbildungUnterbruchAntragGSDtoSpec startDate(LocalDate startDate) {
+  public CreateAusbildungUnterbruchAntragGSDtoSpec fileUpload(File fileUpload) {
+    
+    this.fileUpload = fileUpload;
+    return this;
+  }
+
+   /**
+   * Get fileUpload
+   * @return fileUpload
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FILE_UPLOAD)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public File getFileUpload() {
+    return fileUpload;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FILE_UPLOAD)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFileUpload(File fileUpload) {
+    this.fileUpload = fileUpload;
+  }
+
+
+  public CreateAusbildungUnterbruchAntragGSDtoSpec startDate(LocalDate startDate) {
     
     this.startDate = startDate;
     return this;
@@ -99,7 +130,7 @@ public class UpdateAusbildungUnterbruchAntragGSDtoSpec {
   }
 
 
-  public UpdateAusbildungUnterbruchAntragGSDtoSpec endDate(LocalDate endDate) {
+  public CreateAusbildungUnterbruchAntragGSDtoSpec endDate(LocalDate endDate) {
     
     this.endDate = endDate;
     return this;
@@ -132,22 +163,24 @@ public class UpdateAusbildungUnterbruchAntragGSDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UpdateAusbildungUnterbruchAntragGSDtoSpec updateAusbildungUnterbruchAntragGS = (UpdateAusbildungUnterbruchAntragGSDtoSpec) o;
-    return Objects.equals(this.kommentarGS, updateAusbildungUnterbruchAntragGS.kommentarGS) &&
-        Objects.equals(this.startDate, updateAusbildungUnterbruchAntragGS.startDate) &&
-        Objects.equals(this.endDate, updateAusbildungUnterbruchAntragGS.endDate);
+    CreateAusbildungUnterbruchAntragGSDtoSpec createAusbildungUnterbruchAntragGS = (CreateAusbildungUnterbruchAntragGSDtoSpec) o;
+    return Objects.equals(this.kommentarGS, createAusbildungUnterbruchAntragGS.kommentarGS) &&
+        Objects.equals(this.fileUpload, createAusbildungUnterbruchAntragGS.fileUpload) &&
+        Objects.equals(this.startDate, createAusbildungUnterbruchAntragGS.startDate) &&
+        Objects.equals(this.endDate, createAusbildungUnterbruchAntragGS.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentarGS, startDate, endDate);
+    return Objects.hash(kommentarGS, fileUpload, startDate, endDate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UpdateAusbildungUnterbruchAntragGSDtoSpec {\n");
+    sb.append("class CreateAusbildungUnterbruchAntragGSDtoSpec {\n");
     sb.append("    kommentarGS: ").append(toIndentedString(kommentarGS)).append("\n");
+    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("}");

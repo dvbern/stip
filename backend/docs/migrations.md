@@ -1,6 +1,15 @@
 # Migrations
 We use Liquibase to generate and ultimately apply our migrations. The Liquibase base changelog is in the `db/migration` directory of the resources, the baseline migration is also in that directory.
 
+## Schema per tenant
+Hibernate multi-tenancy runs in `SCHEMA` mode: every tenant has its own database schema, named after the
+lowercase tenant identifier (`bern`, `dv`, see `TenantIdentifier`). 
+
+On startup, `TenantSchemaMigrator` creates each tenant schema (if missing) and applies `db/migration/changelog.xml` to it, so every tenant schema has its
+own `databasechangelog` table. Tenant independent tables (currently only Quartz) live in the `public` schema
+and are migrated by the Quarkus Liquibase extension via `db/migration/changelog-public.xml`
+(`quarkus.liquibase.change-log`). New tenant migrations still go into `db/migration/changelog.xml` as before.
+
 Ensure that you have the `liquibase.properties` file, you can use the `liquibase.properties-template` as a base.
 
 ## Generating a new Migration

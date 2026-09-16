@@ -14,28 +14,30 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("UpdateAusbildungUnterbruchAntragGS")
+@JsonTypeName("CreateAusbildungUnterbruchAntragGS")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
-public class UpdateAusbildungUnterbruchAntragGSDto  implements Serializable {
+public class CreateAusbildungUnterbruchAntragGSDto  implements Serializable {
   private @Valid String kommentarGS;
+  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
 
-  protected UpdateAusbildungUnterbruchAntragGSDto(UpdateAusbildungUnterbruchAntragGSDtoBuilder<?, ?> b) {
+  protected CreateAusbildungUnterbruchAntragGSDto(CreateAusbildungUnterbruchAntragGSDtoBuilder<?, ?> b) {
     this.kommentarGS = b.kommentarGS;
+    this.fileUpload = b.fileUpload;
     this.startDate = b.startDate;
     this.endDate = b.endDate;
   }
 
-  public UpdateAusbildungUnterbruchAntragGSDto() {
+  public CreateAusbildungUnterbruchAntragGSDto() {
   }
 
   /**
    **/
-  public UpdateAusbildungUnterbruchAntragGSDto kommentarGS(String kommentarGS) {
+  public CreateAusbildungUnterbruchAntragGSDto kommentarGS(String kommentarGS) {
     this.kommentarGS = kommentarGS;
     return this;
   }
@@ -54,7 +56,26 @@ public class UpdateAusbildungUnterbruchAntragGSDto  implements Serializable {
 
   /**
    **/
-  public UpdateAusbildungUnterbruchAntragGSDto startDate(LocalDate startDate) {
+  public CreateAusbildungUnterbruchAntragGSDto fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+    this.fileUpload = fileUpload;
+    return this;
+  }
+
+  
+  @JsonProperty("fileUpload")
+  @NotNull
+  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
+    return fileUpload;
+  }
+
+  @JsonProperty("fileUpload")
+  public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+    this.fileUpload = fileUpload;
+  }
+
+  /**
+   **/
+  public CreateAusbildungUnterbruchAntragGSDto startDate(LocalDate startDate) {
     this.startDate = startDate;
     return this;
   }
@@ -73,7 +94,7 @@ public class UpdateAusbildungUnterbruchAntragGSDto  implements Serializable {
 
   /**
    **/
-  public UpdateAusbildungUnterbruchAntragGSDto endDate(LocalDate endDate) {
+  public CreateAusbildungUnterbruchAntragGSDto endDate(LocalDate endDate) {
     this.endDate = endDate;
     return this;
   }
@@ -99,23 +120,25 @@ public class UpdateAusbildungUnterbruchAntragGSDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGS = (UpdateAusbildungUnterbruchAntragGSDto) o;
-    return Objects.equals(this.kommentarGS, updateAusbildungUnterbruchAntragGS.kommentarGS) &&
-        Objects.equals(this.startDate, updateAusbildungUnterbruchAntragGS.startDate) &&
-        Objects.equals(this.endDate, updateAusbildungUnterbruchAntragGS.endDate);
+    CreateAusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntragGS = (CreateAusbildungUnterbruchAntragGSDto) o;
+    return Objects.equals(this.kommentarGS, createAusbildungUnterbruchAntragGS.kommentarGS) &&
+        Objects.equals(this.fileUpload, createAusbildungUnterbruchAntragGS.fileUpload) &&
+        Objects.equals(this.startDate, createAusbildungUnterbruchAntragGS.startDate) &&
+        Objects.equals(this.endDate, createAusbildungUnterbruchAntragGS.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentarGS, startDate, endDate);
+    return Objects.hash(kommentarGS, fileUpload, startDate, endDate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UpdateAusbildungUnterbruchAntragGSDto {\n");
+    sb.append("class CreateAusbildungUnterbruchAntragGSDto {\n");
     
     sb.append("    kommentarGS: ").append(toIndentedString(kommentarGS)).append("\n");
+    sb.append("    fileUpload: ").append(toIndentedString(fileUpload)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("}");
@@ -134,25 +157,26 @@ public class UpdateAusbildungUnterbruchAntragGSDto  implements Serializable {
   }
 
 
-  public static UpdateAusbildungUnterbruchAntragGSDtoBuilder<?, ?> builder() {
-    return new UpdateAusbildungUnterbruchAntragGSDtoBuilderImpl();
+  public static CreateAusbildungUnterbruchAntragGSDtoBuilder<?, ?> builder() {
+    return new CreateAusbildungUnterbruchAntragGSDtoBuilderImpl();
   }
 
-  private static final class UpdateAusbildungUnterbruchAntragGSDtoBuilderImpl extends UpdateAusbildungUnterbruchAntragGSDtoBuilder<UpdateAusbildungUnterbruchAntragGSDto, UpdateAusbildungUnterbruchAntragGSDtoBuilderImpl> {
+  private static final class CreateAusbildungUnterbruchAntragGSDtoBuilderImpl extends CreateAusbildungUnterbruchAntragGSDtoBuilder<CreateAusbildungUnterbruchAntragGSDto, CreateAusbildungUnterbruchAntragGSDtoBuilderImpl> {
 
     @Override
-    protected UpdateAusbildungUnterbruchAntragGSDtoBuilderImpl self() {
+    protected CreateAusbildungUnterbruchAntragGSDtoBuilderImpl self() {
       return this;
     }
 
     @Override
-    public UpdateAusbildungUnterbruchAntragGSDto build() {
-      return new UpdateAusbildungUnterbruchAntragGSDto(this);
+    public CreateAusbildungUnterbruchAntragGSDto build() {
+      return new CreateAusbildungUnterbruchAntragGSDto(this);
     }
   }
 
-  public static abstract class UpdateAusbildungUnterbruchAntragGSDtoBuilder<C extends UpdateAusbildungUnterbruchAntragGSDto, B extends UpdateAusbildungUnterbruchAntragGSDtoBuilder<C, B>>  {
+  public static abstract class CreateAusbildungUnterbruchAntragGSDtoBuilder<C extends CreateAusbildungUnterbruchAntragGSDto, B extends CreateAusbildungUnterbruchAntragGSDtoBuilder<C, B>>  {
     private String kommentarGS;
+    private org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
     private LocalDate startDate;
     private LocalDate endDate;
     protected abstract B self();
@@ -161,6 +185,10 @@ public class UpdateAusbildungUnterbruchAntragGSDto  implements Serializable {
 
     public B kommentarGS(String kommentarGS) {
       this.kommentarGS = kommentarGS;
+      return self();
+    }
+    public B fileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
+      this.fileUpload = fileUpload;
       return self();
     }
     public B startDate(LocalDate startDate) {

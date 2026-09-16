@@ -30,5 +30,6 @@ public class BeschwerdeErfolgreichAkzeptierenHandler implements GesuchStatusChan
     @Override
     public void handle(Gesuch gesuch, String comment) {
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.BESCHWERDE);
+        gesuch.incrementEingereichtCount();
     }
 }

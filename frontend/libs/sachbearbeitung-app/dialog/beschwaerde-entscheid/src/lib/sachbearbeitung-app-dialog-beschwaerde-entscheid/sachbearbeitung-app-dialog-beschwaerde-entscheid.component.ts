@@ -70,11 +70,11 @@ export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
 
   dialogData = inject<BeschwerdeentscheidUploadDialogData>(MAT_DIALOG_DATA);
   form = this.formBuilder.group({
-    fileUpload: [<File | undefined>undefined, Validators.required],
+    fileUpload: [<File[] | undefined>undefined, Validators.required],
     kommentar: [<string | null>null, [Validators.required]],
     beschwerdeErfolgreich: [<boolean | null>null, Validators.required],
   });
-  selectedFileSig = signal<File | null>(null);
+  selectedFileSig = signal<File | undefined>(undefined);
 
   static open(dialog: MatDialog, data: BeschwerdeentscheidUploadDialogData) {
     return dialog.open<

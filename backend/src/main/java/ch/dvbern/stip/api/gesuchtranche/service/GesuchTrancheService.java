@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -52,8 +53,10 @@ import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -75,6 +78,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentEntryDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentListDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -106,6 +110,7 @@ public class GesuchTrancheService {
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchHistoryService gesuchHistoryService;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final BenutzerService benutzerService;
@@ -151,14 +156,39 @@ public class GesuchTrancheService {
     }
 
     @Transactional
+    public GesuchWithChangesDto getGesuchSB(UUID gesuchTrancheId) {
+        final GesuchTranche gesuchTranche = getGesuchTrancheOrHistorical(gesuchTrancheId);
+        final var actualGesuch = gesuchRepository.requireById(gesuchTranche.getGesuch().getId());
+        final var targetGueltigAb = getGesuchTrancheOrHistorical(gesuchTrancheId)
+            .getGueltigkeit()
+            .getGueltigAb();
+        Optional<GesuchTranche> changes = Optional.empty();
+        if (GesuchStatusUtil.sbReceivesChanges(actualGesuch)) {
+            changes = gesuchTrancheHistoryRepository
+                .getLatestWhereGesuchStatusChangedToVerfuegt(actualGesuch.getId(), targetGueltigAb)
+                .or(
+                    () -> gesuchTrancheHistoryRepository
+                        .getLatestWhereGesuchStatusChangedToEingereicht(actualGesuch.getId(), targetGueltigAb)
+                );
+        }
+        // bis eingereicht: changes: empty/null
+        // ab eingereicht bis verfügt: tranche: db, changes: envers changedToEingereicht
+        // ab verfügt: changes: empty/null
+        return gesuchMapperUtil.toWithChangesDto(
+            actualGesuch,
+            gesuchTrancheRepository.requireById(gesuchTrancheId),
+            changes.orElse(null),
+            true
+        );
+    }
+
+    @Transactional
     public GesuchAenderungsDto getHistorizedAenderungsGs(final Gesuch historizedGesuch, final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
         final var offeneAenderung = gesuchTrancheRepository.findOffeneAenderungGs(gesuch.getId())
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);;
-        final var latestAenderung = gesuchTrancheRepository.findLatestAenderungGs(gesuch.getId());
-        final var eingereichteAenderung = latestAenderung
-            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
+        final var eingereichteAenderung = gesuchTrancheHistoryService.findLatestEingereichtAenderungGs(gesuchId)
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);
         return getHistorizedAenderungs(historizedGesuch)
@@ -706,7 +736,7 @@ public class GesuchTrancheService {
     }
 
     @Transactional
-    public void aenderungFehlendeDokumenteUebermitteln(final UUID aenderungId) {
+    public GesuchWithChangesDto aenderungFehlendeDokumenteUebermitteln(final UUID aenderungId) {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheValidatorService
             .validateGesuchTrancheForStatus(aenderungsTranche, GesuchTrancheStatus.FEHLENDE_DOKUMENTE);
@@ -720,6 +750,8 @@ public class GesuchTrancheService {
                     gesuchDokumentKommentarService.getAllFehlendeDokumenteKommentarsForAenderung(aenderungsTranche)
                 )
             );
+
+        return getGesuchSB(aenderungId);
     }
 
     @Transactional

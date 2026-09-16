@@ -28,9 +28,9 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerMapper;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenMapper;
-import ch.dvbern.stip.api.notification.repo.NotificationRepository;
-import ch.dvbern.stip.api.notification.service.NotificationMapper;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.test.Mock;
@@ -59,7 +59,6 @@ public class BenutzerServiceMock extends BenutzerService {
             null,
             null,
             null,
-            null,
             null
         );
 
@@ -69,32 +68,31 @@ public class BenutzerServiceMock extends BenutzerService {
     @Inject
     public BenutzerServiceMock(
     JsonWebToken jsonWebToken,
+    SecurityIdentity identity,
     BenutzerMapper benutzerMapper,
-    NotificationMapper notificationMapper,
     SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper,
+    TenantService tenantService,
+    RolleService rolleService,
+    SachbearbeiterZuordnungStammdatenWorker worker,
     BenutzerRepository benutzerRepository,
     SachbearbeiterRepository sachbearbeiterRepository,
     SozialdienstBenutzerRepository sozialdienstBenutzerRepository,
-    NotificationRepository notificationRepository,
-    RolleService rolleService,
-    CurrentBenutzerContext currentBenutzerContext,
     SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository,
-    SecurityIdentity identity,
-    ZuordnungRepository zuordnungRepository
+    ZuordnungRepository zuordnungRepository,
+    CurrentBenutzerContext currentBenutzerContext
     ) {
         super(
             jsonWebToken,
+            identity,
             benutzerMapper,
-            notificationMapper,
             sachbearbeiterZuordnungStammdatenMapper,
+            tenantService,
+            rolleService,
+            worker,
             benutzerRepository,
             sachbearbeiterRepository,
             sozialdienstBenutzerRepository,
-            notificationRepository,
-            rolleService,
-            currentBenutzerContext,
             sachbearbeiterZuordnungStammdatenRepository,
-            identity,
             zuordnungRepository
         );
 

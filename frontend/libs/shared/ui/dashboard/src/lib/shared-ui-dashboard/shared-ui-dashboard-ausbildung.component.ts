@@ -3,10 +3,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  inject,
   input,
   output,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import {
   GsDashboardActions,
@@ -34,6 +35,7 @@ import { SharedUiDashboardGesuchComponent } from './shared-ui-dashboard-gesuch.c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiDashboardAusbildungComponent {
+  router = inject(Router);
   ausbildungSig = input.required<SharedModelGsAusbildungView>();
   output = output<GsDashboardActions>();
 

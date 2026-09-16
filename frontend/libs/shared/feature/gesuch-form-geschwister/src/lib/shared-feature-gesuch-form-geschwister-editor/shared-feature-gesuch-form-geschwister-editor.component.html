@@ -119,6 +119,34 @@
     </div>
   }
 
+  <!-- ELTERNTEIL -->
+  @if (showElternteilSig()) {
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ t('shared.form.geschwister.elternteil.label') }}</mat-label>
+      <mat-select
+        [formControl]="form.controls.elternteilPiaOfStiefHalbGeschwister"
+        data-testid="form-geschwister-elternteil"
+        [placeholder]="t('shared.form.select.empty')"
+      >
+        @for (elterntyp of elterntypValues; track $index) {
+          <mat-option [attr.data-testid]="elterntyp" [value]="elterntyp">
+            {{ t(`shared.form.geschwister.elternteil.${elterntyp}`) }}
+          </mat-option>
+        }
+      </mat-select>
+      <mat-hint
+        *dvZuvorHint="
+          changes.elternteilPiaOfStiefHalbGeschwister
+            | dvTranslateChange: 'shared.geschwister.elternteil.$VALUE'
+            | async
+        "
+      ></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+    </mat-form-field>
+  }
+
   <!-- Ausbildungssituation -->
   <mat-radio-group
     formControlName="ausbildungssituation"

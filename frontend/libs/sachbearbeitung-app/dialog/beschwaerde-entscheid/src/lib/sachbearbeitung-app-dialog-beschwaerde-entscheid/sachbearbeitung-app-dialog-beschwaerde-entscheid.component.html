@@ -7,7 +7,7 @@
     <dv-shared-ui-file-upload
       formControlName="fileUpload"
       [allowedFileTypesSig]="dialogData.allowedTypes"
-      (selectedFileSig)="selectedFileSig.set($event)"
+      (selectedFileSig)="selectedFileSig.set($event?.[0])"
     ></dv-shared-ui-file-upload>
 
     <mat-form-field class="tw:mt-3 tw:w-full" dvSharedUiFormField>

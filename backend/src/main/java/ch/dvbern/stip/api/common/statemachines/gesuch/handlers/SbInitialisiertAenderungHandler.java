@@ -30,5 +30,6 @@ public class SbInitialisiertAenderungHandler implements GesuchStatusChangeHandle
     @Override
     public void handle(Gesuch gesuch, String comment) {
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.SB_AENDERUNG);
+        gesuch.incrementEingereichtCount();
     }
 }

@@ -20,6 +20,13 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'ausbildung-unterbrechen',
+        loadChildren: () =>
+          import('@dv/shared/feature/ausbildung-unterbrechung').then(
+            (m) => m.sharedFeatureAusbildungUnterbrechungRoutes,
+          ),
+      },
+      {
         path: 'fall/:fallId',
         title: 'shared.dashboard.title',
         loadComponent: () =>

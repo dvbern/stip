@@ -15,26 +15,33 @@
         type="file"
         tabindex="-1"
         data-testid="file-input"
+        [multiple]="multipleSig()"
         [attr.accept]="allowedFileTypesSig()"
         (change)="updateFileList($event)"
       />
     </label>
   </dv-shared-ui-drop-file>
-  @let file = latestValueSig();
-  @if (file) {
-    <div class="tw:flex tw:items-center tw:gap-2">
-      <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
+  @let files = latestValueSig();
+  @if (files?.length) {
+    <div class="tw:flex tw:justify-between">
+      <div class="tw:flex tw:flex-col tw:gap-2">
+        @for (file of files; track file) {
+          <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
+        }
+      </div>
+
       <button
         type="button"
-        class="tw:dv-button-icon tw:ml-2 tw:h-auto tw:w-auto tw:self-end tw:shrink-0"
+        class="tw:dv-button-icon tw:ml-2 tw:h-auto tw:w-auto tw:self-end tw:shrink-0 tw:self-start"
         [attr.aria-label]="t('shared.form.delete')"
         (click)="resetSelectedFile()"
       >
-        <span class="material-symbols-rounded tw:text-dv-gray tw:!text-xl/none align-middle">delete</span>
+        <span class="material-symbols-rounded tw:text-dv-gray tw:text-xl/none! align-middle">delete</span>
       </button>
     </div>
   }
-  <div class="group-errors tw:mb-[3px] tw:text-sm">
+
+  <div class="group-errors tw:mb-0.75 tw:text-sm">
     @if (ngControl?.control?.invalid && ngControl?.control?.touched && fileInput.files?.length === 0) {
       <mat-error>
         {{ t('shared.form.error.required') }}

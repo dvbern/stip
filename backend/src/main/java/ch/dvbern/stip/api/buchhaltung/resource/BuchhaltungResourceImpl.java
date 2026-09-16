@@ -19,17 +19,16 @@ package ch.dvbern.stip.api.buchhaltung.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungMapper;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.authorization.BuchhaltungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.generated.api.BuchhaltungResource;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
 import ch.dvbern.stip.generated.dto.PaginatedFailedAuszahlungBuchhaltungDto;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPortFactory;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +43,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHHALTUNG_ENTRY_R
 public class BuchhaltungResourceImpl implements BuchhaltungResource {
     private final BuchhaltungAuthorizer buchhaltungAuthorizer;
     private final BuchhaltungService buchhaltungService;
-    private final BuchhaltungMapper buchhaltungMapper;
-    private final SapService sapService;
+    private final PaymentProcessingPortFactory paymentProcessingPortFactory;
 
     @Override
     @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
@@ -78,6 +76,6 @@ public class BuchhaltungResourceImpl implements BuchhaltungResource {
     @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
     public BuchhaltungEntryDto retryFailedAuszahlungBuchhaltungForGesuch(UUID gesuchId) {
         buchhaltungAuthorizer.canRetryFailedAuszahlungBuchhaltung(gesuchId);
-        return buchhaltungMapper.toDto(sapService.retryAuszahlungBuchhaltung(gesuchId));
+        return paymentProcessingPortFactory.getPaymentProcessingAdapter().retryAuszahlungBuchhaltung(gesuchId);
     }
 }

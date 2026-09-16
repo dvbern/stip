@@ -47,7 +47,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid AusbildungsgangDto ausbildungsgang;
   private @Valid LocalDate earliestActiveGesuchPeriodeStart;
   private @Valid List<GesuchDashboardItemDto> gesuchs;
-  private @Valid UUID openAusbildungUnterbruchAntragId;
 
   protected AusbildungDashboardItemDto(AusbildungDashboardItemDtoBuilder<?, ?> b) {
     this.fallId = b.fallId;
@@ -71,7 +70,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
     this.ausbildungsgang = b.ausbildungsgang;
     this.earliestActiveGesuchPeriodeStart = b.earliestActiveGesuchPeriodeStart;
     this.gesuchs = b.gesuchs;
-    this.openAusbildungUnterbruchAntragId = b.openAusbildungUnterbruchAntragId;
   }
 
   public AusbildungDashboardItemDto() {
@@ -486,24 +484,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
     return this;
   }
-  /**
-   **/
-  public AusbildungDashboardItemDto openAusbildungUnterbruchAntragId(UUID openAusbildungUnterbruchAntragId) {
-    this.openAusbildungUnterbruchAntragId = openAusbildungUnterbruchAntragId;
-    return this;
-  }
-
-  
-  @JsonProperty("openAusbildungUnterbruchAntragId")
-  public UUID getOpenAusbildungUnterbruchAntragId() {
-    return openAusbildungUnterbruchAntragId;
-  }
-
-  @JsonProperty("openAusbildungUnterbruchAntragId")
-  public void setOpenAusbildungUnterbruchAntragId(UUID openAusbildungUnterbruchAntragId) {
-    this.openAusbildungUnterbruchAntragId = openAusbildungUnterbruchAntragId;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -534,13 +514,12 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.landId, ausbildungDashboardItem.landId) &&
         Objects.equals(this.ausbildungsgang, ausbildungDashboardItem.ausbildungsgang) &&
         Objects.equals(this.earliestActiveGesuchPeriodeStart, ausbildungDashboardItem.earliestActiveGesuchPeriodeStart) &&
-        Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
-        Objects.equals(this.openAusbildungUnterbruchAntragId, ausbildungDashboardItem.openAusbildungUnterbruchAntragId);
+        Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, earliestActiveGesuchPeriodeStart, gesuchs, openAusbildungUnterbruchAntragId);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, earliestActiveGesuchPeriodeStart, gesuchs);
   }
 
   @Override
@@ -569,7 +548,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
     sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
-    sb.append("    openAusbildungUnterbruchAntragId: ").append(toIndentedString(openAusbildungUnterbruchAntragId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -625,7 +603,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
     private AusbildungsgangDto ausbildungsgang;
     private LocalDate earliestActiveGesuchPeriodeStart;
     private List<GesuchDashboardItemDto> gesuchs;
-    private UUID openAusbildungUnterbruchAntragId;
     protected abstract B self();
 
     public abstract C build();
@@ -712,10 +689,6 @@ public class AusbildungDashboardItemDto  implements Serializable {
     }
     public B gesuchs(List<GesuchDashboardItemDto> gesuchs) {
       this.gesuchs = gesuchs;
-      return self();
-    }
-    public B openAusbildungUnterbruchAntragId(UUID openAusbildungUnterbruchAntragId) {
-      this.openAusbildungUnterbruchAntragId = openAusbildungUnterbruchAntragId;
       return self();
     }
   }

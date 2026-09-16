@@ -27,7 +27,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
-import ch.dvbern.stip.api.benutzer.entity.CurrentBenutzerContext;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
@@ -40,9 +39,8 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.util.OidcConstants;
-import ch.dvbern.stip.api.notification.repo.NotificationRepository;
-import ch.dvbern.stip.api.notification.service.NotificationMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
@@ -62,32 +60,20 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 @RequiredArgsConstructor
 public class BenutzerService {
     private final JsonWebToken jsonWebToken;
+    private final SecurityIdentity identity;
 
     private final BenutzerMapper benutzerMapper;
-    private final NotificationMapper notificationMapper;
-
     private final SachbearbeiterZuordnungStammdatenMapper sachbearbeiterZuordnungStammdatenMapper;
+
+    private final TenantService tenantService;
+    private final RolleService rolleService;
+    private final SachbearbeiterZuordnungStammdatenWorker worker;
+
     private final BenutzerRepository benutzerRepository;
     private final SachbearbeiterRepository sachbearbeiterRepository;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
-    private final NotificationRepository notificationRepository;
-    private final RolleService rolleService;
-    private final CurrentBenutzerContext currentBenutzerContext;
-
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
-    private final SecurityIdentity identity;
-
     private final ZuordnungRepository zuordnungRepository;
-
-    // @Transactional
-    // public List<NotificationDto> getNotificationsForCurrentUser() {
-    // return getNotificationsForUser(getCurrentBenutzer().getId());
-    // }
-
-    // @Transactional
-    // public List<NotificationDto> getNotificationsForUser(final UUID userId) {
-    // return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
-    // }
 
     private Benutzer getBenutzerByKeycloakId(final String keycloakId) {
         final var benutzer = findBenutzerByKeycloakId(keycloakId);
@@ -234,6 +220,14 @@ public class BenutzerService {
             .map(sachbearbeiterZuordnungStammdatenMapper::toDto);
     }
 
+    public void createOrUpdateSachbearbeiterStammdatenEntrypoint(
+        UUID sachbearbeiterId,
+        SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdatenDto
+    ) {
+        createOrUpdateSachbearbeiterStammdaten(sachbearbeiterId, sachbearbeiterZuordnungStammdatenDto);
+        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
+    }
+
     @Transactional
     public void createOrUpdateSachbearbeiterStammdaten(
         UUID sachbearbeiterId,
@@ -251,6 +245,18 @@ public class BenutzerService {
         sachbearbeiterZuordnungStammdatenRepository.persist(sachbearbeiterZuordnungStammdaten);
     }
 
+    public void createOrUpdateSachbearbeiterStammdatenEntrypoint(
+        List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdaten
+    ) {
+        createOrUpdateSachbearbeiterStammdaten(sachbearbeiterZuordnungStammdaten);
+        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
+    }
+
+    /**
+     * This is marked @Transactional and public in order for createOrUpdateSachbearbeiterStammdatenEntrypoint
+     * worker.updateZuordnung(tenantService.getCurrentTenantIdentifier()) to not spawn a transaction inside the current
+     * one but after that one. Otherwise the worker does not work.
+     */
     @Transactional
     public void createOrUpdateSachbearbeiterStammdaten(
         List<SachbearbeiterZuordnungStammdatenListDto> sachbearbeiterZuordnungStammdaten
@@ -279,6 +285,11 @@ public class BenutzerService {
         benutzerRepository.persistAndFlush(benutzer);
 
         return benutzerMapper.toDto(benutzer);
+    }
+
+    public void deleteBenutzerEntrypoint(final String benutzerId) {
+        deleteBenutzer(benutzerId);
+        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
     }
 
     @Transactional

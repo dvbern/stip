@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchtranchehistory.service;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchTrancheHistoryService {
+    private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchHistoryService gesuchHistoryService;
@@ -79,5 +81,12 @@ public class GesuchTrancheHistoryService {
         }
 
         return gesuchHistoryService.getHistoricalGesuchRevisionForGS(gesuchTranche.getGesuch().getId());
+    }
+
+    public Optional<GesuchTranche> findLatestEingereichtAenderungGs(UUID gesuchId) {
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
+        return gesuch.getAenderungs()
+            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
+            .findFirst();
     }
 }

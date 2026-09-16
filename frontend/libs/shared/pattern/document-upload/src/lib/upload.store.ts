@@ -386,10 +386,7 @@ export class UploadStore {
               case 'GENERIC_DOKUMENT':
                 switch (action.dokument.dokumentTyp) {
                   case 'ausbildungUnterbruch':
-                    return this.ausbildungService.deleteAusbildungUnterbruchAntragDokument$(
-                      ...deleteCallParams,
-                    );
-
+                    return EMPTY;
                   default:
                     assertUnreachable(action.dokument);
                 }
@@ -603,13 +600,7 @@ export class UploadStore {
         case 'GENERIC_DOKUMENT': {
           switch (dokument.dokumentTyp) {
             case 'ausbildungUnterbruch':
-              return this.ausbildungService.createAusbildungUnterbruchAntragDokument$(
-                {
-                  ausbildungUnterbruchAntragId: dokument.id,
-                  fileUpload,
-                },
-                ...serviceDefaultParams,
-              );
+              return EMPTY;
             default:
               assertUnreachable(dokument);
           }

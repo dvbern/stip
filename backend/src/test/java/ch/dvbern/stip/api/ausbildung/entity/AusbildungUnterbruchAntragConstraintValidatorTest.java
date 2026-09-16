@@ -33,18 +33,6 @@ import static org.hamcrest.Matchers.is;
 public class AusbildungUnterbruchAntragConstraintValidatorTest {
 
     @Test
-    void testRequiredFieldsInBearbeitungGs() {
-        final var validator = new AusbildungUnterbruchAntragRequiredFieldsConstraintValidator();
-        final var antrag = new AusbildungUnterbruchAntrag();
-
-        assertThat(validator.isValid(antrag, null), is(false));
-        antrag.setAusbildung(new Ausbildung());
-        assertThat(validator.isValid(antrag, null), is(false));
-        antrag.setGesuch(new Gesuch());
-        assertThat(validator.isValid(antrag, null), is(true));
-    }
-
-    @Test
     void testRequiredFieldsEingegeben() {
         final var validator = new AusbildungUnterbruchAntragRequiredFieldsConstraintValidator();
         final var antrag = new AusbildungUnterbruchAntrag();

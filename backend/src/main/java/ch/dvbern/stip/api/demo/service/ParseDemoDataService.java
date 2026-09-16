@@ -734,7 +734,7 @@ public class ParseDemoDataService {
             updateList(geschwisters, "bei Mutter.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
             updateList(geschwisters, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.ausbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c.getCell()))));
             updateList(geschwisters, "GeschwisterTyp", 1, (c, o) -> o.get(index).ifPresent(d -> d.geschwisterTyp(ParseDemoEnumUtil.parseGeschwisterTyp(c.getCell()))));
-            updateList(geschwisters, "ElternTyp", 1, (c, o) -> {});
+            updateList(geschwisters, "ElternTyp", 1, (c, o) -> o.get(index).ifPresent(d -> d.elternteilPiaOfStiefHalbGeschwister(ParseDemoEnumUtil.parseElternTyp(c.getCell()))));
             // spotless:on
         }
 
