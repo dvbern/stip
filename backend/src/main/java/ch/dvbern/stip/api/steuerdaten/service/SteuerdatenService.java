@@ -33,12 +33,9 @@ import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPortFactory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped

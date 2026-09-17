@@ -25,9 +25,6 @@ import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessi
 import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPort;
 import ch.dvbern.stip.integration.paymentprocessing.domain.qualifier.PaymentProcessingQualifier;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

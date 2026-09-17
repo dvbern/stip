@@ -22,9 +22,6 @@ import ch.dvbern.stip.integration.paymentprocessing.domain.qualifier.PaymentProc
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped

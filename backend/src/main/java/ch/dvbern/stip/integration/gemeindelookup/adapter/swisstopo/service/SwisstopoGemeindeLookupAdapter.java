@@ -29,9 +29,6 @@ import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupRequ
 import ch.dvbern.stip.integration.gemeindelookup.domain.port.GemeindeLookupPort;
 import ch.dvbern.stip.integration.gemeindelookup.domain.qualifier.GemeindeLookupQualifier;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
