@@ -133,7 +133,7 @@ public class Gesuch extends AbstractTenantEntity {
     @Size(min = 1)
     @OrderBy("timestampErstellt")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
-    private @Valid List<GesuchTranche> gesuchTranchen = new ArrayList<>();
+    private List<@Valid GesuchTranche> gesuchTranchen = new ArrayList<>();
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
@@ -142,7 +142,7 @@ public class Gesuch extends AbstractTenantEntity {
 
     @Nullable
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private @Valid List<GesuchNotiz> notizen = new ArrayList<>();
+    private List<@Valid GesuchNotiz> notizen = new ArrayList<>();
 
     public GesuchTranche getLatestGesuchTranche() {
         // There must always be at least 1 GesuchTranche
@@ -226,7 +226,7 @@ public class Gesuch extends AbstractTenantEntity {
     private Statisticsdata statisticsdata;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
-    private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();
+    private List<@Valid SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();
 
     /**
      * This serves as an audit marker to fetch the version of the Gesuch that is visible to
