@@ -17,7 +17,7 @@ export default defineConfig({
     ...baseConfig.use,
     baseURL: urls.gs,
   },
-  workers: 3,
+  workers: !process.env['CI'] ? 3 : 1,
   projects: [
     {
       name: 'setup',

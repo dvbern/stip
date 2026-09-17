@@ -63,7 +63,6 @@ export const baseConfig = defineConfig({
     screenshot: {
       mode: 'only-on-failure',
     },
-    // viewport: { width: 1440, height: 980 },
     video: {
       mode: 'off',
       size: { width: 1280, height: 720 },

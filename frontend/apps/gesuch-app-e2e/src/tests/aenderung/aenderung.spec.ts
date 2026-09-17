@@ -84,7 +84,6 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
     .click();
 
   // accept all documents =================================================
-  // todo: put into utils function?
   const sbStepsNavPO = new StepsNavPO(sbPage);
   const requiredDokumenteResp = sbPage.waitForResponse(
     '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
