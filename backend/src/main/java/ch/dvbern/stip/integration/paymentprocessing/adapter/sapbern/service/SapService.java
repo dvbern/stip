@@ -156,12 +156,16 @@ public class SapService {
         if (status == SapStatus.SUCCESS) {
             final var readResponse =
                 sapEndpointService.readBusinessPartnerByDeliveryId(buchhaltung.getFall(), deliveryid);
-            SapReturnCodeType.assertSuccess(readResponse.getRETURNCODE().get(0).getTYPE());
-            buchhaltung.getFall()
-                .getAuszahlung()
-                .setSapBusinessPartnerId(
-                    Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
-                );
+            if (SapReturnCodeType.isSuccess(readResponse.getRETURNCODE().get(0).getTYPE())) {
+                buchhaltung.getFall()
+                    .getAuszahlung()
+                    .setSapBusinessPartnerId(
+                        Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
+                    );
+            } else {
+                status = SapStatus.FAILURE;
+            }
+
         }
         sapDelivery.setSapStatus(status);
     }
