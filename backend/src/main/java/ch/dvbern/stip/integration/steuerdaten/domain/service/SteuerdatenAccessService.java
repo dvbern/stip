@@ -28,8 +28,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class SteuerdatenAccessService {
     private final SteuerdatenAccessRepository steuerdatenAccessRepository;
 

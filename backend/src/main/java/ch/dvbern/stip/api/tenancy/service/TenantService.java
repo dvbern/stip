@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENTIFIER_CONTEXT_NAME;
 
 @ApplicationScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
+@RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class TenantService {
     private final RoutingContext context;

@@ -42,8 +42,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 @SteuerdatenAdapterQualifier(SteuerdatenAdapterType.NESKO)
 public class NeskoSteuerdatenAdapter implements SteuerdatenPort {
 

@@ -48,8 +48,7 @@ import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.BUSINESSPARTNE
 @Slf4j
 @RequestScoped
 @PaymentProcessingQualifier(PaymentProcessingAdapterType.DUMMY)
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class DummyPaymentProcessingAdapter implements PaymentProcessingPort {
     final GesuchService gesuchService;
     final GesuchRepository gesuchRepository;

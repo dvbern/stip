@@ -36,8 +36,7 @@ import org.quartz.TriggerBuilder;
 
 @Slf4j
 @ApplicationScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class GemeindeLookupService {
     private final TenantService tenantService;
     private final Scheduler scheduler;

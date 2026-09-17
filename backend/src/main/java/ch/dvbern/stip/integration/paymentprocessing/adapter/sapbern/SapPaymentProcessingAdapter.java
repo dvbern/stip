@@ -34,8 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestScoped
 @PaymentProcessingQualifier(PaymentProcessingAdapterType.SAP_BERN)
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class SapPaymentProcessingAdapter implements PaymentProcessingPort {
     final SapService sapService;
 

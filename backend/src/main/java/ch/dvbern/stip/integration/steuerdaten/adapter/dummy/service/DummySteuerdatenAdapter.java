@@ -31,8 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @SteuerdatenAdapterQualifier(SteuerdatenAdapterType.DUMMY)
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class DummySteuerdatenAdapter implements SteuerdatenPort {
 
     private final SteuerdatenAccessService steuerdatenAccessService;

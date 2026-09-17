@@ -4,6 +4,7 @@
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
   <version>${revision}</version>
+  <packaging>quarkus</packaging>
   <properties>
     <archunit.version>1.4.0</archunit.version>
     <assertj.version>3.27.3</assertj.version>
@@ -22,12 +23,12 @@
     <package.generated.test>${package.generated}</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkiverse.sentry.version>2.3.0</quarkiverse.sentry.version>
+    <quarkiverse.sentry.version>2.3.4</quarkiverse.sentry.version>
     <quarkus-amazon-services.version>3.9.1</quarkus-amazon-services.version>
-    <quarkus-antivirus.version>1.3.0</quarkus-antivirus.version>
+    <quarkus-antivirus.version>1.5.0</quarkus-antivirus.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.27.2</quarkus.platform.version>
+    <quarkus.platform.version>3.39.3</quarkus.platform.version>
     <querydsl.version>6.12</querydsl.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <rest-assured.version>5.5.1</rest-assured.version>
@@ -263,17 +264,17 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
+      <artifactId>quarkus-junit</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5-component</artifactId>
+      <artifactId>quarkus-junit-component</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5-mockito</artifactId>
+      <artifactId>quarkus-junit-mockito</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -289,12 +290,12 @@
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
-      <artifactId>postgresql</artifactId>
+      <artifactId>testcontainers-postgresql</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
-      <artifactId>localstack</artifactId>
+      <artifactId>testcontainers-localstack</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -374,7 +375,6 @@
     <dependency>
       <groupId>com.sun.xml.messaging.saaj</groupId>
       <artifactId>saaj-impl</artifactId>
-      <version>3.0.4</version>
     </dependency>
     <dependency>
       <groupId>com.itextpdf</groupId>
@@ -415,15 +415,6 @@
         <artifactId>quarkus-maven-plugin</artifactId>
         <version>${quarkus.platform.version}</version>
         <extensions>true</extensions>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-              <goal>generate-code</goal>
-              <goal>generate-code-tests</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -523,6 +514,9 @@
             </configuration>
           </execution>
         </executions>
+        <configuration>
+          <argLine>@{argLine}</argLine>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>

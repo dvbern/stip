@@ -39,14 +39,12 @@ import org.jose4j.json.internal.json_simple.JSONObject;
 
 @Slf4j
 @RequestScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 @GemeindeLookupQualifier(GemeindeLookupAdapterType.SWISSTOPO)
 public class SwisstopoGemeindeLookupAdapter implements GemeindeLookupPort {
     private static final String ADDR_NO_SEARCH_LAYER_DEF_KEY = "ch.swisstopo.amtliches-gebaeudeadressverzeichnis";
     private static final String ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR = "adr_number ilike '%s'";
 
-    @Inject
     @RestClient
     SwisstopoApiRestService swisstopoApiRestService;
 

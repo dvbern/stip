@@ -28,11 +28,9 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class PaymentProcessingPortFactory {
     @Any
-    @Inject
     Instance<PaymentProcessingPort> paymentProcessingPorts;
 
     private final TenantService tenantService;
