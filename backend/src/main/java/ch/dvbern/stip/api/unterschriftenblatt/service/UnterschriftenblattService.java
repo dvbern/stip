@@ -34,7 +34,6 @@ import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
@@ -62,7 +61,6 @@ public class UnterschriftenblattService {
     public static final String UNTERSCHRIFTENBLATT_DOKUMENT_PATH = "unterschriftenblatt/";
 
     private final GesuchRepository gesuchRepository;
-    private final GesuchsperiodenService gesuchsperiodenService;
     private final UnterschriftenblattRepository unterschriftenblattRepository;
     private final DokumentRepository dokumentRepository;
     private final Antivirus antivirus;

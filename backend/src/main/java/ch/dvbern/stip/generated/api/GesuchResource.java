@@ -180,9 +180,14 @@ public interface GesuchResource {
     BerechnungsresultatDto getBerechnungForGesuchSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/berechnung/{verfuegungId}")
+    @Path("/berechnung/{verfuegungId}/gs")
     @Produces({ "application/json", "text/plain" })
-    BerechnungsresultatDto getBerechnungForVerfuegung(@PathParam("verfuegungId") UUID verfuegungId);
+    BerechnungsresultatDto getBerechnungForVerfuegungGs(@PathParam("verfuegungId") UUID verfuegungId);
+
+    @GET
+    @Path("/berechnung/{verfuegungId}/sb")
+    @Produces({ "application/json", "text/plain" })
+    BerechnungsresultatDto getBerechnungForVerfuegungSb(@PathParam("verfuegungId") UUID verfuegungId);
 
     @GET
     @Path("/{gesuchId}/berechnungsblatt/token")
