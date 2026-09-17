@@ -108,7 +108,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.hamcrest.Matchers;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
-import org.hibernate.validator.internal.engine.path.MutablePath;
+import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.hibernate.validator.messageinterpolation.ExpressionLanguageFeatureLevel;
 
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_MUTTER;
@@ -543,7 +543,7 @@ public class TestUtil {
 
     public static ConstraintValidatorContextImpl initValidatorContext() {
         return new ConstraintValidatorContextImpl(
-            null, MutablePath.createRootPath(), null, null,
+            null, PathImpl.createRootPath(), null, null,
             ExpressionLanguageFeatureLevel.DEFAULT, ExpressionLanguageFeatureLevel.DEFAULT
         );
     }
