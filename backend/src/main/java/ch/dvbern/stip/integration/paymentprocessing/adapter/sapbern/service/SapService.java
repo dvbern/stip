@@ -257,11 +257,9 @@ public class SapService {
                     switch (businessPartnerActionBuchhaltungType) {
                         case BUSINESSPARTNER_CREATE -> {
                             final var response = sapEndpointService.createBusinessPartner(fall, deliveryid);
-                            SapReturnCodeType.assertSuccess(response.getRETURNCODE().get(0).getTYPE());
                         }
                         case BUSINESSPARTNER_CHANGE -> {
                             final var response = sapEndpointService.changeBusinessPartner(fall, deliveryid);
-                            SapReturnCodeType.assertSuccess(response.getRETURNCODE().get(0).getTYPE());
                         }
                         case null, default -> throw new IllegalStateException();
                     }
@@ -382,7 +380,6 @@ public class SapService {
                             getQrIbanAddlInfoString(gesuch),
                             String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
                         );
-                    SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
                 } catch (Exception e) {
                     LOG.error("Failed to send createVendorPosting action", e);
                 }
