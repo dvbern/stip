@@ -99,13 +99,16 @@ import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.unterschriftenblatt.util.UnterschriftenblattUtil;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -1624,8 +1627,43 @@ public class GesuchService {
             .aenderungs(aenderungs);
     }
 
-    public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {
+    public BerechnungsresultatDto getBerechnungForVerfuegungSb(UUID verfuegungId) {
         return verfuegungService.requireById(verfuegungId).parseBerechnungData();
+    }
+
+    @Transactional
+    public BerechnungsresultatDto getBerechnungForVerfuegungGs(UUID verfuegungId) {
+        final var verfuegung = verfuegungService.requireById(verfuegungId);
+        final Set<SteuerdatenTyp> visibleSteuerdatenTyps =
+            UnterschriftenblattUtil.getGsVisibleSteuerdatenTyps(verfuegung.getGesuch());
+        final BerechnungsresultatDto berechnungsData = verfuegung.parseBerechnungData();
+
+        berechnungsData.getTranchenBerechnungsresultate()
+            .forEach(
+                tranchenBerechnungsresultatDto -> {
+                    tranchenBerechnungsresultatDto.setFamilienBudgetresultate(
+                        tranchenBerechnungsresultatDto.getFamilienBudgetresultate()
+                            .stream()
+                            .filter(
+                                familienBudgetresultatDto -> visibleSteuerdatenTyps
+                                    .contains(familienBudgetresultatDto.getSteuerdatenTyp())
+                            )
+                            .toList()
+                    );
+                    tranchenBerechnungsresultatDto.setPersonenHaushaltGroups(
+                        tranchenBerechnungsresultatDto.getPersonenHaushaltGroups()
+                            .stream()
+                            .filter(
+                                personenHaushaltGruppeDto -> personenHaushaltGruppeDto.getTyp() == PersonenHaushalt.PIA
+                                || visibleSteuerdatenTyps
+                                    .contains(personenHaushaltGruppeDto.getTyp().toSteuerdatenTyp())
+                            )
+                            .toList()
+                    );
+                }
+            );
+
+        return berechnungsData;
     }
 
     @Transactional

@@ -5422,7 +5422,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/berechnung/{verfuegungId}:
+  /gesuch/berechnung/{verfuegungId}/sb:
     parameters:
       - name: verfuegungId
         schema:
@@ -5449,8 +5449,40 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getBerechnungForVerfuegung
-      summary: Holt die Berechnung für die angegebene Verfügung
+      operationId: getBerechnungForVerfuegungSb
+      summary: Holt die Berechnung für die angegebene Verfügung für SB
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/berechnung/{verfuegungId}/gs:
+    parameters:
+      - name: verfuegungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Archivierte Stipendien Berechnung einer Verfügung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungForVerfuegungGs
+      summary: Holt die Berechnung für die angegebene Verfügung für GS
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
