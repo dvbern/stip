@@ -311,11 +311,11 @@ public class FamilienBudgetCalculator {
 
             // If the Elterns are separated there can! only be one eltern in elterns
             if (Objects.requireNonNullElse(elternTeil.getWiederverheiratet(), false)) {
-                verpflegungskostens.setPersonValue(
+                verpflegungskostens.setPartnerValue(
                     BernCalculatorUtil.getElternPartnerName(elternTeil.getElternTyp()),
                     steuerdaten.getVerpflegungPartner()
                 );
-                fahrkostens.setPersonValue(
+                fahrkostens.setPartnerValue(
                     BernCalculatorUtil.getElternPartnerName(elternTeil.getElternTyp()),
                     steuerdaten.getFahrkostenPartner()
                 );
