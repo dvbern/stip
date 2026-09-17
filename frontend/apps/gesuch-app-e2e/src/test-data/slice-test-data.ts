@@ -14,6 +14,7 @@ import {
 import {
   AusbildungValues,
   fruehlingOrHerbst,
+  generateRandomName,
   generateSVN,
   specificMonthPlusYears,
   specificYearsAgo,
@@ -33,43 +34,43 @@ export const ausbildung: AusbildungValues = {
   pensum: 'VOLLZEIT',
 };
 
-export const zahlungsverbindung: Zahlungsverbindung = {
-  vorname: 'Spoerri',
-  nachname: 'Spoerri',
-  iban: '1809000000150664878',
+export const zahlungsverbindungFn = (): Zahlungsverbindung => ({
+  vorname: generateRandomName(),
+  nachname: generateRandomName(),
+  iban: '3908704016075473007', // without prefix CH, since prefilled by Input
   adresse: {
-    landId: 'Schweiz',
+    landId: 'Schweiz', // not id, since filled by playwright!
     strasse: 'Huberstrasse',
     hausnummer: '5a',
     plz: '3008',
     ort: 'Bern',
   },
-};
+});
 
 export const adressen = {
   person: {
     landId: 'Schweiz',
     coAdresse: '',
-    strasse: 'Kramgasse',
-    hausnummer: '1',
-    plz: '3011',
+    strasse: 'Huberstrasse',
+    hausnummer: '5a',
+    plz: '3008',
     ort: 'Bern',
   },
   mutter: {
     landId: 'Schweiz',
     coAdresse: '',
-    strasse: 'Aarbergergasse',
-    hausnummer: '1',
-    plz: '3065',
-    ort: 'Bolligen',
+    strasse: 'Huberstrasse',
+    hausnummer: '5a',
+    plz: '3008',
+    ort: 'Bern',
   },
 } as const satisfies Record<string, Adresse>;
 
 export const person = (seed: string): PersonInAusbildung => ({
   sozialversicherungsnummer: generateSVN(seed + '_person'),
   anrede: 'HERR',
-  nachname: 'Muster',
-  vorname: 'Fritz',
+  nachname: generateRandomName(),
+  vorname: generateRandomName(),
   adresse: adressen.person,
   identischerZivilrechtlicherWohnsitz: true,
   email: 'max.muster@dvbern.ch',
@@ -104,7 +105,7 @@ export const familienlsituation: Familiensituation = {
 
 export const mutter = (seed: string): Eltern => ({
   sozialversicherungsnummer: generateSVN(seed + '_mutter'),
-  nachname: 'Tester',
+  nachname: 'e2e',
   vorname: 'Mutter1',
   adresse: adressen.mutter,
   identischerZivilrechtlicherWohnsitz: true,
@@ -145,7 +146,7 @@ export const steuerdaten: Steuerdaten = {
 };
 
 export const bruder: Geschwister = {
-  nachname: 'Tester',
+  nachname: 'e2e',
   vorname: 'Geschwister1',
   geburtsdatum: `01.01.${specificYearsAgo(19)}`,
   wohnsitz: 'MUTTER_VATER',

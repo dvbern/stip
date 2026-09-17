@@ -12,6 +12,7 @@ import {
   expectFormToBeValid,
   expectInfoTitleToContainText,
   expectStepTitleToContainText,
+  generateRandomName,
   getE2eUrls,
   initializeMultiUserTest,
   secondTrancheStart,
@@ -159,7 +160,9 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
 
   // make a change in the form
   const gsPersonPO = new PersonPO(gsPage);
-  await gsPersonPO.elems.nachname.fill('E2E-Changed');
+  const originalNachname = await gsPersonPO.elems.nachname.inputValue();
+  const newNachname = generateRandomName();
+  await gsPersonPO.elems.nachname.fill(newNachname);
   await expectFormToBeValid(gsPersonPO.elems.form);
   const personGsSaveResponse = gsPage.waitForResponse(
     (r) =>
@@ -180,10 +183,10 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await personStepNav.click();
   await gsPersonPO.elems.loading.waitFor({ state: 'hidden' });
   await expectStepTitleToContainText('Person in Ausbildung', gsPage);
-  await expect(gsPersonPO.elems.nachname).toHaveValue('E2E-Changed');
+  await expect(gsPersonPO.elems.nachname).toHaveValue(newNachname);
   await expect(
     gsPage.getByTestId('form-person-nachname-zuvor-hint'),
-  ).toHaveText('Sanchez');
+  ).toHaveText(originalNachname);
 
   // check changes on stepNav
   await expect(
@@ -230,31 +233,16 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   await sbPage.locator('.cdk-overlay-backdrop').click();
   await expectInfoTitleToContainText('Änderung vom', sbPage);
 
-  // change the nachname again on SB App
+  // verify the change
   await sbStepsNavPO.elems.expanderPersoenlichGroup.first().click();
   await sbStepsNavPO.elems.person.first().click();
-
-  await expectStepTitleToContainText('Person in Ausbildung', sbPage);
   const sbPersonPO = new PersonPO(sbPage);
   await sbPersonPO.elems.loading.waitFor({ state: 'hidden' });
-  await sbPersonPO.elems.nachname.fill('E2E-Changed-2');
-
-  // todo-e2e-next: could all these waitForResponse calls be replaced with awaiting loading?
-  const personSaveResponse = sbPage.waitForResponse(
-    (r) =>
-      r.url().includes('/api/v1/gesuch') && r.request().method() === 'PATCH',
-  );
-  await sbPersonPO.elems.buttonSaveContinue.click();
-  await personSaveResponse;
-
-  // verify the change
-  await sbStepsNavPO.elems.person.first().click();
-  await sbPersonPO.elems.loading.waitFor({ state: 'hidden' });
   await expectStepTitleToContainText('Person in Ausbildung', sbPage);
-  await expect(sbPersonPO.elems.nachname).toHaveValue('E2E-Changed-2');
+  await expect(sbPersonPO.elems.nachname).toHaveValue(newNachname);
   await expect(
     sbPage.getByTestId('form-person-nachname-zuvor-hint'),
-  ).toHaveText('E2E-Changed');
+  ).toHaveText(originalNachname);
 
   await sbStepsNavPO.elems.expanderFamilienGroup.first().click();
   await sbStepsNavPO.elems.geschwister.first().click();

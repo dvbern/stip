@@ -32,7 +32,7 @@ import {
   steuerdaten,
   steuererklaerung,
   taetigkeit,
-  zahlungsverbindung,
+  zahlungsverbindungFn,
 } from '../../test-data/slice-test-data';
 
 const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(ausbildung);
@@ -160,7 +160,7 @@ test.describe('Neues gesuch erstellen', () => {
     // go to Auszahlung edit
     await auszahlungPO.elems.goToAuszahlungEdit.click();
 
-    await auszahlungPO.fillAuszahlungEigenesKonto(zahlungsverbindung);
+    await auszahlungPO.fillAuszahlungEigenesKonto(zahlungsverbindungFn());
 
     await auszahlungPO.elems.buttonSaveContinue.click();
     await auszahlungPO.elems.buttonNext.click();

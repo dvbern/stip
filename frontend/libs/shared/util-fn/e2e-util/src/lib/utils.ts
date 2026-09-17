@@ -40,6 +40,16 @@ export const expectInfoTitleToContainText = async (
   });
 };
 
+const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+export const generateRandomName = (postfix = 'e2e') => {
+  let random = '';
+  for (let i = 0; i < 6; i++) {
+    random += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `${random}-${postfix}`;
+};
+
 export const uploadFilesById = async (page: Page) => {
   const uploadButtons = page.getByTestId(/^button-document-upload-/);
 

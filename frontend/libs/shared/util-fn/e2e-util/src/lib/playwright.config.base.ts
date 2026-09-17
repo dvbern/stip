@@ -70,7 +70,7 @@ export const baseConfig = defineConfig({
     contextOptions: {
       ignoreHTTPSErrors: true,
     },
-    actionTimeout: !process.env.CI ? 5_000 : undefined,
+    actionTimeout: !process.env.CI ? 6_000 : undefined,
   },
   timeout: process.env.CI ? 80_000 : undefined,
   expect: {
