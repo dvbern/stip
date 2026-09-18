@@ -7,7 +7,7 @@
   <packaging>quarkus</packaging>
   <properties>
     <revision>local</revision>
-    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.release>25</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <package>ch.dvbern.stip</package>
@@ -52,7 +52,7 @@
     <liquibase-maven-plugin.version>5.0.4</liquibase-maven-plugin.version>
     <surefire-plugin.version>3.6.0</surefire-plugin.version>
     <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
-    <jacoco.version>0.8.7</jacoco.version>
+    <jacoco.version>0.8.15</jacoco.version>
     <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
     <!-- bump to version that includes this pr once merged https://github.com/OpenAPITools/openapi-generator/pull/24176 -->
     <!-- this will resolve the warnings about @Valid being depricated when used on containers (List,Set,Map) -->
