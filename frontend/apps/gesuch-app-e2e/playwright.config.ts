@@ -17,14 +17,22 @@ export default defineConfig({
     ...baseConfig.use,
     baseURL: urls.gs,
   },
-  workers: 3,
+  workers: !process.env['CI'] ? 3 : 1,
   projects: [
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+    },
     {
       name: 'gesuch-app-e2e',
       testDir: `src/tests`,
       use: {
         ...devices['Desktop Chrome'],
       },
+      dependencies: ['setup'],
     },
   ],
 });

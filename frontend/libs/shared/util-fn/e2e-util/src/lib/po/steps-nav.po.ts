@@ -3,6 +3,8 @@ import { Locator, Page } from '@playwright/test';
 export class StepsNavPO {
   public elems: {
     page: Page;
+    expanderPersoenlichGroup: Locator;
+    expanderFamilienGroup: Locator;
     info: Locator;
     ausbildung: Locator;
     person: Locator;
@@ -28,6 +30,12 @@ export class StepsNavPO {
   constructor(page: Page) {
     this.elems = {
       page,
+      expanderPersoenlichGroup: page.getByTestId(
+        'step-nav-group-expander-PERSOENLICHE_ANGABEN',
+      ),
+      expanderFamilienGroup: page.getByTestId(
+        'step-nav-group-expander-FAMILIENANGABEN',
+      ),
       info: page.getByTestId('step-nav-info'),
       ausbildung: page.getByTestId('step-nav-ausbildung'),
       person: page.getByTestId('step-nav-person'),
@@ -52,7 +60,7 @@ export class StepsNavPO {
       partner: page.getByTestId('step-nav-partner'),
       kinder: page.getByTestId('step-nav-kinder'),
       auszahlung: page.getByTestId('step-nav-auszahlung'),
-      einnahmenKosten: page.getByTestId('step-nav-einkommenkosten'),
+      einnahmenKosten: page.getByTestId('step-nav-einnahmenkosten'),
       darlehen: page.getByTestId('step-nav-darlehen'),
       dokumente: page.getByTestId('step-nav-dokumente'),
       abschluss: page.getByTestId('step-nav-abschluss'),

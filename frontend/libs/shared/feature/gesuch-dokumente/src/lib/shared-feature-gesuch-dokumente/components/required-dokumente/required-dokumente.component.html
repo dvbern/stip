@@ -1,6 +1,6 @@
 @let view = dokumenteViewSig();
 @if (view.loading) {
-  <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+  <dv-shared-ui-loading data-testid="loading-required-dokumente" [overlay]="true" type="icon"></dv-shared-ui-loading>
 }
 <ng-container *dvTranslocoShared="let t">
   <div class="tw:flex tw:items-center tw:justify-between">

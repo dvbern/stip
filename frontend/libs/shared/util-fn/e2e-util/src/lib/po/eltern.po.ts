@@ -9,7 +9,6 @@ export class ElternPO {
     page: Page;
     addVater: Locator;
     addMutter: Locator;
-
     loading: Locator;
 
     buttonContinue: Locator;
@@ -21,7 +20,6 @@ export class ElternPO {
       page,
       addVater: page.getByTestId('button-add-vater'),
       addMutter: page.getByTestId('button-add-mutter'),
-
       loading: page.getByTestId('form-eltern-loading'),
 
       buttonContinue: page.getByTestId('button-continue'),

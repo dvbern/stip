@@ -1,10 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Steuerdaten } from '@dv/shared/model/gesuch';
-import {
-  expectFormToBeValid,
-  selectMatRadio,
-} from '@dv/shared/util-fn/e2e-util';
+
+import { expectFormToBeValid, selectMatRadio } from '../utils';
 
 export class SteuerdatenPO {
   public elems: {

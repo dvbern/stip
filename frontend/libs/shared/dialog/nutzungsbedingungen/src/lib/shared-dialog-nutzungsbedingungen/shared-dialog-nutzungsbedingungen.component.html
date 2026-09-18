@@ -1,4 +1,5 @@
 <section
+  data-testid="shared-dialog-nutzungsbedingungen"
   class="tw:relative tw:flex tw:max-h-[94dvh] tw:flex-col tw:overflow-y-auto tw:rounded-lg tw:dv-dialog-container tw:dv-scroll-space"
   *dvTranslocoShared="let t"
 >
@@ -18,7 +19,7 @@
   <div [innerHTML]="t('shared.user.consent.dialog.text')"></div>
 
   <div class="tw:mt-5 tw:flex tw:justify-between">
-    <button type="button" class="tw:dv-button-outline" (click)="cancel()">
+    <button data-testid="cancel-button" type="button" class="tw:dv-button-outline" (click)="cancel()">
       @if (dialogData.nutzungsbedingungenAkzeptiert) {
         {{ t('shared.close') }}
       } @else {
@@ -26,7 +27,7 @@
       }
     </button>
     @if (!dialogData.nutzungsbedingungenAkzeptiert) {
-      <button type="button" class="tw:dv-button-main-primary tw:ml-2" (click)="accept()">
+      <button data-testid="accept-button" type="button" class="tw:dv-button-main-primary tw:ml-2" (click)="accept()">
         {{ t('shared.user.consent.dialog.accept') }}
       </button>
     }

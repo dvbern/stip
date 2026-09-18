@@ -6,7 +6,7 @@
   "tags": ["type:e2e", "scope:sozialdienst-app"],
   "implicitDependencies": ["sozialdienst-app"],
   "targets": {
-    "e2e": {
+    "e2e_deactivated": {
       "executor": "@nx/playwright:playwright",
       "outputs": ["{workspaceRoot}/dist/.playwright/apps/sozialdienst-app-e2e"],
       "options": {

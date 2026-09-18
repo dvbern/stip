@@ -1,10 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Ausbildung } from '@dv/shared/model/gesuch';
-import {
-  expectFormToBeValid,
-  selectMatOption,
-} from '@dv/shared/util-fn/e2e-util';
+
+import { expectFormToBeValid, selectMatOption } from '../utils';
 
 export interface AusbildungValues extends Ausbildung {
   ausbildungsstaetteText: string;

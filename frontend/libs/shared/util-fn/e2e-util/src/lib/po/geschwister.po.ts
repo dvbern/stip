@@ -11,7 +11,6 @@ export class GeschwisterPO {
     addGeschwister: Locator;
     geschwisterRow: Locator;
     buttonContinue: Locator;
-    buttonNext: Locator;
   };
 
   constructor(page: Page) {
@@ -21,7 +20,6 @@ export class GeschwisterPO {
       addGeschwister: page.getByTestId('button-add-geschwister'),
       geschwisterRow: page.getByTestId('geschwister-row'),
       buttonContinue: page.getByTestId('button-continue'),
-      buttonNext: page.getByTestId('button-next'),
     };
   }
 

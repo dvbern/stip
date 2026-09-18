@@ -39,6 +39,7 @@
         class="dv-nav-expansion-panel mat-elevation-z0 tw:border-b tw:border-dv-border!"
         [ngClass]="{ 'tw:border-t tw:border-dv-border': entry.borderTop, 'tw:bg-dv-gray-subtle!': entry.hasActive }"
         [expanded]="entry.hasActive || openedGroupsSig()[entry.group]"
+        [attr.data-testid]="'step-nav-group-expander-' + entry.group"
       >
         <mat-expansion-panel-header (click)="$event.stopPropagation()" class="tw:hover:bg-inherit!">
           <mat-panel-title class="tw:font-semibold tw:text-dv-gray tw:flex tw:items-center tw:gap-2">

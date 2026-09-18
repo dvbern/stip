@@ -187,6 +187,7 @@ export class SharedFeatureGesuchLayoutComponent {
       route: ['/gesuch', ...tabSegments, gesuchId, trancheTyp, trancheId],
       queryParams: { berechnungId, originStep: originOrTrancheStep },
       key: 'formular' as const,
+      testId: 'gesuchs-tab-nav-gesuch-tab',
     };
 
     const appTypeBasedQueryParams =
@@ -205,6 +206,7 @@ export class SharedFeatureGesuchLayoutComponent {
         originStep: originOrTrancheStep,
       },
       key: 'verfuegung' as const,
+      testId: 'gesuchs-tab-nav-verfuegung-tab',
     };
 
     if (canGetBerechnung) {

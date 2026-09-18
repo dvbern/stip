@@ -45,6 +45,9 @@ Thumbs.db
 .angular
 .env
 
+# Playwright authentication storage states
+**/playwright/.auth
+
 affected-apps.gitlab-ci.yml
 
 .nx/cache

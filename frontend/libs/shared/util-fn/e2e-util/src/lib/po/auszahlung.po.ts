@@ -1,9 +1,9 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Zahlungsverbindung } from '@dv/shared/model/gesuch';
-import { expectFormToBeValid } from '@dv/shared/util-fn/e2e-util';
 
 import { AddressPO } from './adresse.po';
+import { expectFormToBeValid } from '../utils';
 
 export class AuszahlungPO {
   public elems: {
@@ -16,7 +16,7 @@ export class AuszahlungPO {
     adresse: AddressPO;
     iban: Locator;
 
-    buttonSave: Locator;
+    buttonSaveContinue: Locator;
     buttonBack: Locator;
     buttonNext: Locator;
   };
@@ -35,15 +35,15 @@ export class AuszahlungPO {
 
       iban: page.getByTestId('form-auszahlung-iban'),
 
-      buttonSave: page.getByTestId('button-save'),
+      buttonSaveContinue: page.getByTestId('button-save-continue'),
       buttonBack: page.getByTestId('button-back'),
       buttonNext: page.getByTestId('button-next'),
     };
   }
 
   async fillAuszahlungEigenesKonto(zahlungsverbindung: Zahlungsverbindung) {
-    await this.elems.vorname.fill(zahlungsverbindung.vorname);
-    await this.elems.nachname.fill(zahlungsverbindung.nachname);
+    await this.elems.vorname.fill(zahlungsverbindung.vorname!);
+    await this.elems.nachname.fill(zahlungsverbindung.nachname!);
     await this.elems.adresse.fillAddressForm(zahlungsverbindung.adresse);
     await this.elems.iban.fill(zahlungsverbindung.iban);
 

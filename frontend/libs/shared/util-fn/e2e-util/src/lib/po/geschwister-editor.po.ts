@@ -1,11 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Geschwister } from '@dv/shared/model/gesuch';
-import {
-  expectFormToBeValid,
-  selectMatOption,
-  selectMatRadio,
-} from '@dv/shared/util-fn/e2e-util';
+
+import { expectFormToBeValid, selectMatOption, selectMatRadio } from '../utils';
 
 export class GeschwisterEditorPO {
   public elems: {
@@ -15,8 +12,9 @@ export class GeschwisterEditorPO {
     vorname: Locator;
     geburtsdatum: Locator;
     wohnsitzSelect: Locator;
-    wohnsitzMutter: Locator;
-    wohnsitzVater: Locator;
+    geschwisterTypSelect: Locator;
+    wohnsitzAnteilMutter: Locator;
+    wohnsitzAnteilVater: Locator;
     ausbildungssituationRadio: Locator;
 
     buttonSave: Locator;
@@ -33,8 +31,9 @@ export class GeschwisterEditorPO {
       vorname: page.getByTestId('form-geschwister-vorname'),
       geburtsdatum: page.getByTestId('form-geschwister-geburtsdatum'),
       wohnsitzSelect: page.getByTestId('form-geschwister-wohnsitz'),
-      wohnsitzMutter: page.getByTestId('component-percentage-splitter-a'),
-      wohnsitzVater: page.getByTestId('component-percentage-splitter-b'),
+      geschwisterTypSelect: page.getByTestId('form-geschwister-typ'),
+      wohnsitzAnteilMutter: page.getByTestId('component-percentage-splitter-a'),
+      wohnsitzAnteilVater: page.getByTestId('component-percentage-splitter-b'),
       ausbildungssituationRadio: page.getByTestId(
         'form-geschwister-ausbildungssituation',
       ),
@@ -51,11 +50,15 @@ export class GeschwisterEditorPO {
 
     await selectMatOption(this.elems.wohnsitzSelect, item.wohnsitz);
 
+    await selectMatOption(this.elems.geschwisterTypSelect, item.geschwisterTyp);
+
     if (item.wohnsitzAnteilMutter) {
-      await this.elems.wohnsitzMutter.fill(`${item.wohnsitzAnteilMutter}`);
+      await this.elems.wohnsitzAnteilMutter.fill(
+        `${item.wohnsitzAnteilMutter}`,
+      );
     }
     if (item.wohnsitzAnteilVater) {
-      await this.elems.wohnsitzVater.fill(`${item.wohnsitzAnteilVater}`);
+      await this.elems.wohnsitzAnteilVater.fill(`${item.wohnsitzAnteilVater}`);
     }
 
     await selectMatRadio(

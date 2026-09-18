@@ -1,4 +1,4 @@
-import { APIRequestContext, expect } from '@playwright/test';
+import { APIRequestContext } from '@playwright/test';
 
 import {
   AbschlussSlim,
@@ -6,7 +6,8 @@ import {
   GesuchFormularUpdate,
   Land,
 } from '@dv/shared/model/gesuch';
-import { ExplicitNull, SetupFn } from '@dv/shared/util-fn/e2e-util';
+
+import { ExplicitNull, SetupFn } from './utils';
 
 export const setupGesuchWithApi: (
   createFomularUpdateFn: (
@@ -62,11 +63,10 @@ const setGesuchApi = async (
   );
 
   if (!setZahlungsverbindungResponse.ok()) {
-    console.error(
-      `Failed to set zahlungsverbindung for fallId ${fallId}:`,
-      await setZahlungsverbindungResponse.text(),
+    const text = await setZahlungsverbindungResponse.text();
+    throw new Error(
+      `Failed to set zahlungsverbindung for fallId ${fallId}: ${text}`,
     );
-    throw new Error('Failed to set zahlungsverbindung');
   }
 
   const requestBody = {
@@ -76,12 +76,15 @@ const setGesuchApi = async (
     },
   };
 
-  const response = await apiContext.patch(`/api/v1/gesuch/${gesuchId}`, {
+  const response = await apiContext.patch(`/api/v1/gesuch/${gesuchId}/gs`, {
     data: requestBody,
   });
 
-  expect(response.ok(), {
-    message: `Failed to update gesuch with id ${gesuchId}: ${await response.text()}`,
-  }).toBeTruthy();
+  if (!response.ok()) {
+    const responseText = await response.text();
+    throw new Error(
+      `Failed to update gesuch with id ${gesuchId}: ${responseText}`,
+    );
+  }
   return response;
 };
