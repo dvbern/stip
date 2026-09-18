@@ -13,7 +13,6 @@ import {
   Dokumentstatus,
   GesuchDokument,
   GesuchDokumentEntry,
-  GesuchDokumentKommentar,
   GesuchService,
   GesuchTrancheService,
   GesuchTrancheTyp,
@@ -45,9 +44,7 @@ type DokumentsState = {
   dokuments: CachedRemoteData<GesuchDokument[]>;
   entrys: CachedRemoteData<GesuchDokumentEntry[]>;
   documentsToUpload: CachedRemoteData<DokumenteToUpload>;
-  gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument | undefined>;
-  expandedComponentList: 'custom' | 'required' | undefined;
   nachfrist: RemoteData<string>;
 };
 
@@ -56,9 +53,7 @@ const initialState: DokumentsState = {
   dokuments: initial(),
   entrys: initial(),
   documentsToUpload: initial(),
-  gesuchDokumentKommentare: initial(),
   dokument: initial(),
-  expandedComponentList: undefined,
   nachfrist: initial(),
 };
 
@@ -116,10 +111,6 @@ export class DokumentsStore extends signalStore(
     });
   }
 
-  setExpandedList(list: 'custom' | 'required' | undefined) {
-    patchState(this, { expandedComponentList: list });
-  }
-
   resetGesuchDokumentStateToInitial = rxMethod(
     tap(() => {
       patchState(this, {
@@ -147,7 +138,8 @@ export class DokumentsStore extends signalStore(
     return {
       dokuments,
       entrys,
-      loading: isPending(this.dokuments()),
+      loading:
+        isPending(this.dokuments()) || isPending(this.documentsToUpload()),
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.required?.filter(
           // A document can already be uploaded but later on get rejected. In this case the document list would contain
@@ -197,13 +189,6 @@ export class DokumentsStore extends signalStore(
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.unterschriftenblaetter ?? [],
     };
-  });
-
-  kommentareViewSig = computed(() => {
-    return mapData(
-      this.gesuchDokumentKommentare(),
-      (data) => data.filter((k) => k.kommentar) ?? [],
-    );
   });
 
   dokumentViewSig = computed(() =>
@@ -441,41 +426,6 @@ export class DokumentsStore extends signalStore(
     ),
   );
 
-  getGesuchDokumentKommentare$ = rxMethod<{
-    gesuchDokumentId: string;
-    gesuchTrancheId: string;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, () => ({
-          gesuchDokumentKommentare: pending(),
-        }));
-      }),
-      switchMap((req) => {
-        const service$ = byAppConfig(this.config.app, {
-          gesuchsteller: () =>
-            this.dokumentService.getGesuchDokumentKommentareGS$(req),
-          sachbearbeiter: () =>
-            this.dokumentService.getGesuchDokumentKommentareSB$(req),
-        });
-        return service$.pipe(
-          handleApiResponse((gesuchDokumentKommentare) =>
-            patchState(this, {
-              gesuchDokumentKommentare: mapData(
-                gesuchDokumentKommentare,
-                (data) =>
-                  data.map((d) => ({
-                    ...d,
-                    gesuchDokumentId: req.gesuchDokumentId,
-                  })),
-              ),
-            }),
-          ),
-        );
-      }),
-    ),
-  );
-
   createCustomDokumentTyp$ = rxMethod<{
     trancheId: string;
     type: string;
@@ -535,13 +485,12 @@ export class DokumentsStore extends signalStore(
   );
 
   gesuchDokumentAblehnen$ = rxMethod<{
-    gesuchTrancheId: string;
     gesuchDokumentId: string;
     kommentar: string;
     onSuccess?: () => void;
   }>(
     pipe(
-      switchMap(({ gesuchTrancheId, gesuchDokumentId, kommentar, onSuccess }) =>
+      switchMap(({ gesuchDokumentId, kommentar, onSuccess }) =>
         this.dokumentService
           .gesuchDokumentAblehnen$({
             gesuchDokumentId,
@@ -549,7 +498,6 @@ export class DokumentsStore extends signalStore(
               kommentar: {
                 kommentar,
                 gesuchDokumentId,
-                gesuchTrancheId,
               },
             },
           })

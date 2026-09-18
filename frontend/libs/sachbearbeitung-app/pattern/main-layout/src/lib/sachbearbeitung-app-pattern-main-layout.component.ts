@@ -46,6 +46,7 @@ const baseNavItems: (NavItem & {
     icon: 'settings',
     route: ['/administration'],
     rolesAllowed: ['V0_Sachbearbeiter-Admin', 'V0_Jurist'],
+    testId: 'admin-nav-item',
   },
 ];
 

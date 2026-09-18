@@ -7,7 +7,6 @@ import {
   DokumentArt,
   DokumentTyp,
   GesuchDokument,
-  GesuchDokumentKommentar,
   UnterschriftenblattDokument,
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
@@ -81,8 +80,6 @@ export interface SharedModelTableRequiredDokument {
   isExpanded: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: StandardDokumentOptions;
-  kommentare: GesuchDokumentKommentar[];
-  kommentarePending: boolean;
 }
 
 export interface SharedModelTableCustomDokument {
@@ -90,8 +87,7 @@ export interface SharedModelTableCustomDokument {
   canDelete: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: CustomDokumentOptions;
-  kommentare: GesuchDokumentKommentar[];
-  kommentarePending: boolean;
+  isExpanded: boolean;
   hasLongDescription?: boolean;
 }
 

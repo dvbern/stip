@@ -1,0 +1,9 @@
+Bonjour {vorname} {nachname}
+
+Vous avez remis les documents/informations manquants.
+
+Nous vous informerons dès que votre demande aura été traitée.
+
+Meilleures salutations
+
+Section des subsides de formation

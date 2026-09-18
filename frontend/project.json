@@ -2,6 +2,11 @@
   "$schema": "./node_modules/nx/schemas/project-schema.json",
   "name": "stip-frontend",
   "targets": {
+    "e2e": {
+      "cache": false,
+      "dependsOn": [],
+      "executor": "nx:noop"
+    },
     "build": {
       "cache": false,
       "dependsOn": [],

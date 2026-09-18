@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.sap.util;
 
-import jakarta.ws.rs.BadRequestException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -39,12 +38,6 @@ public enum SapReturnCodeType {
             case "I" -> SapReturnCodeType.INFO;
             default -> throw new IllegalStateException("Unexpected value: " + raw);
         };
-    }
-
-    public static void assertSuccess(final String raw) throws BadRequestException {
-        if (!isSuccess(raw)) {
-            throw new BadRequestException();
-        }
     }
 
     public static boolean isSuccess(final String raw) {

@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDto;
 import ch.dvbern.stip.generated.dto.DokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class GesuchDokumentDto  implements Serializable {
   private @Valid UUID entryId;
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
   private @Valid CustomDokumentTypDto customDokumentTyp;
+  private @Valid List<GesuchDokumentKommentarDto> kommentars;
 
   protected GesuchDokumentDto(GesuchDokumentDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -39,6 +41,7 @@ public class GesuchDokumentDto  implements Serializable {
     this.entryId = b.entryId;
     this.dokumentTyp = b.dokumentTyp;
     this.customDokumentTyp = b.customDokumentTyp;
+    this.kommentars = b.kommentars;
   }
 
   public GesuchDokumentDto() {
@@ -171,6 +174,40 @@ public class GesuchDokumentDto  implements Serializable {
     this.customDokumentTyp = customDokumentTyp;
   }
 
+  /**
+   **/
+  public GesuchDokumentDto kommentars(List<GesuchDokumentKommentarDto> kommentars) {
+    this.kommentars = kommentars;
+    return this;
+  }
+
+  
+  @JsonProperty("kommentars")
+  public List<GesuchDokumentKommentarDto> getKommentars() {
+    return kommentars;
+  }
+
+  @JsonProperty("kommentars")
+  public void setKommentars(List<GesuchDokumentKommentarDto> kommentars) {
+    this.kommentars = kommentars;
+  }
+
+  public GesuchDokumentDto addKommentarsItem(GesuchDokumentKommentarDto kommentarsItem) {
+    if (this.kommentars == null) {
+      this.kommentars = new ArrayList<>();
+    }
+
+    this.kommentars.add(kommentarsItem);
+    return this;
+  }
+
+  public GesuchDokumentDto removeKommentarsItem(GesuchDokumentKommentarDto kommentarsItem) {
+    if (kommentarsItem != null && this.kommentars != null) {
+      this.kommentars.remove(kommentarsItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -186,12 +223,13 @@ public class GesuchDokumentDto  implements Serializable {
         Objects.equals(this.status, gesuchDokument.status) &&
         Objects.equals(this.entryId, gesuchDokument.entryId) &&
         Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
-        Objects.equals(this.customDokumentTyp, gesuchDokument.customDokumentTyp);
+        Objects.equals(this.customDokumentTyp, gesuchDokument.customDokumentTyp) &&
+        Objects.equals(this.kommentars, gesuchDokument.kommentars);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokumente, status, entryId, dokumentTyp, customDokumentTyp);
+    return Objects.hash(id, dokumente, status, entryId, dokumentTyp, customDokumentTyp, kommentars);
   }
 
   @Override
@@ -205,6 +243,7 @@ public class GesuchDokumentDto  implements Serializable {
     sb.append("    entryId: ").append(toIndentedString(entryId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    customDokumentTyp: ").append(toIndentedString(customDokumentTyp)).append("\n");
+    sb.append("    kommentars: ").append(toIndentedString(kommentars)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -245,6 +284,7 @@ public class GesuchDokumentDto  implements Serializable {
     private UUID entryId;
     private ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
     private CustomDokumentTypDto customDokumentTyp;
+    private List<GesuchDokumentKommentarDto> kommentars;
     protected abstract B self();
 
     public abstract C build();
@@ -271,6 +311,10 @@ public class GesuchDokumentDto  implements Serializable {
     }
     public B customDokumentTyp(CustomDokumentTypDto customDokumentTyp) {
       this.customDokumentTyp = customDokumentTyp;
+      return self();
+    }
+    public B kommentars(List<GesuchDokumentKommentarDto> kommentars) {
+      this.kommentars = kommentars;
       return self();
     }
   }

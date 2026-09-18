@@ -186,7 +186,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         var kommentar = new GesuchDokumentKommentarDtoSpec();
         kommentar.setKommentar("test");
         kommentar.setGesuchDokumentId(dok.getValue().getId());
-        kommentar.setGesuchTrancheId(gesuchTrancheId);
         gesuchDokumentAblehnenRequest.setKommentar(kommentar);
 
         dokumentApiSpec.gesuchDokumentAblehnen()
@@ -422,7 +421,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         var kommentar = new GesuchDokumentKommentarDtoSpec();
         kommentar.setKommentar("test");
         kommentar.setGesuchDokumentId(dok.getValue().getId());
-        kommentar.setGesuchTrancheId(gesuchTrancheId);
         gesuchDokumentAblehnenRequest.setKommentar(kommentar);
 
         // deny a "normal" gesuchdokument
@@ -437,7 +435,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         var customKommentar = new GesuchDokumentKommentarDtoSpec();
         customKommentar.setKommentar("test");
         customKommentar.setGesuchDokumentId(customDok.getValue().getId());
-        customKommentar.setGesuchTrancheId(gesuchTrancheId);
         customGesuchDokumentAblehnenRequest.setKommentar(kommentar);
         // deny a custom gesuchdokument
         dokumentApiSpec.gesuchDokumentAblehnen()
@@ -537,7 +534,6 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
         var kommentar = new GesuchDokumentKommentarDtoSpec();
         kommentar.setKommentar("test");
         kommentar.setGesuchDokumentId(dok.getValue().getId());
-        kommentar.setGesuchTrancheId(gesuchTrancheId);
         gesuchDokumentAblehnenRequest.setKommentar(kommentar);
 
         // accept a "normal" gesuchdokument

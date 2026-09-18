@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
+import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -42,7 +44,9 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -52,6 +56,7 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.generated.api.DokumentResource;
+import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -70,6 +75,8 @@ import static org.mockito.Mockito.when;
 class DokumentResourceImplTest {
     @Inject
     DokumentResource dokumentResource;
+    @Inject
+    GesuchTrancheResource gesuchTrancheResource;
     @InjectMock
     GesuchDokumentKommentarRepository dokumentKommentarRepository;
     @InjectMock
@@ -94,6 +101,10 @@ class DokumentResourceImplTest {
     DokumentAuthorizer dokumentAuthorizer;
     @InjectMock
     GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
+    @InjectMock
+    GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
+    @Inject
+    GesuchService gesuchService;
 
     @BeforeEach
     void setUp() {
@@ -125,28 +136,34 @@ class DokumentResourceImplTest {
     // Gesuchsteller should be able to read all comments of a gesuch document
     void resourceShouldReturnCommentsOfADokument() {
         doNothing().when(gesuchDokumentAuthorizer).canGetGesuchDokumentKommentar(any());
-        when(gesuchDokumentRepository.requireById(any())).thenReturn(
-            new GesuchDokument()
-                .setGesuchTranche(
-                    new GesuchTranche()
-                        .setGesuch(
-                            new Gesuch()
-                                .setAusbildung(
-                                    new Ausbildung()
-                                        .setFall(
-                                            new Fall()
-                                                .setGesuchsteller(
-                                                    (Benutzer) new Benutzer()
-                                                        .setId(UUID.fromString(GESUCHSTELLER_TEST_ID))
-                                                )
-                                        )
-                                )
-                        )
-                )
-        );
+
+        final var gesuchDokument = new GesuchDokument()
+            .setGesuchTranche(
+                new GesuchTranche()
+                    .setGesuch(
+                        new Gesuch()
+                            .setAusbildung(
+                                new Ausbildung()
+                                    .setFall(
+                                        new Fall()
+                                            .setGesuchsteller(
+                                                (Benutzer) new Benutzer()
+                                                    .setId(UUID.fromString(GESUCHSTELLER_TEST_ID))
+                                            )
+                                    )
+                            )
+                    )
+            );
+        final var gesuchFormular = new GesuchFormular();
+        gesuchFormular.setVersteckteEltern(Set.of());
+        gesuchFormular.setGeschwisters(Set.of());
+        gesuchDokument.getGesuchTranche().setGesuchFormular(gesuchFormular);
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any()))
+            .thenReturn(gesuchDokument.getGesuchTranche());
+        when(gesuchDokumentRepository.requireById(any())).thenReturn(gesuchDokument);
 
         assertNotNull(
-            dokumentResource.getGesuchDokumentKommentareGS(UUID.randomUUID())
+            gesuchTrancheResource.getGesuchDokumenteGS(UUID.randomUUID())
         );
     }
 

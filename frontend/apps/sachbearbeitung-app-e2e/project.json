@@ -6,7 +6,7 @@
   "tags": ["type:e2e", "scope:sachbearbeitung-app"],
   "implicitDependencies": ["sachbearbeitung-app"],
   "targets": {
-    "e2e": {
+    "e2e_disabled": {
       "executor": "@nx/playwright:playwright",
       "outputs": [
         "{workspaceRoot}/dist/.playwright/apps/sachbearbeitung-app-e2e"

@@ -1,18 +1,21 @@
 import { expect } from '@playwright/test';
 
-import { createTest } from '@dv/shared/util-fn/e2e-util';
+import {
+  extendedTest,
+  initializeSingleUserTest,
+} from '@dv/shared/util-fn/e2e-util';
 
 import { AdminPO } from '../po/admin.po';
 
 const E2E_TEST_SOZIALDIENST_MITARBEITER = 'e2e-test-soz-mitarbeiter';
 
-const test = createTest('SOZIALDIENST_ADMIN', { contextPerTest: true });
+const test = initializeSingleUserTest(extendedTest);
 
 test.describe('Sachbearbeiter App: Sozialdienst-Mitarbeiter', () => {
   test('Sozialdienst mitarbeiter erstellen, bearbeiten und löschen', async ({
     page,
   }) => {
-    page.goto('/');
+    await page.goto('/');
     const admin = new AdminPO(page);
 
     await admin.goToAdmin();

@@ -40,7 +40,7 @@ import ch.dvbern.stip.api.delegieren.service.PersoenlicheAngabenMapperImpl;
 import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.DelegierungNotificationService;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
@@ -73,7 +73,7 @@ class DelegierenResourceImplTest {
     private SozialdienstService sozialdienstService;
     private SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private SozialdienstBenutzerService sozialdienstBenutzerService;
-    private NotificationService notificationService;
+    private DelegierungNotificationService delegierungNotificationService;
     private EntityCopyMapper entityCopyMapper;
 
     @BeforeEach
@@ -86,7 +86,7 @@ class DelegierenResourceImplTest {
         sozialdienstBenutzerRepository = Mockito.mock(SozialdienstBenutzerRepository.class);
         sozialdienstBenutzerService = Mockito.mock(SozialdienstBenutzerService.class);
         adresseMapper = Mockito.mock(AdresseMapperImpl.class);
-        notificationService = Mockito.mock(NotificationService.class);
+        delegierungNotificationService = Mockito.mock(DelegierungNotificationService.class);
         entityCopyMapper = Mockito.mock(EntityCopyMapper.class);
 
         PersoenlicheAngabenMapper persoenlicheAngabenMapper = new PersoenlicheAngabenMapperImpl(adresseMapper);
@@ -96,8 +96,8 @@ class DelegierenResourceImplTest {
         );
         DelegierenService delegierenService = new DelegierenService(
             benutzerService, delegierungRepository, fallRepository, sozialdienstRepository, sozialdienstBenutzerService,
-            sozialdienstBenutzerRepository, persoenlicheAngabenMapper, null, null,
-            notificationService, entityCopyMapper
+            sozialdienstBenutzerRepository, persoenlicheAngabenMapper, null,
+            null, delegierungNotificationService, entityCopyMapper
         );
         delegierenApi = new DelegierenResourceImpl(delegierenAuthorizer, delegierenService);
     }

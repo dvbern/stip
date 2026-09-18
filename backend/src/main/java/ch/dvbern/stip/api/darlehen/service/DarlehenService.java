@@ -56,7 +56,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchformular.validation.FreiwilligDarlehenEinreichenValidationGroup;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.DarlehenNotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
@@ -107,7 +107,7 @@ public class DarlehenService {
     private final DokumentRepository dokumentRepository;
     private final DokumentDownloadService dokumentDownloadService;
     private final DarlehenDashboardQueryBuilder darlehenDashboardQueryBuilder;
-    private final NotificationService notificationService;
+    private final DarlehenNotificationService darlehenNotificationService;
     private final Validator validator;
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
@@ -506,7 +506,7 @@ public class DarlehenService {
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
         createNegativeFreiwilligDarlehenVerfuegung(darlehen);
         darlehen.setManuelleVerfuegung(null);
-        notificationService.createDarlehenAbgelehntNotificationAndSendStdMail(darlehen);
+        darlehenNotificationService.createAbgelehntNotificationAndSendStdMail(darlehen);
 
         return freiwilligDarlehenMapper.toDtoGs(darlehen);
     }
@@ -543,7 +543,7 @@ public class DarlehenService {
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
         createPositiveFreiwilligDarlehenVerfuegung(darlehen);
-        notificationService.createDarlehenAkzeptiertNotificationAndSendStdMail(darlehen);
+        darlehenNotificationService.createAkzeptiertNotificationAndSendStdMail(darlehen);
 
         return freiwilligDarlehenMapper.toDtoGs(darlehen);
     }
@@ -564,7 +564,7 @@ public class DarlehenService {
         ValidatorUtil.validate(validator, darlehen, FreiwilligDarlehenEinreichenValidationGroup.class);
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
 
-        notificationService.createDarlehenEingegebenNotificationAndSendStdMail(darlehen);
+        darlehenNotificationService.createEingegebenNotificationAndSendStdMail(darlehen);
 
         return freiwilligDarlehenMapper.toDtoGs(darlehen);
     }
@@ -600,7 +600,7 @@ public class DarlehenService {
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
 
-        notificationService.createDarlehenZurueckgewiesenNotificationAndSendStdMail(darlehen, kommentar.getText());
+        darlehenNotificationService.createZurueckgewiesenNotificationAndSendStdMail(darlehen, kommentar.getText());
 
         return freiwilligDarlehenMapper.toDtoGs(darlehen);
     }

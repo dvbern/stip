@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungDokumentRepository;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +39,25 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
     private final VerfuegungDokumentRepository verfuegungDokumentRepository;
 
     @Transactional
-    public void canGetVerfuegungDownloadToken(final UUID verfuegungId) {
+    public void canGetVerfuegungDownloadTokenSb(final UUID verfuegungId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    @Transactional
+    public void canGetVerfuegungDownloadTokenGs(final UUID verfuegungId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var verfuegungDokument = verfuegungDokumentRepository.requireById(verfuegungId);
         final var gesuch = verfuegungDokument.getVerfuegung().getGesuch();
+
         if (
-            isSbOrFreigabestelleOrJurist(currentBenutzer)
-            || AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+            VerfuegungDokumentTyp.VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG.contains(verfuegungDokument.getTyp()) &&
+            AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuch.getAusbildung().getFall(),
                 currentBenutzer,
                 sozialdienstService
@@ -52,6 +65,7 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
         ) {
             return;
         }
+
         forbidden();
     }
 

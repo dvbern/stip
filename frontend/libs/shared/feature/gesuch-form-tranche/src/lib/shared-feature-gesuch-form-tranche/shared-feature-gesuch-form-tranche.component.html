@@ -14,198 +14,204 @@
     </h1>
   </ng-template>
 
-  <form [formGroup]="form" class="tw:dv-form-grid" [dvSharedUiFormReadonly]="true">
-    <h2 class="tw:dv-form-title">
-      {{ t('shared.form.tranche.title') }}
-    </h2>
-    <!-- Status -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-      <mat-label>
-        @if (tranche) {
-          @if (view.isEditingAenderung) {
-            {{ t(`shared.form.tranche.status.label.${tranche.typ}`) }}
-          } @else {
-            {{ t('shared.form.tranche.status.label.GESUCH') }}
+  @if (view.loading) {
+    <dv-shared-ui-loading data-testid="form-tranche-loading"></dv-shared-ui-loading>
+  } @else {
+    <form [formGroup]="form" class="tw:dv-form-grid" data-testid="form-tranche-form" [dvSharedUiFormReadonly]="true">
+      <h2 class="tw:dv-form-title">
+        {{ t('shared.form.tranche.title') }}
+      </h2>
+      <!-- Status -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>
+          @if (tranche) {
+            @if (view.isEditingAenderung) {
+              {{ t(`shared.form.tranche.status.label.${tranche.typ}`) }}
+            } @else {
+              {{ t('shared.form.tranche.status.label.GESUCH') }}
+            }
           }
+        </mat-label>
+
+        <input readonly type="text" matInput [formControl]="form.controls.status" data-testid="form-tranche-status" />
+      </mat-form-field>
+
+      <!-- PiA -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.tranche.pia.label') }}</mat-label>
+
+        <input readonly type="text" matInput [formControl]="form.controls.pia" data-testid="form-tranche-pia" />
+      </mat-form-field>
+
+      <!-- Gesuchsnummer -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.tranche.gesuchsnummer.label') }}</mat-label>
+
+        <input
+          readonly
+          type="text"
+          matInput
+          [formControl]="form.controls.gesuchsnummer"
+          data-testid="form-tranche-gesuchsnummer"
+        />
+      </mat-form-field>
+
+      <!-- Fallnummer -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.tranche.fallnummer.label') }}</mat-label>
+
+        <input
+          readonly
+          type="text"
+          matInput
+          [formControl]="form.controls.fallnummer"
+          data-testid="form-tranche-fallnummer"
+        />
+      </mat-form-field>
+
+      <!-- Einreichedatum -->
+      <div class="tw:dv-form-item tw:flex tw:gap-4">
+        <mat-form-field dvSharedUiFormField class="tw:grow">
+          <mat-label>{{ t('shared.form.tranche.einreichedatum.label') }}</mat-label>
+          <input
+            readonly
+            type="text"
+            matInput
+            [formControl]="form.controls.einreichedatum"
+            data-testid="form-tranche-einreichedatum"
+          />
+        </mat-form-field>
+        @let einreichedatum = view.gesuch?.einreichedatum;
+        @let minDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStart;
+        @let maxDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStopp;
+        @let canAendern = einreichenStore.einreichedatumAendernStatus().data?.canAendern;
+        @if (gesuchId && einreichedatum && minDate && maxDate && canAendern) {
+          <button
+            type="button"
+            class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
+            (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate, maxDate)"
+          >
+            <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
+          </button>
         }
-      </mat-label>
+      </div>
 
-      <input readonly type="text" matInput [formControl]="form.controls.status" data-testid="form-tranche-status" />
-    </mat-form-field>
+      <!-- Gesuchsperiode -->
+      <div class="tw:dv-form-item tw:flex tw:gap-4">
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
+          <mat-label>{{ t('shared.form.tranche.gesuchsperiode.label') }}</mat-label>
 
-    <!-- PiA -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-      <mat-label>{{ t('shared.form.tranche.pia.label') }}</mat-label>
+          <input
+            readonly
+            type="text"
+            matInput
+            [formControl]="form.controls.gesuchsperiode"
+            data-testid="form-tranche-gesuchsperiode"
+          />
+        </mat-form-field>
+        <!-- change gesuchsPeriode Button -->
+        @if (isSbApp && gesuchInfoStore?.gesuchInfo()?.data?.state?.canChangeGesuchsperiode) {
+          <button
+            type="button"
+            class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
+            [attr.aria-label]="t('shared.form.tranche.gesuchsperiode.change')"
+            data-testid="form-tranche-gesuchsperiode-change-button"
+            (click)="changeGesuchsperiode(tranche?.id)"
+          >
+            <i class="material-symbols-rounded tw:!text-3xl/none">format_indent_increase</i>
+          </button>
+        }
+      </div>
 
-      <input readonly type="text" matInput [formControl]="form.controls.pia" data-testid="form-tranche-pia" />
-    </mat-form-field>
-
-    <!-- Gesuchsnummer -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-      <mat-label>{{ t('shared.form.tranche.gesuchsnummer.label') }}</mat-label>
-
-      <input
-        readonly
-        type="text"
-        matInput
-        [formControl]="form.controls.gesuchsnummer"
-        data-testid="form-tranche-gesuchsnummer"
-      />
-    </mat-form-field>
-
-    <!-- Fallnummer -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-      <mat-label>{{ t('shared.form.tranche.fallnummer.label') }}</mat-label>
-
-      <input
-        readonly
-        type="text"
-        matInput
-        [formControl]="form.controls.fallnummer"
-        data-testid="form-tranche-fallnummer"
-      />
-    </mat-form-field>
-
-    <!-- Einreichedatum -->
-    <div class="tw:dv-form-item tw:flex tw:gap-4">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ t('shared.form.tranche.einreichedatum.label') }}</mat-label>
-        <input
-          readonly
-          type="text"
-          matInput
-          [formControl]="form.controls.einreichedatum"
-          data-testid="form-tranche-einreichedatum"
-        />
-      </mat-form-field>
-      @let einreichedatum = view.gesuch?.einreichedatum;
-      @let minDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStart;
-      @let maxDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStopp;
-      @let canAendern = einreichenStore.einreichedatumAendernStatus().data?.canAendern;
-      @if (gesuchId && einreichedatum && minDate && maxDate && canAendern) {
-        <button
-          type="button"
-          class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
-          (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate, maxDate)"
-        >
-          <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
-        </button>
-      }
-    </div>
-
-    <!-- Gesuchsperiode -->
-    <div class="tw:dv-form-item tw:flex tw:gap-4">
-      <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>{{ t('shared.form.tranche.gesuchsperiode.label') }}</mat-label>
+      <!-- Einreichefrist -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.tranche.einreichefrist.label') }}</mat-label>
 
         <input
           readonly
           type="text"
           matInput
-          [formControl]="form.controls.gesuchsperiode"
-          data-testid="form-tranche-gesuchsperiode"
+          [formControl]="form.controls.einreichefrist"
+          data-testid="form-tranche-einreichefrist"
         />
       </mat-form-field>
-      <!-- change gesuchsPeriode Button -->
-      @if (isSbApp && gesuchInfoStore?.gesuchInfo()?.data?.state?.canChangeGesuchsperiode) {
-        <button
-          type="button"
-          class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
-          [attr.aria-label]="t('shared.form.tranche.gesuchsperiode.change')"
-          data-testid="form-tranche-gesuchsperiode-change-button"
-          (click)="changeGesuchsperiode(tranche?.id)"
-        >
-          <i class="material-symbols-rounded tw:!text-3xl/none">format_indent_increase</i>
-        </button>
-      }
-    </div>
 
-    <!-- Einreichefrist -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-      <mat-label>{{ t('shared.form.tranche.einreichefrist.label') }}</mat-label>
+      <ng-template #updateAenderungVonBisButton>
+        @let gesuch = view.gesuch;
+        @if (
+          gesuch && !view.readonly && !view.loading && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG'
+        ) {
+          <button
+            type="button"
+            class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
+            [attr.aria-label]="t('shared.form.tranche.aenderung.update-von-bis')"
+            data-testid="form-tranche-aenderung-von-bis-update"
+            (click)="updateAenderungVonBis(gesuch)"
+          >
+            <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
+          </button>
+        }
+      </ng-template>
 
-      <input
-        readonly
-        type="text"
-        matInput
-        [formControl]="form.controls.einreichefrist"
-        data-testid="form-tranche-einreichefrist"
-      />
-    </mat-form-field>
+      <!-- Von -->
+      <div class="tw:dv-form-item tw:flex tw:gap-4">
+        <mat-form-field dvSharedUiFormField class="tw:grow">
+          <mat-label>{{ t('shared.form.tranche.von.label') }}</mat-label>
 
-    <ng-template #updateAenderungVonBisButton>
-      @let gesuch = view.gesuch;
-      @if (gesuch && !view.readonly && !view.loading && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
-        <button
-          type="button"
-          class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
-          [attr.aria-label]="t('shared.form.tranche.aenderung.update-von-bis')"
-          data-testid="form-tranche-aenderung-von-bis-update"
-          (click)="updateAenderungVonBis(gesuch)"
-        >
-          <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
-        </button>
-      }
-    </ng-template>
+          <input readonly type="text" matInput [formControl]="form.controls.von" data-testid="form-tranche-von" />
+        </mat-form-field>
 
-    <!-- Von -->
-    <div class="tw:dv-form-item tw:flex tw:gap-4">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ t('shared.form.tranche.von.label') }}</mat-label>
+        <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
+      </div>
 
-        <input readonly type="text" matInput [formControl]="form.controls.von" data-testid="form-tranche-von" />
+      <!-- Bis -->
+      <div class="tw:dv-form-item tw:flex tw:gap-4">
+        <mat-form-field dvSharedUiFormField class="tw:grow">
+          <mat-label>{{ t('shared.form.tranche.bis.label') }}</mat-label>
+
+          <input readonly type="text" matInput [formControl]="form.controls.bis" data-testid="form-tranche-bis" />
+        </mat-form-field>
+
+        <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
+      </div>
+
+      <!-- Bemerkung -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.tranche.bemerkung.label') }}</mat-label>
+        <textarea
+          readonly
+          rows="3"
+          type="text"
+          matInput
+          [formControl]="form.controls.bemerkung"
+          data-testid="form-tranche-bemerkung"
+        ></textarea>
       </mat-form-field>
 
-      <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
-    </div>
-
-    <!-- Bis -->
-    <div class="tw:dv-form-item tw:flex tw:gap-4">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ t('shared.form.tranche.bis.label') }}</mat-label>
-
-        <input readonly type="text" matInput [formControl]="form.controls.bis" data-testid="form-tranche-bis" />
+      <!-- Zuständiger Sachbearbeiter -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ t('shared.form.tranche.sachbearbeiter.label') }}</mat-label>
+        <input
+          readonly
+          type="text"
+          matInput
+          [formControl]="form.controls.sachbearbeiter"
+          data-testid="form-tranche-sachbearbeiter"
+        />
       </mat-form-field>
 
-      <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
-    </div>
-
-    <!-- Bemerkung -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-      <mat-label>{{ t('shared.form.tranche.bemerkung.label') }}</mat-label>
-      <textarea
-        readonly
-        rows="3"
-        type="text"
-        matInput
-        [formControl]="form.controls.bemerkung"
-        data-testid="form-tranche-bemerkung"
-      ></textarea>
-    </mat-form-field>
-
-    <!-- Zuständiger Sachbearbeiter -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-      <mat-label>{{ t('shared.form.tranche.sachbearbeiter.label') }}</mat-label>
-      <input
-        readonly
-        type="text"
-        matInput
-        [formControl]="form.controls.sachbearbeiter"
-        data-testid="form-tranche-sachbearbeiter"
-      />
-    </mat-form-field>
-
-    <!-- Buttons -->
-    <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
-      <button
-        type="button"
-        class="tw:dv-button-main-primary"
-        (click)="handleContinue()"
-        [disabled]="!view.gesuchId"
-        data-testid="button-continue"
-      >
-        {{ t('shared.form.gonext') }}
-      </button>
-    </dv-shared-ui-step-form-buttons>
-  </form>
+      <!-- Buttons -->
+      <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
+        <button
+          type="button"
+          class="tw:dv-button-main-primary"
+          (click)="handleContinue()"
+          [disabled]="!view.gesuchId"
+          data-testid="button-continue"
+        >
+          {{ t('shared.form.gonext') }}
+        </button>
+      </dv-shared-ui-step-form-buttons>
+    </form>
+  }
 </ng-container>
