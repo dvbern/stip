@@ -138,56 +138,64 @@
           }
         }
         @for (darlehen of gesuch.freiwilligeDarlehenList; track darlehen.id) {
-          <dv-shared-ui-dashboard-gesuch-subitem
-            class="tw:bg-dv-blue-light"
-            [statusSig]="t(`shared.darlehen.status.${darlehen.status}`)"
-            [ngClass]="{
-              'tw:bg-dv-orange': darlehen.status === 'IN_BEARBEITUNG_GS',
-              'tw:bg-dv-gray-light': darlehen.status === 'AKZEPTIERT' || darlehen.status === 'ABGELEHNT',
-            }"
-          >
-            <div dvItemInfo>
-              <dl class="tw:flex tw:flex-col">
-                <dt class="tw:font-bold">
-                  {{ t('shared.dashboard.darlehen.title') }}
-                </dt>
-                <dd class="tw:text-sm tw:mt-1">
-                  @if (darlehen.gruende.length) {
-                    {{
-                      t('shared.dashboard.darlehen.timestampErstellt', {
-                        date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
-                      })
-                    }}
-                  }
-                </dd>
-              </dl>
-            </div>
-            <div dvItemActions class="tw:flex tw:flex-wrap tw:gap-3">
-              <a
-                class="tw:flex tw:dv-button-main-primary"
-                data-testid="cockpit-gesuch-edit"
-                [routerLink]="['/gesuch', darlehen.relatedGesuchId, 'darlehen', darlehen.id, 'fall', ausbildung.fallId]"
-              >
-                {{
-                  t(
-                    darlehen.status === 'IN_BEARBEITUNG_GS'
-                      ? 'shared.dashboard.darlehen.edit'
-                      : 'shared.dashboard.darlehen.open'
-                  )
-                }}
-              </a>
-              @if (darlehen.status === 'IN_BEARBEITUNG_GS') {
-                <button
-                  type="button"
-                  class="tw:dv-button-outline"
-                  data-testid="shared-dashboard-darlehen-delete"
-                  (click)="output.emit({ typ: 'delete darlehen', id: darlehen.id })"
+          @if (darlehen.status !== DarlehenStatus.AKZEPTIERT && darlehen.status !== DarlehenStatus.ABGELEHNT) {
+            <dv-shared-ui-dashboard-gesuch-subitem
+              class="tw:bg-dv-blue-light"
+              [statusSig]="t(`shared.darlehen.status.${darlehen.status}`)"
+              [ngClass]="{
+                'tw:bg-dv-orange': darlehen.status === DarlehenStatus.IN_BEARBEITUNG_GS,
+              }"
+            >
+              <div dvItemInfo>
+                <dl class="tw:flex tw:flex-col">
+                  <dt class="tw:font-bold">
+                    {{ t('shared.dashboard.darlehen.title') }}
+                  </dt>
+                  <dd class="tw:text-sm tw:mt-1">
+                    @if (darlehen.gruende.length) {
+                      {{
+                        t('shared.dashboard.darlehen.timestampErstellt', {
+                          date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
+                        })
+                      }}
+                    }
+                  </dd>
+                </dl>
+              </div>
+              <div dvItemActions class="tw:flex tw:flex-wrap tw:gap-3">
+                <a
+                  class="tw:flex tw:dv-button-main-primary"
+                  data-testid="cockpit-gesuch-edit"
+                  [routerLink]="[
+                    '/gesuch',
+                    darlehen.relatedGesuchId,
+                    'darlehen',
+                    darlehen.id,
+                    'fall',
+                    ausbildung.fallId,
+                  ]"
                 >
-                  <span>{{ t('shared.dashboard.darlehen.delete') }}</span>
-                </button>
-              }
-            </div>
-          </dv-shared-ui-dashboard-gesuch-subitem>
+                  {{
+                    t(
+                      darlehen.status === 'IN_BEARBEITUNG_GS'
+                        ? 'shared.dashboard.darlehen.edit'
+                        : 'shared.dashboard.darlehen.open'
+                    )
+                  }}
+                </a>
+                @if (darlehen.status === 'IN_BEARBEITUNG_GS') {
+                  <button
+                    type="button"
+                    class="tw:dv-button-outline"
+                    data-testid="shared-dashboard-darlehen-delete"
+                    (click)="output.emit({ typ: 'delete darlehen', id: darlehen.id })"
+                  >
+                    <span>{{ t('shared.dashboard.darlehen.delete') }}</span>
+                  </button>
+                }
+              </div>
+            </dv-shared-ui-dashboard-gesuch-subitem>
+          }
         }
       </div>
     }
