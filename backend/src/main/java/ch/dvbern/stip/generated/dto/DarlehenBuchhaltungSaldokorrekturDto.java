@@ -14,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DarlehenBuchhaltungSaldokorrektur")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DarlehenBuchhaltungSaldokorrekturDto  implements Serializable {
-  private @Valid Integer betrag;
-  private @Valid String comment;
+  private Integer betrag;
+  private String comment;
 
   protected DarlehenBuchhaltungSaldokorrekturDto(DarlehenBuchhaltungSaldokorrekturDtoBuilder<?, ?> b) {
     this.betrag = b.betrag;
@@ -38,13 +38,12 @@ public class DarlehenBuchhaltungSaldokorrekturDto  implements Serializable {
   }
 
   
-  @JsonProperty("betrag")
-  @NotNull
-  public Integer getBetrag() {
+  @JsonProperty(required = true, value = "betrag")
+  @NotNull public Integer getBetrag() {
     return betrag;
   }
 
-  @JsonProperty("betrag")
+  @JsonProperty(required = true, value = "betrag")
   public void setBetrag(Integer betrag) {
     this.betrag = betrag;
   }
@@ -57,13 +56,12 @@ public class DarlehenBuchhaltungSaldokorrekturDto  implements Serializable {
   }
 
   
-  @JsonProperty("comment")
-  @NotNull
-  public String getComment() {
+  @JsonProperty(required = true, value = "comment")
+  @NotNull public String getComment() {
     return comment;
   }
 
-  @JsonProperty("comment")
+  @JsonProperty(required = true, value = "comment")
   public void setComment(String comment) {
     this.comment = comment;
   }
@@ -103,10 +101,7 @@ public class DarlehenBuchhaltungSaldokorrekturDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +139,3 @@ public class DarlehenBuchhaltungSaldokorrekturDto  implements Serializable {
     }
   }
 }
-

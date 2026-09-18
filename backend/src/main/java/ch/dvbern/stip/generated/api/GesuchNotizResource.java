@@ -9,7 +9,7 @@ import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
+import org.jboss.resteasy.reactive.ResponseStatus;
 
 
 
@@ -20,39 +20,39 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/gesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
+@Path("")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public interface GesuchNotizResource {
 
     @PATCH
-    @Path("/notiz/juristischeAbklaerung/{notizId}")
+    @Path("/gesuch/notiz/juristischeAbklaerung/{notizId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchNotizDto answerJuristischeAbklaerungNotiz(@PathParam("notizId") UUID notizId,@Valid @NotNull JuristischeAbklaerungNotizAntwortDto juristischeAbklaerungNotizAntwortDto);
 
     @POST
-    @Path("/notiz/create")
+    @Path("/gesuch/notiz/create")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchNotizDto createNotiz(@Valid @NotNull GesuchNotizCreateDto gesuchNotizCreateDto);
 
     @DELETE
-    @Path("/notiz/{notizId}")
+    @Path("/gesuch/notiz/{notizId}")
     @Produces({ "text/plain" })
     void deleteNotiz(@PathParam("notizId") UUID notizId);
 
     @GET
-    @Path("/notiz/{notizId}")
+    @Path("/gesuch/notiz/{notizId}")
     @Produces({ "application/json", "text/plain" })
     GesuchNotizDto getNotiz(@PathParam("notizId") UUID notizId);
 
     @GET
-    @Path("/{gesuchId}/notiz/all")
+    @Path("/gesuch/{gesuchId}/notiz/all")
     @Produces({ "application/json", "text/plain" })
     List<GesuchNotizDto> getNotizen(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
-    @Path("/notiz")
+    @Path("/gesuch/notiz")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchNotizDto updateNotiz(@Valid @NotNull GesuchNotizUpdateDto gesuchNotizUpdateDto);

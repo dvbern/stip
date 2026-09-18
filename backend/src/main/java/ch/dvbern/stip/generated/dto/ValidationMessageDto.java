@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("ValidationMessage")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ValidationMessageDto  implements Serializable {
-  private @Valid String messageTemplate;
-  private @Valid String message;
-  private @Valid String propertyPath;
+  private String messageTemplate;
+  private String message;
+  private String propertyPath;
 
   protected ValidationMessageDto(ValidationMessageDtoBuilder<?, ?> b) {
     this.messageTemplate = b.messageTemplate;
@@ -40,13 +40,12 @@ public class ValidationMessageDto  implements Serializable {
   }
 
   
-  @JsonProperty("messageTemplate")
-  @NotNull
-  public String getMessageTemplate() {
+  @JsonProperty(required = true, value = "messageTemplate")
+  @NotNull public String getMessageTemplate() {
     return messageTemplate;
   }
 
-  @JsonProperty("messageTemplate")
+  @JsonProperty(required = true, value = "messageTemplate")
   public void setMessageTemplate(String messageTemplate) {
     this.messageTemplate = messageTemplate;
   }
@@ -59,13 +58,12 @@ public class ValidationMessageDto  implements Serializable {
   }
 
   
-  @JsonProperty("message")
-  @NotNull
-  public String getMessage() {
+  @JsonProperty(required = true, value = "message")
+  @NotNull public String getMessage() {
     return message;
   }
 
-  @JsonProperty("message")
+  @JsonProperty(required = true, value = "message")
   public void setMessage(String message) {
     this.message = message;
   }
@@ -125,10 +123,7 @@ public class ValidationMessageDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -171,4 +166,3 @@ public class ValidationMessageDto  implements Serializable {
     }
   }
 }
-

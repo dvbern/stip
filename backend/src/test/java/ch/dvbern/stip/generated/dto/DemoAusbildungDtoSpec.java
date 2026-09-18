@@ -41,53 +41,63 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoAusbildungDtoSpec.JSON_PROPERTY_PENSUM
 })
 @JsonTypeName("DemoAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoAusbildungDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE = "ausbildungsstaette";
+  @jakarta.annotation.Nonnull
   private String ausbildungsstaette;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSGANG = "ausbildungsgang";
+  @jakarta.annotation.Nonnull
   private String ausbildungsgang;
 
   public static final String JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG = "berufsbezeichnungFachrichtung";
+  @jakarta.annotation.Nonnull
   private String berufsbezeichnungFachrichtung;
 
   public static final String JSON_PROPERTY_PLZ = "plz";
+  @jakarta.annotation.Nonnull
   private String plz;
 
   public static final String JSON_PROPERTY_ORT = "ort";
+  @jakarta.annotation.Nonnull
   private String ort;
 
   public static final String JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND = "isAusbildungAusland";
+  @jakarta.annotation.Nonnull
   private Boolean isAusbildungAusland;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN = "ausbildungNichtGefunden";
+  @jakarta.annotation.Nullable
   private Boolean ausbildungNichtGefunden;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_BEGINN = "ausbildungBeginn";
+  @jakarta.annotation.Nonnull
   private LocalDate ausbildungBeginn;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_END = "ausbildungEnd";
+  @jakarta.annotation.Nonnull
   private LocalDate ausbildungEnd;
 
   public static final String JSON_PROPERTY_PENSUM = "pensum";
+  @jakarta.annotation.Nonnull
   private AusbildungsPensumDtoSpec pensum;
 
   public DemoAusbildungDtoSpec() {
   }
 
-  public DemoAusbildungDtoSpec ausbildungsstaette(String ausbildungsstaette) {
+  public DemoAusbildungDtoSpec ausbildungsstaette(@jakarta.annotation.Nonnull String ausbildungsstaette) {
     
     this.ausbildungsstaette = ausbildungsstaette;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungsstaette
    * @return ausbildungsstaette
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSTAETTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAusbildungsstaette() {
@@ -95,25 +105,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSTAETTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsstaette(String ausbildungsstaette) {
+  public void setAusbildungsstaette(@jakarta.annotation.Nonnull String ausbildungsstaette) {
     this.ausbildungsstaette = ausbildungsstaette;
   }
 
-
-  public DemoAusbildungDtoSpec ausbildungsgang(String ausbildungsgang) {
+  public DemoAusbildungDtoSpec ausbildungsgang(@jakarta.annotation.Nonnull String ausbildungsgang) {
     
     this.ausbildungsgang = ausbildungsgang;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungsgang
    * @return ausbildungsgang
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGANG)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSGANG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAusbildungsgang() {
@@ -121,25 +130,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGANG)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSGANG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsgang(String ausbildungsgang) {
+  public void setAusbildungsgang(@jakarta.annotation.Nonnull String ausbildungsgang) {
     this.ausbildungsgang = ausbildungsgang;
   }
 
-
-  public DemoAusbildungDtoSpec berufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+  public DemoAusbildungDtoSpec berufsbezeichnungFachrichtung(@jakarta.annotation.Nonnull String berufsbezeichnungFachrichtung) {
     
     this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
     return this;
   }
 
-   /**
+  /**
    * Get berufsbezeichnungFachrichtung
    * @return berufsbezeichnungFachrichtung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBerufsbezeichnungFachrichtung() {
@@ -147,25 +155,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+  public void setBerufsbezeichnungFachrichtung(@jakarta.annotation.Nonnull String berufsbezeichnungFachrichtung) {
     this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
   }
 
-
-  public DemoAusbildungDtoSpec plz(String plz) {
+  public DemoAusbildungDtoSpec plz(@jakarta.annotation.Nonnull String plz) {
     
     this.plz = plz;
     return this;
   }
 
-   /**
+  /**
    * Get plz
    * @return plz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PLZ)
+  @JsonProperty(value = JSON_PROPERTY_PLZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPlz() {
@@ -173,25 +180,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PLZ)
+  @JsonProperty(value = JSON_PROPERTY_PLZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPlz(String plz) {
+  public void setPlz(@jakarta.annotation.Nonnull String plz) {
     this.plz = plz;
   }
 
-
-  public DemoAusbildungDtoSpec ort(String ort) {
+  public DemoAusbildungDtoSpec ort(@jakarta.annotation.Nonnull String ort) {
     
     this.ort = ort;
     return this;
   }
 
-   /**
+  /**
    * Get ort
    * @return ort
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ORT)
+  @JsonProperty(value = JSON_PROPERTY_ORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getOrt() {
@@ -199,25 +205,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ORT)
+  @JsonProperty(value = JSON_PROPERTY_ORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setOrt(String ort) {
+  public void setOrt(@jakarta.annotation.Nonnull String ort) {
     this.ort = ort;
   }
 
-
-  public DemoAusbildungDtoSpec isAusbildungAusland(Boolean isAusbildungAusland) {
+  public DemoAusbildungDtoSpec isAusbildungAusland(@jakarta.annotation.Nonnull Boolean isAusbildungAusland) {
     
     this.isAusbildungAusland = isAusbildungAusland;
     return this;
   }
 
-   /**
+  /**
    * Get isAusbildungAusland
    * @return isAusbildungAusland
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND)
+  @JsonProperty(value = JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getIsAusbildungAusland() {
@@ -225,25 +230,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND)
+  @JsonProperty(value = JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIsAusbildungAusland(Boolean isAusbildungAusland) {
+  public void setIsAusbildungAusland(@jakarta.annotation.Nonnull Boolean isAusbildungAusland) {
     this.isAusbildungAusland = isAusbildungAusland;
   }
 
-
-  public DemoAusbildungDtoSpec ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+  public DemoAusbildungDtoSpec ausbildungNichtGefunden(@jakarta.annotation.Nullable Boolean ausbildungNichtGefunden) {
     
     this.ausbildungNichtGefunden = ausbildungNichtGefunden;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungNichtGefunden
    * @return ausbildungNichtGefunden
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getAusbildungNichtGefunden() {
@@ -251,25 +255,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+  public void setAusbildungNichtGefunden(@jakarta.annotation.Nullable Boolean ausbildungNichtGefunden) {
     this.ausbildungNichtGefunden = ausbildungNichtGefunden;
   }
 
-
-  public DemoAusbildungDtoSpec ausbildungBeginn(LocalDate ausbildungBeginn) {
+  public DemoAusbildungDtoSpec ausbildungBeginn(@jakarta.annotation.Nonnull LocalDate ausbildungBeginn) {
     
     this.ausbildungBeginn = ausbildungBeginn;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungBeginn
    * @return ausbildungBeginn
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BEGINN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_BEGINN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getAusbildungBeginn() {
@@ -277,25 +280,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BEGINN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_BEGINN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungBeginn(LocalDate ausbildungBeginn) {
+  public void setAusbildungBeginn(@jakarta.annotation.Nonnull LocalDate ausbildungBeginn) {
     this.ausbildungBeginn = ausbildungBeginn;
   }
 
-
-  public DemoAusbildungDtoSpec ausbildungEnd(LocalDate ausbildungEnd) {
+  public DemoAusbildungDtoSpec ausbildungEnd(@jakarta.annotation.Nonnull LocalDate ausbildungEnd) {
     
     this.ausbildungEnd = ausbildungEnd;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungEnd
    * @return ausbildungEnd
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_END)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_END, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getAusbildungEnd() {
@@ -303,25 +305,24 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_END)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_END, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungEnd(LocalDate ausbildungEnd) {
+  public void setAusbildungEnd(@jakarta.annotation.Nonnull LocalDate ausbildungEnd) {
     this.ausbildungEnd = ausbildungEnd;
   }
 
-
-  public DemoAusbildungDtoSpec pensum(AusbildungsPensumDtoSpec pensum) {
+  public DemoAusbildungDtoSpec pensum(@jakarta.annotation.Nonnull AusbildungsPensumDtoSpec pensum) {
     
     this.pensum = pensum;
     return this;
   }
 
-   /**
+  /**
    * Get pensum
    * @return pensum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PENSUM)
+  @JsonProperty(value = JSON_PROPERTY_PENSUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungsPensumDtoSpec getPensum() {
@@ -329,11 +330,12 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PENSUM)
+  @JsonProperty(value = JSON_PROPERTY_PENSUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPensum(AusbildungsPensumDtoSpec pensum) {
+  public void setPensum(@jakarta.annotation.Nonnull AusbildungsPensumDtoSpec pensum) {
     this.pensum = pensum;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -384,10 +386,7 @@ public class DemoAusbildungDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

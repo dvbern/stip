@@ -35,38 +35,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDarlehenDtoSpec.JSON_PROPERTY_GRUENDE
 })
 @JsonTypeName("DemoDarlehen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoDarlehenDtoSpec {
   public static final String JSON_PROPERTY_WILL_DARLEHEN = "willDarlehen";
+  @jakarta.annotation.Nonnull
   private Boolean willDarlehen;
 
   public static final String JSON_PROPERTY_BETRAG_GEWUENSCHT = "betragGewuenscht";
+  @jakarta.annotation.Nonnull
   private Integer betragGewuenscht;
 
   public static final String JSON_PROPERTY_SCHULDEN = "schulden";
+  @jakarta.annotation.Nonnull
   private Integer schulden;
 
   public static final String JSON_PROPERTY_ANZAHL_BETREIBUNGEN = "anzahlBetreibungen";
+  @jakarta.annotation.Nonnull
   private Integer anzahlBetreibungen;
 
   public static final String JSON_PROPERTY_GRUENDE = "gruende";
+  @jakarta.annotation.Nonnull
   private DemoDarlehenGruendeDtoSpec gruende;
 
   public DemoDarlehenDtoSpec() {
   }
 
-  public DemoDarlehenDtoSpec willDarlehen(Boolean willDarlehen) {
+  public DemoDarlehenDtoSpec willDarlehen(@jakarta.annotation.Nonnull Boolean willDarlehen) {
     
     this.willDarlehen = willDarlehen;
     return this;
   }
 
-   /**
+  /**
    * Get willDarlehen
    * @return willDarlehen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WILL_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_WILL_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getWillDarlehen() {
@@ -74,25 +79,24 @@ public class DemoDarlehenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WILL_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_WILL_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWillDarlehen(Boolean willDarlehen) {
+  public void setWillDarlehen(@jakarta.annotation.Nonnull Boolean willDarlehen) {
     this.willDarlehen = willDarlehen;
   }
 
-
-  public DemoDarlehenDtoSpec betragGewuenscht(Integer betragGewuenscht) {
+  public DemoDarlehenDtoSpec betragGewuenscht(@jakarta.annotation.Nonnull Integer betragGewuenscht) {
     
     this.betragGewuenscht = betragGewuenscht;
     return this;
   }
 
-   /**
+  /**
    * Get betragGewuenscht
    * @return betragGewuenscht
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
+  @JsonProperty(value = JSON_PROPERTY_BETRAG_GEWUENSCHT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBetragGewuenscht() {
@@ -100,25 +104,24 @@ public class DemoDarlehenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
+  @JsonProperty(value = JSON_PROPERTY_BETRAG_GEWUENSCHT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetragGewuenscht(Integer betragGewuenscht) {
+  public void setBetragGewuenscht(@jakarta.annotation.Nonnull Integer betragGewuenscht) {
     this.betragGewuenscht = betragGewuenscht;
   }
 
-
-  public DemoDarlehenDtoSpec schulden(Integer schulden) {
+  public DemoDarlehenDtoSpec schulden(@jakarta.annotation.Nonnull Integer schulden) {
     
     this.schulden = schulden;
     return this;
   }
 
-   /**
+  /**
    * Get schulden
    * @return schulden
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SCHULDEN)
+  @JsonProperty(value = JSON_PROPERTY_SCHULDEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSchulden() {
@@ -126,25 +129,24 @@ public class DemoDarlehenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SCHULDEN)
+  @JsonProperty(value = JSON_PROPERTY_SCHULDEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSchulden(Integer schulden) {
+  public void setSchulden(@jakarta.annotation.Nonnull Integer schulden) {
     this.schulden = schulden;
   }
 
-
-  public DemoDarlehenDtoSpec anzahlBetreibungen(Integer anzahlBetreibungen) {
+  public DemoDarlehenDtoSpec anzahlBetreibungen(@jakarta.annotation.Nonnull Integer anzahlBetreibungen) {
     
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlBetreibungen
    * @return anzahlBetreibungen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_BETREIBUNGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlBetreibungen() {
@@ -152,25 +154,24 @@ public class DemoDarlehenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_BETREIBUNGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlBetreibungen(Integer anzahlBetreibungen) {
+  public void setAnzahlBetreibungen(@jakarta.annotation.Nonnull Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
   }
 
-
-  public DemoDarlehenDtoSpec gruende(DemoDarlehenGruendeDtoSpec gruende) {
+  public DemoDarlehenDtoSpec gruende(@jakarta.annotation.Nonnull DemoDarlehenGruendeDtoSpec gruende) {
     
     this.gruende = gruende;
     return this;
   }
 
-   /**
+  /**
    * Get gruende
    * @return gruende
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GRUENDE)
+  @JsonProperty(value = JSON_PROPERTY_GRUENDE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DemoDarlehenGruendeDtoSpec getGruende() {
@@ -178,11 +179,12 @@ public class DemoDarlehenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUENDE)
+  @JsonProperty(value = JSON_PROPERTY_GRUENDE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGruende(DemoDarlehenGruendeDtoSpec gruende) {
+  public void setGruende(@jakarta.annotation.Nonnull DemoDarlehenGruendeDtoSpec gruende) {
     this.gruende = gruende;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -223,10 +225,7 @@ public class DemoDarlehenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -15,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BeschwerdeVerlaufEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BeschwerdeVerlaufEntryDto  implements Serializable {
-  private @Valid String kommentar;
-  private @Valid Boolean beschwerdeSetTo;
-  private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid String userErstellt;
-  private @Valid BeschwerdeEntscheidDto beschwerdeEntscheid;
+  private String kommentar;
+  private Boolean beschwerdeSetTo;
+  private java.time.LocalDateTime timestampErstellt;
+  private String userErstellt;
+  private BeschwerdeEntscheidDto beschwerdeEntscheid;
 
   protected BeschwerdeVerlaufEntryDto(BeschwerdeVerlaufEntryDtoBuilder<?, ?> b) {
     this.kommentar = b.kommentar;
@@ -45,13 +45,12 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentar")
-  @NotNull
-  public String getKommentar() {
+  @JsonProperty(required = true, value = "kommentar")
+  @NotNull public String getKommentar() {
     return kommentar;
   }
 
-  @JsonProperty("kommentar")
+  @JsonProperty(required = true, value = "kommentar")
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -64,13 +63,12 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("beschwerdeSetTo")
-  @NotNull
-  public Boolean getBeschwerdeSetTo() {
+  @JsonProperty(required = true, value = "beschwerdeSetTo")
+  @NotNull public Boolean getBeschwerdeSetTo() {
     return beschwerdeSetTo;
   }
 
-  @JsonProperty("beschwerdeSetTo")
+  @JsonProperty(required = true, value = "beschwerdeSetTo")
   public void setBeschwerdeSetTo(Boolean beschwerdeSetTo) {
     this.beschwerdeSetTo = beschwerdeSetTo;
   }
@@ -83,13 +81,12 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public java.time.LocalDateTime getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -102,13 +99,12 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
+  @JsonProperty(required = true, value = "userErstellt")
+  @NotNull public String getUserErstellt() {
     return userErstellt;
   }
 
-  @JsonProperty("userErstellt")
+  @JsonProperty(required = true, value = "userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
   }
@@ -122,7 +118,7 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
 
   
   @JsonProperty("beschwerdeEntscheid")
-  public BeschwerdeEntscheidDto getBeschwerdeEntscheid() {
+  @Valid public BeschwerdeEntscheidDto getBeschwerdeEntscheid() {
     return beschwerdeEntscheid;
   }
 
@@ -172,10 +168,7 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -228,4 +221,3 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
     }
   }
 }
-

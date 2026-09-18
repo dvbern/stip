@@ -34,38 +34,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDarlehenGruendeDtoSpec.JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG
 })
 @JsonTypeName("DemoDarlehen_gruende")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoDarlehenGruendeDtoSpec {
   public static final String JSON_PROPERTY_GRUND_NICHT_BERECHTIGT = "grundNichtBerechtigt";
+  @jakarta.annotation.Nullable
   private Boolean grundNichtBerechtigt;
 
   public static final String JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE = "grundAusbildungZwoelfJahre";
+  @jakarta.annotation.Nullable
   private Boolean grundAusbildungZwoelfJahre;
 
   public static final String JSON_PROPERTY_GRUND_HOHE_GEBUEHREN = "grundHoheGebuehren";
+  @jakarta.annotation.Nullable
   private Boolean grundHoheGebuehren;
 
   public static final String JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG = "grundAnschaffungenFuerAusbildung";
+  @jakarta.annotation.Nullable
   private Boolean grundAnschaffungenFuerAusbildung;
 
   public static final String JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG = "grundZweitausbildung";
+  @jakarta.annotation.Nullable
   private Boolean grundZweitausbildung;
 
   public DemoDarlehenGruendeDtoSpec() {
   }
 
-  public DemoDarlehenGruendeDtoSpec grundNichtBerechtigt(Boolean grundNichtBerechtigt) {
+  public DemoDarlehenGruendeDtoSpec grundNichtBerechtigt(@jakarta.annotation.Nullable Boolean grundNichtBerechtigt) {
     
     this.grundNichtBerechtigt = grundNichtBerechtigt;
     return this;
   }
 
-   /**
+  /**
    * Get grundNichtBerechtigt
    * @return grundNichtBerechtigt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_NICHT_BERECHTIGT)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_NICHT_BERECHTIGT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getGrundNichtBerechtigt() {
@@ -73,25 +78,24 @@ public class DemoDarlehenGruendeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUND_NICHT_BERECHTIGT)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_NICHT_BERECHTIGT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundNichtBerechtigt(Boolean grundNichtBerechtigt) {
+  public void setGrundNichtBerechtigt(@jakarta.annotation.Nullable Boolean grundNichtBerechtigt) {
     this.grundNichtBerechtigt = grundNichtBerechtigt;
   }
 
-
-  public DemoDarlehenGruendeDtoSpec grundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
+  public DemoDarlehenGruendeDtoSpec grundAusbildungZwoelfJahre(@jakarta.annotation.Nullable Boolean grundAusbildungZwoelfJahre) {
     
     this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
     return this;
   }
 
-   /**
+  /**
    * Get grundAusbildungZwoelfJahre
    * @return grundAusbildungZwoelfJahre
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getGrundAusbildungZwoelfJahre() {
@@ -99,25 +103,24 @@ public class DemoDarlehenGruendeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
+  public void setGrundAusbildungZwoelfJahre(@jakarta.annotation.Nullable Boolean grundAusbildungZwoelfJahre) {
     this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
   }
 
-
-  public DemoDarlehenGruendeDtoSpec grundHoheGebuehren(Boolean grundHoheGebuehren) {
+  public DemoDarlehenGruendeDtoSpec grundHoheGebuehren(@jakarta.annotation.Nullable Boolean grundHoheGebuehren) {
     
     this.grundHoheGebuehren = grundHoheGebuehren;
     return this;
   }
 
-   /**
+  /**
    * Get grundHoheGebuehren
    * @return grundHoheGebuehren
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_HOHE_GEBUEHREN)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_HOHE_GEBUEHREN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getGrundHoheGebuehren() {
@@ -125,25 +128,24 @@ public class DemoDarlehenGruendeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUND_HOHE_GEBUEHREN)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_HOHE_GEBUEHREN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundHoheGebuehren(Boolean grundHoheGebuehren) {
+  public void setGrundHoheGebuehren(@jakarta.annotation.Nullable Boolean grundHoheGebuehren) {
     this.grundHoheGebuehren = grundHoheGebuehren;
   }
 
-
-  public DemoDarlehenGruendeDtoSpec grundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
+  public DemoDarlehenGruendeDtoSpec grundAnschaffungenFuerAusbildung(@jakarta.annotation.Nullable Boolean grundAnschaffungenFuerAusbildung) {
     
     this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
     return this;
   }
 
-   /**
+  /**
    * Get grundAnschaffungenFuerAusbildung
    * @return grundAnschaffungenFuerAusbildung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getGrundAnschaffungenFuerAusbildung() {
@@ -151,25 +153,24 @@ public class DemoDarlehenGruendeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
+  public void setGrundAnschaffungenFuerAusbildung(@jakarta.annotation.Nullable Boolean grundAnschaffungenFuerAusbildung) {
     this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
   }
 
-
-  public DemoDarlehenGruendeDtoSpec grundZweitausbildung(Boolean grundZweitausbildung) {
+  public DemoDarlehenGruendeDtoSpec grundZweitausbildung(@jakarta.annotation.Nullable Boolean grundZweitausbildung) {
     
     this.grundZweitausbildung = grundZweitausbildung;
     return this;
   }
 
-   /**
+  /**
    * Get grundZweitausbildung
    * @return grundZweitausbildung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getGrundZweitausbildung() {
@@ -177,11 +178,12 @@ public class DemoDarlehenGruendeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundZweitausbildung(Boolean grundZweitausbildung) {
+  public void setGrundZweitausbildung(@jakarta.annotation.Nullable Boolean grundZweitausbildung) {
     this.grundZweitausbildung = grundZweitausbildung;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -222,10 +224,7 @@ public class DemoDarlehenGruendeDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

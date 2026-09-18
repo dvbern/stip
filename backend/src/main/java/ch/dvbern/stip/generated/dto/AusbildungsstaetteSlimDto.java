@@ -19,16 +19,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsstaetteSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsstaetteSlimDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String nameDe;
-  private @Valid String nameFr;
-  private @Valid List<AusbildungsgangDataDto> ausbildungsgaenge = new ArrayList<>();
-  private @Valid Boolean aktiv;
+  private UUID id;
+  private String nameDe;
+  private String nameFr;
+  private @Valid List<@Valid AusbildungsgangDataDto> ausbildungsgaenge = new ArrayList<>();
+  private Boolean aktiv;
 
   protected AusbildungsstaetteSlimDto(AusbildungsstaetteSlimDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -49,13 +49,12 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -68,13 +67,12 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("nameDe")
-  @NotNull
-  public String getNameDe() {
+  @JsonProperty(required = true, value = "nameDe")
+  @NotNull public String getNameDe() {
     return nameDe;
   }
 
-  @JsonProperty("nameDe")
+  @JsonProperty(required = true, value = "nameDe")
   public void setNameDe(String nameDe) {
     this.nameDe = nameDe;
   }
@@ -87,33 +85,31 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("nameFr")
-  @NotNull
-  public String getNameFr() {
+  @JsonProperty(required = true, value = "nameFr")
+  @NotNull public String getNameFr() {
     return nameFr;
   }
 
-  @JsonProperty("nameFr")
+  @JsonProperty(required = true, value = "nameFr")
   public void setNameFr(String nameFr) {
     this.nameFr = nameFr;
   }
 
   /**
    **/
-  public AusbildungsstaetteSlimDto ausbildungsgaenge(List<AusbildungsgangDataDto> ausbildungsgaenge) {
+  public AusbildungsstaetteSlimDto ausbildungsgaenge(List<@Valid AusbildungsgangDataDto> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;
     return this;
   }
 
   
-  @JsonProperty("ausbildungsgaenge")
-  @NotNull
-  public List<AusbildungsgangDataDto> getAusbildungsgaenge() {
+  @JsonProperty(required = true, value = "ausbildungsgaenge")
+  @NotNull @Valid public List<@Valid AusbildungsgangDataDto> getAusbildungsgaenge() {
     return ausbildungsgaenge;
   }
 
-  @JsonProperty("ausbildungsgaenge")
-  public void setAusbildungsgaenge(List<AusbildungsgangDataDto> ausbildungsgaenge) {
+  @JsonProperty(required = true, value = "ausbildungsgaenge")
+  public void setAusbildungsgaenge(List<@Valid AusbildungsgangDataDto> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;
   }
 
@@ -141,13 +137,12 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("aktiv")
-  @NotNull
-  public Boolean getAktiv() {
+  @JsonProperty(required = true, value = "aktiv")
+  @NotNull public Boolean getAktiv() {
     return aktiv;
   }
 
-  @JsonProperty("aktiv")
+  @JsonProperty(required = true, value = "aktiv")
   public void setAktiv(Boolean aktiv) {
     this.aktiv = aktiv;
   }
@@ -193,10 +188,7 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -249,4 +241,3 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
     }
   }
 }
-

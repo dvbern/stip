@@ -18,15 +18,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataErrorDto  implements Serializable {
-  private @Valid String internalMessage;
-  private @Valid String errorClass;
-  private @Valid String cause;
-  private @Valid List<ValidationMessageDto> validationErrors;
+  private String internalMessage;
+  private String errorClass;
+  private String cause;
+  private @Valid List<@Valid ValidationMessageDto> validationErrors = new ArrayList<>();
 
   protected DemoDataErrorDto(DemoDataErrorDtoBuilder<?, ?> b) {
     this.internalMessage = b.internalMessage;
@@ -46,13 +46,12 @@ public class DemoDataErrorDto  implements Serializable {
   }
 
   
-  @JsonProperty("internalMessage")
-  @NotNull
-  public String getInternalMessage() {
+  @JsonProperty(required = true, value = "internalMessage")
+  @NotNull public String getInternalMessage() {
     return internalMessage;
   }
 
-  @JsonProperty("internalMessage")
+  @JsonProperty(required = true, value = "internalMessage")
   public void setInternalMessage(String internalMessage) {
     this.internalMessage = internalMessage;
   }
@@ -65,13 +64,12 @@ public class DemoDataErrorDto  implements Serializable {
   }
 
   
-  @JsonProperty("errorClass")
-  @NotNull
-  public String getErrorClass() {
+  @JsonProperty(required = true, value = "errorClass")
+  @NotNull public String getErrorClass() {
     return errorClass;
   }
 
-  @JsonProperty("errorClass")
+  @JsonProperty(required = true, value = "errorClass")
   public void setErrorClass(String errorClass) {
     this.errorClass = errorClass;
   }
@@ -96,19 +94,19 @@ public class DemoDataErrorDto  implements Serializable {
 
   /**
    **/
-  public DemoDataErrorDto validationErrors(List<ValidationMessageDto> validationErrors) {
+  public DemoDataErrorDto validationErrors(List<@Valid ValidationMessageDto> validationErrors) {
     this.validationErrors = validationErrors;
     return this;
   }
 
   
   @JsonProperty("validationErrors")
-  public List<ValidationMessageDto> getValidationErrors() {
+  @Valid public List<@Valid ValidationMessageDto> getValidationErrors() {
     return validationErrors;
   }
 
   @JsonProperty("validationErrors")
-  public void setValidationErrors(List<ValidationMessageDto> validationErrors) {
+  public void setValidationErrors(List<@Valid ValidationMessageDto> validationErrors) {
     this.validationErrors = validationErrors;
   }
 
@@ -167,10 +165,7 @@ public class DemoDataErrorDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -195,7 +190,7 @@ public class DemoDataErrorDto  implements Serializable {
     private String internalMessage;
     private String errorClass;
     private String cause;
-    private List<ValidationMessageDto> validationErrors;
+    private List<ValidationMessageDto> validationErrors = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -218,4 +213,3 @@ public class DemoDataErrorDto  implements Serializable {
     }
   }
 }
-

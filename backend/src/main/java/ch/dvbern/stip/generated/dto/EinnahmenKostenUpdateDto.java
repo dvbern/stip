@@ -14,34 +14,34 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("EinnahmenKostenUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class EinnahmenKostenUpdateDto  implements Serializable {
-  private @Valid Integer nettoerwerbseinkommen;
-  private @Valid Integer fahrkosten;
-  private @Valid Integer arbeitspensumProzent;
-  private @Valid Integer unterhaltsbeitraege;
-  private @Valid Integer einnahmenBGSA;
-  private @Valid Integer taggelderAHVIV;
-  private @Valid Integer andereEinnahmen;
-  private @Valid Integer zulagen;
-  private @Valid Integer renten;
-  private @Valid Integer eoLeistungen;
-  private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer beitraege;
-  private @Valid Integer ausbildungskosten;
-  private @Valid Integer wohnkosten;
-  private @Valid Boolean wgWohnend;
-  private @Valid Integer wgAnzahlPersonen;
-  private @Valid Boolean alternativeWohnformWohnend;
-  private @Valid Integer auswaertigeMittagessenProWoche;
-  private @Valid Integer verpflegungskosten;
-  private @Valid String veranlagungsStatus;
-  private @Valid Integer steuerjahr;
-  private @Valid Integer vermoegen;
-  private @Valid Integer steuern;
+  private Integer nettoerwerbseinkommen;
+  private Integer fahrkosten;
+  private Integer arbeitspensumProzent;
+  private Integer unterhaltsbeitraege;
+  private Integer einnahmenBGSA;
+  private Integer taggelderAHVIV;
+  private Integer andereEinnahmen;
+  private Integer zulagen;
+  private Integer renten;
+  private Integer eoLeistungen;
+  private Integer ergaenzungsleistungen;
+  private Integer beitraege;
+  private Integer ausbildungskosten;
+  private Integer wohnkosten;
+  private Boolean wgWohnend;
+  private Integer wgAnzahlPersonen;
+  private Boolean alternativeWohnformWohnend;
+  private Integer auswaertigeMittagessenProWoche;
+  private Integer verpflegungskosten;
+  private String veranlagungsStatus;
+  private Integer steuerjahr;
+  private Integer vermoegen;
+  private Integer steuern;
 
   protected EinnahmenKostenUpdateDto(EinnahmenKostenUpdateDtoBuilder<?, ?> b) {
     this.nettoerwerbseinkommen = b.nettoerwerbseinkommen;
@@ -80,13 +80,12 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nettoerwerbseinkommen")
-  @NotNull
-  public Integer getNettoerwerbseinkommen() {
+  @JsonProperty(required = true, value = "nettoerwerbseinkommen")
+  @NotNull public Integer getNettoerwerbseinkommen() {
     return nettoerwerbseinkommen;
   }
 
-  @JsonProperty("nettoerwerbseinkommen")
+  @JsonProperty(required = true, value = "nettoerwerbseinkommen")
   public void setNettoerwerbseinkommen(Integer nettoerwerbseinkommen) {
     this.nettoerwerbseinkommen = nettoerwerbseinkommen;
   }
@@ -99,13 +98,12 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("fahrkosten")
-  @NotNull
-  public Integer getFahrkosten() {
+  @JsonProperty(required = true, value = "fahrkosten")
+  @NotNull public Integer getFahrkosten() {
     return fahrkosten;
   }
 
-  @JsonProperty("fahrkosten")
+  @JsonProperty(required = true, value = "fahrkosten")
   public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
@@ -457,7 +455,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
 
   
   @JsonProperty("steuerjahr")
- @Min(0) @Max(99999)  public Integer getSteuerjahr() {
+   @Min(0) @Max(99999)public Integer getSteuerjahr() {
     return steuerjahr;
   }
 
@@ -478,7 +476,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
 
   
   @JsonProperty("vermoegen")
- @Min(0) @Max(2147483647)  public Integer getVermoegen() {
+   @Min(0) @Max(2147483647)public Integer getVermoegen() {
     return vermoegen;
   }
 
@@ -499,7 +497,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
 
   
   @JsonProperty("steuern")
- @Min(0) @Max(2147483647)  public Integer getSteuern() {
+   @Min(0) @Max(2147483647)public Integer getSteuern() {
     return steuern;
   }
 
@@ -585,10 +583,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -731,4 +726,3 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     }
   }
 }
-

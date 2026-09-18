@@ -32,32 +32,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ValidationMessageDtoSpec.JSON_PROPERTY_MESSAGE
 })
 @JsonTypeName("ValidationMessage")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class ValidationMessageDtoSpec {
   public static final String JSON_PROPERTY_PROPERTY_PATH = "propertyPath";
+  @jakarta.annotation.Nullable
   private String propertyPath;
 
   public static final String JSON_PROPERTY_MESSAGE_TEMPLATE = "messageTemplate";
+  @jakarta.annotation.Nonnull
   private String messageTemplate;
 
   public static final String JSON_PROPERTY_MESSAGE = "message";
+  @jakarta.annotation.Nonnull
   private String message;
 
   public ValidationMessageDtoSpec() {
   }
 
-  public ValidationMessageDtoSpec propertyPath(String propertyPath) {
+  public ValidationMessageDtoSpec propertyPath(@jakarta.annotation.Nullable String propertyPath) {
     
     this.propertyPath = propertyPath;
     return this;
   }
 
-   /**
+  /**
    * Get propertyPath
    * @return propertyPath
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PROPERTY_PATH)
+  @JsonProperty(value = JSON_PROPERTY_PROPERTY_PATH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getPropertyPath() {
@@ -65,25 +68,24 @@ public class ValidationMessageDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PROPERTY_PATH)
+  @JsonProperty(value = JSON_PROPERTY_PROPERTY_PATH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPropertyPath(String propertyPath) {
+  public void setPropertyPath(@jakarta.annotation.Nullable String propertyPath) {
     this.propertyPath = propertyPath;
   }
 
-
-  public ValidationMessageDtoSpec messageTemplate(String messageTemplate) {
+  public ValidationMessageDtoSpec messageTemplate(@jakarta.annotation.Nonnull String messageTemplate) {
     
     this.messageTemplate = messageTemplate;
     return this;
   }
 
-   /**
+  /**
    * Get messageTemplate
    * @return messageTemplate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MESSAGE_TEMPLATE)
+  @JsonProperty(value = JSON_PROPERTY_MESSAGE_TEMPLATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getMessageTemplate() {
@@ -91,25 +93,24 @@ public class ValidationMessageDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MESSAGE_TEMPLATE)
+  @JsonProperty(value = JSON_PROPERTY_MESSAGE_TEMPLATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMessageTemplate(String messageTemplate) {
+  public void setMessageTemplate(@jakarta.annotation.Nonnull String messageTemplate) {
     this.messageTemplate = messageTemplate;
   }
 
-
-  public ValidationMessageDtoSpec message(String message) {
+  public ValidationMessageDtoSpec message(@jakarta.annotation.Nonnull String message) {
     
     this.message = message;
     return this;
   }
 
-   /**
+  /**
    * Get message
    * @return message
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MESSAGE)
+  @JsonProperty(value = JSON_PROPERTY_MESSAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getMessage() {
@@ -117,11 +118,12 @@ public class ValidationMessageDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MESSAGE)
+  @JsonProperty(value = JSON_PROPERTY_MESSAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMessage(String message) {
+  public void setMessage(@jakarta.annotation.Nonnull String message) {
     this.message = message;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -158,10 +160,7 @@ public class ValidationMessageDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -18,13 +18,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehenGsResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenGsResponseDto  implements Serializable {
-  private @Valid List<FreiwilligDarlehenDto> darlehenList = new ArrayList<>();
-  private @Valid Boolean canCreateDarlehen;
+  private @Valid List<@Valid FreiwilligDarlehenDto> darlehenList = new ArrayList<>();
+  private Boolean canCreateDarlehen;
 
   protected FreiwilligDarlehenGsResponseDto(FreiwilligDarlehenGsResponseDtoBuilder<?, ?> b) {
     this.darlehenList = b.darlehenList;
@@ -36,20 +36,19 @@ public class FreiwilligDarlehenGsResponseDto  implements Serializable {
 
   /**
    **/
-  public FreiwilligDarlehenGsResponseDto darlehenList(List<FreiwilligDarlehenDto> darlehenList) {
+  public FreiwilligDarlehenGsResponseDto darlehenList(List<@Valid FreiwilligDarlehenDto> darlehenList) {
     this.darlehenList = darlehenList;
     return this;
   }
 
   
-  @JsonProperty("darlehenList")
-  @NotNull
-  public List<FreiwilligDarlehenDto> getDarlehenList() {
+  @JsonProperty(required = true, value = "darlehenList")
+  @NotNull @Valid public List<@Valid FreiwilligDarlehenDto> getDarlehenList() {
     return darlehenList;
   }
 
-  @JsonProperty("darlehenList")
-  public void setDarlehenList(List<FreiwilligDarlehenDto> darlehenList) {
+  @JsonProperty(required = true, value = "darlehenList")
+  public void setDarlehenList(List<@Valid FreiwilligDarlehenDto> darlehenList) {
     this.darlehenList = darlehenList;
   }
 
@@ -77,13 +76,12 @@ public class FreiwilligDarlehenGsResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("canCreateDarlehen")
-  @NotNull
-  public Boolean getCanCreateDarlehen() {
+  @JsonProperty(required = true, value = "canCreateDarlehen")
+  @NotNull public Boolean getCanCreateDarlehen() {
     return canCreateDarlehen;
   }
 
-  @JsonProperty("canCreateDarlehen")
+  @JsonProperty(required = true, value = "canCreateDarlehen")
   public void setCanCreateDarlehen(Boolean canCreateDarlehen) {
     this.canCreateDarlehen = canCreateDarlehen;
   }
@@ -123,10 +121,7 @@ public class FreiwilligDarlehenGsResponseDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -164,4 +159,3 @@ public class FreiwilligDarlehenGsResponseDto  implements Serializable {
     }
   }
 }
-

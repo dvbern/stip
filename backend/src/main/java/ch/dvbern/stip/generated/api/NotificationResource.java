@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
+import org.jboss.resteasy.reactive.ResponseStatus;
 
 
 
@@ -16,17 +16,17 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/fall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
+@Path("")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public interface NotificationResource {
 
     @GET
-    @Path("/{fallId}/notifications")
+    @Path("/fall/{fallId}/notifications")
     @Produces({ "application/json", "text/plain" })
     List<NotificationDto> getNotificationsForFall(@PathParam("fallId") UUID fallId);
 
     @PATCH
-    @Path("/notifications/{notificationId}/markAsRead")
+    @Path("/fall/notifications/{notificationId}/markAsRead")
     @Produces({ "text/plain" })
     void markNotificationAsRead(@PathParam("notificationId") UUID notificationId);
 }

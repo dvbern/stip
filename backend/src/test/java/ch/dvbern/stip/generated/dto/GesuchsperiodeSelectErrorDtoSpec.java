@@ -33,29 +33,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeSelectErrorDtoSpec.JSON_PROPERTY_CONTEXT
 })
 @JsonTypeName("GesuchsperiodeSelectError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchsperiodeSelectErrorDtoSpec {
   public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nonnull
   private GesuchsperiodeSelectErrorTypeDtoSpec type;
 
   public static final String JSON_PROPERTY_CONTEXT = "context";
+  @jakarta.annotation.Nullable
   private LocalDate context;
 
   public GesuchsperiodeSelectErrorDtoSpec() {
   }
 
-  public GesuchsperiodeSelectErrorDtoSpec type(GesuchsperiodeSelectErrorTypeDtoSpec type) {
+  public GesuchsperiodeSelectErrorDtoSpec type(@jakarta.annotation.Nonnull GesuchsperiodeSelectErrorTypeDtoSpec type) {
     
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchsperiodeSelectErrorTypeDtoSpec getType() {
@@ -63,25 +65,24 @@ public class GesuchsperiodeSelectErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setType(GesuchsperiodeSelectErrorTypeDtoSpec type) {
+  public void setType(@jakarta.annotation.Nonnull GesuchsperiodeSelectErrorTypeDtoSpec type) {
     this.type = type;
   }
 
-
-  public GesuchsperiodeSelectErrorDtoSpec context(LocalDate context) {
+  public GesuchsperiodeSelectErrorDtoSpec context(@jakarta.annotation.Nullable LocalDate context) {
     
     this.context = context;
     return this;
   }
 
-   /**
+  /**
    * Get context
    * @return context
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CONTEXT)
+  @JsonProperty(value = JSON_PROPERTY_CONTEXT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getContext() {
@@ -89,11 +90,12 @@ public class GesuchsperiodeSelectErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CONTEXT)
+  @JsonProperty(value = JSON_PROPERTY_CONTEXT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setContext(LocalDate context) {
+  public void setContext(@jakarta.annotation.Nullable LocalDate context) {
     this.context = context;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -128,10 +130,7 @@ public class GesuchsperiodeSelectErrorDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

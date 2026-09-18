@@ -38,44 +38,51 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DarlehenBuchhaltungEntryDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
 @JsonTypeName("DarlehenBuchhaltungEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DarlehenBuchhaltungEntryDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
   private java.time.LocalDateTime timestampErstellt;
 
   public static final String JSON_PROPERTY_KATEGORIE = "kategorie";
+  @jakarta.annotation.Nonnull
   private DarlehenBuchhaltungEntryKategorieDtoSpec kategorie;
 
   public static final String JSON_PROPERTY_VERFUEGUNG = "verfuegung";
+  @jakarta.annotation.Nullable
   private DokumentDtoSpec verfuegung;
 
   public static final String JSON_PROPERTY_BETRAG = "betrag";
+  @jakarta.annotation.Nonnull
   private Integer betrag;
 
   public static final String JSON_PROPERTY_YEAR_RANGE = "yearRange";
+  @jakarta.annotation.Nullable
   private String yearRange;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  @jakarta.annotation.Nullable
   private String userErstellt;
 
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  @jakarta.annotation.Nullable
   private String kommentar;
 
   public DarlehenBuchhaltungEntryDtoSpec() {
   }
 
-  public DarlehenBuchhaltungEntryDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+  public DarlehenBuchhaltungEntryDtoSpec timestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public java.time.LocalDateTime getTimestampErstellt() {
@@ -83,25 +90,24 @@ public class DarlehenBuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public DarlehenBuchhaltungEntryDtoSpec kategorie(DarlehenBuchhaltungEntryKategorieDtoSpec kategorie) {
+  public DarlehenBuchhaltungEntryDtoSpec kategorie(@jakarta.annotation.Nonnull DarlehenBuchhaltungEntryKategorieDtoSpec kategorie) {
     
     this.kategorie = kategorie;
     return this;
   }
 
-   /**
+  /**
    * Get kategorie
    * @return kategorie
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_KATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DarlehenBuchhaltungEntryKategorieDtoSpec getKategorie() {
@@ -109,25 +115,24 @@ public class DarlehenBuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_KATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKategorie(DarlehenBuchhaltungEntryKategorieDtoSpec kategorie) {
+  public void setKategorie(@jakarta.annotation.Nonnull DarlehenBuchhaltungEntryKategorieDtoSpec kategorie) {
     this.kategorie = kategorie;
   }
 
-
-  public DarlehenBuchhaltungEntryDtoSpec verfuegung(DokumentDtoSpec verfuegung) {
+  public DarlehenBuchhaltungEntryDtoSpec verfuegung(@jakarta.annotation.Nullable DokumentDtoSpec verfuegung) {
     
     this.verfuegung = verfuegung;
     return this;
   }
 
-   /**
+  /**
    * Get verfuegung
    * @return verfuegung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERFUEGUNG)
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DokumentDtoSpec getVerfuegung() {
@@ -135,25 +140,24 @@ public class DarlehenBuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERFUEGUNG)
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerfuegung(DokumentDtoSpec verfuegung) {
+  public void setVerfuegung(@jakarta.annotation.Nullable DokumentDtoSpec verfuegung) {
     this.verfuegung = verfuegung;
   }
 
-
-  public DarlehenBuchhaltungEntryDtoSpec betrag(Integer betrag) {
+  public DarlehenBuchhaltungEntryDtoSpec betrag(@jakarta.annotation.Nonnull Integer betrag) {
     
     this.betrag = betrag;
     return this;
   }
 
-   /**
+  /**
    * Get betrag
    * @return betrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETRAG)
+  @JsonProperty(value = JSON_PROPERTY_BETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBetrag() {
@@ -161,25 +165,24 @@ public class DarlehenBuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETRAG)
+  @JsonProperty(value = JSON_PROPERTY_BETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetrag(Integer betrag) {
+  public void setBetrag(@jakarta.annotation.Nonnull Integer betrag) {
     this.betrag = betrag;
   }
 
-
-  public DarlehenBuchhaltungEntryDtoSpec yearRange(String yearRange) {
+  public DarlehenBuchhaltungEntryDtoSpec yearRange(@jakarta.annotation.Nullable String yearRange) {
     
     this.yearRange = yearRange;
     return this;
   }
 
-   /**
+  /**
    * Get yearRange
    * @return yearRange
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonProperty(value = JSON_PROPERTY_YEAR_RANGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getYearRange() {
@@ -187,25 +190,24 @@ public class DarlehenBuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonProperty(value = JSON_PROPERTY_YEAR_RANGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setYearRange(String yearRange) {
+  public void setYearRange(@jakarta.annotation.Nullable String yearRange) {
     this.yearRange = yearRange;
   }
 
-
-  public DarlehenBuchhaltungEntryDtoSpec userErstellt(String userErstellt) {
+  public DarlehenBuchhaltungEntryDtoSpec userErstellt(@jakarta.annotation.Nullable String userErstellt) {
     
     this.userErstellt = userErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get userErstellt
    * @return userErstellt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getUserErstellt() {
@@ -213,25 +215,24 @@ public class DarlehenBuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUserErstellt(String userErstellt) {
+  public void setUserErstellt(@jakarta.annotation.Nullable String userErstellt) {
     this.userErstellt = userErstellt;
   }
 
-
-  public DarlehenBuchhaltungEntryDtoSpec kommentar(String kommentar) {
+  public DarlehenBuchhaltungEntryDtoSpec kommentar(@jakarta.annotation.Nullable String kommentar) {
     
     this.kommentar = kommentar;
     return this;
   }
 
-   /**
+  /**
    * Get kommentar
    * @return kommentar
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getKommentar() {
@@ -239,11 +240,12 @@ public class DarlehenBuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setKommentar(String kommentar) {
+  public void setKommentar(@jakarta.annotation.Nullable String kommentar) {
     this.kommentar = kommentar;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -288,10 +290,7 @@ public class DarlehenBuchhaltungEntryDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

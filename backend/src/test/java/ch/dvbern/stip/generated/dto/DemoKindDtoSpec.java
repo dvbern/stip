@@ -42,59 +42,71 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoKindDtoSpec.JSON_PROPERTY_ANDERE_EINNAHMEN
 })
 @JsonTypeName("DemoKind")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoKindDtoSpec {
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  @jakarta.annotation.Nonnull
   private String geburtsdatum;
 
   public static final String JSON_PROPERTY_ALTER = "alter";
+  @jakarta.annotation.Nonnull
   private Integer alter;
 
   public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA = "wohnsitzAnteilPia";
+  @jakarta.annotation.Nonnull
   private Integer wohnsitzAnteilPia;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSITUATION = "ausbildungssituation";
+  @jakarta.annotation.Nonnull
   private AusbildungssituationDtoSpec ausbildungssituation;
 
   public static final String JSON_PROPERTY_UNTERHALTSBEITRAEGE = "unterhaltsbeitraege";
+  @jakarta.annotation.Nonnull
   private Integer unterhaltsbeitraege;
 
   public static final String JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN = "kinderUndAusbildungszulagen";
+  @jakarta.annotation.Nonnull
   private Integer kinderUndAusbildungszulagen;
 
   public static final String JSON_PROPERTY_RENTEN = "renten";
+  @jakarta.annotation.Nonnull
   private Integer renten;
 
   public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
+  @jakarta.annotation.Nonnull
   private Integer ergaenzungsleistungen;
 
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN = "betreuungskosten";
+  @jakarta.annotation.Nonnull
   private Integer betreuungskosten;
 
   public static final String JSON_PROPERTY_ANDERE_EINNAHMEN = "andereEinnahmen";
+  @jakarta.annotation.Nonnull
   private Integer andereEinnahmen;
 
   public DemoKindDtoSpec() {
   }
 
-  public DemoKindDtoSpec nachname(String nachname) {
+  public DemoKindDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -102,25 +114,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public DemoKindDtoSpec vorname(String vorname) {
+  public DemoKindDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -128,25 +139,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public DemoKindDtoSpec geburtsdatum(String geburtsdatum) {
+  public DemoKindDtoSpec geburtsdatum(@jakarta.annotation.Nonnull String geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * Get geburtsdatum
    * @return geburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getGeburtsdatum() {
@@ -154,25 +164,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(@jakarta.annotation.Nonnull String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
-
-  public DemoKindDtoSpec alter(Integer alter) {
+  public DemoKindDtoSpec alter(@jakarta.annotation.Nonnull Integer alter) {
     
     this.alter = alter;
     return this;
   }
 
-   /**
+  /**
    * Get alter
    * @return alter
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonProperty(value = JSON_PROPERTY_ALTER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAlter() {
@@ -180,25 +189,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonProperty(value = JSON_PROPERTY_ALTER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAlter(Integer alter) {
+  public void setAlter(@jakarta.annotation.Nonnull Integer alter) {
     this.alter = alter;
   }
 
-
-  public DemoKindDtoSpec wohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+  public DemoKindDtoSpec wohnsitzAnteilPia(@jakarta.annotation.Nonnull Integer wohnsitzAnteilPia) {
     
     this.wohnsitzAnteilPia = wohnsitzAnteilPia;
     return this;
   }
 
-   /**
+  /**
    * Get wohnsitzAnteilPia
    * @return wohnsitzAnteilPia
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnsitzAnteilPia() {
@@ -206,25 +214,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+  public void setWohnsitzAnteilPia(@jakarta.annotation.Nonnull Integer wohnsitzAnteilPia) {
     this.wohnsitzAnteilPia = wohnsitzAnteilPia;
   }
 
-
-  public DemoKindDtoSpec ausbildungssituation(AusbildungssituationDtoSpec ausbildungssituation) {
+  public DemoKindDtoSpec ausbildungssituation(@jakarta.annotation.Nonnull AusbildungssituationDtoSpec ausbildungssituation) {
     
     this.ausbildungssituation = ausbildungssituation;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungssituation
    * @return ausbildungssituation
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSITUATION)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSITUATION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungssituationDtoSpec getAusbildungssituation() {
@@ -232,25 +239,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSITUATION)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSITUATION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungssituation(AusbildungssituationDtoSpec ausbildungssituation) {
+  public void setAusbildungssituation(@jakarta.annotation.Nonnull AusbildungssituationDtoSpec ausbildungssituation) {
     this.ausbildungssituation = ausbildungssituation;
   }
 
-
-  public DemoKindDtoSpec unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+  public DemoKindDtoSpec unterhaltsbeitraege(@jakarta.annotation.Nonnull Integer unterhaltsbeitraege) {
     
     this.unterhaltsbeitraege = unterhaltsbeitraege;
     return this;
   }
 
-   /**
+  /**
    * Get unterhaltsbeitraege
    * @return unterhaltsbeitraege
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
+  @JsonProperty(value = JSON_PROPERTY_UNTERHALTSBEITRAEGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getUnterhaltsbeitraege() {
@@ -258,25 +264,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
+  @JsonProperty(value = JSON_PROPERTY_UNTERHALTSBEITRAEGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
+  public void setUnterhaltsbeitraege(@jakarta.annotation.Nonnull Integer unterhaltsbeitraege) {
     this.unterhaltsbeitraege = unterhaltsbeitraege;
   }
 
-
-  public DemoKindDtoSpec kinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
+  public DemoKindDtoSpec kinderUndAusbildungszulagen(@jakarta.annotation.Nonnull Integer kinderUndAusbildungszulagen) {
     
     this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
     return this;
   }
 
-   /**
+  /**
    * Get kinderUndAusbildungszulagen
    * @return kinderUndAusbildungszulagen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN)
+  @JsonProperty(value = JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getKinderUndAusbildungszulagen() {
@@ -284,25 +289,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN)
+  @JsonProperty(value = JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
+  public void setKinderUndAusbildungszulagen(@jakarta.annotation.Nonnull Integer kinderUndAusbildungszulagen) {
     this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
   }
 
-
-  public DemoKindDtoSpec renten(Integer renten) {
+  public DemoKindDtoSpec renten(@jakarta.annotation.Nonnull Integer renten) {
     
     this.renten = renten;
     return this;
   }
 
-   /**
+  /**
    * Get renten
    * @return renten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_RENTEN)
+  @JsonProperty(value = JSON_PROPERTY_RENTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getRenten() {
@@ -310,25 +314,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_RENTEN)
+  @JsonProperty(value = JSON_PROPERTY_RENTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setRenten(Integer renten) {
+  public void setRenten(@jakarta.annotation.Nonnull Integer renten) {
     this.renten = renten;
   }
 
-
-  public DemoKindDtoSpec ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+  public DemoKindDtoSpec ergaenzungsleistungen(@jakarta.annotation.Nonnull Integer ergaenzungsleistungen) {
     
     this.ergaenzungsleistungen = ergaenzungsleistungen;
     return this;
   }
 
-   /**
+  /**
    * Get ergaenzungsleistungen
    * @return ergaenzungsleistungen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getErgaenzungsleistungen() {
@@ -336,25 +339,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
+  public void setErgaenzungsleistungen(@jakarta.annotation.Nonnull Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
   }
 
-
-  public DemoKindDtoSpec betreuungskosten(Integer betreuungskosten) {
+  public DemoKindDtoSpec betreuungskosten(@jakarta.annotation.Nonnull Integer betreuungskosten) {
     
     this.betreuungskosten = betreuungskosten;
     return this;
   }
 
-   /**
+  /**
    * Get betreuungskosten
    * @return betreuungskosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_BETREUUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBetreuungskosten() {
@@ -362,25 +364,24 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_BETREUUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetreuungskosten(Integer betreuungskosten) {
+  public void setBetreuungskosten(@jakarta.annotation.Nonnull Integer betreuungskosten) {
     this.betreuungskosten = betreuungskosten;
   }
 
-
-  public DemoKindDtoSpec andereEinnahmen(Integer andereEinnahmen) {
+  public DemoKindDtoSpec andereEinnahmen(@jakarta.annotation.Nonnull Integer andereEinnahmen) {
     
     this.andereEinnahmen = andereEinnahmen;
     return this;
   }
 
-   /**
+  /**
    * Get andereEinnahmen
    * @return andereEinnahmen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonProperty(value = JSON_PROPERTY_ANDERE_EINNAHMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAndereEinnahmen() {
@@ -388,11 +389,12 @@ public class DemoKindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonProperty(value = JSON_PROPERTY_ANDERE_EINNAHMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAndereEinnahmen(Integer andereEinnahmen) {
+  public void setAndereEinnahmen(@jakarta.annotation.Nonnull Integer andereEinnahmen) {
     this.andereEinnahmen = andereEinnahmen;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -447,10 +449,7 @@ public class DemoKindDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

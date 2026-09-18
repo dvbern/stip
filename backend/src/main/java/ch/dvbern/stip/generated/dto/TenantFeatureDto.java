@@ -14,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("TenantFeature")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TenantFeatureDto  implements Serializable {
-  private @Valid Boolean enabled;
-  private @Valid ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType;
+  private Boolean enabled;
+  private ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType;
 
   protected TenantFeatureDto(TenantFeatureDtoBuilder<?, ?> b) {
     this.enabled = b.enabled;
@@ -38,13 +38,12 @@ public class TenantFeatureDto  implements Serializable {
   }
 
   
-  @JsonProperty("enabled")
-  @NotNull
-  public Boolean getEnabled() {
+  @JsonProperty(required = true, value = "enabled")
+  @NotNull public Boolean getEnabled() {
     return enabled;
   }
 
-  @JsonProperty("enabled")
+  @JsonProperty(required = true, value = "enabled")
   public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
@@ -102,10 +101,7 @@ public class TenantFeatureDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -143,4 +139,3 @@ public class TenantFeatureDto  implements Serializable {
     }
   }
 }
-

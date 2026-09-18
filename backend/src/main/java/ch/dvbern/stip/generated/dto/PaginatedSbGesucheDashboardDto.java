@@ -18,15 +18,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedSbGesucheDashboard")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedSbGesucheDashboardDto  implements Serializable {
-  private @Valid Integer page;
-  private @Valid Integer pageSize;
-  private @Valid Integer totalEntries;
-  private @Valid List<SbDashboardGesuchDto> entries;
+  private Integer page;
+  private Integer pageSize;
+  private Integer totalEntries;
+  private @Valid List<@Valid SbDashboardGesuchDto> entries = new ArrayList<>();
 
   protected PaginatedSbGesucheDashboardDto(PaginatedSbGesucheDashboardDtoBuilder<?, ?> b) {
     this.page = b.page;
@@ -94,19 +94,19 @@ public class PaginatedSbGesucheDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSbGesucheDashboardDto entries(List<SbDashboardGesuchDto> entries) {
+  public PaginatedSbGesucheDashboardDto entries(List<@Valid SbDashboardGesuchDto> entries) {
     this.entries = entries;
     return this;
   }
 
   
   @JsonProperty("entries")
-  public List<SbDashboardGesuchDto> getEntries() {
+  @Valid public List<@Valid SbDashboardGesuchDto> getEntries() {
     return entries;
   }
 
   @JsonProperty("entries")
-  public void setEntries(List<SbDashboardGesuchDto> entries) {
+  public void setEntries(List<@Valid SbDashboardGesuchDto> entries) {
     this.entries = entries;
   }
 
@@ -165,10 +165,7 @@ public class PaginatedSbGesucheDashboardDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -193,7 +190,7 @@ public class PaginatedSbGesucheDashboardDto  implements Serializable {
     private Integer page;
     private Integer pageSize;
     private Integer totalEntries;
-    private List<SbDashboardGesuchDto> entries;
+    private List<SbDashboardGesuchDto> entries = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -216,4 +213,3 @@ public class PaginatedSbGesucheDashboardDto  implements Serializable {
     }
   }
 }
-

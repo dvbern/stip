@@ -32,32 +32,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsjahrCreateDtoSpec.JSON_PROPERTY_TECHNISCHES_JAHR
 })
 @JsonTypeName("GesuchsjahrCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchsjahrCreateDtoSpec {
   public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  @jakarta.annotation.Nonnull
   private String bezeichnungDe;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  @jakarta.annotation.Nonnull
   private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_TECHNISCHES_JAHR = "technischesJahr";
+  @jakarta.annotation.Nonnull
   private Integer technischesJahr;
 
   public GesuchsjahrCreateDtoSpec() {
   }
 
-  public GesuchsjahrCreateDtoSpec bezeichnungDe(String bezeichnungDe) {
+  public GesuchsjahrCreateDtoSpec bezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungDe
    * @return bezeichnungDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungDe() {
@@ -65,25 +68,24 @@ public class GesuchsjahrCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
+  public void setBezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
 
-
-  public GesuchsjahrCreateDtoSpec bezeichnungFr(String bezeichnungFr) {
+  public GesuchsjahrCreateDtoSpec bezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungFr
    * @return bezeichnungFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungFr() {
@@ -91,25 +93,24 @@ public class GesuchsjahrCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
+  public void setBezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
 
-
-  public GesuchsjahrCreateDtoSpec technischesJahr(Integer technischesJahr) {
+  public GesuchsjahrCreateDtoSpec technischesJahr(@jakarta.annotation.Nonnull Integer technischesJahr) {
     
     this.technischesJahr = technischesJahr;
     return this;
   }
 
-   /**
+  /**
    * Get technischesJahr
    * @return technischesJahr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TECHNISCHES_JAHR)
+  @JsonProperty(value = JSON_PROPERTY_TECHNISCHES_JAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTechnischesJahr() {
@@ -117,11 +118,12 @@ public class GesuchsjahrCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TECHNISCHES_JAHR)
+  @JsonProperty(value = JSON_PROPERTY_TECHNISCHES_JAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTechnischesJahr(Integer technischesJahr) {
+  public void setTechnischesJahr(@jakarta.annotation.Nonnull Integer technischesJahr) {
     this.technischesJahr = technischesJahr;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -158,10 +160,7 @@ public class GesuchsjahrCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

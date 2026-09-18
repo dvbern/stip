@@ -17,23 +17,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GeschwisterUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GeschwisterUpdateDto  implements Serializable {
-  private @Valid UUID entryId;
-  private @Valid String vorname;
-  private @Valid LocalDate geburtsdatum;
-  private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
-  private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
-  private @Valid String nachname;
-  private @Valid ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
-  private @Valid UUID id;
-  private @Valid BigDecimal wohnsitzAnteilMutter;
-  private @Valid BigDecimal wohnsitzAnteilVater;
-  private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternteilPiaOfStiefHalbGeschwister;
-  private @Valid Boolean hidden;
+  private UUID entryId;
+  private String vorname;
+  private LocalDate geburtsdatum;
+  private ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
+  private ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+  private String nachname;
+  private ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
+  private UUID id;
+  private BigDecimal wohnsitzAnteilMutter;
+  private BigDecimal wohnsitzAnteilVater;
+  private ch.dvbern.stip.api.eltern.type.ElternTyp elternteilPiaOfStiefHalbGeschwister;
+  private Boolean hidden;
 
   protected GeschwisterUpdateDto(GeschwisterUpdateDtoBuilder<?, ?> b) {
     this.entryId = b.entryId;
@@ -61,13 +61,12 @@ public class GeschwisterUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("entryId")
-  @NotNull
-  public UUID getEntryId() {
+  @JsonProperty(required = true, value = "entryId")
+  @NotNull public UUID getEntryId() {
     return entryId;
   }
 
-  @JsonProperty("entryId")
+  @JsonProperty(required = true, value = "entryId")
   public void setEntryId(UUID entryId) {
     this.entryId = entryId;
   }
@@ -80,13 +79,12 @@ public class GeschwisterUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -100,13 +98,12 @@ public class GeschwisterUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
-  public LocalDate getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -119,13 +116,12 @@ public class GeschwisterUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnsitz")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.Wohnsitz getWohnsitz() {
+  @JsonProperty(required = true, value = "wohnsitz")
+  @NotNull public ch.dvbern.stip.api.common.type.Wohnsitz getWohnsitz() {
     return wohnsitz;
   }
 
-  @JsonProperty("wohnsitz")
+  @JsonProperty(required = true, value = "wohnsitz")
   public void setWohnsitz(ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz) {
     this.wohnsitz = wohnsitz;
   }
@@ -138,13 +134,12 @@ public class GeschwisterUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungssituation")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.Ausbildungssituation getAusbildungssituation() {
+  @JsonProperty(required = true, value = "ausbildungssituation")
+  @NotNull public ch.dvbern.stip.api.common.type.Ausbildungssituation getAusbildungssituation() {
     return ausbildungssituation;
   }
 
-  @JsonProperty("ausbildungssituation")
+  @JsonProperty(required = true, value = "ausbildungssituation")
   public void setAusbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
     this.ausbildungssituation = ausbildungssituation;
   }
@@ -157,13 +152,12 @@ public class GeschwisterUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -176,13 +170,12 @@ public class GeschwisterUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("geschwisterTyp")
-  @NotNull
-  public ch.dvbern.stip.api.geschwister.type.GeschwisterTyp getGeschwisterTyp() {
+  @JsonProperty(required = true, value = "geschwisterTyp")
+  @NotNull public ch.dvbern.stip.api.geschwister.type.GeschwisterTyp getGeschwisterTyp() {
     return geschwisterTyp;
   }
 
-  @JsonProperty("geschwisterTyp")
+  @JsonProperty(required = true, value = "geschwisterTyp")
   public void setGeschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
     this.geschwisterTyp = geschwisterTyp;
   }
@@ -215,7 +208,7 @@ public class GeschwisterUpdateDto  implements Serializable {
 
   
   @JsonProperty("wohnsitzAnteilMutter")
-  public BigDecimal getWohnsitzAnteilMutter() {
+  @Valid public BigDecimal getWohnsitzAnteilMutter() {
     return wohnsitzAnteilMutter;
   }
 
@@ -234,7 +227,7 @@ public class GeschwisterUpdateDto  implements Serializable {
 
   
   @JsonProperty("wohnsitzAnteilVater")
-  public BigDecimal getWohnsitzAnteilVater() {
+  @Valid public BigDecimal getWohnsitzAnteilVater() {
     return wohnsitzAnteilVater;
   }
 
@@ -334,10 +327,7 @@ public class GeschwisterUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -425,4 +415,3 @@ public class GeschwisterUpdateDto  implements Serializable {
     }
   }
 }
-

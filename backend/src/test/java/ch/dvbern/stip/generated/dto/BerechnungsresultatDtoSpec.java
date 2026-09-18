@@ -46,62 +46,75 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BerechnungsresultatDtoSpec.JSON_PROPERTY_MONATE_MIT_DARLEHEN
 })
 @JsonTypeName("Berechnungsresultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_YEAR = "year";
+  @jakarta.annotation.Nonnull
   private Integer year;
 
   public static final String JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG = "berechnungVorKuerzungUndTeilung";
+  @jakarta.annotation.Nonnull
   private Integer berechnungVorKuerzungUndTeilung;
 
   public static final String JSON_PROPERTY_UNGEKUERZT_STIPENDIEN = "ungekuerztStipendien";
+  @jakarta.annotation.Nullable
   private Integer ungekuerztStipendien;
 
   public static final String JSON_PROPERTY_UNGEKUERZT_DARLEHEN = "ungekuerztDarlehen";
+  @jakarta.annotation.Nullable
   private Integer ungekuerztDarlehen;
 
   public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST = "totalNachKuerzungNachEinreichefrist";
+  @jakarta.annotation.Nullable
   private Integer totalNachKuerzungNachEinreichefrist;
 
   public static final String JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST = "anzahlMonateEinreichefrist";
+  @jakarta.annotation.Nullable
   private Integer anzahlMonateEinreichefrist;
 
   public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH = "totalNachKuerzungUnterbruch";
+  @jakarta.annotation.Nullable
   private Integer totalNachKuerzungUnterbruch;
 
   public static final String JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH = "anzahlMonateUnterbruch";
+  @jakarta.annotation.Nullable
   private Integer anzahlMonateUnterbruch;
 
   public static final String JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN = "berechnungVorTeilungDarlehen";
+  @jakarta.annotation.Nonnull
   private Integer berechnungVorTeilungDarlehen;
 
   public static final String JSON_PROPERTY_BERECHNUNG_STIPENDIUM = "berechnungStipendium";
+  @jakarta.annotation.Nonnull
   private Integer berechnungStipendium;
 
   public static final String JSON_PROPERTY_BERECHNUNG_DARLEHEN = "berechnungDarlehen";
+  @jakarta.annotation.Nullable
   private Integer berechnungDarlehen;
 
   public static final String JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE = "tranchenBerechnungsresultate";
+  @jakarta.annotation.Nonnull
   private List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate;
 
   public static final String JSON_PROPERTY_MONATE_MIT_DARLEHEN = "monateMitDarlehen";
+  @jakarta.annotation.Nonnull
   private Integer monateMitDarlehen;
 
   public BerechnungsresultatDtoSpec() {
   }
 
-  public BerechnungsresultatDtoSpec year(Integer year) {
+  public BerechnungsresultatDtoSpec year(@jakarta.annotation.Nonnull Integer year) {
     
     this.year = year;
     return this;
   }
 
-   /**
+  /**
    * Get year
    * @return year
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_YEAR)
+  @JsonProperty(value = JSON_PROPERTY_YEAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getYear() {
@@ -109,25 +122,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_YEAR)
+  @JsonProperty(value = JSON_PROPERTY_YEAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setYear(Integer year) {
+  public void setYear(@jakarta.annotation.Nonnull Integer year) {
     this.year = year;
   }
 
-
-  public BerechnungsresultatDtoSpec berechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
+  public BerechnungsresultatDtoSpec berechnungVorKuerzungUndTeilung(@jakarta.annotation.Nonnull Integer berechnungVorKuerzungUndTeilung) {
     
     this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
     return this;
   }
 
-   /**
+  /**
    * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen und Teilung des Gesetzlichen Darlehens
    * @return berechnungVorKuerzungUndTeilung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBerechnungVorKuerzungUndTeilung() {
@@ -135,25 +147,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
+  public void setBerechnungVorKuerzungUndTeilung(@jakarta.annotation.Nonnull Integer berechnungVorKuerzungUndTeilung) {
     this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
   }
 
-
-  public BerechnungsresultatDtoSpec ungekuerztStipendien(Integer ungekuerztStipendien) {
+  public BerechnungsresultatDtoSpec ungekuerztStipendien(@jakarta.annotation.Nullable Integer ungekuerztStipendien) {
     
     this.ungekuerztStipendien = ungekuerztStipendien;
     return this;
   }
 
-   /**
+  /**
    * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen abzüglich des Darlehens (wird nur für Vergleiche und debugging verwendet)
    * @return ungekuerztStipendien
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_STIPENDIEN)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_STIPENDIEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getUngekuerztStipendien() {
@@ -161,25 +172,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_STIPENDIEN)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_STIPENDIEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUngekuerztStipendien(Integer ungekuerztStipendien) {
+  public void setUngekuerztStipendien(@jakarta.annotation.Nullable Integer ungekuerztStipendien) {
     this.ungekuerztStipendien = ungekuerztStipendien;
   }
 
-
-  public BerechnungsresultatDtoSpec ungekuerztDarlehen(Integer ungekuerztDarlehen) {
+  public BerechnungsresultatDtoSpec ungekuerztDarlehen(@jakarta.annotation.Nullable Integer ungekuerztDarlehen) {
     
     this.ungekuerztDarlehen = ungekuerztDarlehen;
     return this;
   }
 
-   /**
+  /**
    * Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen (wird nur für Vergleiche und debugging verwendet)
    * @return ungekuerztDarlehen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_DARLEHEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getUngekuerztDarlehen() {
@@ -187,25 +197,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_DARLEHEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUngekuerztDarlehen(Integer ungekuerztDarlehen) {
+  public void setUngekuerztDarlehen(@jakarta.annotation.Nullable Integer ungekuerztDarlehen) {
     this.ungekuerztDarlehen = ungekuerztDarlehen;
   }
 
-
-  public BerechnungsresultatDtoSpec totalNachKuerzungNachEinreichefrist(Integer totalNachKuerzungNachEinreichefrist) {
+  public BerechnungsresultatDtoSpec totalNachKuerzungNachEinreichefrist(@jakarta.annotation.Nullable Integer totalNachKuerzungNachEinreichefrist) {
     
     this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
     return this;
   }
 
-   /**
+  /**
    * Die Summe nach der Kürzung der verspäteten Eingabe
    * @return totalNachKuerzungNachEinreichefrist
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getTotalNachKuerzungNachEinreichefrist() {
@@ -213,25 +222,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTotalNachKuerzungNachEinreichefrist(Integer totalNachKuerzungNachEinreichefrist) {
+  public void setTotalNachKuerzungNachEinreichefrist(@jakarta.annotation.Nullable Integer totalNachKuerzungNachEinreichefrist) {
     this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
   }
 
-
-  public BerechnungsresultatDtoSpec anzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
+  public BerechnungsresultatDtoSpec anzahlMonateEinreichefrist(@jakarta.annotation.Nullable Integer anzahlMonateEinreichefrist) {
     
     this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
     return this;
   }
 
-   /**
+  /**
    * Die Anzahl Monate der verspäteten Eingabe
    * @return anzahlMonateEinreichefrist
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getAnzahlMonateEinreichefrist() {
@@ -239,25 +247,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAnzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
+  public void setAnzahlMonateEinreichefrist(@jakarta.annotation.Nullable Integer anzahlMonateEinreichefrist) {
     this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
   }
 
-
-  public BerechnungsresultatDtoSpec totalNachKuerzungUnterbruch(Integer totalNachKuerzungUnterbruch) {
+  public BerechnungsresultatDtoSpec totalNachKuerzungUnterbruch(@jakarta.annotation.Nullable Integer totalNachKuerzungUnterbruch) {
     
     this.totalNachKuerzungUnterbruch = totalNachKuerzungUnterbruch;
     return this;
   }
 
-   /**
+  /**
    * Die Summe nach der Kürzung des Unterbruchs der Ausbildung
    * @return totalNachKuerzungUnterbruch
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getTotalNachKuerzungUnterbruch() {
@@ -265,25 +272,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTotalNachKuerzungUnterbruch(Integer totalNachKuerzungUnterbruch) {
+  public void setTotalNachKuerzungUnterbruch(@jakarta.annotation.Nullable Integer totalNachKuerzungUnterbruch) {
     this.totalNachKuerzungUnterbruch = totalNachKuerzungUnterbruch;
   }
 
-
-  public BerechnungsresultatDtoSpec anzahlMonateUnterbruch(Integer anzahlMonateUnterbruch) {
+  public BerechnungsresultatDtoSpec anzahlMonateUnterbruch(@jakarta.annotation.Nullable Integer anzahlMonateUnterbruch) {
     
     this.anzahlMonateUnterbruch = anzahlMonateUnterbruch;
     return this;
   }
 
-   /**
+  /**
    * Die Anzahl Monate von dem Unterbruch der Ausbildung
    * @return anzahlMonateUnterbruch
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getAnzahlMonateUnterbruch() {
@@ -291,25 +297,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAnzahlMonateUnterbruch(Integer anzahlMonateUnterbruch) {
+  public void setAnzahlMonateUnterbruch(@jakarta.annotation.Nullable Integer anzahlMonateUnterbruch) {
     this.anzahlMonateUnterbruch = anzahlMonateUnterbruch;
   }
 
-
-  public BerechnungsresultatDtoSpec berechnungVorTeilungDarlehen(Integer berechnungVorTeilungDarlehen) {
+  public BerechnungsresultatDtoSpec berechnungVorTeilungDarlehen(@jakarta.annotation.Nonnull Integer berechnungVorTeilungDarlehen) {
     
     this.berechnungVorTeilungDarlehen = berechnungVorTeilungDarlehen;
     return this;
   }
 
-   /**
+  /**
    * berechneter stipendienbetrag vor der Teilung in darlehen und stipendium
    * @return berechnungVorTeilungDarlehen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBerechnungVorTeilungDarlehen() {
@@ -317,25 +322,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungVorTeilungDarlehen(Integer berechnungVorTeilungDarlehen) {
+  public void setBerechnungVorTeilungDarlehen(@jakarta.annotation.Nonnull Integer berechnungVorTeilungDarlehen) {
     this.berechnungVorTeilungDarlehen = berechnungVorTeilungDarlehen;
   }
 
-
-  public BerechnungsresultatDtoSpec berechnungStipendium(Integer berechnungStipendium) {
+  public BerechnungsresultatDtoSpec berechnungStipendium(@jakarta.annotation.Nonnull Integer berechnungStipendium) {
     
     this.berechnungStipendium = berechnungStipendium;
     return this;
   }
 
-   /**
+  /**
    * Berechneter Stpendiumsanspruch für das Gesuch
    * @return berechnungStipendium
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_STIPENDIUM)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_STIPENDIUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBerechnungStipendium() {
@@ -343,25 +347,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_STIPENDIUM)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_STIPENDIUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungStipendium(Integer berechnungStipendium) {
+  public void setBerechnungStipendium(@jakarta.annotation.Nonnull Integer berechnungStipendium) {
     this.berechnungStipendium = berechnungStipendium;
   }
 
-
-  public BerechnungsresultatDtoSpec berechnungDarlehen(Integer berechnungDarlehen) {
+  public BerechnungsresultatDtoSpec berechnungDarlehen(@jakarta.annotation.Nullable Integer berechnungDarlehen) {
     
     this.berechnungDarlehen = berechnungDarlehen;
     return this;
   }
 
-   /**
+  /**
    * Berechneter Darlehensanspruch für das Gesuch
    * @return berechnungDarlehen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_DARLEHEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getBerechnungDarlehen() {
@@ -369,14 +372,13 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_DARLEHEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBerechnungDarlehen(Integer berechnungDarlehen) {
+  public void setBerechnungDarlehen(@jakarta.annotation.Nullable Integer berechnungDarlehen) {
     this.berechnungDarlehen = berechnungDarlehen;
   }
 
-
-  public BerechnungsresultatDtoSpec tranchenBerechnungsresultate(List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate) {
+  public BerechnungsresultatDtoSpec tranchenBerechnungsresultate(@jakarta.annotation.Nonnull List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate) {
     
     this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
     return this;
@@ -390,12 +392,12 @@ public class BerechnungsresultatDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Resultate der Berechnung für die Tranchen des Gesuchs
    * @return tranchenBerechnungsresultate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE)
+  @JsonProperty(value = JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<TranchenBerechnungsresultatDtoSpec> getTranchenBerechnungsresultate() {
@@ -403,25 +405,24 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE)
+  @JsonProperty(value = JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTranchenBerechnungsresultate(List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate) {
+  public void setTranchenBerechnungsresultate(@jakarta.annotation.Nonnull List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate) {
     this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
   }
 
-
-  public BerechnungsresultatDtoSpec monateMitDarlehen(Integer monateMitDarlehen) {
+  public BerechnungsresultatDtoSpec monateMitDarlehen(@jakarta.annotation.Nonnull Integer monateMitDarlehen) {
     
     this.monateMitDarlehen = monateMitDarlehen;
     return this;
   }
 
-   /**
+  /**
    * Die anzahl monate die das Gesuch 36 Monate in Tertiaerausbildung uberschreitet
    * @return monateMitDarlehen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MONATE_MIT_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_MONATE_MIT_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getMonateMitDarlehen() {
@@ -429,11 +430,12 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MONATE_MIT_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_MONATE_MIT_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMonateMitDarlehen(Integer monateMitDarlehen) {
+  public void setMonateMitDarlehen(@jakarta.annotation.Nonnull Integer monateMitDarlehen) {
     this.monateMitDarlehen = monateMitDarlehen;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -490,10 +492,7 @@ public class BerechnungsresultatDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

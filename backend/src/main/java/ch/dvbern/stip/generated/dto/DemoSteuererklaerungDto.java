@@ -14,18 +14,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoSteuererklaerung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoSteuererklaerungDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
-  private @Valid Boolean steuererklaerungInBern;
-  private @Valid Integer unterhaltsbeitraege;
-  private @Valid Integer renten;
-  private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer einnahmenBGSA;
-  private @Valid Integer andereEinnahmen;
+  private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
+  private Boolean steuererklaerungInBern;
+  private Integer unterhaltsbeitraege;
+  private Integer renten;
+  private Integer ergaenzungsleistungen;
+  private Integer einnahmenBGSA;
+  private Integer andereEinnahmen;
 
   protected DemoSteuererklaerungDto(DemoSteuererklaerungDtoBuilder<?, ?> b) {
     this.type = b.type;
@@ -48,13 +48,12 @@ public class DemoSteuererklaerungDto  implements Serializable {
   }
 
   
-  @JsonProperty("type")
-  @NotNull
-  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getType() {
+  @JsonProperty(required = true, value = "type")
+  @NotNull public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getType() {
     return type;
   }
 
-  @JsonProperty("type")
+  @JsonProperty(required = true, value = "type")
   public void setType(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type) {
     this.type = type;
   }
@@ -67,13 +66,12 @@ public class DemoSteuererklaerungDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuererklaerungInBern")
-  @NotNull
-  public Boolean getSteuererklaerungInBern() {
+  @JsonProperty(required = true, value = "steuererklaerungInBern")
+  @NotNull public Boolean getSteuererklaerungInBern() {
     return steuererklaerungInBern;
   }
 
-  @JsonProperty("steuererklaerungInBern")
+  @JsonProperty(required = true, value = "steuererklaerungInBern")
   public void setSteuererklaerungInBern(Boolean steuererklaerungInBern) {
     this.steuererklaerungInBern = steuererklaerungInBern;
   }
@@ -86,13 +84,12 @@ public class DemoSteuererklaerungDto  implements Serializable {
   }
 
   
-  @JsonProperty("unterhaltsbeitraege")
-  @NotNull
-  public Integer getUnterhaltsbeitraege() {
+  @JsonProperty(required = true, value = "unterhaltsbeitraege")
+  @NotNull public Integer getUnterhaltsbeitraege() {
     return unterhaltsbeitraege;
   }
 
-  @JsonProperty("unterhaltsbeitraege")
+  @JsonProperty(required = true, value = "unterhaltsbeitraege")
   public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
     this.unterhaltsbeitraege = unterhaltsbeitraege;
   }
@@ -105,13 +102,12 @@ public class DemoSteuererklaerungDto  implements Serializable {
   }
 
   
-  @JsonProperty("renten")
-  @NotNull
-  public Integer getRenten() {
+  @JsonProperty(required = true, value = "renten")
+  @NotNull public Integer getRenten() {
     return renten;
   }
 
-  @JsonProperty("renten")
+  @JsonProperty(required = true, value = "renten")
   public void setRenten(Integer renten) {
     this.renten = renten;
   }
@@ -124,13 +120,12 @@ public class DemoSteuererklaerungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ergaenzungsleistungen")
-  @NotNull
-  public Integer getErgaenzungsleistungen() {
+  @JsonProperty(required = true, value = "ergaenzungsleistungen")
+  @NotNull public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
   }
 
-  @JsonProperty("ergaenzungsleistungen")
+  @JsonProperty(required = true, value = "ergaenzungsleistungen")
   public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
   }
@@ -143,13 +138,12 @@ public class DemoSteuererklaerungDto  implements Serializable {
   }
 
   
-  @JsonProperty("einnahmenBGSA")
-  @NotNull
-  public Integer getEinnahmenBGSA() {
+  @JsonProperty(required = true, value = "einnahmenBGSA")
+  @NotNull public Integer getEinnahmenBGSA() {
     return einnahmenBGSA;
   }
 
-  @JsonProperty("einnahmenBGSA")
+  @JsonProperty(required = true, value = "einnahmenBGSA")
   public void setEinnahmenBGSA(Integer einnahmenBGSA) {
     this.einnahmenBGSA = einnahmenBGSA;
   }
@@ -162,13 +156,12 @@ public class DemoSteuererklaerungDto  implements Serializable {
   }
 
   
-  @JsonProperty("andereEinnahmen")
-  @NotNull
-  public Integer getAndereEinnahmen() {
+  @JsonProperty(required = true, value = "andereEinnahmen")
+  @NotNull public Integer getAndereEinnahmen() {
     return andereEinnahmen;
   }
 
-  @JsonProperty("andereEinnahmen")
+  @JsonProperty(required = true, value = "andereEinnahmen")
   public void setAndereEinnahmen(Integer andereEinnahmen) {
     this.andereEinnahmen = andereEinnahmen;
   }
@@ -218,10 +211,7 @@ public class DemoSteuererklaerungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -284,4 +274,3 @@ public class DemoSteuererklaerungDto  implements Serializable {
     }
   }
 }
-

@@ -14,15 +14,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsstaetteCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsstaetteCreateDto  implements Serializable {
-  private @Valid String nameDe;
-  private @Valid String nameFr;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
-  private @Valid String nummer;
+  private String nameDe;
+  private String nameFr;
+  private ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
+  private String nummer;
 
   protected AusbildungsstaetteCreateDto(AusbildungsstaetteCreateDtoBuilder<?, ?> b) {
     this.nameDe = b.nameDe;
@@ -42,13 +42,12 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nameDe")
-  @NotNull
-  public String getNameDe() {
+  @JsonProperty(required = true, value = "nameDe")
+  @NotNull public String getNameDe() {
     return nameDe;
   }
 
-  @JsonProperty("nameDe")
+  @JsonProperty(required = true, value = "nameDe")
   public void setNameDe(String nameDe) {
     this.nameDe = nameDe;
   }
@@ -61,13 +60,12 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nameFr")
-  @NotNull
-  public String getNameFr() {
+  @JsonProperty(required = true, value = "nameFr")
+  @NotNull public String getNameFr() {
     return nameFr;
   }
 
-  @JsonProperty("nameFr")
+  @JsonProperty(required = true, value = "nameFr")
   public void setNameFr(String nameFr) {
     this.nameFr = nameFr;
   }
@@ -80,13 +78,12 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nummerTyp")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp getNummerTyp() {
+  @JsonProperty(required = true, value = "nummerTyp")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp getNummerTyp() {
     return nummerTyp;
   }
 
-  @JsonProperty("nummerTyp")
+  @JsonProperty(required = true, value = "nummerTyp")
   public void setNummerTyp(ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp) {
     this.nummerTyp = nummerTyp;
   }
@@ -148,10 +145,7 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -199,4 +193,3 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     }
   }
 }
-

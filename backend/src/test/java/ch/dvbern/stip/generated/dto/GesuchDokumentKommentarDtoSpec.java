@@ -36,38 +36,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDokumentKommentarDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
 })
 @JsonTypeName("GesuchDokumentKommentar")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchDokumentKommentarDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_GESUCH_DOKUMENT_ID = "gesuchDokumentId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchDokumentId;
 
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  @jakarta.annotation.Nullable
   private String kommentar;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "user_erstellt";
+  @jakarta.annotation.Nullable
   private String userErstellt;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nullable
   private LocalDate timestampErstellt;
 
   public GesuchDokumentKommentarDtoSpec() {
   }
 
-  public GesuchDokumentKommentarDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public GesuchDokumentKommentarDtoSpec gesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheId
    * @return gesuchTrancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchTrancheId() {
@@ -75,25 +80,24 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+  public void setGesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
 
-
-  public GesuchDokumentKommentarDtoSpec gesuchDokumentId(UUID gesuchDokumentId) {
+  public GesuchDokumentKommentarDtoSpec gesuchDokumentId(@jakarta.annotation.Nonnull UUID gesuchDokumentId) {
     
     this.gesuchDokumentId = gesuchDokumentId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchDokumentId
    * @return gesuchDokumentId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_DOKUMENT_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_DOKUMENT_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchDokumentId() {
@@ -101,25 +105,24 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_DOKUMENT_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_DOKUMENT_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchDokumentId(UUID gesuchDokumentId) {
+  public void setGesuchDokumentId(@jakarta.annotation.Nonnull UUID gesuchDokumentId) {
     this.gesuchDokumentId = gesuchDokumentId;
   }
 
-
-  public GesuchDokumentKommentarDtoSpec kommentar(String kommentar) {
+  public GesuchDokumentKommentarDtoSpec kommentar(@jakarta.annotation.Nullable String kommentar) {
     
     this.kommentar = kommentar;
     return this;
   }
 
-   /**
+  /**
    * Get kommentar
    * @return kommentar
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getKommentar() {
@@ -127,25 +130,24 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setKommentar(String kommentar) {
+  public void setKommentar(@jakarta.annotation.Nullable String kommentar) {
     this.kommentar = kommentar;
   }
 
-
-  public GesuchDokumentKommentarDtoSpec userErstellt(String userErstellt) {
+  public GesuchDokumentKommentarDtoSpec userErstellt(@jakarta.annotation.Nullable String userErstellt) {
     
     this.userErstellt = userErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get userErstellt
    * @return userErstellt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getUserErstellt() {
@@ -153,25 +155,24 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUserErstellt(String userErstellt) {
+  public void setUserErstellt(@jakarta.annotation.Nullable String userErstellt) {
     this.userErstellt = userErstellt;
   }
 
-
-  public GesuchDokumentKommentarDtoSpec timestampErstellt(LocalDate timestampErstellt) {
+  public GesuchDokumentKommentarDtoSpec timestampErstellt(@jakarta.annotation.Nullable LocalDate timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getTimestampErstellt() {
@@ -179,11 +180,12 @@ public class GesuchDokumentKommentarDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nullable LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -224,10 +226,7 @@ public class GesuchDokumentKommentarDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

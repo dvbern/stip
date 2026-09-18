@@ -16,17 +16,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("StatusprotokollEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class StatusprotokollEntryDto  implements Serializable {
-  private @Valid java.time.LocalDateTime timestamp;
-  private @Valid String statusTo;
-  private @Valid ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp typ;
-  private @Valid String benutzer;
-  private @Valid String kommentar;
-  private @Valid String statusFrom;
+  private java.time.LocalDateTime timestamp;
+  private String statusTo;
+  private ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp typ;
+  private String benutzer;
+  private String kommentar;
+  private String statusFrom;
 
   protected StatusprotokollEntryDto(StatusprotokollEntryDtoBuilder<?, ?> b) {
     this.timestamp = b.timestamp;
@@ -49,13 +49,12 @@ public class StatusprotokollEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestamp")
-  @NotNull
-  public java.time.LocalDateTime getTimestamp() {
+  @JsonProperty(required = true, value = "timestamp")
+  @NotNull public java.time.LocalDateTime getTimestamp() {
     return timestamp;
   }
 
-  @JsonProperty("timestamp")
+  @JsonProperty(required = true, value = "timestamp")
   public void setTimestamp(java.time.LocalDateTime timestamp) {
     this.timestamp = timestamp;
   }
@@ -68,13 +67,12 @@ public class StatusprotokollEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("statusTo")
-  @NotNull
-  public String getStatusTo() {
+  @JsonProperty(required = true, value = "statusTo")
+  @NotNull public String getStatusTo() {
     return statusTo;
   }
 
-  @JsonProperty("statusTo")
+  @JsonProperty(required = true, value = "statusTo")
   public void setStatusTo(String statusTo) {
     this.statusTo = statusTo;
   }
@@ -87,13 +85,12 @@ public class StatusprotokollEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("typ")
-  @NotNull
-  public ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp getTyp() {
+  @JsonProperty(required = true, value = "typ")
+  @NotNull public ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp getTyp() {
     return typ;
   }
 
-  @JsonProperty("typ")
+  @JsonProperty(required = true, value = "typ")
   public void setTyp(ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp typ) {
     this.typ = typ;
   }
@@ -107,13 +104,12 @@ public class StatusprotokollEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("benutzer")
-  @NotNull
-  public String getBenutzer() {
+  @JsonProperty(required = true, value = "benutzer")
+  @NotNull public String getBenutzer() {
     return benutzer;
   }
 
-  @JsonProperty("benutzer")
+  @JsonProperty(required = true, value = "benutzer")
   public void setBenutzer(String benutzer) {
     this.benutzer = benutzer;
   }
@@ -127,13 +123,12 @@ public class StatusprotokollEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentar")
-  @NotNull
-  public String getKommentar() {
+  @JsonProperty(required = true, value = "kommentar")
+  @NotNull public String getKommentar() {
     return kommentar;
   }
 
-  @JsonProperty("kommentar")
+  @JsonProperty(required = true, value = "kommentar")
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -199,10 +194,7 @@ public class StatusprotokollEntryDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -260,4 +252,3 @@ public class StatusprotokollEntryDto  implements Serializable {
     }
   }
 }
-

@@ -37,41 +37,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoLebenslaufAusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN
 })
 @JsonTypeName("DemoLebenslaufAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoLebenslaufAusbildungDtoSpec {
   public static final String JSON_PROPERTY_ABSCHLUSS = "abschluss";
+  @jakarta.annotation.Nonnull
   private String abschluss;
 
   public static final String JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG = "berufsbezeichnungFachrichtung";
+  @jakarta.annotation.Nullable
   private String berufsbezeichnungFachrichtung;
 
   public static final String JSON_PROPERTY_VON = "von";
+  @jakarta.annotation.Nonnull
   private LocalDate von;
 
   public static final String JSON_PROPERTY_BIS = "bis";
+  @jakarta.annotation.Nonnull
   private LocalDate bis;
 
   public static final String JSON_PROPERTY_WOHNSITZ = "wohnsitz";
+  @jakarta.annotation.Nonnull
   private WohnsitzKantonDtoSpec wohnsitz;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN = "ausbildungAbgeschlossen";
+  @jakarta.annotation.Nonnull
   private Boolean ausbildungAbgeschlossen;
 
   public DemoLebenslaufAusbildungDtoSpec() {
   }
 
-  public DemoLebenslaufAusbildungDtoSpec abschluss(String abschluss) {
+  public DemoLebenslaufAusbildungDtoSpec abschluss(@jakarta.annotation.Nonnull String abschluss) {
     
     this.abschluss = abschluss;
     return this;
   }
 
-   /**
+  /**
    * Get abschluss
    * @return abschluss
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ABSCHLUSS)
+  @JsonProperty(value = JSON_PROPERTY_ABSCHLUSS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAbschluss() {
@@ -79,25 +85,24 @@ public class DemoLebenslaufAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ABSCHLUSS)
+  @JsonProperty(value = JSON_PROPERTY_ABSCHLUSS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAbschluss(String abschluss) {
+  public void setAbschluss(@jakarta.annotation.Nonnull String abschluss) {
     this.abschluss = abschluss;
   }
 
-
-  public DemoLebenslaufAusbildungDtoSpec berufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+  public DemoLebenslaufAusbildungDtoSpec berufsbezeichnungFachrichtung(@jakarta.annotation.Nullable String berufsbezeichnungFachrichtung) {
     
     this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
     return this;
   }
 
-   /**
+  /**
    * Get berufsbezeichnungFachrichtung
    * @return berufsbezeichnungFachrichtung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getBerufsbezeichnungFachrichtung() {
@@ -105,25 +110,24 @@ public class DemoLebenslaufAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBerufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+  public void setBerufsbezeichnungFachrichtung(@jakarta.annotation.Nullable String berufsbezeichnungFachrichtung) {
     this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
   }
 
-
-  public DemoLebenslaufAusbildungDtoSpec von(LocalDate von) {
+  public DemoLebenslaufAusbildungDtoSpec von(@jakarta.annotation.Nonnull LocalDate von) {
     
     this.von = von;
     return this;
   }
 
-   /**
+  /**
    * Get von
    * @return von
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VON)
+  @JsonProperty(value = JSON_PROPERTY_VON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getVon() {
@@ -131,25 +135,24 @@ public class DemoLebenslaufAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VON)
+  @JsonProperty(value = JSON_PROPERTY_VON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVon(LocalDate von) {
+  public void setVon(@jakarta.annotation.Nonnull LocalDate von) {
     this.von = von;
   }
 
-
-  public DemoLebenslaufAusbildungDtoSpec bis(LocalDate bis) {
+  public DemoLebenslaufAusbildungDtoSpec bis(@jakarta.annotation.Nonnull LocalDate bis) {
     
     this.bis = bis;
     return this;
   }
 
-   /**
+  /**
    * Get bis
    * @return bis
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BIS)
+  @JsonProperty(value = JSON_PROPERTY_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getBis() {
@@ -157,25 +160,24 @@ public class DemoLebenslaufAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BIS)
+  @JsonProperty(value = JSON_PROPERTY_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBis(LocalDate bis) {
+  public void setBis(@jakarta.annotation.Nonnull LocalDate bis) {
     this.bis = bis;
   }
 
-
-  public DemoLebenslaufAusbildungDtoSpec wohnsitz(WohnsitzKantonDtoSpec wohnsitz) {
+  public DemoLebenslaufAusbildungDtoSpec wohnsitz(@jakarta.annotation.Nonnull WohnsitzKantonDtoSpec wohnsitz) {
     
     this.wohnsitz = wohnsitz;
     return this;
   }
 
-   /**
+  /**
    * Get wohnsitz
    * @return wohnsitz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public WohnsitzKantonDtoSpec getWohnsitz() {
@@ -183,25 +185,24 @@ public class DemoLebenslaufAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitz(WohnsitzKantonDtoSpec wohnsitz) {
+  public void setWohnsitz(@jakarta.annotation.Nonnull WohnsitzKantonDtoSpec wohnsitz) {
     this.wohnsitz = wohnsitz;
   }
 
-
-  public DemoLebenslaufAusbildungDtoSpec ausbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
+  public DemoLebenslaufAusbildungDtoSpec ausbildungAbgeschlossen(@jakarta.annotation.Nonnull Boolean ausbildungAbgeschlossen) {
     
     this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungAbgeschlossen
    * @return ausbildungAbgeschlossen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAusbildungAbgeschlossen() {
@@ -209,11 +210,12 @@ public class DemoLebenslaufAusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
+  public void setAusbildungAbgeschlossen(@jakarta.annotation.Nonnull Boolean ausbildungAbgeschlossen) {
     this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -256,10 +258,7 @@ public class DemoLebenslaufAusbildungDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

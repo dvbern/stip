@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   NachfristAendernRequestDtoSpec.JSON_PROPERTY_NEW_NACHFRIST
 })
 @JsonTypeName("NachfristAendernRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class NachfristAendernRequestDtoSpec {
   public static final String JSON_PROPERTY_NEW_NACHFRIST = "newNachfrist";
+  @jakarta.annotation.Nonnull
   private LocalDate newNachfrist;
 
   public NachfristAendernRequestDtoSpec() {
   }
 
-  public NachfristAendernRequestDtoSpec newNachfrist(LocalDate newNachfrist) {
+  public NachfristAendernRequestDtoSpec newNachfrist(@jakarta.annotation.Nonnull LocalDate newNachfrist) {
     
     this.newNachfrist = newNachfrist;
     return this;
   }
 
-   /**
+  /**
    * Get newNachfrist
    * @return newNachfrist
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NEW_NACHFRIST)
+  @JsonProperty(value = JSON_PROPERTY_NEW_NACHFRIST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getNewNachfrist() {
@@ -58,11 +59,12 @@ public class NachfristAendernRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NEW_NACHFRIST)
+  @JsonProperty(value = JSON_PROPERTY_NEW_NACHFRIST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNewNachfrist(LocalDate newNachfrist) {
+  public void setNewNachfrist(@jakarta.annotation.Nonnull LocalDate newNachfrist) {
     this.newNachfrist = newNachfrist;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class NachfristAendernRequestDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

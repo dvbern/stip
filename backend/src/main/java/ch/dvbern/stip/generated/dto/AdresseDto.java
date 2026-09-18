@@ -15,18 +15,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Adresse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AdresseDto  implements Serializable {
-  private @Valid UUID landId;
-  private @Valid String strasse;
-  private @Valid String plz;
-  private @Valid String ort;
-  private @Valid UUID id;
-  private @Valid String coAdresse;
-  private @Valid String hausnummer;
+  private UUID landId;
+  private String strasse;
+  private String plz;
+  private String ort;
+  private UUID id;
+  private String coAdresse;
+  private String hausnummer;
 
   protected AdresseDto(AdresseDtoBuilder<?, ?> b) {
     this.landId = b.landId;
@@ -49,13 +49,12 @@ public class AdresseDto  implements Serializable {
   }
 
   
-  @JsonProperty("landId")
-  @NotNull
-  public UUID getLandId() {
+  @JsonProperty(required = true, value = "landId")
+  @NotNull public UUID getLandId() {
     return landId;
   }
 
-  @JsonProperty("landId")
+  @JsonProperty(required = true, value = "landId")
   public void setLandId(UUID landId) {
     this.landId = landId;
   }
@@ -68,13 +67,12 @@ public class AdresseDto  implements Serializable {
   }
 
   
-  @JsonProperty("strasse")
-  @NotNull
-  public String getStrasse() {
+  @JsonProperty(required = true, value = "strasse")
+  @NotNull public String getStrasse() {
     return strasse;
   }
 
-  @JsonProperty("strasse")
+  @JsonProperty(required = true, value = "strasse")
   public void setStrasse(String strasse) {
     this.strasse = strasse;
   }
@@ -87,13 +85,12 @@ public class AdresseDto  implements Serializable {
   }
 
   
-  @JsonProperty("plz")
-  @NotNull
-  public String getPlz() {
+  @JsonProperty(required = true, value = "plz")
+  @NotNull public String getPlz() {
     return plz;
   }
 
-  @JsonProperty("plz")
+  @JsonProperty(required = true, value = "plz")
   public void setPlz(String plz) {
     this.plz = plz;
   }
@@ -106,13 +103,12 @@ public class AdresseDto  implements Serializable {
   }
 
   
-  @JsonProperty("ort")
-  @NotNull
-  public String getOrt() {
+  @JsonProperty(required = true, value = "ort")
+  @NotNull public String getOrt() {
     return ort;
   }
 
-  @JsonProperty("ort")
+  @JsonProperty(required = true, value = "ort")
   public void setOrt(String ort) {
     this.ort = ort;
   }
@@ -216,10 +212,7 @@ public class AdresseDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -282,4 +275,3 @@ public class AdresseDto  implements Serializable {
     }
   }
 }
-

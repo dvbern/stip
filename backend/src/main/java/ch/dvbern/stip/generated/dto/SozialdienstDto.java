@@ -17,16 +17,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Sozialdienst")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String name;
-  private @Valid Boolean aktiv;
-  private @Valid ZahlungsverbindungDto zahlungsverbindung;
-  private @Valid SozialdienstBenutzerDto sozialdienstAdmin;
+  private UUID id;
+  private String name;
+  private Boolean aktiv;
+  private ZahlungsverbindungDto zahlungsverbindung;
+  private SozialdienstBenutzerDto sozialdienstAdmin;
 
   protected SozialdienstDto(SozialdienstDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -47,13 +47,12 @@ public class SozialdienstDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -66,13 +65,12 @@ public class SozialdienstDto  implements Serializable {
   }
 
   
-  @JsonProperty("name")
-  @NotNull
-  public String getName() {
+  @JsonProperty(required = true, value = "name")
+  @NotNull public String getName() {
     return name;
   }
 
-  @JsonProperty("name")
+  @JsonProperty(required = true, value = "name")
   public void setName(String name) {
     this.name = name;
   }
@@ -85,13 +83,12 @@ public class SozialdienstDto  implements Serializable {
   }
 
   
-  @JsonProperty("aktiv")
-  @NotNull
-  public Boolean getAktiv() {
+  @JsonProperty(required = true, value = "aktiv")
+  @NotNull public Boolean getAktiv() {
     return aktiv;
   }
 
-  @JsonProperty("aktiv")
+  @JsonProperty(required = true, value = "aktiv")
   public void setAktiv(Boolean aktiv) {
     this.aktiv = aktiv;
   }
@@ -104,13 +101,12 @@ public class SozialdienstDto  implements Serializable {
   }
 
   
-  @JsonProperty("zahlungsverbindung")
-  @NotNull
-  public ZahlungsverbindungDto getZahlungsverbindung() {
+  @JsonProperty(required = true, value = "zahlungsverbindung")
+  @NotNull @Valid public ZahlungsverbindungDto getZahlungsverbindung() {
     return zahlungsverbindung;
   }
 
-  @JsonProperty("zahlungsverbindung")
+  @JsonProperty(required = true, value = "zahlungsverbindung")
   public void setZahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
   }
@@ -123,13 +119,12 @@ public class SozialdienstDto  implements Serializable {
   }
 
   
-  @JsonProperty("sozialdienstAdmin")
-  @NotNull
-  public SozialdienstBenutzerDto getSozialdienstAdmin() {
+  @JsonProperty(required = true, value = "sozialdienstAdmin")
+  @NotNull @Valid public SozialdienstBenutzerDto getSozialdienstAdmin() {
     return sozialdienstAdmin;
   }
 
-  @JsonProperty("sozialdienstAdmin")
+  @JsonProperty(required = true, value = "sozialdienstAdmin")
   public void setSozialdienstAdmin(SozialdienstBenutzerDto sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
   }
@@ -175,10 +170,7 @@ public class SozialdienstDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -231,4 +223,3 @@ public class SozialdienstDto  implements Serializable {
     }
   }
 }
-

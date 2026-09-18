@@ -33,32 +33,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BrueckenangebotCreateDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR
 })
 @JsonTypeName("BrueckenangebotCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BrueckenangebotCreateDtoSpec {
   public static final String JSON_PROPERTY_BILDUNGSRICHTUNG = "bildungsrichtung";
+  @jakarta.annotation.Nonnull
   private BildungsrichtungDtoSpec bildungsrichtung;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  @jakarta.annotation.Nonnull
   private String bezeichnungDe;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  @jakarta.annotation.Nonnull
   private String bezeichnungFr;
 
   public BrueckenangebotCreateDtoSpec() {
   }
 
-  public BrueckenangebotCreateDtoSpec bildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+  public BrueckenangebotCreateDtoSpec bildungsrichtung(@jakarta.annotation.Nonnull BildungsrichtungDtoSpec bildungsrichtung) {
     
     this.bildungsrichtung = bildungsrichtung;
     return this;
   }
 
-   /**
+  /**
    * Get bildungsrichtung
    * @return bildungsrichtung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSRICHTUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public BildungsrichtungDtoSpec getBildungsrichtung() {
@@ -66,25 +69,24 @@ public class BrueckenangebotCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSRICHTUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+  public void setBildungsrichtung(@jakarta.annotation.Nonnull BildungsrichtungDtoSpec bildungsrichtung) {
     this.bildungsrichtung = bildungsrichtung;
   }
 
-
-  public BrueckenangebotCreateDtoSpec bezeichnungDe(String bezeichnungDe) {
+  public BrueckenangebotCreateDtoSpec bezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungDe
    * @return bezeichnungDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungDe() {
@@ -92,25 +94,24 @@ public class BrueckenangebotCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
+  public void setBezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
 
-
-  public BrueckenangebotCreateDtoSpec bezeichnungFr(String bezeichnungFr) {
+  public BrueckenangebotCreateDtoSpec bezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungFr
    * @return bezeichnungFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungFr() {
@@ -118,11 +119,12 @@ public class BrueckenangebotCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
+  public void setBezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -159,10 +161,7 @@ public class BrueckenangebotCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

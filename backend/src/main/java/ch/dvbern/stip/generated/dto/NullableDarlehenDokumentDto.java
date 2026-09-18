@@ -15,12 +15,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("NullableDarlehenDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class NullableDarlehenDokumentDto  implements Serializable {
-  private @Valid DarlehenDokumentDto value;
+  private DarlehenDokumentDto value;
 
   protected NullableDarlehenDokumentDto(NullableDarlehenDokumentDtoBuilder<?, ?> b) {
     this.value = b.value;
@@ -38,7 +38,7 @@ public class NullableDarlehenDokumentDto  implements Serializable {
 
   
   @JsonProperty("value")
-  public DarlehenDokumentDto getValue() {
+  @Valid public DarlehenDokumentDto getValue() {
     return value;
   }
 
@@ -80,10 +80,7 @@ public class NullableDarlehenDokumentDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -116,4 +113,3 @@ public class NullableDarlehenDokumentDto  implements Serializable {
     }
   }
 }
-

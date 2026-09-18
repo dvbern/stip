@@ -20,18 +20,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("MassendruckJobDetail")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class MassendruckJobDetailDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String userErstellt;
-  private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
-  private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp;
-  private @Valid List<MassendruckDatenschutzbriefDto> datenschutzbriefMassendrucks;
-  private @Valid List<MassendruckVerfuegungDto> verfuegungMassendrucks;
+  private UUID id;
+  private String userErstellt;
+  private java.time.LocalDateTime timestampErstellt;
+  private ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
+  private ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp;
+  private @Valid List<@Valid MassendruckDatenschutzbriefDto> datenschutzbriefMassendrucks = new ArrayList<>();
+  private @Valid List<@Valid MassendruckVerfuegungDto> verfuegungMassendrucks = new ArrayList<>();
 
   protected MassendruckJobDetailDto(MassendruckJobDetailDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -54,13 +54,12 @@ public class MassendruckJobDetailDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -73,13 +72,12 @@ public class MassendruckJobDetailDto  implements Serializable {
   }
 
   
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
+  @JsonProperty(required = true, value = "userErstellt")
+  @NotNull public String getUserErstellt() {
     return userErstellt;
   }
 
-  @JsonProperty("userErstellt")
+  @JsonProperty(required = true, value = "userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
   }
@@ -92,13 +90,12 @@ public class MassendruckJobDetailDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public java.time.LocalDateTime getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -111,13 +108,12 @@ public class MassendruckJobDetailDto  implements Serializable {
   }
 
   
-  @JsonProperty("massendruckJobStatus")
-  @NotNull
-  public ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus getMassendruckJobStatus() {
+  @JsonProperty(required = true, value = "massendruckJobStatus")
+  @NotNull public ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus getMassendruckJobStatus() {
     return massendruckJobStatus;
   }
 
-  @JsonProperty("massendruckJobStatus")
+  @JsonProperty(required = true, value = "massendruckJobStatus")
   public void setMassendruckJobStatus(ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus) {
     this.massendruckJobStatus = massendruckJobStatus;
   }
@@ -130,32 +126,31 @@ public class MassendruckJobDetailDto  implements Serializable {
   }
 
   
-  @JsonProperty("massendruckJobTyp")
-  @NotNull
-  public ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp getMassendruckJobTyp() {
+  @JsonProperty(required = true, value = "massendruckJobTyp")
+  @NotNull public ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp getMassendruckJobTyp() {
     return massendruckJobTyp;
   }
 
-  @JsonProperty("massendruckJobTyp")
+  @JsonProperty(required = true, value = "massendruckJobTyp")
   public void setMassendruckJobTyp(ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp) {
     this.massendruckJobTyp = massendruckJobTyp;
   }
 
   /**
    **/
-  public MassendruckJobDetailDto datenschutzbriefMassendrucks(List<MassendruckDatenschutzbriefDto> datenschutzbriefMassendrucks) {
+  public MassendruckJobDetailDto datenschutzbriefMassendrucks(List<@Valid MassendruckDatenschutzbriefDto> datenschutzbriefMassendrucks) {
     this.datenschutzbriefMassendrucks = datenschutzbriefMassendrucks;
     return this;
   }
 
   
   @JsonProperty("datenschutzbriefMassendrucks")
-  public List<MassendruckDatenschutzbriefDto> getDatenschutzbriefMassendrucks() {
+  @Valid public List<@Valid MassendruckDatenschutzbriefDto> getDatenschutzbriefMassendrucks() {
     return datenschutzbriefMassendrucks;
   }
 
   @JsonProperty("datenschutzbriefMassendrucks")
-  public void setDatenschutzbriefMassendrucks(List<MassendruckDatenschutzbriefDto> datenschutzbriefMassendrucks) {
+  public void setDatenschutzbriefMassendrucks(List<@Valid MassendruckDatenschutzbriefDto> datenschutzbriefMassendrucks) {
     this.datenschutzbriefMassendrucks = datenschutzbriefMassendrucks;
   }
 
@@ -177,19 +172,19 @@ public class MassendruckJobDetailDto  implements Serializable {
   }
   /**
    **/
-  public MassendruckJobDetailDto verfuegungMassendrucks(List<MassendruckVerfuegungDto> verfuegungMassendrucks) {
+  public MassendruckJobDetailDto verfuegungMassendrucks(List<@Valid MassendruckVerfuegungDto> verfuegungMassendrucks) {
     this.verfuegungMassendrucks = verfuegungMassendrucks;
     return this;
   }
 
   
   @JsonProperty("verfuegungMassendrucks")
-  public List<MassendruckVerfuegungDto> getVerfuegungMassendrucks() {
+  @Valid public List<@Valid MassendruckVerfuegungDto> getVerfuegungMassendrucks() {
     return verfuegungMassendrucks;
   }
 
   @JsonProperty("verfuegungMassendrucks")
-  public void setVerfuegungMassendrucks(List<MassendruckVerfuegungDto> verfuegungMassendrucks) {
+  public void setVerfuegungMassendrucks(List<@Valid MassendruckVerfuegungDto> verfuegungMassendrucks) {
     this.verfuegungMassendrucks = verfuegungMassendrucks;
   }
 
@@ -254,10 +249,7 @@ public class MassendruckJobDetailDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -284,8 +276,8 @@ public class MassendruckJobDetailDto  implements Serializable {
     private java.time.LocalDateTime timestampErstellt;
     private ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
     private ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp;
-    private List<MassendruckDatenschutzbriefDto> datenschutzbriefMassendrucks;
-    private List<MassendruckVerfuegungDto> verfuegungMassendrucks;
+    private List<MassendruckDatenschutzbriefDto> datenschutzbriefMassendrucks = new ArrayList<>();
+    private List<MassendruckVerfuegungDto> verfuegungMassendrucks = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -320,4 +312,3 @@ public class MassendruckJobDetailDto  implements Serializable {
     }
   }
 }
-

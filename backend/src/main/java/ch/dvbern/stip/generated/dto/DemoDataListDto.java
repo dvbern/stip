@@ -18,19 +18,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataListDto  implements Serializable {
-  private @Valid String importiertVon;
-  private @Valid java.time.LocalDateTime letzteAktivitaet;
-  private @Valid String kommentar;
-  private @Valid String documentId;
-  private @Valid String filename;
-  private @Valid String filepath;
-  private @Valid Integer filesize;
-  private @Valid List<DemoDataSlimDto> demoDatas = new ArrayList<>();
+  private String importiertVon;
+  private java.time.LocalDateTime letzteAktivitaet;
+  private String kommentar;
+  private String documentId;
+  private String filename;
+  private String filepath;
+  private Integer filesize;
+  private @Valid List<@Valid DemoDataSlimDto> demoDatas = new ArrayList<>();
 
   protected DemoDataListDto(DemoDataListDtoBuilder<?, ?> b) {
     this.importiertVon = b.importiertVon;
@@ -54,13 +54,12 @@ public class DemoDataListDto  implements Serializable {
   }
 
   
-  @JsonProperty("importiertVon")
-  @NotNull
-  public String getImportiertVon() {
+  @JsonProperty(required = true, value = "importiertVon")
+  @NotNull public String getImportiertVon() {
     return importiertVon;
   }
 
-  @JsonProperty("importiertVon")
+  @JsonProperty(required = true, value = "importiertVon")
   public void setImportiertVon(String importiertVon) {
     this.importiertVon = importiertVon;
   }
@@ -73,13 +72,12 @@ public class DemoDataListDto  implements Serializable {
   }
 
   
-  @JsonProperty("letzteAktivitaet")
-  @NotNull
-  public java.time.LocalDateTime getLetzteAktivitaet() {
+  @JsonProperty(required = true, value = "letzteAktivitaet")
+  @NotNull public java.time.LocalDateTime getLetzteAktivitaet() {
     return letzteAktivitaet;
   }
 
-  @JsonProperty("letzteAktivitaet")
+  @JsonProperty(required = true, value = "letzteAktivitaet")
   public void setLetzteAktivitaet(java.time.LocalDateTime letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
@@ -92,13 +90,12 @@ public class DemoDataListDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentar")
-  @NotNull
-  public String getKommentar() {
+  @JsonProperty(required = true, value = "kommentar")
+  @NotNull public String getKommentar() {
     return kommentar;
   }
 
-  @JsonProperty("kommentar")
+  @JsonProperty(required = true, value = "kommentar")
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -111,13 +108,12 @@ public class DemoDataListDto  implements Serializable {
   }
 
   
-  @JsonProperty("documentId")
-  @NotNull
-  public String getDocumentId() {
+  @JsonProperty(required = true, value = "documentId")
+  @NotNull public String getDocumentId() {
     return documentId;
   }
 
-  @JsonProperty("documentId")
+  @JsonProperty(required = true, value = "documentId")
   public void setDocumentId(String documentId) {
     this.documentId = documentId;
   }
@@ -130,13 +126,12 @@ public class DemoDataListDto  implements Serializable {
   }
 
   
-  @JsonProperty("filename")
-  @NotNull
-  public String getFilename() {
+  @JsonProperty(required = true, value = "filename")
+  @NotNull public String getFilename() {
     return filename;
   }
 
-  @JsonProperty("filename")
+  @JsonProperty(required = true, value = "filename")
   public void setFilename(String filename) {
     this.filename = filename;
   }
@@ -149,13 +144,12 @@ public class DemoDataListDto  implements Serializable {
   }
 
   
-  @JsonProperty("filepath")
-  @NotNull
-  public String getFilepath() {
+  @JsonProperty(required = true, value = "filepath")
+  @NotNull public String getFilepath() {
     return filepath;
   }
 
-  @JsonProperty("filepath")
+  @JsonProperty(required = true, value = "filepath")
   public void setFilepath(String filepath) {
     this.filepath = filepath;
   }
@@ -168,33 +162,31 @@ public class DemoDataListDto  implements Serializable {
   }
 
   
-  @JsonProperty("filesize")
-  @NotNull
-  public Integer getFilesize() {
+  @JsonProperty(required = true, value = "filesize")
+  @NotNull public Integer getFilesize() {
     return filesize;
   }
 
-  @JsonProperty("filesize")
+  @JsonProperty(required = true, value = "filesize")
   public void setFilesize(Integer filesize) {
     this.filesize = filesize;
   }
 
   /**
    **/
-  public DemoDataListDto demoDatas(List<DemoDataSlimDto> demoDatas) {
+  public DemoDataListDto demoDatas(List<@Valid DemoDataSlimDto> demoDatas) {
     this.demoDatas = demoDatas;
     return this;
   }
 
   
-  @JsonProperty("demoDatas")
-  @NotNull
-  public List<DemoDataSlimDto> getDemoDatas() {
+  @JsonProperty(required = true, value = "demoDatas")
+  @NotNull @Valid public List<@Valid DemoDataSlimDto> getDemoDatas() {
     return demoDatas;
   }
 
-  @JsonProperty("demoDatas")
-  public void setDemoDatas(List<DemoDataSlimDto> demoDatas) {
+  @JsonProperty(required = true, value = "demoDatas")
+  public void setDemoDatas(List<@Valid DemoDataSlimDto> demoDatas) {
     this.demoDatas = demoDatas;
   }
 
@@ -261,10 +253,7 @@ public class DemoDataListDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -332,4 +321,3 @@ public class DemoDataListDto  implements Serializable {
     }
   }
 }
-

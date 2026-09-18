@@ -27,24 +27,24 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchFormular")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchFormularDto  implements Serializable {
-  private @Valid AusbildungDto ausbildung;
-  private @Valid PersonInAusbildungDto personInAusbildung;
-  private @Valid FamiliensituationDto familiensituation;
-  private @Valid PartnerDto partner;
-  private @Valid List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern;
-  private @Valid List<ElternDto> elterns;
-  private @Valid List<GeschwisterDto> geschwisters;
-  private @Valid List<LebenslaufItemDto> lebenslaufItems;
-  private @Valid List<KindDto> kinds;
-  private @Valid EinnahmenKostenDto einnahmenKosten;
-  private @Valid EinnahmenKostenDto einnahmenKostenPartner;
-  private @Valid List<SteuererklaerungUpdateDto> steuererklaerung;
-  private @Valid List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs;
+  private AusbildungDto ausbildung;
+  private PersonInAusbildungDto personInAusbildung;
+  private FamiliensituationDto familiensituation;
+  private PartnerDto partner;
+  private @Valid List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern = new ArrayList<>();
+  private @Valid List<@Valid ElternDto> elterns = new ArrayList<>();
+  private @Valid List<@Valid GeschwisterDto> geschwisters = new ArrayList<>();
+  private @Valid List<@Valid LebenslaufItemDto> lebenslaufItems = new ArrayList<>();
+  private @Valid List<@Valid KindDto> kinds = new ArrayList<>();
+  private EinnahmenKostenDto einnahmenKosten;
+  private EinnahmenKostenDto einnahmenKostenPartner;
+  private @Valid List<@Valid SteuererklaerungUpdateDto> steuererklaerung = new ArrayList<>();
+  private @Valid List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs = new ArrayList<>();
 
   protected GesuchFormularDto(GesuchFormularDtoBuilder<?, ?> b) {
     this.ausbildung = b.ausbildung;
@@ -73,13 +73,12 @@ public class GesuchFormularDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildung")
-  @NotNull
-  public AusbildungDto getAusbildung() {
+  @JsonProperty(required = true, value = "ausbildung")
+  @NotNull @Valid public AusbildungDto getAusbildung() {
     return ausbildung;
   }
 
-  @JsonProperty("ausbildung")
+  @JsonProperty(required = true, value = "ausbildung")
   public void setAusbildung(AusbildungDto ausbildung) {
     this.ausbildung = ausbildung;
   }
@@ -93,7 +92,7 @@ public class GesuchFormularDto  implements Serializable {
 
   
   @JsonProperty("personInAusbildung")
-  public PersonInAusbildungDto getPersonInAusbildung() {
+  @Valid public PersonInAusbildungDto getPersonInAusbildung() {
     return personInAusbildung;
   }
 
@@ -111,7 +110,7 @@ public class GesuchFormularDto  implements Serializable {
 
   
   @JsonProperty("familiensituation")
-  public FamiliensituationDto getFamiliensituation() {
+  @Valid public FamiliensituationDto getFamiliensituation() {
     return familiensituation;
   }
 
@@ -129,7 +128,7 @@ public class GesuchFormularDto  implements Serializable {
 
   
   @JsonProperty("partner")
-  public PartnerDto getPartner() {
+  @Valid public PartnerDto getPartner() {
     return partner;
   }
 
@@ -174,19 +173,19 @@ public class GesuchFormularDto  implements Serializable {
   }
   /**
    **/
-  public GesuchFormularDto elterns(List<ElternDto> elterns) {
+  public GesuchFormularDto elterns(List<@Valid ElternDto> elterns) {
     this.elterns = elterns;
     return this;
   }
 
   
   @JsonProperty("elterns")
-  public List<ElternDto> getElterns() {
+  @Valid public List<@Valid ElternDto> getElterns() {
     return elterns;
   }
 
   @JsonProperty("elterns")
-  public void setElterns(List<ElternDto> elterns) {
+  public void setElterns(List<@Valid ElternDto> elterns) {
     this.elterns = elterns;
   }
 
@@ -208,19 +207,19 @@ public class GesuchFormularDto  implements Serializable {
   }
   /**
    **/
-  public GesuchFormularDto geschwisters(List<GeschwisterDto> geschwisters) {
+  public GesuchFormularDto geschwisters(List<@Valid GeschwisterDto> geschwisters) {
     this.geschwisters = geschwisters;
     return this;
   }
 
   
   @JsonProperty("geschwisters")
-  public List<GeschwisterDto> getGeschwisters() {
+  @Valid public List<@Valid GeschwisterDto> getGeschwisters() {
     return geschwisters;
   }
 
   @JsonProperty("geschwisters")
-  public void setGeschwisters(List<GeschwisterDto> geschwisters) {
+  public void setGeschwisters(List<@Valid GeschwisterDto> geschwisters) {
     this.geschwisters = geschwisters;
   }
 
@@ -242,19 +241,19 @@ public class GesuchFormularDto  implements Serializable {
   }
   /**
    **/
-  public GesuchFormularDto lebenslaufItems(List<LebenslaufItemDto> lebenslaufItems) {
+  public GesuchFormularDto lebenslaufItems(List<@Valid LebenslaufItemDto> lebenslaufItems) {
     this.lebenslaufItems = lebenslaufItems;
     return this;
   }
 
   
   @JsonProperty("lebenslaufItems")
-  public List<LebenslaufItemDto> getLebenslaufItems() {
+  @Valid public List<@Valid LebenslaufItemDto> getLebenslaufItems() {
     return lebenslaufItems;
   }
 
   @JsonProperty("lebenslaufItems")
-  public void setLebenslaufItems(List<LebenslaufItemDto> lebenslaufItems) {
+  public void setLebenslaufItems(List<@Valid LebenslaufItemDto> lebenslaufItems) {
     this.lebenslaufItems = lebenslaufItems;
   }
 
@@ -276,19 +275,19 @@ public class GesuchFormularDto  implements Serializable {
   }
   /**
    **/
-  public GesuchFormularDto kinds(List<KindDto> kinds) {
+  public GesuchFormularDto kinds(List<@Valid KindDto> kinds) {
     this.kinds = kinds;
     return this;
   }
 
   
   @JsonProperty("kinds")
-  public List<KindDto> getKinds() {
+  @Valid public List<@Valid KindDto> getKinds() {
     return kinds;
   }
 
   @JsonProperty("kinds")
-  public void setKinds(List<KindDto> kinds) {
+  public void setKinds(List<@Valid KindDto> kinds) {
     this.kinds = kinds;
   }
 
@@ -317,7 +316,7 @@ public class GesuchFormularDto  implements Serializable {
 
   
   @JsonProperty("einnahmenKosten")
-  public EinnahmenKostenDto getEinnahmenKosten() {
+  @Valid public EinnahmenKostenDto getEinnahmenKosten() {
     return einnahmenKosten;
   }
 
@@ -335,7 +334,7 @@ public class GesuchFormularDto  implements Serializable {
 
   
   @JsonProperty("einnahmenKostenPartner")
-  public EinnahmenKostenDto getEinnahmenKostenPartner() {
+  @Valid public EinnahmenKostenDto getEinnahmenKostenPartner() {
     return einnahmenKostenPartner;
   }
 
@@ -346,19 +345,19 @@ public class GesuchFormularDto  implements Serializable {
 
   /**
    **/
-  public GesuchFormularDto steuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+  public GesuchFormularDto steuererklaerung(List<@Valid SteuererklaerungUpdateDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
     return this;
   }
 
   
   @JsonProperty("steuererklaerung")
-  public List<SteuererklaerungUpdateDto> getSteuererklaerung() {
+  @Valid public List<@Valid SteuererklaerungUpdateDto> getSteuererklaerung() {
     return steuererklaerung;
   }
 
   @JsonProperty("steuererklaerung")
-  public void setSteuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+  public void setSteuererklaerung(List<@Valid SteuererklaerungUpdateDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
   }
 
@@ -469,10 +468,7 @@ public class GesuchFormularDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -498,15 +494,15 @@ public class GesuchFormularDto  implements Serializable {
     private PersonInAusbildungDto personInAusbildung;
     private FamiliensituationDto familiensituation;
     private PartnerDto partner;
-    private List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern;
-    private List<ElternDto> elterns;
-    private List<GeschwisterDto> geschwisters;
-    private List<LebenslaufItemDto> lebenslaufItems;
-    private List<KindDto> kinds;
+    private List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern = new ArrayList<>();
+    private List<ElternDto> elterns = new ArrayList<>();
+    private List<GeschwisterDto> geschwisters = new ArrayList<>();
+    private List<LebenslaufItemDto> lebenslaufItems = new ArrayList<>();
+    private List<KindDto> kinds = new ArrayList<>();
     private EinnahmenKostenDto einnahmenKosten;
     private EinnahmenKostenDto einnahmenKostenPartner;
-    private List<SteuererklaerungUpdateDto> steuererklaerung;
-    private List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs;
+    private List<SteuererklaerungUpdateDto> steuererklaerung = new ArrayList<>();
+    private List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -565,4 +561,3 @@ public class GesuchFormularDto  implements Serializable {
     }
   }
 }
-

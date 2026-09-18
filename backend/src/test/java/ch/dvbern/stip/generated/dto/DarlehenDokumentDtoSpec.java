@@ -38,32 +38,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DarlehenDokumentDtoSpec.JSON_PROPERTY_DOKUMENTE
 })
 @JsonTypeName("DarlehenDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DarlehenDokumentDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_DOKUMENT_TYPE = "dokumentType";
+  @jakarta.annotation.Nonnull
   private DarlehenDokumentTypeDtoSpec dokumentType;
 
   public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
+  @jakarta.annotation.Nonnull
   private List<DokumentDtoSpec> dokumente;
 
   public DarlehenDokumentDtoSpec() {
   }
 
-  public DarlehenDokumentDtoSpec id(UUID id) {
+  public DarlehenDokumentDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -71,25 +74,24 @@ public class DarlehenDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public DarlehenDokumentDtoSpec dokumentType(DarlehenDokumentTypeDtoSpec dokumentType) {
+  public DarlehenDokumentDtoSpec dokumentType(@jakarta.annotation.Nonnull DarlehenDokumentTypeDtoSpec dokumentType) {
     
     this.dokumentType = dokumentType;
     return this;
   }
 
-   /**
+  /**
    * Get dokumentType
    * @return dokumentType
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DarlehenDokumentTypeDtoSpec getDokumentType() {
@@ -97,14 +99,13 @@ public class DarlehenDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumentType(DarlehenDokumentTypeDtoSpec dokumentType) {
+  public void setDokumentType(@jakarta.annotation.Nonnull DarlehenDokumentTypeDtoSpec dokumentType) {
     this.dokumentType = dokumentType;
   }
 
-
-  public DarlehenDokumentDtoSpec dokumente(List<DokumentDtoSpec> dokumente) {
+  public DarlehenDokumentDtoSpec dokumente(@jakarta.annotation.Nonnull List<DokumentDtoSpec> dokumente) {
     
     this.dokumente = dokumente;
     return this;
@@ -118,12 +119,12 @@ public class DarlehenDokumentDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get dokumente
    * @return dokumente
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<DokumentDtoSpec> getDokumente() {
@@ -131,11 +132,12 @@ public class DarlehenDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumente(List<DokumentDtoSpec> dokumente) {
+  public void setDokumente(@jakarta.annotation.Nonnull List<DokumentDtoSpec> dokumente) {
     this.dokumente = dokumente;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -172,10 +174,7 @@ public class DarlehenDokumentDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

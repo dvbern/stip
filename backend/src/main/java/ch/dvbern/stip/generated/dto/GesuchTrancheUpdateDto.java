@@ -16,13 +16,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchTrancheUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchTrancheUpdateDto  implements Serializable {
-  private @Valid GesuchFormularUpdateDto gesuchFormular;
-  private @Valid UUID id;
+  private GesuchFormularUpdateDto gesuchFormular;
+  private UUID id;
 
   protected GesuchTrancheUpdateDto(GesuchTrancheUpdateDtoBuilder<?, ?> b) {
     this.gesuchFormular = b.gesuchFormular;
@@ -40,13 +40,12 @@ public class GesuchTrancheUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchFormular")
-  @NotNull
-  public GesuchFormularUpdateDto getGesuchFormular() {
+  @JsonProperty(required = true, value = "gesuchFormular")
+  @NotNull @Valid public GesuchFormularUpdateDto getGesuchFormular() {
     return gesuchFormular;
   }
 
-  @JsonProperty("gesuchFormular")
+  @JsonProperty(required = true, value = "gesuchFormular")
   public void setGesuchFormular(GesuchFormularUpdateDto gesuchFormular) {
     this.gesuchFormular = gesuchFormular;
   }
@@ -59,13 +58,12 @@ public class GesuchTrancheUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -105,10 +103,7 @@ public class GesuchTrancheUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -146,4 +141,3 @@ public class GesuchTrancheUpdateDto  implements Serializable {
     }
   }
 }
-

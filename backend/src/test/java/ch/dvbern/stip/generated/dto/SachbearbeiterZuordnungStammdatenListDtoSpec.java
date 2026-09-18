@@ -33,29 +33,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SachbearbeiterZuordnungStammdatenListDtoSpec.JSON_PROPERTY_ZUORDNUNG
 })
 @JsonTypeName("SachbearbeiterZuordnungStammdatenList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SachbearbeiterZuordnungStammdatenListDtoSpec {
   public static final String JSON_PROPERTY_SACHBEARBEITER = "sachbearbeiter";
+  @jakarta.annotation.Nullable
   private UUID sachbearbeiter;
 
   public static final String JSON_PROPERTY_ZUORDNUNG = "zuordnung";
+  @jakarta.annotation.Nullable
   private SachbearbeiterZuordnungStammdatenDtoSpec zuordnung;
 
   public SachbearbeiterZuordnungStammdatenListDtoSpec() {
   }
 
-  public SachbearbeiterZuordnungStammdatenListDtoSpec sachbearbeiter(UUID sachbearbeiter) {
+  public SachbearbeiterZuordnungStammdatenListDtoSpec sachbearbeiter(@jakarta.annotation.Nullable UUID sachbearbeiter) {
     
     this.sachbearbeiter = sachbearbeiter;
     return this;
   }
 
-   /**
+  /**
    * Get sachbearbeiter
    * @return sachbearbeiter
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SACHBEARBEITER)
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getSachbearbeiter() {
@@ -63,25 +65,24 @@ public class SachbearbeiterZuordnungStammdatenListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SACHBEARBEITER)
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSachbearbeiter(UUID sachbearbeiter) {
+  public void setSachbearbeiter(@jakarta.annotation.Nullable UUID sachbearbeiter) {
     this.sachbearbeiter = sachbearbeiter;
   }
 
-
-  public SachbearbeiterZuordnungStammdatenListDtoSpec zuordnung(SachbearbeiterZuordnungStammdatenDtoSpec zuordnung) {
+  public SachbearbeiterZuordnungStammdatenListDtoSpec zuordnung(@jakarta.annotation.Nullable SachbearbeiterZuordnungStammdatenDtoSpec zuordnung) {
     
     this.zuordnung = zuordnung;
     return this;
   }
 
-   /**
+  /**
    * Get zuordnung
    * @return zuordnung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ZUORDNUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZUORDNUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public SachbearbeiterZuordnungStammdatenDtoSpec getZuordnung() {
@@ -89,11 +90,12 @@ public class SachbearbeiterZuordnungStammdatenListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZUORDNUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZUORDNUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setZuordnung(SachbearbeiterZuordnungStammdatenDtoSpec zuordnung) {
+  public void setZuordnung(@jakarta.annotation.Nullable SachbearbeiterZuordnungStammdatenDtoSpec zuordnung) {
     this.zuordnung = zuordnung;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -128,10 +130,7 @@ public class SachbearbeiterZuordnungStammdatenListDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

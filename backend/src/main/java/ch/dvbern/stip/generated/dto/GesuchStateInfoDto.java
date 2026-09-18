@@ -14,21 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchStateInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchStateInfoDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
-  private @Valid Boolean beschwerdeHaengig;
-  private @Valid Boolean canGSGetBerechnung;
-  private @Valid Boolean canSBGetBerechnung;
-  private @Valid Boolean canChangeGesuchsperiode;
-  private @Valid Boolean canTriggerManuellPruefen;
-  private @Valid Boolean canBearbeitungAbschliessen;
-  private @Valid Boolean canSBInitAenderung;
-  private @Valid Boolean canFreigeben;
-  private @Valid ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason;
+  private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+  private Boolean beschwerdeHaengig;
+  private Boolean canGSGetBerechnung;
+  private Boolean canSBGetBerechnung;
+  private Boolean canChangeGesuchsperiode;
+  private Boolean canTriggerManuellPruefen;
+  private Boolean canBearbeitungAbschliessen;
+  private Boolean canSBInitAenderung;
+  private Boolean canFreigeben;
+  private ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason;
 
   protected GesuchStateInfoDto(GesuchStateInfoDtoBuilder<?, ?> b) {
     this.gesuchStatus = b.gesuchStatus;
@@ -54,13 +54,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchStatus")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
+  @JsonProperty(required = true, value = "gesuchStatus")
+  @NotNull public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
-  @JsonProperty("gesuchStatus")
+  @JsonProperty(required = true, value = "gesuchStatus")
   public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
@@ -73,13 +72,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("beschwerdeHaengig")
-  @NotNull
-  public Boolean getBeschwerdeHaengig() {
+  @JsonProperty(required = true, value = "beschwerdeHaengig")
+  @NotNull public Boolean getBeschwerdeHaengig() {
     return beschwerdeHaengig;
   }
 
-  @JsonProperty("beschwerdeHaengig")
+  @JsonProperty(required = true, value = "beschwerdeHaengig")
   public void setBeschwerdeHaengig(Boolean beschwerdeHaengig) {
     this.beschwerdeHaengig = beschwerdeHaengig;
   }
@@ -92,13 +90,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("canGSGetBerechnung")
-  @NotNull
-  public Boolean getCanGSGetBerechnung() {
+  @JsonProperty(required = true, value = "canGSGetBerechnung")
+  @NotNull public Boolean getCanGSGetBerechnung() {
     return canGSGetBerechnung;
   }
 
-  @JsonProperty("canGSGetBerechnung")
+  @JsonProperty(required = true, value = "canGSGetBerechnung")
   public void setCanGSGetBerechnung(Boolean canGSGetBerechnung) {
     this.canGSGetBerechnung = canGSGetBerechnung;
   }
@@ -111,13 +108,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("canSBGetBerechnung")
-  @NotNull
-  public Boolean getCanSBGetBerechnung() {
+  @JsonProperty(required = true, value = "canSBGetBerechnung")
+  @NotNull public Boolean getCanSBGetBerechnung() {
     return canSBGetBerechnung;
   }
 
-  @JsonProperty("canSBGetBerechnung")
+  @JsonProperty(required = true, value = "canSBGetBerechnung")
   public void setCanSBGetBerechnung(Boolean canSBGetBerechnung) {
     this.canSBGetBerechnung = canSBGetBerechnung;
   }
@@ -130,13 +126,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("canChangeGesuchsperiode")
-  @NotNull
-  public Boolean getCanChangeGesuchsperiode() {
+  @JsonProperty(required = true, value = "canChangeGesuchsperiode")
+  @NotNull public Boolean getCanChangeGesuchsperiode() {
     return canChangeGesuchsperiode;
   }
 
-  @JsonProperty("canChangeGesuchsperiode")
+  @JsonProperty(required = true, value = "canChangeGesuchsperiode")
   public void setCanChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
     this.canChangeGesuchsperiode = canChangeGesuchsperiode;
   }
@@ -149,13 +144,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("canTriggerManuellPruefen")
-  @NotNull
-  public Boolean getCanTriggerManuellPruefen() {
+  @JsonProperty(required = true, value = "canTriggerManuellPruefen")
+  @NotNull public Boolean getCanTriggerManuellPruefen() {
     return canTriggerManuellPruefen;
   }
 
-  @JsonProperty("canTriggerManuellPruefen")
+  @JsonProperty(required = true, value = "canTriggerManuellPruefen")
   public void setCanTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
     this.canTriggerManuellPruefen = canTriggerManuellPruefen;
   }
@@ -168,13 +162,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("canBearbeitungAbschliessen")
-  @NotNull
-  public Boolean getCanBearbeitungAbschliessen() {
+  @JsonProperty(required = true, value = "canBearbeitungAbschliessen")
+  @NotNull public Boolean getCanBearbeitungAbschliessen() {
     return canBearbeitungAbschliessen;
   }
 
-  @JsonProperty("canBearbeitungAbschliessen")
+  @JsonProperty(required = true, value = "canBearbeitungAbschliessen")
   public void setCanBearbeitungAbschliessen(Boolean canBearbeitungAbschliessen) {
     this.canBearbeitungAbschliessen = canBearbeitungAbschliessen;
   }
@@ -187,13 +180,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("canSBInitAenderung")
-  @NotNull
-  public Boolean getCanSBInitAenderung() {
+  @JsonProperty(required = true, value = "canSBInitAenderung")
+  @NotNull public Boolean getCanSBInitAenderung() {
     return canSBInitAenderung;
   }
 
-  @JsonProperty("canSBInitAenderung")
+  @JsonProperty(required = true, value = "canSBInitAenderung")
   public void setCanSBInitAenderung(Boolean canSBInitAenderung) {
     this.canSBInitAenderung = canSBInitAenderung;
   }
@@ -206,13 +198,12 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("canFreigeben")
-  @NotNull
-  public Boolean getCanFreigeben() {
+  @JsonProperty(required = true, value = "canFreigeben")
+  @NotNull public Boolean getCanFreigeben() {
     return canFreigeben;
   }
 
-  @JsonProperty("canFreigeben")
+  @JsonProperty(required = true, value = "canFreigeben")
   public void setCanFreigeben(Boolean canFreigeben) {
     this.canFreigeben = canFreigeben;
   }
@@ -286,10 +277,7 @@ public class GesuchStateInfoDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -367,4 +355,3 @@ public class GesuchStateInfoDto  implements Serializable {
     }
   }
 }
-

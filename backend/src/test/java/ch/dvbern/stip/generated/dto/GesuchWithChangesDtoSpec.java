@@ -33,11 +33,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * 1 or 2 Aenderungstranche in relation to another Tranche
+ * GesuchWithChangesDtoSpec
  */
 @JsonPropertyOrder({
-  GesuchWithChangesDtoSpec.JSON_PROPERTY_CHANGES,
-  GesuchWithChangesDtoSpec.JSON_PROPERTY_IS_INITIAL,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_FALL_ID,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID,
@@ -54,72 +52,518 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchWithChangesDtoSpec.JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_DELEGIERUNG,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE,
-  GesuchWithChangesDtoSpec.JSON_PROPERTY_VERFUEGT
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_VERFUEGT,
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_CHANGES,
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_IS_INITIAL
 })
 @JsonTypeName("GesuchWithChanges")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchWithChangesDtoSpec {
-  public static final String JSON_PROPERTY_CHANGES = "changes";
-  private List<GesuchTrancheDtoSpec> changes;
-
-  public static final String JSON_PROPERTY_IS_INITIAL = "isInitial";
-  private Boolean isInitial;
-
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private UUID fallId;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  @jakarta.annotation.Nonnull
   private String fallNummer;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
+  @jakarta.annotation.Nonnull
   private UUID ausbildungId;
 
   public static final String JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG = "hasPendingAusbildungUnterbruchAntrag";
+  @jakarta.annotation.Nonnull
   private Boolean hasPendingAusbildungUnterbruchAntrag;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE = "gesuchsperiode";
+  @jakarta.annotation.Nonnull
   private GesuchsperiodeDtoSpec gesuchsperiode;
 
   public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  @jakarta.annotation.Nonnull
   private GesuchstatusDtoSpec gesuchStatus;
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
+  @jakarta.annotation.Nonnull
   private String gesuchNummer;
 
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_AENDERUNGSDATUM = "aenderungsdatum";
+  @jakarta.annotation.Nonnull
   private LocalDate aenderungsdatum;
 
   public static final String JSON_PROPERTY_BEARBEITER = "bearbeiter";
+  @jakarta.annotation.Nullable
   private String bearbeiter;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH = "gesuchTrancheToWorkWith";
+  @jakarta.annotation.Nonnull
   private GesuchTrancheDtoSpec gesuchTrancheToWorkWith;
 
   public static final String JSON_PROPERTY_EINREICHEDATUM = "einreichedatum";
+  @jakarta.annotation.Nullable
   private LocalDate einreichedatum;
 
   public static final String JSON_PROPERTY_HAD_DELEGIERUNGS = "hadDelegierungs";
+  @jakarta.annotation.Nullable
   private Boolean hadDelegierungs;
 
   public static final String JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ = "minDateEigenerWohnsitz";
+  @jakarta.annotation.Nullable
   private LocalDate minDateEigenerWohnsitz;
 
   public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
+  @jakarta.annotation.Nullable
   private DelegierungSlimDtoSpec delegierung;
 
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
+  @jakarta.annotation.Nullable
   private LocalDate nachfristDokumente;
 
   public static final String JSON_PROPERTY_VERFUEGT = "verfuegt";
+  @jakarta.annotation.Nonnull
   private Boolean verfuegt;
+
+  public static final String JSON_PROPERTY_CHANGES = "changes";
+  @jakarta.annotation.Nullable
+  private List<GesuchTrancheDtoSpec> changes;
+
+  public static final String JSON_PROPERTY_IS_INITIAL = "isInitial";
+  @jakarta.annotation.Nullable
+  private Boolean isInitial;
 
   public GesuchWithChangesDtoSpec() {
   }
 
-  public GesuchWithChangesDtoSpec changes(List<GesuchTrancheDtoSpec> changes) {
+  public GesuchWithChangesDtoSpec fallId(@jakarta.annotation.Nonnull UUID fallId) {
+    
+    this.fallId = fallId;
+    return this;
+  }
+
+  /**
+   * Get fallId
+   * @return fallId
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getFallId() {
+    return fallId;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallId(@jakarta.annotation.Nonnull UUID fallId) {
+    this.fallId = fallId;
+  }
+
+  public GesuchWithChangesDtoSpec fallNummer(@jakarta.annotation.Nonnull String fallNummer) {
+    
+    this.fallNummer = fallNummer;
+    return this;
+  }
+
+  /**
+   * Get fallNummer
+   * @return fallNummer
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getFallNummer() {
+    return fallNummer;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallNummer(@jakarta.annotation.Nonnull String fallNummer) {
+    this.fallNummer = fallNummer;
+  }
+
+  public GesuchWithChangesDtoSpec ausbildungId(@jakarta.annotation.Nonnull UUID ausbildungId) {
+    
+    this.ausbildungId = ausbildungId;
+    return this;
+  }
+
+  /**
+   * Get ausbildungId
+   * @return ausbildungId
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getAusbildungId() {
+    return ausbildungId;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungId(@jakarta.annotation.Nonnull UUID ausbildungId) {
+    this.ausbildungId = ausbildungId;
+  }
+
+  public GesuchWithChangesDtoSpec hasPendingAusbildungUnterbruchAntrag(@jakarta.annotation.Nonnull Boolean hasPendingAusbildungUnterbruchAntrag) {
+    
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
+    return this;
+  }
+
+  /**
+   * Get hasPendingAusbildungUnterbruchAntrag
+   * @return hasPendingAusbildungUnterbruchAntrag
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getHasPendingAusbildungUnterbruchAntrag() {
+    return hasPendingAusbildungUnterbruchAntrag;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setHasPendingAusbildungUnterbruchAntrag(@jakarta.annotation.Nonnull Boolean hasPendingAusbildungUnterbruchAntrag) {
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
+  }
+
+  public GesuchWithChangesDtoSpec gesuchsperiode(@jakarta.annotation.Nonnull GesuchsperiodeDtoSpec gesuchsperiode) {
+    
+    this.gesuchsperiode = gesuchsperiode;
+    return this;
+  }
+
+  /**
+   * Get gesuchsperiode
+   * @return gesuchsperiode
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchsperiodeDtoSpec getGesuchsperiode() {
+    return gesuchsperiode;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchsperiode(@jakarta.annotation.Nonnull GesuchsperiodeDtoSpec gesuchsperiode) {
+    this.gesuchsperiode = gesuchsperiode;
+  }
+
+  public GesuchWithChangesDtoSpec gesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
+    
+    this.gesuchStatus = gesuchStatus;
+    return this;
+  }
+
+  /**
+   * Get gesuchStatus
+   * @return gesuchStatus
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchstatusDtoSpec getGesuchStatus() {
+    return gesuchStatus;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
+    this.gesuchStatus = gesuchStatus;
+  }
+
+  public GesuchWithChangesDtoSpec gesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
+    
+    this.gesuchNummer = gesuchNummer;
+    return this;
+  }
+
+  /**
+   * Get gesuchNummer
+   * @return gesuchNummer
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getGesuchNummer() {
+    return gesuchNummer;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
+    this.gesuchNummer = gesuchNummer;
+  }
+
+  public GesuchWithChangesDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
+    this.id = id;
+  }
+
+  public GesuchWithChangesDtoSpec aenderungsdatum(@jakarta.annotation.Nonnull LocalDate aenderungsdatum) {
+    
+    this.aenderungsdatum = aenderungsdatum;
+    return this;
+  }
+
+  /**
+   * Get aenderungsdatum
+   * @return aenderungsdatum
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_AENDERUNGSDATUM, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getAenderungsdatum() {
+    return aenderungsdatum;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AENDERUNGSDATUM, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAenderungsdatum(@jakarta.annotation.Nonnull LocalDate aenderungsdatum) {
+    this.aenderungsdatum = aenderungsdatum;
+  }
+
+  public GesuchWithChangesDtoSpec bearbeiter(@jakarta.annotation.Nullable String bearbeiter) {
+    
+    this.bearbeiter = bearbeiter;
+    return this;
+  }
+
+  /**
+   * Zuständiger Sachbearbeiter des Gesuchs
+   * @return bearbeiter
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_BEARBEITER, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getBearbeiter() {
+    return bearbeiter;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_BEARBEITER, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBearbeiter(@jakarta.annotation.Nullable String bearbeiter) {
+    this.bearbeiter = bearbeiter;
+  }
+
+  public GesuchWithChangesDtoSpec gesuchTrancheToWorkWith(@jakarta.annotation.Nonnull GesuchTrancheDtoSpec gesuchTrancheToWorkWith) {
+    
+    this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
+    return this;
+  }
+
+  /**
+   * Get gesuchTrancheToWorkWith
+   * @return gesuchTrancheToWorkWith
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchTrancheDtoSpec getGesuchTrancheToWorkWith() {
+    return gesuchTrancheToWorkWith;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchTrancheToWorkWith(@jakarta.annotation.Nonnull GesuchTrancheDtoSpec gesuchTrancheToWorkWith) {
+    this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
+  }
+
+  public GesuchWithChangesDtoSpec einreichedatum(@jakarta.annotation.Nullable LocalDate einreichedatum) {
+    
+    this.einreichedatum = einreichedatum;
+    return this;
+  }
+
+  /**
+   * Get einreichedatum
+   * @return einreichedatum
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEDATUM, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEinreichedatum() {
+    return einreichedatum;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEDATUM, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinreichedatum(@jakarta.annotation.Nullable LocalDate einreichedatum) {
+    this.einreichedatum = einreichedatum;
+  }
+
+  public GesuchWithChangesDtoSpec hadDelegierungs(@jakarta.annotation.Nullable Boolean hadDelegierungs) {
+    
+    this.hadDelegierungs = hadDelegierungs;
+    return this;
+  }
+
+  /**
+   * Get hadDelegierungs
+   * @return hadDelegierungs
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_HAD_DELEGIERUNGS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getHadDelegierungs() {
+    return hadDelegierungs;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_HAD_DELEGIERUNGS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHadDelegierungs(@jakarta.annotation.Nullable Boolean hadDelegierungs) {
+    this.hadDelegierungs = hadDelegierungs;
+  }
+
+  public GesuchWithChangesDtoSpec minDateEigenerWohnsitz(@jakarta.annotation.Nullable LocalDate minDateEigenerWohnsitz) {
+    
+    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
+    return this;
+  }
+
+  /**
+   * Get minDateEigenerWohnsitz
+   * @return minDateEigenerWohnsitz
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getMinDateEigenerWohnsitz() {
+    return minDateEigenerWohnsitz;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMinDateEigenerWohnsitz(@jakarta.annotation.Nullable LocalDate minDateEigenerWohnsitz) {
+    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
+  }
+
+  public GesuchWithChangesDtoSpec delegierung(@jakarta.annotation.Nullable DelegierungSlimDtoSpec delegierung) {
+    
+    this.delegierung = delegierung;
+    return this;
+  }
+
+  /**
+   * Get delegierung
+   * @return delegierung
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_DELEGIERUNG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DelegierungSlimDtoSpec getDelegierung() {
+    return delegierung;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_DELEGIERUNG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelegierung(@jakarta.annotation.Nullable DelegierungSlimDtoSpec delegierung) {
+    this.delegierung = delegierung;
+  }
+
+  public GesuchWithChangesDtoSpec nachfristDokumente(@jakarta.annotation.Nullable LocalDate nachfristDokumente) {
+    
+    this.nachfristDokumente = nachfristDokumente;
+    return this;
+  }
+
+  /**
+   * Get nachfristDokumente
+   * @return nachfristDokumente
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_NACHFRIST_DOKUMENTE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getNachfristDokumente() {
+    return nachfristDokumente;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_NACHFRIST_DOKUMENTE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNachfristDokumente(@jakarta.annotation.Nullable LocalDate nachfristDokumente) {
+    this.nachfristDokumente = nachfristDokumente;
+  }
+
+  public GesuchWithChangesDtoSpec verfuegt(@jakarta.annotation.Nonnull Boolean verfuegt) {
+    
+    this.verfuegt = verfuegt;
+    return this;
+  }
+
+  /**
+   * Get verfuegt
+   * @return verfuegt
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getVerfuegt() {
+    return verfuegt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVerfuegt(@jakarta.annotation.Nonnull Boolean verfuegt) {
+    this.verfuegt = verfuegt;
+  }
+
+  public GesuchWithChangesDtoSpec changes(@jakarta.annotation.Nullable List<GesuchTrancheDtoSpec> changes) {
     
     this.changes = changes;
     return this;
@@ -133,12 +577,12 @@ public class GesuchWithChangesDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get changes
    * @return changes
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CHANGES)
+  @JsonProperty(value = JSON_PROPERTY_CHANGES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<GesuchTrancheDtoSpec> getChanges() {
@@ -146,25 +590,24 @@ public class GesuchWithChangesDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CHANGES)
+  @JsonProperty(value = JSON_PROPERTY_CHANGES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setChanges(List<GesuchTrancheDtoSpec> changes) {
+  public void setChanges(@jakarta.annotation.Nullable List<GesuchTrancheDtoSpec> changes) {
     this.changes = changes;
   }
 
-
-  public GesuchWithChangesDtoSpec isInitial(Boolean isInitial) {
+  public GesuchWithChangesDtoSpec isInitial(@jakarta.annotation.Nullable Boolean isInitial) {
     
     this.isInitial = isInitial;
     return this;
   }
 
-   /**
+  /**
    * Get isInitial
    * @return isInitial
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IS_INITIAL)
+  @JsonProperty(value = JSON_PROPERTY_IS_INITIAL, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getIsInitial() {
@@ -172,453 +615,12 @@ public class GesuchWithChangesDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_INITIAL)
+  @JsonProperty(value = JSON_PROPERTY_IS_INITIAL, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIsInitial(Boolean isInitial) {
+  public void setIsInitial(@jakarta.annotation.Nullable Boolean isInitial) {
     this.isInitial = isInitial;
   }
 
-
-  public GesuchWithChangesDtoSpec fallId(UUID fallId) {
-    
-    this.fallId = fallId;
-    return this;
-  }
-
-   /**
-   * Get fallId
-   * @return fallId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getFallId() {
-    return fallId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
-    this.fallId = fallId;
-  }
-
-
-  public GesuchWithChangesDtoSpec fallNummer(String fallNummer) {
-    
-    this.fallNummer = fallNummer;
-    return this;
-  }
-
-   /**
-   * Get fallNummer
-   * @return fallNummer
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getFallNummer() {
-    return fallNummer;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallNummer(String fallNummer) {
-    this.fallNummer = fallNummer;
-  }
-
-
-  public GesuchWithChangesDtoSpec ausbildungId(UUID ausbildungId) {
-    
-    this.ausbildungId = ausbildungId;
-    return this;
-  }
-
-   /**
-   * Get ausbildungId
-   * @return ausbildungId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getAusbildungId() {
-    return ausbildungId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungId(UUID ausbildungId) {
-    this.ausbildungId = ausbildungId;
-  }
-
-
-  public GesuchWithChangesDtoSpec hasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
-    
-    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
-    return this;
-  }
-
-   /**
-   * Get hasPendingAusbildungUnterbruchAntrag
-   * @return hasPendingAusbildungUnterbruchAntrag
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getHasPendingAusbildungUnterbruchAntrag() {
-    return hasPendingAusbildungUnterbruchAntrag;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
-    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
-  }
-
-
-  public GesuchWithChangesDtoSpec gesuchsperiode(GesuchsperiodeDtoSpec gesuchsperiode) {
-    
-    this.gesuchsperiode = gesuchsperiode;
-    return this;
-  }
-
-   /**
-   * Get gesuchsperiode
-   * @return gesuchsperiode
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public GesuchsperiodeDtoSpec getGesuchsperiode() {
-    return gesuchsperiode;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsperiode(GesuchsperiodeDtoSpec gesuchsperiode) {
-    this.gesuchsperiode = gesuchsperiode;
-  }
-
-
-  public GesuchWithChangesDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
-    
-    this.gesuchStatus = gesuchStatus;
-    return this;
-  }
-
-   /**
-   * Get gesuchStatus
-   * @return gesuchStatus
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public GesuchstatusDtoSpec getGesuchStatus() {
-    return gesuchStatus;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
-    this.gesuchStatus = gesuchStatus;
-  }
-
-
-  public GesuchWithChangesDtoSpec gesuchNummer(String gesuchNummer) {
-    
-    this.gesuchNummer = gesuchNummer;
-    return this;
-  }
-
-   /**
-   * Get gesuchNummer
-   * @return gesuchNummer
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getGesuchNummer() {
-    return gesuchNummer;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchNummer(String gesuchNummer) {
-    this.gesuchNummer = gesuchNummer;
-  }
-
-
-  public GesuchWithChangesDtoSpec id(UUID id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getId() {
-    return id;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-
-  public GesuchWithChangesDtoSpec aenderungsdatum(LocalDate aenderungsdatum) {
-    
-    this.aenderungsdatum = aenderungsdatum;
-    return this;
-  }
-
-   /**
-   * Get aenderungsdatum
-   * @return aenderungsdatum
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AENDERUNGSDATUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getAenderungsdatum() {
-    return aenderungsdatum;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AENDERUNGSDATUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAenderungsdatum(LocalDate aenderungsdatum) {
-    this.aenderungsdatum = aenderungsdatum;
-  }
-
-
-  public GesuchWithChangesDtoSpec bearbeiter(String bearbeiter) {
-    
-    this.bearbeiter = bearbeiter;
-    return this;
-  }
-
-   /**
-   * Zuständiger Sachbearbeiter des Gesuchs
-   * @return bearbeiter
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BEARBEITER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getBearbeiter() {
-    return bearbeiter;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BEARBEITER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBearbeiter(String bearbeiter) {
-    this.bearbeiter = bearbeiter;
-  }
-
-
-  public GesuchWithChangesDtoSpec gesuchTrancheToWorkWith(GesuchTrancheDtoSpec gesuchTrancheToWorkWith) {
-    
-    this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
-    return this;
-  }
-
-   /**
-   * Get gesuchTrancheToWorkWith
-   * @return gesuchTrancheToWorkWith
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public GesuchTrancheDtoSpec getGesuchTrancheToWorkWith() {
-    return gesuchTrancheToWorkWith;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheToWorkWith(GesuchTrancheDtoSpec gesuchTrancheToWorkWith) {
-    this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
-  }
-
-
-  public GesuchWithChangesDtoSpec einreichedatum(LocalDate einreichedatum) {
-    
-    this.einreichedatum = einreichedatum;
-    return this;
-  }
-
-   /**
-   * Get einreichedatum
-   * @return einreichedatum
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EINREICHEDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public LocalDate getEinreichedatum() {
-    return einreichedatum;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_EINREICHEDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEinreichedatum(LocalDate einreichedatum) {
-    this.einreichedatum = einreichedatum;
-  }
-
-
-  public GesuchWithChangesDtoSpec hadDelegierungs(Boolean hadDelegierungs) {
-    
-    this.hadDelegierungs = hadDelegierungs;
-    return this;
-  }
-
-   /**
-   * Get hadDelegierungs
-   * @return hadDelegierungs
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_HAD_DELEGIERUNGS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getHadDelegierungs() {
-    return hadDelegierungs;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_HAD_DELEGIERUNGS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setHadDelegierungs(Boolean hadDelegierungs) {
-    this.hadDelegierungs = hadDelegierungs;
-  }
-
-
-  public GesuchWithChangesDtoSpec minDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
-    
-    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
-    return this;
-  }
-
-   /**
-   * Get minDateEigenerWohnsitz
-   * @return minDateEigenerWohnsitz
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public LocalDate getMinDateEigenerWohnsitz() {
-    return minDateEigenerWohnsitz;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMinDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
-    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
-  }
-
-
-  public GesuchWithChangesDtoSpec delegierung(DelegierungSlimDtoSpec delegierung) {
-    
-    this.delegierung = delegierung;
-    return this;
-  }
-
-   /**
-   * Get delegierung
-   * @return delegierung
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public DelegierungSlimDtoSpec getDelegierung() {
-    return delegierung;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDelegierung(DelegierungSlimDtoSpec delegierung) {
-    this.delegierung = delegierung;
-  }
-
-
-  public GesuchWithChangesDtoSpec nachfristDokumente(LocalDate nachfristDokumente) {
-    
-    this.nachfristDokumente = nachfristDokumente;
-    return this;
-  }
-
-   /**
-   * Get nachfristDokumente
-   * @return nachfristDokumente
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public LocalDate getNachfristDokumente() {
-    return nachfristDokumente;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachfristDokumente(LocalDate nachfristDokumente) {
-    this.nachfristDokumente = nachfristDokumente;
-  }
-
-
-  public GesuchWithChangesDtoSpec verfuegt(Boolean verfuegt) {
-    
-    this.verfuegt = verfuegt;
-    return this;
-  }
-
-   /**
-   * Get verfuegt
-   * @return verfuegt
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERFUEGT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getVerfuegt() {
-    return verfuegt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VERFUEGT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVerfuegt(Boolean verfuegt) {
-    this.verfuegt = verfuegt;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -629,9 +631,7 @@ public class GesuchWithChangesDtoSpec {
       return false;
     }
     GesuchWithChangesDtoSpec gesuchWithChanges = (GesuchWithChangesDtoSpec) o;
-    return Objects.equals(this.changes, gesuchWithChanges.changes) &&
-        Objects.equals(this.isInitial, gesuchWithChanges.isInitial) &&
-        Objects.equals(this.fallId, gesuchWithChanges.fallId) &&
+    return Objects.equals(this.fallId, gesuchWithChanges.fallId) &&
         Objects.equals(this.fallNummer, gesuchWithChanges.fallNummer) &&
         Objects.equals(this.ausbildungId, gesuchWithChanges.ausbildungId) &&
         Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, gesuchWithChanges.hasPendingAusbildungUnterbruchAntrag) &&
@@ -647,20 +647,20 @@ public class GesuchWithChangesDtoSpec {
         Objects.equals(this.minDateEigenerWohnsitz, gesuchWithChanges.minDateEigenerWohnsitz) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente) &&
-        Objects.equals(this.verfuegt, gesuchWithChanges.verfuegt);
+        Objects.equals(this.verfuegt, gesuchWithChanges.verfuegt) &&
+        Objects.equals(this.changes, gesuchWithChanges.changes) &&
+        Objects.equals(this.isInitial, gesuchWithChanges.isInitial);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(changes, isInitial, fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, hadDelegierungs, minDateEigenerWohnsitz, delegierung, nachfristDokumente, verfuegt);
+    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, hadDelegierungs, minDateEigenerWohnsitz, delegierung, nachfristDokumente, verfuegt, changes, isInitial);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchWithChangesDtoSpec {\n");
-    sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
-    sb.append("    isInitial: ").append(toIndentedString(isInitial)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
@@ -678,6 +678,8 @@ public class GesuchWithChangesDtoSpec {
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    verfuegt: ").append(toIndentedString(verfuegt)).append("\n");
+    sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
+    sb.append("    isInitial: ").append(toIndentedString(isInitial)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -687,10 +689,7 @@ public class GesuchWithChangesDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

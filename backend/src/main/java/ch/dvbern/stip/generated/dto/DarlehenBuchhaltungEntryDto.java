@@ -15,18 +15,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DarlehenBuchhaltungEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DarlehenBuchhaltungEntryDto  implements Serializable {
-  private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie kategorie;
-  private @Valid Integer betrag;
-  private @Valid DokumentDto verfuegung;
-  private @Valid String yearRange;
-  private @Valid String userErstellt;
-  private @Valid String kommentar;
+  private java.time.LocalDateTime timestampErstellt;
+  private ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie kategorie;
+  private Integer betrag;
+  private DokumentDto verfuegung;
+  private String yearRange;
+  private String userErstellt;
+  private String kommentar;
 
   protected DarlehenBuchhaltungEntryDto(DarlehenBuchhaltungEntryDtoBuilder<?, ?> b) {
     this.timestampErstellt = b.timestampErstellt;
@@ -49,13 +49,12 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public java.time.LocalDateTime getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -68,13 +67,12 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("kategorie")
-  @NotNull
-  public ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie getKategorie() {
+  @JsonProperty(required = true, value = "kategorie")
+  @NotNull public ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie getKategorie() {
     return kategorie;
   }
 
-  @JsonProperty("kategorie")
+  @JsonProperty(required = true, value = "kategorie")
   public void setKategorie(ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie kategorie) {
     this.kategorie = kategorie;
   }
@@ -87,13 +85,12 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("betrag")
-  @NotNull
-  public Integer getBetrag() {
+  @JsonProperty(required = true, value = "betrag")
+  @NotNull public Integer getBetrag() {
     return betrag;
   }
 
-  @JsonProperty("betrag")
+  @JsonProperty(required = true, value = "betrag")
   public void setBetrag(Integer betrag) {
     this.betrag = betrag;
   }
@@ -107,7 +104,7 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
 
   
   @JsonProperty("verfuegung")
-  public DokumentDto getVerfuegung() {
+  @Valid public DokumentDto getVerfuegung() {
     return verfuegung;
   }
 
@@ -215,10 +212,7 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -281,4 +275,3 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
     }
   }
 }
-

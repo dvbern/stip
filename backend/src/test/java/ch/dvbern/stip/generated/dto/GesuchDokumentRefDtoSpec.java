@@ -33,29 +33,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDokumentRefDtoSpec.JSON_PROPERTY_ENTRY_ID
 })
 @JsonTypeName("GesuchDokumentRef")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchDokumentRefDtoSpec {
   public static final String JSON_PROPERTY_DOKUMENT_TYP = "dokumentTyp";
+  @jakarta.annotation.Nonnull
   private DokumentTypDtoSpec dokumentTyp;
 
   public static final String JSON_PROPERTY_ENTRY_ID = "entryId";
+  @jakarta.annotation.Nullable
   private UUID entryId;
 
   public GesuchDokumentRefDtoSpec() {
   }
 
-  public GesuchDokumentRefDtoSpec dokumentTyp(DokumentTypDtoSpec dokumentTyp) {
+  public GesuchDokumentRefDtoSpec dokumentTyp(@jakarta.annotation.Nonnull DokumentTypDtoSpec dokumentTyp) {
     
     this.dokumentTyp = dokumentTyp;
     return this;
   }
 
-   /**
+  /**
    * Get dokumentTyp
    * @return dokumentTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DokumentTypDtoSpec getDokumentTyp() {
@@ -63,25 +65,24 @@ public class GesuchDokumentRefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumentTyp(DokumentTypDtoSpec dokumentTyp) {
+  public void setDokumentTyp(@jakarta.annotation.Nonnull DokumentTypDtoSpec dokumentTyp) {
     this.dokumentTyp = dokumentTyp;
   }
 
-
-  public GesuchDokumentRefDtoSpec entryId(UUID entryId) {
+  public GesuchDokumentRefDtoSpec entryId(@jakarta.annotation.Nullable UUID entryId) {
     
     this.entryId = entryId;
     return this;
   }
 
-   /**
+  /**
    * Get entryId
    * @return entryId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ENTRY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getEntryId() {
@@ -89,11 +90,12 @@ public class GesuchDokumentRefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ENTRY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEntryId(UUID entryId) {
+  public void setEntryId(@jakarta.annotation.Nullable UUID entryId) {
     this.entryId = entryId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -128,10 +130,7 @@ public class GesuchDokumentRefDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

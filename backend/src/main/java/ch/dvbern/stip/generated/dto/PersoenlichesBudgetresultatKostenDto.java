@@ -20,27 +20,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("PersoenlichesBudgetresultatKosten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
-  private @Valid Integer total;
-  private @Valid Integer ausbildungskosten;
-  private @Valid Integer ausbildungskostenTotal;
-  private @Valid Integer fahrkosten;
-  private @Valid Integer fahrkostenTotal;
-  private @Valid Integer verpflegungskosten;
-  private @Valid Integer grundbedarf;
-  private @Valid Integer wohnkosten;
-  private @Valid List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
-  private @Valid Integer medizinischeGrundversorgungTotal;
-  private @Valid List<PersonValueItemDto> betreuungskosten = new ArrayList<>();
-  private @Valid Integer betreuungskostenTotal;
-  private @Valid Integer steuern;
-  private @Valid Integer anteilLebenshaltungskosten;
-  private @Valid Integer fahrkostenPartner;
-  private @Valid Integer verpflegungPartner;
+  private Integer total;
+  private Integer ausbildungskosten;
+  private Integer ausbildungskostenTotal;
+  private Integer fahrkosten;
+  private Integer fahrkostenTotal;
+  private Integer verpflegungskosten;
+  private Integer grundbedarf;
+  private Integer wohnkosten;
+  private @Valid List<@Valid PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
+  private Integer medizinischeGrundversorgungTotal;
+  private @Valid List<@Valid PersonValueItemDto> betreuungskosten = new ArrayList<>();
+  private Integer betreuungskostenTotal;
+  private Integer steuern;
+  private Integer anteilLebenshaltungskosten;
+  private Integer fahrkostenPartner;
+  private Integer verpflegungPartner;
 
   protected PersoenlichesBudgetresultatKostenDto(PersoenlichesBudgetresultatKostenDtoBuilder<?, ?> b) {
     this.total = b.total;
@@ -72,13 +72,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("total")
-  @NotNull
-  public Integer getTotal() {
+  @JsonProperty(required = true, value = "total")
+  @NotNull public Integer getTotal() {
     return total;
   }
 
-  @JsonProperty("total")
+  @JsonProperty(required = true, value = "total")
   public void setTotal(Integer total) {
     this.total = total;
   }
@@ -91,13 +90,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungskosten")
-  @NotNull
-  public Integer getAusbildungskosten() {
+  @JsonProperty(required = true, value = "ausbildungskosten")
+  @NotNull public Integer getAusbildungskosten() {
     return ausbildungskosten;
   }
 
-  @JsonProperty("ausbildungskosten")
+  @JsonProperty(required = true, value = "ausbildungskosten")
   public void setAusbildungskosten(Integer ausbildungskosten) {
     this.ausbildungskosten = ausbildungskosten;
   }
@@ -110,13 +108,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungskostenTotal")
-  @NotNull
-  public Integer getAusbildungskostenTotal() {
+  @JsonProperty(required = true, value = "ausbildungskostenTotal")
+  @NotNull public Integer getAusbildungskostenTotal() {
     return ausbildungskostenTotal;
   }
 
-  @JsonProperty("ausbildungskostenTotal")
+  @JsonProperty(required = true, value = "ausbildungskostenTotal")
   public void setAusbildungskostenTotal(Integer ausbildungskostenTotal) {
     this.ausbildungskostenTotal = ausbildungskostenTotal;
   }
@@ -129,13 +126,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fahrkosten")
-  @NotNull
-  public Integer getFahrkosten() {
+  @JsonProperty(required = true, value = "fahrkosten")
+  @NotNull public Integer getFahrkosten() {
     return fahrkosten;
   }
 
-  @JsonProperty("fahrkosten")
+  @JsonProperty(required = true, value = "fahrkosten")
   public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
@@ -148,13 +144,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fahrkostenTotal")
-  @NotNull
-  public Integer getFahrkostenTotal() {
+  @JsonProperty(required = true, value = "fahrkostenTotal")
+  @NotNull public Integer getFahrkostenTotal() {
     return fahrkostenTotal;
   }
 
-  @JsonProperty("fahrkostenTotal")
+  @JsonProperty(required = true, value = "fahrkostenTotal")
   public void setFahrkostenTotal(Integer fahrkostenTotal) {
     this.fahrkostenTotal = fahrkostenTotal;
   }
@@ -167,13 +162,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("verpflegungskosten")
-  @NotNull
-  public Integer getVerpflegungskosten() {
+  @JsonProperty(required = true, value = "verpflegungskosten")
+  @NotNull public Integer getVerpflegungskosten() {
     return verpflegungskosten;
   }
 
-  @JsonProperty("verpflegungskosten")
+  @JsonProperty(required = true, value = "verpflegungskosten")
   public void setVerpflegungskosten(Integer verpflegungskosten) {
     this.verpflegungskosten = verpflegungskosten;
   }
@@ -186,13 +180,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("grundbedarf")
-  @NotNull
-  public Integer getGrundbedarf() {
+  @JsonProperty(required = true, value = "grundbedarf")
+  @NotNull public Integer getGrundbedarf() {
     return grundbedarf;
   }
 
-  @JsonProperty("grundbedarf")
+  @JsonProperty(required = true, value = "grundbedarf")
   public void setGrundbedarf(Integer grundbedarf) {
     this.grundbedarf = grundbedarf;
   }
@@ -205,33 +198,31 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten")
-  @NotNull
-  public Integer getWohnkosten() {
+  @JsonProperty(required = true, value = "wohnkosten")
+  @NotNull public Integer getWohnkosten() {
     return wohnkosten;
   }
 
-  @JsonProperty("wohnkosten")
+  @JsonProperty(required = true, value = "wohnkosten")
   public void setWohnkosten(Integer wohnkosten) {
     this.wohnkosten = wohnkosten;
   }
 
   /**
    **/
-  public PersoenlichesBudgetresultatKostenDto medizinischeGrundversorgung(List<PersonValueItemDto> medizinischeGrundversorgung) {
+  public PersoenlichesBudgetresultatKostenDto medizinischeGrundversorgung(List<@Valid PersonValueItemDto> medizinischeGrundversorgung) {
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
     return this;
   }
 
   
-  @JsonProperty("medizinischeGrundversorgung")
-  @NotNull
-  public List<PersonValueItemDto> getMedizinischeGrundversorgung() {
+  @JsonProperty(required = true, value = "medizinischeGrundversorgung")
+  @NotNull @Valid public List<@Valid PersonValueItemDto> getMedizinischeGrundversorgung() {
     return medizinischeGrundversorgung;
   }
 
-  @JsonProperty("medizinischeGrundversorgung")
-  public void setMedizinischeGrundversorgung(List<PersonValueItemDto> medizinischeGrundversorgung) {
+  @JsonProperty(required = true, value = "medizinischeGrundversorgung")
+  public void setMedizinischeGrundversorgung(List<@Valid PersonValueItemDto> medizinischeGrundversorgung) {
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
   }
 
@@ -259,33 +250,31 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("medizinischeGrundversorgungTotal")
-  @NotNull
-  public Integer getMedizinischeGrundversorgungTotal() {
+  @JsonProperty(required = true, value = "medizinischeGrundversorgungTotal")
+  @NotNull public Integer getMedizinischeGrundversorgungTotal() {
     return medizinischeGrundversorgungTotal;
   }
 
-  @JsonProperty("medizinischeGrundversorgungTotal")
+  @JsonProperty(required = true, value = "medizinischeGrundversorgungTotal")
   public void setMedizinischeGrundversorgungTotal(Integer medizinischeGrundversorgungTotal) {
     this.medizinischeGrundversorgungTotal = medizinischeGrundversorgungTotal;
   }
 
   /**
    **/
-  public PersoenlichesBudgetresultatKostenDto betreuungskosten(List<PersonValueItemDto> betreuungskosten) {
+  public PersoenlichesBudgetresultatKostenDto betreuungskosten(List<@Valid PersonValueItemDto> betreuungskosten) {
     this.betreuungskosten = betreuungskosten;
     return this;
   }
 
   
-  @JsonProperty("betreuungskosten")
-  @NotNull
-  public List<PersonValueItemDto> getBetreuungskosten() {
+  @JsonProperty(required = true, value = "betreuungskosten")
+  @NotNull @Valid public List<@Valid PersonValueItemDto> getBetreuungskosten() {
     return betreuungskosten;
   }
 
-  @JsonProperty("betreuungskosten")
-  public void setBetreuungskosten(List<PersonValueItemDto> betreuungskosten) {
+  @JsonProperty(required = true, value = "betreuungskosten")
+  public void setBetreuungskosten(List<@Valid PersonValueItemDto> betreuungskosten) {
     this.betreuungskosten = betreuungskosten;
   }
 
@@ -313,13 +302,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("betreuungskostenTotal")
-  @NotNull
-  public Integer getBetreuungskostenTotal() {
+  @JsonProperty(required = true, value = "betreuungskostenTotal")
+  @NotNull public Integer getBetreuungskostenTotal() {
     return betreuungskostenTotal;
   }
 
-  @JsonProperty("betreuungskostenTotal")
+  @JsonProperty(required = true, value = "betreuungskostenTotal")
   public void setBetreuungskostenTotal(Integer betreuungskostenTotal) {
     this.betreuungskostenTotal = betreuungskostenTotal;
   }
@@ -332,13 +320,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuern")
-  @NotNull
-  public Integer getSteuern() {
+  @JsonProperty(required = true, value = "steuern")
+  @NotNull public Integer getSteuern() {
     return steuern;
   }
 
-  @JsonProperty("steuern")
+  @JsonProperty(required = true, value = "steuern")
   public void setSteuern(Integer steuern) {
     this.steuern = steuern;
   }
@@ -351,13 +338,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("anteilLebenshaltungskosten")
-  @NotNull
-  public Integer getAnteilLebenshaltungskosten() {
+  @JsonProperty(required = true, value = "anteilLebenshaltungskosten")
+  @NotNull public Integer getAnteilLebenshaltungskosten() {
     return anteilLebenshaltungskosten;
   }
 
-  @JsonProperty("anteilLebenshaltungskosten")
+  @JsonProperty(required = true, value = "anteilLebenshaltungskosten")
   public void setAnteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
     this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
   }
@@ -461,10 +447,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -572,4 +555,3 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     }
   }
 }
-

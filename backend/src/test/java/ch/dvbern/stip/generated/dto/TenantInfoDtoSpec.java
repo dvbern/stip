@@ -34,32 +34,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   TenantInfoDtoSpec.JSON_PROPERTY_IDENTIFIER
 })
 @JsonTypeName("TenantInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class TenantInfoDtoSpec {
   public static final String JSON_PROPERTY_CLIENT_AUTH = "clientAuth";
+  @jakarta.annotation.Nonnull
   private TenantAuthConfigDtoSpec clientAuth;
 
   public static final String JSON_PROPERTY_FEATURES = "features";
+  @jakarta.annotation.Nonnull
   private TenantFeaturesDtoSpec features;
 
   public static final String JSON_PROPERTY_IDENTIFIER = "identifier";
+  @jakarta.annotation.Nonnull
   private String identifier;
 
   public TenantInfoDtoSpec() {
   }
 
-  public TenantInfoDtoSpec clientAuth(TenantAuthConfigDtoSpec clientAuth) {
+  public TenantInfoDtoSpec clientAuth(@jakarta.annotation.Nonnull TenantAuthConfigDtoSpec clientAuth) {
     
     this.clientAuth = clientAuth;
     return this;
   }
 
-   /**
+  /**
    * Get clientAuth
    * @return clientAuth
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CLIENT_AUTH)
+  @JsonProperty(value = JSON_PROPERTY_CLIENT_AUTH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public TenantAuthConfigDtoSpec getClientAuth() {
@@ -67,25 +70,24 @@ public class TenantInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CLIENT_AUTH)
+  @JsonProperty(value = JSON_PROPERTY_CLIENT_AUTH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setClientAuth(TenantAuthConfigDtoSpec clientAuth) {
+  public void setClientAuth(@jakarta.annotation.Nonnull TenantAuthConfigDtoSpec clientAuth) {
     this.clientAuth = clientAuth;
   }
 
-
-  public TenantInfoDtoSpec features(TenantFeaturesDtoSpec features) {
+  public TenantInfoDtoSpec features(@jakarta.annotation.Nonnull TenantFeaturesDtoSpec features) {
     
     this.features = features;
     return this;
   }
 
-   /**
+  /**
    * Get features
    * @return features
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FEATURES)
+  @JsonProperty(value = JSON_PROPERTY_FEATURES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public TenantFeaturesDtoSpec getFeatures() {
@@ -93,25 +95,24 @@ public class TenantInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FEATURES)
+  @JsonProperty(value = JSON_PROPERTY_FEATURES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFeatures(TenantFeaturesDtoSpec features) {
+  public void setFeatures(@jakarta.annotation.Nonnull TenantFeaturesDtoSpec features) {
     this.features = features;
   }
 
-
-  public TenantInfoDtoSpec identifier(String identifier) {
+  public TenantInfoDtoSpec identifier(@jakarta.annotation.Nonnull String identifier) {
     
     this.identifier = identifier;
     return this;
   }
 
-   /**
+  /**
    * Get identifier
    * @return identifier
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IDENTIFIER)
+  @JsonProperty(value = JSON_PROPERTY_IDENTIFIER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getIdentifier() {
@@ -119,11 +120,12 @@ public class TenantInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IDENTIFIER)
+  @JsonProperty(value = JSON_PROPERTY_IDENTIFIER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIdentifier(String identifier) {
+  public void setIdentifier(@jakarta.annotation.Nonnull String identifier) {
     this.identifier = identifier;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -160,10 +162,7 @@ public class TenantInfoDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

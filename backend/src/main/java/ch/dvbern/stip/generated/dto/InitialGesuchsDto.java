@@ -16,13 +16,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("InitialGesuchs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class InitialGesuchsDto  implements Serializable {
-  private @Valid GesuchTrancheSlimDto eingereichtGesuch;
-  private @Valid VerfuegtGesuchDto verfuegtGesuch;
+  private GesuchTrancheSlimDto eingereichtGesuch;
+  private VerfuegtGesuchDto verfuegtGesuch;
 
   protected InitialGesuchsDto(InitialGesuchsDtoBuilder<?, ?> b) {
     this.eingereichtGesuch = b.eingereichtGesuch;
@@ -41,7 +41,7 @@ public class InitialGesuchsDto  implements Serializable {
 
   
   @JsonProperty("eingereichtGesuch")
-  public GesuchTrancheSlimDto getEingereichtGesuch() {
+  @Valid public GesuchTrancheSlimDto getEingereichtGesuch() {
     return eingereichtGesuch;
   }
 
@@ -59,7 +59,7 @@ public class InitialGesuchsDto  implements Serializable {
 
   
   @JsonProperty("verfuegtGesuch")
-  public VerfuegtGesuchDto getVerfuegtGesuch() {
+  @Valid public VerfuegtGesuchDto getVerfuegtGesuch() {
     return verfuegtGesuch;
   }
 
@@ -103,10 +103,7 @@ public class InitialGesuchsDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +141,3 @@ public class InitialGesuchsDto  implements Serializable {
     }
   }
 }
-

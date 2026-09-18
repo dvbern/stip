@@ -40,44 +40,51 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchAenderungsDtoSpec.JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN
 })
 @JsonTypeName("GesuchAenderungs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchAenderungsDtoSpec {
   public static final String JSON_PROPERTY_OFFEN = "offen";
+  @jakarta.annotation.Nullable
   private GesuchTrancheSlimDtoSpec offen;
 
   public static final String JSON_PROPERTY_EINGEREICHT = "eingereicht";
+  @jakarta.annotation.Nullable
   private GesuchTrancheSlimDtoSpec eingereicht;
 
   public static final String JSON_PROPERTY_MANUELL = "manuell";
+  @jakarta.annotation.Nonnull
   private List<GesuchTrancheSlimDtoSpec> manuell;
 
   public static final String JSON_PROPERTY_AKZEPTIERT = "akzeptiert";
+  @jakarta.annotation.Nonnull
   private List<GesuchTrancheSlimDtoSpec> akzeptiert;
 
   public static final String JSON_PROPERTY_ABGELEHNT = "abgelehnt";
+  @jakarta.annotation.Nonnull
   private List<GesuchTrancheSlimDtoSpec> abgelehnt;
 
   public static final String JSON_PROPERTY_FEHLENDE_DOKUMENTE = "fehlendeDokumente";
+  @jakarta.annotation.Nonnull
   private List<GesuchTrancheSlimDtoSpec> fehlendeDokumente;
 
   public static final String JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN = "canAenderungEinreichen";
+  @jakarta.annotation.Nonnull
   private Boolean canAenderungEinreichen;
 
   public GesuchAenderungsDtoSpec() {
   }
 
-  public GesuchAenderungsDtoSpec offen(GesuchTrancheSlimDtoSpec offen) {
+  public GesuchAenderungsDtoSpec offen(@jakarta.annotation.Nullable GesuchTrancheSlimDtoSpec offen) {
     
     this.offen = offen;
     return this;
   }
 
-   /**
+  /**
    * Get offen
    * @return offen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_OFFEN)
+  @JsonProperty(value = JSON_PROPERTY_OFFEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchTrancheSlimDtoSpec getOffen() {
@@ -85,25 +92,24 @@ public class GesuchAenderungsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_OFFEN)
+  @JsonProperty(value = JSON_PROPERTY_OFFEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setOffen(GesuchTrancheSlimDtoSpec offen) {
+  public void setOffen(@jakarta.annotation.Nullable GesuchTrancheSlimDtoSpec offen) {
     this.offen = offen;
   }
 
-
-  public GesuchAenderungsDtoSpec eingereicht(GesuchTrancheSlimDtoSpec eingereicht) {
+  public GesuchAenderungsDtoSpec eingereicht(@jakarta.annotation.Nullable GesuchTrancheSlimDtoSpec eingereicht) {
     
     this.eingereicht = eingereicht;
     return this;
   }
 
-   /**
+  /**
    * Get eingereicht
    * @return eingereicht
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EINGEREICHT)
+  @JsonProperty(value = JSON_PROPERTY_EINGEREICHT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchTrancheSlimDtoSpec getEingereicht() {
@@ -111,14 +117,13 @@ public class GesuchAenderungsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINGEREICHT)
+  @JsonProperty(value = JSON_PROPERTY_EINGEREICHT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEingereicht(GesuchTrancheSlimDtoSpec eingereicht) {
+  public void setEingereicht(@jakarta.annotation.Nullable GesuchTrancheSlimDtoSpec eingereicht) {
     this.eingereicht = eingereicht;
   }
 
-
-  public GesuchAenderungsDtoSpec manuell(List<GesuchTrancheSlimDtoSpec> manuell) {
+  public GesuchAenderungsDtoSpec manuell(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> manuell) {
     
     this.manuell = manuell;
     return this;
@@ -132,12 +137,12 @@ public class GesuchAenderungsDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get manuell
    * @return manuell
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MANUELL)
+  @JsonProperty(value = JSON_PROPERTY_MANUELL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<GesuchTrancheSlimDtoSpec> getManuell() {
@@ -145,14 +150,13 @@ public class GesuchAenderungsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MANUELL)
+  @JsonProperty(value = JSON_PROPERTY_MANUELL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setManuell(List<GesuchTrancheSlimDtoSpec> manuell) {
+  public void setManuell(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> manuell) {
     this.manuell = manuell;
   }
 
-
-  public GesuchAenderungsDtoSpec akzeptiert(List<GesuchTrancheSlimDtoSpec> akzeptiert) {
+  public GesuchAenderungsDtoSpec akzeptiert(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> akzeptiert) {
     
     this.akzeptiert = akzeptiert;
     return this;
@@ -166,12 +170,12 @@ public class GesuchAenderungsDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get akzeptiert
    * @return akzeptiert
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AKZEPTIERT)
+  @JsonProperty(value = JSON_PROPERTY_AKZEPTIERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<GesuchTrancheSlimDtoSpec> getAkzeptiert() {
@@ -179,14 +183,13 @@ public class GesuchAenderungsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AKZEPTIERT)
+  @JsonProperty(value = JSON_PROPERTY_AKZEPTIERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAkzeptiert(List<GesuchTrancheSlimDtoSpec> akzeptiert) {
+  public void setAkzeptiert(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> akzeptiert) {
     this.akzeptiert = akzeptiert;
   }
 
-
-  public GesuchAenderungsDtoSpec abgelehnt(List<GesuchTrancheSlimDtoSpec> abgelehnt) {
+  public GesuchAenderungsDtoSpec abgelehnt(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> abgelehnt) {
     
     this.abgelehnt = abgelehnt;
     return this;
@@ -200,12 +203,12 @@ public class GesuchAenderungsDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get abgelehnt
    * @return abgelehnt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ABGELEHNT)
+  @JsonProperty(value = JSON_PROPERTY_ABGELEHNT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<GesuchTrancheSlimDtoSpec> getAbgelehnt() {
@@ -213,14 +216,13 @@ public class GesuchAenderungsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ABGELEHNT)
+  @JsonProperty(value = JSON_PROPERTY_ABGELEHNT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAbgelehnt(List<GesuchTrancheSlimDtoSpec> abgelehnt) {
+  public void setAbgelehnt(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> abgelehnt) {
     this.abgelehnt = abgelehnt;
   }
 
-
-  public GesuchAenderungsDtoSpec fehlendeDokumente(List<GesuchTrancheSlimDtoSpec> fehlendeDokumente) {
+  public GesuchAenderungsDtoSpec fehlendeDokumente(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> fehlendeDokumente) {
     
     this.fehlendeDokumente = fehlendeDokumente;
     return this;
@@ -234,12 +236,12 @@ public class GesuchAenderungsDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get fehlendeDokumente
    * @return fehlendeDokumente
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FEHLENDE_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_FEHLENDE_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<GesuchTrancheSlimDtoSpec> getFehlendeDokumente() {
@@ -247,25 +249,24 @@ public class GesuchAenderungsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FEHLENDE_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_FEHLENDE_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFehlendeDokumente(List<GesuchTrancheSlimDtoSpec> fehlendeDokumente) {
+  public void setFehlendeDokumente(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> fehlendeDokumente) {
     this.fehlendeDokumente = fehlendeDokumente;
   }
 
-
-  public GesuchAenderungsDtoSpec canAenderungEinreichen(Boolean canAenderungEinreichen) {
+  public GesuchAenderungsDtoSpec canAenderungEinreichen(@jakarta.annotation.Nonnull Boolean canAenderungEinreichen) {
     
     this.canAenderungEinreichen = canAenderungEinreichen;
     return this;
   }
 
-   /**
+  /**
    * Get canAenderungEinreichen
    * @return canAenderungEinreichen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanAenderungEinreichen() {
@@ -273,11 +274,12 @@ public class GesuchAenderungsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanAenderungEinreichen(Boolean canAenderungEinreichen) {
+  public void setCanAenderungEinreichen(@jakarta.annotation.Nonnull Boolean canAenderungEinreichen) {
     this.canAenderungEinreichen = canAenderungEinreichen;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -322,10 +324,7 @@ public class GesuchAenderungsDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

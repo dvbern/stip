@@ -17,12 +17,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("GesuchDokumentAblehnenRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentAblehnenRequestDto  implements Serializable {
-  private @Valid GesuchDokumentKommentarDto kommentar;
+  private GesuchDokumentKommentarDto kommentar;
 
   protected GesuchDokumentAblehnenRequestDto(GesuchDokumentAblehnenRequestDtoBuilder<?, ?> b) {
     this.kommentar = b.kommentar;
@@ -40,7 +40,7 @@ public class GesuchDokumentAblehnenRequestDto  implements Serializable {
 
   
   @JsonProperty("kommentar")
-  public GesuchDokumentKommentarDto getKommentar() {
+  @Valid public GesuchDokumentKommentarDto getKommentar() {
     return kommentar;
   }
 
@@ -82,10 +82,7 @@ public class GesuchDokumentAblehnenRequestDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -118,4 +115,3 @@ public class GesuchDokumentAblehnenRequestDto  implements Serializable {
     }
   }
 }
-

@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BenutzereinstellungenDtoSpec.JSON_PROPERTY_DIGITALE_KOMMUNIKATION
 })
 @JsonTypeName("Benutzereinstellungen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BenutzereinstellungenDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_DIGITALE_KOMMUNIKATION = "digitaleKommunikation";
+  @jakarta.annotation.Nullable
   private Boolean digitaleKommunikation;
 
   public BenutzereinstellungenDtoSpec() {
   }
 
-  public BenutzereinstellungenDtoSpec id(UUID id) {
+  public BenutzereinstellungenDtoSpec id(@jakarta.annotation.Nullable UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
@@ -62,25 +64,24 @@ public class BenutzereinstellungenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nullable UUID id) {
     this.id = id;
   }
 
-
-  public BenutzereinstellungenDtoSpec digitaleKommunikation(Boolean digitaleKommunikation) {
+  public BenutzereinstellungenDtoSpec digitaleKommunikation(@jakarta.annotation.Nullable Boolean digitaleKommunikation) {
     
     this.digitaleKommunikation = digitaleKommunikation;
     return this;
   }
 
-   /**
+  /**
    * Get digitaleKommunikation
    * @return digitaleKommunikation
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DIGITALE_KOMMUNIKATION)
+  @JsonProperty(value = JSON_PROPERTY_DIGITALE_KOMMUNIKATION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getDigitaleKommunikation() {
@@ -88,11 +89,12 @@ public class BenutzereinstellungenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DIGITALE_KOMMUNIKATION)
+  @JsonProperty(value = JSON_PROPERTY_DIGITALE_KOMMUNIKATION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDigitaleKommunikation(Boolean digitaleKommunikation) {
+  public void setDigitaleKommunikation(@jakarta.annotation.Nullable Boolean digitaleKommunikation) {
     this.digitaleKommunikation = digitaleKommunikation;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class BenutzereinstellungenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

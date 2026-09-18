@@ -30,6 +30,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -104,7 +105,7 @@ public class SteuerdatenApiSpec {
 
         public GetSteuerdatenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -179,7 +180,7 @@ public class SteuerdatenApiSpec {
         public UpdateSteuerdatenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -208,7 +209,7 @@ public class SteuerdatenApiSpec {
          * @param steuerdatenDtoSpec (List&lt;SteuerdatenDtoSpec&gt;)  (required)
          * @return operation
          */
-        public UpdateSteuerdatenOper body(List<SteuerdatenDtoSpec> steuerdatenDtoSpec) {
+        public UpdateSteuerdatenOper body(@jakarta.annotation.Nonnull List<SteuerdatenDtoSpec> steuerdatenDtoSpec) {
             reqSpec.setBody(steuerdatenDtoSpec);
             return this;
         }
@@ -263,7 +264,7 @@ public class SteuerdatenApiSpec {
         public UpdateSteuerdatenFromPortOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -292,7 +293,7 @@ public class SteuerdatenApiSpec {
          * @param getSteuerdatenFromPortRequestDtoSpec (GetSteuerdatenFromPortRequestDtoSpec)  (required)
          * @return operation
          */
-        public UpdateSteuerdatenFromPortOper body(GetSteuerdatenFromPortRequestDtoSpec getSteuerdatenFromPortRequestDtoSpec) {
+        public UpdateSteuerdatenFromPortOper body(@jakarta.annotation.Nonnull GetSteuerdatenFromPortRequestDtoSpec getSteuerdatenFromPortRequestDtoSpec) {
             reqSpec.setBody(getSteuerdatenFromPortRequestDtoSpec);
             return this;
         }

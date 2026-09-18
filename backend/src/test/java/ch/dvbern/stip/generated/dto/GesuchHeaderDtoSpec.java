@@ -45,44 +45,51 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchHeaderDtoSpec.JSON_PROPERTY_GESUCH_INFO
 })
 @JsonTypeName("GesuchHeader")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchHeaderDtoSpec {
   public static final String JSON_PROPERTY_INITIAL = "initial";
+  @jakarta.annotation.Nullable
   private InitialGesuchsDtoSpec initial;
 
   public static final String JSON_PROPERTY_VERSIONS = "versions";
+  @jakarta.annotation.Nonnull
   private List<VerfuegtGesuchDtoSpec> versions;
 
   public static final String JSON_PROPERTY_AENDERUNGS = "aenderungs";
+  @jakarta.annotation.Nonnull
   private GesuchAenderungsDtoSpec aenderungs;
 
   public static final String JSON_PROPERTY_CURRENT_TRANCHES = "currentTranches";
+  @jakarta.annotation.Nonnull
   private List<GesuchTrancheSlimDtoSpec> currentTranches;
 
   public static final String JSON_PROPERTY_LATEST_VERFUEGUNG_ID = "latestVerfuegungId";
+  @jakarta.annotation.Nullable
   private UUID latestVerfuegungId;
 
   public static final String JSON_PROPERTY_LATEST_VERFUEGT_AT = "latestVerfuegtAt";
+  @jakarta.annotation.Nullable
   private java.time.LocalDateTime latestVerfuegtAt;
 
   public static final String JSON_PROPERTY_GESUCH_INFO = "gesuchInfo";
+  @jakarta.annotation.Nonnull
   private GesuchInfoDtoSpec gesuchInfo;
 
   public GesuchHeaderDtoSpec() {
   }
 
-  public GesuchHeaderDtoSpec initial(InitialGesuchsDtoSpec initial) {
+  public GesuchHeaderDtoSpec initial(@jakarta.annotation.Nullable InitialGesuchsDtoSpec initial) {
     
     this.initial = initial;
     return this;
   }
 
-   /**
+  /**
    * Get initial
    * @return initial
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_INITIAL)
+  @JsonProperty(value = JSON_PROPERTY_INITIAL, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public InitialGesuchsDtoSpec getInitial() {
@@ -90,14 +97,13 @@ public class GesuchHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_INITIAL)
+  @JsonProperty(value = JSON_PROPERTY_INITIAL, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInitial(InitialGesuchsDtoSpec initial) {
+  public void setInitial(@jakarta.annotation.Nullable InitialGesuchsDtoSpec initial) {
     this.initial = initial;
   }
 
-
-  public GesuchHeaderDtoSpec versions(List<VerfuegtGesuchDtoSpec> versions) {
+  public GesuchHeaderDtoSpec versions(@jakarta.annotation.Nonnull List<VerfuegtGesuchDtoSpec> versions) {
     
     this.versions = versions;
     return this;
@@ -111,12 +117,12 @@ public class GesuchHeaderDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get versions
    * @return versions
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERSIONS)
+  @JsonProperty(value = JSON_PROPERTY_VERSIONS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<VerfuegtGesuchDtoSpec> getVersions() {
@@ -124,25 +130,24 @@ public class GesuchHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERSIONS)
+  @JsonProperty(value = JSON_PROPERTY_VERSIONS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVersions(List<VerfuegtGesuchDtoSpec> versions) {
+  public void setVersions(@jakarta.annotation.Nonnull List<VerfuegtGesuchDtoSpec> versions) {
     this.versions = versions;
   }
 
-
-  public GesuchHeaderDtoSpec aenderungs(GesuchAenderungsDtoSpec aenderungs) {
+  public GesuchHeaderDtoSpec aenderungs(@jakarta.annotation.Nonnull GesuchAenderungsDtoSpec aenderungs) {
     
     this.aenderungs = aenderungs;
     return this;
   }
 
-   /**
+  /**
    * Get aenderungs
    * @return aenderungs
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AENDERUNGS)
+  @JsonProperty(value = JSON_PROPERTY_AENDERUNGS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchAenderungsDtoSpec getAenderungs() {
@@ -150,14 +155,13 @@ public class GesuchHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AENDERUNGS)
+  @JsonProperty(value = JSON_PROPERTY_AENDERUNGS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAenderungs(GesuchAenderungsDtoSpec aenderungs) {
+  public void setAenderungs(@jakarta.annotation.Nonnull GesuchAenderungsDtoSpec aenderungs) {
     this.aenderungs = aenderungs;
   }
 
-
-  public GesuchHeaderDtoSpec currentTranches(List<GesuchTrancheSlimDtoSpec> currentTranches) {
+  public GesuchHeaderDtoSpec currentTranches(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> currentTranches) {
     
     this.currentTranches = currentTranches;
     return this;
@@ -171,12 +175,12 @@ public class GesuchHeaderDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get currentTranches
    * @return currentTranches
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CURRENT_TRANCHES)
+  @JsonProperty(value = JSON_PROPERTY_CURRENT_TRANCHES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<GesuchTrancheSlimDtoSpec> getCurrentTranches() {
@@ -184,25 +188,24 @@ public class GesuchHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CURRENT_TRANCHES)
+  @JsonProperty(value = JSON_PROPERTY_CURRENT_TRANCHES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCurrentTranches(List<GesuchTrancheSlimDtoSpec> currentTranches) {
+  public void setCurrentTranches(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> currentTranches) {
     this.currentTranches = currentTranches;
   }
 
-
-  public GesuchHeaderDtoSpec latestVerfuegungId(UUID latestVerfuegungId) {
+  public GesuchHeaderDtoSpec latestVerfuegungId(@jakarta.annotation.Nullable UUID latestVerfuegungId) {
     
     this.latestVerfuegungId = latestVerfuegungId;
     return this;
   }
 
-   /**
+  /**
    * Get latestVerfuegungId
    * @return latestVerfuegungId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_LATEST_VERFUEGUNG_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getLatestVerfuegungId() {
@@ -210,25 +213,24 @@ public class GesuchHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_LATEST_VERFUEGUNG_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLatestVerfuegungId(UUID latestVerfuegungId) {
+  public void setLatestVerfuegungId(@jakarta.annotation.Nullable UUID latestVerfuegungId) {
     this.latestVerfuegungId = latestVerfuegungId;
   }
 
-
-  public GesuchHeaderDtoSpec latestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+  public GesuchHeaderDtoSpec latestVerfuegtAt(@jakarta.annotation.Nullable java.time.LocalDateTime latestVerfuegtAt) {
     
     this.latestVerfuegtAt = latestVerfuegtAt;
     return this;
   }
 
-   /**
+  /**
    * Get latestVerfuegtAt
    * @return latestVerfuegtAt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGT_AT)
+  @JsonProperty(value = JSON_PROPERTY_LATEST_VERFUEGT_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public java.time.LocalDateTime getLatestVerfuegtAt() {
@@ -236,25 +238,24 @@ public class GesuchHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGT_AT)
+  @JsonProperty(value = JSON_PROPERTY_LATEST_VERFUEGT_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLatestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+  public void setLatestVerfuegtAt(@jakarta.annotation.Nullable java.time.LocalDateTime latestVerfuegtAt) {
     this.latestVerfuegtAt = latestVerfuegtAt;
   }
 
-
-  public GesuchHeaderDtoSpec gesuchInfo(GesuchInfoDtoSpec gesuchInfo) {
+  public GesuchHeaderDtoSpec gesuchInfo(@jakarta.annotation.Nonnull GesuchInfoDtoSpec gesuchInfo) {
     
     this.gesuchInfo = gesuchInfo;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchInfo
    * @return gesuchInfo
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_INFO)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_INFO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchInfoDtoSpec getGesuchInfo() {
@@ -262,11 +263,12 @@ public class GesuchHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_INFO)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_INFO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchInfo(GesuchInfoDtoSpec gesuchInfo) {
+  public void setGesuchInfo(@jakarta.annotation.Nonnull GesuchInfoDtoSpec gesuchInfo) {
     this.gesuchInfo = gesuchInfo;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -311,10 +313,7 @@ public class GesuchHeaderDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

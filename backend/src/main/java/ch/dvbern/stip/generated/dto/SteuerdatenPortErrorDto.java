@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SteuerdatenPortError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SteuerdatenPortErrorDto  implements Serializable {
-  private @Valid String type;
-  private @Valid String error;
-  private @Valid String userMessage;
+  private String type;
+  private String error;
+  private String userMessage;
 
   protected SteuerdatenPortErrorDto(SteuerdatenPortErrorDtoBuilder<?, ?> b) {
     this.type = b.type;
@@ -40,13 +40,12 @@ public class SteuerdatenPortErrorDto  implements Serializable {
   }
 
   
-  @JsonProperty("type")
-  @NotNull
-  public String getType() {
+  @JsonProperty(required = true, value = "type")
+  @NotNull public String getType() {
     return type;
   }
 
-  @JsonProperty("type")
+  @JsonProperty(required = true, value = "type")
   public void setType(String type) {
     this.type = type;
   }
@@ -59,13 +58,12 @@ public class SteuerdatenPortErrorDto  implements Serializable {
   }
 
   
-  @JsonProperty("error")
-  @NotNull
-  public String getError() {
+  @JsonProperty(required = true, value = "error")
+  @NotNull public String getError() {
     return error;
   }
 
-  @JsonProperty("error")
+  @JsonProperty(required = true, value = "error")
   public void setError(String error) {
     this.error = error;
   }
@@ -78,13 +76,12 @@ public class SteuerdatenPortErrorDto  implements Serializable {
   }
 
   
-  @JsonProperty("userMessage")
-  @NotNull
-  public String getUserMessage() {
+  @JsonProperty(required = true, value = "userMessage")
+  @NotNull public String getUserMessage() {
     return userMessage;
   }
 
-  @JsonProperty("userMessage")
+  @JsonProperty(required = true, value = "userMessage")
   public void setUserMessage(String userMessage) {
     this.userMessage = userMessage;
   }
@@ -126,10 +123,7 @@ public class SteuerdatenPortErrorDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -172,4 +166,3 @@ public class SteuerdatenPortErrorDto  implements Serializable {
     }
   }
 }
-

@@ -15,27 +15,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Steuerdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SteuerdatenDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
-  private @Valid Integer steuernKantonGemeinde;
-  private @Valid Integer steuernBund;
-  private @Valid Integer fahrkosten;
-  private @Valid Integer verpflegung;
-  private @Valid Integer totalEinkuenfte;
-  private @Valid Integer eigenmietwert;
-  private @Valid Boolean isArbeitsverhaeltnisSelbstaendig;
-  private @Valid Integer vermoegen;
-  private @Valid UUID id;
-  private @Valid Integer fahrkostenPartner;
-  private @Valid Integer verpflegungPartner;
-  private @Valid Integer steuerjahr;
-  private @Valid String veranlagungsStatus;
-  private @Valid Integer saeule3a;
-  private @Valid Integer saeule2;
+  private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
+  private Integer steuernKantonGemeinde;
+  private Integer steuernBund;
+  private Integer fahrkosten;
+  private Integer verpflegung;
+  private Integer totalEinkuenfte;
+  private Integer eigenmietwert;
+  private Boolean isArbeitsverhaeltnisSelbstaendig;
+  private Integer vermoegen;
+  private UUID id;
+  private Integer fahrkostenPartner;
+  private Integer verpflegungPartner;
+  private Integer steuerjahr;
+  private String veranlagungsStatus;
+  private Integer saeule3a;
+  private Integer saeule2;
 
   protected SteuerdatenDto(SteuerdatenDtoBuilder<?, ?> b) {
     this.steuerdatenTyp = b.steuerdatenTyp;
@@ -67,13 +67,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuerdatenTyp")
-  @NotNull
-  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getSteuerdatenTyp() {
+  @JsonProperty(required = true, value = "steuerdatenTyp")
+  @NotNull public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getSteuerdatenTyp() {
     return steuerdatenTyp;
   }
 
-  @JsonProperty("steuerdatenTyp")
+  @JsonProperty(required = true, value = "steuerdatenTyp")
   public void setSteuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
     this.steuerdatenTyp = steuerdatenTyp;
   }
@@ -86,13 +85,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuernKantonGemeinde")
-  @NotNull
-  public Integer getSteuernKantonGemeinde() {
+  @JsonProperty(required = true, value = "steuernKantonGemeinde")
+  @NotNull public Integer getSteuernKantonGemeinde() {
     return steuernKantonGemeinde;
   }
 
-  @JsonProperty("steuernKantonGemeinde")
+  @JsonProperty(required = true, value = "steuernKantonGemeinde")
   public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
     this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
@@ -105,13 +103,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuernBund")
-  @NotNull
-  public Integer getSteuernBund() {
+  @JsonProperty(required = true, value = "steuernBund")
+  @NotNull public Integer getSteuernBund() {
     return steuernBund;
   }
 
-  @JsonProperty("steuernBund")
+  @JsonProperty(required = true, value = "steuernBund")
   public void setSteuernBund(Integer steuernBund) {
     this.steuernBund = steuernBund;
   }
@@ -124,13 +121,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fahrkosten")
-  @NotNull
-  public Integer getFahrkosten() {
+  @JsonProperty(required = true, value = "fahrkosten")
+  @NotNull public Integer getFahrkosten() {
     return fahrkosten;
   }
 
-  @JsonProperty("fahrkosten")
+  @JsonProperty(required = true, value = "fahrkosten")
   public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
@@ -143,13 +139,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("verpflegung")
-  @NotNull
-  public Integer getVerpflegung() {
+  @JsonProperty(required = true, value = "verpflegung")
+  @NotNull public Integer getVerpflegung() {
     return verpflegung;
   }
 
-  @JsonProperty("verpflegung")
+  @JsonProperty(required = true, value = "verpflegung")
   public void setVerpflegung(Integer verpflegung) {
     this.verpflegung = verpflegung;
   }
@@ -162,13 +157,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("totalEinkuenfte")
-  @NotNull
-  public Integer getTotalEinkuenfte() {
+  @JsonProperty(required = true, value = "totalEinkuenfte")
+  @NotNull public Integer getTotalEinkuenfte() {
     return totalEinkuenfte;
   }
 
-  @JsonProperty("totalEinkuenfte")
+  @JsonProperty(required = true, value = "totalEinkuenfte")
   public void setTotalEinkuenfte(Integer totalEinkuenfte) {
     this.totalEinkuenfte = totalEinkuenfte;
   }
@@ -181,13 +175,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("eigenmietwert")
-  @NotNull
-  public Integer getEigenmietwert() {
+  @JsonProperty(required = true, value = "eigenmietwert")
+  @NotNull public Integer getEigenmietwert() {
     return eigenmietwert;
   }
 
-  @JsonProperty("eigenmietwert")
+  @JsonProperty(required = true, value = "eigenmietwert")
   public void setEigenmietwert(Integer eigenmietwert) {
     this.eigenmietwert = eigenmietwert;
   }
@@ -200,13 +193,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("isArbeitsverhaeltnisSelbstaendig")
-  @NotNull
-  public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
+  @JsonProperty(required = true, value = "isArbeitsverhaeltnisSelbstaendig")
+  @NotNull public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
     return isArbeitsverhaeltnisSelbstaendig;
   }
 
-  @JsonProperty("isArbeitsverhaeltnisSelbstaendig")
+  @JsonProperty(required = true, value = "isArbeitsverhaeltnisSelbstaendig")
   public void setIsArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
     this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
   }
@@ -219,13 +211,12 @@ public class SteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("vermoegen")
-  @NotNull
-  public Integer getVermoegen() {
+  @JsonProperty(required = true, value = "vermoegen")
+  @NotNull public Integer getVermoegen() {
     return vermoegen;
   }
 
-  @JsonProperty("vermoegen")
+  @JsonProperty(required = true, value = "vermoegen")
   public void setVermoegen(Integer vermoegen) {
     this.vermoegen = vermoegen;
   }
@@ -419,10 +410,7 @@ public class SteuerdatenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -530,4 +518,3 @@ public class SteuerdatenDto  implements Serializable {
     }
   }
 }
-

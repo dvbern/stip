@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DatenschutzbriefCreateDtoSpec.JSON_PROPERTY_ELTERN_ID
 })
 @JsonTypeName("DatenschutzbriefCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DatenschutzbriefCreateDtoSpec {
   public static final String JSON_PROPERTY_ELTERN_ID = "elternId";
+  @jakarta.annotation.Nonnull
   private UUID elternId;
 
   public DatenschutzbriefCreateDtoSpec() {
   }
 
-  public DatenschutzbriefCreateDtoSpec elternId(UUID elternId) {
+  public DatenschutzbriefCreateDtoSpec elternId(@jakarta.annotation.Nonnull UUID elternId) {
     
     this.elternId = elternId;
     return this;
   }
 
-   /**
+  /**
    * Get elternId
    * @return elternId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ELTERN_ID)
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getElternId() {
@@ -58,11 +59,12 @@ public class DatenschutzbriefCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ELTERN_ID)
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setElternId(UUID elternId) {
+  public void setElternId(@jakarta.annotation.Nonnull UUID elternId) {
     this.elternId = elternId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class DatenschutzbriefCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

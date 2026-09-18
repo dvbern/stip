@@ -34,32 +34,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   VerfuegungDokumentDtoSpec.JSON_PROPERTY_FILENAME
 })
 @JsonTypeName("VerfuegungDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class VerfuegungDokumentDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_TYP = "typ";
+  @jakarta.annotation.Nonnull
   private VerfuegungDokumentTypDtoSpec typ;
 
   public static final String JSON_PROPERTY_FILENAME = "filename";
+  @jakarta.annotation.Nonnull
   private String filename;
 
   public VerfuegungDokumentDtoSpec() {
   }
 
-  public VerfuegungDokumentDtoSpec id(UUID id) {
+  public VerfuegungDokumentDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -67,25 +70,24 @@ public class VerfuegungDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public VerfuegungDokumentDtoSpec typ(VerfuegungDokumentTypDtoSpec typ) {
+  public VerfuegungDokumentDtoSpec typ(@jakarta.annotation.Nonnull VerfuegungDokumentTypDtoSpec typ) {
     
     this.typ = typ;
     return this;
   }
 
-   /**
+  /**
    * Get typ
    * @return typ
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public VerfuegungDokumentTypDtoSpec getTyp() {
@@ -93,25 +95,24 @@ public class VerfuegungDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTyp(VerfuegungDokumentTypDtoSpec typ) {
+  public void setTyp(@jakarta.annotation.Nonnull VerfuegungDokumentTypDtoSpec typ) {
     this.typ = typ;
   }
 
-
-  public VerfuegungDokumentDtoSpec filename(String filename) {
+  public VerfuegungDokumentDtoSpec filename(@jakarta.annotation.Nonnull String filename) {
     
     this.filename = filename;
     return this;
   }
 
-   /**
+  /**
    * Get filename
    * @return filename
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILENAME)
+  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilename() {
@@ -119,11 +120,12 @@ public class VerfuegungDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILENAME)
+  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilename(String filename) {
+  public void setFilename(@jakarta.annotation.Nonnull String filename) {
     this.filename = filename;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -160,10 +162,7 @@ public class VerfuegungDokumentDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

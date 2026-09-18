@@ -15,21 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoAusbildungDto  implements Serializable {
-  private @Valid String ausbildungsstaette;
-  private @Valid String ausbildungsgang;
-  private @Valid String berufsbezeichnungFachrichtung;
-  private @Valid String plz;
-  private @Valid String ort;
-  private @Valid Boolean isAusbildungAusland;
-  private @Valid LocalDate ausbildungBeginn;
-  private @Valid LocalDate ausbildungEnd;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
-  private @Valid Boolean ausbildungNichtGefunden;
+  private String ausbildungsstaette;
+  private String ausbildungsgang;
+  private String berufsbezeichnungFachrichtung;
+  private String plz;
+  private String ort;
+  private Boolean isAusbildungAusland;
+  private LocalDate ausbildungBeginn;
+  private LocalDate ausbildungEnd;
+  private ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
+  private Boolean ausbildungNichtGefunden;
 
   protected DemoAusbildungDto(DemoAusbildungDtoBuilder<?, ?> b) {
     this.ausbildungsstaette = b.ausbildungsstaette;
@@ -55,13 +55,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungsstaette")
-  @NotNull
-  public String getAusbildungsstaette() {
+  @JsonProperty(required = true, value = "ausbildungsstaette")
+  @NotNull public String getAusbildungsstaette() {
     return ausbildungsstaette;
   }
 
-  @JsonProperty("ausbildungsstaette")
+  @JsonProperty(required = true, value = "ausbildungsstaette")
   public void setAusbildungsstaette(String ausbildungsstaette) {
     this.ausbildungsstaette = ausbildungsstaette;
   }
@@ -74,13 +73,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungsgang")
-  @NotNull
-  public String getAusbildungsgang() {
+  @JsonProperty(required = true, value = "ausbildungsgang")
+  @NotNull public String getAusbildungsgang() {
     return ausbildungsgang;
   }
 
-  @JsonProperty("ausbildungsgang")
+  @JsonProperty(required = true, value = "ausbildungsgang")
   public void setAusbildungsgang(String ausbildungsgang) {
     this.ausbildungsgang = ausbildungsgang;
   }
@@ -93,13 +91,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("berufsbezeichnungFachrichtung")
-  @NotNull
-  public String getBerufsbezeichnungFachrichtung() {
+  @JsonProperty(required = true, value = "berufsbezeichnungFachrichtung")
+  @NotNull public String getBerufsbezeichnungFachrichtung() {
     return berufsbezeichnungFachrichtung;
   }
 
-  @JsonProperty("berufsbezeichnungFachrichtung")
+  @JsonProperty(required = true, value = "berufsbezeichnungFachrichtung")
   public void setBerufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
     this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
   }
@@ -112,13 +109,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("plz")
-  @NotNull
-  public String getPlz() {
+  @JsonProperty(required = true, value = "plz")
+  @NotNull public String getPlz() {
     return plz;
   }
 
-  @JsonProperty("plz")
+  @JsonProperty(required = true, value = "plz")
   public void setPlz(String plz) {
     this.plz = plz;
   }
@@ -131,13 +127,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ort")
-  @NotNull
-  public String getOrt() {
+  @JsonProperty(required = true, value = "ort")
+  @NotNull public String getOrt() {
     return ort;
   }
 
-  @JsonProperty("ort")
+  @JsonProperty(required = true, value = "ort")
   public void setOrt(String ort) {
     this.ort = ort;
   }
@@ -150,13 +145,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("isAusbildungAusland")
-  @NotNull
-  public Boolean getIsAusbildungAusland() {
+  @JsonProperty(required = true, value = "isAusbildungAusland")
+  @NotNull public Boolean getIsAusbildungAusland() {
     return isAusbildungAusland;
   }
 
-  @JsonProperty("isAusbildungAusland")
+  @JsonProperty(required = true, value = "isAusbildungAusland")
   public void setIsAusbildungAusland(Boolean isAusbildungAusland) {
     this.isAusbildungAusland = isAusbildungAusland;
   }
@@ -169,13 +163,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungBeginn")
-  @NotNull
-  public LocalDate getAusbildungBeginn() {
+  @JsonProperty(required = true, value = "ausbildungBeginn")
+  @NotNull public LocalDate getAusbildungBeginn() {
     return ausbildungBeginn;
   }
 
-  @JsonProperty("ausbildungBeginn")
+  @JsonProperty(required = true, value = "ausbildungBeginn")
   public void setAusbildungBeginn(LocalDate ausbildungBeginn) {
     this.ausbildungBeginn = ausbildungBeginn;
   }
@@ -188,13 +181,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungEnd")
-  @NotNull
-  public LocalDate getAusbildungEnd() {
+  @JsonProperty(required = true, value = "ausbildungEnd")
+  @NotNull public LocalDate getAusbildungEnd() {
     return ausbildungEnd;
   }
 
-  @JsonProperty("ausbildungEnd")
+  @JsonProperty(required = true, value = "ausbildungEnd")
   public void setAusbildungEnd(LocalDate ausbildungEnd) {
     this.ausbildungEnd = ausbildungEnd;
   }
@@ -207,13 +199,12 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("pensum")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum getPensum() {
+  @JsonProperty(required = true, value = "pensum")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum getPensum() {
     return pensum;
   }
 
-  @JsonProperty("pensum")
+  @JsonProperty(required = true, value = "pensum")
   public void setPensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
     this.pensum = pensum;
   }
@@ -287,10 +278,7 @@ public class DemoAusbildungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -368,4 +356,3 @@ public class DemoAusbildungDto  implements Serializable {
     }
   }
 }
-

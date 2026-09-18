@@ -18,15 +18,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DarlehenBuchhaltungOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DarlehenBuchhaltungOverviewDto  implements Serializable {
-  private @Valid Integer total;
-  private @Valid Integer totalFreiwillig;
-  private @Valid Integer totalGesetzlich;
-  private @Valid List<DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys = new ArrayList<>();
+  private Integer total;
+  private Integer totalFreiwillig;
+  private Integer totalGesetzlich;
+  private @Valid List<@Valid DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys = new ArrayList<>();
 
   protected DarlehenBuchhaltungOverviewDto(DarlehenBuchhaltungOverviewDtoBuilder<?, ?> b) {
     this.total = b.total;
@@ -46,13 +46,12 @@ public class DarlehenBuchhaltungOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("total")
-  @NotNull
-  public Integer getTotal() {
+  @JsonProperty(required = true, value = "total")
+  @NotNull public Integer getTotal() {
     return total;
   }
 
-  @JsonProperty("total")
+  @JsonProperty(required = true, value = "total")
   public void setTotal(Integer total) {
     this.total = total;
   }
@@ -65,13 +64,12 @@ public class DarlehenBuchhaltungOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("totalFreiwillig")
-  @NotNull
-  public Integer getTotalFreiwillig() {
+  @JsonProperty(required = true, value = "totalFreiwillig")
+  @NotNull public Integer getTotalFreiwillig() {
     return totalFreiwillig;
   }
 
-  @JsonProperty("totalFreiwillig")
+  @JsonProperty(required = true, value = "totalFreiwillig")
   public void setTotalFreiwillig(Integer totalFreiwillig) {
     this.totalFreiwillig = totalFreiwillig;
   }
@@ -84,33 +82,31 @@ public class DarlehenBuchhaltungOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("totalGesetzlich")
-  @NotNull
-  public Integer getTotalGesetzlich() {
+  @JsonProperty(required = true, value = "totalGesetzlich")
+  @NotNull public Integer getTotalGesetzlich() {
     return totalGesetzlich;
   }
 
-  @JsonProperty("totalGesetzlich")
+  @JsonProperty(required = true, value = "totalGesetzlich")
   public void setTotalGesetzlich(Integer totalGesetzlich) {
     this.totalGesetzlich = totalGesetzlich;
   }
 
   /**
    **/
-  public DarlehenBuchhaltungOverviewDto darlehenBuchhaltungEntrys(List<DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys) {
+  public DarlehenBuchhaltungOverviewDto darlehenBuchhaltungEntrys(List<@Valid DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys) {
     this.darlehenBuchhaltungEntrys = darlehenBuchhaltungEntrys;
     return this;
   }
 
   
-  @JsonProperty("darlehenBuchhaltungEntrys")
-  @NotNull
-  public List<DarlehenBuchhaltungEntryDto> getDarlehenBuchhaltungEntrys() {
+  @JsonProperty(required = true, value = "darlehenBuchhaltungEntrys")
+  @NotNull @Valid public List<@Valid DarlehenBuchhaltungEntryDto> getDarlehenBuchhaltungEntrys() {
     return darlehenBuchhaltungEntrys;
   }
 
-  @JsonProperty("darlehenBuchhaltungEntrys")
-  public void setDarlehenBuchhaltungEntrys(List<DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys) {
+  @JsonProperty(required = true, value = "darlehenBuchhaltungEntrys")
+  public void setDarlehenBuchhaltungEntrys(List<@Valid DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys) {
     this.darlehenBuchhaltungEntrys = darlehenBuchhaltungEntrys;
   }
 
@@ -169,10 +165,7 @@ public class DarlehenBuchhaltungOverviewDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -220,4 +213,3 @@ public class DarlehenBuchhaltungOverviewDto  implements Serializable {
     }
   }
 }
-

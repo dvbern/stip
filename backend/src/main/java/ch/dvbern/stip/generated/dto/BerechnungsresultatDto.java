@@ -20,24 +20,24 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("Berechnungsresultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BerechnungsresultatDto  implements Serializable {
-  private @Valid Integer year;
-  private @Valid Integer berechnungVorKuerzungUndTeilung;
-  private @Valid Integer berechnungVorTeilungDarlehen;
-  private @Valid Integer berechnungStipendium;
-  private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
-  private @Valid Integer monateMitDarlehen;
-  private @Valid Integer ungekuerztStipendien;
-  private @Valid Integer ungekuerztDarlehen;
-  private @Valid Integer totalNachKuerzungNachEinreichefrist;
-  private @Valid Integer anzahlMonateEinreichefrist;
-  private @Valid Integer totalNachKuerzungUnterbruch;
-  private @Valid Integer anzahlMonateUnterbruch;
-  private @Valid Integer berechnungDarlehen;
+  private Integer year;
+  private Integer berechnungVorKuerzungUndTeilung;
+  private Integer berechnungVorTeilungDarlehen;
+  private Integer berechnungStipendium;
+  private @Valid List<@Valid TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
+  private Integer monateMitDarlehen;
+  private Integer ungekuerztStipendien;
+  private Integer ungekuerztDarlehen;
+  private Integer totalNachKuerzungNachEinreichefrist;
+  private Integer anzahlMonateEinreichefrist;
+  private Integer totalNachKuerzungUnterbruch;
+  private Integer anzahlMonateUnterbruch;
+  private Integer berechnungDarlehen;
 
   protected BerechnungsresultatDto(BerechnungsresultatDtoBuilder<?, ?> b) {
     this.year = b.year;
@@ -66,13 +66,12 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("year")
-  @NotNull
-  public Integer getYear() {
+  @JsonProperty(required = true, value = "year")
+  @NotNull public Integer getYear() {
     return year;
   }
 
-  @JsonProperty("year")
+  @JsonProperty(required = true, value = "year")
   public void setYear(Integer year) {
     this.year = year;
   }
@@ -86,13 +85,12 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("berechnungVorKuerzungUndTeilung")
-  @NotNull
-  public Integer getBerechnungVorKuerzungUndTeilung() {
+  @JsonProperty(required = true, value = "berechnungVorKuerzungUndTeilung")
+  @NotNull public Integer getBerechnungVorKuerzungUndTeilung() {
     return berechnungVorKuerzungUndTeilung;
   }
 
-  @JsonProperty("berechnungVorKuerzungUndTeilung")
+  @JsonProperty(required = true, value = "berechnungVorKuerzungUndTeilung")
   public void setBerechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
     this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
   }
@@ -106,13 +104,12 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("berechnungVorTeilungDarlehen")
-  @NotNull
-  public Integer getBerechnungVorTeilungDarlehen() {
+  @JsonProperty(required = true, value = "berechnungVorTeilungDarlehen")
+  @NotNull public Integer getBerechnungVorTeilungDarlehen() {
     return berechnungVorTeilungDarlehen;
   }
 
-  @JsonProperty("berechnungVorTeilungDarlehen")
+  @JsonProperty(required = true, value = "berechnungVorTeilungDarlehen")
   public void setBerechnungVorTeilungDarlehen(Integer berechnungVorTeilungDarlehen) {
     this.berechnungVorTeilungDarlehen = berechnungVorTeilungDarlehen;
   }
@@ -126,13 +123,12 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("berechnungStipendium")
-  @NotNull
-  public Integer getBerechnungStipendium() {
+  @JsonProperty(required = true, value = "berechnungStipendium")
+  @NotNull public Integer getBerechnungStipendium() {
     return berechnungStipendium;
   }
 
-  @JsonProperty("berechnungStipendium")
+  @JsonProperty(required = true, value = "berechnungStipendium")
   public void setBerechnungStipendium(Integer berechnungStipendium) {
     this.berechnungStipendium = berechnungStipendium;
   }
@@ -140,20 +136,19 @@ public class BerechnungsresultatDto  implements Serializable {
   /**
    * Resultate der Berechnung für die Tranchen des Gesuchs
    **/
-  public BerechnungsresultatDto tranchenBerechnungsresultate(List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate) {
+  public BerechnungsresultatDto tranchenBerechnungsresultate(List<@Valid TranchenBerechnungsresultatDto> tranchenBerechnungsresultate) {
     this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
     return this;
   }
 
   
-  @JsonProperty("tranchenBerechnungsresultate")
-  @NotNull
-  public List<TranchenBerechnungsresultatDto> getTranchenBerechnungsresultate() {
+  @JsonProperty(required = true, value = "tranchenBerechnungsresultate")
+  @NotNull @Valid public List<@Valid TranchenBerechnungsresultatDto> getTranchenBerechnungsresultate() {
     return tranchenBerechnungsresultate;
   }
 
-  @JsonProperty("tranchenBerechnungsresultate")
-  public void setTranchenBerechnungsresultate(List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate) {
+  @JsonProperty(required = true, value = "tranchenBerechnungsresultate")
+  public void setTranchenBerechnungsresultate(List<@Valid TranchenBerechnungsresultatDto> tranchenBerechnungsresultate) {
     this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
   }
 
@@ -182,13 +177,12 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("monateMitDarlehen")
-  @NotNull
-  public Integer getMonateMitDarlehen() {
+  @JsonProperty(required = true, value = "monateMitDarlehen")
+  @NotNull public Integer getMonateMitDarlehen() {
     return monateMitDarlehen;
   }
 
-  @JsonProperty("monateMitDarlehen")
+  @JsonProperty(required = true, value = "monateMitDarlehen")
   public void setMonateMitDarlehen(Integer monateMitDarlehen) {
     this.monateMitDarlehen = monateMitDarlehen;
   }
@@ -383,10 +377,7 @@ public class BerechnungsresultatDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -479,4 +470,3 @@ public class BerechnungsresultatDto  implements Serializable {
     }
   }
 }
-

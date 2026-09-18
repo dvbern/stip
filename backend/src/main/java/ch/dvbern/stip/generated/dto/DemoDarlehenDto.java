@@ -15,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDarlehen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDarlehenDto  implements Serializable {
-  private @Valid Boolean willDarlehen;
-  private @Valid Integer betragGewuenscht;
-  private @Valid Integer schulden;
-  private @Valid Integer anzahlBetreibungen;
-  private @Valid DemoDarlehenGruendeDto gruende;
+  private Boolean willDarlehen;
+  private Integer betragGewuenscht;
+  private Integer schulden;
+  private Integer anzahlBetreibungen;
+  private DemoDarlehenGruendeDto gruende;
 
   protected DemoDarlehenDto(DemoDarlehenDtoBuilder<?, ?> b) {
     this.willDarlehen = b.willDarlehen;
@@ -45,13 +45,12 @@ public class DemoDarlehenDto  implements Serializable {
   }
 
   
-  @JsonProperty("willDarlehen")
-  @NotNull
-  public Boolean getWillDarlehen() {
+  @JsonProperty(required = true, value = "willDarlehen")
+  @NotNull public Boolean getWillDarlehen() {
     return willDarlehen;
   }
 
-  @JsonProperty("willDarlehen")
+  @JsonProperty(required = true, value = "willDarlehen")
   public void setWillDarlehen(Boolean willDarlehen) {
     this.willDarlehen = willDarlehen;
   }
@@ -64,13 +63,12 @@ public class DemoDarlehenDto  implements Serializable {
   }
 
   
-  @JsonProperty("betragGewuenscht")
-  @NotNull
-  public Integer getBetragGewuenscht() {
+  @JsonProperty(required = true, value = "betragGewuenscht")
+  @NotNull public Integer getBetragGewuenscht() {
     return betragGewuenscht;
   }
 
-  @JsonProperty("betragGewuenscht")
+  @JsonProperty(required = true, value = "betragGewuenscht")
   public void setBetragGewuenscht(Integer betragGewuenscht) {
     this.betragGewuenscht = betragGewuenscht;
   }
@@ -83,13 +81,12 @@ public class DemoDarlehenDto  implements Serializable {
   }
 
   
-  @JsonProperty("schulden")
-  @NotNull
-  public Integer getSchulden() {
+  @JsonProperty(required = true, value = "schulden")
+  @NotNull public Integer getSchulden() {
     return schulden;
   }
 
-  @JsonProperty("schulden")
+  @JsonProperty(required = true, value = "schulden")
   public void setSchulden(Integer schulden) {
     this.schulden = schulden;
   }
@@ -102,13 +99,12 @@ public class DemoDarlehenDto  implements Serializable {
   }
 
   
-  @JsonProperty("anzahlBetreibungen")
-  @NotNull
-  public Integer getAnzahlBetreibungen() {
+  @JsonProperty(required = true, value = "anzahlBetreibungen")
+  @NotNull public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
   }
 
-  @JsonProperty("anzahlBetreibungen")
+  @JsonProperty(required = true, value = "anzahlBetreibungen")
   public void setAnzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
   }
@@ -121,13 +117,12 @@ public class DemoDarlehenDto  implements Serializable {
   }
 
   
-  @JsonProperty("gruende")
-  @NotNull
-  public DemoDarlehenGruendeDto getGruende() {
+  @JsonProperty(required = true, value = "gruende")
+  @NotNull @Valid public DemoDarlehenGruendeDto getGruende() {
     return gruende;
   }
 
-  @JsonProperty("gruende")
+  @JsonProperty(required = true, value = "gruende")
   public void setGruende(DemoDarlehenGruendeDto gruende) {
     this.gruende = gruende;
   }
@@ -173,10 +168,7 @@ public class DemoDarlehenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -229,4 +221,3 @@ public class DemoDarlehenDto  implements Serializable {
     }
   }
 }
-

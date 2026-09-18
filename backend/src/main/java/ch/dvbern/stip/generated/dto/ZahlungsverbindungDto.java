@@ -15,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Zahlungsverbindung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ZahlungsverbindungDto  implements Serializable {
-  private @Valid AdresseDto adresse;
-  private @Valid String iban;
-  private @Valid String vorname;
-  private @Valid String nachname;
-  private @Valid String institution;
+  private AdresseDto adresse;
+  private String iban;
+  private String vorname;
+  private String nachname;
+  private String institution;
 
   protected ZahlungsverbindungDto(ZahlungsverbindungDtoBuilder<?, ?> b) {
     this.adresse = b.adresse;
@@ -45,13 +45,12 @@ public class ZahlungsverbindungDto  implements Serializable {
   }
 
   
-  @JsonProperty("adresse")
-  @NotNull
-  public AdresseDto getAdresse() {
+  @JsonProperty(required = true, value = "adresse")
+  @NotNull @Valid public AdresseDto getAdresse() {
     return adresse;
   }
 
-  @JsonProperty("adresse")
+  @JsonProperty(required = true, value = "adresse")
   public void setAdresse(AdresseDto adresse) {
     this.adresse = adresse;
   }
@@ -64,13 +63,12 @@ public class ZahlungsverbindungDto  implements Serializable {
   }
 
   
-  @JsonProperty("iban")
-  @NotNull
-  public String getIban() {
+  @JsonProperty(required = true, value = "iban")
+  @NotNull public String getIban() {
     return iban;
   }
 
-  @JsonProperty("iban")
+  @JsonProperty(required = true, value = "iban")
   public void setIban(String iban) {
     this.iban = iban;
   }
@@ -170,10 +168,7 @@ public class ZahlungsverbindungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -226,4 +221,3 @@ public class ZahlungsverbindungDto  implements Serializable {
     }
   }
 }
-

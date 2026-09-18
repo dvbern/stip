@@ -19,14 +19,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Verfuegung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class VerfuegungDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid List<VerfuegungDokumentDto> dokumente = new ArrayList<>();
-  private @Valid String timestampErstellt;
+  private UUID id;
+  private @Valid List<@Valid VerfuegungDokumentDto> dokumente = new ArrayList<>();
+  private String timestampErstellt;
 
   protected VerfuegungDto(VerfuegungDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -45,33 +45,31 @@ public class VerfuegungDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
    **/
-  public VerfuegungDto dokumente(List<VerfuegungDokumentDto> dokumente) {
+  public VerfuegungDto dokumente(List<@Valid VerfuegungDokumentDto> dokumente) {
     this.dokumente = dokumente;
     return this;
   }
 
   
-  @JsonProperty("dokumente")
-  @NotNull
-  public List<VerfuegungDokumentDto> getDokumente() {
+  @JsonProperty(required = true, value = "dokumente")
+  @NotNull @Valid public List<@Valid VerfuegungDokumentDto> getDokumente() {
     return dokumente;
   }
 
-  @JsonProperty("dokumente")
-  public void setDokumente(List<VerfuegungDokumentDto> dokumente) {
+  @JsonProperty(required = true, value = "dokumente")
+  public void setDokumente(List<@Valid VerfuegungDokumentDto> dokumente) {
     this.dokumente = dokumente;
   }
 
@@ -146,10 +144,7 @@ public class VerfuegungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -192,4 +187,3 @@ public class VerfuegungDto  implements Serializable {
     }
   }
 }
-

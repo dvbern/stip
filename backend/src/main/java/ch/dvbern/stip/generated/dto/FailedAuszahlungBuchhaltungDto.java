@@ -15,18 +15,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FailedAuszahlungBuchhaltung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FailedAuszahlungBuchhaltungDto  implements Serializable {
-  private @Valid UUID fallId;
-  private @Valid String fallNummer;
-  private @Valid UUID gesuchId;
-  private @Valid String gesuchNummer;
-  private @Valid String name;
-  private @Valid String vorname;
-  private @Valid java.time.LocalDateTime lastTryDate;
+  private UUID fallId;
+  private String fallNummer;
+  private UUID gesuchId;
+  private String gesuchNummer;
+  private String name;
+  private String vorname;
+  private java.time.LocalDateTime lastTryDate;
 
   protected FailedAuszahlungBuchhaltungDto(FailedAuszahlungBuchhaltungDtoBuilder<?, ?> b) {
     this.fallId = b.fallId;
@@ -49,13 +49,12 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallId")
-  @NotNull
-  public UUID getFallId() {
+  @JsonProperty(required = true, value = "fallId")
+  @NotNull public UUID getFallId() {
     return fallId;
   }
 
-  @JsonProperty("fallId")
+  @JsonProperty(required = true, value = "fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
   }
@@ -68,13 +67,12 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallNummer")
-  @NotNull
-  public String getFallNummer() {
+  @JsonProperty(required = true, value = "fallNummer")
+  @NotNull public String getFallNummer() {
     return fallNummer;
   }
 
-  @JsonProperty("fallNummer")
+  @JsonProperty(required = true, value = "fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -87,13 +85,12 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
+  @JsonProperty(required = true, value = "gesuchId")
+  @NotNull public UUID getGesuchId() {
     return gesuchId;
   }
 
-  @JsonProperty("gesuchId")
+  @JsonProperty(required = true, value = "gesuchId")
   public void setGesuchId(UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
@@ -106,13 +103,12 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchNummer")
-  @NotNull
-  public String getGesuchNummer() {
+  @JsonProperty(required = true, value = "gesuchNummer")
+  @NotNull public String getGesuchNummer() {
     return gesuchNummer;
   }
 
-  @JsonProperty("gesuchNummer")
+  @JsonProperty(required = true, value = "gesuchNummer")
   public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
@@ -125,13 +121,12 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   }
 
   
-  @JsonProperty("name")
-  @NotNull
-  public String getName() {
+  @JsonProperty(required = true, value = "name")
+  @NotNull public String getName() {
     return name;
   }
 
-  @JsonProperty("name")
+  @JsonProperty(required = true, value = "name")
   public void setName(String name) {
     this.name = name;
   }
@@ -144,13 +139,12 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -163,13 +157,12 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   }
 
   
-  @JsonProperty("lastTryDate")
-  @NotNull
-  public java.time.LocalDateTime getLastTryDate() {
+  @JsonProperty(required = true, value = "lastTryDate")
+  @NotNull public java.time.LocalDateTime getLastTryDate() {
     return lastTryDate;
   }
 
-  @JsonProperty("lastTryDate")
+  @JsonProperty(required = true, value = "lastTryDate")
   public void setLastTryDate(java.time.LocalDateTime lastTryDate) {
     this.lastTryDate = lastTryDate;
   }
@@ -219,10 +212,7 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -285,4 +275,3 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
     }
   }
 }
-

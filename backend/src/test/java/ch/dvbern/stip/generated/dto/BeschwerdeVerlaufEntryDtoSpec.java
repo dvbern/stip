@@ -28,123 +28,50 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * BeschwerdeVerlaufEntryDtoSpec
  */
 @JsonPropertyOrder({
+  BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_KOMMENTAR,
+  BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_BESCHWERDE_SET_TO,
   BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_BESCHWERDE_ENTSCHEID,
   BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
-  BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
-  BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_KOMMENTAR,
-  BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_BESCHWERDE_SET_TO
+  BeschwerdeVerlaufEntryDtoSpec.JSON_PROPERTY_USER_ERSTELLT
 })
 @JsonTypeName("BeschwerdeVerlaufEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BeschwerdeVerlaufEntryDtoSpec {
-  public static final String JSON_PROPERTY_BESCHWERDE_ENTSCHEID = "beschwerdeEntscheid";
-  private BeschwerdeEntscheidDtoSpec beschwerdeEntscheid;
-
-  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
-  private java.time.LocalDateTime timestampErstellt;
-
-  public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
-  private String userErstellt;
-
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  @jakarta.annotation.Nonnull
   private String kommentar;
 
   public static final String JSON_PROPERTY_BESCHWERDE_SET_TO = "beschwerdeSetTo";
+  @jakarta.annotation.Nonnull
   private Boolean beschwerdeSetTo;
+
+  public static final String JSON_PROPERTY_BESCHWERDE_ENTSCHEID = "beschwerdeEntscheid";
+  @jakarta.annotation.Nullable
+  private BeschwerdeEntscheidDtoSpec beschwerdeEntscheid;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
+  private java.time.LocalDateTime timestampErstellt;
+
+  public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  @jakarta.annotation.Nonnull
+  private String userErstellt;
 
   public BeschwerdeVerlaufEntryDtoSpec() {
   }
 
-  public BeschwerdeVerlaufEntryDtoSpec beschwerdeEntscheid(BeschwerdeEntscheidDtoSpec beschwerdeEntscheid) {
-    
-    this.beschwerdeEntscheid = beschwerdeEntscheid;
-    return this;
-  }
-
-   /**
-   * Get beschwerdeEntscheid
-   * @return beschwerdeEntscheid
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_ENTSCHEID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public BeschwerdeEntscheidDtoSpec getBeschwerdeEntscheid() {
-    return beschwerdeEntscheid;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_ENTSCHEID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBeschwerdeEntscheid(BeschwerdeEntscheidDtoSpec beschwerdeEntscheid) {
-    this.beschwerdeEntscheid = beschwerdeEntscheid;
-  }
-
-
-  public BeschwerdeVerlaufEntryDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
-    
-    this.timestampErstellt = timestampErstellt;
-    return this;
-  }
-
-   /**
-   * Get timestampErstellt
-   * @return timestampErstellt
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public java.time.LocalDateTime getTimestampErstellt() {
-    return timestampErstellt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-  }
-
-
-  public BeschwerdeVerlaufEntryDtoSpec userErstellt(String userErstellt) {
-    
-    this.userErstellt = userErstellt;
-    return this;
-  }
-
-   /**
-   * Get userErstellt
-   * @return userErstellt
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getUserErstellt() {
-    return userErstellt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
-  }
-
-
-  public BeschwerdeVerlaufEntryDtoSpec kommentar(String kommentar) {
+  public BeschwerdeVerlaufEntryDtoSpec kommentar(@jakarta.annotation.Nonnull String kommentar) {
     
     this.kommentar = kommentar;
     return this;
   }
 
-   /**
+  /**
    * Get kommentar
    * @return kommentar
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKommentar() {
@@ -152,25 +79,24 @@ public class BeschwerdeVerlaufEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKommentar(String kommentar) {
+  public void setKommentar(@jakarta.annotation.Nonnull String kommentar) {
     this.kommentar = kommentar;
   }
 
-
-  public BeschwerdeVerlaufEntryDtoSpec beschwerdeSetTo(Boolean beschwerdeSetTo) {
+  public BeschwerdeVerlaufEntryDtoSpec beschwerdeSetTo(@jakarta.annotation.Nonnull Boolean beschwerdeSetTo) {
     
     this.beschwerdeSetTo = beschwerdeSetTo;
     return this;
   }
 
-   /**
+  /**
    * Get beschwerdeSetTo
    * @return beschwerdeSetTo
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_SET_TO)
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_SET_TO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getBeschwerdeSetTo() {
@@ -178,11 +104,87 @@ public class BeschwerdeVerlaufEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_SET_TO)
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_SET_TO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBeschwerdeSetTo(Boolean beschwerdeSetTo) {
+  public void setBeschwerdeSetTo(@jakarta.annotation.Nonnull Boolean beschwerdeSetTo) {
     this.beschwerdeSetTo = beschwerdeSetTo;
   }
+
+  public BeschwerdeVerlaufEntryDtoSpec beschwerdeEntscheid(@jakarta.annotation.Nullable BeschwerdeEntscheidDtoSpec beschwerdeEntscheid) {
+    
+    this.beschwerdeEntscheid = beschwerdeEntscheid;
+    return this;
+  }
+
+  /**
+   * Get beschwerdeEntscheid
+   * @return beschwerdeEntscheid
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_ENTSCHEID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public BeschwerdeEntscheidDtoSpec getBeschwerdeEntscheid() {
+    return beschwerdeEntscheid;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_ENTSCHEID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBeschwerdeEntscheid(@jakarta.annotation.Nullable BeschwerdeEntscheidDtoSpec beschwerdeEntscheid) {
+    this.beschwerdeEntscheid = beschwerdeEntscheid;
+  }
+
+  public BeschwerdeVerlaufEntryDtoSpec timestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
+    
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  /**
+   * Get timestampErstellt
+   * @return timestampErstellt
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public java.time.LocalDateTime getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
+  public BeschwerdeVerlaufEntryDtoSpec userErstellt(@jakarta.annotation.Nonnull String userErstellt) {
+    
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+  /**
+   * Get userErstellt
+   * @return userErstellt
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUserErstellt(@jakarta.annotation.Nonnull String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -193,27 +195,27 @@ public class BeschwerdeVerlaufEntryDtoSpec {
       return false;
     }
     BeschwerdeVerlaufEntryDtoSpec beschwerdeVerlaufEntry = (BeschwerdeVerlaufEntryDtoSpec) o;
-    return Objects.equals(this.beschwerdeEntscheid, beschwerdeVerlaufEntry.beschwerdeEntscheid) &&
+    return Objects.equals(this.kommentar, beschwerdeVerlaufEntry.kommentar) &&
+        Objects.equals(this.beschwerdeSetTo, beschwerdeVerlaufEntry.beschwerdeSetTo) &&
+        Objects.equals(this.beschwerdeEntscheid, beschwerdeVerlaufEntry.beschwerdeEntscheid) &&
         Objects.equals(this.timestampErstellt, beschwerdeVerlaufEntry.timestampErstellt) &&
-        Objects.equals(this.userErstellt, beschwerdeVerlaufEntry.userErstellt) &&
-        Objects.equals(this.kommentar, beschwerdeVerlaufEntry.kommentar) &&
-        Objects.equals(this.beschwerdeSetTo, beschwerdeVerlaufEntry.beschwerdeSetTo);
+        Objects.equals(this.userErstellt, beschwerdeVerlaufEntry.userErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(beschwerdeEntscheid, timestampErstellt, userErstellt, kommentar, beschwerdeSetTo);
+    return Objects.hash(kommentar, beschwerdeSetTo, beschwerdeEntscheid, timestampErstellt, userErstellt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class BeschwerdeVerlaufEntryDtoSpec {\n");
+    sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
+    sb.append("    beschwerdeSetTo: ").append(toIndentedString(beschwerdeSetTo)).append("\n");
     sb.append("    beschwerdeEntscheid: ").append(toIndentedString(beschwerdeEntscheid)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
-    sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
-    sb.append("    beschwerdeSetTo: ").append(toIndentedString(beschwerdeSetTo)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -223,10 +225,7 @@ public class BeschwerdeVerlaufEntryDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

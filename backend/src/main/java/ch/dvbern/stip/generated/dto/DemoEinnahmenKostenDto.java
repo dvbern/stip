@@ -14,30 +14,30 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoEinnahmenKosten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoEinnahmenKostenDto  implements Serializable {
-  private @Valid Integer nettoerwerbseinkommen;
-  private @Valid Integer unterhaltsbeitraege;
-  private @Valid Integer zulagen;
-  private @Valid Integer renten;
-  private @Valid Integer eoLeistungen;
-  private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer beitraege;
-  private @Valid Integer einnahmenBGSA;
-  private @Valid Integer taggelderAHVIV;
-  private @Valid Integer andereEinnahmen;
-  private @Valid Integer fahrkosten;
-  private @Valid Integer vermoegen;
-  private @Valid Integer steuernKantonGemeinde;
-  private @Valid Integer ausbildungskosten;
-  private @Valid Integer verpflegungskosten;
-  private @Valid Integer auswaertigeMittagessenProWoche;
-  private @Valid Integer wohnkosten;
-  private @Valid Boolean wgWohnend;
-  private @Valid Boolean alternativeWohnformWohnend;
+  private Integer nettoerwerbseinkommen;
+  private Integer unterhaltsbeitraege;
+  private Integer zulagen;
+  private Integer renten;
+  private Integer eoLeistungen;
+  private Integer ergaenzungsleistungen;
+  private Integer beitraege;
+  private Integer einnahmenBGSA;
+  private Integer taggelderAHVIV;
+  private Integer andereEinnahmen;
+  private Integer fahrkosten;
+  private Integer vermoegen;
+  private Integer steuernKantonGemeinde;
+  private Integer ausbildungskosten;
+  private Integer verpflegungskosten;
+  private Integer auswaertigeMittagessenProWoche;
+  private Integer wohnkosten;
+  private Boolean wgWohnend;
+  private Boolean alternativeWohnformWohnend;
 
   protected DemoEinnahmenKostenDto(DemoEinnahmenKostenDtoBuilder<?, ?> b) {
     this.nettoerwerbseinkommen = b.nettoerwerbseinkommen;
@@ -72,13 +72,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("nettoerwerbseinkommen")
-  @NotNull
-  public Integer getNettoerwerbseinkommen() {
+  @JsonProperty(required = true, value = "nettoerwerbseinkommen")
+  @NotNull public Integer getNettoerwerbseinkommen() {
     return nettoerwerbseinkommen;
   }
 
-  @JsonProperty("nettoerwerbseinkommen")
+  @JsonProperty(required = true, value = "nettoerwerbseinkommen")
   public void setNettoerwerbseinkommen(Integer nettoerwerbseinkommen) {
     this.nettoerwerbseinkommen = nettoerwerbseinkommen;
   }
@@ -91,13 +90,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("unterhaltsbeitraege")
-  @NotNull
-  public Integer getUnterhaltsbeitraege() {
+  @JsonProperty(required = true, value = "unterhaltsbeitraege")
+  @NotNull public Integer getUnterhaltsbeitraege() {
     return unterhaltsbeitraege;
   }
 
-  @JsonProperty("unterhaltsbeitraege")
+  @JsonProperty(required = true, value = "unterhaltsbeitraege")
   public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
     this.unterhaltsbeitraege = unterhaltsbeitraege;
   }
@@ -110,13 +108,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("zulagen")
-  @NotNull
-  public Integer getZulagen() {
+  @JsonProperty(required = true, value = "zulagen")
+  @NotNull public Integer getZulagen() {
     return zulagen;
   }
 
-  @JsonProperty("zulagen")
+  @JsonProperty(required = true, value = "zulagen")
   public void setZulagen(Integer zulagen) {
     this.zulagen = zulagen;
   }
@@ -129,13 +126,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("renten")
-  @NotNull
-  public Integer getRenten() {
+  @JsonProperty(required = true, value = "renten")
+  @NotNull public Integer getRenten() {
     return renten;
   }
 
-  @JsonProperty("renten")
+  @JsonProperty(required = true, value = "renten")
   public void setRenten(Integer renten) {
     this.renten = renten;
   }
@@ -148,13 +144,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("eoLeistungen")
-  @NotNull
-  public Integer getEoLeistungen() {
+  @JsonProperty(required = true, value = "eoLeistungen")
+  @NotNull public Integer getEoLeistungen() {
     return eoLeistungen;
   }
 
-  @JsonProperty("eoLeistungen")
+  @JsonProperty(required = true, value = "eoLeistungen")
   public void setEoLeistungen(Integer eoLeistungen) {
     this.eoLeistungen = eoLeistungen;
   }
@@ -167,13 +162,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("ergaenzungsleistungen")
-  @NotNull
-  public Integer getErgaenzungsleistungen() {
+  @JsonProperty(required = true, value = "ergaenzungsleistungen")
+  @NotNull public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
   }
 
-  @JsonProperty("ergaenzungsleistungen")
+  @JsonProperty(required = true, value = "ergaenzungsleistungen")
   public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
   }
@@ -186,13 +180,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("beitraege")
-  @NotNull
-  public Integer getBeitraege() {
+  @JsonProperty(required = true, value = "beitraege")
+  @NotNull public Integer getBeitraege() {
     return beitraege;
   }
 
-  @JsonProperty("beitraege")
+  @JsonProperty(required = true, value = "beitraege")
   public void setBeitraege(Integer beitraege) {
     this.beitraege = beitraege;
   }
@@ -205,13 +198,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("einnahmenBGSA")
-  @NotNull
-  public Integer getEinnahmenBGSA() {
+  @JsonProperty(required = true, value = "einnahmenBGSA")
+  @NotNull public Integer getEinnahmenBGSA() {
     return einnahmenBGSA;
   }
 
-  @JsonProperty("einnahmenBGSA")
+  @JsonProperty(required = true, value = "einnahmenBGSA")
   public void setEinnahmenBGSA(Integer einnahmenBGSA) {
     this.einnahmenBGSA = einnahmenBGSA;
   }
@@ -224,13 +216,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("taggelderAHVIV")
-  @NotNull
-  public Integer getTaggelderAHVIV() {
+  @JsonProperty(required = true, value = "taggelderAHVIV")
+  @NotNull public Integer getTaggelderAHVIV() {
     return taggelderAHVIV;
   }
 
-  @JsonProperty("taggelderAHVIV")
+  @JsonProperty(required = true, value = "taggelderAHVIV")
   public void setTaggelderAHVIV(Integer taggelderAHVIV) {
     this.taggelderAHVIV = taggelderAHVIV;
   }
@@ -243,13 +234,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("andereEinnahmen")
-  @NotNull
-  public Integer getAndereEinnahmen() {
+  @JsonProperty(required = true, value = "andereEinnahmen")
+  @NotNull public Integer getAndereEinnahmen() {
     return andereEinnahmen;
   }
 
-  @JsonProperty("andereEinnahmen")
+  @JsonProperty(required = true, value = "andereEinnahmen")
   public void setAndereEinnahmen(Integer andereEinnahmen) {
     this.andereEinnahmen = andereEinnahmen;
   }
@@ -262,13 +252,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fahrkosten")
-  @NotNull
-  public Integer getFahrkosten() {
+  @JsonProperty(required = true, value = "fahrkosten")
+  @NotNull public Integer getFahrkosten() {
     return fahrkosten;
   }
 
-  @JsonProperty("fahrkosten")
+  @JsonProperty(required = true, value = "fahrkosten")
   public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
@@ -281,13 +270,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("vermoegen")
-  @NotNull
-  public Integer getVermoegen() {
+  @JsonProperty(required = true, value = "vermoegen")
+  @NotNull public Integer getVermoegen() {
     return vermoegen;
   }
 
-  @JsonProperty("vermoegen")
+  @JsonProperty(required = true, value = "vermoegen")
   public void setVermoegen(Integer vermoegen) {
     this.vermoegen = vermoegen;
   }
@@ -300,13 +288,12 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuernKantonGemeinde")
-  @NotNull
-  public Integer getSteuernKantonGemeinde() {
+  @JsonProperty(required = true, value = "steuernKantonGemeinde")
+  @NotNull public Integer getSteuernKantonGemeinde() {
     return steuernKantonGemeinde;
   }
 
-  @JsonProperty("steuernKantonGemeinde")
+  @JsonProperty(required = true, value = "steuernKantonGemeinde")
   public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
     this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
@@ -488,10 +475,7 @@ public class DemoEinnahmenKostenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -614,4 +598,3 @@ public class DemoEinnahmenKostenDto  implements Serializable {
     }
   }
 }
-

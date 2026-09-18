@@ -35,42 +35,174 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * MassendruckJobDetailDtoSpec
  */
 @JsonPropertyOrder({
-  MassendruckJobDetailDtoSpec.JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS,
-  MassendruckJobDetailDtoSpec.JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_ID,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_MASSENDRUCK_JOB_STATUS,
-  MassendruckJobDetailDtoSpec.JSON_PROPERTY_MASSENDRUCK_JOB_TYP
+  MassendruckJobDetailDtoSpec.JSON_PROPERTY_MASSENDRUCK_JOB_TYP,
+  MassendruckJobDetailDtoSpec.JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS,
+  MassendruckJobDetailDtoSpec.JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS
 })
 @JsonTypeName("MassendruckJobDetail")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class MassendruckJobDetailDtoSpec {
-  public static final String JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS = "datenschutzbriefMassendrucks";
-  private List<MassendruckDatenschutzbriefDtoSpec> datenschutzbriefMassendrucks;
-
-  public static final String JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS = "verfuegungMassendrucks";
-  private List<MassendruckVerfuegungDtoSpec> verfuegungMassendrucks;
-
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  @jakarta.annotation.Nonnull
   private String userErstellt;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
   private java.time.LocalDateTime timestampErstellt;
 
   public static final String JSON_PROPERTY_MASSENDRUCK_JOB_STATUS = "massendruckJobStatus";
+  @jakarta.annotation.Nonnull
   private MassendruckJobStatusDtoSpec massendruckJobStatus;
 
   public static final String JSON_PROPERTY_MASSENDRUCK_JOB_TYP = "massendruckJobTyp";
+  @jakarta.annotation.Nonnull
   private MassendruckJobTypDtoSpec massendruckJobTyp;
+
+  public static final String JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS = "datenschutzbriefMassendrucks";
+  @jakarta.annotation.Nullable
+  private List<MassendruckDatenschutzbriefDtoSpec> datenschutzbriefMassendrucks;
+
+  public static final String JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS = "verfuegungMassendrucks";
+  @jakarta.annotation.Nullable
+  private List<MassendruckVerfuegungDtoSpec> verfuegungMassendrucks;
 
   public MassendruckJobDetailDtoSpec() {
   }
 
-  public MassendruckJobDetailDtoSpec datenschutzbriefMassendrucks(List<MassendruckDatenschutzbriefDtoSpec> datenschutzbriefMassendrucks) {
+  public MassendruckJobDetailDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
+    this.id = id;
+  }
+
+  public MassendruckJobDetailDtoSpec userErstellt(@jakarta.annotation.Nonnull String userErstellt) {
+    
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+  /**
+   * Get userErstellt
+   * @return userErstellt
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUserErstellt(@jakarta.annotation.Nonnull String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
+
+  public MassendruckJobDetailDtoSpec timestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
+    
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  /**
+   * Get timestampErstellt
+   * @return timestampErstellt
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public java.time.LocalDateTime getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
+  public MassendruckJobDetailDtoSpec massendruckJobStatus(@jakarta.annotation.Nonnull MassendruckJobStatusDtoSpec massendruckJobStatus) {
+    
+    this.massendruckJobStatus = massendruckJobStatus;
+    return this;
+  }
+
+  /**
+   * Get massendruckJobStatus
+   * @return massendruckJobStatus
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_MASSENDRUCK_JOB_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public MassendruckJobStatusDtoSpec getMassendruckJobStatus() {
+    return massendruckJobStatus;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_MASSENDRUCK_JOB_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setMassendruckJobStatus(@jakarta.annotation.Nonnull MassendruckJobStatusDtoSpec massendruckJobStatus) {
+    this.massendruckJobStatus = massendruckJobStatus;
+  }
+
+  public MassendruckJobDetailDtoSpec massendruckJobTyp(@jakarta.annotation.Nonnull MassendruckJobTypDtoSpec massendruckJobTyp) {
+    
+    this.massendruckJobTyp = massendruckJobTyp;
+    return this;
+  }
+
+  /**
+   * Get massendruckJobTyp
+   * @return massendruckJobTyp
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_MASSENDRUCK_JOB_TYP, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public MassendruckJobTypDtoSpec getMassendruckJobTyp() {
+    return massendruckJobTyp;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_MASSENDRUCK_JOB_TYP, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setMassendruckJobTyp(@jakarta.annotation.Nonnull MassendruckJobTypDtoSpec massendruckJobTyp) {
+    this.massendruckJobTyp = massendruckJobTyp;
+  }
+
+  public MassendruckJobDetailDtoSpec datenschutzbriefMassendrucks(@jakarta.annotation.Nullable List<MassendruckDatenschutzbriefDtoSpec> datenschutzbriefMassendrucks) {
     
     this.datenschutzbriefMassendrucks = datenschutzbriefMassendrucks;
     return this;
@@ -84,12 +216,12 @@ public class MassendruckJobDetailDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get datenschutzbriefMassendrucks
    * @return datenschutzbriefMassendrucks
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS)
+  @JsonProperty(value = JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<MassendruckDatenschutzbriefDtoSpec> getDatenschutzbriefMassendrucks() {
@@ -97,14 +229,13 @@ public class MassendruckJobDetailDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS)
+  @JsonProperty(value = JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDatenschutzbriefMassendrucks(List<MassendruckDatenschutzbriefDtoSpec> datenschutzbriefMassendrucks) {
+  public void setDatenschutzbriefMassendrucks(@jakarta.annotation.Nullable List<MassendruckDatenschutzbriefDtoSpec> datenschutzbriefMassendrucks) {
     this.datenschutzbriefMassendrucks = datenschutzbriefMassendrucks;
   }
 
-
-  public MassendruckJobDetailDtoSpec verfuegungMassendrucks(List<MassendruckVerfuegungDtoSpec> verfuegungMassendrucks) {
+  public MassendruckJobDetailDtoSpec verfuegungMassendrucks(@jakarta.annotation.Nullable List<MassendruckVerfuegungDtoSpec> verfuegungMassendrucks) {
     
     this.verfuegungMassendrucks = verfuegungMassendrucks;
     return this;
@@ -118,12 +249,12 @@ public class MassendruckJobDetailDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get verfuegungMassendrucks
    * @return verfuegungMassendrucks
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS)
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<MassendruckVerfuegungDtoSpec> getVerfuegungMassendrucks() {
@@ -131,141 +262,12 @@ public class MassendruckJobDetailDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS)
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerfuegungMassendrucks(List<MassendruckVerfuegungDtoSpec> verfuegungMassendrucks) {
+  public void setVerfuegungMassendrucks(@jakarta.annotation.Nullable List<MassendruckVerfuegungDtoSpec> verfuegungMassendrucks) {
     this.verfuegungMassendrucks = verfuegungMassendrucks;
   }
 
-
-  public MassendruckJobDetailDtoSpec id(UUID id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getId() {
-    return id;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-
-  public MassendruckJobDetailDtoSpec userErstellt(String userErstellt) {
-    
-    this.userErstellt = userErstellt;
-    return this;
-  }
-
-   /**
-   * Get userErstellt
-   * @return userErstellt
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getUserErstellt() {
-    return userErstellt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
-  }
-
-
-  public MassendruckJobDetailDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
-    
-    this.timestampErstellt = timestampErstellt;
-    return this;
-  }
-
-   /**
-   * Get timestampErstellt
-   * @return timestampErstellt
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public java.time.LocalDateTime getTimestampErstellt() {
-    return timestampErstellt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-  }
-
-
-  public MassendruckJobDetailDtoSpec massendruckJobStatus(MassendruckJobStatusDtoSpec massendruckJobStatus) {
-    
-    this.massendruckJobStatus = massendruckJobStatus;
-    return this;
-  }
-
-   /**
-   * Get massendruckJobStatus
-   * @return massendruckJobStatus
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public MassendruckJobStatusDtoSpec getMassendruckJobStatus() {
-    return massendruckJobStatus;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMassendruckJobStatus(MassendruckJobStatusDtoSpec massendruckJobStatus) {
-    this.massendruckJobStatus = massendruckJobStatus;
-  }
-
-
-  public MassendruckJobDetailDtoSpec massendruckJobTyp(MassendruckJobTypDtoSpec massendruckJobTyp) {
-    
-    this.massendruckJobTyp = massendruckJobTyp;
-    return this;
-  }
-
-   /**
-   * Get massendruckJobTyp
-   * @return massendruckJobTyp
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_TYP)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public MassendruckJobTypDtoSpec getMassendruckJobTyp() {
-    return massendruckJobTyp;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_TYP)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMassendruckJobTyp(MassendruckJobTypDtoSpec massendruckJobTyp) {
-    this.massendruckJobTyp = massendruckJobTyp;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -276,31 +278,31 @@ public class MassendruckJobDetailDtoSpec {
       return false;
     }
     MassendruckJobDetailDtoSpec massendruckJobDetail = (MassendruckJobDetailDtoSpec) o;
-    return Objects.equals(this.datenschutzbriefMassendrucks, massendruckJobDetail.datenschutzbriefMassendrucks) &&
-        Objects.equals(this.verfuegungMassendrucks, massendruckJobDetail.verfuegungMassendrucks) &&
-        Objects.equals(this.id, massendruckJobDetail.id) &&
+    return Objects.equals(this.id, massendruckJobDetail.id) &&
         Objects.equals(this.userErstellt, massendruckJobDetail.userErstellt) &&
         Objects.equals(this.timestampErstellt, massendruckJobDetail.timestampErstellt) &&
         Objects.equals(this.massendruckJobStatus, massendruckJobDetail.massendruckJobStatus) &&
-        Objects.equals(this.massendruckJobTyp, massendruckJobDetail.massendruckJobTyp);
+        Objects.equals(this.massendruckJobTyp, massendruckJobDetail.massendruckJobTyp) &&
+        Objects.equals(this.datenschutzbriefMassendrucks, massendruckJobDetail.datenschutzbriefMassendrucks) &&
+        Objects.equals(this.verfuegungMassendrucks, massendruckJobDetail.verfuegungMassendrucks);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(datenschutzbriefMassendrucks, verfuegungMassendrucks, id, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp);
+    return Objects.hash(id, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp, datenschutzbriefMassendrucks, verfuegungMassendrucks);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class MassendruckJobDetailDtoSpec {\n");
-    sb.append("    datenschutzbriefMassendrucks: ").append(toIndentedString(datenschutzbriefMassendrucks)).append("\n");
-    sb.append("    verfuegungMassendrucks: ").append(toIndentedString(verfuegungMassendrucks)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    massendruckJobStatus: ").append(toIndentedString(massendruckJobStatus)).append("\n");
     sb.append("    massendruckJobTyp: ").append(toIndentedString(massendruckJobTyp)).append("\n");
+    sb.append("    datenschutzbriefMassendrucks: ").append(toIndentedString(datenschutzbriefMassendrucks)).append("\n");
+    sb.append("    verfuegungMassendrucks: ").append(toIndentedString(verfuegungMassendrucks)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -310,10 +312,7 @@ public class MassendruckJobDetailDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

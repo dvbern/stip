@@ -37,38 +37,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoLebenslaufTaetigkeitDtoSpec.JSON_PROPERTY_WOHNSITZ
 })
 @JsonTypeName("DemoLebenslaufTaetigkeit")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoLebenslaufTaetigkeitDtoSpec {
   public static final String JSON_PROPERTY_TAETIGKEITSART = "taetigkeitsart";
+  @jakarta.annotation.Nonnull
   private TaetigkeitsartDtoSpec taetigkeitsart;
 
   public static final String JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG = "taetigkeitsBeschreibung";
+  @jakarta.annotation.Nonnull
   private String taetigkeitsBeschreibung;
 
   public static final String JSON_PROPERTY_VON = "von";
+  @jakarta.annotation.Nonnull
   private LocalDate von;
 
   public static final String JSON_PROPERTY_BIS = "bis";
+  @jakarta.annotation.Nonnull
   private LocalDate bis;
 
   public static final String JSON_PROPERTY_WOHNSITZ = "wohnsitz";
+  @jakarta.annotation.Nonnull
   private WohnsitzKantonDtoSpec wohnsitz;
 
   public DemoLebenslaufTaetigkeitDtoSpec() {
   }
 
-  public DemoLebenslaufTaetigkeitDtoSpec taetigkeitsart(TaetigkeitsartDtoSpec taetigkeitsart) {
+  public DemoLebenslaufTaetigkeitDtoSpec taetigkeitsart(@jakarta.annotation.Nonnull TaetigkeitsartDtoSpec taetigkeitsart) {
     
     this.taetigkeitsart = taetigkeitsart;
     return this;
   }
 
-   /**
+  /**
    * Get taetigkeitsart
    * @return taetigkeitsart
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITSART)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITSART, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public TaetigkeitsartDtoSpec getTaetigkeitsart() {
@@ -76,25 +81,24 @@ public class DemoLebenslaufTaetigkeitDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITSART)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITSART, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTaetigkeitsart(TaetigkeitsartDtoSpec taetigkeitsart) {
+  public void setTaetigkeitsart(@jakarta.annotation.Nonnull TaetigkeitsartDtoSpec taetigkeitsart) {
     this.taetigkeitsart = taetigkeitsart;
   }
 
-
-  public DemoLebenslaufTaetigkeitDtoSpec taetigkeitsBeschreibung(String taetigkeitsBeschreibung) {
+  public DemoLebenslaufTaetigkeitDtoSpec taetigkeitsBeschreibung(@jakarta.annotation.Nonnull String taetigkeitsBeschreibung) {
     
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
     return this;
   }
 
-   /**
+  /**
    * Get taetigkeitsBeschreibung
    * @return taetigkeitsBeschreibung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTaetigkeitsBeschreibung() {
@@ -102,25 +106,24 @@ public class DemoLebenslaufTaetigkeitDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTaetigkeitsBeschreibung(String taetigkeitsBeschreibung) {
+  public void setTaetigkeitsBeschreibung(@jakarta.annotation.Nonnull String taetigkeitsBeschreibung) {
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
   }
 
-
-  public DemoLebenslaufTaetigkeitDtoSpec von(LocalDate von) {
+  public DemoLebenslaufTaetigkeitDtoSpec von(@jakarta.annotation.Nonnull LocalDate von) {
     
     this.von = von;
     return this;
   }
 
-   /**
+  /**
    * Get von
    * @return von
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VON)
+  @JsonProperty(value = JSON_PROPERTY_VON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getVon() {
@@ -128,25 +131,24 @@ public class DemoLebenslaufTaetigkeitDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VON)
+  @JsonProperty(value = JSON_PROPERTY_VON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVon(LocalDate von) {
+  public void setVon(@jakarta.annotation.Nonnull LocalDate von) {
     this.von = von;
   }
 
-
-  public DemoLebenslaufTaetigkeitDtoSpec bis(LocalDate bis) {
+  public DemoLebenslaufTaetigkeitDtoSpec bis(@jakarta.annotation.Nonnull LocalDate bis) {
     
     this.bis = bis;
     return this;
   }
 
-   /**
+  /**
    * Get bis
    * @return bis
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BIS)
+  @JsonProperty(value = JSON_PROPERTY_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getBis() {
@@ -154,25 +156,24 @@ public class DemoLebenslaufTaetigkeitDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BIS)
+  @JsonProperty(value = JSON_PROPERTY_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBis(LocalDate bis) {
+  public void setBis(@jakarta.annotation.Nonnull LocalDate bis) {
     this.bis = bis;
   }
 
-
-  public DemoLebenslaufTaetigkeitDtoSpec wohnsitz(WohnsitzKantonDtoSpec wohnsitz) {
+  public DemoLebenslaufTaetigkeitDtoSpec wohnsitz(@jakarta.annotation.Nonnull WohnsitzKantonDtoSpec wohnsitz) {
     
     this.wohnsitz = wohnsitz;
     return this;
   }
 
-   /**
+  /**
    * Get wohnsitz
    * @return wohnsitz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public WohnsitzKantonDtoSpec getWohnsitz() {
@@ -180,11 +181,12 @@ public class DemoLebenslaufTaetigkeitDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitz(WohnsitzKantonDtoSpec wohnsitz) {
+  public void setWohnsitz(@jakarta.annotation.Nonnull WohnsitzKantonDtoSpec wohnsitz) {
     this.wohnsitz = wohnsitz;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -225,10 +227,7 @@ public class DemoLebenslaufTaetigkeitDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

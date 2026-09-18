@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataImport")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataImportDto  implements Serializable {
-  private @Valid String kommentar;
-  private @Valid Boolean ignoreBerechnungErrors;
-  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
+  private String kommentar;
+  private Boolean ignoreBerechnungErrors;
+  private org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
 
   protected DemoDataImportDto(DemoDataImportDtoBuilder<?, ?> b) {
     this.kommentar = b.kommentar;
@@ -40,13 +40,12 @@ public class DemoDataImportDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentar")
-  @NotNull
-  public String getKommentar() {
+  @JsonProperty(required = true, value = "kommentar")
+  @NotNull public String getKommentar() {
     return kommentar;
   }
 
-  @JsonProperty("kommentar")
+  @JsonProperty(required = true, value = "kommentar")
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -59,13 +58,12 @@ public class DemoDataImportDto  implements Serializable {
   }
 
   
-  @JsonProperty("ignoreBerechnungErrors")
-  @NotNull
-  public Boolean getIgnoreBerechnungErrors() {
+  @JsonProperty(required = true, value = "ignoreBerechnungErrors")
+  @NotNull public Boolean getIgnoreBerechnungErrors() {
     return ignoreBerechnungErrors;
   }
 
-  @JsonProperty("ignoreBerechnungErrors")
+  @JsonProperty(required = true, value = "ignoreBerechnungErrors")
   public void setIgnoreBerechnungErrors(Boolean ignoreBerechnungErrors) {
     this.ignoreBerechnungErrors = ignoreBerechnungErrors;
   }
@@ -78,13 +76,12 @@ public class DemoDataImportDto  implements Serializable {
   }
 
   
-  @JsonProperty("fileUpload")
-  @NotNull
-  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
+  @JsonProperty(required = true, value = "fileUpload")
+  @NotNull @Valid public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
     return fileUpload;
   }
 
-  @JsonProperty("fileUpload")
+  @JsonProperty(required = true, value = "fileUpload")
   public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
     this.fileUpload = fileUpload;
   }
@@ -126,10 +123,7 @@ public class DemoDataImportDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -172,4 +166,3 @@ public class DemoDataImportDto  implements Serializable {
     }
   }
 }
-

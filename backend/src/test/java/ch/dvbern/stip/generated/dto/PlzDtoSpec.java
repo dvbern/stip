@@ -32,32 +32,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PlzDtoSpec.JSON_PROPERTY_KANTONSKUERZEL
 })
 @JsonTypeName("plz")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PlzDtoSpec {
   public static final String JSON_PROPERTY_PLZ = "plz";
+  @jakarta.annotation.Nonnull
   private String plz;
 
   public static final String JSON_PROPERTY_ORT = "ort";
+  @jakarta.annotation.Nonnull
   private String ort;
 
   public static final String JSON_PROPERTY_KANTONSKUERZEL = "kantonskuerzel";
+  @jakarta.annotation.Nonnull
   private String kantonskuerzel;
 
   public PlzDtoSpec() {
   }
 
-  public PlzDtoSpec plz(String plz) {
+  public PlzDtoSpec plz(@jakarta.annotation.Nonnull String plz) {
     
     this.plz = plz;
     return this;
   }
 
-   /**
+  /**
    * Get plz
    * @return plz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PLZ)
+  @JsonProperty(value = JSON_PROPERTY_PLZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPlz() {
@@ -65,25 +68,24 @@ public class PlzDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PLZ)
+  @JsonProperty(value = JSON_PROPERTY_PLZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPlz(String plz) {
+  public void setPlz(@jakarta.annotation.Nonnull String plz) {
     this.plz = plz;
   }
 
-
-  public PlzDtoSpec ort(String ort) {
+  public PlzDtoSpec ort(@jakarta.annotation.Nonnull String ort) {
     
     this.ort = ort;
     return this;
   }
 
-   /**
+  /**
    * Get ort
    * @return ort
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ORT)
+  @JsonProperty(value = JSON_PROPERTY_ORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getOrt() {
@@ -91,25 +93,24 @@ public class PlzDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ORT)
+  @JsonProperty(value = JSON_PROPERTY_ORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setOrt(String ort) {
+  public void setOrt(@jakarta.annotation.Nonnull String ort) {
     this.ort = ort;
   }
 
-
-  public PlzDtoSpec kantonskuerzel(String kantonskuerzel) {
+  public PlzDtoSpec kantonskuerzel(@jakarta.annotation.Nonnull String kantonskuerzel) {
     
     this.kantonskuerzel = kantonskuerzel;
     return this;
   }
 
-   /**
+  /**
    * Get kantonskuerzel
    * @return kantonskuerzel
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KANTONSKUERZEL)
+  @JsonProperty(value = JSON_PROPERTY_KANTONSKUERZEL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKantonskuerzel() {
@@ -117,11 +118,12 @@ public class PlzDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KANTONSKUERZEL)
+  @JsonProperty(value = JSON_PROPERTY_KANTONSKUERZEL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKantonskuerzel(String kantonskuerzel) {
+  public void setKantonskuerzel(@jakarta.annotation.Nonnull String kantonskuerzel) {
     this.kantonskuerzel = kantonskuerzel;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -158,10 +160,7 @@ public class PlzDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

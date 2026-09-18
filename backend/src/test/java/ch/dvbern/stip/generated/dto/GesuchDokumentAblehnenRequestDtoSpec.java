@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDokumentAblehnenRequestDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
 @JsonTypeName("GesuchDokumentAblehnenRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchDokumentAblehnenRequestDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  @jakarta.annotation.Nullable
   private GesuchDokumentKommentarDtoSpec kommentar;
 
   public GesuchDokumentAblehnenRequestDtoSpec() {
   }
 
-  public GesuchDokumentAblehnenRequestDtoSpec kommentar(GesuchDokumentKommentarDtoSpec kommentar) {
+  public GesuchDokumentAblehnenRequestDtoSpec kommentar(@jakarta.annotation.Nullable GesuchDokumentKommentarDtoSpec kommentar) {
     
     this.kommentar = kommentar;
     return this;
   }
 
-   /**
+  /**
    * Get kommentar
    * @return kommentar
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchDokumentKommentarDtoSpec getKommentar() {
@@ -58,11 +59,12 @@ public class GesuchDokumentAblehnenRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setKommentar(GesuchDokumentKommentarDtoSpec kommentar) {
+  public void setKommentar(@jakarta.annotation.Nullable GesuchDokumentKommentarDtoSpec kommentar) {
     this.kommentar = kommentar;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class GesuchDokumentAblehnenRequestDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

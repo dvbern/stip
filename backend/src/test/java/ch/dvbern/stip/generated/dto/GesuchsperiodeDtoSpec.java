@@ -46,62 +46,75 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE
 })
 @JsonTypeName("Gesuchsperiode")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchsperiodeDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  @jakarta.annotation.Nonnull
   private String bezeichnungDe;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  @jakarta.annotation.Nonnull
   private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_GUELTIGKEIT_STATUS = "gueltigkeitStatus";
+  @jakarta.annotation.Nonnull
   private GueltigkeitStatusDtoSpec gueltigkeitStatus;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE_START = "gesuchsperiodeStart";
+  @jakarta.annotation.Nonnull
   private LocalDate gesuchsperiodeStart;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE_STOPP = "gesuchsperiodeStopp";
+  @jakarta.annotation.Nonnull
   private LocalDate gesuchsperiodeStopp;
 
   public static final String JSON_PROPERTY_AUFSCHALTTERMIN_START = "aufschaltterminStart";
+  @jakarta.annotation.Nonnull
   private LocalDate aufschaltterminStart;
 
   public static final String JSON_PROPERTY_EINREICHEFRIST_NORMAL = "einreichefristNormal";
+  @jakarta.annotation.Nonnull
   private LocalDate einreichefristNormal;
 
   public static final String JSON_PROPERTY_EINREICHEFRIST_REDUZIERT = "einreichefristReduziert";
+  @jakarta.annotation.Nonnull
   private LocalDate einreichefristReduziert;
 
   public static final String JSON_PROPERTY_GESUCHSJAHR = "gesuchsjahr";
+  @jakarta.annotation.Nonnull
   private GesuchsjahrDtoSpec gesuchsjahr;
 
   public static final String JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I = "ausbKosten_SekII";
+  @jakarta.annotation.Nonnull
   private Integer ausbKostenSekII;
 
   public static final String JSON_PROPERTY_AUSB_KOSTEN_TERTIAER = "ausbKosten_Tertiaer";
+  @jakarta.annotation.Nonnull
   private Integer ausbKostenTertiaer;
 
   public static final String JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE = "fristNachreichenDokumente";
+  @jakarta.annotation.Nonnull
   private Integer fristNachreichenDokumente;
 
   public GesuchsperiodeDtoSpec() {
   }
 
-  public GesuchsperiodeDtoSpec id(UUID id) {
+  public GesuchsperiodeDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -109,25 +122,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public GesuchsperiodeDtoSpec bezeichnungDe(String bezeichnungDe) {
+  public GesuchsperiodeDtoSpec bezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungDe
    * @return bezeichnungDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungDe() {
@@ -135,25 +147,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
+  public void setBezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
 
-
-  public GesuchsperiodeDtoSpec bezeichnungFr(String bezeichnungFr) {
+  public GesuchsperiodeDtoSpec bezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungFr
    * @return bezeichnungFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungFr() {
@@ -161,25 +172,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
+  public void setBezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
 
-
-  public GesuchsperiodeDtoSpec gueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
+  public GesuchsperiodeDtoSpec gueltigkeitStatus(@jakarta.annotation.Nonnull GueltigkeitStatusDtoSpec gueltigkeitStatus) {
     
     this.gueltigkeitStatus = gueltigkeitStatus;
     return this;
   }
 
-   /**
+  /**
    * Get gueltigkeitStatus
    * @return gueltigkeitStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIGKEIT_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GueltigkeitStatusDtoSpec getGueltigkeitStatus() {
@@ -187,25 +197,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIGKEIT_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
+  public void setGueltigkeitStatus(@jakarta.annotation.Nonnull GueltigkeitStatusDtoSpec gueltigkeitStatus) {
     this.gueltigkeitStatus = gueltigkeitStatus;
   }
 
-
-  public GesuchsperiodeDtoSpec gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+  public GesuchsperiodeDtoSpec gesuchsperiodeStart(@jakarta.annotation.Nonnull LocalDate gesuchsperiodeStart) {
     
     this.gesuchsperiodeStart = gesuchsperiodeStart;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchsperiodeStart
    * @return gesuchsperiodeStart
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_START)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGesuchsperiodeStart() {
@@ -213,25 +222,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_START)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+  public void setGesuchsperiodeStart(@jakarta.annotation.Nonnull LocalDate gesuchsperiodeStart) {
     this.gesuchsperiodeStart = gesuchsperiodeStart;
   }
 
-
-  public GesuchsperiodeDtoSpec gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+  public GesuchsperiodeDtoSpec gesuchsperiodeStopp(@jakarta.annotation.Nonnull LocalDate gesuchsperiodeStopp) {
     
     this.gesuchsperiodeStopp = gesuchsperiodeStopp;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchsperiodeStopp
    * @return gesuchsperiodeStopp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_STOPP)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE_STOPP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGesuchsperiodeStopp() {
@@ -239,25 +247,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_STOPP)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE_STOPP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+  public void setGesuchsperiodeStopp(@jakarta.annotation.Nonnull LocalDate gesuchsperiodeStopp) {
     this.gesuchsperiodeStopp = gesuchsperiodeStopp;
   }
 
-
-  public GesuchsperiodeDtoSpec aufschaltterminStart(LocalDate aufschaltterminStart) {
+  public GesuchsperiodeDtoSpec aufschaltterminStart(@jakarta.annotation.Nonnull LocalDate aufschaltterminStart) {
     
     this.aufschaltterminStart = aufschaltterminStart;
     return this;
   }
 
-   /**
+  /**
    * Get aufschaltterminStart
    * @return aufschaltterminStart
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_START)
+  @JsonProperty(value = JSON_PROPERTY_AUFSCHALTTERMIN_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getAufschaltterminStart() {
@@ -265,25 +272,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_START)
+  @JsonProperty(value = JSON_PROPERTY_AUFSCHALTTERMIN_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
+  public void setAufschaltterminStart(@jakarta.annotation.Nonnull LocalDate aufschaltterminStart) {
     this.aufschaltterminStart = aufschaltterminStart;
   }
 
-
-  public GesuchsperiodeDtoSpec einreichefristNormal(LocalDate einreichefristNormal) {
+  public GesuchsperiodeDtoSpec einreichefristNormal(@jakarta.annotation.Nonnull LocalDate einreichefristNormal) {
     
     this.einreichefristNormal = einreichefristNormal;
     return this;
   }
 
-   /**
+  /**
    * Get einreichefristNormal
    * @return einreichefristNormal
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEFRIST_NORMAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEinreichefristNormal() {
@@ -291,25 +297,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEFRIST_NORMAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinreichefristNormal(LocalDate einreichefristNormal) {
+  public void setEinreichefristNormal(@jakarta.annotation.Nonnull LocalDate einreichefristNormal) {
     this.einreichefristNormal = einreichefristNormal;
   }
 
-
-  public GesuchsperiodeDtoSpec einreichefristReduziert(LocalDate einreichefristReduziert) {
+  public GesuchsperiodeDtoSpec einreichefristReduziert(@jakarta.annotation.Nonnull LocalDate einreichefristReduziert) {
     
     this.einreichefristReduziert = einreichefristReduziert;
     return this;
   }
 
-   /**
+  /**
    * Get einreichefristReduziert
    * @return einreichefristReduziert
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEFRIST_REDUZIERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEinreichefristReduziert() {
@@ -317,25 +322,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEFRIST_REDUZIERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
+  public void setEinreichefristReduziert(@jakarta.annotation.Nonnull LocalDate einreichefristReduziert) {
     this.einreichefristReduziert = einreichefristReduziert;
   }
 
-
-  public GesuchsperiodeDtoSpec gesuchsjahr(GesuchsjahrDtoSpec gesuchsjahr) {
+  public GesuchsperiodeDtoSpec gesuchsjahr(@jakarta.annotation.Nonnull GesuchsjahrDtoSpec gesuchsjahr) {
     
     this.gesuchsjahr = gesuchsjahr;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchsjahr
    * @return gesuchsjahr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSJAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchsjahrDtoSpec getGesuchsjahr() {
@@ -343,25 +347,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSJAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsjahr(GesuchsjahrDtoSpec gesuchsjahr) {
+  public void setGesuchsjahr(@jakarta.annotation.Nonnull GesuchsjahrDtoSpec gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
   }
 
-
-  public GesuchsperiodeDtoSpec ausbKostenSekII(Integer ausbKostenSekII) {
+  public GesuchsperiodeDtoSpec ausbKostenSekII(@jakarta.annotation.Nonnull Integer ausbKostenSekII) {
     
     this.ausbKostenSekII = ausbKostenSekII;
     return this;
   }
 
-   /**
+  /**
    * Get ausbKostenSekII
    * @return ausbKostenSekII
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
+  @JsonProperty(value = JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAusbKostenSekII() {
@@ -369,25 +372,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
+  @JsonProperty(value = JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbKostenSekII(Integer ausbKostenSekII) {
+  public void setAusbKostenSekII(@jakarta.annotation.Nonnull Integer ausbKostenSekII) {
     this.ausbKostenSekII = ausbKostenSekII;
   }
 
-
-  public GesuchsperiodeDtoSpec ausbKostenTertiaer(Integer ausbKostenTertiaer) {
+  public GesuchsperiodeDtoSpec ausbKostenTertiaer(@jakarta.annotation.Nonnull Integer ausbKostenTertiaer) {
     
     this.ausbKostenTertiaer = ausbKostenTertiaer;
     return this;
   }
 
-   /**
+  /**
    * Get ausbKostenTertiaer
    * @return ausbKostenTertiaer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
+  @JsonProperty(value = JSON_PROPERTY_AUSB_KOSTEN_TERTIAER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAusbKostenTertiaer() {
@@ -395,25 +397,24 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
+  @JsonProperty(value = JSON_PROPERTY_AUSB_KOSTEN_TERTIAER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbKostenTertiaer(Integer ausbKostenTertiaer) {
+  public void setAusbKostenTertiaer(@jakarta.annotation.Nonnull Integer ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
   }
 
-
-  public GesuchsperiodeDtoSpec fristNachreichenDokumente(Integer fristNachreichenDokumente) {
+  public GesuchsperiodeDtoSpec fristNachreichenDokumente(@jakarta.annotation.Nonnull Integer fristNachreichenDokumente) {
     
     this.fristNachreichenDokumente = fristNachreichenDokumente;
     return this;
   }
 
-   /**
+  /**
    * Get fristNachreichenDokumente
    * @return fristNachreichenDokumente
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFristNachreichenDokumente() {
@@ -421,11 +422,12 @@ public class GesuchsperiodeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFristNachreichenDokumente(Integer fristNachreichenDokumente) {
+  public void setFristNachreichenDokumente(@jakarta.annotation.Nonnull Integer fristNachreichenDokumente) {
     this.fristNachreichenDokumente = fristNachreichenDokumente;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -482,10 +484,7 @@ public class GesuchsperiodeDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

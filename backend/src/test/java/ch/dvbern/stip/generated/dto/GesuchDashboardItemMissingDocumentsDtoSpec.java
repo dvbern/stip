@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDashboardItemMissingDocumentsDtoSpec.JSON_PROPERTY_COUNT
 })
 @JsonTypeName("GesuchDashboardItem_missingDocuments")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchDashboardItemMissingDocumentsDtoSpec {
   public static final String JSON_PROPERTY_TRANCHE_ID = "trancheId";
+  @jakarta.annotation.Nonnull
   private UUID trancheId;
 
   public static final String JSON_PROPERTY_COUNT = "count";
+  @jakarta.annotation.Nonnull
   private Integer count;
 
   public GesuchDashboardItemMissingDocumentsDtoSpec() {
   }
 
-  public GesuchDashboardItemMissingDocumentsDtoSpec trancheId(UUID trancheId) {
+  public GesuchDashboardItemMissingDocumentsDtoSpec trancheId(@jakarta.annotation.Nonnull UUID trancheId) {
     
     this.trancheId = trancheId;
     return this;
   }
 
-   /**
+  /**
    * Get trancheId
    * @return trancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getTrancheId() {
@@ -62,25 +64,24 @@ public class GesuchDashboardItemMissingDocumentsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTrancheId(UUID trancheId) {
+  public void setTrancheId(@jakarta.annotation.Nonnull UUID trancheId) {
     this.trancheId = trancheId;
   }
 
-
-  public GesuchDashboardItemMissingDocumentsDtoSpec count(Integer count) {
+  public GesuchDashboardItemMissingDocumentsDtoSpec count(@jakarta.annotation.Nonnull Integer count) {
     
     this.count = count;
     return this;
   }
 
-   /**
+  /**
    * Get count
    * @return count
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_COUNT)
+  @JsonProperty(value = JSON_PROPERTY_COUNT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getCount() {
@@ -88,11 +89,12 @@ public class GesuchDashboardItemMissingDocumentsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_COUNT)
+  @JsonProperty(value = JSON_PROPERTY_COUNT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCount(Integer count) {
+  public void setCount(@jakarta.annotation.Nonnull Integer count) {
     this.count = count;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class GesuchDashboardItemMissingDocumentsDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

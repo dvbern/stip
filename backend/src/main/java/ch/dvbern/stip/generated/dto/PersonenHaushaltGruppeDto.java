@@ -17,12 +17,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PersonenHaushaltGruppe")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersonenHaushaltGruppeDto  implements Serializable {
-  private @Valid ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt typ;
+  private ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt typ;
   private @Valid List<String> names = new ArrayList<>();
 
   protected PersonenHaushaltGruppeDto(PersonenHaushaltGruppeDtoBuilder<?, ?> b) {
@@ -41,13 +41,12 @@ public class PersonenHaushaltGruppeDto  implements Serializable {
   }
 
   
-  @JsonProperty("typ")
-  @NotNull
-  public ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt getTyp() {
+  @JsonProperty(required = true, value = "typ")
+  @NotNull public ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt getTyp() {
     return typ;
   }
 
-  @JsonProperty("typ")
+  @JsonProperty(required = true, value = "typ")
   public void setTyp(ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt typ) {
     this.typ = typ;
   }
@@ -60,13 +59,12 @@ public class PersonenHaushaltGruppeDto  implements Serializable {
   }
 
   
-  @JsonProperty("names")
-  @NotNull
-  public List<String> getNames() {
+  @JsonProperty(required = true, value = "names")
+  @NotNull public List<String> getNames() {
     return names;
   }
 
-  @JsonProperty("names")
+  @JsonProperty(required = true, value = "names")
   public void setNames(List<String> names) {
     this.names = names;
   }
@@ -122,10 +120,7 @@ public class PersonenHaushaltGruppeDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -163,4 +158,3 @@ public class PersonenHaushaltGruppeDto  implements Serializable {
     }
   }
 }
-

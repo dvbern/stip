@@ -43,6 +43,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -224,7 +225,7 @@ public class DarlehenApiSpec {
         public CreateDarlehenBuchhaltungSaldokorrekturOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -253,7 +254,7 @@ public class DarlehenApiSpec {
          * @param darlehenBuchhaltungSaldokorrekturDtoSpec (DarlehenBuchhaltungSaldokorrekturDtoSpec)  (required)
          * @return operation
          */
-        public CreateDarlehenBuchhaltungSaldokorrekturOper body(DarlehenBuchhaltungSaldokorrekturDtoSpec darlehenBuchhaltungSaldokorrekturDtoSpec) {
+        public CreateDarlehenBuchhaltungSaldokorrekturOper body(@jakarta.annotation.Nonnull DarlehenBuchhaltungSaldokorrekturDtoSpec darlehenBuchhaltungSaldokorrekturDtoSpec) {
             reqSpec.setBody(darlehenBuchhaltungSaldokorrekturDtoSpec);
             return this;
         }
@@ -351,7 +352,7 @@ public class DarlehenApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateDarlehenDokumentOper fileUploadMultiPart(File fileUpload) {
+         public CreateDarlehenDokumentOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -393,7 +394,7 @@ public class DarlehenApiSpec {
 
         public CreateFreiwilligDarlehenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -527,7 +528,7 @@ public class DarlehenApiSpec {
 
         public DeleteFreiwilligDarlehenGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -736,7 +737,7 @@ public class DarlehenApiSpec {
 
         public FreiwilligDarlehenAblehenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -809,7 +810,7 @@ public class DarlehenApiSpec {
 
         public FreiwilligDarlehenAkzeptierenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -882,7 +883,7 @@ public class DarlehenApiSpec {
 
         public FreiwilligDarlehenEingebenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -955,7 +956,7 @@ public class DarlehenApiSpec {
 
         public FreiwilligDarlehenFreigebenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1030,7 +1031,7 @@ public class DarlehenApiSpec {
         public FreiwilligDarlehenUpdateGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1059,7 +1060,7 @@ public class DarlehenApiSpec {
          * @param freiwilligDarlehenUpdateGsDtoSpec (FreiwilligDarlehenUpdateGsDtoSpec)  (required)
          * @return operation
          */
-        public FreiwilligDarlehenUpdateGsOper body(FreiwilligDarlehenUpdateGsDtoSpec freiwilligDarlehenUpdateGsDtoSpec) {
+        public FreiwilligDarlehenUpdateGsOper body(@jakarta.annotation.Nonnull FreiwilligDarlehenUpdateGsDtoSpec freiwilligDarlehenUpdateGsDtoSpec) {
             reqSpec.setBody(freiwilligDarlehenUpdateGsDtoSpec);
             return this;
         }
@@ -1117,7 +1118,7 @@ public class DarlehenApiSpec {
         public FreiwilligDarlehenUpdateSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("multipart/form-data");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1192,7 +1193,7 @@ public class DarlehenApiSpec {
          * @param negativeVerfuegung (File)  (optional)
          * @return operation
          */
-         public FreiwilligDarlehenUpdateSbOper negativeVerfuegungMultiPart(File negativeVerfuegung) {
+         public FreiwilligDarlehenUpdateSbOper negativeVerfuegungMultiPart(@jakarta.annotation.Nullable File negativeVerfuegung) {
             reqSpec.addMultiPart(negativeVerfuegung);
             return this;
          }
@@ -1236,7 +1237,7 @@ public class DarlehenApiSpec {
         public FreiwilligDarlehenZurueckweisenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1265,7 +1266,7 @@ public class DarlehenApiSpec {
          * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
          * @return operation
          */
-        public FreiwilligDarlehenZurueckweisenOper body(KommentarDtoSpec kommentarDtoSpec) {
+        public FreiwilligDarlehenZurueckweisenOper body(@jakarta.annotation.Nonnull KommentarDtoSpec kommentarDtoSpec) {
             reqSpec.setBody(kommentarDtoSpec);
             return this;
         }
@@ -1318,7 +1319,7 @@ public class DarlehenApiSpec {
 
         public GetAllFreiwilligDarlehenGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1391,7 +1392,7 @@ public class DarlehenApiSpec {
 
         public GetAllFreiwilligDarlehenSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1464,7 +1465,7 @@ public class DarlehenApiSpec {
 
         public GetDarlehenBuchhaltungEntrysOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1537,7 +1538,7 @@ public class DarlehenApiSpec {
 
         public GetDarlehenBuchhaltungEntrysByFallIdOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1611,7 +1612,7 @@ public class DarlehenApiSpec {
 
         public GetDarlehenDokumentOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1695,7 +1696,7 @@ public class DarlehenApiSpec {
 
         public GetDarlehenDownloadTokenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1768,7 +1769,7 @@ public class DarlehenApiSpec {
 
         public GetDarlehenNegativVerfuegungDownloadTokenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1854,7 +1855,7 @@ public class DarlehenApiSpec {
 
         public GetFreiwilligDarlehenDashboardSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -2070,7 +2071,7 @@ public class DarlehenApiSpec {
 
         public GetFreiwilligDarlehenGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -2143,7 +2144,7 @@ public class DarlehenApiSpec {
 
         public GetFreiwilligDarlehenSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 

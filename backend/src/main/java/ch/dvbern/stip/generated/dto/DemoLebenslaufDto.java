@@ -19,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoLebenslauf")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoLebenslaufDto  implements Serializable {
-  private @Valid List<DemoLebenslaufAusbildungDto> ausbildung = new ArrayList<>();
-  private @Valid List<DemoLebenslaufTaetigkeitDto> taetigkeiten = new ArrayList<>();
+  private @Valid List<@Valid DemoLebenslaufAusbildungDto> ausbildung = new ArrayList<>();
+  private @Valid List<@Valid DemoLebenslaufTaetigkeitDto> taetigkeiten = new ArrayList<>();
 
   protected DemoLebenslaufDto(DemoLebenslaufDtoBuilder<?, ?> b) {
     this.ausbildung = b.ausbildung;
@@ -37,20 +37,19 @@ public class DemoLebenslaufDto  implements Serializable {
 
   /**
    **/
-  public DemoLebenslaufDto ausbildung(List<DemoLebenslaufAusbildungDto> ausbildung) {
+  public DemoLebenslaufDto ausbildung(List<@Valid DemoLebenslaufAusbildungDto> ausbildung) {
     this.ausbildung = ausbildung;
     return this;
   }
 
   
-  @JsonProperty("ausbildung")
-  @NotNull
-  public List<DemoLebenslaufAusbildungDto> getAusbildung() {
+  @JsonProperty(required = true, value = "ausbildung")
+  @NotNull @Valid public List<@Valid DemoLebenslaufAusbildungDto> getAusbildung() {
     return ausbildung;
   }
 
-  @JsonProperty("ausbildung")
-  public void setAusbildung(List<DemoLebenslaufAusbildungDto> ausbildung) {
+  @JsonProperty(required = true, value = "ausbildung")
+  public void setAusbildung(List<@Valid DemoLebenslaufAusbildungDto> ausbildung) {
     this.ausbildung = ausbildung;
   }
 
@@ -72,20 +71,19 @@ public class DemoLebenslaufDto  implements Serializable {
   }
   /**
    **/
-  public DemoLebenslaufDto taetigkeiten(List<DemoLebenslaufTaetigkeitDto> taetigkeiten) {
+  public DemoLebenslaufDto taetigkeiten(List<@Valid DemoLebenslaufTaetigkeitDto> taetigkeiten) {
     this.taetigkeiten = taetigkeiten;
     return this;
   }
 
   
-  @JsonProperty("taetigkeiten")
-  @NotNull
-  public List<DemoLebenslaufTaetigkeitDto> getTaetigkeiten() {
+  @JsonProperty(required = true, value = "taetigkeiten")
+  @NotNull @Valid public List<@Valid DemoLebenslaufTaetigkeitDto> getTaetigkeiten() {
     return taetigkeiten;
   }
 
-  @JsonProperty("taetigkeiten")
-  public void setTaetigkeiten(List<DemoLebenslaufTaetigkeitDto> taetigkeiten) {
+  @JsonProperty(required = true, value = "taetigkeiten")
+  public void setTaetigkeiten(List<@Valid DemoLebenslaufTaetigkeitDto> taetigkeiten) {
     this.taetigkeiten = taetigkeiten;
   }
 
@@ -140,10 +138,7 @@ public class DemoLebenslaufDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -181,4 +176,3 @@ public class DemoLebenslaufDto  implements Serializable {
     }
   }
 }
-

@@ -33,32 +33,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FallDtoSpec.JSON_PROPERTY_TENANT
 })
 @JsonTypeName("Fall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FallDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  @jakarta.annotation.Nonnull
   private String fallNummer;
 
   public static final String JSON_PROPERTY_TENANT = "tenant";
+  @jakarta.annotation.Nonnull
   private String tenant;
 
   public FallDtoSpec() {
   }
 
-  public FallDtoSpec id(UUID id) {
+  public FallDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -66,25 +69,24 @@ public class FallDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public FallDtoSpec fallNummer(String fallNummer) {
+  public FallDtoSpec fallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     
     this.fallNummer = fallNummer;
     return this;
   }
 
-   /**
+  /**
    * Get fallNummer
    * @return fallNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
@@ -92,25 +94,24 @@ public class FallDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallNummer(String fallNummer) {
+  public void setFallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     this.fallNummer = fallNummer;
   }
 
-
-  public FallDtoSpec tenant(String tenant) {
+  public FallDtoSpec tenant(@jakarta.annotation.Nonnull String tenant) {
     
     this.tenant = tenant;
     return this;
   }
 
-   /**
+  /**
    * Get tenant
    * @return tenant
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TENANT)
+  @JsonProperty(value = JSON_PROPERTY_TENANT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTenant() {
@@ -118,11 +119,12 @@ public class FallDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TENANT)
+  @JsonProperty(value = JSON_PROPERTY_TENANT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTenant(String tenant) {
+  public void setTenant(@jakarta.annotation.Nonnull String tenant) {
     this.tenant = tenant;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -159,10 +161,7 @@ public class FallDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

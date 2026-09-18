@@ -20,26 +20,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BuchhaltungEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BuchhaltungEntryDto  implements Serializable {
-  private @Valid String userErstellt;
-  private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType;
-  private @Valid Integer saldoAenderung;
-  private @Valid Integer saldo;
-  private @Valid String comment;
-  private @Valid Integer stipendienBetrag;
-  private @Valid Integer auszahlung;
-  private @Valid Integer rueckforderung;
-  private @Valid Integer businessPartnerId;
-  private @Valid UUID verfuegungId;
-  private @Valid UUID gesuchId;
-  private @Valid ZahlungsverbindungDto zahlungsverbindung;
-  private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
-  private @Valid List<SapDeliveryDto> sapDeliverys;
+  private String userErstellt;
+  private java.time.LocalDateTime timestampErstellt;
+  private ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType;
+  private Integer saldoAenderung;
+  private Integer saldo;
+  private String comment;
+  private Integer stipendienBetrag;
+  private Integer auszahlung;
+  private Integer rueckforderung;
+  private Integer businessPartnerId;
+  private UUID verfuegungId;
+  private UUID gesuchId;
+  private ZahlungsverbindungDto zahlungsverbindung;
+  private ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+  private @Valid List<@Valid SapDeliveryDto> sapDeliverys = new ArrayList<>();
 
   protected BuchhaltungEntryDto(BuchhaltungEntryDtoBuilder<?, ?> b) {
     this.userErstellt = b.userErstellt;
@@ -70,13 +70,12 @@ public class BuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
+  @JsonProperty(required = true, value = "userErstellt")
+  @NotNull public String getUserErstellt() {
     return userErstellt;
   }
 
-  @JsonProperty("userErstellt")
+  @JsonProperty(required = true, value = "userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
   }
@@ -89,13 +88,12 @@ public class BuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public java.time.LocalDateTime getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -108,13 +106,12 @@ public class BuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("buchhaltungType")
-  @NotNull
-  public ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType getBuchhaltungType() {
+  @JsonProperty(required = true, value = "buchhaltungType")
+  @NotNull public ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType getBuchhaltungType() {
     return buchhaltungType;
   }
 
-  @JsonProperty("buchhaltungType")
+  @JsonProperty(required = true, value = "buchhaltungType")
   public void setBuchhaltungType(ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType) {
     this.buchhaltungType = buchhaltungType;
   }
@@ -127,13 +124,12 @@ public class BuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("saldoAenderung")
-  @NotNull
-  public Integer getSaldoAenderung() {
+  @JsonProperty(required = true, value = "saldoAenderung")
+  @NotNull public Integer getSaldoAenderung() {
     return saldoAenderung;
   }
 
-  @JsonProperty("saldoAenderung")
+  @JsonProperty(required = true, value = "saldoAenderung")
   public void setSaldoAenderung(Integer saldoAenderung) {
     this.saldoAenderung = saldoAenderung;
   }
@@ -146,13 +142,12 @@ public class BuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("saldo")
-  @NotNull
-  public Integer getSaldo() {
+  @JsonProperty(required = true, value = "saldo")
+  @NotNull public Integer getSaldo() {
     return saldo;
   }
 
-  @JsonProperty("saldo")
+  @JsonProperty(required = true, value = "saldo")
   public void setSaldo(Integer saldo) {
     this.saldo = saldo;
   }
@@ -165,13 +160,12 @@ public class BuchhaltungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("comment")
-  @NotNull
-  public String getComment() {
+  @JsonProperty(required = true, value = "comment")
+  @NotNull public String getComment() {
     return comment;
   }
 
-  @JsonProperty("comment")
+  @JsonProperty(required = true, value = "comment")
   public void setComment(String comment) {
     this.comment = comment;
   }
@@ -293,7 +287,7 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   
   @JsonProperty("zahlungsverbindung")
-  public ZahlungsverbindungDto getZahlungsverbindung() {
+  @Valid public ZahlungsverbindungDto getZahlungsverbindung() {
     return zahlungsverbindung;
   }
 
@@ -322,19 +316,19 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   /**
    **/
-  public BuchhaltungEntryDto sapDeliverys(List<SapDeliveryDto> sapDeliverys) {
+  public BuchhaltungEntryDto sapDeliverys(List<@Valid SapDeliveryDto> sapDeliverys) {
     this.sapDeliverys = sapDeliverys;
     return this;
   }
 
   
   @JsonProperty("sapDeliverys")
-  public List<SapDeliveryDto> getSapDeliverys() {
+  @Valid public List<@Valid SapDeliveryDto> getSapDeliverys() {
     return sapDeliverys;
   }
 
   @JsonProperty("sapDeliverys")
-  public void setSapDeliverys(List<SapDeliveryDto> sapDeliverys) {
+  public void setSapDeliverys(List<@Valid SapDeliveryDto> sapDeliverys) {
     this.sapDeliverys = sapDeliverys;
   }
 
@@ -415,10 +409,7 @@ public class BuchhaltungEntryDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -454,7 +445,7 @@ public class BuchhaltungEntryDto  implements Serializable {
     private UUID gesuchId;
     private ZahlungsverbindungDto zahlungsverbindung;
     private ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
-    private List<SapDeliveryDto> sapDeliverys;
+    private List<SapDeliveryDto> sapDeliverys = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -521,4 +512,3 @@ public class BuchhaltungEntryDto  implements Serializable {
     }
   }
 }
-

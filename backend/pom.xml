@@ -54,7 +54,9 @@
     <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
     <jacoco.version>0.8.7</jacoco.version>
     <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
-    <openapi-generator.version>7.1.0</openapi-generator.version>
+    <!-- bump to version that includes this pr once merged https://github.com/OpenAPITools/openapi-generator/pull/24176 -->
+    <!-- this will resolve the warnings about @Valid being depricated when used on containers (List,Set,Map) -->
+    <openapi-generator.version>7.25.0</openapi-generator.version>
     <!-- Paths -->
     <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
@@ -843,6 +845,8 @@
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                     <useTags>true</useTags>
                     <generateBuilders>true</generateBuilders>
+                    <generateJsonCreator>false</generateJsonCreator>
+                    <openApiNullable>false</openApiNullable>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>

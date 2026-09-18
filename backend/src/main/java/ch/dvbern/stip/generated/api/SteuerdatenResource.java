@@ -7,7 +7,7 @@ import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
+import org.jboss.resteasy.reactive.ResponseStatus;
 
 
 
@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 
 
 @Path("/steuerdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public interface SteuerdatenResource {
 
     @GET
@@ -31,7 +31,7 @@ public interface SteuerdatenResource {
     @Path("/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    List<SteuerdatenDto> updateSteuerdaten(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull List<SteuerdatenDto> steuerdatenDto);
+    List<SteuerdatenDto> updateSteuerdaten(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull List<@Valid SteuerdatenDto> steuerdatenDto);
 
     @POST
     @Path("/port/{gesuchTrancheId}")

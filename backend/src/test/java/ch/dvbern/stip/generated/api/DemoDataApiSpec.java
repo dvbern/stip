@@ -32,6 +32,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -131,7 +132,7 @@ public class DemoDataApiSpec {
 
         public ApplyDemoDataOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -207,7 +208,7 @@ public class DemoDataApiSpec {
         public CreateNewDemoDataImportOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("multipart/form-data");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -260,7 +261,7 @@ public class DemoDataApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateNewDemoDataImportOper fileUploadMultiPart(File fileUpload) {
+         public CreateNewDemoDataImportOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -351,7 +352,7 @@ public class DemoDataApiSpec {
 
         public GetAllDemoDataOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -486,7 +487,7 @@ public class DemoDataApiSpec {
 
         public GetDemoDataDokumentDownloadTokenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -619,7 +620,7 @@ public class DemoDataApiSpec {
 
         public TestAllDemoDataBerechnungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 

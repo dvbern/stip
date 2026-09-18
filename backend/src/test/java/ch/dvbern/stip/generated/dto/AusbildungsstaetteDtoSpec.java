@@ -37,41 +37,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsstaetteDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("Ausbildungsstaette")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungsstaetteDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_NAME_DE = "nameDe";
+  @jakarta.annotation.Nonnull
   private String nameDe;
 
   public static final String JSON_PROPERTY_NAME_FR = "nameFr";
+  @jakarta.annotation.Nonnull
   private String nameFr;
 
   public static final String JSON_PROPERTY_NUMMER = "nummer";
+  @jakarta.annotation.Nullable
   private String nummer;
 
   public static final String JSON_PROPERTY_NUMMER_TYP = "nummerTyp";
+  @jakarta.annotation.Nonnull
   private AusbildungsstaetteNummerTypDtoSpec nummerTyp;
 
   public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  @jakarta.annotation.Nonnull
   private Boolean aktiv;
 
   public AusbildungsstaetteDtoSpec() {
   }
 
-  public AusbildungsstaetteDtoSpec id(UUID id) {
+  public AusbildungsstaetteDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -79,25 +85,24 @@ public class AusbildungsstaetteDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public AusbildungsstaetteDtoSpec nameDe(String nameDe) {
+  public AusbildungsstaetteDtoSpec nameDe(@jakarta.annotation.Nonnull String nameDe) {
     
     this.nameDe = nameDe;
     return this;
   }
 
-   /**
+  /**
    * Get nameDe
    * @return nameDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_DE)
+  @JsonProperty(value = JSON_PROPERTY_NAME_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNameDe() {
@@ -105,25 +110,24 @@ public class AusbildungsstaetteDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_DE)
+  @JsonProperty(value = JSON_PROPERTY_NAME_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameDe(String nameDe) {
+  public void setNameDe(@jakarta.annotation.Nonnull String nameDe) {
     this.nameDe = nameDe;
   }
 
-
-  public AusbildungsstaetteDtoSpec nameFr(String nameFr) {
+  public AusbildungsstaetteDtoSpec nameFr(@jakarta.annotation.Nonnull String nameFr) {
     
     this.nameFr = nameFr;
     return this;
   }
 
-   /**
+  /**
    * Get nameFr
    * @return nameFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_FR)
+  @JsonProperty(value = JSON_PROPERTY_NAME_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNameFr() {
@@ -131,25 +135,24 @@ public class AusbildungsstaetteDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_FR)
+  @JsonProperty(value = JSON_PROPERTY_NAME_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameFr(String nameFr) {
+  public void setNameFr(@jakarta.annotation.Nonnull String nameFr) {
     this.nameFr = nameFr;
   }
 
-
-  public AusbildungsstaetteDtoSpec nummer(String nummer) {
+  public AusbildungsstaetteDtoSpec nummer(@jakarta.annotation.Nullable String nummer) {
     
     this.nummer = nummer;
     return this;
   }
 
-   /**
+  /**
    * Get nummer
    * @return nummer
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_NUMMER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getNummer() {
@@ -157,25 +160,24 @@ public class AusbildungsstaetteDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_NUMMER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNummer(String nummer) {
+  public void setNummer(@jakarta.annotation.Nullable String nummer) {
     this.nummer = nummer;
   }
 
-
-  public AusbildungsstaetteDtoSpec nummerTyp(AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
+  public AusbildungsstaetteDtoSpec nummerTyp(@jakarta.annotation.Nonnull AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
     
     this.nummerTyp = nummerTyp;
     return this;
   }
 
-   /**
+  /**
    * Get nummerTyp
    * @return nummerTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NUMMER_TYP)
+  @JsonProperty(value = JSON_PROPERTY_NUMMER_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungsstaetteNummerTypDtoSpec getNummerTyp() {
@@ -183,25 +185,24 @@ public class AusbildungsstaetteDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NUMMER_TYP)
+  @JsonProperty(value = JSON_PROPERTY_NUMMER_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNummerTyp(AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
+  public void setNummerTyp(@jakarta.annotation.Nonnull AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
     this.nummerTyp = nummerTyp;
   }
 
-
-  public AusbildungsstaetteDtoSpec aktiv(Boolean aktiv) {
+  public AusbildungsstaetteDtoSpec aktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     
     this.aktiv = aktiv;
     return this;
   }
 
-   /**
+  /**
    * Get aktiv
    * @return aktiv
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAktiv() {
@@ -209,11 +210,12 @@ public class AusbildungsstaetteDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAktiv(Boolean aktiv) {
+  public void setAktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     this.aktiv = aktiv;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -256,10 +258,7 @@ public class AusbildungsstaetteDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

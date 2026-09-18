@@ -31,29 +31,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   TenantAuthConfigDtoSpec.JSON_PROPERTY_REALM
 })
 @JsonTypeName("TenantAuthConfig")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class TenantAuthConfigDtoSpec {
   public static final String JSON_PROPERTY_AUTH_SERVER_URL = "authServerUrl";
+  @jakarta.annotation.Nonnull
   private String authServerUrl;
 
   public static final String JSON_PROPERTY_REALM = "realm";
+  @jakarta.annotation.Nonnull
   private String realm;
 
   public TenantAuthConfigDtoSpec() {
   }
 
-  public TenantAuthConfigDtoSpec authServerUrl(String authServerUrl) {
+  public TenantAuthConfigDtoSpec authServerUrl(@jakarta.annotation.Nonnull String authServerUrl) {
     
     this.authServerUrl = authServerUrl;
     return this;
   }
 
-   /**
+  /**
    * Get authServerUrl
    * @return authServerUrl
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUTH_SERVER_URL)
+  @JsonProperty(value = JSON_PROPERTY_AUTH_SERVER_URL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAuthServerUrl() {
@@ -61,25 +63,24 @@ public class TenantAuthConfigDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUTH_SERVER_URL)
+  @JsonProperty(value = JSON_PROPERTY_AUTH_SERVER_URL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAuthServerUrl(String authServerUrl) {
+  public void setAuthServerUrl(@jakarta.annotation.Nonnull String authServerUrl) {
     this.authServerUrl = authServerUrl;
   }
 
-
-  public TenantAuthConfigDtoSpec realm(String realm) {
+  public TenantAuthConfigDtoSpec realm(@jakarta.annotation.Nonnull String realm) {
     
     this.realm = realm;
     return this;
   }
 
-   /**
+  /**
    * Get realm
    * @return realm
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_REALM)
+  @JsonProperty(value = JSON_PROPERTY_REALM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getRealm() {
@@ -87,11 +88,12 @@ public class TenantAuthConfigDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_REALM)
+  @JsonProperty(value = JSON_PROPERTY_REALM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setRealm(String realm) {
+  public void setRealm(@jakarta.annotation.Nonnull String realm) {
     this.realm = realm;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -126,10 +128,7 @@ public class TenantAuthConfigDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

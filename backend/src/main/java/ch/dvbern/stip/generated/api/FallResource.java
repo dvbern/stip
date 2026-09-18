@@ -4,7 +4,7 @@ import ch.dvbern.stip.generated.dto.FallDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
+import org.jboss.resteasy.reactive.ResponseStatus;
 
 
 
@@ -15,22 +15,22 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/fall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
+@Path("")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public interface FallResource {
 
     @POST
-    @Path("/gs")
+    @Path("/fall/gs")
     @Produces({ "application/json", "text/plain" })
     FallDto createFallForGs();
 
     @GET
-    @Path("/sb")
+    @Path("/fall/sb")
     @Produces({ "application/json", "text/plain" })
     List<FallDto> getFaelleForSb();
 
     @GET
-    @Path("/gs")
+    @Path("/fall/gs")
     @Produces({ "application/json", "text/plain" })
     FallDto getFallForGs();
 }

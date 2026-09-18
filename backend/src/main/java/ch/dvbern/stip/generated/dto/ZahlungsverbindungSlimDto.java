@@ -15,15 +15,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("ZahlungsverbindungSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ZahlungsverbindungSlimDto  implements Serializable {
-  private @Valid AdresseDto adresse;
-  private @Valid String vorname;
-  private @Valid String nachname;
-  private @Valid String institution;
+  private AdresseDto adresse;
+  private String vorname;
+  private String nachname;
+  private String institution;
 
   protected ZahlungsverbindungSlimDto(ZahlungsverbindungSlimDtoBuilder<?, ?> b) {
     this.adresse = b.adresse;
@@ -43,13 +43,12 @@ public class ZahlungsverbindungSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("adresse")
-  @NotNull
-  public AdresseDto getAdresse() {
+  @JsonProperty(required = true, value = "adresse")
+  @NotNull @Valid public AdresseDto getAdresse() {
     return adresse;
   }
 
-  @JsonProperty("adresse")
+  @JsonProperty(required = true, value = "adresse")
   public void setAdresse(AdresseDto adresse) {
     this.adresse = adresse;
   }
@@ -147,10 +146,7 @@ public class ZahlungsverbindungSlimDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -198,4 +194,3 @@ public class ZahlungsverbindungSlimDto  implements Serializable {
     }
   }
 }
-

@@ -43,41 +43,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDokumentDtoSpec.JSON_PROPERTY_STATUS
 })
 @JsonTypeName("GesuchDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchDokumentDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_ENTRY_ID = "entryId";
+  @jakarta.annotation.Nullable
   private UUID entryId;
 
   public static final String JSON_PROPERTY_DOKUMENT_TYP = "dokumentTyp";
+  @jakarta.annotation.Nullable
   private DokumentTypDtoSpec dokumentTyp;
 
   public static final String JSON_PROPERTY_CUSTOM_DOKUMENT_TYP = "customDokumentTyp";
+  @jakarta.annotation.Nullable
   private CustomDokumentTypDtoSpec customDokumentTyp;
 
   public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
+  @jakarta.annotation.Nonnull
   private List<DokumentDtoSpec> dokumente;
 
   public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nonnull
   private DokumentstatusDtoSpec status;
 
   public GesuchDokumentDtoSpec() {
   }
 
-  public GesuchDokumentDtoSpec id(UUID id) {
+  public GesuchDokumentDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -85,25 +91,24 @@ public class GesuchDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public GesuchDokumentDtoSpec entryId(UUID entryId) {
+  public GesuchDokumentDtoSpec entryId(@jakarta.annotation.Nullable UUID entryId) {
     
     this.entryId = entryId;
     return this;
   }
 
-   /**
+  /**
    * Get entryId
    * @return entryId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ENTRY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getEntryId() {
@@ -111,25 +116,24 @@ public class GesuchDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ENTRY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEntryId(UUID entryId) {
+  public void setEntryId(@jakarta.annotation.Nullable UUID entryId) {
     this.entryId = entryId;
   }
 
-
-  public GesuchDokumentDtoSpec dokumentTyp(DokumentTypDtoSpec dokumentTyp) {
+  public GesuchDokumentDtoSpec dokumentTyp(@jakarta.annotation.Nullable DokumentTypDtoSpec dokumentTyp) {
     
     this.dokumentTyp = dokumentTyp;
     return this;
   }
 
-   /**
+  /**
    * Get dokumentTyp
    * @return dokumentTyp
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT_TYP, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DokumentTypDtoSpec getDokumentTyp() {
@@ -137,25 +141,24 @@ public class GesuchDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT_TYP, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDokumentTyp(DokumentTypDtoSpec dokumentTyp) {
+  public void setDokumentTyp(@jakarta.annotation.Nullable DokumentTypDtoSpec dokumentTyp) {
     this.dokumentTyp = dokumentTyp;
   }
 
-
-  public GesuchDokumentDtoSpec customDokumentTyp(CustomDokumentTypDtoSpec customDokumentTyp) {
+  public GesuchDokumentDtoSpec customDokumentTyp(@jakarta.annotation.Nullable CustomDokumentTypDtoSpec customDokumentTyp) {
     
     this.customDokumentTyp = customDokumentTyp;
     return this;
   }
 
-   /**
+  /**
    * Get customDokumentTyp
    * @return customDokumentTyp
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CUSTOM_DOKUMENT_TYP)
+  @JsonProperty(value = JSON_PROPERTY_CUSTOM_DOKUMENT_TYP, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public CustomDokumentTypDtoSpec getCustomDokumentTyp() {
@@ -163,14 +166,13 @@ public class GesuchDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CUSTOM_DOKUMENT_TYP)
+  @JsonProperty(value = JSON_PROPERTY_CUSTOM_DOKUMENT_TYP, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCustomDokumentTyp(CustomDokumentTypDtoSpec customDokumentTyp) {
+  public void setCustomDokumentTyp(@jakarta.annotation.Nullable CustomDokumentTypDtoSpec customDokumentTyp) {
     this.customDokumentTyp = customDokumentTyp;
   }
 
-
-  public GesuchDokumentDtoSpec dokumente(List<DokumentDtoSpec> dokumente) {
+  public GesuchDokumentDtoSpec dokumente(@jakarta.annotation.Nonnull List<DokumentDtoSpec> dokumente) {
     
     this.dokumente = dokumente;
     return this;
@@ -184,12 +186,12 @@ public class GesuchDokumentDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get dokumente
    * @return dokumente
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<DokumentDtoSpec> getDokumente() {
@@ -197,25 +199,24 @@ public class GesuchDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumente(List<DokumentDtoSpec> dokumente) {
+  public void setDokumente(@jakarta.annotation.Nonnull List<DokumentDtoSpec> dokumente) {
     this.dokumente = dokumente;
   }
 
-
-  public GesuchDokumentDtoSpec status(DokumentstatusDtoSpec status) {
+  public GesuchDokumentDtoSpec status(@jakarta.annotation.Nonnull DokumentstatusDtoSpec status) {
     
     this.status = status;
     return this;
   }
 
-   /**
+  /**
    * Get status
    * @return status
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DokumentstatusDtoSpec getStatus() {
@@ -223,11 +224,12 @@ public class GesuchDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(DokumentstatusDtoSpec status) {
+  public void setStatus(@jakarta.annotation.Nonnull DokumentstatusDtoSpec status) {
     this.status = status;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -270,10 +272,7 @@ public class GesuchDokumentDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Gets or Sets VerfuegungDokumentTyp
  */
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public enum VerfuegungDokumentTypDto {
   
   BERECHNUNGSBLATT_PIA("BERECHNUNGSBLATT_PIA"),
@@ -36,7 +37,7 @@ public enum VerfuegungDokumentTypDto {
      * Convert a String into String, as specified in the
      * <a href="https://download.oracle.com/otndocs/jcp/jaxrs-2_0-fr-eval-spec/index.html">See JAX RS 2.0 Specification, section 3.2, p. 12</a>
      */
-	public static VerfuegungDokumentTypDto fromString(String s) {
+    public static VerfuegungDokumentTypDto fromString(String s) {
       for (VerfuegungDokumentTypDto b : VerfuegungDokumentTypDto.values()) {
         // using Objects.toString() to be safe if value type non-object type
         // because types like 'int' etc. will be auto-boxed
@@ -45,8 +46,8 @@ public enum VerfuegungDokumentTypDto {
         }
       }
       throw new IllegalArgumentException("Unexpected string value '" + s + "'");
-	}
-	
+    }
+
   @Override
   @JsonValue
   public String toString() {

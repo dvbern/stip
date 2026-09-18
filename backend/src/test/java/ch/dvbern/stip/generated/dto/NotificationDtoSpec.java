@@ -41,50 +41,59 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   NotificationDtoSpec.JSON_PROPERTY_READ
 })
 @JsonTypeName("Notification")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class NotificationDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_NOTIFICATION_TEXT = "notificationText";
+  @jakarta.annotation.Nullable
   private String notificationText;
 
   public static final String JSON_PROPERTY_NOTIFICATION_TYPE = "notificationType";
+  @jakarta.annotation.Nonnull
   private NotificationTypeDtoSpec notificationType;
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private UUID fallId;
 
   public static final String JSON_PROPERTY_CONTEXT_ID = "contextId";
+  @jakarta.annotation.Nullable
   private UUID contextId;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  @jakarta.annotation.Nonnull
   private String userErstellt;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
   private LocalDate timestampErstellt;
 
   public static final String JSON_PROPERTY_ABSENDER = "absender";
+  @jakarta.annotation.Nonnull
   private String absender;
 
   public static final String JSON_PROPERTY_READ = "read";
+  @jakarta.annotation.Nonnull
   private Boolean read;
 
   public NotificationDtoSpec() {
   }
 
-  public NotificationDtoSpec id(UUID id) {
+  public NotificationDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -92,25 +101,24 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public NotificationDtoSpec notificationText(String notificationText) {
+  public NotificationDtoSpec notificationText(@jakarta.annotation.Nullable String notificationText) {
     
     this.notificationText = notificationText;
     return this;
   }
 
-   /**
+  /**
    * Get notificationText
    * @return notificationText
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NOTIFICATION_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_NOTIFICATION_TEXT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getNotificationText() {
@@ -118,25 +126,24 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NOTIFICATION_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_NOTIFICATION_TEXT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNotificationText(String notificationText) {
+  public void setNotificationText(@jakarta.annotation.Nullable String notificationText) {
     this.notificationText = notificationText;
   }
 
-
-  public NotificationDtoSpec notificationType(NotificationTypeDtoSpec notificationType) {
+  public NotificationDtoSpec notificationType(@jakarta.annotation.Nonnull NotificationTypeDtoSpec notificationType) {
     
     this.notificationType = notificationType;
     return this;
   }
 
-   /**
+  /**
    * Get notificationType
    * @return notificationType
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NOTIFICATION_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_NOTIFICATION_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public NotificationTypeDtoSpec getNotificationType() {
@@ -144,25 +151,24 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NOTIFICATION_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_NOTIFICATION_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNotificationType(NotificationTypeDtoSpec notificationType) {
+  public void setNotificationType(@jakarta.annotation.Nonnull NotificationTypeDtoSpec notificationType) {
     this.notificationType = notificationType;
   }
 
-
-  public NotificationDtoSpec fallId(UUID fallId) {
+  public NotificationDtoSpec fallId(@jakarta.annotation.Nonnull UUID fallId) {
     
     this.fallId = fallId;
     return this;
   }
 
-   /**
+  /**
    * Get fallId
    * @return fallId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getFallId() {
@@ -170,25 +176,24 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
+  public void setFallId(@jakarta.annotation.Nonnull UUID fallId) {
     this.fallId = fallId;
   }
 
-
-  public NotificationDtoSpec contextId(UUID contextId) {
+  public NotificationDtoSpec contextId(@jakarta.annotation.Nullable UUID contextId) {
     
     this.contextId = contextId;
     return this;
   }
 
-   /**
+  /**
    * Get contextId
    * @return contextId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CONTEXT_ID)
+  @JsonProperty(value = JSON_PROPERTY_CONTEXT_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getContextId() {
@@ -196,25 +201,24 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CONTEXT_ID)
+  @JsonProperty(value = JSON_PROPERTY_CONTEXT_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setContextId(UUID contextId) {
+  public void setContextId(@jakarta.annotation.Nullable UUID contextId) {
     this.contextId = contextId;
   }
 
-
-  public NotificationDtoSpec userErstellt(String userErstellt) {
+  public NotificationDtoSpec userErstellt(@jakarta.annotation.Nonnull String userErstellt) {
     
     this.userErstellt = userErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get userErstellt
    * @return userErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getUserErstellt() {
@@ -222,25 +226,24 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserErstellt(String userErstellt) {
+  public void setUserErstellt(@jakarta.annotation.Nonnull String userErstellt) {
     this.userErstellt = userErstellt;
   }
 
-
-  public NotificationDtoSpec timestampErstellt(LocalDate timestampErstellt) {
+  public NotificationDtoSpec timestampErstellt(@jakarta.annotation.Nonnull LocalDate timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getTimestampErstellt() {
@@ -248,25 +251,24 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public NotificationDtoSpec absender(String absender) {
+  public NotificationDtoSpec absender(@jakarta.annotation.Nonnull String absender) {
     
     this.absender = absender;
     return this;
   }
 
-   /**
+  /**
    * Get absender
    * @return absender
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ABSENDER)
+  @JsonProperty(value = JSON_PROPERTY_ABSENDER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAbsender() {
@@ -274,25 +276,24 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ABSENDER)
+  @JsonProperty(value = JSON_PROPERTY_ABSENDER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAbsender(String absender) {
+  public void setAbsender(@jakarta.annotation.Nonnull String absender) {
     this.absender = absender;
   }
 
-
-  public NotificationDtoSpec read(Boolean read) {
+  public NotificationDtoSpec read(@jakarta.annotation.Nonnull Boolean read) {
     
     this.read = read;
     return this;
   }
 
-   /**
+  /**
    * Get read
    * @return read
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_READ)
+  @JsonProperty(value = JSON_PROPERTY_READ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getRead() {
@@ -300,11 +301,12 @@ public class NotificationDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_READ)
+  @JsonProperty(value = JSON_PROPERTY_READ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setRead(Boolean read) {
+  public void setRead(@jakarta.annotation.Nonnull Boolean read) {
     this.read = read;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -353,10 +355,7 @@ public class NotificationDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }
