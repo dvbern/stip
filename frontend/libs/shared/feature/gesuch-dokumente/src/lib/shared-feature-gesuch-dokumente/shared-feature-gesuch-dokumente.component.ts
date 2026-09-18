@@ -120,8 +120,6 @@ export class SharedFeatureGesuchDokumenteComponent {
     } = this.dokumentsStore.dokumenteViewSig();
     const stepsFlow = this.stepViewSig().stepsFlow;
 
-    const kommentare = this.dokumentsStore.kommentareViewSig();
-
     return {
       gesuchId,
       nachfrist: gesuch?.nachfristDokumente,
@@ -134,7 +132,6 @@ export class SharedFeatureGesuchDokumenteComponent {
       stepsFlow,
       dokuments,
       entrys,
-      kommentare,
       requiredDocumentTypes,
       requiredDocumentRefs,
       readonly,
@@ -160,8 +157,6 @@ export class SharedFeatureGesuchDokumenteComponent {
     const { dokuments, customDocumentTypes, loading } =
       this.dokumentsStore.customDokumenteViewSig();
 
-    const kommentare = this.dokumentsStore.kommentareViewSig();
-
     return {
       gesuchId,
       trancheId,
@@ -171,7 +166,6 @@ export class SharedFeatureGesuchDokumenteComponent {
       isSachbearbeitungApp,
       allowTypes,
       dokuments,
-      kommentare,
       customDocumentTypes,
       readonly,
       loading,
@@ -293,7 +287,6 @@ export class SharedFeatureGesuchDokumenteComponent {
       .subscribe((result) => {
         if (result) {
           this.dokumentsStore.gesuchDokumentAblehnen$({
-            gesuchTrancheId: gesuchTrancheId,
             kommentar: result.kommentar,
             gesuchDokumentId,
             onSuccess: () => {
@@ -304,17 +297,6 @@ export class SharedFeatureGesuchDokumenteComponent {
           });
         }
       });
-  }
-
-  getGesuchDokumentKommentare(dokument: SharedModelTableDokument) {
-    const { trancheId } = this.gesuchViewSig();
-    const gesuchDokumentId = dokument.gesuchDokument?.id;
-    if (!trancheId || !gesuchDokumentId) return;
-
-    this.dokumentsStore.getGesuchDokumentKommentare$({
-      gesuchDokumentId: gesuchDokumentId,
-      gesuchTrancheId: trancheId,
-    });
   }
 
   deleteCustomDokumentTyp(dokument: SharedModelTableCustomDokument) {

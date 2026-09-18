@@ -275,6 +275,10 @@ GesuchDokument:
         $ref: '#/Dokument'
     status:
       $ref: '#/Dokumentstatus'
+    kommentars:
+      type: array
+      items:
+        $ref: '#/GesuchDokumentKommentar'
 Dokument:
   required:
     - id
@@ -296,6 +300,20 @@ Dokument:
       type: string
     objectId:
       type: string
+GesuchDokumentKommentar:
+  required:
+    - gesuchDokumentId
+  description: 'Kommentar zu einem (abgelehnten) GesuchDokument'
+  type: object
+  properties:
+    gesuchDokumentId:
+      $ref: '#/UUID'
+    kommentar:
+      type: string
+    user_erstellt:
+      type: string
+    timestampErstellt:
+      $ref: '#/LocalDate'
 Fall:
   required:
     - id

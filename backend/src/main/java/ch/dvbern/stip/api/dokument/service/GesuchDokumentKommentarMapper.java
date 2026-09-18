@@ -25,6 +25,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(config = MappingConfig.class)
 public interface GesuchDokumentKommentarMapper {
+    @Mapping(source = "gesuchDokument.id", target = "gesuchDokumentId")
     @Mapping(source = "autor", target = "userErstellt")
     GesuchDokumentKommentarDto toDto(GesuchDokumentKommentar kommentar);
 

@@ -3560,74 +3560,6 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuchDokument/{gesuchDokumentId}/kommentare/gs:
-    get:
-      tags:
-        - Dokument
-      parameters:
-        - name: gesuchDokumentId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokumentKommentar'
-          description: >-
-            Returns an Array of GesuchDokumentKommentar for a given
-            GesuchDokuemntId
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuchDokumentKommentareGS
-      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuchDokument/{gesuchDokumentId}/kommentare/sb:
-    get:
-      tags:
-        - Dokument
-      parameters:
-        - name: gesuchDokumentId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokumentKommentar'
-          description: >-
-            Returns an Array of GesuchDokumentKommentar for a given
-            GesuchDokuemntId
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuchDokumentKommentareSB
-      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
   /gesuchDokument/{gesuchDokumentId}/akzeptieren:
     parameters:
       - name: gesuchDokumentId
@@ -9745,23 +9677,6 @@ components:
           type: string
         read:
           type: boolean
-    GesuchDokumentKommentar:
-      description: Kommentar zu einem (abgelehnten) GesuchDokument
-      type: object
-      required:
-        - gesuchTrancheId
-        - gesuchDokumentId
-      properties:
-        gesuchTrancheId:
-          $ref: '#/components/schemas/UUID'
-        gesuchDokumentId:
-          $ref: '#/components/schemas/UUID'
-        kommentar:
-          type: string
-        user_erstellt:
-          type: string
-        timestampErstellt:
-          $ref: '#/components/schemas/LocalDate'
     GesuchDokumentAblehnenRequest:
       description: Meta information um ein GesuchDokument abzulehnen
       type: object
@@ -9957,6 +9872,20 @@ components:
         - AUSSTEHEND
         - ABGELEHNT
         - AKZEPTIERT
+    GesuchDokumentKommentar:
+      required:
+        - gesuchDokumentId
+      description: Kommentar zu einem (abgelehnten) GesuchDokument
+      type: object
+      properties:
+        gesuchDokumentId:
+          $ref: '#/components/schemas/UUID'
+        kommentar:
+          type: string
+        user_erstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
     GesuchDokument:
       required:
         - id
@@ -9981,6 +9910,10 @@ components:
             $ref: '#/components/schemas/Dokument'
         status:
           $ref: '#/components/schemas/Dokumentstatus'
+        kommentars:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentKommentar'
     UnterschriftenblattDokumentTyp:
       type: string
       enum:

@@ -4,7 +4,6 @@ import {
   Component,
   DestroyRef,
   computed,
-  effect,
   inject,
   input,
   output,
@@ -27,7 +26,6 @@ import {
   Dokumentstatus,
   GesuchDokument,
   GesuchDokumentEntry,
-  GesuchDokumentKommentar,
   GesuchDokumentRef,
   GesuchTrancheStatus,
   Gesuchstatus,
@@ -38,7 +36,6 @@ import {
   getFormStepByDocumentType,
 } from '@dv/shared/model/gesuch-form';
 import { PermissionMap } from '@dv/shared/model/permission-state';
-import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   DOKUMENT_TYP_TO_DOCUMENT_OPTIONS,
   SharedPatternDocumentUploadComponent,
@@ -49,12 +46,14 @@ import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
+  RowExpansionOverrides,
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
+  isExpanded,
+  toggleRowFn,
 } from '@dv/shared/ui/table-helper';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
-import { RemoteData, isPending } from '@dv/shared/util/remote-data';
 
 import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
 
@@ -70,20 +69,6 @@ const interactionMapAenderung: Partial<
 > = {
   FEHLENDE_DOKUMENTE: true,
 };
-
-type ExpandedRow =
-  | {
-      type: 'none';
-    }
-  | {
-      type: 'id';
-      id: string;
-    }
-  | {
-      type: 'ref';
-      dokumentTyp: DokumentTyp;
-      entryId: string | undefined;
-    };
 
 @Component({
   selector: 'dv-required-dokumente',
@@ -124,7 +109,6 @@ export class RequiredDokumenteComponent {
     stepsFlow: GesuchFormStep[];
     dokuments: GesuchDokument[];
     entrys: GesuchDokumentEntry[];
-    kommentare: RemoteData<GesuchDokumentKommentar[]>;
     requiredDocumentTypes: DokumentTyp[];
     requiredDocumentRefs: GesuchDokumentRef[];
     readonly: boolean;
@@ -132,7 +116,6 @@ export class RequiredDokumenteComponent {
     gesuchStatus?: Gesuchstatus;
     trancheStatus?: GesuchTrancheStatus;
   }>();
-  getGesuchDokumentKommentare = output<SharedModelTableRequiredDokument>();
   dokumentAkzeptieren = output<SharedModelTableDokument>();
   dokumentAblehnen = output<SharedModelTableDokument>();
   reloadGesuch = output<unknown>();
@@ -148,7 +131,7 @@ export class RequiredDokumenteComponent {
 
   DokumentStatus = Dokumentstatus;
 
-  expandedRowSig = signal<ExpandedRow>({ type: 'none' });
+  rowExpansionOverrides = signal<RowExpansionOverrides>({});
 
   canEditNachfristSig = computed(() => {
     const { gesuchStatus, trancheSetting, trancheStatus } =
@@ -176,7 +159,6 @@ export class RequiredDokumenteComponent {
       stepsFlow,
       dokuments,
       entrys,
-      kommentare,
       requiredDocumentTypes,
       requiredDocumentRefs,
     } = this.dokumenteViewSig();
@@ -185,7 +167,7 @@ export class RequiredDokumenteComponent {
       return new MatTableDataSource<SharedModelTableRequiredDokument>([]);
     }
 
-    const expandedRow = this.expandedRowSig();
+    const overrides = this.rowExpansionOverrides();
 
     const uploadedDocuments: SharedModelTableRequiredDokument[] = dokuments.map(
       (gesuchDokument) => {
@@ -211,14 +193,8 @@ export class RequiredDokumenteComponent {
         return {
           dokumentTyp,
           entryId,
-          isExpanded: isExpanded(expandedRow, {
-            id: gesuchDokument.id,
-            dokumentTyp: dokumentTyp,
-            entryId,
-          }),
+          isExpanded: true,
           gesuchDokument,
-          kommentare: [],
-          kommentarePending: false,
           formStep,
           entryName: entrys.find(
             (e) =>
@@ -254,9 +230,7 @@ export class RequiredDokumenteComponent {
         entryName: entrys.find(
           (e) => e.dokumentTyps.includes(dokumentTyp) && e.entryId === entryId,
         )?.name,
-        isExpanded: isExpanded(expandedRow, { dokumentTyp, entryId }),
-        kommentare: [],
-        kommentarePending: false,
+        isExpanded: true,
         titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
         dokumentOptions,
       };
@@ -276,16 +250,7 @@ export class RequiredDokumenteComponent {
         )
         .map((dokument) => ({
           ...dokument,
-          isExpanded: isExpanded(expandedRow, {
-            id: dokument.gesuchDokument?.id,
-            dokumentTyp: dokument.dokumentTyp,
-            entryId: dokument.entryId,
-          }),
-          kommentarePending: isPending(kommentare),
-          kommentare:
-            kommentare.data?.filter(
-              (k) => k.gesuchDokumentId === dokument.gesuchDokument?.id,
-            ) ?? [],
+          isExpanded: isExpanded(dokument.gesuchDokument, overrides),
           formStep: {
             ...dokument.formStep,
             routes: gesuchId
@@ -301,16 +266,6 @@ export class RequiredDokumenteComponent {
         })),
     );
   });
-
-  constructor() {
-    effect(() => {
-      const el = this.dokumentStore.expandedComponentList();
-
-      if (el !== 'required') {
-        this.expandedRowSig.set({ type: 'none' });
-      }
-    });
-  }
 
   trackByFn(_index: number, item: SharedModelTableRequiredDokument) {
     return getEntryName(item);
@@ -332,43 +287,10 @@ export class RequiredDokumenteComponent {
       });
   }
 
-  expandRow(dokument: SharedModelTableRequiredDokument) {
-    const identifier: ExpandedRow = dokument.gesuchDokument?.id
-      ? { type: 'id', id: dokument.gesuchDokument.id }
-      : {
-          type: 'ref',
-          dokumentTyp: dokument.dokumentTyp,
-          entryId: dokument.entryId,
-        };
-
-    if (JSON.stringify(this.expandedRowSig()) === JSON.stringify(identifier)) {
-      this.expandedRowSig.set({ type: 'none' });
-    } else {
-      this.dokumentStore.setExpandedList('required');
-      this.expandedRowSig.set(identifier);
-      this.getGesuchDokumentKommentare.emit(dokument);
-    }
+  toggleRow(tableDok: SharedModelTableRequiredDokument) {
+    toggleRowFn(tableDok.gesuchDokument, this.rowExpansionOverrides);
   }
 }
-
-const isExpanded = (
-  expandedRow: ExpandedRow,
-  ref: { id?: string; dokumentTyp: DokumentTyp; entryId: string | undefined },
-) => {
-  switch (expandedRow.type) {
-    case 'none':
-      return false;
-    case 'id':
-      return ref.id === expandedRow.id;
-    case 'ref':
-      return (
-        ref.dokumentTyp === expandedRow.dokumentTyp &&
-        ref.entryId === expandedRow.entryId
-      );
-    default:
-      assertUnreachable(expandedRow);
-  }
-};
 
 const getEntryName = (item: {
   dokumentTyp: DokumentTyp;
