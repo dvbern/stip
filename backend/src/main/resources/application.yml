@@ -337,6 +337,12 @@ quarkus:
             soz: 'localhost:4202'
             demo: 'localhost:4203'
 '%test':
+  old:
+    sap:
+      system-id: 0
+      auth-header-value: 'dummy'
+      connectionTimeout: 6000
+      receiveTimeout: 1000
   mp:
     jwt:
       verify:
