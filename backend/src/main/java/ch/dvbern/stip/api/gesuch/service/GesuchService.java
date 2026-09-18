@@ -94,6 +94,8 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
+import ch.dvbern.stip.api.notification.service.AenderungNotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
@@ -168,6 +170,8 @@ public class GesuchService {
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
+    private final GesuchNotificationService gesuchNotificationService;
+    private final AenderungNotificationService aenderungNotificationService;
     private final BerechnungService berechnungService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
@@ -900,7 +904,7 @@ public class GesuchService {
             ),
             false
         );
-        notificationService.createGesuchToBearbeitungAsAenderungNotificationAndSendStdMail(gesuch, kommentar);
+        aenderungNotificationService.createInitiatedBySachbearbeiterNotificationAndSendStdMail(gesuch, kommentar);
         return gesuchTrancheService.getGesuchSB(gesuchTrancheId);
     }
 
@@ -1104,7 +1108,7 @@ public class GesuchService {
                     gesuch
                 );
             });
-        notificationService.createGesuchNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
+        gesuchNotificationService.createNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
     }
 
     @Transactional
@@ -1324,7 +1328,7 @@ public class GesuchService {
     }
 
     public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
-        notificationService.createMissingDocumentNotificationAndSendStdMail(gesuch);
+        gesuchNotificationService.createStatusChangeToFehlendeDokumenteNotificationAndSendStdMail(gesuch);
     }
 
     @Transactional

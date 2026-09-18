@@ -67,7 +67,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.AenderungNotificationService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
@@ -106,7 +106,7 @@ public class GesuchTrancheService {
     private final GesuchTrancheStatusService gesuchTrancheStatusService;
     private final GesuchStatusService gesuchStatusService;
     private final GesuchTrancheValidatorService gesuchTrancheValidatorService;
-    private final NotificationService notificationService;
+    private final AenderungNotificationService aenderungNotificationService;
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
@@ -509,7 +509,7 @@ public class GesuchTrancheService {
     public void aenderungEinreichen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
-        notificationService.createAenderungEingereichtNotificationAndSendStdMail(aenderung.getGesuch());
+        aenderungNotificationService.createEingereichtNotificationAndSendStdMail(aenderung.getGesuch());
     }
 
     @Transactional
@@ -617,8 +617,8 @@ public class GesuchTrancheService {
                 );
 
         resetGesuchTrancheToTranche(lastFreigegebenTranche, aenderung);
-        notificationService
-            .createAenderungAbgelehntNotificationAndSendStdMail(aenderung.getGesuch(), aenderung, kommentarDto);
+        aenderungNotificationService
+            .createAbgelehntNotificationAndSendStdMail(aenderung.getGesuch(), aenderung, kommentarDto);
 
         return gesuchTrancheMapper.toDtoWithConfidentialFields(aenderung.getGesuch().getLatestGesuchTranche());
     }

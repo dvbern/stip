@@ -1,0 +1,8 @@
+Bonjour {vorname} {nachname}
+
+Votre demande de subsides de formation a été soumise avec succès.
+Vous recevrez un message de notre part dans les 12 prochaines semaines.
+
+Meilleures salutations
+
+Section des subsides de formation

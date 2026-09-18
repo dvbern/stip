@@ -1,0 +1,10 @@
+Guten Tag {vorname} {nachname}
+
+Die Delegation wurde von {sozialdienst} abgelehnt.
+
+Sie sind wieder selbst für Ihr Gesuch verantwortlich.
+Wenn Sie Fragen zur Ablehnung haben, wenden Sie sich bitte an {sozialdienst}.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

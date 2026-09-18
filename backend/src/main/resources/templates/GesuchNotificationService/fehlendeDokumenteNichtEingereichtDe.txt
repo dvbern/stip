@@ -1,0 +1,7 @@
+Guten Tag {vorname} {nachname}
+
+Die Frist für die Einreichung der fehlenden Dokumente/Angaben ist abgelaufen.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

@@ -1,0 +1,9 @@
+Guten Tag {vorname} {nachname}
+
+Sie haben die fehlenden Dokumente/Angaben eingereicht.
+
+Sie werden von uns informiert, sobald Ihr Gesuch weiterbearbeitet wurde.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

@@ -1,0 +1,9 @@
+Bonjour {vorname} {nachname}
+
+Votre annonce de modification a été refusée. Motif :
+
+{kommentar}
+
+Meilleures salutations
+
+Section des subsides de formation
