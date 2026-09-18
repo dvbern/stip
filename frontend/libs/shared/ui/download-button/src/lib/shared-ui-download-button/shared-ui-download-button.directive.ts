@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { firstValueFrom, map } from 'rxjs';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   AusbildungService,
   DarlehenService,
@@ -19,6 +20,7 @@ import {
   StatistikService,
   VerfuegungService,
 } from '@dv/shared/model/gesuch';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { assertUnreachable } from '@dv/shared/model/type-util';
 
 type IdOnlyTypes =
@@ -68,6 +70,7 @@ export class SharedUiDownloadButtonDirective {
   private ausbildungService = inject(AusbildungService);
   private statistikService = inject(StatistikService);
   private dcmnt = inject(DOCUMENT, { optional: true });
+  private config = inject(SharedModelCompileTimeConfig);
 
   @HostListener('click')
   onClick() {
@@ -156,15 +159,20 @@ export class SharedUiDownloadButtonDirective {
           );
       }
       case 'verfuegung': {
-        return this.verfuegungService
-          .getVerfuegungDokumentDownloadToken$({
-            verfuegungDokumentId: id,
-          })
-          .pipe(
-            map(({ token }) =>
-              this.verfuegungService.getVerfuegungDokumentPath({ token }),
-            ),
-          );
+        return byAppConfig(this.config.app, {
+          sachbearbeiter: () =>
+            this.verfuegungService.getVerfuegungDokumentDownloadTokenSb$({
+              verfuegungDokumentId: id,
+            }),
+          gesuchsteller: () =>
+            this.verfuegungService.getVerfuegungDokumentDownloadTokenGs$({
+              verfuegungDokumentId: id,
+            }),
+        }).pipe(
+          map(({ token }) =>
+            this.verfuegungService.getVerfuegungDokumentPath({ token }),
+          ),
+        );
       }
       case 'massendruck': {
         return this.massendruckService

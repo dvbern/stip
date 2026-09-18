@@ -30,7 +30,11 @@ export interface VerfuegungServiceGetVerfuegungDokumentRequestParams {
     token: string;
 }
 
-export interface VerfuegungServiceGetVerfuegungDokumentDownloadTokenRequestParams {
+export interface VerfuegungServiceGetVerfuegungDokumentDownloadTokenGsRequestParams {
+    verfuegungDokumentId: string;
+}
+
+export interface VerfuegungServiceGetVerfuegungDokumentDownloadTokenSbRequestParams {
     verfuegungDokumentId: string;
 }
 
@@ -193,12 +197,12 @@ export class VerfuegungService {
         );
     }
 
-    public getVerfuegungDokumentDownloadTokenPath = (requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenRequestParams) => {
+    public getVerfuegungDokumentDownloadTokenGsPath = (requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenGsRequestParams) => {
         const verfuegungDokumentId = requestParameters.verfuegungDokumentId;
         if (verfuegungDokumentId === null || verfuegungDokumentId === undefined) {
-            throw new Error('Required parameter verfuegungDokumentId was null or undefined when calling getVerfuegungDokumentDownloadToken$.');
+            throw new Error('Required parameter verfuegungDokumentId was null or undefined when calling getVerfuegungDokumentDownloadTokenGs$.');
         }
-        let path = `/api/v1/verfuegung/dokument/${this.configuration.encodeParam({name: "verfuegungDokumentId", value: verfuegungDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+        let path = `/api/v1/verfuegung/dokument/${this.configuration.encodeParam({name: "verfuegungDokumentId", value: verfuegungDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token/gs`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -210,18 +214,18 @@ export class VerfuegungService {
     }
 
     /**
-     * get Token to download Verfuegung
+     * get Token to download Verfuegung for GS
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getVerfuegungDokumentDownloadToken$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
-     public getVerfuegungDokumentDownloadToken$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
-     public getVerfuegungDokumentDownloadToken$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
-     public getVerfuegungDokumentDownloadToken$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getVerfuegungDokumentDownloadTokenGs$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenGsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getVerfuegungDokumentDownloadTokenGs$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenGsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getVerfuegungDokumentDownloadTokenGs$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenGsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getVerfuegungDokumentDownloadTokenGs$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenGsRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const verfuegungDokumentId = requestParameters.verfuegungDokumentId;
         if (verfuegungDokumentId === null || verfuegungDokumentId === undefined) {
-            throw new Error('Required parameter verfuegungDokumentId was null or undefined when calling getVerfuegungDokumentDownloadToken$.');
+            throw new Error('Required parameter verfuegungDokumentId was null or undefined when calling getVerfuegungDokumentDownloadTokenGs$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -269,7 +273,96 @@ export class VerfuegungService {
             }
         }
 
-        const localVarPath = `/verfuegung/dokument/${this.configuration.encodeParam({name: "verfuegungDokumentId", value: verfuegungDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+        const localVarPath = `/verfuegung/dokument/${this.configuration.encodeParam({name: "verfuegungDokumentId", value: verfuegungDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token/gs`;
+        return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public getVerfuegungDokumentDownloadTokenSbPath = (requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenSbRequestParams) => {
+        const verfuegungDokumentId = requestParameters.verfuegungDokumentId;
+        if (verfuegungDokumentId === null || verfuegungDokumentId === undefined) {
+            throw new Error('Required parameter verfuegungDokumentId was null or undefined when calling getVerfuegungDokumentDownloadTokenSb$.');
+        }
+        let path = `/api/v1/verfuegung/dokument/${this.configuration.encodeParam({name: "verfuegungDokumentId", value: verfuegungDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token/sb`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * get Token to download Verfuegung for SB
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getVerfuegungDokumentDownloadTokenSb$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenSbRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getVerfuegungDokumentDownloadTokenSb$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getVerfuegungDokumentDownloadTokenSb$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getVerfuegungDokumentDownloadTokenSb$(requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const verfuegungDokumentId = requestParameters.verfuegungDokumentId;
+        if (verfuegungDokumentId === null || verfuegungDokumentId === undefined) {
+            throw new Error('Required parameter verfuegungDokumentId was null or undefined when calling getVerfuegungDokumentDownloadTokenSb$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/verfuegung/dokument/${this.configuration.encodeParam({name: "verfuegungDokumentId", value: verfuegungDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token/sb`;
         return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

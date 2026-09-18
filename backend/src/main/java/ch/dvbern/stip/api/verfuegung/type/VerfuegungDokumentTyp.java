@@ -27,13 +27,14 @@ public enum VerfuegungDokumentTyp {
     BERECHNUNGSBLATT_VATER,
     BERECHNUNGSBLATT_FAMILIE,
     VERSENDETE_VERFUEGUNG,
+    VERFUEGUNG_GS,
     VERFUEGUNGSBRIEF,
     MANUELLE_NEGATIVE_VERFUEGUNG;
 
     public static final Set<VerfuegungDokumentTyp> VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG =
         Collections.unmodifiableSet(
             EnumSet.of(
-                VERSENDETE_VERFUEGUNG,
+                VERFUEGUNG_GS,
                 MANUELLE_NEGATIVE_VERFUEGUNG
             )
         );

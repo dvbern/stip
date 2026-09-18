@@ -60,7 +60,8 @@ public class VerfuegungService {
     static final String FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER = "Berechnungsblatt_%s_Mutter_%s%s";
     static final String FILENAME_PREFIX_BERECHNUNGSBLATT_VATER = "Berechnungsblatt_%s_Vater_%s%s";
     static final String FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE = "Berechnungsblatt_%s_Familie_%s%s";
-    static final String FILENAME_PREFIX_VERFUEGUNG = "Verfügung_%s_%s%s";
+    static final String FILENAME_PREFIX_VERFUEGUNG = "Versendete_Verfügung_%s_%s%s";
+    static final String FILENAME_PREFIX_VERFUEGUNG_GS = "Verfügung_%s_%s%s";
     static final String FILENAME_PREFIX_VERFUEGUNGSBRIEF = "Verfügungsbrief_%s_%s%s";
     static final String FILENAME_EXTENSION_PDF = ".pdf";
 
@@ -223,6 +224,9 @@ public class VerfuegungService {
                 .format(FILENAME_PREFIX_VERFUEGUNG, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
             case VERFUEGUNGSBRIEF -> String
                 .format(FILENAME_PREFIX_VERFUEGUNGSBRIEF, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
+            case VERFUEGUNG_GS -> String
+                .format(FILENAME_PREFIX_VERFUEGUNG_GS, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
+            default -> throw new IllegalArgumentException("Unexpected value: " + typ);
         };
     }
 }
