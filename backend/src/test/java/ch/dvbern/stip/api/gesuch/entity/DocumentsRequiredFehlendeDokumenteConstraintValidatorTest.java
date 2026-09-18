@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapper;
 import ch.dvbern.stip.api.dokument.service.CustomDocumentTypMapperImpl;
 import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.dokument.service.DokumentMapperImpl;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapperImpl;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
@@ -33,6 +34,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
@@ -43,7 +45,10 @@ import static org.hamcrest.Matchers.is;
 class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     DokumentMapper dokumentMapper = new DokumentMapperImpl();
     CustomDocumentTypMapper customDocumentTypMapper = new CustomDocumentTypMapperImpl();
-    GesuchDokumentMapper gesuchDokumentMapper = new GesuchDokumentMapperImpl(dokumentMapper, customDocumentTypMapper);
+    GesuchDokumentKommentarMapper gesuchDokumentKommentarMapper =
+        Mappers.getMapper(GesuchDokumentKommentarMapper.class);
+    GesuchDokumentMapper gesuchDokumentMapper =
+        new GesuchDokumentMapperImpl(dokumentMapper, customDocumentTypMapper, gesuchDokumentKommentarMapper);
     final GesuchService gesuchServiceMock = Mockito.mock(GesuchService.class);
 
     @Test

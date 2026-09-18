@@ -1,0 +1,9 @@
+Guten Tag {vorname} {nachname}
+
+Sie haben eine neue Verfügung erhalten.
+
+Sie können die Verfügung herunterladen. Zusätzlich erhalten Sie diese per Post.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

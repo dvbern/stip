@@ -1,0 +1,9 @@
+Bonjour {vorname} {nachname}
+
+La délégation a été acceptée par {sozialdienst}.
+
+Dès à présent, {sozialdienst} est responsable de votre demande. Vous pouvez continuer à consulter votre demande, mais vous ne pouvez plus la modifier.
+
+Meilleures salutations
+
+Section des subsides de formation

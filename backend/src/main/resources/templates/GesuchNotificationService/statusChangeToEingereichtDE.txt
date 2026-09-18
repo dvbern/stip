@@ -1,0 +1,8 @@
+Guten Tag {vorname} {nachname}
+
+Ihr Gesuch um Ausbildungsbeiträge wurde erfolgreich eingereicht.
+Sie erhalten innerhalb der nächsten 12 Wochen eine Nachricht von uns.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

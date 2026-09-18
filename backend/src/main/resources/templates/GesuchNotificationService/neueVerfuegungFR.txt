@@ -1,0 +1,9 @@
+Bonjour {vorname} {nachname}
+
+Vous avez reçu une nouvelle décision.
+
+Vous pouvez télécharger la décision. Vous la recevrez également par courrier.
+
+Meilleures salutations
+
+Section des subsides de formation

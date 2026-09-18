@@ -1,0 +1,13 @@
+Guten Tag {vorname} {nachname}
+
+Die Delegation an {sozialdienst} wurde aufgehoben.
+
+Sie sind wieder selbst für Ihr Gesuch verantwortlich.
+
+Bitte prüfen Sie Ihre Auszahlungsdaten und passen Sie diese bei Bedarf an. So stellen Sie sicher, dass die Ausbildungsbeiträge auf das richtige Konto ausbezahlt werden.
+
+Ist neu eine andere Institution für Sie zuständig, können Sie Ihr Gesuch an diese Institution delegieren.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

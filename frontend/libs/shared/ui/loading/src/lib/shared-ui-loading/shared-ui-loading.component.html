@@ -4,6 +4,8 @@
   [class.tw:mt-6]="type === 'spinner' && !overlay"
   [class.overlay]="overlay"
   *transloco="let t"
+  role="status"
+  aria-label="Loading"
 >
   <div class="spinner" [class.tw:mb-4]="type === 'spinner'" [class.tw:mb-1]="type === 'compact'"></div>
   @if (type !== 'icon') {

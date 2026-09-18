@@ -20,7 +20,7 @@ export const expectStepTitleToContainText = async (
   text: string,
   page: Page,
 ) => {
-  return expect(page.getByTestId('step-title')).toContainText(text, {
+  return expect(page.getByTestId('step-title').first()).toContainText(text, {
     timeout: 10000,
   });
 };
@@ -32,30 +32,93 @@ export const expectInfoTitleToContainText = async (
   text: string,
   page: Page,
 ) => {
-  return expect(page.getByTestId('dynamic-tranche-step-title')).toContainText(
-    text,
-    {
-      ignoreCase: true,
-      timeout: 10000,
-    },
-  );
+  return expect(
+    page.getByTestId('dynamic-tranche-step-title').first(),
+  ).toContainText(text, {
+    ignoreCase: true,
+    timeout: 10000,
+  });
 };
 
-export const uploadFiles = async (page: Page) => {
-  const uploads = await page
-    .locator('[data-testid^="button-document-upload"]')
-    .all();
-  for (const upload of uploads) {
+const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+export const generateRandomName = (postfix = 'e2e') => {
+  let random = '';
+  for (let i = 0; i < 6; i++) {
+    random += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `${random}-${postfix}`;
+};
+
+export const uploadFilesById = async (page: Page) => {
+  const uploadButtons = page.getByTestId(/^button-document-upload-/);
+
+  await expect(uploadButtons.first()).toBeVisible({ timeout: 10000 });
+
+  // Resolve the stable, unique per-dokumentTyp testids up front.
+  const testIds = await uploadButtons.evaluateAll((els) =>
+    els
+      .map((el) => el.getAttribute('data-testid'))
+      .filter((id): id is string => !!id),
+  );
+
+  for (const testId of testIds) {
+    const upload = page.getByTestId(testId);
     const uploadCall = page.waitForResponse(
       (response) =>
         response.url().includes('/api/v1/gesuchDokument') &&
         response.request().method() === 'POST',
     );
+    await upload.scrollIntoViewIfNeeded();
     await upload.click();
     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
+    await uploadCall;
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('file-input')).toHaveCount(0);
+  }
+};
+
+export const uploadFiles = async (page: Page) => {
+  const fristButton = page.getByTestId(/^button-document-upload-/).first();
+
+  await expect(fristButton).toBeVisible({ timeout: 10000 });
+
+  const uploads = await page
+    .locator('[data-testid^="button-document-upload"]')
+    .all();
+  for (const upload of uploads) {
+    await upload.click();
+    const uploadCall = page.waitForResponse(
+      async (response) =>
+        response.url().includes('/api/v1/gesuchtranche') &&
+        response.url().includes('/dokumenteToUpload/gs') &&
+        response.request().method() === 'GET',
+    );
+    await page.getByTestId('file-input').setInputFiles(SmallImageFile);
     await uploadCall;
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('file-input')).toHaveCount(0);
+  }
+};
+
+export const acceptDocuments = async (page: Page) => {
+  const acceptButtons = page.getByTestId('dokument-akzeptieren');
+
+  await expect(acceptButtons.first()).toBeVisible({ timeout: 10000 });
+
+  const count = await acceptButtons.count();
+
+  for (let i = 0; i < count; i++) {
+    const accept = page.getByTestId('dokument-akzeptieren').first();
+    const documentsToUploadReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/sb',
+    );
+    const dokumenteReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumente/sb',
+    );
+    await accept.scrollIntoViewIfNeeded();
+    await accept.click();
+    await Promise.all([documentsToUploadReq, dokumenteReq]);
   }
 };
 
@@ -93,7 +156,7 @@ export const handleCheckbox = async (
 };
 
 export const selectMatOption = async (locator: Locator, value: string) => {
-  locator.click();
+  await locator.click();
 
   return locator.page().getByTestId(value).first().click();
 };

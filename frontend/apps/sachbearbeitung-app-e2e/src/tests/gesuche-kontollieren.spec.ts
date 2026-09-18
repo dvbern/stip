@@ -1,10 +1,15 @@
 import { expect } from '@playwright/test';
 
-import { createTest } from '@dv/shared/util-fn/e2e-util';
+import {
+  extendedTest,
+  initializeSingleUserTest,
+} from '@dv/shared/util-fn/e2e-util';
 
 import { SbCockpitPO } from '../po/cockpit.po';
 
-const test = createTest('SACHBEARBEITER').extend<{ cockpit: SbCockpitPO }>({
+const test = initializeSingleUserTest(extendedTest).extend<{
+  cockpit: SbCockpitPO;
+}>({
   cockpit: async ({ page }, use) => {
     const cockpit = new SbCockpitPO(page);
 

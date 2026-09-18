@@ -1,0 +1,8 @@
+Bonjour {vorname} {nachname}
+
+Votre prêt a été rejeté pour le motif suivant:
+{kommentar}
+
+Meilleures salutations
+
+Section des subsides de formation

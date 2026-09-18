@@ -1,0 +1,11 @@
+Guten Tag {vorname} {nachname}
+
+Die Auszahlung Ihrer Ausbildungsbeiträge konnte nicht erfolgen.
+
+Bitte prüfen Sie Ihre Auszahlungsdaten und passen Sie diese bei Bedarf an. Nach der Anpassung Ihrer Auszahlungsdaten wird die Auszahlung erneut durchgeführt.
+
+Falls das Problem weiterhin besteht, wenden Sie sich bitte an die Abteilung Ausbildungsbeiträge.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

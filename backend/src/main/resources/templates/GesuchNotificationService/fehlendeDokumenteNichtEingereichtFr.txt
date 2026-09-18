@@ -1,0 +1,7 @@
+Bonjour {vorname} {nachname}
+
+Le délai pour transmettre les documents/informations manquants est arrivé à échéance.
+
+Meilleures salutations
+
+Section des subsides de formation

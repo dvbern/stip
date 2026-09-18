@@ -23,14 +23,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentKommentarDto  implements Serializable {
-  private @Valid UUID gesuchTrancheId;
   private @Valid UUID gesuchDokumentId;
   private @Valid String kommentar;
   private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
 
   protected GesuchDokumentKommentarDto(GesuchDokumentKommentarDtoBuilder<?, ?> b) {
-    this.gesuchTrancheId = b.gesuchTrancheId;
     this.gesuchDokumentId = b.gesuchDokumentId;
     this.kommentar = b.kommentar;
     this.userErstellt = b.userErstellt;
@@ -38,25 +36,6 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   }
 
   public GesuchDokumentKommentarDto() {
-  }
-
-  /**
-   **/
-  public GesuchDokumentKommentarDto gesuchTrancheId(UUID gesuchTrancheId) {
-    this.gesuchTrancheId = gesuchTrancheId;
-    return this;
-  }
-
-  
-  @JsonProperty("gesuchTrancheId")
-  @NotNull
-  public UUID getGesuchTrancheId() {
-    return gesuchTrancheId;
-  }
-
-  @JsonProperty("gesuchTrancheId")
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
-    this.gesuchTrancheId = gesuchTrancheId;
   }
 
   /**
@@ -142,8 +121,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
       return false;
     }
     GesuchDokumentKommentarDto gesuchDokumentKommentar = (GesuchDokumentKommentarDto) o;
-    return Objects.equals(this.gesuchTrancheId, gesuchDokumentKommentar.gesuchTrancheId) &&
-        Objects.equals(this.gesuchDokumentId, gesuchDokumentKommentar.gesuchDokumentId) &&
+    return Objects.equals(this.gesuchDokumentId, gesuchDokumentKommentar.gesuchDokumentId) &&
         Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
         Objects.equals(this.userErstellt, gesuchDokumentKommentar.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchDokumentKommentar.timestampErstellt);
@@ -151,7 +129,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchTrancheId, gesuchDokumentId, kommentar, userErstellt, timestampErstellt);
+    return Objects.hash(gesuchDokumentId, kommentar, userErstellt, timestampErstellt);
   }
 
   @Override
@@ -159,7 +137,6 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentKommentarDto {\n");
     
-    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    gesuchDokumentId: ").append(toIndentedString(gesuchDokumentId)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
@@ -198,7 +175,6 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   }
 
   public static abstract class GesuchDokumentKommentarDtoBuilder<C extends GesuchDokumentKommentarDto, B extends GesuchDokumentKommentarDtoBuilder<C, B>>  {
-    private UUID gesuchTrancheId;
     private UUID gesuchDokumentId;
     private String kommentar;
     private String userErstellt;
@@ -207,10 +183,6 @@ public class GesuchDokumentKommentarDto  implements Serializable {
 
     public abstract C build();
 
-    public B gesuchTrancheId(UUID gesuchTrancheId) {
-      this.gesuchTrancheId = gesuchTrancheId;
-      return self();
-    }
     public B gesuchDokumentId(UUID gesuchDokumentId) {
       this.gesuchDokumentId = gesuchDokumentId;
       return self();

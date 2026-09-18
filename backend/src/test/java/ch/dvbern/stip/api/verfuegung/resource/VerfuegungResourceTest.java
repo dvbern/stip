@@ -224,7 +224,7 @@ public class VerfuegungResourceTest {
 
         assertThat(header.getVersions().size()).isEqualTo(1);
 
-        final var berechnung = gesuchApiSpec.getBerechnungForVerfuegung()
+        final var berechnung = gesuchApiSpec.getBerechnungForVerfuegungSb()
             .verfuegungIdPath(header.getVersions().getFirst().getBerechnungId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -347,7 +347,7 @@ public class VerfuegungResourceTest {
 
         assertThat(header.getVersions().size()).isEqualTo(2);
 
-        final var berechnung = gesuchApiSpec.getBerechnungForVerfuegung()
+        final var berechnung = gesuchApiSpec.getBerechnungForVerfuegungSb()
             .verfuegungIdPath(header.getVersions().getFirst().getBerechnungId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

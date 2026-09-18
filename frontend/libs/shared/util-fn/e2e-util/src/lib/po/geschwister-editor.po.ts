@@ -1,0 +1,73 @@
+import { Locator, Page } from '@playwright/test';
+
+import { Geschwister } from '@dv/shared/model/gesuch';
+
+import { expectFormToBeValid, selectMatOption, selectMatRadio } from '../utils';
+
+export class GeschwisterEditorPO {
+  public elems: {
+    page: Page;
+    form: Locator;
+    nachname: Locator;
+    vorname: Locator;
+    geburtsdatum: Locator;
+    wohnsitzSelect: Locator;
+    geschwisterTypSelect: Locator;
+    wohnsitzAnteilMutter: Locator;
+    wohnsitzAnteilVater: Locator;
+    ausbildungssituationRadio: Locator;
+
+    buttonSave: Locator;
+    buttonCancel: Locator;
+  };
+
+  constructor(page: Page) {
+    this.elems = {
+      page,
+
+      form: page.getByTestId('form-geschwister-form'),
+
+      nachname: page.getByTestId('form-geschwister-nachname'),
+      vorname: page.getByTestId('form-geschwister-vorname'),
+      geburtsdatum: page.getByTestId('form-geschwister-geburtsdatum'),
+      wohnsitzSelect: page.getByTestId('form-geschwister-wohnsitz'),
+      geschwisterTypSelect: page.getByTestId('form-geschwister-typ'),
+      wohnsitzAnteilMutter: page.getByTestId('component-percentage-splitter-a'),
+      wohnsitzAnteilVater: page.getByTestId('component-percentage-splitter-b'),
+      ausbildungssituationRadio: page.getByTestId(
+        'form-geschwister-ausbildungssituation',
+      ),
+
+      buttonSave: page.getByTestId('button-save'),
+      buttonCancel: page.getByTestId('button-cancel-back'),
+    };
+  }
+
+  async addGeschwister(item: Geschwister) {
+    await this.elems.nachname.fill(item.nachname);
+    await this.elems.vorname.fill(item.vorname);
+    await this.elems.geburtsdatum.fill(item.geburtsdatum);
+
+    await selectMatOption(this.elems.wohnsitzSelect, item.wohnsitz);
+
+    await selectMatOption(this.elems.geschwisterTypSelect, item.geschwisterTyp);
+
+    if (item.wohnsitzAnteilMutter) {
+      await this.elems.wohnsitzAnteilMutter.fill(
+        `${item.wohnsitzAnteilMutter}`,
+      );
+    }
+    if (item.wohnsitzAnteilVater) {
+      await this.elems.wohnsitzAnteilVater.fill(`${item.wohnsitzAnteilVater}`);
+    }
+
+    await selectMatRadio(
+      this.elems.ausbildungssituationRadio,
+      item.ausbildungssituation,
+    );
+
+    await expectFormToBeValid(this.elems.form);
+
+    await this.elems.buttonSave.click();
+  }
+}

@@ -1,0 +1,9 @@
+Bonjour {vorname} {nachname}
+
+Votre annonce de modification a été soumise avec succès.
+
+Vous recevrez un message dès que l'examen sera terminé.
+
+Meilleures salutations
+
+Section des subsides de formation

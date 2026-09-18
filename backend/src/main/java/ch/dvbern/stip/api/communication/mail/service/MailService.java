@@ -103,7 +103,11 @@ public class MailService {
 
         mailAlreadySentCheckerService.sentStandardNotification();
 
-        Templates.getStandardNotification(nachname, vorname, language)
+        var link = tenantService.getConfigForCurrentTenant().frontend().urls().get(FrontendType.GS);
+
+        link = String.format("https://%s", link);
+
+        Templates.getStandardNotification(nachname, vorname, link, language)
             .to(recipients.toArray(String[]::new))
             .subject(TLProducer.defaultBundle().forAppLanguage(language).translate("stip.standard.notification"))
             .send()
@@ -114,10 +118,10 @@ public class MailService {
     }
 
     public void sendStandardNotificationEmail(
-        String name,
-        String vorname,
-        String receiver,
-        AppLanguages language
+        final String name,
+        final String vorname,
+        final String receiver,
+        final AppLanguages language
     ) {
         sendStandardNotificationEmails(name, vorname, language, List.of(receiver));
     }
@@ -140,7 +144,7 @@ public class MailService {
             .asCompletionStage();
     }
 
-    Uni<Void> sendEmail(String to, String subject, String htmlContent) {
+    Uni<Void> sendEmail(final String to, final String subject, final String htmlContent) {
         return reactiveMailer.send(
             Mail.withHtml(
                 to,
@@ -150,7 +154,7 @@ public class MailService {
         );
     }
 
-    void sendEmailSync(String to, String subject, String htmlContent) {
+    void sendEmailSync(final String to, final String subject, final String htmlContent) {
         mailer.send(
             Mail.withHtml(
                 to,
@@ -160,8 +164,13 @@ public class MailService {
         );
     }
 
-    public Uni<Void> sendEmailWithAttachment(String to, String subject, String htmlContent, List<File> attachments) {
-        Mail mail = Mail.withHtml(
+    public Uni<Void> sendEmailWithAttachment(
+        final String to,
+        final String subject,
+        final String htmlContent,
+        final List<File> attachments
+    ) {
+        final Mail mail = Mail.withHtml(
             to,
             subject,
             htmlContent
@@ -176,8 +185,13 @@ public class MailService {
         return reactiveMailer.send(mail);
     }
 
-    public void sendEmailWithAttachmentSync(String to, String subject, String htmlContent, List<File> attachments) {
-        Mail mail = Mail.withHtml(
+    public void sendEmailWithAttachmentSync(
+        final String to,
+        final String subject,
+        final String htmlContent,
+        final List<File> attachments
+    ) {
+        final Mail mail = Mail.withHtml(
             to,
             subject,
             htmlContent
@@ -193,11 +207,11 @@ public class MailService {
     }
 
     public void sendDarlehenVerfuegungEmail(
-        String to,
-        String filename,
-        byte[] verfuegung,
-        PersonInAusbildung pia,
-        Sachbearbeiter sachbearbeiter
+        final String to,
+        final String filename,
+        final byte[] verfuegung,
+        final PersonInAusbildung pia,
+        final Sachbearbeiter sachbearbeiter
     ) {
         Templates
             .darlehenVerfuegungCreated(
@@ -228,31 +242,45 @@ public class MailService {
     }
 
     @CheckedTemplate
-    static class Templates {
-
-        private Templates() {}
-
-        public static MailTemplateInstance getStandardNotification(String name, String vorname, AppLanguages language) {
+    private static class Templates {
+        public static MailTemplateInstance getStandardNotification(
+            final String vorname,
+            final String nachname,
+            final String link,
+            final AppLanguages language
+        ) {
             return switch (language) {
-                case FR -> standardNotificationFr(name, vorname);
-                case DE -> standardNotificationDe(name, vorname);
+                case FR -> standardNotificationFr(vorname, nachname, link);
+                case DE -> standardNotificationDe(vorname, nachname, link);
             };
         }
 
-        private static native MailTemplateInstance standardNotificationDe(String name, String vorname);
+        private static native MailTemplateInstance standardNotificationDe(
+            final String vorname,
+            final String nachname,
+            final String link
+        );
 
-        private static native MailTemplateInstance standardNotificationFr(String name, String vorname);
+        private static native MailTemplateInstance standardNotificationFr(
+            final String vorname,
+            final String nachname,
+            final String link
+        );
 
-        public static native MailTemplateInstance benutzerWelcome(String name, String vorname, String link);
+        public static native MailTemplateInstance benutzerWelcome(
+            final String name,
+            final String vorname,
+            final String link
+        );
 
         public static native MailTemplateInstance darlehenVerfuegungCreated(
-            String vorname,
-            String name,
-            String vornameSB,
-            String nachnameSB,
-            String rolleSB,
-            String telSB,
-            String emailSB
+            final String vorname,
+            final String name,
+            final String vornameSB,
+            final String nachnameSB,
+            final String rolleSB,
+            final String telSB,
+            final String emailSB
         );
     }
 }

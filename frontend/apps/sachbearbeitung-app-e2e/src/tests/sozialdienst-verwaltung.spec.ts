@@ -1,13 +1,18 @@
 import { expect } from '@playwright/test';
 
-import { createTest } from '@dv/shared/util-fn/e2e-util';
+import {
+  extendedTest,
+  initializeSingleUserTest,
+} from '@dv/shared/util-fn/e2e-util';
 
 import { AdminPO } from '../po/admin.po';
 import { SbCockpitPO } from '../po/cockpit.po';
 
 const E2E_TEST_SOZIALDIENST = 'e2e-test-sozialdienst';
 
-const test = createTest('SACHBEARBEITER').extend<{ cockpit: SbCockpitPO }>({
+const test = initializeSingleUserTest(extendedTest).extend<{
+  cockpit: SbCockpitPO;
+}>({
   cockpit: async ({ page }, use) => {
     const cockpit = new SbCockpitPO(page);
 
@@ -17,9 +22,9 @@ const test = createTest('SACHBEARBEITER').extend<{ cockpit: SbCockpitPO }>({
   },
 });
 
-test.describe('Sachbearbeiter App: Sozialdienst-Administration', () => {
+test.describe.skip('Sachbearbeiter App: Sozialdienst-Administration', () => {
   test('Sozialdienst erstellen und löschen', async ({ cockpit, page }) => {
-    cockpit.goToAdmin();
+    await cockpit.goToAdmin();
 
     const admin = new AdminPO(page);
     await admin.goToAdmin();

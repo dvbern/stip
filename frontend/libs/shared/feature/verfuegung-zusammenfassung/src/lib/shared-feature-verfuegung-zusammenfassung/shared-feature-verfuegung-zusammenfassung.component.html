@@ -13,11 +13,9 @@
     <div
       [ngClass]="{ accept: accepted, reject: !accepted }"
       class="tw:min-h-24 tw:flex tw:gap-2 tw:justify-between tw:p-4 tw:items-center tw:rounded-xl tw:mb-10 tw:bg-gray-100"
+      data-testid="zusammenfassung-resultat"
     >
-      <div
-        class="tw:text-2xl tw:font-bold tw:flex tw:items-center tw:gap-2 tw:ml-3"
-        data-testid="zusammenfassung-resultat"
-      >
+      <div class="tw:text-2xl tw:font-bold tw:flex tw:items-center tw:gap-2 tw:ml-3">
         <span class="material-symbols-rounded tw:text-4xl!">{{ accepted ? 'check_circle' : 'cancel' }}</span>
         <span>
           {{ t(`shared.verfuegung.zusammenfassung.resultat.${accepted ? 'angenommen' : 'abgelehnt'}`) }}

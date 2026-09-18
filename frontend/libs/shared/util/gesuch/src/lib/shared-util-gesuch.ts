@@ -15,6 +15,7 @@ import {
   GesuchState,
   Gesuchstatus,
   Niederlassungsstatus,
+  StatusUebergang,
   ZustaendigerKanton,
 } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
@@ -92,23 +93,6 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
     },
   ];
 }
-
-/**
- * Available status transitions actions for the gesuch
- */
-export type StatusUebergang =
-  | 'SET_TO_BEARBEITUNG'
-  | 'ANSPRUCH_PRUEFEN'
-  | 'BEREIT_FUER_BEARBEITUNG'
-  | 'BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'
-  | 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'
-  | 'ZURUECKWEISEN_OR_UNDO'
-  | 'BEARBEITUNG_ABSCHLIESSEN'
-  | 'VERFUEGT'
-  | 'VERSENDET'
-  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN'
-  | 'STATUS_PRUEFUNG_AUSLOESEN'
-  | 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT';
 
 /**
  * A map which contains the possible status transitions for specific gesuch statuses

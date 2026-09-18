@@ -23,8 +23,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
@@ -33,8 +31,7 @@ import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
-import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
-import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.util.UnterschriftenblattUtil;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
@@ -131,7 +128,7 @@ public class VerfuegungPdfComposerService {
     ) {
         final var lang = LocaleUtil.getKorrespondenzSprache(gesuch);
 
-        final var uploadedSteuerdatenTypes = getUploadedUnterschriftenblaetterTypes(gesuch);
+        final var uploadedSteuerdatenTypes = UnterschriftenblattUtil.getGsVisibleSteuerdatenTyps(gesuch);
 
         final var allBerechnungsBlaetter = new ArrayList<ByteArrayOutputStream>();
         final var piaBlaetter = new ArrayList<ByteArrayOutputStream>();
@@ -264,22 +261,6 @@ public class VerfuegungPdfComposerService {
         }
 
         return verfuegungBriefPdfService.createVerfuegungMitAnspruchPdf(verfuegung, anhangs);
-    }
-
-    private Set<SteuerdatenTyp> getUploadedUnterschriftenblaetterTypes(final Gesuch gesuch) {
-        return gesuch.getUnterschriftenblaetter()
-            .stream()
-            .map(Unterschriftenblatt::getDokumentTyp)
-            .map(this::mapToSteuerdatenTyp)
-            .collect(Collectors.toSet());
-    }
-
-    private SteuerdatenTyp mapToSteuerdatenTyp(final UnterschriftenblattDokumentTyp unterschriftenblattDokumentTyp) {
-        return switch (unterschriftenblattDokumentTyp) {
-            case MUTTER -> SteuerdatenTyp.MUTTER;
-            case VATER -> SteuerdatenTyp.VATER;
-            case GEMEINSAM -> SteuerdatenTyp.FAMILIE;
-        };
     }
 
     private VerfuegungDokumentTyp mapToVerfuegungDokumentTyp(final SteuerdatenTyp steuerdatenTyp) {

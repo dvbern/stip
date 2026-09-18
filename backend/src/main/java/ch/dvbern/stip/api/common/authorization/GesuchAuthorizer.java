@@ -169,9 +169,14 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canGetBerechnungOfVerfuegung(final UUID verfuegungId) {
+    public void sbOrFreigabestelleOrJuristCanRead() {
+        permitAll();
+    }
+
+    @Transactional
+    public void canGetBerechnungOfVerfuegungGs(final UUID verfuegungId) {
         final var verfuegung = verfuegungService.requireById(verfuegungId);
-        gsSbFreigabestelleOrJuristCanRead(verfuegung.getGesuch().getId());
+        gsCanRead(verfuegung.getGesuch().getId());
     }
 
     @Transactional

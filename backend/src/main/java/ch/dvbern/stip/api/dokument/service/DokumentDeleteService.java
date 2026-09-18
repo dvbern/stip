@@ -47,6 +47,11 @@ public class DokumentDeleteService {
         final String bucketName,
         final List<String> objectIds
     ) {
+
+        if (objectIds.isEmpty()) {
+            return;
+        }
+
         try {
             Uni.createFrom()
                 .item(deleteDokumentsFromS3Blocking(s3, bucketName, objectIds))

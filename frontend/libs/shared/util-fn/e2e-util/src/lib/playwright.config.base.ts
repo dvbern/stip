@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import test, { defineConfig } from '@playwright/test';
 import { zstdCompress, zstdDecompress } from 'http-encoding';
 
 export const BEARER_COOKIE = 'access_cookie';
@@ -39,8 +39,19 @@ export interface KeycloakResponse {
 export type E2eUser =
   | 'GESUCHSTELLER'
   | 'SACHBEARBEITER'
-  | 'ADMIN'
+  | 'SACHBEARBEITER_ADMIN'
+  | 'SOZIALDIENST'
   | 'SOZIALDIENST_ADMIN';
+
+export type CustomTestOptions = {
+  testUser: E2eUser;
+};
+
+export const extendedTest = test.extend<CustomTestOptions>({
+  testUser: ['GESUCHSTELLER', { option: true }],
+});
+
+export type ExtendedTest = typeof extendedTest;
 
 /**
  * Some default configuration for e2e tests
@@ -53,19 +64,21 @@ export const baseConfig = defineConfig({
       mode: 'only-on-failure',
     },
     video: {
-      mode: 'on',
-      // size: { width: 1920, height: 1080 },
-      // smaller video size to reduce file size
+      mode: 'off',
       size: { width: 1280, height: 720 },
     },
     contextOptions: {
       ignoreHTTPSErrors: true,
     },
+    actionTimeout: !process.env.CI ? 6_000 : undefined,
+  },
+  timeout: process.env.CI ? 80_000 : undefined,
+  expect: {
+    timeout: process.env.CI ? 20_000 : undefined,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 1,
-  // workers: 2,
 });
 
 export const compress = async (value: string) => {

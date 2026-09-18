@@ -21,8 +21,13 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper(config = MappingConfig.class, uses = { DokumentMapper.class, CustomDocumentTypMapper.class })
+@Mapper(
+    config = MappingConfig.class,
+    uses = { DokumentMapper.class, CustomDocumentTypMapper.class, GesuchDokumentKommentarMapper.class }
+)
 public interface GesuchDokumentMapper {
+    @Mapping(source = "gesuchDokumentKommentare", target = "kommentars")
     GesuchDokumentDto toDto(GesuchDokument gesuchDokument);
 }
