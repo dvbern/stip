@@ -119,7 +119,7 @@ public class SozialdienstSeeding extends Seeder {
 
     void seedSozialdienst(final EnvSozialdienst envSozialdienst, final Land land) {
         if (sozialdienstRepository.find("name", envSozialdienst.getName()).singleResultOptional().isPresent()) {
-            LOG.error("Already present: {}", envSozialdienst.name);
+            LOG.info("Already present: {}", envSozialdienst.name);
             return;
         }
 

@@ -156,12 +156,16 @@ public class SapService {
         if (status == SapStatus.SUCCESS) {
             final var readResponse =
                 sapEndpointService.readBusinessPartnerByDeliveryId(buchhaltung.getFall(), deliveryid);
-            SapReturnCodeType.assertSuccess(readResponse.getRETURNCODE().get(0).getTYPE());
-            buchhaltung.getFall()
-                .getAuszahlung()
-                .setSapBusinessPartnerId(
-                    Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
-                );
+            if (SapReturnCodeType.isSuccess(readResponse.getRETURNCODE().get(0).getTYPE())) {
+                buchhaltung.getFall()
+                    .getAuszahlung()
+                    .setSapBusinessPartnerId(
+                        Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
+                    );
+            } else {
+                status = SapStatus.FAILURE;
+            }
+
         }
         sapDelivery.setSapStatus(status);
     }
@@ -253,11 +257,9 @@ public class SapService {
                     switch (businessPartnerActionBuchhaltungType) {
                         case BUSINESSPARTNER_CREATE -> {
                             final var response = sapEndpointService.createBusinessPartner(fall, deliveryid);
-                            SapReturnCodeType.assertSuccess(response.getRETURNCODE().get(0).getTYPE());
                         }
                         case BUSINESSPARTNER_CHANGE -> {
                             final var response = sapEndpointService.changeBusinessPartner(fall, deliveryid);
-                            SapReturnCodeType.assertSuccess(response.getRETURNCODE().get(0).getTYPE());
                         }
                         case null, default -> throw new IllegalStateException();
                     }
@@ -315,10 +317,13 @@ public class SapService {
         final var sapDelivery = sapDeliveryOpt.get();
         final var deliveryid = sapDelivery.getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(buchhaltung.getFall(), deliveryid);
-        SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
 
-        sapDelivery
-            .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+        var status = SapStatus.FAILURE;
+        if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE())) {
+            status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        }
+
+        sapDelivery.setSapStatus(status);
 
     }
 
@@ -375,7 +380,6 @@ public class SapService {
                             getQrIbanAddlInfoString(gesuch),
                             String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
                         );
-                    SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
                 } catch (Exception e) {
                     LOG.error("Failed to send createVendorPosting action", e);
                 }
