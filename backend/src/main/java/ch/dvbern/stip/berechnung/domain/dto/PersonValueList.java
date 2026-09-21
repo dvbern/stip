@@ -29,10 +29,12 @@ public class PersonValueList {
     private final ArrayList<PersonValueItemDto> kinderValueList = new ArrayList<>();
 
     public void setPersonValue(String name, Integer value) {
+        assert person == null;
         person = new PersonValueItemDto(name, Objects.requireNonNullElse(value, 0));
     }
 
     public void setPartnerValue(String partnerName, Integer value) {
+        assert partner == null;
         partner = new PersonValueItemDto(partnerName, Objects.requireNonNullElse(value, 0));
     }
 
