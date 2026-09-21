@@ -2170,7 +2170,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /verfuegung/dokument/{verfuegungDokumentId}/token:
+  /verfuegung/dokument/{verfuegungDokumentId}/token/sb:
     parameters:
       - name: verfuegungDokumentId
         schema:
@@ -2193,8 +2193,36 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getVerfuegungDokumentDownloadToken
-      summary: get Token to download Verfuegung
+      operationId: getVerfuegungDokumentDownloadTokenSb
+      summary: get Token to download Verfuegung for SB
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /verfuegung/dokument/{verfuegungDokumentId}/token/gs:
+    parameters:
+      - name: verfuegungDokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Returns a download token
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungDokumentDownloadTokenGs
+      summary: get Token to download Verfuegung for GS
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -3557,74 +3585,6 @@ paths:
         Upload a file for the given customDokumentTyp to the Tranche; GS
         Endpoint
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuchDokument/{gesuchDokumentId}/kommentare/gs:
-    get:
-      tags:
-        - Dokument
-      parameters:
-        - name: gesuchDokumentId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokumentKommentar'
-          description: >-
-            Returns an Array of GesuchDokumentKommentar for a given
-            GesuchDokuemntId
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuchDokumentKommentareGS
-      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuchDokument/{gesuchDokumentId}/kommentare/sb:
-    get:
-      tags:
-        - Dokument
-      parameters:
-        - name: gesuchDokumentId
-          schema:
-            $ref: '#/components/schemas/UUID'
-          in: path
-          required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokumentKommentar'
-          description: >-
-            Returns an Array of GesuchDokumentKommentar for a given
-            GesuchDokuemntId
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getGesuchDokumentKommentareSB
-      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -9042,6 +9002,7 @@ components:
         - BERECHNUNGSBLATT_VATER
         - BERECHNUNGSBLATT_FAMILIE
         - VERSENDETE_VERFUEGUNG
+        - VERFUEGUNG_GS
         - VERFUEGUNGSBRIEF
         - MANUELLE_NEGATIVE_VERFUEGUNG
     VerfuegungDokument:
@@ -9696,15 +9657,16 @@ components:
       enum:
         - GESUCH_EINGEREICHT
         - GESUCH_STATUS_CHANGE_WITH_COMMENT
-        - FEHLENDE_DOKUMENTE_EINREICHEN
+        - FEHLENDE_DOKUMENTE_EINGEREICHT
         - FEHLENDE_DOKUMENTE
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
         - AENDERUNG_EINGEREICHT
-        - GESUCH_IN_BEARBEITUNG_AS_AENDERUNG
+        - AENDERUNG_INITIATED_BY_SACHBEARBEITER
         - NACHFRIST_DOKUMENTE_CHANGED
         - NEUE_VERFUEGUNG
         - FAILED_AUSZAHLUNG
+        - DELEGIERUNG_EINGEGEBEN
         - DELEGIERUNG_ANGENOMMEN
         - DELEGIERUNG_ABGELEHNT
         - DELEGIERUNG_AUFGELOEST
@@ -9745,23 +9707,6 @@ components:
           type: string
         read:
           type: boolean
-    GesuchDokumentKommentar:
-      description: Kommentar zu einem (abgelehnten) GesuchDokument
-      type: object
-      required:
-        - gesuchTrancheId
-        - gesuchDokumentId
-      properties:
-        gesuchTrancheId:
-          $ref: '#/components/schemas/UUID'
-        gesuchDokumentId:
-          $ref: '#/components/schemas/UUID'
-        kommentar:
-          type: string
-        user_erstellt:
-          type: string
-        timestampErstellt:
-          $ref: '#/components/schemas/LocalDate'
     GesuchDokumentAblehnenRequest:
       description: Meta information um ein GesuchDokument abzulehnen
       type: object
@@ -9957,6 +9902,20 @@ components:
         - AUSSTEHEND
         - ABGELEHNT
         - AKZEPTIERT
+    GesuchDokumentKommentar:
+      required:
+        - gesuchDokumentId
+      description: Kommentar zu einem (abgelehnten) GesuchDokument
+      type: object
+      properties:
+        gesuchDokumentId:
+          $ref: '#/components/schemas/UUID'
+        kommentar:
+          type: string
+        user_erstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
     GesuchDokument:
       required:
         - id
@@ -9981,6 +9940,10 @@ components:
             $ref: '#/components/schemas/Dokument'
         status:
           $ref: '#/components/schemas/Dokumentstatus'
+        kommentars:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentKommentar'
     UnterschriftenblattDokumentTyp:
       type: string
       enum:

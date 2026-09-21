@@ -5,7 +5,6 @@ import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentCreateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentDto;
@@ -135,16 +134,6 @@ public interface DokumentResource {
     @Path("/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
     NullableGesuchDokumentDto getGesuchDokumentForTypSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@QueryParam("entryId")   UUID entryId);
-
-    @GET
-    @Path("/gesuchDokument/{gesuchDokumentId}/kommentare/gs")
-    @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareGS(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
-
-    @GET
-    @Path("/gesuchDokument/{gesuchDokumentId}/kommentare/sb")
-    @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareSB(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
     @Path("/sachbearbeiterGesuchDokument/dokument/download")

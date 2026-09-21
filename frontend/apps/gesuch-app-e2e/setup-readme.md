@@ -2,17 +2,16 @@
 
 ### Overview of how Tests are initialized
 
-```mermaid
-graph TD
-E2E[Test] --> B{Multiple Roles?}
-B -->|Yes|C[initializeMultiUserTest]
-B -->|No|D[initializeTest]
-C --> E[createMultiUserTest]
-E <--> F[createMultiUserTestContexts]
-E <--> G[authenticateUser]
-D --> H[createTest]
-H <--> I[createTestContext]
-```
+Authentication for multi-user flows happens once in the `setup` project
+(`src/auth.setup.ts`), before the parallel workers start. It writes one
+Gesuchsteller storage state per worker plus two shared Sachbearbeiter storage
+states to `playwright/.auth/`. The test projects declare `dependencies: ['setup']`
+and the fixtures only read those pre-authenticated storage states — no login
+happens inside the tests, which removes the previous per-worker race.
+
+The Sachbearbeiter page is created lazily via `createSbPage()` so its browser
+window only opens once a test actually switches to the SB app. Use
+`createSbPage(1)` when a flow needs the second Sachbearbeiter.
 
 ## Multiple User Test Initialization
 

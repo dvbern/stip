@@ -1,6 +1,5 @@
 <ng-container *dvTranslocoShared="let t">
   @let view = dokumenteViewSig();
-  @let expandedRowId = expandedRowSig();
   @if (view.loading) {
     <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
   }
@@ -9,7 +8,13 @@
   </h2>
 
   <div class="tw:dv-table tw:shadow-none tw:border">
-    <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
+    <table
+      mat-table
+      class="document-expanded"
+      [dataSource]="dokumenteDataSourceSig()"
+      [trackBy]="trackByFn"
+      multiTemplateDataRows
+    >
       <caption class="cdk-visually-hidden">
         {{
           t('shared.dokumente.table.title.customDocuments')
@@ -20,14 +25,13 @@
       <ng-container matColumnDef="expander">
         <th mat-header-cell *matHeaderCellDef></th>
         <td class="tw:px-0!" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-          <button class="tw:dv-button tw:box-content tw:items-center tw:size-7 tw:p-2" type="button">
-            <i
-              class="material-symbols-rounded tw:transition-transform tw:rounded-full tw:bg-(--dv-blue) tw:align-middle tw:text-2xl/none tw:text-white"
-              [class.tw:rotate-180]="dokument.gesuchDokument?.id === expandedRowId"
-            >
-              expand_more
-            </i>
-          </button>
+          @if (dokument.gesuchDokument?.kommentars && dokument?.gesuchDokument?.kommentars?.length) {
+            <button class="tw:dv-button tw:box-content tw:items-center tw:p-2 tw:size-7" type="button">
+              <i class="material-symbols-rounded tw:transition-transform" [class.tw:rotate-180]="dokument.isExpanded">
+                expand_more
+              </i>
+            </button>
+          }
         </td>
       </ng-container>
 
@@ -133,42 +137,27 @@
           mat-cell
           [attr.colspan]="displayedColumns.length"
           *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
+          class="tw:pl-15!"
         >
-          <div
-            [@detailExpand]="
-              dokument.gesuchDokument?.id
-                ? dokument.gesuchDokument?.id === expandedRowId
-                  ? 'expanded'
-                  : 'collapsed'
-                : 'collapsed'
-            "
-          >
-            @if (dokument.kommentarePending) {
-              <dv-shared-ui-loading class="tw:pb-2" type="icon"></dv-shared-ui-loading>
-            } @else if (dokument.kommentare.length === 0) {
-              <div class="tw:text-dv-gray tw:py-2 tw:text-center">
-                {{ t('shared.dokumente.table.noComment') }}
-              </div>
-            } @else {
-              <div class="tw:flex tw:flex-col tw:gap-4 tw:py-4">
-                @for (kommentar of dokument.kommentare; track $index) {
-                  <div>
-                    <div class="tw:flex tw:items-center tw:justify-between tw:gap-4 tw:mb-2">
-                      <div class="tw:flex tw:items-center tw:gap-2">
-                        <i class="material-symbols-rounded tw:text-dv-gray">person</i>
-                        <span>{{ kommentar.user_erstellt }}</span>
-                      </div>
-                      <div class="tw:text-dv-gray">
-                        {{ kommentar.timestampErstellt | date: 'dd. MMMM yyyy' }}
-                      </div>
+          <div [@detailExpand]="dokument.isExpanded ? 'expanded' : 'collapsed'">
+            <div class="tw:flex tw:flex-col tw:gap-4 tw:py-4">
+              @for (kommentar of dokument.gesuchDokument?.kommentars ?? []; track $index) {
+                <div>
+                  <div class="tw:flex tw:items-center tw:justify-between tw:gap-4 tw:mb-2">
+                    <div class="tw:flex tw:items-center tw:gap-2">
+                      <i class="material-symbols-rounded tw:text-dv-gray">person</i>
+                      <span>{{ kommentar.user_erstellt }}</span>
                     </div>
-                    <div>
-                      {{ kommentar.kommentar }}
+                    <div class="tw:text-dv-gray">
+                      {{ kommentar.timestampErstellt | date: 'dd. MMMM yyyy' }}
                     </div>
                   </div>
-                }
-              </div>
-            }
+                  <div>
+                    {{ kommentar.kommentar }}
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </td>
       </ng-container>
@@ -177,16 +166,12 @@
 
       <tr
         [ngClass]="{
-          'expanded-row': dokument.gesuchDokument?.id
-            ? dokument.gesuchDokument?.id === expandedRowId
-              ? true
-              : false
-            : false,
+          'expanded-row': dokument.isExpanded,
           'tw:!bg-(dv-yellow-subtle)': !dokument?.gesuchDokument?.id,
         }"
         mat-row
         *matRowDef="let dokument; columns: displayedColumns"
-        (click)="expandRow(dokument)"
+        (click)="toggleRow(dokument)"
       ></tr>
       <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>
 

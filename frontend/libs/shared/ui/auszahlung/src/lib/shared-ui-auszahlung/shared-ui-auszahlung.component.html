@@ -138,7 +138,7 @@
     <!-- Buttons -->
     <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
       @if (!isGesuchFormStepSig()) {
-        <button type="button" class="tw:dv-button-outline" (click)="backTriggered.emit()" data-testid="button-next">
+        <button type="button" class="tw:dv-button-outline" (click)="backTriggered.emit()" data-testid="button-back">
           {{ 'shared.form.back' | transloco }}
         </button>
       }
@@ -159,7 +159,7 @@
           type="submit"
           class="tw:dv-button-main-primary"
           [disabled]="form.invalid || form.pristine || view.isLoading"
-          data-testid="button-save-and-next"
+          data-testid="button-save-continue"
         >
           {{ 'shared.form.save-and-continue' | transloco }}
         </button>

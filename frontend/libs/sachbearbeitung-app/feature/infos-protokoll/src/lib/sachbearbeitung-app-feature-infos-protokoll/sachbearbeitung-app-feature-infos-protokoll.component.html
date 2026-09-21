@@ -44,6 +44,7 @@
           *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()"
           class="tw:max-w-48 tw:whitespace-nowrap"
           [dvTruncateTooltip]="t($any(protokoll.statusKey))"
+          [attr.data-testid]="'status-to-' + protokoll.statusTo"
         >
           {{ t($any(protokoll.statusKey)) }}
         </td>

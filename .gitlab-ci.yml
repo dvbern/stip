@@ -30,7 +30,7 @@ include:
       e2e-on: 'default'
       e2e-test-package-version: '13.6.2'
       e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
-      e2e-test-image-version: v1.49.1-jammy
+      e2e-test-image-version: v1.63.0-jammy
       lint-on: '(branch|mr|default)'
       test-on: '(branch|mr|default)'
       build-additional-args: '--verbose'
@@ -125,7 +125,7 @@ include:
       e2e-test-package-version: '13.6.2'
       context-dir: 'frontend'
       e2e-test-image: docker-registry.dvbern.ch/microsoft/playwright
-      e2e-test-image-version: v1.49.1-jammy
+      e2e-test-image-version: v1.63.0-jammy
       install-e2e-test-package: false
       e2e-artifacts-dir: 'dist/.playwright/'
       e2e-on: 'default'

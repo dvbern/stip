@@ -1,0 +1,11 @@
+Bonjour {vorname} {nachname}
+
+Le versement de vos subsides de formation n'a pas pu être effectué.
+
+Veuillez vérifier vos coordonnées de paiement et les corriger si nécessaire. Après la modification de vos coordonnées de paiement, le versement sera effectué à nouveau.
+
+Si le problème persiste, veuillez vous adresser à la Section des subsides de formation.
+
+Meilleures salutations
+
+Section des subsides de formation

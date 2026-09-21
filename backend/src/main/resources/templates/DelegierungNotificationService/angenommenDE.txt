@@ -1,0 +1,9 @@
+Guten Tag {vorname} {nachname}
+
+Die Delegation wurde von {sozialdienst} angenommen.
+
+{sozialdienst} ist ab sofort für Ihr Gesuch zuständig. Sie können das Gesuch weiterhin einsehen, aber nicht mehr bearbeiten.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

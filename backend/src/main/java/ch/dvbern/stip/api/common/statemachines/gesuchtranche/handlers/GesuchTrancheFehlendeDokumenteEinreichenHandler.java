@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
 import ch.dvbern.stip.api.common.statemachines.StateChangeWithCommentHandler;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,14 +28,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class GesuchTrancheFehlendeDokumenteEinreichenHandler implements StateChangeWithCommentHandler<GesuchTranche> {
-    private final NotificationService notificationService;
+    private final GesuchNotificationService gesuchNotificationService;
 
     @Override
     public void handle(
         GesuchTranche gesuchTranche,
         String comment
     ) {
-        notificationService
-            .createGesuchFehlendeDokumenteEinreichenNotificationAndSendStdMail(gesuchTranche.getGesuch());
+        gesuchNotificationService
+            .createFehlendeDokumenteEingereichtNotificationAndSendStdMail(gesuchTranche.getGesuch());
     }
 }

@@ -1,0 +1,9 @@
+Guten Tag {vorname} {nachname}
+
+Ihr Antrag für ein Darlehen wurde abgelehnt.
+
+Die Gründe für den Entscheid finden Sie in der Verfügung. Sie können die Verfügung herunterladen. Zusätzlich erhalten Sie diese per Post.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

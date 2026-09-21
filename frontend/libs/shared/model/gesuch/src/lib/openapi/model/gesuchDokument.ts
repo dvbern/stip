@@ -13,6 +13,7 @@ import { Dokumentstatus } from './dokumentstatus';
 import { CustomDokumentTyp } from './customDokumentTyp';
 import { DokumentTyp } from './dokumentTyp';
 import { Dokument } from './dokument';
+import { GesuchDokumentKommentar } from './gesuchDokumentKommentar';
 
 export interface GesuchDokument { 
     id: string;
@@ -21,6 +22,7 @@ export interface GesuchDokument {
     customDokumentTyp?: CustomDokumentTyp;
     dokumente: Array<Dokument>;
     status: Dokumentstatus;
+    kommentars?: Array<GesuchDokumentKommentar>;
 }
 
 
