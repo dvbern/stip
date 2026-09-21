@@ -35,7 +35,6 @@
     <testcontainers.version>2.0.5</testcontainers.version>
     <!-- Libraries -->
     <apache.commons-validator.version>1.11.0</apache.commons-validator.version>
-    <contract.version>1.24.0</contract.version>
     <itext.version>9.7.1</itext.version>
     <kie.version>10.1.0</kie.version>
     <stateless4j.version>2.6.0</stateless4j.version>
@@ -43,8 +42,7 @@
     <dvb-commons-i18n-l10n.version>2.0.8</dvb-commons-i18n-l10n.version>
     <tika.version>4.0.0</tika.version>
     <!-- Code Quality -->
-    <findbugs-annotations.version>3.0.1</findbugs-annotations.version>
-    <checkerframework.version>3.49.2</checkerframework.version>
+    <checkerframework.version>4.2.3</checkerframework.version>
     <spotless.eclipse.version>4.29</spotless.eclipse.version>
     <spotless.version>3.10.2</spotless.version>
     <!-- Build Plugins -->
@@ -265,11 +263,6 @@
       <scope>provided</scope>
     </dependency>
     <!-- Code Quality Annotations -->
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>findbugs-annotations</artifactId>
-      <version>${findbugs-annotations.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.checkerframework</groupId>
       <artifactId>checker-qual</artifactId>
