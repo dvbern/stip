@@ -36,7 +36,6 @@
     <!-- Libraries -->
     <apache.commons-validator.version>1.11.0</apache.commons-validator.version>
     <itext.version>9.7.1</itext.version>
-    <kie.version>10.1.0</kie.version>
     <stateless4j.version>2.6.0</stateless4j.version>
     <fastexcel-reader.version>0.20.2</fastexcel-reader.version>
     <dvb-commons-i18n-l10n.version>2.0.8</dvb-commons-i18n-l10n.version>
