@@ -30,277 +30,80 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchNotizDtoSpec
  */
 @JsonPropertyOrder({
+  GesuchNotizDtoSpec.JSON_PROPERTY_ID,
+  GesuchNotizDtoSpec.JSON_PROPERTY_BETREFF,
+  GesuchNotizDtoSpec.JSON_PROPERTY_TEXT,
+  GesuchNotizDtoSpec.JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN,
   GesuchNotizDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   GesuchNotizDtoSpec.JSON_PROPERTY_USER_MUTIERT,
   GesuchNotizDtoSpec.JSON_PROPERTY_TIMESTAMP_MUTIERT,
   GesuchNotizDtoSpec.JSON_PROPERTY_NOTIZ_TYP,
   GesuchNotizDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
-  GesuchNotizDtoSpec.JSON_PROPERTY_ANTWORT,
-  GesuchNotizDtoSpec.JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN,
-  GesuchNotizDtoSpec.JSON_PROPERTY_ID,
-  GesuchNotizDtoSpec.JSON_PROPERTY_BETREFF,
-  GesuchNotizDtoSpec.JSON_PROPERTY_TEXT
+  GesuchNotizDtoSpec.JSON_PROPERTY_ANTWORT
 })
 @JsonTypeName("GesuchNotiz")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchNotizDtoSpec {
-  public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
-  private String userErstellt;
-
-  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
-  private LocalDate timestampErstellt;
-
-  public static final String JSON_PROPERTY_USER_MUTIERT = "userMutiert";
-  private String userMutiert;
-
-  public static final String JSON_PROPERTY_TIMESTAMP_MUTIERT = "timestampMutiert";
-  private LocalDate timestampMutiert;
-
-  public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
-  private GesuchNotizTypDtoSpec notizTyp;
-
-  public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
-  private String gesuchNummer;
-
-  public static final String JSON_PROPERTY_ANTWORT = "antwort";
-  private String antwort;
-
-  public static final String JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN = "pendenzAbgeschlossen";
-  private Boolean pendenzAbgeschlossen;
-
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_BETREFF = "betreff";
+  @jakarta.annotation.Nonnull
   private String betreff;
 
   public static final String JSON_PROPERTY_TEXT = "text";
+  @jakarta.annotation.Nonnull
   private String text;
+
+  public static final String JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN = "pendenzAbgeschlossen";
+  @jakarta.annotation.Nullable
+  private Boolean pendenzAbgeschlossen;
+
+  public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  @jakarta.annotation.Nonnull
+  private String userErstellt;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
+  private LocalDate timestampErstellt;
+
+  public static final String JSON_PROPERTY_USER_MUTIERT = "userMutiert";
+  @jakarta.annotation.Nullable
+  private String userMutiert;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_MUTIERT = "timestampMutiert";
+  @jakarta.annotation.Nullable
+  private LocalDate timestampMutiert;
+
+  public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
+  @jakarta.annotation.Nonnull
+  private GesuchNotizTypDtoSpec notizTyp;
+
+  public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
+  @jakarta.annotation.Nonnull
+  private String gesuchNummer;
+
+  public static final String JSON_PROPERTY_ANTWORT = "antwort";
+  @jakarta.annotation.Nullable
+  private String antwort;
 
   public GesuchNotizDtoSpec() {
   }
 
-  public GesuchNotizDtoSpec userErstellt(String userErstellt) {
-    
-    this.userErstellt = userErstellt;
-    return this;
-  }
-
-   /**
-   * Get userErstellt
-   * @return userErstellt
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getUserErstellt() {
-    return userErstellt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
-  }
-
-
-  public GesuchNotizDtoSpec timestampErstellt(LocalDate timestampErstellt) {
-    
-    this.timestampErstellt = timestampErstellt;
-    return this;
-  }
-
-   /**
-   * Get timestampErstellt
-   * @return timestampErstellt
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getTimestampErstellt() {
-    return timestampErstellt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-  }
-
-
-  public GesuchNotizDtoSpec userMutiert(String userMutiert) {
-    
-    this.userMutiert = userMutiert;
-    return this;
-  }
-
-   /**
-   * Get userMutiert
-   * @return userMutiert
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getUserMutiert() {
-    return userMutiert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_USER_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUserMutiert(String userMutiert) {
-    this.userMutiert = userMutiert;
-  }
-
-
-  public GesuchNotizDtoSpec timestampMutiert(LocalDate timestampMutiert) {
-    
-    this.timestampMutiert = timestampMutiert;
-    return this;
-  }
-
-   /**
-   * Get timestampMutiert
-   * @return timestampMutiert
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public LocalDate getTimestampMutiert() {
-    return timestampMutiert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_MUTIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTimestampMutiert(LocalDate timestampMutiert) {
-    this.timestampMutiert = timestampMutiert;
-  }
-
-
-  public GesuchNotizDtoSpec notizTyp(GesuchNotizTypDtoSpec notizTyp) {
-    
-    this.notizTyp = notizTyp;
-    return this;
-  }
-
-   /**
-   * Get notizTyp
-   * @return notizTyp
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public GesuchNotizTypDtoSpec getNotizTyp() {
-    return notizTyp;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNotizTyp(GesuchNotizTypDtoSpec notizTyp) {
-    this.notizTyp = notizTyp;
-  }
-
-
-  public GesuchNotizDtoSpec gesuchNummer(String gesuchNummer) {
-    
-    this.gesuchNummer = gesuchNummer;
-    return this;
-  }
-
-   /**
-   * Get gesuchNummer
-   * @return gesuchNummer
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getGesuchNummer() {
-    return gesuchNummer;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchNummer(String gesuchNummer) {
-    this.gesuchNummer = gesuchNummer;
-  }
-
-
-  public GesuchNotizDtoSpec antwort(String antwort) {
-    
-    this.antwort = antwort;
-    return this;
-  }
-
-   /**
-   * Get antwort
-   * @return antwort
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ANTWORT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getAntwort() {
-    return antwort;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ANTWORT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAntwort(String antwort) {
-    this.antwort = antwort;
-  }
-
-
-  public GesuchNotizDtoSpec pendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
-    
-    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
-    return this;
-  }
-
-   /**
-   * Get pendenzAbgeschlossen
-   * @return pendenzAbgeschlossen
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getPendenzAbgeschlossen() {
-    return pendenzAbgeschlossen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
-    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
-  }
-
-
-  public GesuchNotizDtoSpec id(UUID id) {
+  public GesuchNotizDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -308,25 +111,24 @@ public class GesuchNotizDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public GesuchNotizDtoSpec betreff(String betreff) {
+  public GesuchNotizDtoSpec betreff(@jakarta.annotation.Nonnull String betreff) {
     
     this.betreff = betreff;
     return this;
   }
 
-   /**
+  /**
    * Get betreff
    * @return betreff
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonProperty(value = JSON_PROPERTY_BETREFF, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBetreff() {
@@ -334,25 +136,24 @@ public class GesuchNotizDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonProperty(value = JSON_PROPERTY_BETREFF, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetreff(String betreff) {
+  public void setBetreff(@jakarta.annotation.Nonnull String betreff) {
     this.betreff = betreff;
   }
 
-
-  public GesuchNotizDtoSpec text(String text) {
+  public GesuchNotizDtoSpec text(@jakarta.annotation.Nonnull String text) {
     
     this.text = text;
     return this;
   }
 
-   /**
+  /**
    * Get text
    * @return text
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_TEXT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getText() {
@@ -360,11 +161,212 @@ public class GesuchNotizDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_TEXT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setText(String text) {
+  public void setText(@jakarta.annotation.Nonnull String text) {
     this.text = text;
   }
+
+  public GesuchNotizDtoSpec pendenzAbgeschlossen(@jakarta.annotation.Nullable Boolean pendenzAbgeschlossen) {
+    
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
+    return this;
+  }
+
+  /**
+   * Get pendenzAbgeschlossen
+   * @return pendenzAbgeschlossen
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getPendenzAbgeschlossen() {
+    return pendenzAbgeschlossen;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPendenzAbgeschlossen(@jakarta.annotation.Nullable Boolean pendenzAbgeschlossen) {
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
+  }
+
+  public GesuchNotizDtoSpec userErstellt(@jakarta.annotation.Nonnull String userErstellt) {
+    
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+  /**
+   * Get userErstellt
+   * @return userErstellt
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUserErstellt(@jakarta.annotation.Nonnull String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
+
+  public GesuchNotizDtoSpec timestampErstellt(@jakarta.annotation.Nonnull LocalDate timestampErstellt) {
+    
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  /**
+   * Get timestampErstellt
+   * @return timestampErstellt
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
+  public GesuchNotizDtoSpec userMutiert(@jakarta.annotation.Nullable String userMutiert) {
+    
+    this.userMutiert = userMutiert;
+    return this;
+  }
+
+  /**
+   * Get userMutiert
+   * @return userMutiert
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_USER_MUTIERT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getUserMutiert() {
+    return userMutiert;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_USER_MUTIERT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserMutiert(@jakarta.annotation.Nullable String userMutiert) {
+    this.userMutiert = userMutiert;
+  }
+
+  public GesuchNotizDtoSpec timestampMutiert(@jakarta.annotation.Nullable LocalDate timestampMutiert) {
+    
+    this.timestampMutiert = timestampMutiert;
+    return this;
+  }
+
+  /**
+   * Get timestampMutiert
+   * @return timestampMutiert
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_MUTIERT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getTimestampMutiert() {
+    return timestampMutiert;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_MUTIERT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimestampMutiert(@jakarta.annotation.Nullable LocalDate timestampMutiert) {
+    this.timestampMutiert = timestampMutiert;
+  }
+
+  public GesuchNotizDtoSpec notizTyp(@jakarta.annotation.Nonnull GesuchNotizTypDtoSpec notizTyp) {
+    
+    this.notizTyp = notizTyp;
+    return this;
+  }
+
+  /**
+   * Get notizTyp
+   * @return notizTyp
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_NOTIZ_TYP, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchNotizTypDtoSpec getNotizTyp() {
+    return notizTyp;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_NOTIZ_TYP, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setNotizTyp(@jakarta.annotation.Nonnull GesuchNotizTypDtoSpec notizTyp) {
+    this.notizTyp = notizTyp;
+  }
+
+  public GesuchNotizDtoSpec gesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
+    
+    this.gesuchNummer = gesuchNummer;
+    return this;
+  }
+
+  /**
+   * Get gesuchNummer
+   * @return gesuchNummer
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getGesuchNummer() {
+    return gesuchNummer;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
+    this.gesuchNummer = gesuchNummer;
+  }
+
+  public GesuchNotizDtoSpec antwort(@jakarta.annotation.Nullable String antwort) {
+    
+    this.antwort = antwort;
+    return this;
+  }
+
+  /**
+   * Get antwort
+   * @return antwort
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ANTWORT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAntwort() {
+    return antwort;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ANTWORT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAntwort(@jakarta.annotation.Nullable String antwort) {
+    this.antwort = antwort;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -375,28 +377,32 @@ public class GesuchNotizDtoSpec {
       return false;
     }
     GesuchNotizDtoSpec gesuchNotiz = (GesuchNotizDtoSpec) o;
-    return Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
+    return Objects.equals(this.id, gesuchNotiz.id) &&
+        Objects.equals(this.betreff, gesuchNotiz.betreff) &&
+        Objects.equals(this.text, gesuchNotiz.text) &&
+        Objects.equals(this.pendenzAbgeschlossen, gesuchNotiz.pendenzAbgeschlossen) &&
+        Objects.equals(this.userErstellt, gesuchNotiz.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
         Objects.equals(this.userMutiert, gesuchNotiz.userMutiert) &&
         Objects.equals(this.timestampMutiert, gesuchNotiz.timestampMutiert) &&
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.gesuchNummer, gesuchNotiz.gesuchNummer) &&
-        Objects.equals(this.antwort, gesuchNotiz.antwort) &&
-        Objects.equals(this.pendenzAbgeschlossen, gesuchNotiz.pendenzAbgeschlossen) &&
-        Objects.equals(this.id, gesuchNotiz.id) &&
-        Objects.equals(this.betreff, gesuchNotiz.betreff) &&
-        Objects.equals(this.text, gesuchNotiz.text);
+        Objects.equals(this.antwort, gesuchNotiz.antwort);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, userMutiert, timestampMutiert, notizTyp, gesuchNummer, antwort, pendenzAbgeschlossen, id, betreff, text);
+    return Objects.hash(id, betreff, text, pendenzAbgeschlossen, userErstellt, timestampErstellt, userMutiert, timestampMutiert, notizTyp, gesuchNummer, antwort);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchNotizDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
+    sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    pendenzAbgeschlossen: ").append(toIndentedString(pendenzAbgeschlossen)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
@@ -404,10 +410,6 @@ public class GesuchNotizDtoSpec {
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
-    sb.append("    pendenzAbgeschlossen: ").append(toIndentedString(pendenzAbgeschlossen)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
-    sb.append("    text: ").append(toIndentedString(text)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -417,10 +419,7 @@ public class GesuchNotizDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

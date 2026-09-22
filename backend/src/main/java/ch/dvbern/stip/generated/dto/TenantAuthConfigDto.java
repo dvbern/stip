@@ -14,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("TenantAuthConfig")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TenantAuthConfigDto  implements Serializable {
-  private @Valid String authServerUrl;
-  private @Valid String realm;
+  private String authServerUrl;
+  private String realm;
 
   protected TenantAuthConfigDto(TenantAuthConfigDtoBuilder<?, ?> b) {
     this.authServerUrl = b.authServerUrl;
@@ -38,13 +38,12 @@ public class TenantAuthConfigDto  implements Serializable {
   }
 
   
-  @JsonProperty("authServerUrl")
-  @NotNull
-  public String getAuthServerUrl() {
+  @JsonProperty(required = true, value = "authServerUrl")
+  @NotNull public String getAuthServerUrl() {
     return authServerUrl;
   }
 
-  @JsonProperty("authServerUrl")
+  @JsonProperty(required = true, value = "authServerUrl")
   public void setAuthServerUrl(String authServerUrl) {
     this.authServerUrl = authServerUrl;
   }
@@ -57,13 +56,12 @@ public class TenantAuthConfigDto  implements Serializable {
   }
 
   
-  @JsonProperty("realm")
-  @NotNull
-  public String getRealm() {
+  @JsonProperty(required = true, value = "realm")
+  @NotNull public String getRealm() {
     return realm;
   }
 
-  @JsonProperty("realm")
+  @JsonProperty(required = true, value = "realm")
   public void setRealm(String realm) {
     this.realm = realm;
   }
@@ -103,10 +101,7 @@ public class TenantAuthConfigDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +139,3 @@ public class TenantAuthConfigDto  implements Serializable {
     }
   }
 }
-

@@ -41,53 +41,63 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_FREIGEBEN
 })
 @JsonTypeName("GesuchStateInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchStateInfoDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  @jakarta.annotation.Nonnull
   private GesuchstatusDtoSpec gesuchStatus;
 
   public static final String JSON_PROPERTY_BESCHWERDE_HAENGIG = "beschwerdeHaengig";
+  @jakarta.annotation.Nonnull
   private Boolean beschwerdeHaengig;
 
   public static final String JSON_PROPERTY_CAN_G_S_GET_BERECHNUNG = "canGSGetBerechnung";
+  @jakarta.annotation.Nonnull
   private Boolean canGSGetBerechnung;
 
   public static final String JSON_PROPERTY_CAN_S_B_GET_BERECHNUNG = "canSBGetBerechnung";
+  @jakarta.annotation.Nonnull
   private Boolean canSBGetBerechnung;
 
   public static final String JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE = "canChangeGesuchsperiode";
+  @jakarta.annotation.Nonnull
   private Boolean canChangeGesuchsperiode;
 
   public static final String JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN = "canTriggerManuellPruefen";
+  @jakarta.annotation.Nonnull
   private Boolean canTriggerManuellPruefen;
 
   public static final String JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN = "canBearbeitungAbschliessen";
+  @jakarta.annotation.Nonnull
   private Boolean canBearbeitungAbschliessen;
 
   public static final String JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG = "canSBInitAenderung";
+  @jakarta.annotation.Nonnull
   private Boolean canSBInitAenderung;
 
   public static final String JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON = "inBearbeitungSbReason";
+  @jakarta.annotation.Nullable
   private InBearbeitungSbReasonDtoSpec inBearbeitungSbReason;
 
   public static final String JSON_PROPERTY_CAN_FREIGEBEN = "canFreigeben";
+  @jakarta.annotation.Nonnull
   private Boolean canFreigeben;
 
   public GesuchStateInfoDtoSpec() {
   }
 
-  public GesuchStateInfoDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public GesuchStateInfoDtoSpec gesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
     
     this.gesuchStatus = gesuchStatus;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchStatus
    * @return gesuchStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchstatusDtoSpec getGesuchStatus() {
@@ -95,25 +105,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public void setGesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 
-
-  public GesuchStateInfoDtoSpec beschwerdeHaengig(Boolean beschwerdeHaengig) {
+  public GesuchStateInfoDtoSpec beschwerdeHaengig(@jakarta.annotation.Nonnull Boolean beschwerdeHaengig) {
     
     this.beschwerdeHaengig = beschwerdeHaengig;
     return this;
   }
 
-   /**
+  /**
    * Get beschwerdeHaengig
    * @return beschwerdeHaengig
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_HAENGIG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getBeschwerdeHaengig() {
@@ -121,25 +130,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_HAENGIG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBeschwerdeHaengig(Boolean beschwerdeHaengig) {
+  public void setBeschwerdeHaengig(@jakarta.annotation.Nonnull Boolean beschwerdeHaengig) {
     this.beschwerdeHaengig = beschwerdeHaengig;
   }
 
-
-  public GesuchStateInfoDtoSpec canGSGetBerechnung(Boolean canGSGetBerechnung) {
+  public GesuchStateInfoDtoSpec canGSGetBerechnung(@jakarta.annotation.Nonnull Boolean canGSGetBerechnung) {
     
     this.canGSGetBerechnung = canGSGetBerechnung;
     return this;
   }
 
-   /**
+  /**
    * Get canGSGetBerechnung
    * @return canGSGetBerechnung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_G_S_GET_BERECHNUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_G_S_GET_BERECHNUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanGSGetBerechnung() {
@@ -147,25 +155,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_G_S_GET_BERECHNUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_G_S_GET_BERECHNUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanGSGetBerechnung(Boolean canGSGetBerechnung) {
+  public void setCanGSGetBerechnung(@jakarta.annotation.Nonnull Boolean canGSGetBerechnung) {
     this.canGSGetBerechnung = canGSGetBerechnung;
   }
 
-
-  public GesuchStateInfoDtoSpec canSBGetBerechnung(Boolean canSBGetBerechnung) {
+  public GesuchStateInfoDtoSpec canSBGetBerechnung(@jakarta.annotation.Nonnull Boolean canSBGetBerechnung) {
     
     this.canSBGetBerechnung = canSBGetBerechnung;
     return this;
   }
 
-   /**
+  /**
    * Get canSBGetBerechnung
    * @return canSBGetBerechnung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_S_B_GET_BERECHNUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_S_B_GET_BERECHNUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanSBGetBerechnung() {
@@ -173,25 +180,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_S_B_GET_BERECHNUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_S_B_GET_BERECHNUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanSBGetBerechnung(Boolean canSBGetBerechnung) {
+  public void setCanSBGetBerechnung(@jakarta.annotation.Nonnull Boolean canSBGetBerechnung) {
     this.canSBGetBerechnung = canSBGetBerechnung;
   }
 
-
-  public GesuchStateInfoDtoSpec canChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
+  public GesuchStateInfoDtoSpec canChangeGesuchsperiode(@jakarta.annotation.Nonnull Boolean canChangeGesuchsperiode) {
     
     this.canChangeGesuchsperiode = canChangeGesuchsperiode;
     return this;
   }
 
-   /**
+  /**
    * Get canChangeGesuchsperiode
    * @return canChangeGesuchsperiode
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanChangeGesuchsperiode() {
@@ -199,25 +205,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
+  public void setCanChangeGesuchsperiode(@jakarta.annotation.Nonnull Boolean canChangeGesuchsperiode) {
     this.canChangeGesuchsperiode = canChangeGesuchsperiode;
   }
 
-
-  public GesuchStateInfoDtoSpec canTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
+  public GesuchStateInfoDtoSpec canTriggerManuellPruefen(@jakarta.annotation.Nonnull Boolean canTriggerManuellPruefen) {
     
     this.canTriggerManuellPruefen = canTriggerManuellPruefen;
     return this;
   }
 
-   /**
+  /**
    * Get canTriggerManuellPruefen
    * @return canTriggerManuellPruefen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanTriggerManuellPruefen() {
@@ -225,25 +230,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
+  public void setCanTriggerManuellPruefen(@jakarta.annotation.Nonnull Boolean canTriggerManuellPruefen) {
     this.canTriggerManuellPruefen = canTriggerManuellPruefen;
   }
 
-
-  public GesuchStateInfoDtoSpec canBearbeitungAbschliessen(Boolean canBearbeitungAbschliessen) {
+  public GesuchStateInfoDtoSpec canBearbeitungAbschliessen(@jakarta.annotation.Nonnull Boolean canBearbeitungAbschliessen) {
     
     this.canBearbeitungAbschliessen = canBearbeitungAbschliessen;
     return this;
   }
 
-   /**
+  /**
    * Get canBearbeitungAbschliessen
    * @return canBearbeitungAbschliessen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanBearbeitungAbschliessen() {
@@ -251,25 +255,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanBearbeitungAbschliessen(Boolean canBearbeitungAbschliessen) {
+  public void setCanBearbeitungAbschliessen(@jakarta.annotation.Nonnull Boolean canBearbeitungAbschliessen) {
     this.canBearbeitungAbschliessen = canBearbeitungAbschliessen;
   }
 
-
-  public GesuchStateInfoDtoSpec canSBInitAenderung(Boolean canSBInitAenderung) {
+  public GesuchStateInfoDtoSpec canSBInitAenderung(@jakarta.annotation.Nonnull Boolean canSBInitAenderung) {
     
     this.canSBInitAenderung = canSBInitAenderung;
     return this;
   }
 
-   /**
+  /**
    * Get canSBInitAenderung
    * @return canSBInitAenderung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanSBInitAenderung() {
@@ -277,25 +280,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanSBInitAenderung(Boolean canSBInitAenderung) {
+  public void setCanSBInitAenderung(@jakarta.annotation.Nonnull Boolean canSBInitAenderung) {
     this.canSBInitAenderung = canSBInitAenderung;
   }
 
-
-  public GesuchStateInfoDtoSpec inBearbeitungSbReason(InBearbeitungSbReasonDtoSpec inBearbeitungSbReason) {
+  public GesuchStateInfoDtoSpec inBearbeitungSbReason(@jakarta.annotation.Nullable InBearbeitungSbReasonDtoSpec inBearbeitungSbReason) {
     
     this.inBearbeitungSbReason = inBearbeitungSbReason;
     return this;
   }
 
-   /**
+  /**
    * Get inBearbeitungSbReason
    * @return inBearbeitungSbReason
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON)
+  @JsonProperty(value = JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public InBearbeitungSbReasonDtoSpec getInBearbeitungSbReason() {
@@ -303,25 +305,24 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON)
+  @JsonProperty(value = JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInBearbeitungSbReason(InBearbeitungSbReasonDtoSpec inBearbeitungSbReason) {
+  public void setInBearbeitungSbReason(@jakarta.annotation.Nullable InBearbeitungSbReasonDtoSpec inBearbeitungSbReason) {
     this.inBearbeitungSbReason = inBearbeitungSbReason;
   }
 
-
-  public GesuchStateInfoDtoSpec canFreigeben(Boolean canFreigeben) {
+  public GesuchStateInfoDtoSpec canFreigeben(@jakarta.annotation.Nonnull Boolean canFreigeben) {
     
     this.canFreigeben = canFreigeben;
     return this;
   }
 
-   /**
+  /**
    * Get canFreigeben
    * @return canFreigeben
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_FREIGEBEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_FREIGEBEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanFreigeben() {
@@ -329,11 +330,12 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_FREIGEBEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_FREIGEBEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanFreigeben(Boolean canFreigeben) {
+  public void setCanFreigeben(@jakarta.annotation.Nonnull Boolean canFreigeben) {
     this.canFreigeben = canFreigeben;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -384,10 +386,7 @@ public class GesuchStateInfoDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

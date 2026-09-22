@@ -14,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BeschwerdeVerlaufEntryCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BeschwerdeVerlaufEntryCreateDto  implements Serializable {
-  private @Valid String kommentar;
-  private @Valid Boolean beschwerdeSetTo;
+  private String kommentar;
+  private Boolean beschwerdeSetTo;
 
   protected BeschwerdeVerlaufEntryCreateDto(BeschwerdeVerlaufEntryCreateDtoBuilder<?, ?> b) {
     this.kommentar = b.kommentar;
@@ -38,13 +38,12 @@ public class BeschwerdeVerlaufEntryCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentar")
-  @NotNull
-  public String getKommentar() {
+  @JsonProperty(required = true, value = "kommentar")
+  @NotNull public String getKommentar() {
     return kommentar;
   }
 
-  @JsonProperty("kommentar")
+  @JsonProperty(required = true, value = "kommentar")
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -57,13 +56,12 @@ public class BeschwerdeVerlaufEntryCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("beschwerdeSetTo")
-  @NotNull
-  public Boolean getBeschwerdeSetTo() {
+  @JsonProperty(required = true, value = "beschwerdeSetTo")
+  @NotNull public Boolean getBeschwerdeSetTo() {
     return beschwerdeSetTo;
   }
 
-  @JsonProperty("beschwerdeSetTo")
+  @JsonProperty(required = true, value = "beschwerdeSetTo")
   public void setBeschwerdeSetTo(Boolean beschwerdeSetTo) {
     this.beschwerdeSetTo = beschwerdeSetTo;
   }
@@ -103,10 +101,7 @@ public class BeschwerdeVerlaufEntryCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +139,3 @@ public class BeschwerdeVerlaufEntryCreateDto  implements Serializable {
     }
   }
 }
-

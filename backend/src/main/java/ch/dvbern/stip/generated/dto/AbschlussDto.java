@@ -15,23 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Abschluss")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AbschlussDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
-  private @Valid Integer bfsKategorie;
-  private @Valid Boolean berufsbefaehigenderAbschluss;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.FerienTyp ferien;
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
-  private @Valid Boolean askForBerufsmaturitaet;
-  private @Valid Boolean aktiv;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
+  private UUID id;
+  private ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
+  private ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
+  private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+  private Integer bfsKategorie;
+  private Boolean berufsbefaehigenderAbschluss;
+  private ch.dvbern.stip.api.ausbildung.type.FerienTyp ferien;
+  private String bezeichnungDe;
+  private String bezeichnungFr;
+  private Boolean askForBerufsmaturitaet;
+  private Boolean aktiv;
+  private ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
 
   protected AbschlussDto(AbschlussDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -59,13 +59,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -78,13 +77,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungskategorie")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie getAusbildungskategorie() {
+  @JsonProperty(required = true, value = "ausbildungskategorie")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie getAusbildungskategorie() {
     return ausbildungskategorie;
   }
 
-  @JsonProperty("ausbildungskategorie")
+  @JsonProperty(required = true, value = "ausbildungskategorie")
   public void setAusbildungskategorie(ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie) {
     this.ausbildungskategorie = ausbildungskategorie;
   }
@@ -97,13 +95,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("bildungskategorie")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.Bildungskategorie getBildungskategorie() {
+  @JsonProperty(required = true, value = "bildungskategorie")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.Bildungskategorie getBildungskategorie() {
     return bildungskategorie;
   }
 
-  @JsonProperty("bildungskategorie")
+  @JsonProperty(required = true, value = "bildungskategorie")
   public void setBildungskategorie(ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie) {
     this.bildungskategorie = bildungskategorie;
   }
@@ -116,13 +113,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("bildungsrichtung")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung getBildungsrichtung() {
+  @JsonProperty(required = true, value = "bildungsrichtung")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung getBildungsrichtung() {
     return bildungsrichtung;
   }
 
-  @JsonProperty("bildungsrichtung")
+  @JsonProperty(required = true, value = "bildungsrichtung")
   public void setBildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
     this.bildungsrichtung = bildungsrichtung;
   }
@@ -135,13 +131,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("bfsKategorie")
-  @NotNull
-  public Integer getBfsKategorie() {
+  @JsonProperty(required = true, value = "bfsKategorie")
+  @NotNull public Integer getBfsKategorie() {
     return bfsKategorie;
   }
 
-  @JsonProperty("bfsKategorie")
+  @JsonProperty(required = true, value = "bfsKategorie")
   public void setBfsKategorie(Integer bfsKategorie) {
     this.bfsKategorie = bfsKategorie;
   }
@@ -154,13 +149,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("berufsbefaehigenderAbschluss")
-  @NotNull
-  public Boolean getBerufsbefaehigenderAbschluss() {
+  @JsonProperty(required = true, value = "berufsbefaehigenderAbschluss")
+  @NotNull public Boolean getBerufsbefaehigenderAbschluss() {
     return berufsbefaehigenderAbschluss;
   }
 
-  @JsonProperty("berufsbefaehigenderAbschluss")
+  @JsonProperty(required = true, value = "berufsbefaehigenderAbschluss")
   public void setBerufsbefaehigenderAbschluss(Boolean berufsbefaehigenderAbschluss) {
     this.berufsbefaehigenderAbschluss = berufsbefaehigenderAbschluss;
   }
@@ -173,13 +167,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("ferien")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.FerienTyp getFerien() {
+  @JsonProperty(required = true, value = "ferien")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.FerienTyp getFerien() {
     return ferien;
   }
 
-  @JsonProperty("ferien")
+  @JsonProperty(required = true, value = "ferien")
   public void setFerien(ch.dvbern.stip.api.ausbildung.type.FerienTyp ferien) {
     this.ferien = ferien;
   }
@@ -192,13 +185,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungDe")
-  @NotNull
-  public String getBezeichnungDe() {
+  @JsonProperty(required = true, value = "bezeichnungDe")
+  @NotNull public String getBezeichnungDe() {
     return bezeichnungDe;
   }
 
-  @JsonProperty("bezeichnungDe")
+  @JsonProperty(required = true, value = "bezeichnungDe")
   public void setBezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
@@ -211,13 +203,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungFr")
-  @NotNull
-  public String getBezeichnungFr() {
+  @JsonProperty(required = true, value = "bezeichnungFr")
+  @NotNull public String getBezeichnungFr() {
     return bezeichnungFr;
   }
 
-  @JsonProperty("bezeichnungFr")
+  @JsonProperty(required = true, value = "bezeichnungFr")
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
@@ -230,13 +221,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("askForBerufsmaturitaet")
-  @NotNull
-  public Boolean getAskForBerufsmaturitaet() {
+  @JsonProperty(required = true, value = "askForBerufsmaturitaet")
+  @NotNull public Boolean getAskForBerufsmaturitaet() {
     return askForBerufsmaturitaet;
   }
 
-  @JsonProperty("askForBerufsmaturitaet")
+  @JsonProperty(required = true, value = "askForBerufsmaturitaet")
   public void setAskForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
     this.askForBerufsmaturitaet = askForBerufsmaturitaet;
   }
@@ -249,13 +239,12 @@ public class AbschlussDto  implements Serializable {
   }
 
   
-  @JsonProperty("aktiv")
-  @NotNull
-  public Boolean getAktiv() {
+  @JsonProperty(required = true, value = "aktiv")
+  @NotNull public Boolean getAktiv() {
     return aktiv;
   }
 
-  @JsonProperty("aktiv")
+  @JsonProperty(required = true, value = "aktiv")
   public void setAktiv(Boolean aktiv) {
     this.aktiv = aktiv;
   }
@@ -333,10 +322,7 @@ public class AbschlussDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -424,4 +410,3 @@ public class AbschlussDto  implements Serializable {
     }
   }
 }
-

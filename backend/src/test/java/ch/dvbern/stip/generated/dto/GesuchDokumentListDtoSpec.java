@@ -36,18 +36,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDokumentListDtoSpec.JSON_PROPERTY_DOKUMENTS
 })
 @JsonTypeName("GesuchDokumentList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchDokumentListDtoSpec {
   public static final String JSON_PROPERTY_ENTRYS = "entrys";
+  @jakarta.annotation.Nonnull
   private List<GesuchDokumentEntryDtoSpec> entrys;
 
   public static final String JSON_PROPERTY_DOKUMENTS = "dokuments";
+  @jakarta.annotation.Nonnull
   private List<GesuchDokumentDtoSpec> dokuments;
 
   public GesuchDokumentListDtoSpec() {
   }
 
-  public GesuchDokumentListDtoSpec entrys(List<GesuchDokumentEntryDtoSpec> entrys) {
+  public GesuchDokumentListDtoSpec entrys(@jakarta.annotation.Nonnull List<GesuchDokumentEntryDtoSpec> entrys) {
     
     this.entrys = entrys;
     return this;
@@ -61,12 +63,12 @@ public class GesuchDokumentListDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get entrys
    * @return entrys
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ENTRYS)
+  @JsonProperty(value = JSON_PROPERTY_ENTRYS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<GesuchDokumentEntryDtoSpec> getEntrys() {
@@ -74,14 +76,13 @@ public class GesuchDokumentListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENTRYS)
+  @JsonProperty(value = JSON_PROPERTY_ENTRYS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEntrys(List<GesuchDokumentEntryDtoSpec> entrys) {
+  public void setEntrys(@jakarta.annotation.Nonnull List<GesuchDokumentEntryDtoSpec> entrys) {
     this.entrys = entrys;
   }
 
-
-  public GesuchDokumentListDtoSpec dokuments(List<GesuchDokumentDtoSpec> dokuments) {
+  public GesuchDokumentListDtoSpec dokuments(@jakarta.annotation.Nonnull List<GesuchDokumentDtoSpec> dokuments) {
     
     this.dokuments = dokuments;
     return this;
@@ -95,12 +96,12 @@ public class GesuchDokumentListDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get dokuments
    * @return dokuments
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENTS)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<GesuchDokumentDtoSpec> getDokuments() {
@@ -108,11 +109,12 @@ public class GesuchDokumentListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENTS)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokuments(List<GesuchDokumentDtoSpec> dokuments) {
+  public void setDokuments(@jakarta.annotation.Nonnull List<GesuchDokumentDtoSpec> dokuments) {
     this.dokuments = dokuments;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -147,10 +149,7 @@ public class GesuchDokumentListDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

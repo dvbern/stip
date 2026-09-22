@@ -41,47 +41,55 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DelegierungCreateDtoSpec.JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT
 })
 @JsonTypeName("DelegierungCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DelegierungCreateDtoSpec {
   public static final String JSON_PROPERTY_ANREDE = "anrede";
+  @jakarta.annotation.Nonnull
   private AnredeDtoSpec anrede;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  @jakarta.annotation.Nonnull
   private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_EMAIL = "email";
+  @jakarta.annotation.Nonnull
   private String email;
 
   public static final String JSON_PROPERTY_SPRACHE = "sprache";
+  @jakarta.annotation.Nonnull
   private SpracheDtoSpec sprache;
 
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
+  @jakarta.annotation.Nonnull
   private AdresseDtoSpec adresse;
 
   public static final String JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT = "nutzungsbedingungenAkzeptiert";
+  @jakarta.annotation.Nonnull
   private Boolean nutzungsbedingungenAkzeptiert;
 
   public DelegierungCreateDtoSpec() {
   }
 
-  public DelegierungCreateDtoSpec anrede(AnredeDtoSpec anrede) {
+  public DelegierungCreateDtoSpec anrede(@jakarta.annotation.Nonnull AnredeDtoSpec anrede) {
     
     this.anrede = anrede;
     return this;
   }
 
-   /**
+  /**
    * Get anrede
    * @return anrede
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANREDE)
+  @JsonProperty(value = JSON_PROPERTY_ANREDE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AnredeDtoSpec getAnrede() {
@@ -89,25 +97,24 @@ public class DelegierungCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANREDE)
+  @JsonProperty(value = JSON_PROPERTY_ANREDE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnrede(AnredeDtoSpec anrede) {
+  public void setAnrede(@jakarta.annotation.Nonnull AnredeDtoSpec anrede) {
     this.anrede = anrede;
   }
 
-
-  public DelegierungCreateDtoSpec nachname(String nachname) {
+  public DelegierungCreateDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -115,25 +122,24 @@ public class DelegierungCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public DelegierungCreateDtoSpec vorname(String vorname) {
+  public DelegierungCreateDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -141,25 +147,24 @@ public class DelegierungCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public DelegierungCreateDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public DelegierungCreateDtoSpec geburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * Get geburtsdatum
    * @return geburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGeburtsdatum() {
@@ -167,25 +172,24 @@ public class DelegierungCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
-
-  public DelegierungCreateDtoSpec email(String email) {
+  public DelegierungCreateDtoSpec email(@jakarta.annotation.Nonnull String email) {
     
     this.email = email;
     return this;
   }
 
-   /**
+  /**
    * Get email
    * @return email
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonProperty(value = JSON_PROPERTY_EMAIL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getEmail() {
@@ -193,25 +197,24 @@ public class DelegierungCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonProperty(value = JSON_PROPERTY_EMAIL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEmail(String email) {
+  public void setEmail(@jakarta.annotation.Nonnull String email) {
     this.email = email;
   }
 
-
-  public DelegierungCreateDtoSpec sprache(SpracheDtoSpec sprache) {
+  public DelegierungCreateDtoSpec sprache(@jakarta.annotation.Nonnull SpracheDtoSpec sprache) {
     
     this.sprache = sprache;
     return this;
   }
 
-   /**
+  /**
    * Get sprache
    * @return sprache
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SPRACHE)
+  @JsonProperty(value = JSON_PROPERTY_SPRACHE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SpracheDtoSpec getSprache() {
@@ -219,25 +222,24 @@ public class DelegierungCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SPRACHE)
+  @JsonProperty(value = JSON_PROPERTY_SPRACHE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSprache(SpracheDtoSpec sprache) {
+  public void setSprache(@jakarta.annotation.Nonnull SpracheDtoSpec sprache) {
     this.sprache = sprache;
   }
 
-
-  public DelegierungCreateDtoSpec adresse(AdresseDtoSpec adresse) {
+  public DelegierungCreateDtoSpec adresse(@jakarta.annotation.Nonnull AdresseDtoSpec adresse) {
     
     this.adresse = adresse;
     return this;
   }
 
-   /**
+  /**
    * Get adresse
    * @return adresse
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_ADRESSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AdresseDtoSpec getAdresse() {
@@ -245,25 +247,24 @@ public class DelegierungCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_ADRESSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdresse(AdresseDtoSpec adresse) {
+  public void setAdresse(@jakarta.annotation.Nonnull AdresseDtoSpec adresse) {
     this.adresse = adresse;
   }
 
-
-  public DelegierungCreateDtoSpec nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+  public DelegierungCreateDtoSpec nutzungsbedingungenAkzeptiert(@jakarta.annotation.Nonnull Boolean nutzungsbedingungenAkzeptiert) {
     
     this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
     return this;
   }
 
-   /**
+  /**
    * Get nutzungsbedingungenAkzeptiert
    * @return nutzungsbedingungenAkzeptiert
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonProperty(value = JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getNutzungsbedingungenAkzeptiert() {
@@ -271,11 +272,12 @@ public class DelegierungCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonProperty(value = JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+  public void setNutzungsbedingungenAkzeptiert(@jakarta.annotation.Nonnull Boolean nutzungsbedingungenAkzeptiert) {
     this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -322,10 +324,7 @@ public class DelegierungCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

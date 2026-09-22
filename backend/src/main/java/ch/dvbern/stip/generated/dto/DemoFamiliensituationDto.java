@@ -14,23 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoFamiliensituation")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoFamiliensituationDto  implements Serializable {
-  private @Valid Boolean elternVerheiratetZusammen;
-  private @Valid Boolean gerichtlicheAlimentenregelung;
-  private @Valid ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente;
-  private @Valid Boolean elternteilUnbekanntVerstorben;
-  private @Valid Boolean mutterVerstorben;
-  private @Valid Boolean mutterUnbekannt;
-  private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund;
-  private @Valid Boolean mutterKeineOptionen;
-  private @Valid Boolean vaterVerstorben;
-  private @Valid Boolean vaterUnbekannt;
-  private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
-  private @Valid Boolean vaterKeineOptionen;
+  private Boolean elternVerheiratetZusammen;
+  private Boolean gerichtlicheAlimentenregelung;
+  private ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente;
+  private Boolean elternteilUnbekanntVerstorben;
+  private Boolean mutterVerstorben;
+  private Boolean mutterUnbekannt;
+  private ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund;
+  private Boolean mutterKeineOptionen;
+  private Boolean vaterVerstorben;
+  private Boolean vaterUnbekannt;
+  private ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
+  private Boolean vaterKeineOptionen;
 
   protected DemoFamiliensituationDto(DemoFamiliensituationDtoBuilder<?, ?> b) {
     this.elternVerheiratetZusammen = b.elternVerheiratetZusammen;
@@ -58,13 +58,12 @@ public class DemoFamiliensituationDto  implements Serializable {
   }
 
   
-  @JsonProperty("elternVerheiratetZusammen")
-  @NotNull
-  public Boolean getElternVerheiratetZusammen() {
+  @JsonProperty(required = true, value = "elternVerheiratetZusammen")
+  @NotNull public Boolean getElternVerheiratetZusammen() {
     return elternVerheiratetZusammen;
   }
 
-  @JsonProperty("elternVerheiratetZusammen")
+  @JsonProperty(required = true, value = "elternVerheiratetZusammen")
   public void setElternVerheiratetZusammen(Boolean elternVerheiratetZusammen) {
     this.elternVerheiratetZusammen = elternVerheiratetZusammen;
   }
@@ -322,10 +321,7 @@ public class DemoFamiliensituationDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -413,4 +409,3 @@ public class DemoFamiliensituationDto  implements Serializable {
     }
   }
 }
-

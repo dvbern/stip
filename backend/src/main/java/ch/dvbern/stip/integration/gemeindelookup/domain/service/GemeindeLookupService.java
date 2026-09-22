@@ -21,10 +21,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupRequest;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobBuilder;
@@ -36,8 +33,7 @@ import org.quartz.TriggerBuilder;
 
 @Slf4j
 @ApplicationScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class GemeindeLookupService {
     private final TenantService tenantService;
     private final Scheduler scheduler;

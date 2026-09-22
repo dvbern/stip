@@ -21,18 +21,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid List<DokumentDto> dokumente = new ArrayList<>();
-  private @Valid ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus status;
-  private @Valid UUID entryId;
-  private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
-  private @Valid CustomDokumentTypDto customDokumentTyp;
-  private @Valid List<GesuchDokumentKommentarDto> kommentars;
+  private UUID id;
+  private @Valid List<@Valid DokumentDto> dokumente = new ArrayList<>();
+  private ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus status;
+  private UUID entryId;
+  private ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
+  private CustomDokumentTypDto customDokumentTyp;
+  private @Valid List<@Valid GesuchDokumentKommentarDto> kommentars = new ArrayList<>();
 
   protected GesuchDokumentDto(GesuchDokumentDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -55,33 +55,31 @@ public class GesuchDokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
    **/
-  public GesuchDokumentDto dokumente(List<DokumentDto> dokumente) {
+  public GesuchDokumentDto dokumente(List<@Valid DokumentDto> dokumente) {
     this.dokumente = dokumente;
     return this;
   }
 
   
-  @JsonProperty("dokumente")
-  @NotNull
-  public List<DokumentDto> getDokumente() {
+  @JsonProperty(required = true, value = "dokumente")
+  @NotNull @Valid public List<@Valid DokumentDto> getDokumente() {
     return dokumente;
   }
 
-  @JsonProperty("dokumente")
-  public void setDokumente(List<DokumentDto> dokumente) {
+  @JsonProperty(required = true, value = "dokumente")
+  public void setDokumente(List<@Valid DokumentDto> dokumente) {
     this.dokumente = dokumente;
   }
 
@@ -109,13 +107,12 @@ public class GesuchDokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("status")
-  @NotNull
-  public ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus getStatus() {
+  @JsonProperty(required = true, value = "status")
+  @NotNull public ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus getStatus() {
     return status;
   }
 
-  @JsonProperty("status")
+  @JsonProperty(required = true, value = "status")
   public void setStatus(ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus status) {
     this.status = status;
   }
@@ -165,7 +162,7 @@ public class GesuchDokumentDto  implements Serializable {
 
   
   @JsonProperty("customDokumentTyp")
-  public CustomDokumentTypDto getCustomDokumentTyp() {
+  @Valid public CustomDokumentTypDto getCustomDokumentTyp() {
     return customDokumentTyp;
   }
 
@@ -176,19 +173,19 @@ public class GesuchDokumentDto  implements Serializable {
 
   /**
    **/
-  public GesuchDokumentDto kommentars(List<GesuchDokumentKommentarDto> kommentars) {
+  public GesuchDokumentDto kommentars(List<@Valid GesuchDokumentKommentarDto> kommentars) {
     this.kommentars = kommentars;
     return this;
   }
 
   
   @JsonProperty("kommentars")
-  public List<GesuchDokumentKommentarDto> getKommentars() {
+  @Valid public List<@Valid GesuchDokumentKommentarDto> getKommentars() {
     return kommentars;
   }
 
   @JsonProperty("kommentars")
-  public void setKommentars(List<GesuchDokumentKommentarDto> kommentars) {
+  public void setKommentars(List<@Valid GesuchDokumentKommentarDto> kommentars) {
     this.kommentars = kommentars;
   }
 
@@ -253,10 +250,7 @@ public class GesuchDokumentDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -284,7 +278,7 @@ public class GesuchDokumentDto  implements Serializable {
     private UUID entryId;
     private ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
     private CustomDokumentTypDto customDokumentTyp;
-    private List<GesuchDokumentKommentarDto> kommentars;
+    private List<GesuchDokumentKommentarDto> kommentars = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -319,4 +313,3 @@ public class GesuchDokumentDto  implements Serializable {
     }
   }
 }
-

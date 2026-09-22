@@ -26,9 +26,9 @@ import static ch.dvbern.stip.generated.JacksonObjectMapper.jackson;
 public class ApiClient {
     public static final String BASE_URI = "http://localhost:8080/api/v1";
 
-    private final Config config;
+    protected final Config config;
 
-    private ApiClient(Config config) {
+    protected ApiClient(Config config) {
         this.config = config;
     }
 
@@ -128,7 +128,7 @@ public class ApiClient {
     }
 
     public static class Config {
-        private Supplier<RequestSpecBuilder> reqSpecSupplier = () -> new RequestSpecBuilder()
+        protected Supplier<RequestSpecBuilder> reqSpecSupplier = () -> new RequestSpecBuilder()
                 .setBaseUri(BASE_URI)
                 .setConfig(config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(jackson())));
 

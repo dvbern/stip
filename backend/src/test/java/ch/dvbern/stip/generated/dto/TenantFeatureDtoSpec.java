@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   TenantFeatureDtoSpec.JSON_PROPERTY_ADAPTER_TYPE
 })
 @JsonTypeName("TenantFeature")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class TenantFeatureDtoSpec {
   public static final String JSON_PROPERTY_ENABLED = "enabled";
+  @jakarta.annotation.Nonnull
   private Boolean enabled;
 
   public static final String JSON_PROPERTY_ADAPTER_TYPE = "adapterType";
+  @jakarta.annotation.Nullable
   private SteuerdatenAdapterTypeDtoSpec adapterType;
 
   public TenantFeatureDtoSpec() {
   }
 
-  public TenantFeatureDtoSpec enabled(Boolean enabled) {
+  public TenantFeatureDtoSpec enabled(@jakarta.annotation.Nonnull Boolean enabled) {
     
     this.enabled = enabled;
     return this;
   }
 
-   /**
+  /**
    * Get enabled
    * @return enabled
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ENABLED)
+  @JsonProperty(value = JSON_PROPERTY_ENABLED, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getEnabled() {
@@ -62,25 +64,24 @@ public class TenantFeatureDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENABLED)
+  @JsonProperty(value = JSON_PROPERTY_ENABLED, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEnabled(Boolean enabled) {
+  public void setEnabled(@jakarta.annotation.Nonnull Boolean enabled) {
     this.enabled = enabled;
   }
 
-
-  public TenantFeatureDtoSpec adapterType(SteuerdatenAdapterTypeDtoSpec adapterType) {
+  public TenantFeatureDtoSpec adapterType(@jakarta.annotation.Nullable SteuerdatenAdapterTypeDtoSpec adapterType) {
     
     this.adapterType = adapterType;
     return this;
   }
 
-   /**
+  /**
    * Get adapterType
    * @return adapterType
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ADAPTER_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_ADAPTER_TYPE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public SteuerdatenAdapterTypeDtoSpec getAdapterType() {
@@ -88,11 +89,12 @@ public class TenantFeatureDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ADAPTER_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_ADAPTER_TYPE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAdapterType(SteuerdatenAdapterTypeDtoSpec adapterType) {
+  public void setAdapterType(@jakarta.annotation.Nullable SteuerdatenAdapterTypeDtoSpec adapterType) {
     this.adapterType = adapterType;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class TenantFeatureDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

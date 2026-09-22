@@ -17,17 +17,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("ApplyDemoDataResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ApplyDemoDataResponseDto  implements Serializable {
-  private @Valid UUID gesuchId;
-  private @Valid UUID gesuchTrancheId;
-  private @Valid LocalDate gueltigAb;
-  private @Valid LocalDate gueltigBis;
-  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
-  private @Valid DemoDataTestBerechnungResultatDto berechnungResultat;
+  private UUID gesuchId;
+  private UUID gesuchTrancheId;
+  private LocalDate gueltigAb;
+  private LocalDate gueltigBis;
+  private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+  private DemoDataTestBerechnungResultatDto berechnungResultat;
 
   protected ApplyDemoDataResponseDto(ApplyDemoDataResponseDtoBuilder<?, ?> b) {
     this.gesuchId = b.gesuchId;
@@ -49,13 +49,12 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
+  @JsonProperty(required = true, value = "gesuchId")
+  @NotNull public UUID getGesuchId() {
     return gesuchId;
   }
 
-  @JsonProperty("gesuchId")
+  @JsonProperty(required = true, value = "gesuchId")
   public void setGesuchId(UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
@@ -68,13 +67,12 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchTrancheId")
-  @NotNull
-  public UUID getGesuchTrancheId() {
+  @JsonProperty(required = true, value = "gesuchTrancheId")
+  @NotNull public UUID getGesuchTrancheId() {
     return gesuchTrancheId;
   }
 
-  @JsonProperty("gesuchTrancheId")
+  @JsonProperty(required = true, value = "gesuchTrancheId")
   public void setGesuchTrancheId(UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
@@ -87,13 +85,12 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("gueltigAb")
-  @NotNull
-  public LocalDate getGueltigAb() {
+  @JsonProperty(required = true, value = "gueltigAb")
+  @NotNull public LocalDate getGueltigAb() {
     return gueltigAb;
   }
 
-  @JsonProperty("gueltigAb")
+  @JsonProperty(required = true, value = "gueltigAb")
   public void setGueltigAb(LocalDate gueltigAb) {
     this.gueltigAb = gueltigAb;
   }
@@ -106,13 +103,12 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("gueltigBis")
-  @NotNull
-  public LocalDate getGueltigBis() {
+  @JsonProperty(required = true, value = "gueltigBis")
+  @NotNull public LocalDate getGueltigBis() {
     return gueltigBis;
   }
 
-  @JsonProperty("gueltigBis")
+  @JsonProperty(required = true, value = "gueltigBis")
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
   }
@@ -125,13 +121,12 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchStatus")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
+  @JsonProperty(required = true, value = "gesuchStatus")
+  @NotNull public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
-  @JsonProperty("gesuchStatus")
+  @JsonProperty(required = true, value = "gesuchStatus")
   public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
@@ -144,13 +139,12 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("berechnungResultat")
-  @NotNull
-  public DemoDataTestBerechnungResultatDto getBerechnungResultat() {
+  @JsonProperty(required = true, value = "berechnungResultat")
+  @NotNull @Valid public DemoDataTestBerechnungResultatDto getBerechnungResultat() {
     return berechnungResultat;
   }
 
-  @JsonProperty("berechnungResultat")
+  @JsonProperty(required = true, value = "berechnungResultat")
   public void setBerechnungResultat(DemoDataTestBerechnungResultatDto berechnungResultat) {
     this.berechnungResultat = berechnungResultat;
   }
@@ -198,10 +192,7 @@ public class ApplyDemoDataResponseDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -259,4 +250,3 @@ public class ApplyDemoDataResponseDto  implements Serializable {
     }
   }
 }
-

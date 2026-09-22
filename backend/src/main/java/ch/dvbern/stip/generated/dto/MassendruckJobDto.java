@@ -15,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("MassendruckJob")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class MassendruckJobDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String userErstellt;
-  private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
-  private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp;
+  private UUID id;
+  private String userErstellt;
+  private java.time.LocalDateTime timestampErstellt;
+  private ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
+  private ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp;
 
   protected MassendruckJobDto(MassendruckJobDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -45,13 +45,12 @@ public class MassendruckJobDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -64,13 +63,12 @@ public class MassendruckJobDto  implements Serializable {
   }
 
   
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
+  @JsonProperty(required = true, value = "userErstellt")
+  @NotNull public String getUserErstellt() {
     return userErstellt;
   }
 
-  @JsonProperty("userErstellt")
+  @JsonProperty(required = true, value = "userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
   }
@@ -83,13 +81,12 @@ public class MassendruckJobDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public java.time.LocalDateTime getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -102,13 +99,12 @@ public class MassendruckJobDto  implements Serializable {
   }
 
   
-  @JsonProperty("massendruckJobStatus")
-  @NotNull
-  public ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus getMassendruckJobStatus() {
+  @JsonProperty(required = true, value = "massendruckJobStatus")
+  @NotNull public ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus getMassendruckJobStatus() {
     return massendruckJobStatus;
   }
 
-  @JsonProperty("massendruckJobStatus")
+  @JsonProperty(required = true, value = "massendruckJobStatus")
   public void setMassendruckJobStatus(ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus) {
     this.massendruckJobStatus = massendruckJobStatus;
   }
@@ -121,13 +117,12 @@ public class MassendruckJobDto  implements Serializable {
   }
 
   
-  @JsonProperty("massendruckJobTyp")
-  @NotNull
-  public ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp getMassendruckJobTyp() {
+  @JsonProperty(required = true, value = "massendruckJobTyp")
+  @NotNull public ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp getMassendruckJobTyp() {
     return massendruckJobTyp;
   }
 
-  @JsonProperty("massendruckJobTyp")
+  @JsonProperty(required = true, value = "massendruckJobTyp")
   public void setMassendruckJobTyp(ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp) {
     this.massendruckJobTyp = massendruckJobTyp;
   }
@@ -173,10 +168,7 @@ public class MassendruckJobDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -229,4 +221,3 @@ public class MassendruckJobDto  implements Serializable {
     }
   }
 }
-

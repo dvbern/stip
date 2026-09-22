@@ -18,14 +18,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("ValidationReport")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ValidationReportDto  implements Serializable {
-  private @Valid List<ValidationMessageDto> validationErrors = new ArrayList<>();
-  private @Valid List<ValidationMessageDto> validationWarnings = new ArrayList<>();
-  private @Valid Boolean hasDocuments;
+  private @Valid List<@Valid ValidationMessageDto> validationErrors = new ArrayList<>();
+  private @Valid List<@Valid ValidationMessageDto> validationWarnings = new ArrayList<>();
+  private Boolean hasDocuments;
 
   protected ValidationReportDto(ValidationReportDtoBuilder<?, ?> b) {
     this.validationErrors = b.validationErrors;
@@ -38,20 +38,19 @@ public class ValidationReportDto  implements Serializable {
 
   /**
    **/
-  public ValidationReportDto validationErrors(List<ValidationMessageDto> validationErrors) {
+  public ValidationReportDto validationErrors(List<@Valid ValidationMessageDto> validationErrors) {
     this.validationErrors = validationErrors;
     return this;
   }
 
   
-  @JsonProperty("validationErrors")
-  @NotNull
-  public List<ValidationMessageDto> getValidationErrors() {
+  @JsonProperty(required = true, value = "validationErrors")
+  @NotNull @Valid public List<@Valid ValidationMessageDto> getValidationErrors() {
     return validationErrors;
   }
 
-  @JsonProperty("validationErrors")
-  public void setValidationErrors(List<ValidationMessageDto> validationErrors) {
+  @JsonProperty(required = true, value = "validationErrors")
+  public void setValidationErrors(List<@Valid ValidationMessageDto> validationErrors) {
     this.validationErrors = validationErrors;
   }
 
@@ -73,20 +72,19 @@ public class ValidationReportDto  implements Serializable {
   }
   /**
    **/
-  public ValidationReportDto validationWarnings(List<ValidationMessageDto> validationWarnings) {
+  public ValidationReportDto validationWarnings(List<@Valid ValidationMessageDto> validationWarnings) {
     this.validationWarnings = validationWarnings;
     return this;
   }
 
   
-  @JsonProperty("validationWarnings")
-  @NotNull
-  public List<ValidationMessageDto> getValidationWarnings() {
+  @JsonProperty(required = true, value = "validationWarnings")
+  @NotNull @Valid public List<@Valid ValidationMessageDto> getValidationWarnings() {
     return validationWarnings;
   }
 
-  @JsonProperty("validationWarnings")
-  public void setValidationWarnings(List<ValidationMessageDto> validationWarnings) {
+  @JsonProperty(required = true, value = "validationWarnings")
+  public void setValidationWarnings(List<@Valid ValidationMessageDto> validationWarnings) {
     this.validationWarnings = validationWarnings;
   }
 
@@ -162,10 +160,7 @@ public class ValidationReportDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -208,4 +203,3 @@ public class ValidationReportDto  implements Serializable {
     }
   }
 }
-

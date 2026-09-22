@@ -14,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GetSteuerdatenFromPortRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GetSteuerdatenFromPortRequestDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
-  private @Valid Integer steuerjahr;
+  private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
+  private Integer steuerjahr;
 
   protected GetSteuerdatenFromPortRequestDto(GetSteuerdatenFromPortRequestDtoBuilder<?, ?> b) {
     this.steuerdatenTyp = b.steuerdatenTyp;
@@ -38,13 +38,12 @@ public class GetSteuerdatenFromPortRequestDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuerdatenTyp")
-  @NotNull
-  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getSteuerdatenTyp() {
+  @JsonProperty(required = true, value = "steuerdatenTyp")
+  @NotNull public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getSteuerdatenTyp() {
     return steuerdatenTyp;
   }
 
-  @JsonProperty("steuerdatenTyp")
+  @JsonProperty(required = true, value = "steuerdatenTyp")
   public void setSteuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
     this.steuerdatenTyp = steuerdatenTyp;
   }
@@ -57,13 +56,12 @@ public class GetSteuerdatenFromPortRequestDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuerjahr")
-  @NotNull
-  public Integer getSteuerjahr() {
+  @JsonProperty(required = true, value = "steuerjahr")
+  @NotNull public Integer getSteuerjahr() {
     return steuerjahr;
   }
 
-  @JsonProperty("steuerjahr")
+  @JsonProperty(required = true, value = "steuerjahr")
   public void setSteuerjahr(Integer steuerjahr) {
     this.steuerjahr = steuerjahr;
   }
@@ -103,10 +101,7 @@ public class GetSteuerdatenFromPortRequestDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +139,3 @@ public class GetSteuerdatenFromPortRequestDto  implements Serializable {
     }
   }
 }
-

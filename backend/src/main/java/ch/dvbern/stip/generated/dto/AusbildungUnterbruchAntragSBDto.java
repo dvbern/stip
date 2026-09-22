@@ -20,26 +20,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungUnterbruchAntragSB")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungUnterbruchAntragSBDto  implements Serializable {
-  private @Valid String kommentarGS;
-  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
-  private @Valid LocalDate startDate;
-  private @Valid LocalDate endDate;
-  private @Valid UUID id;
-  private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid String userErstellt;
-  private @Valid Boolean canAntragAkzeptieren;
-  private @Valid LocalDate unterbruchLatestEndDate;
-  private @Valid LocalDate unterbruchEarliestStartDate;
-  private @Valid List<DokumentDto> dokuments = new ArrayList<>();
-  private @Valid UUID gesuchId;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
-  private @Valid String kommentarSB;
-  private @Valid Integer monateOhneAnspruch;
+  private String kommentarGS;
+  private org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
+  private LocalDate startDate;
+  private LocalDate endDate;
+  private UUID id;
+  private java.time.LocalDateTime timestampErstellt;
+  private String userErstellt;
+  private Boolean canAntragAkzeptieren;
+  private LocalDate unterbruchLatestEndDate;
+  private LocalDate unterbruchEarliestStartDate;
+  private @Valid List<@Valid DokumentDto> dokuments = new ArrayList<>();
+  private UUID gesuchId;
+  private ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
+  private String kommentarSB;
+  private Integer monateOhneAnspruch;
 
   protected AusbildungUnterbruchAntragSBDto(AusbildungUnterbruchAntragSBDtoBuilder<?, ?> b) {
     this.kommentarGS = b.kommentarGS;
@@ -70,13 +70,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentarGS")
-  @NotNull
-  public String getKommentarGS() {
+  @JsonProperty(required = true, value = "kommentarGS")
+  @NotNull public String getKommentarGS() {
     return kommentarGS;
   }
 
-  @JsonProperty("kommentarGS")
+  @JsonProperty(required = true, value = "kommentarGS")
   public void setKommentarGS(String kommentarGS) {
     this.kommentarGS = kommentarGS;
   }
@@ -89,13 +88,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("fileUpload")
-  @NotNull
-  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
+  @JsonProperty(required = true, value = "fileUpload")
+  @NotNull @Valid public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
     return fileUpload;
   }
 
-  @JsonProperty("fileUpload")
+  @JsonProperty(required = true, value = "fileUpload")
   public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
     this.fileUpload = fileUpload;
   }
@@ -108,13 +106,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("startDate")
-  @NotNull
-  public LocalDate getStartDate() {
+  @JsonProperty(required = true, value = "startDate")
+  @NotNull public LocalDate getStartDate() {
     return startDate;
   }
 
-  @JsonProperty("startDate")
+  @JsonProperty(required = true, value = "startDate")
   public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
@@ -127,13 +124,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("endDate")
-  @NotNull
-  public LocalDate getEndDate() {
+  @JsonProperty(required = true, value = "endDate")
+  @NotNull public LocalDate getEndDate() {
     return endDate;
   }
 
-  @JsonProperty("endDate")
+  @JsonProperty(required = true, value = "endDate")
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
   }
@@ -146,13 +142,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -165,13 +160,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public java.time.LocalDateTime getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -184,13 +178,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
+  @JsonProperty(required = true, value = "userErstellt")
+  @NotNull public String getUserErstellt() {
     return userErstellt;
   }
 
-  @JsonProperty("userErstellt")
+  @JsonProperty(required = true, value = "userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
   }
@@ -203,13 +196,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("canAntragAkzeptieren")
-  @NotNull
-  public Boolean getCanAntragAkzeptieren() {
+  @JsonProperty(required = true, value = "canAntragAkzeptieren")
+  @NotNull public Boolean getCanAntragAkzeptieren() {
     return canAntragAkzeptieren;
   }
 
-  @JsonProperty("canAntragAkzeptieren")
+  @JsonProperty(required = true, value = "canAntragAkzeptieren")
   public void setCanAntragAkzeptieren(Boolean canAntragAkzeptieren) {
     this.canAntragAkzeptieren = canAntragAkzeptieren;
   }
@@ -222,13 +214,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("unterbruchLatestEndDate")
-  @NotNull
-  public LocalDate getUnterbruchLatestEndDate() {
+  @JsonProperty(required = true, value = "unterbruchLatestEndDate")
+  @NotNull public LocalDate getUnterbruchLatestEndDate() {
     return unterbruchLatestEndDate;
   }
 
-  @JsonProperty("unterbruchLatestEndDate")
+  @JsonProperty(required = true, value = "unterbruchLatestEndDate")
   public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
     this.unterbruchLatestEndDate = unterbruchLatestEndDate;
   }
@@ -241,33 +232,31 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("unterbruchEarliestStartDate")
-  @NotNull
-  public LocalDate getUnterbruchEarliestStartDate() {
+  @JsonProperty(required = true, value = "unterbruchEarliestStartDate")
+  @NotNull public LocalDate getUnterbruchEarliestStartDate() {
     return unterbruchEarliestStartDate;
   }
 
-  @JsonProperty("unterbruchEarliestStartDate")
+  @JsonProperty(required = true, value = "unterbruchEarliestStartDate")
   public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
     this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
 
   /**
    **/
-  public AusbildungUnterbruchAntragSBDto dokuments(List<DokumentDto> dokuments) {
+  public AusbildungUnterbruchAntragSBDto dokuments(List<@Valid DokumentDto> dokuments) {
     this.dokuments = dokuments;
     return this;
   }
 
   
-  @JsonProperty("dokuments")
-  @NotNull
-  public List<DokumentDto> getDokuments() {
+  @JsonProperty(required = true, value = "dokuments")
+  @NotNull @Valid public List<@Valid DokumentDto> getDokuments() {
     return dokuments;
   }
 
-  @JsonProperty("dokuments")
-  public void setDokuments(List<DokumentDto> dokuments) {
+  @JsonProperty(required = true, value = "dokuments")
+  public void setDokuments(List<@Valid DokumentDto> dokuments) {
     this.dokuments = dokuments;
   }
 
@@ -295,13 +284,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
+  @JsonProperty(required = true, value = "gesuchId")
+  @NotNull public UUID getGesuchId() {
     return gesuchId;
   }
 
-  @JsonProperty("gesuchId")
+  @JsonProperty(required = true, value = "gesuchId")
   public void setGesuchId(UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
@@ -314,13 +302,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("status")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus getStatus() {
+  @JsonProperty(required = true, value = "status")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus getStatus() {
     return status;
   }
 
-  @JsonProperty("status")
+  @JsonProperty(required = true, value = "status")
   public void setStatus(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
     this.status = status;
   }
@@ -422,10 +409,7 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -528,4 +512,3 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     }
   }
 }
-

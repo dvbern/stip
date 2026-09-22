@@ -207,7 +207,7 @@ public class PersoenlichesBudgetCalculator {
             renten.setPartnerValue(partnerName, einnahmenKostenPartner.getRenten());
             ergaenzungsleistungen.setPartnerValue(partnerName, einnahmenKostenPartner.getErgaenzungsleistungen());
             andereEinnahmen.setPartnerValue(partnerName, einnahmenKostenPartner.getAndereEinnahmen());
-            beitraegeGemeindeInstitutionen.setPersonValue(partnerName, einnahmenKostenPartner.getBeitraege());
+            beitraegeGemeindeInstitutionen.setPartnerValue(partnerName, einnahmenKostenPartner.getBeitraege());
             steuerbaresVermoegen += BernCalculatorUtil.intOrZero(einnahmenKostenPartner.getVermoegen());
         }
 

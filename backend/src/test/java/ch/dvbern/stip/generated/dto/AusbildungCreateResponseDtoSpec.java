@@ -36,35 +36,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungCreateResponseDtoSpec.JSON_PROPERTY_ERROR
 })
 @JsonTypeName("AusbildungCreateResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungCreateResponseDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNG = "ausbildung";
+  @jakarta.annotation.Nullable
   private AusbildungDtoSpec ausbildung;
 
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  @jakarta.annotation.Nullable
   private UUID gesuchId;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  @jakarta.annotation.Nullable
   private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_ERROR = "error";
+  @jakarta.annotation.Nullable
   private GesuchsperiodeSelectErrorDtoSpec error;
 
   public AusbildungCreateResponseDtoSpec() {
   }
 
-  public AusbildungCreateResponseDtoSpec ausbildung(AusbildungDtoSpec ausbildung) {
+  public AusbildungCreateResponseDtoSpec ausbildung(@jakarta.annotation.Nullable AusbildungDtoSpec ausbildung) {
     
     this.ausbildung = ausbildung;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildung
    * @return ausbildung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public AusbildungDtoSpec getAusbildung() {
@@ -72,25 +76,24 @@ public class AusbildungCreateResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildung(AusbildungDtoSpec ausbildung) {
+  public void setAusbildung(@jakarta.annotation.Nullable AusbildungDtoSpec ausbildung) {
     this.ausbildung = ausbildung;
   }
 
-
-  public AusbildungCreateResponseDtoSpec gesuchId(UUID gesuchId) {
+  public AusbildungCreateResponseDtoSpec gesuchId(@jakarta.annotation.Nullable UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchId
    * @return gesuchId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getGesuchId() {
@@ -98,25 +101,24 @@ public class AusbildungCreateResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuchId(UUID gesuchId) {
+  public void setGesuchId(@jakarta.annotation.Nullable UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
 
-
-  public AusbildungCreateResponseDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public AusbildungCreateResponseDtoSpec gesuchTrancheId(@jakarta.annotation.Nullable UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheId
    * @return gesuchTrancheId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getGesuchTrancheId() {
@@ -124,25 +126,24 @@ public class AusbildungCreateResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+  public void setGesuchTrancheId(@jakarta.annotation.Nullable UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
 
-
-  public AusbildungCreateResponseDtoSpec error(GesuchsperiodeSelectErrorDtoSpec error) {
+  public AusbildungCreateResponseDtoSpec error(@jakarta.annotation.Nullable GesuchsperiodeSelectErrorDtoSpec error) {
     
     this.error = error;
     return this;
   }
 
-   /**
+  /**
    * Get error
    * @return error
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonProperty(value = JSON_PROPERTY_ERROR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchsperiodeSelectErrorDtoSpec getError() {
@@ -150,11 +151,12 @@ public class AusbildungCreateResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonProperty(value = JSON_PROPERTY_ERROR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setError(GesuchsperiodeSelectErrorDtoSpec error) {
+  public void setError(@jakarta.annotation.Nullable GesuchsperiodeSelectErrorDtoSpec error) {
     this.error = error;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -193,10 +195,7 @@ public class AusbildungCreateResponseDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -22,17 +22,12 @@ import ch.dvbern.stip.integration.pdf.domain.qualifier.PdfQualifierLiteral;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class PdfPortFactory {
     @Any
-    @Inject
     Instance<PdfPort> pdfPorts;
 
     private final TenantService tenantService;

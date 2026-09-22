@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   NullableDarlehenDokumentDtoSpec.JSON_PROPERTY_VALUE
 })
 @JsonTypeName("NullableDarlehenDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class NullableDarlehenDokumentDtoSpec {
   public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private DarlehenDokumentDtoSpec value;
 
   public NullableDarlehenDokumentDtoSpec() {
   }
 
-  public NullableDarlehenDokumentDtoSpec value(DarlehenDokumentDtoSpec value) {
+  public NullableDarlehenDokumentDtoSpec value(@jakarta.annotation.Nullable DarlehenDokumentDtoSpec value) {
     
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DarlehenDokumentDtoSpec getValue() {
@@ -58,11 +59,12 @@ public class NullableDarlehenDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setValue(DarlehenDokumentDtoSpec value) {
+  public void setValue(@jakarta.annotation.Nullable DarlehenDokumentDtoSpec value) {
     this.value = value;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class NullableDarlehenDokumentDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

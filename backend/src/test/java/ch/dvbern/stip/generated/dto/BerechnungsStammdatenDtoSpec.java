@@ -41,59 +41,71 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_ANZAHL_MONATE
 })
 @JsonTypeName("BerechnungsStammdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BerechnungsStammdatenDtoSpec {
   public static final String JSON_PROPERTY_MAX_SAEULE3A = "maxSaeule3a";
+  @jakarta.annotation.Nonnull
   private Integer maxSaeule3a;
 
   public static final String JSON_PROPERTY_EINKOMMENSFREIBETRAG = "einkommensfreibetrag";
+  @jakarta.annotation.Nonnull
   private Integer einkommensfreibetrag;
 
   public static final String JSON_PROPERTY_ABZUGSLIMITE = "abzugslimite";
+  @jakarta.annotation.Nonnull
   private Integer abzugslimite;
 
   public static final String JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN = "freibetragErwerbseinkommen";
+  @jakarta.annotation.Nonnull
   private Integer freibetragErwerbseinkommen;
 
   public static final String JSON_PROPERTY_FREIBETRAG_VERMOEGEN = "freibetragVermoegen";
+  @jakarta.annotation.Nonnull
   private Integer freibetragVermoegen;
 
   public static final String JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT = "vermoegensanteilInProzent";
+  @jakarta.annotation.Nonnull
   private Integer vermoegensanteilInProzent;
 
   public static final String JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE = "anzahlWochenLehre";
+  @jakarta.annotation.Nonnull
   private Integer anzahlWochenLehre;
 
   public static final String JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE = "anzahlWochenSchule";
+  @jakarta.annotation.Nonnull
   private Integer anzahlWochenSchule;
 
   public static final String JSON_PROPERTY_PREIS_PRO_MAHLZEIT = "preisProMahlzeit";
+  @jakarta.annotation.Nonnull
   private Integer preisProMahlzeit;
 
   public static final String JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM = "stipLimiteMinimalstipendium";
+  @jakarta.annotation.Nonnull
   private Integer stipLimiteMinimalstipendium;
 
   public static final String JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG = "limiteAlterAntragsstellerHalbierungElternbeitrag";
+  @jakarta.annotation.Nonnull
   private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
 
   public static final String JSON_PROPERTY_ANZAHL_MONATE = "anzahlMonate";
+  @jakarta.annotation.Nonnull
   private Integer anzahlMonate;
 
   public BerechnungsStammdatenDtoSpec() {
   }
 
-  public BerechnungsStammdatenDtoSpec maxSaeule3a(Integer maxSaeule3a) {
+  public BerechnungsStammdatenDtoSpec maxSaeule3a(@jakarta.annotation.Nonnull Integer maxSaeule3a) {
     
     this.maxSaeule3a = maxSaeule3a;
     return this;
   }
 
-   /**
+  /**
    * Get maxSaeule3a
    * @return maxSaeule3a
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MAX_SAEULE3A)
+  @JsonProperty(value = JSON_PROPERTY_MAX_SAEULE3A, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getMaxSaeule3a() {
@@ -101,25 +113,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MAX_SAEULE3A)
+  @JsonProperty(value = JSON_PROPERTY_MAX_SAEULE3A, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMaxSaeule3a(Integer maxSaeule3a) {
+  public void setMaxSaeule3a(@jakarta.annotation.Nonnull Integer maxSaeule3a) {
     this.maxSaeule3a = maxSaeule3a;
   }
 
-
-  public BerechnungsStammdatenDtoSpec einkommensfreibetrag(Integer einkommensfreibetrag) {
+  public BerechnungsStammdatenDtoSpec einkommensfreibetrag(@jakarta.annotation.Nonnull Integer einkommensfreibetrag) {
     
     this.einkommensfreibetrag = einkommensfreibetrag;
     return this;
   }
 
-   /**
+  /**
    * Get einkommensfreibetrag
    * @return einkommensfreibetrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
+  @JsonProperty(value = JSON_PROPERTY_EINKOMMENSFREIBETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEinkommensfreibetrag() {
@@ -127,25 +138,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
+  @JsonProperty(value = JSON_PROPERTY_EINKOMMENSFREIBETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
+  public void setEinkommensfreibetrag(@jakarta.annotation.Nonnull Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
   }
 
-
-  public BerechnungsStammdatenDtoSpec abzugslimite(Integer abzugslimite) {
+  public BerechnungsStammdatenDtoSpec abzugslimite(@jakarta.annotation.Nonnull Integer abzugslimite) {
     
     this.abzugslimite = abzugslimite;
     return this;
   }
 
-   /**
+  /**
    * Get abzugslimite
    * @return abzugslimite
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ABZUGSLIMITE)
+  @JsonProperty(value = JSON_PROPERTY_ABZUGSLIMITE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAbzugslimite() {
@@ -153,25 +163,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ABZUGSLIMITE)
+  @JsonProperty(value = JSON_PROPERTY_ABZUGSLIMITE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAbzugslimite(Integer abzugslimite) {
+  public void setAbzugslimite(@jakarta.annotation.Nonnull Integer abzugslimite) {
     this.abzugslimite = abzugslimite;
   }
 
-
-  public BerechnungsStammdatenDtoSpec freibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
+  public BerechnungsStammdatenDtoSpec freibetragErwerbseinkommen(@jakarta.annotation.Nonnull Integer freibetragErwerbseinkommen) {
     
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
     return this;
   }
 
-   /**
+  /**
    * Get freibetragErwerbseinkommen
    * @return freibetragErwerbseinkommen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN)
+  @JsonProperty(value = JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFreibetragErwerbseinkommen() {
@@ -179,25 +188,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN)
+  @JsonProperty(value = JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFreibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
+  public void setFreibetragErwerbseinkommen(@jakarta.annotation.Nonnull Integer freibetragErwerbseinkommen) {
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
   }
 
-
-  public BerechnungsStammdatenDtoSpec freibetragVermoegen(Integer freibetragVermoegen) {
+  public BerechnungsStammdatenDtoSpec freibetragVermoegen(@jakarta.annotation.Nonnull Integer freibetragVermoegen) {
     
     this.freibetragVermoegen = freibetragVermoegen;
     return this;
   }
 
-   /**
+  /**
    * Get freibetragVermoegen
    * @return freibetragVermoegen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
+  @JsonProperty(value = JSON_PROPERTY_FREIBETRAG_VERMOEGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFreibetragVermoegen() {
@@ -205,25 +213,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
+  @JsonProperty(value = JSON_PROPERTY_FREIBETRAG_VERMOEGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFreibetragVermoegen(Integer freibetragVermoegen) {
+  public void setFreibetragVermoegen(@jakarta.annotation.Nonnull Integer freibetragVermoegen) {
     this.freibetragVermoegen = freibetragVermoegen;
   }
 
-
-  public BerechnungsStammdatenDtoSpec vermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+  public BerechnungsStammdatenDtoSpec vermoegensanteilInProzent(@jakarta.annotation.Nonnull Integer vermoegensanteilInProzent) {
     
     this.vermoegensanteilInProzent = vermoegensanteilInProzent;
     return this;
   }
 
-   /**
+  /**
    * Get vermoegensanteilInProzent
    * @return vermoegensanteilInProzent
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT)
+  @JsonProperty(value = JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVermoegensanteilInProzent() {
@@ -231,25 +238,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT)
+  @JsonProperty(value = JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+  public void setVermoegensanteilInProzent(@jakarta.annotation.Nonnull Integer vermoegensanteilInProzent) {
     this.vermoegensanteilInProzent = vermoegensanteilInProzent;
   }
 
-
-  public BerechnungsStammdatenDtoSpec anzahlWochenLehre(Integer anzahlWochenLehre) {
+  public BerechnungsStammdatenDtoSpec anzahlWochenLehre(@jakarta.annotation.Nonnull Integer anzahlWochenLehre) {
     
     this.anzahlWochenLehre = anzahlWochenLehre;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlWochenLehre
    * @return anzahlWochenLehre
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlWochenLehre() {
@@ -257,25 +263,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlWochenLehre(Integer anzahlWochenLehre) {
+  public void setAnzahlWochenLehre(@jakarta.annotation.Nonnull Integer anzahlWochenLehre) {
     this.anzahlWochenLehre = anzahlWochenLehre;
   }
 
-
-  public BerechnungsStammdatenDtoSpec anzahlWochenSchule(Integer anzahlWochenSchule) {
+  public BerechnungsStammdatenDtoSpec anzahlWochenSchule(@jakarta.annotation.Nonnull Integer anzahlWochenSchule) {
     
     this.anzahlWochenSchule = anzahlWochenSchule;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlWochenSchule
    * @return anzahlWochenSchule
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlWochenSchule() {
@@ -283,25 +288,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlWochenSchule(Integer anzahlWochenSchule) {
+  public void setAnzahlWochenSchule(@jakarta.annotation.Nonnull Integer anzahlWochenSchule) {
     this.anzahlWochenSchule = anzahlWochenSchule;
   }
 
-
-  public BerechnungsStammdatenDtoSpec preisProMahlzeit(Integer preisProMahlzeit) {
+  public BerechnungsStammdatenDtoSpec preisProMahlzeit(@jakarta.annotation.Nonnull Integer preisProMahlzeit) {
     
     this.preisProMahlzeit = preisProMahlzeit;
     return this;
   }
 
-   /**
+  /**
    * Get preisProMahlzeit
    * @return preisProMahlzeit
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PREIS_PRO_MAHLZEIT)
+  @JsonProperty(value = JSON_PROPERTY_PREIS_PRO_MAHLZEIT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPreisProMahlzeit() {
@@ -309,25 +313,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PREIS_PRO_MAHLZEIT)
+  @JsonProperty(value = JSON_PROPERTY_PREIS_PRO_MAHLZEIT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPreisProMahlzeit(Integer preisProMahlzeit) {
+  public void setPreisProMahlzeit(@jakarta.annotation.Nonnull Integer preisProMahlzeit) {
     this.preisProMahlzeit = preisProMahlzeit;
   }
 
-
-  public BerechnungsStammdatenDtoSpec stipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
+  public BerechnungsStammdatenDtoSpec stipLimiteMinimalstipendium(@jakarta.annotation.Nonnull Integer stipLimiteMinimalstipendium) {
     
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
     return this;
   }
 
-   /**
+  /**
    * Get stipLimiteMinimalstipendium
    * @return stipLimiteMinimalstipendium
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM)
+  @JsonProperty(value = JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getStipLimiteMinimalstipendium() {
@@ -335,25 +338,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM)
+  @JsonProperty(value = JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
+  public void setStipLimiteMinimalstipendium(@jakarta.annotation.Nonnull Integer stipLimiteMinimalstipendium) {
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
   }
 
-
-  public BerechnungsStammdatenDtoSpec limiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
+  public BerechnungsStammdatenDtoSpec limiteAlterAntragsstellerHalbierungElternbeitrag(@jakarta.annotation.Nonnull Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
     
     this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
     return this;
   }
 
-   /**
+  /**
    * Get limiteAlterAntragsstellerHalbierungElternbeitrag
    * @return limiteAlterAntragsstellerHalbierungElternbeitrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG)
+  @JsonProperty(value = JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getLimiteAlterAntragsstellerHalbierungElternbeitrag() {
@@ -361,25 +363,24 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG)
+  @JsonProperty(value = JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLimiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
+  public void setLimiteAlterAntragsstellerHalbierungElternbeitrag(@jakarta.annotation.Nonnull Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
     this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
   }
 
-
-  public BerechnungsStammdatenDtoSpec anzahlMonate(Integer anzahlMonate) {
+  public BerechnungsStammdatenDtoSpec anzahlMonate(@jakarta.annotation.Nonnull Integer anzahlMonate) {
     
     this.anzahlMonate = anzahlMonate;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlMonate
    * @return anzahlMonate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlMonate() {
@@ -387,11 +388,12 @@ public class BerechnungsStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlMonate(Integer anzahlMonate) {
+  public void setAnzahlMonate(@jakarta.annotation.Nonnull Integer anzahlMonate) {
     this.anzahlMonate = anzahlMonate;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -446,10 +448,7 @@ public class BerechnungsStammdatenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

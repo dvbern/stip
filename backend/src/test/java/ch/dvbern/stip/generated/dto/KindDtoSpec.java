@@ -45,62 +45,75 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   KindDtoSpec.JSON_PROPERTY_ANDERE_EINNAHMEN
 })
 @JsonTypeName("Kind")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class KindDtoSpec {
   public static final String JSON_PROPERTY_ENTRY_ID = "entryId";
+  @jakarta.annotation.Nonnull
   private UUID entryId;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  @jakarta.annotation.Nonnull
   private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSITUATION = "ausbildungssituation";
+  @jakarta.annotation.Nonnull
   private AusbildungssituationDtoSpec ausbildungssituation;
 
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA = "wohnsitzAnteilPia";
+  @jakarta.annotation.Nonnull
   private Integer wohnsitzAnteilPia;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_UNTERHALTSBEITRAEGE = "unterhaltsbeitraege";
+  @jakarta.annotation.Nullable
   private Integer unterhaltsbeitraege;
 
   public static final String JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN = "kinderUndAusbildungszulagen";
+  @jakarta.annotation.Nullable
   private Integer kinderUndAusbildungszulagen;
 
   public static final String JSON_PROPERTY_RENTEN = "renten";
+  @jakarta.annotation.Nullable
   private Integer renten;
 
   public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
+  @jakarta.annotation.Nullable
   private Integer ergaenzungsleistungen;
 
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN = "betreuungskosten";
+  @jakarta.annotation.Nullable
   private Integer betreuungskosten;
 
   public static final String JSON_PROPERTY_ANDERE_EINNAHMEN = "andereEinnahmen";
+  @jakarta.annotation.Nullable
   private Integer andereEinnahmen;
 
   public KindDtoSpec() {
   }
 
-  public KindDtoSpec entryId(UUID entryId) {
+  public KindDtoSpec entryId(@jakarta.annotation.Nonnull UUID entryId) {
     
     this.entryId = entryId;
     return this;
   }
 
-   /**
+  /**
    * Get entryId
    * @return entryId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ENTRY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getEntryId() {
@@ -108,25 +121,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ENTRY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEntryId(UUID entryId) {
+  public void setEntryId(@jakarta.annotation.Nonnull UUID entryId) {
     this.entryId = entryId;
   }
 
-
-  public KindDtoSpec vorname(String vorname) {
+  public KindDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -134,25 +146,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public KindDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public KindDtoSpec geburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return geburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGeburtsdatum() {
@@ -160,25 +171,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
-
-  public KindDtoSpec ausbildungssituation(AusbildungssituationDtoSpec ausbildungssituation) {
+  public KindDtoSpec ausbildungssituation(@jakarta.annotation.Nonnull AusbildungssituationDtoSpec ausbildungssituation) {
     
     this.ausbildungssituation = ausbildungssituation;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungssituation
    * @return ausbildungssituation
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSITUATION)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSITUATION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungssituationDtoSpec getAusbildungssituation() {
@@ -186,25 +196,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSITUATION)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSITUATION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungssituation(AusbildungssituationDtoSpec ausbildungssituation) {
+  public void setAusbildungssituation(@jakarta.annotation.Nonnull AusbildungssituationDtoSpec ausbildungssituation) {
     this.ausbildungssituation = ausbildungssituation;
   }
 
-
-  public KindDtoSpec id(UUID id) {
+  public KindDtoSpec id(@jakarta.annotation.Nullable UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
@@ -212,25 +221,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nullable UUID id) {
     this.id = id;
   }
 
-
-  public KindDtoSpec wohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+  public KindDtoSpec wohnsitzAnteilPia(@jakarta.annotation.Nonnull Integer wohnsitzAnteilPia) {
     
     this.wohnsitzAnteilPia = wohnsitzAnteilPia;
     return this;
   }
 
-   /**
+  /**
    * Get wohnsitzAnteilPia
    * @return wohnsitzAnteilPia
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnsitzAnteilPia() {
@@ -238,25 +246,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
+  public void setWohnsitzAnteilPia(@jakarta.annotation.Nonnull Integer wohnsitzAnteilPia) {
     this.wohnsitzAnteilPia = wohnsitzAnteilPia;
   }
 
-
-  public KindDtoSpec nachname(String nachname) {
+  public KindDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -264,25 +271,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public KindDtoSpec unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+  public KindDtoSpec unterhaltsbeitraege(@jakarta.annotation.Nullable Integer unterhaltsbeitraege) {
     
     this.unterhaltsbeitraege = unterhaltsbeitraege;
     return this;
   }
 
-   /**
+  /**
    * Get unterhaltsbeitraege
    * @return unterhaltsbeitraege
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
+  @JsonProperty(value = JSON_PROPERTY_UNTERHALTSBEITRAEGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getUnterhaltsbeitraege() {
@@ -290,25 +296,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
+  @JsonProperty(value = JSON_PROPERTY_UNTERHALTSBEITRAEGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
+  public void setUnterhaltsbeitraege(@jakarta.annotation.Nullable Integer unterhaltsbeitraege) {
     this.unterhaltsbeitraege = unterhaltsbeitraege;
   }
 
-
-  public KindDtoSpec kinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
+  public KindDtoSpec kinderUndAusbildungszulagen(@jakarta.annotation.Nullable Integer kinderUndAusbildungszulagen) {
     
     this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
     return this;
   }
 
-   /**
+  /**
    * Get kinderUndAusbildungszulagen
    * @return kinderUndAusbildungszulagen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN)
+  @JsonProperty(value = JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getKinderUndAusbildungszulagen() {
@@ -316,25 +321,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN)
+  @JsonProperty(value = JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setKinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
+  public void setKinderUndAusbildungszulagen(@jakarta.annotation.Nullable Integer kinderUndAusbildungszulagen) {
     this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
   }
 
-
-  public KindDtoSpec renten(Integer renten) {
+  public KindDtoSpec renten(@jakarta.annotation.Nullable Integer renten) {
     
     this.renten = renten;
     return this;
   }
 
-   /**
+  /**
    * Get renten
    * @return renten
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_RENTEN)
+  @JsonProperty(value = JSON_PROPERTY_RENTEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getRenten() {
@@ -342,25 +346,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_RENTEN)
+  @JsonProperty(value = JSON_PROPERTY_RENTEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRenten(Integer renten) {
+  public void setRenten(@jakarta.annotation.Nullable Integer renten) {
     this.renten = renten;
   }
 
-
-  public KindDtoSpec ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+  public KindDtoSpec ergaenzungsleistungen(@jakarta.annotation.Nullable Integer ergaenzungsleistungen) {
     
     this.ergaenzungsleistungen = ergaenzungsleistungen;
     return this;
   }
 
-   /**
+  /**
    * Get ergaenzungsleistungen
    * @return ergaenzungsleistungen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getErgaenzungsleistungen() {
@@ -368,25 +371,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
+  public void setErgaenzungsleistungen(@jakarta.annotation.Nullable Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
   }
 
-
-  public KindDtoSpec betreuungskosten(Integer betreuungskosten) {
+  public KindDtoSpec betreuungskosten(@jakarta.annotation.Nullable Integer betreuungskosten) {
     
     this.betreuungskosten = betreuungskosten;
     return this;
   }
 
-   /**
+  /**
    * Get betreuungskosten
    * @return betreuungskosten
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_BETREUUNGSKOSTEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getBetreuungskosten() {
@@ -394,25 +396,24 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_BETREUUNGSKOSTEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetreuungskosten(Integer betreuungskosten) {
+  public void setBetreuungskosten(@jakarta.annotation.Nullable Integer betreuungskosten) {
     this.betreuungskosten = betreuungskosten;
   }
 
-
-  public KindDtoSpec andereEinnahmen(Integer andereEinnahmen) {
+  public KindDtoSpec andereEinnahmen(@jakarta.annotation.Nullable Integer andereEinnahmen) {
     
     this.andereEinnahmen = andereEinnahmen;
     return this;
   }
 
-   /**
+  /**
    * Get andereEinnahmen
    * @return andereEinnahmen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonProperty(value = JSON_PROPERTY_ANDERE_EINNAHMEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getAndereEinnahmen() {
@@ -420,11 +421,12 @@ public class KindDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonProperty(value = JSON_PROPERTY_ANDERE_EINNAHMEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAndereEinnahmen(Integer andereEinnahmen) {
+  public void setAndereEinnahmen(@jakarta.annotation.Nullable Integer andereEinnahmen) {
     this.andereEinnahmen = andereEinnahmen;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -481,10 +483,7 @@ public class KindDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

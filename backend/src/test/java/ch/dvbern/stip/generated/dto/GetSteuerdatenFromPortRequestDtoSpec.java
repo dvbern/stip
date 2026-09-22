@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GetSteuerdatenFromPortRequestDtoSpec.JSON_PROPERTY_STEUERJAHR
 })
 @JsonTypeName("GetSteuerdatenFromPortRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GetSteuerdatenFromPortRequestDtoSpec {
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
+  @jakarta.annotation.Nonnull
   private SteuerdatenTypDtoSpec steuerdatenTyp;
 
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
+  @jakarta.annotation.Nonnull
   private Integer steuerjahr;
 
   public GetSteuerdatenFromPortRequestDtoSpec() {
   }
 
-  public GetSteuerdatenFromPortRequestDtoSpec steuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
+  public GetSteuerdatenFromPortRequestDtoSpec steuerdatenTyp(@jakarta.annotation.Nonnull SteuerdatenTypDtoSpec steuerdatenTyp) {
     
     this.steuerdatenTyp = steuerdatenTyp;
     return this;
   }
 
-   /**
+  /**
    * Get steuerdatenTyp
    * @return steuerdatenTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN_TYP)
+  @JsonProperty(value = JSON_PROPERTY_STEUERDATEN_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SteuerdatenTypDtoSpec getSteuerdatenTyp() {
@@ -62,25 +64,24 @@ public class GetSteuerdatenFromPortRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN_TYP)
+  @JsonProperty(value = JSON_PROPERTY_STEUERDATEN_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
+  public void setSteuerdatenTyp(@jakarta.annotation.Nonnull SteuerdatenTypDtoSpec steuerdatenTyp) {
     this.steuerdatenTyp = steuerdatenTyp;
   }
 
-
-  public GetSteuerdatenFromPortRequestDtoSpec steuerjahr(Integer steuerjahr) {
+  public GetSteuerdatenFromPortRequestDtoSpec steuerjahr(@jakarta.annotation.Nonnull Integer steuerjahr) {
     
     this.steuerjahr = steuerjahr;
     return this;
   }
 
-   /**
+  /**
    * Get steuerjahr
    * @return steuerjahr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERJAHR)
+  @JsonProperty(value = JSON_PROPERTY_STEUERJAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuerjahr() {
@@ -88,11 +89,12 @@ public class GetSteuerdatenFromPortRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERJAHR)
+  @JsonProperty(value = JSON_PROPERTY_STEUERJAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuerjahr(Integer steuerjahr) {
+  public void setSteuerjahr(@jakarta.annotation.Nonnull Integer steuerjahr) {
     this.steuerjahr = steuerjahr;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class GetSteuerdatenFromPortRequestDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -15,21 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("LebenslaufItemUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class LebenslaufItemUpdateDto  implements Serializable {
-  private @Valid String von;
-  private @Valid String bis;
-  private @Valid ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
-  private @Valid UUID id;
-  private @Valid UUID abschlussId;
-  private @Valid Boolean ausbildungAbgeschlossen;
-  private @Valid String fachrichtungBerufsbezeichnung;
-  private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
-  private @Valid String taetigkeitsBeschreibung;
-  private @Valid Boolean invalid;
+  private String von;
+  private String bis;
+  private ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+  private UUID id;
+  private UUID abschlussId;
+  private Boolean ausbildungAbgeschlossen;
+  private String fachrichtungBerufsbezeichnung;
+  private ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
+  private String taetigkeitsBeschreibung;
+  private Boolean invalid;
 
   protected LebenslaufItemUpdateDto(LebenslaufItemUpdateDtoBuilder<?, ?> b) {
     this.von = b.von;
@@ -56,13 +56,12 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("von")
-  @NotNull
-  public String getVon() {
+  @JsonProperty(required = true, value = "von")
+  @NotNull public String getVon() {
     return von;
   }
 
-  @JsonProperty("von")
+  @JsonProperty(required = true, value = "von")
   public void setVon(String von) {
     this.von = von;
   }
@@ -76,13 +75,12 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("bis")
-  @NotNull
-  public String getBis() {
+  @JsonProperty(required = true, value = "bis")
+  @NotNull public String getBis() {
     return bis;
   }
 
-  @JsonProperty("bis")
+  @JsonProperty(required = true, value = "bis")
   public void setBis(String bis) {
     this.bis = bis;
   }
@@ -95,13 +93,12 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnsitz")
-  @NotNull
-  public ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton getWohnsitz() {
+  @JsonProperty(required = true, value = "wohnsitz")
+  @NotNull public ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton getWohnsitz() {
     return wohnsitz;
   }
 
-  @JsonProperty("wohnsitz")
+  @JsonProperty(required = true, value = "wohnsitz")
   public void setWohnsitz(ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz) {
     this.wohnsitz = wohnsitz;
   }
@@ -286,10 +283,7 @@ public class LebenslaufItemUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -367,4 +361,3 @@ public class LebenslaufItemUpdateDto  implements Serializable {
     }
   }
 }
-

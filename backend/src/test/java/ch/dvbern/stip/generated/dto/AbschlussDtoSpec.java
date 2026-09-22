@@ -47,59 +47,71 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AbschlussDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("Abschluss")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AbschlussDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSKATEGORIE = "ausbildungskategorie";
+  @jakarta.annotation.Nonnull
   private AusbildungskategorieDtoSpec ausbildungskategorie;
 
   public static final String JSON_PROPERTY_BILDUNGSKATEGORIE = "bildungskategorie";
+  @jakarta.annotation.Nonnull
   private BildungskategorieDtoSpec bildungskategorie;
 
   public static final String JSON_PROPERTY_BILDUNGSRICHTUNG = "bildungsrichtung";
+  @jakarta.annotation.Nonnull
   private BildungsrichtungDtoSpec bildungsrichtung;
 
   public static final String JSON_PROPERTY_BFS_KATEGORIE = "bfsKategorie";
+  @jakarta.annotation.Nonnull
   private Integer bfsKategorie;
 
   public static final String JSON_PROPERTY_BERUFSBEFAEHIGENDER_ABSCHLUSS = "berufsbefaehigenderAbschluss";
+  @jakarta.annotation.Nonnull
   private Boolean berufsbefaehigenderAbschluss;
 
   public static final String JSON_PROPERTY_FERIEN = "ferien";
+  @jakarta.annotation.Nonnull
   private FerienTypDtoSpec ferien;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  @jakarta.annotation.Nonnull
   private String bezeichnungDe;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  @jakarta.annotation.Nonnull
   private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET = "askForBerufsmaturitaet";
+  @jakarta.annotation.Nonnull
   private Boolean askForBerufsmaturitaet;
 
   public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
+  @jakarta.annotation.Nullable
   private AbschlussZusatzfrageDtoSpec zusatzfrage;
 
   public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  @jakarta.annotation.Nonnull
   private Boolean aktiv;
 
   public AbschlussDtoSpec() {
   }
 
-  public AbschlussDtoSpec id(UUID id) {
+  public AbschlussDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -107,25 +119,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public AbschlussDtoSpec ausbildungskategorie(AusbildungskategorieDtoSpec ausbildungskategorie) {
+  public AbschlussDtoSpec ausbildungskategorie(@jakarta.annotation.Nonnull AusbildungskategorieDtoSpec ausbildungskategorie) {
     
     this.ausbildungskategorie = ausbildungskategorie;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungskategorie
    * @return ausbildungskategorie
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSKATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungskategorieDtoSpec getAusbildungskategorie() {
@@ -133,25 +144,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSKATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungskategorie(AusbildungskategorieDtoSpec ausbildungskategorie) {
+  public void setAusbildungskategorie(@jakarta.annotation.Nonnull AusbildungskategorieDtoSpec ausbildungskategorie) {
     this.ausbildungskategorie = ausbildungskategorie;
   }
 
-
-  public AbschlussDtoSpec bildungskategorie(BildungskategorieDtoSpec bildungskategorie) {
+  public AbschlussDtoSpec bildungskategorie(@jakarta.annotation.Nonnull BildungskategorieDtoSpec bildungskategorie) {
     
     this.bildungskategorie = bildungskategorie;
     return this;
   }
 
-   /**
+  /**
    * Get bildungskategorie
    * @return bildungskategorie
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSKATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public BildungskategorieDtoSpec getBildungskategorie() {
@@ -159,25 +169,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSKATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBildungskategorie(BildungskategorieDtoSpec bildungskategorie) {
+  public void setBildungskategorie(@jakarta.annotation.Nonnull BildungskategorieDtoSpec bildungskategorie) {
     this.bildungskategorie = bildungskategorie;
   }
 
-
-  public AbschlussDtoSpec bildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+  public AbschlussDtoSpec bildungsrichtung(@jakarta.annotation.Nonnull BildungsrichtungDtoSpec bildungsrichtung) {
     
     this.bildungsrichtung = bildungsrichtung;
     return this;
   }
 
-   /**
+  /**
    * Get bildungsrichtung
    * @return bildungsrichtung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSRICHTUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public BildungsrichtungDtoSpec getBildungsrichtung() {
@@ -185,25 +194,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSRICHTUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+  public void setBildungsrichtung(@jakarta.annotation.Nonnull BildungsrichtungDtoSpec bildungsrichtung) {
     this.bildungsrichtung = bildungsrichtung;
   }
 
-
-  public AbschlussDtoSpec bfsKategorie(Integer bfsKategorie) {
+  public AbschlussDtoSpec bfsKategorie(@jakarta.annotation.Nonnull Integer bfsKategorie) {
     
     this.bfsKategorie = bfsKategorie;
     return this;
   }
 
-   /**
+  /**
    * Get bfsKategorie
    * @return bfsKategorie
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BFS_KATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_BFS_KATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBfsKategorie() {
@@ -211,25 +219,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BFS_KATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_BFS_KATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBfsKategorie(Integer bfsKategorie) {
+  public void setBfsKategorie(@jakarta.annotation.Nonnull Integer bfsKategorie) {
     this.bfsKategorie = bfsKategorie;
   }
 
-
-  public AbschlussDtoSpec berufsbefaehigenderAbschluss(Boolean berufsbefaehigenderAbschluss) {
+  public AbschlussDtoSpec berufsbefaehigenderAbschluss(@jakarta.annotation.Nonnull Boolean berufsbefaehigenderAbschluss) {
     
     this.berufsbefaehigenderAbschluss = berufsbefaehigenderAbschluss;
     return this;
   }
 
-   /**
+  /**
    * Get berufsbefaehigenderAbschluss
    * @return berufsbefaehigenderAbschluss
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERUFSBEFAEHIGENDER_ABSCHLUSS)
+  @JsonProperty(value = JSON_PROPERTY_BERUFSBEFAEHIGENDER_ABSCHLUSS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getBerufsbefaehigenderAbschluss() {
@@ -237,25 +244,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERUFSBEFAEHIGENDER_ABSCHLUSS)
+  @JsonProperty(value = JSON_PROPERTY_BERUFSBEFAEHIGENDER_ABSCHLUSS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerufsbefaehigenderAbschluss(Boolean berufsbefaehigenderAbschluss) {
+  public void setBerufsbefaehigenderAbschluss(@jakarta.annotation.Nonnull Boolean berufsbefaehigenderAbschluss) {
     this.berufsbefaehigenderAbschluss = berufsbefaehigenderAbschluss;
   }
 
-
-  public AbschlussDtoSpec ferien(FerienTypDtoSpec ferien) {
+  public AbschlussDtoSpec ferien(@jakarta.annotation.Nonnull FerienTypDtoSpec ferien) {
     
     this.ferien = ferien;
     return this;
   }
 
-   /**
+  /**
    * Get ferien
    * @return ferien
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FERIEN)
+  @JsonProperty(value = JSON_PROPERTY_FERIEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public FerienTypDtoSpec getFerien() {
@@ -263,25 +269,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FERIEN)
+  @JsonProperty(value = JSON_PROPERTY_FERIEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFerien(FerienTypDtoSpec ferien) {
+  public void setFerien(@jakarta.annotation.Nonnull FerienTypDtoSpec ferien) {
     this.ferien = ferien;
   }
 
-
-  public AbschlussDtoSpec bezeichnungDe(String bezeichnungDe) {
+  public AbschlussDtoSpec bezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungDe
    * @return bezeichnungDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungDe() {
@@ -289,25 +294,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
+  public void setBezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
 
-
-  public AbschlussDtoSpec bezeichnungFr(String bezeichnungFr) {
+  public AbschlussDtoSpec bezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungFr
    * @return bezeichnungFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungFr() {
@@ -315,25 +319,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
+  public void setBezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
 
-
-  public AbschlussDtoSpec askForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+  public AbschlussDtoSpec askForBerufsmaturitaet(@jakarta.annotation.Nonnull Boolean askForBerufsmaturitaet) {
     
     this.askForBerufsmaturitaet = askForBerufsmaturitaet;
     return this;
   }
 
-   /**
+  /**
    * Get askForBerufsmaturitaet
    * @return askForBerufsmaturitaet
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET)
+  @JsonProperty(value = JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAskForBerufsmaturitaet() {
@@ -341,25 +344,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET)
+  @JsonProperty(value = JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAskForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+  public void setAskForBerufsmaturitaet(@jakarta.annotation.Nonnull Boolean askForBerufsmaturitaet) {
     this.askForBerufsmaturitaet = askForBerufsmaturitaet;
   }
 
-
-  public AbschlussDtoSpec zusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
+  public AbschlussDtoSpec zusatzfrage(@jakarta.annotation.Nullable AbschlussZusatzfrageDtoSpec zusatzfrage) {
     
     this.zusatzfrage = zusatzfrage;
     return this;
   }
 
-   /**
+  /**
    * Get zusatzfrage
    * @return zusatzfrage
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ZUSATZFRAGE)
+  @JsonProperty(value = JSON_PROPERTY_ZUSATZFRAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public AbschlussZusatzfrageDtoSpec getZusatzfrage() {
@@ -367,25 +369,24 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZUSATZFRAGE)
+  @JsonProperty(value = JSON_PROPERTY_ZUSATZFRAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setZusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
+  public void setZusatzfrage(@jakarta.annotation.Nullable AbschlussZusatzfrageDtoSpec zusatzfrage) {
     this.zusatzfrage = zusatzfrage;
   }
 
-
-  public AbschlussDtoSpec aktiv(Boolean aktiv) {
+  public AbschlussDtoSpec aktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     
     this.aktiv = aktiv;
     return this;
   }
 
-   /**
+  /**
    * Get aktiv
    * @return aktiv
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAktiv() {
@@ -393,11 +394,12 @@ public class AbschlussDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAktiv(Boolean aktiv) {
+  public void setAktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     this.aktiv = aktiv;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -452,10 +454,7 @@ public class AbschlussDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

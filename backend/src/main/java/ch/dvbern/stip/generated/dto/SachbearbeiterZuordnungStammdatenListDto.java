@@ -16,13 +16,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SachbearbeiterZuordnungStammdatenList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
-  private @Valid UUID sachbearbeiter;
-  private @Valid SachbearbeiterZuordnungStammdatenDto zuordnung;
+  private UUID sachbearbeiter;
+  private SachbearbeiterZuordnungStammdatenDto zuordnung;
 
   protected SachbearbeiterZuordnungStammdatenListDto(SachbearbeiterZuordnungStammdatenListDtoBuilder<?, ?> b) {
     this.sachbearbeiter = b.sachbearbeiter;
@@ -59,7 +59,7 @@ public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
 
   
   @JsonProperty("zuordnung")
-  public SachbearbeiterZuordnungStammdatenDto getZuordnung() {
+  @Valid public SachbearbeiterZuordnungStammdatenDto getZuordnung() {
     return zuordnung;
   }
 
@@ -103,10 +103,7 @@ public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +141,3 @@ public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
     }
   }
 }
-

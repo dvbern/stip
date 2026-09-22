@@ -35,35 +35,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchNotizCreateDtoSpec.JSON_PROPERTY_NOTIZ_TYP
 })
 @JsonTypeName("GesuchNotizCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchNotizCreateDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchId;
 
   public static final String JSON_PROPERTY_BETREFF = "betreff";
+  @jakarta.annotation.Nonnull
   private String betreff;
 
   public static final String JSON_PROPERTY_TEXT = "text";
+  @jakarta.annotation.Nonnull
   private String text;
 
   public static final String JSON_PROPERTY_NOTIZ_TYP = "notizTyp";
+  @jakarta.annotation.Nonnull
   private GesuchNotizTypDtoSpec notizTyp;
 
   public GesuchNotizCreateDtoSpec() {
   }
 
-  public GesuchNotizCreateDtoSpec gesuchId(UUID gesuchId) {
+  public GesuchNotizCreateDtoSpec gesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchId
    * @return gesuchId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchId() {
@@ -71,25 +75,24 @@ public class GesuchNotizCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
+  public void setGesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
 
-
-  public GesuchNotizCreateDtoSpec betreff(String betreff) {
+  public GesuchNotizCreateDtoSpec betreff(@jakarta.annotation.Nonnull String betreff) {
     
     this.betreff = betreff;
     return this;
   }
 
-   /**
+  /**
    * Get betreff
    * @return betreff
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonProperty(value = JSON_PROPERTY_BETREFF, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBetreff() {
@@ -97,25 +100,24 @@ public class GesuchNotizCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonProperty(value = JSON_PROPERTY_BETREFF, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetreff(String betreff) {
+  public void setBetreff(@jakarta.annotation.Nonnull String betreff) {
     this.betreff = betreff;
   }
 
-
-  public GesuchNotizCreateDtoSpec text(String text) {
+  public GesuchNotizCreateDtoSpec text(@jakarta.annotation.Nonnull String text) {
     
     this.text = text;
     return this;
   }
 
-   /**
+  /**
    * Get text
    * @return text
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_TEXT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getText() {
@@ -123,25 +125,24 @@ public class GesuchNotizCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_TEXT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setText(String text) {
+  public void setText(@jakarta.annotation.Nonnull String text) {
     this.text = text;
   }
 
-
-  public GesuchNotizCreateDtoSpec notizTyp(GesuchNotizTypDtoSpec notizTyp) {
+  public GesuchNotizCreateDtoSpec notizTyp(@jakarta.annotation.Nonnull GesuchNotizTypDtoSpec notizTyp) {
     
     this.notizTyp = notizTyp;
     return this;
   }
 
-   /**
+  /**
    * Get notizTyp
    * @return notizTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
+  @JsonProperty(value = JSON_PROPERTY_NOTIZ_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchNotizTypDtoSpec getNotizTyp() {
@@ -149,11 +150,12 @@ public class GesuchNotizCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NOTIZ_TYP)
+  @JsonProperty(value = JSON_PROPERTY_NOTIZ_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNotizTyp(GesuchNotizTypDtoSpec notizTyp) {
+  public void setNotizTyp(@jakarta.annotation.Nonnull GesuchNotizTypDtoSpec notizTyp) {
     this.notizTyp = notizTyp;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -192,10 +194,7 @@ public class GesuchNotizCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

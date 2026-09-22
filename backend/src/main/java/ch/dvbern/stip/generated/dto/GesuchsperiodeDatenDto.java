@@ -16,64 +16,64 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchsperiodeDaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsperiodeDatenDto  implements Serializable {
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
-  private @Valid Integer fiskaljahr;
-  private @Valid UUID gesuchsjahrId;
-  private @Valid LocalDate gesuchsperiodeStart;
-  private @Valid LocalDate gesuchsperiodeStopp;
-  private @Valid LocalDate aufschaltterminStart;
-  private @Valid LocalDate einreichefristNormal;
-  private @Valid LocalDate einreichefristReduziert;
-  private @Valid Integer ausbKostenSekII;
-  private @Valid Integer ausbKostenTertiaer;
-  private @Valid Integer freibetragVermoegen;
-  private @Valid Integer freibetragErwerbseinkommen;
-  private @Valid Integer einkommensfreibetrag;
-  private @Valid Integer elternbeteiligungssatz;
-  private @Valid Integer vermogenSatzAngerechnet;
-  private @Valid Integer integrationszulage;
-  private @Valid Integer limiteEkFreibetragIntegrationszulage;
-  private @Valid Integer stipLimiteMinimalstipendium;
-  private @Valid Integer person1;
-  private @Valid Integer personen2;
-  private @Valid Integer personen3;
-  private @Valid Integer personen4;
-  private @Valid Integer personen5;
-  private @Valid Integer personen6;
-  private @Valid Integer personen7;
-  private @Valid Integer proWeiterePerson;
-  private @Valid Integer kinder0017;
-  private @Valid Integer jugendlicheErwachsene1824;
-  private @Valid Integer erwachsene2599;
-  private @Valid Integer wohnkostenFam1pers;
-  private @Valid Integer wohnkostenFam2pers;
-  private @Valid Integer wohnkostenFam3pers;
-  private @Valid Integer wohnkostenFam4pers;
-  private @Valid Integer wohnkostenFam5pluspers;
-  private @Valid Integer wohnkostenPersoenlich1pers;
-  private @Valid Integer wohnkostenPersoenlich2pers;
-  private @Valid Integer wohnkostenPersoenlich3pers;
-  private @Valid Integer wohnkostenPersoenlich4pers;
-  private @Valid Integer wohnkostenPersoenlich5pluspers;
-  private @Valid Integer preisProMahlzeit;
-  private @Valid Integer maxSaeule3a;
-  private @Valid Integer anzahlWochenLehre;
-  private @Valid Integer anzahlWochenSchule;
-  private @Valid Integer vermoegensanteilInProzent;
-  private @Valid Integer reduzierungDesGrundbedarfs;
-  private @Valid Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
-  private @Valid Integer zweiterAuszahlungsterminMonat;
-  private @Valid Integer zweiterAuszahlungsterminTag;
-  private @Valid Integer fristNachreichenDokumente;
-  private @Valid Integer fristUploadUnterschriftenblatt;
-  private @Valid LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
-  private @Valid LocalDate einreichfrist;
+  private String bezeichnungDe;
+  private String bezeichnungFr;
+  private Integer fiskaljahr;
+  private UUID gesuchsjahrId;
+  private LocalDate gesuchsperiodeStart;
+  private LocalDate gesuchsperiodeStopp;
+  private LocalDate aufschaltterminStart;
+  private LocalDate einreichefristNormal;
+  private LocalDate einreichefristReduziert;
+  private Integer ausbKostenSekII;
+  private Integer ausbKostenTertiaer;
+  private Integer freibetragVermoegen;
+  private Integer freibetragErwerbseinkommen;
+  private Integer einkommensfreibetrag;
+  private Integer elternbeteiligungssatz;
+  private Integer vermogenSatzAngerechnet;
+  private Integer integrationszulage;
+  private Integer limiteEkFreibetragIntegrationszulage;
+  private Integer stipLimiteMinimalstipendium;
+  private Integer person1;
+  private Integer personen2;
+  private Integer personen3;
+  private Integer personen4;
+  private Integer personen5;
+  private Integer personen6;
+  private Integer personen7;
+  private Integer proWeiterePerson;
+  private Integer kinder0017;
+  private Integer jugendlicheErwachsene1824;
+  private Integer erwachsene2599;
+  private Integer wohnkostenFam1pers;
+  private Integer wohnkostenFam2pers;
+  private Integer wohnkostenFam3pers;
+  private Integer wohnkostenFam4pers;
+  private Integer wohnkostenFam5pluspers;
+  private Integer wohnkostenPersoenlich1pers;
+  private Integer wohnkostenPersoenlich2pers;
+  private Integer wohnkostenPersoenlich3pers;
+  private Integer wohnkostenPersoenlich4pers;
+  private Integer wohnkostenPersoenlich5pluspers;
+  private Integer preisProMahlzeit;
+  private Integer maxSaeule3a;
+  private Integer anzahlWochenLehre;
+  private Integer anzahlWochenSchule;
+  private Integer vermoegensanteilInProzent;
+  private Integer reduzierungDesGrundbedarfs;
+  private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
+  private Integer zweiterAuszahlungsterminMonat;
+  private Integer zweiterAuszahlungsterminTag;
+  private Integer fristNachreichenDokumente;
+  private Integer fristUploadUnterschriftenblatt;
+  private LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+  private LocalDate einreichfrist;
 
   protected GesuchsperiodeDatenDto(GesuchsperiodeDatenDtoBuilder<?, ?> b) {
     this.bezeichnungDe = b.bezeichnungDe;
@@ -142,13 +142,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungDe")
-  @NotNull
-  public String getBezeichnungDe() {
+  @JsonProperty(required = true, value = "bezeichnungDe")
+  @NotNull public String getBezeichnungDe() {
     return bezeichnungDe;
   }
 
-  @JsonProperty("bezeichnungDe")
+  @JsonProperty(required = true, value = "bezeichnungDe")
   public void setBezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
@@ -161,13 +160,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungFr")
-  @NotNull
-  public String getBezeichnungFr() {
+  @JsonProperty(required = true, value = "bezeichnungFr")
+  @NotNull public String getBezeichnungFr() {
     return bezeichnungFr;
   }
 
-  @JsonProperty("bezeichnungFr")
+  @JsonProperty(required = true, value = "bezeichnungFr")
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
@@ -180,13 +178,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fiskaljahr")
-  @NotNull
-  public Integer getFiskaljahr() {
+  @JsonProperty(required = true, value = "fiskaljahr")
+  @NotNull public Integer getFiskaljahr() {
     return fiskaljahr;
   }
 
-  @JsonProperty("fiskaljahr")
+  @JsonProperty(required = true, value = "fiskaljahr")
   public void setFiskaljahr(Integer fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
   }
@@ -199,13 +196,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchsjahrId")
-  @NotNull
-  public UUID getGesuchsjahrId() {
+  @JsonProperty(required = true, value = "gesuchsjahrId")
+  @NotNull public UUID getGesuchsjahrId() {
     return gesuchsjahrId;
   }
 
-  @JsonProperty("gesuchsjahrId")
+  @JsonProperty(required = true, value = "gesuchsjahrId")
   public void setGesuchsjahrId(UUID gesuchsjahrId) {
     this.gesuchsjahrId = gesuchsjahrId;
   }
@@ -219,13 +215,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchsperiodeStart")
-  @NotNull
-  public LocalDate getGesuchsperiodeStart() {
+  @JsonProperty(required = true, value = "gesuchsperiodeStart")
+  @NotNull public LocalDate getGesuchsperiodeStart() {
     return gesuchsperiodeStart;
   }
 
-  @JsonProperty("gesuchsperiodeStart")
+  @JsonProperty(required = true, value = "gesuchsperiodeStart")
   public void setGesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
     this.gesuchsperiodeStart = gesuchsperiodeStart;
   }
@@ -239,13 +234,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchsperiodeStopp")
-  @NotNull
-  public LocalDate getGesuchsperiodeStopp() {
+  @JsonProperty(required = true, value = "gesuchsperiodeStopp")
+  @NotNull public LocalDate getGesuchsperiodeStopp() {
     return gesuchsperiodeStopp;
   }
 
-  @JsonProperty("gesuchsperiodeStopp")
+  @JsonProperty(required = true, value = "gesuchsperiodeStopp")
   public void setGesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
     this.gesuchsperiodeStopp = gesuchsperiodeStopp;
   }
@@ -259,13 +253,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("aufschaltterminStart")
-  @NotNull
-  public LocalDate getAufschaltterminStart() {
+  @JsonProperty(required = true, value = "aufschaltterminStart")
+  @NotNull public LocalDate getAufschaltterminStart() {
     return aufschaltterminStart;
   }
 
-  @JsonProperty("aufschaltterminStart")
+  @JsonProperty(required = true, value = "aufschaltterminStart")
   public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
     this.aufschaltterminStart = aufschaltterminStart;
   }
@@ -279,13 +272,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("einreichefristNormal")
-  @NotNull
-  public LocalDate getEinreichefristNormal() {
+  @JsonProperty(required = true, value = "einreichefristNormal")
+  @NotNull public LocalDate getEinreichefristNormal() {
     return einreichefristNormal;
   }
 
-  @JsonProperty("einreichefristNormal")
+  @JsonProperty(required = true, value = "einreichefristNormal")
   public void setEinreichefristNormal(LocalDate einreichefristNormal) {
     this.einreichefristNormal = einreichefristNormal;
   }
@@ -299,13 +291,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("einreichefristReduziert")
-  @NotNull
-  public LocalDate getEinreichefristReduziert() {
+  @JsonProperty(required = true, value = "einreichefristReduziert")
+  @NotNull public LocalDate getEinreichefristReduziert() {
     return einreichefristReduziert;
   }
 
-  @JsonProperty("einreichefristReduziert")
+  @JsonProperty(required = true, value = "einreichefristReduziert")
   public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
     this.einreichefristReduziert = einreichefristReduziert;
   }
@@ -318,13 +309,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbKosten_SekII")
-  @NotNull
-  public Integer getAusbKostenSekII() {
+  @JsonProperty(required = true, value = "ausbKosten_SekII")
+  @NotNull public Integer getAusbKostenSekII() {
     return ausbKostenSekII;
   }
 
-  @JsonProperty("ausbKosten_SekII")
+  @JsonProperty(required = true, value = "ausbKosten_SekII")
   public void setAusbKostenSekII(Integer ausbKostenSekII) {
     this.ausbKostenSekII = ausbKostenSekII;
   }
@@ -337,13 +327,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbKosten_Tertiaer")
-  @NotNull
-  public Integer getAusbKostenTertiaer() {
+  @JsonProperty(required = true, value = "ausbKosten_Tertiaer")
+  @NotNull public Integer getAusbKostenTertiaer() {
     return ausbKostenTertiaer;
   }
 
-  @JsonProperty("ausbKosten_Tertiaer")
+  @JsonProperty(required = true, value = "ausbKosten_Tertiaer")
   public void setAusbKostenTertiaer(Integer ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
   }
@@ -356,13 +345,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("freibetrag_vermoegen")
-  @NotNull
-  public Integer getFreibetragVermoegen() {
+  @JsonProperty(required = true, value = "freibetrag_vermoegen")
+  @NotNull public Integer getFreibetragVermoegen() {
     return freibetragVermoegen;
   }
 
-  @JsonProperty("freibetrag_vermoegen")
+  @JsonProperty(required = true, value = "freibetrag_vermoegen")
   public void setFreibetragVermoegen(Integer freibetragVermoegen) {
     this.freibetragVermoegen = freibetragVermoegen;
   }
@@ -375,13 +363,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("freibetrag_erwerbseinkommen")
-  @NotNull
-  public Integer getFreibetragErwerbseinkommen() {
+  @JsonProperty(required = true, value = "freibetrag_erwerbseinkommen")
+  @NotNull public Integer getFreibetragErwerbseinkommen() {
     return freibetragErwerbseinkommen;
   }
 
-  @JsonProperty("freibetrag_erwerbseinkommen")
+  @JsonProperty(required = true, value = "freibetrag_erwerbseinkommen")
   public void setFreibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
   }
@@ -394,13 +381,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("einkommensfreibetrag")
-  @NotNull
-  public Integer getEinkommensfreibetrag() {
+  @JsonProperty(required = true, value = "einkommensfreibetrag")
+  @NotNull public Integer getEinkommensfreibetrag() {
     return einkommensfreibetrag;
   }
 
-  @JsonProperty("einkommensfreibetrag")
+  @JsonProperty(required = true, value = "einkommensfreibetrag")
   public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
   }
@@ -413,13 +399,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("elternbeteiligungssatz")
-  @NotNull
-  public Integer getElternbeteiligungssatz() {
+  @JsonProperty(required = true, value = "elternbeteiligungssatz")
+  @NotNull public Integer getElternbeteiligungssatz() {
     return elternbeteiligungssatz;
   }
 
-  @JsonProperty("elternbeteiligungssatz")
+  @JsonProperty(required = true, value = "elternbeteiligungssatz")
   public void setElternbeteiligungssatz(Integer elternbeteiligungssatz) {
     this.elternbeteiligungssatz = elternbeteiligungssatz;
   }
@@ -432,13 +417,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("vermogenSatzAngerechnet")
-  @NotNull
-  public Integer getVermogenSatzAngerechnet() {
+  @JsonProperty(required = true, value = "vermogenSatzAngerechnet")
+  @NotNull public Integer getVermogenSatzAngerechnet() {
     return vermogenSatzAngerechnet;
   }
 
-  @JsonProperty("vermogenSatzAngerechnet")
+  @JsonProperty(required = true, value = "vermogenSatzAngerechnet")
   public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
     this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
   }
@@ -451,13 +435,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("integrationszulage")
-  @NotNull
-  public Integer getIntegrationszulage() {
+  @JsonProperty(required = true, value = "integrationszulage")
+  @NotNull public Integer getIntegrationszulage() {
     return integrationszulage;
   }
 
-  @JsonProperty("integrationszulage")
+  @JsonProperty(required = true, value = "integrationszulage")
   public void setIntegrationszulage(Integer integrationszulage) {
     this.integrationszulage = integrationszulage;
   }
@@ -470,13 +453,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("limite_EkFreibetrag_Integrationszulage")
-  @NotNull
-  public Integer getLimiteEkFreibetragIntegrationszulage() {
+  @JsonProperty(required = true, value = "limite_EkFreibetrag_Integrationszulage")
+  @NotNull public Integer getLimiteEkFreibetragIntegrationszulage() {
     return limiteEkFreibetragIntegrationszulage;
   }
 
-  @JsonProperty("limite_EkFreibetrag_Integrationszulage")
+  @JsonProperty(required = true, value = "limite_EkFreibetrag_Integrationszulage")
   public void setLimiteEkFreibetragIntegrationszulage(Integer limiteEkFreibetragIntegrationszulage) {
     this.limiteEkFreibetragIntegrationszulage = limiteEkFreibetragIntegrationszulage;
   }
@@ -489,13 +471,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("stipLimite_Minimalstipendium")
-  @NotNull
-  public Integer getStipLimiteMinimalstipendium() {
+  @JsonProperty(required = true, value = "stipLimite_Minimalstipendium")
+  @NotNull public Integer getStipLimiteMinimalstipendium() {
     return stipLimiteMinimalstipendium;
   }
 
-  @JsonProperty("stipLimite_Minimalstipendium")
+  @JsonProperty(required = true, value = "stipLimite_Minimalstipendium")
   public void setStipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
   }
@@ -508,13 +489,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("person_1")
-  @NotNull
-  public Integer getPerson1() {
+  @JsonProperty(required = true, value = "person_1")
+  @NotNull public Integer getPerson1() {
     return person1;
   }
 
-  @JsonProperty("person_1")
+  @JsonProperty(required = true, value = "person_1")
   public void setPerson1(Integer person1) {
     this.person1 = person1;
   }
@@ -527,13 +507,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("personen_2")
-  @NotNull
-  public Integer getPersonen2() {
+  @JsonProperty(required = true, value = "personen_2")
+  @NotNull public Integer getPersonen2() {
     return personen2;
   }
 
-  @JsonProperty("personen_2")
+  @JsonProperty(required = true, value = "personen_2")
   public void setPersonen2(Integer personen2) {
     this.personen2 = personen2;
   }
@@ -546,13 +525,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("personen_3")
-  @NotNull
-  public Integer getPersonen3() {
+  @JsonProperty(required = true, value = "personen_3")
+  @NotNull public Integer getPersonen3() {
     return personen3;
   }
 
-  @JsonProperty("personen_3")
+  @JsonProperty(required = true, value = "personen_3")
   public void setPersonen3(Integer personen3) {
     this.personen3 = personen3;
   }
@@ -565,13 +543,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("personen_4")
-  @NotNull
-  public Integer getPersonen4() {
+  @JsonProperty(required = true, value = "personen_4")
+  @NotNull public Integer getPersonen4() {
     return personen4;
   }
 
-  @JsonProperty("personen_4")
+  @JsonProperty(required = true, value = "personen_4")
   public void setPersonen4(Integer personen4) {
     this.personen4 = personen4;
   }
@@ -584,13 +561,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("personen_5")
-  @NotNull
-  public Integer getPersonen5() {
+  @JsonProperty(required = true, value = "personen_5")
+  @NotNull public Integer getPersonen5() {
     return personen5;
   }
 
-  @JsonProperty("personen_5")
+  @JsonProperty(required = true, value = "personen_5")
   public void setPersonen5(Integer personen5) {
     this.personen5 = personen5;
   }
@@ -603,13 +579,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("personen_6")
-  @NotNull
-  public Integer getPersonen6() {
+  @JsonProperty(required = true, value = "personen_6")
+  @NotNull public Integer getPersonen6() {
     return personen6;
   }
 
-  @JsonProperty("personen_6")
+  @JsonProperty(required = true, value = "personen_6")
   public void setPersonen6(Integer personen6) {
     this.personen6 = personen6;
   }
@@ -622,13 +597,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("personen_7")
-  @NotNull
-  public Integer getPersonen7() {
+  @JsonProperty(required = true, value = "personen_7")
+  @NotNull public Integer getPersonen7() {
     return personen7;
   }
 
-  @JsonProperty("personen_7")
+  @JsonProperty(required = true, value = "personen_7")
   public void setPersonen7(Integer personen7) {
     this.personen7 = personen7;
   }
@@ -641,13 +615,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("proWeiterePerson")
-  @NotNull
-  public Integer getProWeiterePerson() {
+  @JsonProperty(required = true, value = "proWeiterePerson")
+  @NotNull public Integer getProWeiterePerson() {
     return proWeiterePerson;
   }
 
-  @JsonProperty("proWeiterePerson")
+  @JsonProperty(required = true, value = "proWeiterePerson")
   public void setProWeiterePerson(Integer proWeiterePerson) {
     this.proWeiterePerson = proWeiterePerson;
   }
@@ -660,13 +633,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("kinder_00_17")
-  @NotNull
-  public Integer getKinder0017() {
+  @JsonProperty(required = true, value = "kinder_00_17")
+  @NotNull public Integer getKinder0017() {
     return kinder0017;
   }
 
-  @JsonProperty("kinder_00_17")
+  @JsonProperty(required = true, value = "kinder_00_17")
   public void setKinder0017(Integer kinder0017) {
     this.kinder0017 = kinder0017;
   }
@@ -679,13 +651,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("jugendliche_erwachsene_18_24")
-  @NotNull
-  public Integer getJugendlicheErwachsene1824() {
+  @JsonProperty(required = true, value = "jugendliche_erwachsene_18_24")
+  @NotNull public Integer getJugendlicheErwachsene1824() {
     return jugendlicheErwachsene1824;
   }
 
-  @JsonProperty("jugendliche_erwachsene_18_24")
+  @JsonProperty(required = true, value = "jugendliche_erwachsene_18_24")
   public void setJugendlicheErwachsene1824(Integer jugendlicheErwachsene1824) {
     this.jugendlicheErwachsene1824 = jugendlicheErwachsene1824;
   }
@@ -698,13 +669,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("erwachsene_25_99")
-  @NotNull
-  public Integer getErwachsene2599() {
+  @JsonProperty(required = true, value = "erwachsene_25_99")
+  @NotNull public Integer getErwachsene2599() {
     return erwachsene2599;
   }
 
-  @JsonProperty("erwachsene_25_99")
+  @JsonProperty(required = true, value = "erwachsene_25_99")
   public void setErwachsene2599(Integer erwachsene2599) {
     this.erwachsene2599 = erwachsene2599;
   }
@@ -717,13 +687,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_fam_1pers")
-  @NotNull
-  public Integer getWohnkostenFam1pers() {
+  @JsonProperty(required = true, value = "wohnkosten_fam_1pers")
+  @NotNull public Integer getWohnkostenFam1pers() {
     return wohnkostenFam1pers;
   }
 
-  @JsonProperty("wohnkosten_fam_1pers")
+  @JsonProperty(required = true, value = "wohnkosten_fam_1pers")
   public void setWohnkostenFam1pers(Integer wohnkostenFam1pers) {
     this.wohnkostenFam1pers = wohnkostenFam1pers;
   }
@@ -736,13 +705,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_fam_2pers")
-  @NotNull
-  public Integer getWohnkostenFam2pers() {
+  @JsonProperty(required = true, value = "wohnkosten_fam_2pers")
+  @NotNull public Integer getWohnkostenFam2pers() {
     return wohnkostenFam2pers;
   }
 
-  @JsonProperty("wohnkosten_fam_2pers")
+  @JsonProperty(required = true, value = "wohnkosten_fam_2pers")
   public void setWohnkostenFam2pers(Integer wohnkostenFam2pers) {
     this.wohnkostenFam2pers = wohnkostenFam2pers;
   }
@@ -755,13 +723,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_fam_3pers")
-  @NotNull
-  public Integer getWohnkostenFam3pers() {
+  @JsonProperty(required = true, value = "wohnkosten_fam_3pers")
+  @NotNull public Integer getWohnkostenFam3pers() {
     return wohnkostenFam3pers;
   }
 
-  @JsonProperty("wohnkosten_fam_3pers")
+  @JsonProperty(required = true, value = "wohnkosten_fam_3pers")
   public void setWohnkostenFam3pers(Integer wohnkostenFam3pers) {
     this.wohnkostenFam3pers = wohnkostenFam3pers;
   }
@@ -774,13 +741,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_fam_4pers")
-  @NotNull
-  public Integer getWohnkostenFam4pers() {
+  @JsonProperty(required = true, value = "wohnkosten_fam_4pers")
+  @NotNull public Integer getWohnkostenFam4pers() {
     return wohnkostenFam4pers;
   }
 
-  @JsonProperty("wohnkosten_fam_4pers")
+  @JsonProperty(required = true, value = "wohnkosten_fam_4pers")
   public void setWohnkostenFam4pers(Integer wohnkostenFam4pers) {
     this.wohnkostenFam4pers = wohnkostenFam4pers;
   }
@@ -793,13 +759,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_fam_5pluspers")
-  @NotNull
-  public Integer getWohnkostenFam5pluspers() {
+  @JsonProperty(required = true, value = "wohnkosten_fam_5pluspers")
+  @NotNull public Integer getWohnkostenFam5pluspers() {
     return wohnkostenFam5pluspers;
   }
 
-  @JsonProperty("wohnkosten_fam_5pluspers")
+  @JsonProperty(required = true, value = "wohnkosten_fam_5pluspers")
   public void setWohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
     this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
   }
@@ -812,13 +777,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_persoenlich_1pers")
-  @NotNull
-  public Integer getWohnkostenPersoenlich1pers() {
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_1pers")
+  @NotNull public Integer getWohnkostenPersoenlich1pers() {
     return wohnkostenPersoenlich1pers;
   }
 
-  @JsonProperty("wohnkosten_persoenlich_1pers")
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_1pers")
   public void setWohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
     this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
   }
@@ -831,13 +795,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_persoenlich_2pers")
-  @NotNull
-  public Integer getWohnkostenPersoenlich2pers() {
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_2pers")
+  @NotNull public Integer getWohnkostenPersoenlich2pers() {
     return wohnkostenPersoenlich2pers;
   }
 
-  @JsonProperty("wohnkosten_persoenlich_2pers")
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_2pers")
   public void setWohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
     this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
   }
@@ -850,13 +813,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_persoenlich_3pers")
-  @NotNull
-  public Integer getWohnkostenPersoenlich3pers() {
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_3pers")
+  @NotNull public Integer getWohnkostenPersoenlich3pers() {
     return wohnkostenPersoenlich3pers;
   }
 
-  @JsonProperty("wohnkosten_persoenlich_3pers")
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_3pers")
   public void setWohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
     this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
   }
@@ -869,13 +831,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_persoenlich_4pers")
-  @NotNull
-  public Integer getWohnkostenPersoenlich4pers() {
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_4pers")
+  @NotNull public Integer getWohnkostenPersoenlich4pers() {
     return wohnkostenPersoenlich4pers;
   }
 
-  @JsonProperty("wohnkosten_persoenlich_4pers")
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_4pers")
   public void setWohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
     this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
   }
@@ -888,13 +849,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnkosten_persoenlich_5pluspers")
-  @NotNull
-  public Integer getWohnkostenPersoenlich5pluspers() {
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_5pluspers")
+  @NotNull public Integer getWohnkostenPersoenlich5pluspers() {
     return wohnkostenPersoenlich5pluspers;
   }
 
-  @JsonProperty("wohnkosten_persoenlich_5pluspers")
+  @JsonProperty(required = true, value = "wohnkosten_persoenlich_5pluspers")
   public void setWohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
     this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
   }
@@ -907,13 +867,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("preisProMahlzeit")
-  @NotNull
-  public Integer getPreisProMahlzeit() {
+  @JsonProperty(required = true, value = "preisProMahlzeit")
+  @NotNull public Integer getPreisProMahlzeit() {
     return preisProMahlzeit;
   }
 
-  @JsonProperty("preisProMahlzeit")
+  @JsonProperty(required = true, value = "preisProMahlzeit")
   public void setPreisProMahlzeit(Integer preisProMahlzeit) {
     this.preisProMahlzeit = preisProMahlzeit;
   }
@@ -926,13 +885,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("maxSaeule3a")
-  @NotNull
-  public Integer getMaxSaeule3a() {
+  @JsonProperty(required = true, value = "maxSaeule3a")
+  @NotNull public Integer getMaxSaeule3a() {
     return maxSaeule3a;
   }
 
-  @JsonProperty("maxSaeule3a")
+  @JsonProperty(required = true, value = "maxSaeule3a")
   public void setMaxSaeule3a(Integer maxSaeule3a) {
     this.maxSaeule3a = maxSaeule3a;
   }
@@ -945,13 +903,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("anzahlWochenLehre")
-  @NotNull
-  public Integer getAnzahlWochenLehre() {
+  @JsonProperty(required = true, value = "anzahlWochenLehre")
+  @NotNull public Integer getAnzahlWochenLehre() {
     return anzahlWochenLehre;
   }
 
-  @JsonProperty("anzahlWochenLehre")
+  @JsonProperty(required = true, value = "anzahlWochenLehre")
   public void setAnzahlWochenLehre(Integer anzahlWochenLehre) {
     this.anzahlWochenLehre = anzahlWochenLehre;
   }
@@ -964,13 +921,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("anzahlWochenSchule")
-  @NotNull
-  public Integer getAnzahlWochenSchule() {
+  @JsonProperty(required = true, value = "anzahlWochenSchule")
+  @NotNull public Integer getAnzahlWochenSchule() {
     return anzahlWochenSchule;
   }
 
-  @JsonProperty("anzahlWochenSchule")
+  @JsonProperty(required = true, value = "anzahlWochenSchule")
   public void setAnzahlWochenSchule(Integer anzahlWochenSchule) {
     this.anzahlWochenSchule = anzahlWochenSchule;
   }
@@ -983,13 +939,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("vermoegensanteilInProzent")
-  @NotNull
-  public Integer getVermoegensanteilInProzent() {
+  @JsonProperty(required = true, value = "vermoegensanteilInProzent")
+  @NotNull public Integer getVermoegensanteilInProzent() {
     return vermoegensanteilInProzent;
   }
 
-  @JsonProperty("vermoegensanteilInProzent")
+  @JsonProperty(required = true, value = "vermoegensanteilInProzent")
   public void setVermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
     this.vermoegensanteilInProzent = vermoegensanteilInProzent;
   }
@@ -1002,13 +957,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("reduzierungDesGrundbedarfs")
-  @NotNull
-  public Integer getReduzierungDesGrundbedarfs() {
+  @JsonProperty(required = true, value = "reduzierungDesGrundbedarfs")
+  @NotNull public Integer getReduzierungDesGrundbedarfs() {
     return reduzierungDesGrundbedarfs;
   }
 
-  @JsonProperty("reduzierungDesGrundbedarfs")
+  @JsonProperty(required = true, value = "reduzierungDesGrundbedarfs")
   public void setReduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
     this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
   }
@@ -1021,13 +975,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("limiteAlterAntragsstellerHalbierungElternbeitrag")
-  @NotNull
-  public Integer getLimiteAlterAntragsstellerHalbierungElternbeitrag() {
+  @JsonProperty(required = true, value = "limiteAlterAntragsstellerHalbierungElternbeitrag")
+  @NotNull public Integer getLimiteAlterAntragsstellerHalbierungElternbeitrag() {
     return limiteAlterAntragsstellerHalbierungElternbeitrag;
   }
 
-  @JsonProperty("limiteAlterAntragsstellerHalbierungElternbeitrag")
+  @JsonProperty(required = true, value = "limiteAlterAntragsstellerHalbierungElternbeitrag")
   public void setLimiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
     this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
   }
@@ -1040,13 +993,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("zweiterAuszahlungsterminMonat")
-  @NotNull
-  public Integer getZweiterAuszahlungsterminMonat() {
+  @JsonProperty(required = true, value = "zweiterAuszahlungsterminMonat")
+  @NotNull public Integer getZweiterAuszahlungsterminMonat() {
     return zweiterAuszahlungsterminMonat;
   }
 
-  @JsonProperty("zweiterAuszahlungsterminMonat")
+  @JsonProperty(required = true, value = "zweiterAuszahlungsterminMonat")
   public void setZweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
     this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
   }
@@ -1059,13 +1011,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("zweiterAuszahlungsterminTag")
-  @NotNull
-  public Integer getZweiterAuszahlungsterminTag() {
+  @JsonProperty(required = true, value = "zweiterAuszahlungsterminTag")
+  @NotNull public Integer getZweiterAuszahlungsterminTag() {
     return zweiterAuszahlungsterminTag;
   }
 
-  @JsonProperty("zweiterAuszahlungsterminTag")
+  @JsonProperty(required = true, value = "zweiterAuszahlungsterminTag")
   public void setZweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
     this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
   }
@@ -1078,13 +1029,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fristNachreichenDokumente")
-  @NotNull
-  public Integer getFristNachreichenDokumente() {
+  @JsonProperty(required = true, value = "fristNachreichenDokumente")
+  @NotNull public Integer getFristNachreichenDokumente() {
     return fristNachreichenDokumente;
   }
 
-  @JsonProperty("fristNachreichenDokumente")
+  @JsonProperty(required = true, value = "fristNachreichenDokumente")
   public void setFristNachreichenDokumente(Integer fristNachreichenDokumente) {
     this.fristNachreichenDokumente = fristNachreichenDokumente;
   }
@@ -1097,13 +1047,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fristUploadUnterschriftenblatt")
-  @NotNull
-  public Integer getFristUploadUnterschriftenblatt() {
+  @JsonProperty(required = true, value = "fristUploadUnterschriftenblatt")
+  @NotNull public Integer getFristUploadUnterschriftenblatt() {
     return fristUploadUnterschriftenblatt;
   }
 
-  @JsonProperty("fristUploadUnterschriftenblatt")
+  @JsonProperty(required = true, value = "fristUploadUnterschriftenblatt")
   public void setFristUploadUnterschriftenblatt(Integer fristUploadUnterschriftenblatt) {
     this.fristUploadUnterschriftenblatt = fristUploadUnterschriftenblatt;
   }
@@ -1117,13 +1066,12 @@ public class GesuchsperiodeDatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("stichtagVolljaehrigkeitMedizinischeGrundversorgung")
-  @NotNull
-  public LocalDate getStichtagVolljaehrigkeitMedizinischeGrundversorgung() {
+  @JsonProperty(required = true, value = "stichtagVolljaehrigkeitMedizinischeGrundversorgung")
+  @NotNull public LocalDate getStichtagVolljaehrigkeitMedizinischeGrundversorgung() {
     return stichtagVolljaehrigkeitMedizinischeGrundversorgung;
   }
 
-  @JsonProperty("stichtagVolljaehrigkeitMedizinischeGrundversorgung")
+  @JsonProperty(required = true, value = "stichtagVolljaehrigkeitMedizinischeGrundversorgung")
   public void setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
     this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
   }
@@ -1283,10 +1231,7 @@ public class GesuchsperiodeDatenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -1579,4 +1524,3 @@ public class GesuchsperiodeDatenDto  implements Serializable {
     }
   }
 }
-

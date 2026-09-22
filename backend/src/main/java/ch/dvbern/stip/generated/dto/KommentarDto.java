@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Kommentar")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class KommentarDto  implements Serializable {
-  private @Valid String text;
+  private String text;
 
   protected KommentarDto(KommentarDtoBuilder<?, ?> b) {
     this.text = b.text;
@@ -36,13 +36,12 @@ public class KommentarDto  implements Serializable {
   }
 
   
-  @JsonProperty("text")
-  @NotNull
-  public String getText() {
+  @JsonProperty(required = true, value = "text")
+  @NotNull public String getText() {
     return text;
   }
 
-  @JsonProperty("text")
+  @JsonProperty(required = true, value = "text")
   public void setText(String text) {
     this.text = text;
   }
@@ -80,10 +79,7 @@ public class KommentarDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -116,4 +112,3 @@ public class KommentarDto  implements Serializable {
     }
   }
 }
-

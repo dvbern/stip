@@ -16,16 +16,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Gesuchsjahr")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsjahrDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
-  private @Valid Integer technischesJahr;
-  private @Valid GueltigkeitStatusDto gueltigkeitStatus;
+  private UUID id;
+  private String bezeichnungDe;
+  private String bezeichnungFr;
+  private Integer technischesJahr;
+  private GueltigkeitStatusDto gueltigkeitStatus;
 
   protected GesuchsjahrDto(GesuchsjahrDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -46,13 +46,12 @@ public class GesuchsjahrDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -65,13 +64,12 @@ public class GesuchsjahrDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungDe")
-  @NotNull
-  public String getBezeichnungDe() {
+  @JsonProperty(required = true, value = "bezeichnungDe")
+  @NotNull public String getBezeichnungDe() {
     return bezeichnungDe;
   }
 
-  @JsonProperty("bezeichnungDe")
+  @JsonProperty(required = true, value = "bezeichnungDe")
   public void setBezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
@@ -84,13 +82,12 @@ public class GesuchsjahrDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungFr")
-  @NotNull
-  public String getBezeichnungFr() {
+  @JsonProperty(required = true, value = "bezeichnungFr")
+  @NotNull public String getBezeichnungFr() {
     return bezeichnungFr;
   }
 
-  @JsonProperty("bezeichnungFr")
+  @JsonProperty(required = true, value = "bezeichnungFr")
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
@@ -103,13 +100,12 @@ public class GesuchsjahrDto  implements Serializable {
   }
 
   
-  @JsonProperty("technischesJahr")
-  @NotNull
-  public Integer getTechnischesJahr() {
+  @JsonProperty(required = true, value = "technischesJahr")
+  @NotNull public Integer getTechnischesJahr() {
     return technischesJahr;
   }
 
-  @JsonProperty("technischesJahr")
+  @JsonProperty(required = true, value = "technischesJahr")
   public void setTechnischesJahr(Integer technischesJahr) {
     this.technischesJahr = technischesJahr;
   }
@@ -122,13 +118,12 @@ public class GesuchsjahrDto  implements Serializable {
   }
 
   
-  @JsonProperty("gueltigkeitStatus")
-  @NotNull
-  public GueltigkeitStatusDto getGueltigkeitStatus() {
+  @JsonProperty(required = true, value = "gueltigkeitStatus")
+  @NotNull public GueltigkeitStatusDto getGueltigkeitStatus() {
     return gueltigkeitStatus;
   }
 
-  @JsonProperty("gueltigkeitStatus")
+  @JsonProperty(required = true, value = "gueltigkeitStatus")
   public void setGueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
     this.gueltigkeitStatus = gueltigkeitStatus;
   }
@@ -174,10 +169,7 @@ public class GesuchsjahrDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -230,4 +222,3 @@ public class GesuchsjahrDto  implements Serializable {
     }
   }
 }
-

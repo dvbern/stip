@@ -29,83 +29,65 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * MassendruckDatenschutzbriefDtoSpec
  */
 @JsonPropertyOrder({
-  MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_ELTERN_TYP,
   MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_ID,
   MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_IS_VERSENDET,
   MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_NACHNAME,
   MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_VORNAME,
   MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
   MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_GESUCH_ID,
-  MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID
+  MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
+  MassendruckDatenschutzbriefDtoSpec.JSON_PROPERTY_ELTERN_TYP
 })
 @JsonTypeName("MassendruckDatenschutzbrief")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class MassendruckDatenschutzbriefDtoSpec {
-  public static final String JSON_PROPERTY_ELTERN_TYP = "elternTyp";
-  private ElternTypDtoSpec elternTyp;
-
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_IS_VERSENDET = "isVersendet";
+  @jakarta.annotation.Nonnull
   private Boolean isVersendet;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
+  @jakarta.annotation.Nonnull
   private String gesuchNummer;
 
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchId;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchTrancheId;
+
+  public static final String JSON_PROPERTY_ELTERN_TYP = "elternTyp";
+  @jakarta.annotation.Nonnull
+  private ElternTypDtoSpec elternTyp;
 
   public MassendruckDatenschutzbriefDtoSpec() {
   }
 
-  public MassendruckDatenschutzbriefDtoSpec elternTyp(ElternTypDtoSpec elternTyp) {
-    
-    this.elternTyp = elternTyp;
-    return this;
-  }
-
-   /**
-   * Get elternTyp
-   * @return elternTyp
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ELTERN_TYP)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public ElternTypDtoSpec getElternTyp() {
-    return elternTyp;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ELTERN_TYP)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setElternTyp(ElternTypDtoSpec elternTyp) {
-    this.elternTyp = elternTyp;
-  }
-
-
-  public MassendruckDatenschutzbriefDtoSpec id(UUID id) {
+  public MassendruckDatenschutzbriefDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -113,25 +95,24 @@ public class MassendruckDatenschutzbriefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public MassendruckDatenschutzbriefDtoSpec isVersendet(Boolean isVersendet) {
+  public MassendruckDatenschutzbriefDtoSpec isVersendet(@jakarta.annotation.Nonnull Boolean isVersendet) {
     
     this.isVersendet = isVersendet;
     return this;
   }
 
-   /**
+  /**
    * Get isVersendet
    * @return isVersendet
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IS_VERSENDET)
+  @JsonProperty(value = JSON_PROPERTY_IS_VERSENDET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getIsVersendet() {
@@ -139,25 +120,24 @@ public class MassendruckDatenschutzbriefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_VERSENDET)
+  @JsonProperty(value = JSON_PROPERTY_IS_VERSENDET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIsVersendet(Boolean isVersendet) {
+  public void setIsVersendet(@jakarta.annotation.Nonnull Boolean isVersendet) {
     this.isVersendet = isVersendet;
   }
 
-
-  public MassendruckDatenschutzbriefDtoSpec nachname(String nachname) {
+  public MassendruckDatenschutzbriefDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -165,25 +145,24 @@ public class MassendruckDatenschutzbriefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public MassendruckDatenschutzbriefDtoSpec vorname(String vorname) {
+  public MassendruckDatenschutzbriefDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -191,25 +170,24 @@ public class MassendruckDatenschutzbriefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public MassendruckDatenschutzbriefDtoSpec gesuchNummer(String gesuchNummer) {
+  public MassendruckDatenschutzbriefDtoSpec gesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
     
     this.gesuchNummer = gesuchNummer;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchNummer
    * @return gesuchNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getGesuchNummer() {
@@ -217,25 +195,24 @@ public class MassendruckDatenschutzbriefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchNummer(String gesuchNummer) {
+  public void setGesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
 
-
-  public MassendruckDatenschutzbriefDtoSpec gesuchId(UUID gesuchId) {
+  public MassendruckDatenschutzbriefDtoSpec gesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchId
    * @return gesuchId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchId() {
@@ -243,25 +220,24 @@ public class MassendruckDatenschutzbriefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
+  public void setGesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
 
-
-  public MassendruckDatenschutzbriefDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public MassendruckDatenschutzbriefDtoSpec gesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheId
    * @return gesuchTrancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchTrancheId() {
@@ -269,11 +245,37 @@ public class MassendruckDatenschutzbriefDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+  public void setGesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
+
+  public MassendruckDatenschutzbriefDtoSpec elternTyp(@jakarta.annotation.Nonnull ElternTypDtoSpec elternTyp) {
+    
+    this.elternTyp = elternTyp;
+    return this;
+  }
+
+  /**
+   * Get elternTyp
+   * @return elternTyp
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_TYP, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public ElternTypDtoSpec getElternTyp() {
+    return elternTyp;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_TYP, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setElternTyp(@jakarta.annotation.Nonnull ElternTypDtoSpec elternTyp) {
+    this.elternTyp = elternTyp;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -284,26 +286,25 @@ public class MassendruckDatenschutzbriefDtoSpec {
       return false;
     }
     MassendruckDatenschutzbriefDtoSpec massendruckDatenschutzbrief = (MassendruckDatenschutzbriefDtoSpec) o;
-    return Objects.equals(this.elternTyp, massendruckDatenschutzbrief.elternTyp) &&
-        Objects.equals(this.id, massendruckDatenschutzbrief.id) &&
+    return Objects.equals(this.id, massendruckDatenschutzbrief.id) &&
         Objects.equals(this.isVersendet, massendruckDatenschutzbrief.isVersendet) &&
         Objects.equals(this.nachname, massendruckDatenschutzbrief.nachname) &&
         Objects.equals(this.vorname, massendruckDatenschutzbrief.vorname) &&
         Objects.equals(this.gesuchNummer, massendruckDatenschutzbrief.gesuchNummer) &&
         Objects.equals(this.gesuchId, massendruckDatenschutzbrief.gesuchId) &&
-        Objects.equals(this.gesuchTrancheId, massendruckDatenschutzbrief.gesuchTrancheId);
+        Objects.equals(this.gesuchTrancheId, massendruckDatenschutzbrief.gesuchTrancheId) &&
+        Objects.equals(this.elternTyp, massendruckDatenschutzbrief.elternTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(elternTyp, id, isVersendet, nachname, vorname, gesuchNummer, gesuchId, gesuchTrancheId);
+    return Objects.hash(id, isVersendet, nachname, vorname, gesuchNummer, gesuchId, gesuchTrancheId, elternTyp);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class MassendruckDatenschutzbriefDtoSpec {\n");
-    sb.append("    elternTyp: ").append(toIndentedString(elternTyp)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    isVersendet: ").append(toIndentedString(isVersendet)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
@@ -311,6 +312,7 @@ public class MassendruckDatenschutzbriefDtoSpec {
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
+    sb.append("    elternTyp: ").append(toIndentedString(elternTyp)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -320,10 +322,7 @@ public class MassendruckDatenschutzbriefDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

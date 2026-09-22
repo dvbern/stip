@@ -40,44 +40,51 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_REVISION
 })
 @JsonTypeName("GesuchTrancheSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchTrancheSlimDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
+  @jakarta.annotation.Nonnull
   private LocalDate gueltigAb;
 
   public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
+  @jakarta.annotation.Nonnull
   private LocalDate gueltigBis;
 
   public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nonnull
   private GesuchTrancheStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_COMMENT = "comment";
+  @jakarta.annotation.Nullable
   private String comment;
 
   public static final String JSON_PROPERTY_TYP = "typ";
+  @jakarta.annotation.Nonnull
   private GesuchTrancheTypDtoSpec typ;
 
   public static final String JSON_PROPERTY_REVISION = "revision";
+  @jakarta.annotation.Nullable
   private Integer revision;
 
   public GesuchTrancheSlimDtoSpec() {
   }
 
-  public GesuchTrancheSlimDtoSpec id(UUID id) {
+  public GesuchTrancheSlimDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -85,25 +92,24 @@ public class GesuchTrancheSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public GesuchTrancheSlimDtoSpec gueltigAb(LocalDate gueltigAb) {
+  public GesuchTrancheSlimDtoSpec gueltigAb(@jakarta.annotation.Nonnull LocalDate gueltigAb) {
     
     this.gueltigAb = gueltigAb;
     return this;
   }
 
-   /**
+  /**
    * Get gueltigAb
    * @return gueltigAb
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_AB, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGueltigAb() {
@@ -111,25 +117,24 @@ public class GesuchTrancheSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_AB, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigAb(LocalDate gueltigAb) {
+  public void setGueltigAb(@jakarta.annotation.Nonnull LocalDate gueltigAb) {
     this.gueltigAb = gueltigAb;
   }
 
-
-  public GesuchTrancheSlimDtoSpec gueltigBis(LocalDate gueltigBis) {
+  public GesuchTrancheSlimDtoSpec gueltigBis(@jakarta.annotation.Nonnull LocalDate gueltigBis) {
     
     this.gueltigBis = gueltigBis;
     return this;
   }
 
-   /**
+  /**
    * Get gueltigBis
    * @return gueltigBis
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGueltigBis() {
@@ -137,25 +142,24 @@ public class GesuchTrancheSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigBis(LocalDate gueltigBis) {
+  public void setGueltigBis(@jakarta.annotation.Nonnull LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
   }
 
-
-  public GesuchTrancheSlimDtoSpec status(GesuchTrancheStatusDtoSpec status) {
+  public GesuchTrancheSlimDtoSpec status(@jakarta.annotation.Nonnull GesuchTrancheStatusDtoSpec status) {
     
     this.status = status;
     return this;
   }
 
-   /**
+  /**
    * Get status
    * @return status
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheStatusDtoSpec getStatus() {
@@ -163,25 +167,24 @@ public class GesuchTrancheSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(GesuchTrancheStatusDtoSpec status) {
+  public void setStatus(@jakarta.annotation.Nonnull GesuchTrancheStatusDtoSpec status) {
     this.status = status;
   }
 
-
-  public GesuchTrancheSlimDtoSpec comment(String comment) {
+  public GesuchTrancheSlimDtoSpec comment(@jakarta.annotation.Nullable String comment) {
     
     this.comment = comment;
     return this;
   }
 
-   /**
+  /**
    * Get comment
    * @return comment
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getComment() {
@@ -189,25 +192,24 @@ public class GesuchTrancheSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setComment(String comment) {
+  public void setComment(@jakarta.annotation.Nullable String comment) {
     this.comment = comment;
   }
 
-
-  public GesuchTrancheSlimDtoSpec typ(GesuchTrancheTypDtoSpec typ) {
+  public GesuchTrancheSlimDtoSpec typ(@jakarta.annotation.Nonnull GesuchTrancheTypDtoSpec typ) {
     
     this.typ = typ;
     return this;
   }
 
-   /**
+  /**
    * Get typ
    * @return typ
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheTypDtoSpec getTyp() {
@@ -215,25 +217,24 @@ public class GesuchTrancheSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTyp(GesuchTrancheTypDtoSpec typ) {
+  public void setTyp(@jakarta.annotation.Nonnull GesuchTrancheTypDtoSpec typ) {
     this.typ = typ;
   }
 
-
-  public GesuchTrancheSlimDtoSpec revision(Integer revision) {
+  public GesuchTrancheSlimDtoSpec revision(@jakarta.annotation.Nullable Integer revision) {
     
     this.revision = revision;
     return this;
   }
 
-   /**
+  /**
    * Get revision
    * @return revision
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_REVISION)
+  @JsonProperty(value = JSON_PROPERTY_REVISION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getRevision() {
@@ -241,11 +242,12 @@ public class GesuchTrancheSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_REVISION)
+  @JsonProperty(value = JSON_PROPERTY_REVISION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRevision(Integer revision) {
+  public void setRevision(@jakarta.annotation.Nullable Integer revision) {
     this.revision = revision;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -290,10 +292,7 @@ public class GesuchTrancheSlimDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

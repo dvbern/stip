@@ -54,68 +54,83 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS
 })
 @JsonTypeName("TranchenBerechnungsresultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class TranchenBerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_TOTAL = "total";
+  @jakarta.annotation.Nonnull
   private Integer total;
 
   public static final String JSON_PROPERTY_UNGEKUERZT_TOTAL = "ungekuerztTotal";
+  @jakarta.annotation.Nonnull
   private Integer ungekuerztTotal;
 
   public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
+  @jakarta.annotation.Nonnull
   private LocalDate gueltigAb;
 
   public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
+  @jakarta.annotation.Nonnull
   private LocalDate gueltigBis;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_AB = "ausbildungAb";
+  @jakarta.annotation.Nonnull
   private String ausbildungAb;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_BIS = "ausbildungBis";
+  @jakarta.annotation.Nonnull
   private String ausbildungBis;
 
   public static final String JSON_PROPERTY_YEAR_RANGE = "yearRange";
+  @jakarta.annotation.Nonnull
   private String yearRange;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN = "berechnungsanteilKinderDerEltern";
+  @jakarta.annotation.Nullable
   private BigDecimal berechnungsanteilKinderDerEltern;
 
   public static final String JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN = "teilzeitKinderBeiPiaAnrechnen";
+  @jakarta.annotation.Nullable
   private Boolean teilzeitKinderBeiPiaAnrechnen;
 
   public static final String JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA = "berechnungsanteilKinderPia";
+  @jakarta.annotation.Nullable
   private BigDecimal berechnungsanteilKinderPia;
 
   public static final String JSON_PROPERTY_BERECHNUNGS_STAMMDATEN = "berechnungsStammdaten";
+  @jakarta.annotation.Nonnull
   private BerechnungsStammdatenDtoSpec berechnungsStammdaten;
 
   public static final String JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT = "persoenlichesBudgetresultat";
+  @jakarta.annotation.Nonnull
   private PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat;
 
   public static final String JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE = "familienBudgetresultate";
+  @jakarta.annotation.Nonnull
   private List<FamilienBudgetresultatDtoSpec> familienBudgetresultate;
 
   public static final String JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS = "personenHaushaltGroups";
+  @jakarta.annotation.Nonnull
   private List<PersonenHaushaltGruppeDtoSpec> personenHaushaltGroups;
 
   public TranchenBerechnungsresultatDtoSpec() {
   }
 
-  public TranchenBerechnungsresultatDtoSpec total(Integer total) {
+  public TranchenBerechnungsresultatDtoSpec total(@jakarta.annotation.Nonnull Integer total) {
     
     this.total = total;
     return this;
   }
 
-   /**
+  /**
    * Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
    * @return total
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotal() {
@@ -123,25 +138,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotal(Integer total) {
+  public void setTotal(@jakarta.annotation.Nonnull Integer total) {
     this.total = total;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec ungekuerztTotal(Integer ungekuerztTotal) {
+  public TranchenBerechnungsresultatDtoSpec ungekuerztTotal(@jakarta.annotation.Nonnull Integer ungekuerztTotal) {
     
     this.ungekuerztTotal = ungekuerztTotal;
     return this;
   }
 
-   /**
+  /**
    * Die ungekürzte Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
    * @return ungekuerztTotal
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getUngekuerztTotal() {
@@ -149,25 +163,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUngekuerztTotal(Integer ungekuerztTotal) {
+  public void setUngekuerztTotal(@jakarta.annotation.Nonnull Integer ungekuerztTotal) {
     this.ungekuerztTotal = ungekuerztTotal;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec gueltigAb(LocalDate gueltigAb) {
+  public TranchenBerechnungsresultatDtoSpec gueltigAb(@jakarta.annotation.Nonnull LocalDate gueltigAb) {
     
     this.gueltigAb = gueltigAb;
     return this;
   }
 
-   /**
+  /**
    * Get gueltigAb
    * @return gueltigAb
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_AB, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGueltigAb() {
@@ -175,25 +188,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_AB, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigAb(LocalDate gueltigAb) {
+  public void setGueltigAb(@jakarta.annotation.Nonnull LocalDate gueltigAb) {
     this.gueltigAb = gueltigAb;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec gueltigBis(LocalDate gueltigBis) {
+  public TranchenBerechnungsresultatDtoSpec gueltigBis(@jakarta.annotation.Nonnull LocalDate gueltigBis) {
     
     this.gueltigBis = gueltigBis;
     return this;
   }
 
-   /**
+  /**
    * Get gueltigBis
    * @return gueltigBis
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGueltigBis() {
@@ -201,25 +213,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigBis(LocalDate gueltigBis) {
+  public void setGueltigBis(@jakarta.annotation.Nonnull LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec ausbildungAb(String ausbildungAb) {
+  public TranchenBerechnungsresultatDtoSpec ausbildungAb(@jakarta.annotation.Nonnull String ausbildungAb) {
     
     this.ausbildungAb = ausbildungAb;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungAb
    * @return ausbildungAb
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_AB)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_AB, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAusbildungAb() {
@@ -227,25 +238,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_AB)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_AB, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungAb(String ausbildungAb) {
+  public void setAusbildungAb(@jakarta.annotation.Nonnull String ausbildungAb) {
     this.ausbildungAb = ausbildungAb;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec ausbildungBis(String ausbildungBis) {
+  public TranchenBerechnungsresultatDtoSpec ausbildungBis(@jakarta.annotation.Nonnull String ausbildungBis) {
     
     this.ausbildungBis = ausbildungBis;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungBis
    * @return ausbildungBis
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BIS)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAusbildungBis() {
@@ -253,25 +263,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BIS)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungBis(String ausbildungBis) {
+  public void setAusbildungBis(@jakarta.annotation.Nonnull String ausbildungBis) {
     this.ausbildungBis = ausbildungBis;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec yearRange(String yearRange) {
+  public TranchenBerechnungsresultatDtoSpec yearRange(@jakarta.annotation.Nonnull String yearRange) {
     
     this.yearRange = yearRange;
     return this;
   }
 
-   /**
+  /**
    * Get yearRange
    * @return yearRange
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonProperty(value = JSON_PROPERTY_YEAR_RANGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getYearRange() {
@@ -279,25 +288,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonProperty(value = JSON_PROPERTY_YEAR_RANGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setYearRange(String yearRange) {
+  public void setYearRange(@jakarta.annotation.Nonnull String yearRange) {
     this.yearRange = yearRange;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public TranchenBerechnungsresultatDtoSpec gesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheId
    * @return gesuchTrancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchTrancheId() {
@@ -305,25 +313,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+  public void setGesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec berechnungsanteilKinderDerEltern(BigDecimal berechnungsanteilKinderDerEltern) {
+  public TranchenBerechnungsresultatDtoSpec berechnungsanteilKinderDerEltern(@jakarta.annotation.Nullable BigDecimal berechnungsanteilKinderDerEltern) {
     
     this.berechnungsanteilKinderDerEltern = berechnungsanteilKinderDerEltern;
     return this;
   }
 
-   /**
+  /**
    * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
    * @return berechnungsanteilKinderDerEltern
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BigDecimal getBerechnungsanteilKinderDerEltern() {
@@ -331,25 +338,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBerechnungsanteilKinderDerEltern(BigDecimal berechnungsanteilKinderDerEltern) {
+  public void setBerechnungsanteilKinderDerEltern(@jakarta.annotation.Nullable BigDecimal berechnungsanteilKinderDerEltern) {
     this.berechnungsanteilKinderDerEltern = berechnungsanteilKinderDerEltern;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec teilzeitKinderBeiPiaAnrechnen(Boolean teilzeitKinderBeiPiaAnrechnen) {
+  public TranchenBerechnungsresultatDtoSpec teilzeitKinderBeiPiaAnrechnen(@jakarta.annotation.Nullable Boolean teilzeitKinderBeiPiaAnrechnen) {
     
     this.teilzeitKinderBeiPiaAnrechnen = teilzeitKinderBeiPiaAnrechnen;
     return this;
   }
 
-   /**
+  /**
    * Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet
    * @return teilzeitKinderBeiPiaAnrechnen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN)
+  @JsonProperty(value = JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getTeilzeitKinderBeiPiaAnrechnen() {
@@ -357,25 +363,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN)
+  @JsonProperty(value = JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTeilzeitKinderBeiPiaAnrechnen(Boolean teilzeitKinderBeiPiaAnrechnen) {
+  public void setTeilzeitKinderBeiPiaAnrechnen(@jakarta.annotation.Nullable Boolean teilzeitKinderBeiPiaAnrechnen) {
     this.teilzeitKinderBeiPiaAnrechnen = teilzeitKinderBeiPiaAnrechnen;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec berechnungsanteilKinderPia(BigDecimal berechnungsanteilKinderPia) {
+  public TranchenBerechnungsresultatDtoSpec berechnungsanteilKinderPia(@jakarta.annotation.Nullable BigDecimal berechnungsanteilKinderPia) {
     
     this.berechnungsanteilKinderPia = berechnungsanteilKinderPia;
     return this;
   }
 
-   /**
+  /**
    * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
    * @return berechnungsanteilKinderPia
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BigDecimal getBerechnungsanteilKinderPia() {
@@ -383,25 +388,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBerechnungsanteilKinderPia(BigDecimal berechnungsanteilKinderPia) {
+  public void setBerechnungsanteilKinderPia(@jakarta.annotation.Nullable BigDecimal berechnungsanteilKinderPia) {
     this.berechnungsanteilKinderPia = berechnungsanteilKinderPia;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec berechnungsStammdaten(BerechnungsStammdatenDtoSpec berechnungsStammdaten) {
+  public TranchenBerechnungsresultatDtoSpec berechnungsStammdaten(@jakarta.annotation.Nonnull BerechnungsStammdatenDtoSpec berechnungsStammdaten) {
     
     this.berechnungsStammdaten = berechnungsStammdaten;
     return this;
   }
 
-   /**
+  /**
    * Get berechnungsStammdaten
    * @return berechnungsStammdaten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGS_STAMMDATEN)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNGS_STAMMDATEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public BerechnungsStammdatenDtoSpec getBerechnungsStammdaten() {
@@ -409,25 +413,24 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGS_STAMMDATEN)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNGS_STAMMDATEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungsStammdaten(BerechnungsStammdatenDtoSpec berechnungsStammdaten) {
+  public void setBerechnungsStammdaten(@jakarta.annotation.Nonnull BerechnungsStammdatenDtoSpec berechnungsStammdaten) {
     this.berechnungsStammdaten = berechnungsStammdaten;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec persoenlichesBudgetresultat(PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat) {
+  public TranchenBerechnungsresultatDtoSpec persoenlichesBudgetresultat(@jakarta.annotation.Nonnull PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat) {
     
     this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
     return this;
   }
 
-   /**
+  /**
    * Get persoenlichesBudgetresultat
    * @return persoenlichesBudgetresultat
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT)
+  @JsonProperty(value = JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public PersoenlichesBudgetresultatDtoSpec getPersoenlichesBudgetresultat() {
@@ -435,14 +438,13 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT)
+  @JsonProperty(value = JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersoenlichesBudgetresultat(PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat) {
+  public void setPersoenlichesBudgetresultat(@jakarta.annotation.Nonnull PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat) {
     this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec familienBudgetresultate(List<FamilienBudgetresultatDtoSpec> familienBudgetresultate) {
+  public TranchenBerechnungsresultatDtoSpec familienBudgetresultate(@jakarta.annotation.Nonnull List<FamilienBudgetresultatDtoSpec> familienBudgetresultate) {
     
     this.familienBudgetresultate = familienBudgetresultate;
     return this;
@@ -456,12 +458,12 @@ public class TranchenBerechnungsresultatDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Berechnungsdaten der Familienbudgets
    * @return familienBudgetresultate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE)
+  @JsonProperty(value = JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<FamilienBudgetresultatDtoSpec> getFamilienBudgetresultate() {
@@ -469,14 +471,13 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE)
+  @JsonProperty(value = JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFamilienBudgetresultate(List<FamilienBudgetresultatDtoSpec> familienBudgetresultate) {
+  public void setFamilienBudgetresultate(@jakarta.annotation.Nonnull List<FamilienBudgetresultatDtoSpec> familienBudgetresultate) {
     this.familienBudgetresultate = familienBudgetresultate;
   }
 
-
-  public TranchenBerechnungsresultatDtoSpec personenHaushaltGroups(List<PersonenHaushaltGruppeDtoSpec> personenHaushaltGroups) {
+  public TranchenBerechnungsresultatDtoSpec personenHaushaltGroups(@jakarta.annotation.Nonnull List<PersonenHaushaltGruppeDtoSpec> personenHaushaltGroups) {
     
     this.personenHaushaltGroups = personenHaushaltGroups;
     return this;
@@ -490,12 +491,12 @@ public class TranchenBerechnungsresultatDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Enthällt eine Liste aller relevanten Personen für die jeweiligen Personen Haushalt Gruppen
    * @return personenHaushaltGroups
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<PersonenHaushaltGruppeDtoSpec> getPersonenHaushaltGroups() {
@@ -503,11 +504,12 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonenHaushaltGroups(List<PersonenHaushaltGruppeDtoSpec> personenHaushaltGroups) {
+  public void setPersonenHaushaltGroups(@jakarta.annotation.Nonnull List<PersonenHaushaltGruppeDtoSpec> personenHaushaltGroups) {
     this.personenHaushaltGroups = personenHaushaltGroups;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -568,10 +570,7 @@ public class TranchenBerechnungsresultatDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

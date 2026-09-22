@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstUpdateDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String name;
-  private @Valid ZahlungsverbindungDto zahlungsverbindung;
+  private UUID id;
+  private String name;
+  private ZahlungsverbindungDto zahlungsverbindung;
 
   protected SozialdienstUpdateDto(SozialdienstUpdateDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -42,13 +42,12 @@ public class SozialdienstUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -61,13 +60,12 @@ public class SozialdienstUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("name")
-  @NotNull
-  public String getName() {
+  @JsonProperty(required = true, value = "name")
+  @NotNull public String getName() {
     return name;
   }
 
-  @JsonProperty("name")
+  @JsonProperty(required = true, value = "name")
   public void setName(String name) {
     this.name = name;
   }
@@ -80,13 +78,12 @@ public class SozialdienstUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("zahlungsverbindung")
-  @NotNull
-  public ZahlungsverbindungDto getZahlungsverbindung() {
+  @JsonProperty(required = true, value = "zahlungsverbindung")
+  @NotNull @Valid public ZahlungsverbindungDto getZahlungsverbindung() {
     return zahlungsverbindung;
   }
 
-  @JsonProperty("zahlungsverbindung")
+  @JsonProperty(required = true, value = "zahlungsverbindung")
   public void setZahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
   }
@@ -128,10 +125,7 @@ public class SozialdienstUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -174,4 +168,3 @@ public class SozialdienstUpdateDto  implements Serializable {
     }
   }
 }
-

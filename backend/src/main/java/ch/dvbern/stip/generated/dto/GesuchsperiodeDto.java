@@ -18,24 +18,24 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Gesuchsperiode")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsperiodeDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
-  private @Valid GueltigkeitStatusDto gueltigkeitStatus;
-  private @Valid LocalDate gesuchsperiodeStart;
-  private @Valid LocalDate gesuchsperiodeStopp;
-  private @Valid LocalDate aufschaltterminStart;
-  private @Valid LocalDate einreichefristNormal;
-  private @Valid LocalDate einreichefristReduziert;
-  private @Valid GesuchsjahrDto gesuchsjahr;
-  private @Valid Integer ausbKostenSekII;
-  private @Valid Integer ausbKostenTertiaer;
-  private @Valid Integer fristNachreichenDokumente;
+  private UUID id;
+  private String bezeichnungDe;
+  private String bezeichnungFr;
+  private GueltigkeitStatusDto gueltigkeitStatus;
+  private LocalDate gesuchsperiodeStart;
+  private LocalDate gesuchsperiodeStopp;
+  private LocalDate aufschaltterminStart;
+  private LocalDate einreichefristNormal;
+  private LocalDate einreichefristReduziert;
+  private GesuchsjahrDto gesuchsjahr;
+  private Integer ausbKostenSekII;
+  private Integer ausbKostenTertiaer;
+  private Integer fristNachreichenDokumente;
 
   protected GesuchsperiodeDto(GesuchsperiodeDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -64,13 +64,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -83,13 +82,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungDe")
-  @NotNull
-  public String getBezeichnungDe() {
+  @JsonProperty(required = true, value = "bezeichnungDe")
+  @NotNull public String getBezeichnungDe() {
     return bezeichnungDe;
   }
 
-  @JsonProperty("bezeichnungDe")
+  @JsonProperty(required = true, value = "bezeichnungDe")
   public void setBezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
@@ -102,13 +100,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungFr")
-  @NotNull
-  public String getBezeichnungFr() {
+  @JsonProperty(required = true, value = "bezeichnungFr")
+  @NotNull public String getBezeichnungFr() {
     return bezeichnungFr;
   }
 
-  @JsonProperty("bezeichnungFr")
+  @JsonProperty(required = true, value = "bezeichnungFr")
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
@@ -121,13 +118,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("gueltigkeitStatus")
-  @NotNull
-  public GueltigkeitStatusDto getGueltigkeitStatus() {
+  @JsonProperty(required = true, value = "gueltigkeitStatus")
+  @NotNull public GueltigkeitStatusDto getGueltigkeitStatus() {
     return gueltigkeitStatus;
   }
 
-  @JsonProperty("gueltigkeitStatus")
+  @JsonProperty(required = true, value = "gueltigkeitStatus")
   public void setGueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
     this.gueltigkeitStatus = gueltigkeitStatus;
   }
@@ -140,13 +136,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchsperiodeStart")
-  @NotNull
-  public LocalDate getGesuchsperiodeStart() {
+  @JsonProperty(required = true, value = "gesuchsperiodeStart")
+  @NotNull public LocalDate getGesuchsperiodeStart() {
     return gesuchsperiodeStart;
   }
 
-  @JsonProperty("gesuchsperiodeStart")
+  @JsonProperty(required = true, value = "gesuchsperiodeStart")
   public void setGesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
     this.gesuchsperiodeStart = gesuchsperiodeStart;
   }
@@ -159,13 +154,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchsperiodeStopp")
-  @NotNull
-  public LocalDate getGesuchsperiodeStopp() {
+  @JsonProperty(required = true, value = "gesuchsperiodeStopp")
+  @NotNull public LocalDate getGesuchsperiodeStopp() {
     return gesuchsperiodeStopp;
   }
 
-  @JsonProperty("gesuchsperiodeStopp")
+  @JsonProperty(required = true, value = "gesuchsperiodeStopp")
   public void setGesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
     this.gesuchsperiodeStopp = gesuchsperiodeStopp;
   }
@@ -178,13 +172,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("aufschaltterminStart")
-  @NotNull
-  public LocalDate getAufschaltterminStart() {
+  @JsonProperty(required = true, value = "aufschaltterminStart")
+  @NotNull public LocalDate getAufschaltterminStart() {
     return aufschaltterminStart;
   }
 
-  @JsonProperty("aufschaltterminStart")
+  @JsonProperty(required = true, value = "aufschaltterminStart")
   public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
     this.aufschaltterminStart = aufschaltterminStart;
   }
@@ -197,13 +190,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("einreichefristNormal")
-  @NotNull
-  public LocalDate getEinreichefristNormal() {
+  @JsonProperty(required = true, value = "einreichefristNormal")
+  @NotNull public LocalDate getEinreichefristNormal() {
     return einreichefristNormal;
   }
 
-  @JsonProperty("einreichefristNormal")
+  @JsonProperty(required = true, value = "einreichefristNormal")
   public void setEinreichefristNormal(LocalDate einreichefristNormal) {
     this.einreichefristNormal = einreichefristNormal;
   }
@@ -216,13 +208,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("einreichefristReduziert")
-  @NotNull
-  public LocalDate getEinreichefristReduziert() {
+  @JsonProperty(required = true, value = "einreichefristReduziert")
+  @NotNull public LocalDate getEinreichefristReduziert() {
     return einreichefristReduziert;
   }
 
-  @JsonProperty("einreichefristReduziert")
+  @JsonProperty(required = true, value = "einreichefristReduziert")
   public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
     this.einreichefristReduziert = einreichefristReduziert;
   }
@@ -235,13 +226,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchsjahr")
-  @NotNull
-  public GesuchsjahrDto getGesuchsjahr() {
+  @JsonProperty(required = true, value = "gesuchsjahr")
+  @NotNull @Valid public GesuchsjahrDto getGesuchsjahr() {
     return gesuchsjahr;
   }
 
-  @JsonProperty("gesuchsjahr")
+  @JsonProperty(required = true, value = "gesuchsjahr")
   public void setGesuchsjahr(GesuchsjahrDto gesuchsjahr) {
     this.gesuchsjahr = gesuchsjahr;
   }
@@ -254,13 +244,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbKosten_SekII")
-  @NotNull
-  public Integer getAusbKostenSekII() {
+  @JsonProperty(required = true, value = "ausbKosten_SekII")
+  @NotNull public Integer getAusbKostenSekII() {
     return ausbKostenSekII;
   }
 
-  @JsonProperty("ausbKosten_SekII")
+  @JsonProperty(required = true, value = "ausbKosten_SekII")
   public void setAusbKostenSekII(Integer ausbKostenSekII) {
     this.ausbKostenSekII = ausbKostenSekII;
   }
@@ -273,13 +262,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbKosten_Tertiaer")
-  @NotNull
-  public Integer getAusbKostenTertiaer() {
+  @JsonProperty(required = true, value = "ausbKosten_Tertiaer")
+  @NotNull public Integer getAusbKostenTertiaer() {
     return ausbKostenTertiaer;
   }
 
-  @JsonProperty("ausbKosten_Tertiaer")
+  @JsonProperty(required = true, value = "ausbKosten_Tertiaer")
   public void setAusbKostenTertiaer(Integer ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
   }
@@ -292,13 +280,12 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
   
-  @JsonProperty("fristNachreichenDokumente")
-  @NotNull
-  public Integer getFristNachreichenDokumente() {
+  @JsonProperty(required = true, value = "fristNachreichenDokumente")
+  @NotNull public Integer getFristNachreichenDokumente() {
     return fristNachreichenDokumente;
   }
 
-  @JsonProperty("fristNachreichenDokumente")
+  @JsonProperty(required = true, value = "fristNachreichenDokumente")
   public void setFristNachreichenDokumente(Integer fristNachreichenDokumente) {
     this.fristNachreichenDokumente = fristNachreichenDokumente;
   }
@@ -360,10 +347,7 @@ public class GesuchsperiodeDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -456,4 +440,3 @@ public class GesuchsperiodeDto  implements Serializable {
     }
   }
 }
-

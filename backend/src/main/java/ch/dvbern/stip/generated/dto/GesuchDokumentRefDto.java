@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDokumentRef")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentRefDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
-  private @Valid UUID entryId;
+  private ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
+  private UUID entryId;
 
   protected GesuchDokumentRefDto(GesuchDokumentRefDtoBuilder<?, ?> b) {
     this.dokumentTyp = b.dokumentTyp;
@@ -39,13 +39,12 @@ public class GesuchDokumentRefDto  implements Serializable {
   }
 
   
-  @JsonProperty("dokumentTyp")
-  @NotNull
-  public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
+  @JsonProperty(required = true, value = "dokumentTyp")
+  @NotNull public ch.dvbern.stip.api.dokument.type.DokumentTyp getDokumentTyp() {
     return dokumentTyp;
   }
 
-  @JsonProperty("dokumentTyp")
+  @JsonProperty(required = true, value = "dokumentTyp")
   public void setDokumentTyp(ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp) {
     this.dokumentTyp = dokumentTyp;
   }
@@ -103,10 +102,7 @@ public class GesuchDokumentRefDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +140,3 @@ public class GesuchDokumentRefDto  implements Serializable {
     }
   }
 }
-

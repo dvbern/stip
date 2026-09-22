@@ -31,29 +31,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonValueItemDtoSpec.JSON_PROPERTY_VALUE
 })
 @JsonTypeName("PersonValueItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PersonValueItemDtoSpec {
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nullable
   private String vorname;
 
   public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private Integer value;
 
   public PersonValueItemDtoSpec() {
   }
 
-  public PersonValueItemDtoSpec vorname(String vorname) {
+  public PersonValueItemDtoSpec vorname(@jakarta.annotation.Nullable String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getVorname() {
@@ -61,25 +63,24 @@ public class PersonValueItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nullable String vorname) {
     this.vorname = vorname;
   }
 
-
-  public PersonValueItemDtoSpec value(Integer value) {
+  public PersonValueItemDtoSpec value(@jakarta.annotation.Nullable Integer value) {
     
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getValue() {
@@ -87,11 +88,12 @@ public class PersonValueItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setValue(Integer value) {
+  public void setValue(@jakarta.annotation.Nullable Integer value) {
     this.value = value;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -126,10 +128,7 @@ public class PersonValueItemDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

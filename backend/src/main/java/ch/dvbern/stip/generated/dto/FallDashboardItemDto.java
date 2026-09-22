@@ -21,15 +21,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FallDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallDashboardItemDto  implements Serializable {
-  private @Valid FallDto fall;
-  private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
-  private @Valid DelegierungSlimDto currentDelegierung;
-  private @Valid LocalDate earliestActiveGesuchPeriodeStart;
+  private FallDto fall;
+  private @Valid List<@Valid AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
+  private DelegierungSlimDto currentDelegierung;
+  private LocalDate earliestActiveGesuchPeriodeStart;
 
   protected FallDashboardItemDto(FallDashboardItemDtoBuilder<?, ?> b) {
     this.fall = b.fall;
@@ -49,33 +49,31 @@ public class FallDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("fall")
-  @NotNull
-  public FallDto getFall() {
+  @JsonProperty(required = true, value = "fall")
+  @NotNull @Valid public FallDto getFall() {
     return fall;
   }
 
-  @JsonProperty("fall")
+  @JsonProperty(required = true, value = "fall")
   public void setFall(FallDto fall) {
     this.fall = fall;
   }
 
   /**
    **/
-  public FallDashboardItemDto ausbildungDashboardItems(List<AusbildungDashboardItemDto> ausbildungDashboardItems) {
+  public FallDashboardItemDto ausbildungDashboardItems(List<@Valid AusbildungDashboardItemDto> ausbildungDashboardItems) {
     this.ausbildungDashboardItems = ausbildungDashboardItems;
     return this;
   }
 
   
-  @JsonProperty("ausbildungDashboardItems")
-  @NotNull
-  public List<AusbildungDashboardItemDto> getAusbildungDashboardItems() {
+  @JsonProperty(required = true, value = "ausbildungDashboardItems")
+  @NotNull @Valid public List<@Valid AusbildungDashboardItemDto> getAusbildungDashboardItems() {
     return ausbildungDashboardItems;
   }
 
-  @JsonProperty("ausbildungDashboardItems")
-  public void setAusbildungDashboardItems(List<AusbildungDashboardItemDto> ausbildungDashboardItems) {
+  @JsonProperty(required = true, value = "ausbildungDashboardItems")
+  public void setAusbildungDashboardItems(List<@Valid AusbildungDashboardItemDto> ausbildungDashboardItems) {
     this.ausbildungDashboardItems = ausbildungDashboardItems;
   }
 
@@ -104,7 +102,7 @@ public class FallDashboardItemDto  implements Serializable {
 
   
   @JsonProperty("currentDelegierung")
-  public DelegierungSlimDto getCurrentDelegierung() {
+  @Valid public DelegierungSlimDto getCurrentDelegierung() {
     return currentDelegierung;
   }
 
@@ -170,10 +168,7 @@ public class FallDashboardItemDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -221,4 +216,3 @@ public class FallDashboardItemDto  implements Serializable {
     }
   }
 }
-

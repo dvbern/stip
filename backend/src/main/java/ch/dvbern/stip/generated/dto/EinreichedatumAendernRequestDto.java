@@ -15,14 +15,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("EinreichedatumAendernRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class EinreichedatumAendernRequestDto  implements Serializable {
-  private @Valid LocalDate newEinreichedatum;
-  private @Valid String betreff;
-  private @Valid String text;
+  private LocalDate newEinreichedatum;
+  private String betreff;
+  private String text;
 
   protected EinreichedatumAendernRequestDto(EinreichedatumAendernRequestDtoBuilder<?, ?> b) {
     this.newEinreichedatum = b.newEinreichedatum;
@@ -41,13 +41,12 @@ public class EinreichedatumAendernRequestDto  implements Serializable {
   }
 
   
-  @JsonProperty("newEinreichedatum")
-  @NotNull
-  public LocalDate getNewEinreichedatum() {
+  @JsonProperty(required = true, value = "newEinreichedatum")
+  @NotNull public LocalDate getNewEinreichedatum() {
     return newEinreichedatum;
   }
 
-  @JsonProperty("newEinreichedatum")
+  @JsonProperty(required = true, value = "newEinreichedatum")
   public void setNewEinreichedatum(LocalDate newEinreichedatum) {
     this.newEinreichedatum = newEinreichedatum;
   }
@@ -125,10 +124,7 @@ public class EinreichedatumAendernRequestDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -171,4 +167,3 @@ public class EinreichedatumAendernRequestDto  implements Serializable {
     }
   }
 }
-

@@ -17,17 +17,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataTestBerechnungResultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataTestBerechnungResultatDto  implements Serializable {
-  private @Valid UUID demoDataId;
-  private @Valid String testFall;
-  private @Valid DemoDataTestBerechnungValidDto valid;
-  private @Valid String message;
-  private @Valid DemoDataTestBerechnungValuesDto soll;
-  private @Valid DemoDataTestBerechnungValuesDto ist;
+  private UUID demoDataId;
+  private String testFall;
+  private DemoDataTestBerechnungValidDto valid;
+  private String message;
+  private DemoDataTestBerechnungValuesDto soll;
+  private DemoDataTestBerechnungValuesDto ist;
 
   protected DemoDataTestBerechnungResultatDto(DemoDataTestBerechnungResultatDtoBuilder<?, ?> b) {
     this.demoDataId = b.demoDataId;
@@ -49,13 +49,12 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("demoDataId")
-  @NotNull
-  public UUID getDemoDataId() {
+  @JsonProperty(required = true, value = "demoDataId")
+  @NotNull public UUID getDemoDataId() {
     return demoDataId;
   }
 
-  @JsonProperty("demoDataId")
+  @JsonProperty(required = true, value = "demoDataId")
   public void setDemoDataId(UUID demoDataId) {
     this.demoDataId = demoDataId;
   }
@@ -68,13 +67,12 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("testFall")
-  @NotNull
-  public String getTestFall() {
+  @JsonProperty(required = true, value = "testFall")
+  @NotNull public String getTestFall() {
     return testFall;
   }
 
-  @JsonProperty("testFall")
+  @JsonProperty(required = true, value = "testFall")
   public void setTestFall(String testFall) {
     this.testFall = testFall;
   }
@@ -88,7 +86,7 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
 
   
   @JsonProperty("valid")
-  public DemoDataTestBerechnungValidDto getValid() {
+  @Valid public DemoDataTestBerechnungValidDto getValid() {
     return valid;
   }
 
@@ -124,7 +122,7 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
 
   
   @JsonProperty("soll")
-  public DemoDataTestBerechnungValuesDto getSoll() {
+  @Valid public DemoDataTestBerechnungValuesDto getSoll() {
     return soll;
   }
 
@@ -142,7 +140,7 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
 
   
   @JsonProperty("ist")
-  public DemoDataTestBerechnungValuesDto getIst() {
+  @Valid public DemoDataTestBerechnungValuesDto getIst() {
     return ist;
   }
 
@@ -194,10 +192,7 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -255,4 +250,3 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
     }
   }
 }
-

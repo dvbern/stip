@@ -39,44 +39,51 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PartnerDtoSpec.JSON_PROPERTY_AUSBILDUNGSPENSUM
 })
 @JsonTypeName("Partner")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PartnerDtoSpec {
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
+  @jakarta.annotation.Nonnull
   private AdresseDtoSpec adresse;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  @jakarta.annotation.Nonnull
   private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
+  @jakarta.annotation.Nonnull
   private String sozialversicherungsnummer;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_IN_AUSBILDUNG = "inAusbildung";
+  @jakarta.annotation.Nullable
   private Boolean inAusbildung;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSPENSUM = "ausbildungspensum";
+  @jakarta.annotation.Nullable
   private AusbildungsPensumDtoSpec ausbildungspensum;
 
   public PartnerDtoSpec() {
   }
 
-  public PartnerDtoSpec adresse(AdresseDtoSpec adresse) {
+  public PartnerDtoSpec adresse(@jakarta.annotation.Nonnull AdresseDtoSpec adresse) {
     
     this.adresse = adresse;
     return this;
   }
 
-   /**
+  /**
    * Get adresse
    * @return adresse
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_ADRESSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AdresseDtoSpec getAdresse() {
@@ -84,25 +91,24 @@ public class PartnerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_ADRESSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdresse(AdresseDtoSpec adresse) {
+  public void setAdresse(@jakarta.annotation.Nonnull AdresseDtoSpec adresse) {
     this.adresse = adresse;
   }
 
-
-  public PartnerDtoSpec vorname(String vorname) {
+  public PartnerDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -110,25 +116,24 @@ public class PartnerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public PartnerDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public PartnerDtoSpec geburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * Get geburtsdatum
    * @return geburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGeburtsdatum() {
@@ -136,25 +141,24 @@ public class PartnerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
-
-  public PartnerDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
+  public PartnerDtoSpec sozialversicherungsnummer(@jakarta.annotation.Nonnull String sozialversicherungsnummer) {
     
     this.sozialversicherungsnummer = sozialversicherungsnummer;
     return this;
   }
 
-   /**
+  /**
    * Get sozialversicherungsnummer
    * @return sozialversicherungsnummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getSozialversicherungsnummer() {
@@ -162,25 +166,24 @@ public class PartnerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+  public void setSozialversicherungsnummer(@jakarta.annotation.Nonnull String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
 
-
-  public PartnerDtoSpec nachname(String nachname) {
+  public PartnerDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -188,25 +191,24 @@ public class PartnerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public PartnerDtoSpec inAusbildung(Boolean inAusbildung) {
+  public PartnerDtoSpec inAusbildung(@jakarta.annotation.Nullable Boolean inAusbildung) {
     
     this.inAusbildung = inAusbildung;
     return this;
   }
 
-   /**
+  /**
    * Get inAusbildung
    * @return inAusbildung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IN_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_IN_AUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getInAusbildung() {
@@ -214,25 +216,24 @@ public class PartnerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IN_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_IN_AUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInAusbildung(Boolean inAusbildung) {
+  public void setInAusbildung(@jakarta.annotation.Nullable Boolean inAusbildung) {
     this.inAusbildung = inAusbildung;
   }
 
-
-  public PartnerDtoSpec ausbildungspensum(AusbildungsPensumDtoSpec ausbildungspensum) {
+  public PartnerDtoSpec ausbildungspensum(@jakarta.annotation.Nullable AusbildungsPensumDtoSpec ausbildungspensum) {
     
     this.ausbildungspensum = ausbildungspensum;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungspensum
    * @return ausbildungspensum
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSPENSUM)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSPENSUM, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public AusbildungsPensumDtoSpec getAusbildungspensum() {
@@ -240,11 +241,12 @@ public class PartnerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSPENSUM)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSPENSUM, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungspensum(AusbildungsPensumDtoSpec ausbildungspensum) {
+  public void setAusbildungspensum(@jakarta.annotation.Nullable AusbildungsPensumDtoSpec ausbildungspensum) {
     this.ausbildungspensum = ausbildungspensum;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -289,10 +291,7 @@ public class PartnerDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

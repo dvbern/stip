@@ -37,6 +37,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -188,7 +189,7 @@ public class GesuchTrancheApiSpec {
         public AenderungAblehnenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -217,7 +218,7 @@ public class GesuchTrancheApiSpec {
          * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
          * @return operation
          */
-        public AenderungAblehnenOper body(KommentarDtoSpec kommentarDtoSpec) {
+        public AenderungAblehnenOper body(@jakarta.annotation.Nonnull KommentarDtoSpec kommentarDtoSpec) {
             reqSpec.setBody(kommentarDtoSpec);
             return this;
         }
@@ -270,7 +271,7 @@ public class GesuchTrancheApiSpec {
 
         public AenderungAkzeptierenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -405,7 +406,7 @@ public class GesuchTrancheApiSpec {
 
         public AenderungFehlendeDokumenteEinreichenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -478,7 +479,7 @@ public class GesuchTrancheApiSpec {
 
         public AenderungFehlendeDokumenteUebermittelnOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -551,7 +552,7 @@ public class GesuchTrancheApiSpec {
 
         public AenderungManuellAnpassenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -626,7 +627,7 @@ public class GesuchTrancheApiSpec {
         public CreateAenderungsantragOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -655,7 +656,7 @@ public class GesuchTrancheApiSpec {
          * @param createAenderungsantragRequestDtoSpec (CreateAenderungsantragRequestDtoSpec)  (required)
          * @return operation
          */
-        public CreateAenderungsantragOper body(CreateAenderungsantragRequestDtoSpec createAenderungsantragRequestDtoSpec) {
+        public CreateAenderungsantragOper body(@jakarta.annotation.Nonnull CreateAenderungsantragRequestDtoSpec createAenderungsantragRequestDtoSpec) {
             reqSpec.setBody(createAenderungsantragRequestDtoSpec);
             return this;
         }
@@ -710,7 +711,7 @@ public class GesuchTrancheApiSpec {
         public CreateGesuchTrancheCopyOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -739,7 +740,7 @@ public class GesuchTrancheApiSpec {
          * @param createGesuchTrancheRequestDtoSpec (CreateGesuchTrancheRequestDtoSpec)  (optional)
          * @return operation
          */
-        public CreateGesuchTrancheCopyOper body(CreateGesuchTrancheRequestDtoSpec createGesuchTrancheRequestDtoSpec) {
+        public CreateGesuchTrancheCopyOper body(@jakarta.annotation.Nullable CreateGesuchTrancheRequestDtoSpec createGesuchTrancheRequestDtoSpec) {
             reqSpec.setBody(createGesuchTrancheRequestDtoSpec);
             return this;
         }
@@ -854,7 +855,7 @@ public class GesuchTrancheApiSpec {
 
         public GesuchTrancheEinreichenValidierenGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -927,7 +928,7 @@ public class GesuchTrancheApiSpec {
 
         public GesuchTrancheEinreichenValidierenSBOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1000,7 +1001,7 @@ public class GesuchTrancheApiSpec {
 
         public GetDocumentsToUploadGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1073,7 +1074,7 @@ public class GesuchTrancheApiSpec {
 
         public GetDocumentsToUploadSBOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1146,7 +1147,7 @@ public class GesuchTrancheApiSpec {
 
         public GetGesuchDokumenteGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1219,7 +1220,7 @@ public class GesuchTrancheApiSpec {
 
         public GetGesuchDokumenteSBOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1294,7 +1295,7 @@ public class GesuchTrancheApiSpec {
         public PatchAenderungInfoOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1323,7 +1324,7 @@ public class GesuchTrancheApiSpec {
          * @param patchAenderungsInfoRequestDtoSpec (PatchAenderungsInfoRequestDtoSpec)  (required)
          * @return operation
          */
-        public PatchAenderungInfoOper body(PatchAenderungsInfoRequestDtoSpec patchAenderungsInfoRequestDtoSpec) {
+        public PatchAenderungInfoOper body(@jakarta.annotation.Nonnull PatchAenderungsInfoRequestDtoSpec patchAenderungsInfoRequestDtoSpec) {
             reqSpec.setBody(patchAenderungsInfoRequestDtoSpec);
             return this;
         }

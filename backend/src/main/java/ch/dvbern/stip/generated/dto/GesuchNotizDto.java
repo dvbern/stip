@@ -16,22 +16,22 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchNotiz")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchNotizDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String betreff;
-  private @Valid String text;
-  private @Valid String userErstellt;
-  private @Valid LocalDate timestampErstellt;
-  private @Valid ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
-  private @Valid String gesuchNummer;
-  private @Valid Boolean pendenzAbgeschlossen;
-  private @Valid String userMutiert;
-  private @Valid LocalDate timestampMutiert;
-  private @Valid String antwort;
+  private UUID id;
+  private String betreff;
+  private String text;
+  private String userErstellt;
+  private LocalDate timestampErstellt;
+  private ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
+  private String gesuchNummer;
+  private Boolean pendenzAbgeschlossen;
+  private String userMutiert;
+  private LocalDate timestampMutiert;
+  private String antwort;
 
   protected GesuchNotizDto(GesuchNotizDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -58,13 +58,12 @@ public class GesuchNotizDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -77,13 +76,12 @@ public class GesuchNotizDto  implements Serializable {
   }
 
   
-  @JsonProperty("betreff")
-  @NotNull
-  public String getBetreff() {
+  @JsonProperty(required = true, value = "betreff")
+  @NotNull public String getBetreff() {
     return betreff;
   }
 
-  @JsonProperty("betreff")
+  @JsonProperty(required = true, value = "betreff")
   public void setBetreff(String betreff) {
     this.betreff = betreff;
   }
@@ -96,13 +94,12 @@ public class GesuchNotizDto  implements Serializable {
   }
 
   
-  @JsonProperty("text")
-  @NotNull
-  public String getText() {
+  @JsonProperty(required = true, value = "text")
+  @NotNull public String getText() {
     return text;
   }
 
-  @JsonProperty("text")
+  @JsonProperty(required = true, value = "text")
   public void setText(String text) {
     this.text = text;
   }
@@ -115,13 +112,12 @@ public class GesuchNotizDto  implements Serializable {
   }
 
   
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
+  @JsonProperty(required = true, value = "userErstellt")
+  @NotNull public String getUserErstellt() {
     return userErstellt;
   }
 
-  @JsonProperty("userErstellt")
+  @JsonProperty(required = true, value = "userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
   }
@@ -134,13 +130,12 @@ public class GesuchNotizDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public LocalDate getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public LocalDate getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -153,13 +148,12 @@ public class GesuchNotizDto  implements Serializable {
   }
 
   
-  @JsonProperty("notizTyp")
-  @NotNull
-  public ch.dvbern.stip.api.notiz.type.GesuchNotizTyp getNotizTyp() {
+  @JsonProperty(required = true, value = "notizTyp")
+  @NotNull public ch.dvbern.stip.api.notiz.type.GesuchNotizTyp getNotizTyp() {
     return notizTyp;
   }
 
-  @JsonProperty("notizTyp")
+  @JsonProperty(required = true, value = "notizTyp")
   public void setNotizTyp(ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp) {
     this.notizTyp = notizTyp;
   }
@@ -172,13 +166,12 @@ public class GesuchNotizDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchNummer")
-  @NotNull
-  public String getGesuchNummer() {
+  @JsonProperty(required = true, value = "gesuchNummer")
+  @NotNull public String getGesuchNummer() {
     return gesuchNummer;
   }
 
-  @JsonProperty("gesuchNummer")
+  @JsonProperty(required = true, value = "gesuchNummer")
   public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
@@ -308,10 +301,7 @@ public class GesuchNotizDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -394,4 +384,3 @@ public class GesuchNotizDto  implements Serializable {
     }
   }
 }
-

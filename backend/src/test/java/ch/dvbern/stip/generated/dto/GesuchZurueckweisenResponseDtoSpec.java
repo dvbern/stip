@@ -34,32 +34,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchZurueckweisenResponseDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TYP
 })
 @JsonTypeName("GesuchZurueckweisenResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchZurueckweisenResponseDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchId;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_TYP = "gesuchTrancheTyp";
+  @jakarta.annotation.Nonnull
   private GesuchTrancheTypDtoSpec gesuchTrancheTyp;
 
   public GesuchZurueckweisenResponseDtoSpec() {
   }
 
-  public GesuchZurueckweisenResponseDtoSpec gesuchId(UUID gesuchId) {
+  public GesuchZurueckweisenResponseDtoSpec gesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchId
    * @return gesuchId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchId() {
@@ -67,25 +70,24 @@ public class GesuchZurueckweisenResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
+  public void setGesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
 
-
-  public GesuchZurueckweisenResponseDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public GesuchZurueckweisenResponseDtoSpec gesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheId
    * @return gesuchTrancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchTrancheId() {
@@ -93,25 +95,24 @@ public class GesuchZurueckweisenResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+  public void setGesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
 
-
-  public GesuchZurueckweisenResponseDtoSpec gesuchTrancheTyp(GesuchTrancheTypDtoSpec gesuchTrancheTyp) {
+  public GesuchZurueckweisenResponseDtoSpec gesuchTrancheTyp(@jakarta.annotation.Nonnull GesuchTrancheTypDtoSpec gesuchTrancheTyp) {
     
     this.gesuchTrancheTyp = gesuchTrancheTyp;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheTyp
    * @return gesuchTrancheTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_TYP)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheTypDtoSpec getGesuchTrancheTyp() {
@@ -119,11 +120,12 @@ public class GesuchZurueckweisenResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_TYP)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheTyp(GesuchTrancheTypDtoSpec gesuchTrancheTyp) {
+  public void setGesuchTrancheTyp(@jakarta.annotation.Nonnull GesuchTrancheTypDtoSpec gesuchTrancheTyp) {
     this.gesuchTrancheTyp = gesuchTrancheTyp;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -160,10 +162,7 @@ public class GesuchZurueckweisenResponseDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

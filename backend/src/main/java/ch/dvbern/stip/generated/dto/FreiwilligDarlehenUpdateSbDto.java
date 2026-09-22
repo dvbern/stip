@@ -14,15 +14,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehenUpdateSb")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenUpdateSbDto  implements Serializable {
-  private @Valid Boolean gewaehren;
-  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload negativeVerfuegung;
-  private @Valid Integer betrag;
-  private @Valid String kommentar;
+  private Boolean gewaehren;
+  private org.jboss.resteasy.reactive.multipart.FileUpload negativeVerfuegung;
+  private Integer betrag;
+  private String kommentar;
 
   protected FreiwilligDarlehenUpdateSbDto(FreiwilligDarlehenUpdateSbDtoBuilder<?, ?> b) {
     this.gewaehren = b.gewaehren;
@@ -61,7 +61,7 @@ public class FreiwilligDarlehenUpdateSbDto  implements Serializable {
 
   
   @JsonProperty("negativeVerfuegung")
-  public org.jboss.resteasy.reactive.multipart.FileUpload getNegativeVerfuegung() {
+  @Valid public org.jboss.resteasy.reactive.multipart.FileUpload getNegativeVerfuegung() {
     return negativeVerfuegung;
   }
 
@@ -80,7 +80,7 @@ public class FreiwilligDarlehenUpdateSbDto  implements Serializable {
 
   
   @JsonProperty("betrag")
- @Min(0)  public Integer getBetrag() {
+   @Min(0)public Integer getBetrag() {
     return betrag;
   }
 
@@ -146,10 +146,7 @@ public class FreiwilligDarlehenUpdateSbDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -197,4 +194,3 @@ public class FreiwilligDarlehenUpdateSbDto  implements Serializable {
     }
   }
 }
-

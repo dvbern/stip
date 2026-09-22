@@ -48,6 +48,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -178,7 +179,7 @@ public class AusbildungsstaetteApiSpec {
         public CreateAbschlussBrueckenangebotOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -207,7 +208,7 @@ public class AusbildungsstaetteApiSpec {
          * @param brueckenangebotCreateDtoSpec (BrueckenangebotCreateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAbschlussBrueckenangebotOper body(BrueckenangebotCreateDtoSpec brueckenangebotCreateDtoSpec) {
+        public CreateAbschlussBrueckenangebotOper body(@jakarta.annotation.Nonnull BrueckenangebotCreateDtoSpec brueckenangebotCreateDtoSpec) {
             reqSpec.setBody(brueckenangebotCreateDtoSpec);
             return this;
         }
@@ -250,7 +251,7 @@ public class AusbildungsstaetteApiSpec {
         public CreateAusbildungsgangOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -279,7 +280,7 @@ public class AusbildungsstaetteApiSpec {
          * @param ausbildungsgangCreateDtoSpec (AusbildungsgangCreateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAusbildungsgangOper body(AusbildungsgangCreateDtoSpec ausbildungsgangCreateDtoSpec) {
+        public CreateAusbildungsgangOper body(@jakarta.annotation.Nonnull AusbildungsgangCreateDtoSpec ausbildungsgangCreateDtoSpec) {
             reqSpec.setBody(ausbildungsgangCreateDtoSpec);
             return this;
         }
@@ -322,7 +323,7 @@ public class AusbildungsstaetteApiSpec {
         public CreateAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -351,7 +352,7 @@ public class AusbildungsstaetteApiSpec {
          * @param ausbildungsstaetteCreateDtoSpec (AusbildungsstaetteCreateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAusbildungsstaetteOper body(AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreateDtoSpec) {
+        public CreateAusbildungsstaetteOper body(@jakarta.annotation.Nonnull AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreateDtoSpec) {
             reqSpec.setBody(ausbildungsstaetteCreateDtoSpec);
             return this;
         }
@@ -392,7 +393,7 @@ public class AusbildungsstaetteApiSpec {
 
         public GetAllAbschluessForAuswahlOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -462,7 +463,7 @@ public class AusbildungsstaetteApiSpec {
 
         public GetAllAbschlussForUebersichtOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -622,7 +623,7 @@ public class AusbildungsstaetteApiSpec {
 
         public GetAllAusbildungsgaengeForAuswahlOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -693,7 +694,7 @@ public class AusbildungsstaetteApiSpec {
 
         public GetAllAusbildungsgangForUebersichtOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -864,7 +865,7 @@ public class AusbildungsstaetteApiSpec {
 
         public GetAllAusbildungsstaetteForAuswahlOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -934,7 +935,7 @@ public class AusbildungsstaetteApiSpec {
 
         public GetAllAusbildungsstaetteForUebersichtOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1097,7 +1098,7 @@ public class AusbildungsstaetteApiSpec {
         public RenameAbschlussOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1126,7 +1127,7 @@ public class AusbildungsstaetteApiSpec {
          * @param renameAbschlussDtoSpec (RenameAbschlussDtoSpec)  (required)
          * @return operation
          */
-        public RenameAbschlussOper body(RenameAbschlussDtoSpec renameAbschlussDtoSpec) {
+        public RenameAbschlussOper body(@jakarta.annotation.Nonnull RenameAbschlussDtoSpec renameAbschlussDtoSpec) {
             reqSpec.setBody(renameAbschlussDtoSpec);
             return this;
         }
@@ -1181,7 +1182,7 @@ public class AusbildungsstaetteApiSpec {
         public RenameAusbildungsstaetteOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1210,7 +1211,7 @@ public class AusbildungsstaetteApiSpec {
          * @param renameAusbildungsstaetteDtoSpec (RenameAusbildungsstaetteDtoSpec)  (required)
          * @return operation
          */
-        public RenameAusbildungsstaetteOper body(RenameAusbildungsstaetteDtoSpec renameAusbildungsstaetteDtoSpec) {
+        public RenameAusbildungsstaetteOper body(@jakarta.annotation.Nonnull RenameAusbildungsstaetteDtoSpec renameAusbildungsstaetteDtoSpec) {
             reqSpec.setBody(renameAusbildungsstaetteDtoSpec);
             return this;
         }
@@ -1263,7 +1264,7 @@ public class AusbildungsstaetteApiSpec {
 
         public SetAbschlussInaktivOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1336,7 +1337,7 @@ public class AusbildungsstaetteApiSpec {
 
         public SetAusbildungsgangInaktivOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1409,7 +1410,7 @@ public class AusbildungsstaetteApiSpec {
 
         public SetAusbildungsstaetteInaktivOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 

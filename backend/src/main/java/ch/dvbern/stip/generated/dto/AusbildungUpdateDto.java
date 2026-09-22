@@ -15,26 +15,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungUpdateDto  implements Serializable {
-  private @Valid UUID fallId;
-  private @Valid String ausbildungBegin;
-  private @Valid String ausbildungEnd;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
-  private @Valid UUID id;
-  private @Valid String fachrichtungBerufsbezeichnung;
-  private @Valid Boolean ausbildungNichtGefunden;
-  private @Valid Boolean besuchtBMS;
-  private @Valid String alternativeAusbildungsstaette;
-  private @Valid String alternativeAusbildungsgang;
-  private @Valid String ausbildungsortPLZ;
-  private @Valid String ausbildungsort;
-  private @Valid Boolean isAusbildungAusland;
-  private @Valid UUID landId;
-  private @Valid UUID ausbildungsgangId;
+  private UUID fallId;
+  private String ausbildungBegin;
+  private String ausbildungEnd;
+  private ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
+  private UUID id;
+  private String fachrichtungBerufsbezeichnung;
+  private Boolean ausbildungNichtGefunden;
+  private Boolean besuchtBMS;
+  private String alternativeAusbildungsstaette;
+  private String alternativeAusbildungsgang;
+  private String ausbildungsortPLZ;
+  private String ausbildungsort;
+  private Boolean isAusbildungAusland;
+  private UUID landId;
+  private UUID ausbildungsgangId;
 
   protected AusbildungUpdateDto(AusbildungUpdateDtoBuilder<?, ?> b) {
     this.fallId = b.fallId;
@@ -65,13 +65,12 @@ public class AusbildungUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallId")
-  @NotNull
-  public UUID getFallId() {
+  @JsonProperty(required = true, value = "fallId")
+  @NotNull public UUID getFallId() {
     return fallId;
   }
 
-  @JsonProperty("fallId")
+  @JsonProperty(required = true, value = "fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
   }
@@ -85,13 +84,12 @@ public class AusbildungUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungBegin")
-  @NotNull
-  public String getAusbildungBegin() {
+  @JsonProperty(required = true, value = "ausbildungBegin")
+  @NotNull public String getAusbildungBegin() {
     return ausbildungBegin;
   }
 
-  @JsonProperty("ausbildungBegin")
+  @JsonProperty(required = true, value = "ausbildungBegin")
   public void setAusbildungBegin(String ausbildungBegin) {
     this.ausbildungBegin = ausbildungBegin;
   }
@@ -105,13 +103,12 @@ public class AusbildungUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungEnd")
-  @NotNull
-  public String getAusbildungEnd() {
+  @JsonProperty(required = true, value = "ausbildungEnd")
+  @NotNull public String getAusbildungEnd() {
     return ausbildungEnd;
   }
 
-  @JsonProperty("ausbildungEnd")
+  @JsonProperty(required = true, value = "ausbildungEnd")
   public void setAusbildungEnd(String ausbildungEnd) {
     this.ausbildungEnd = ausbildungEnd;
   }
@@ -124,13 +121,12 @@ public class AusbildungUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("pensum")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum getPensum() {
+  @JsonProperty(required = true, value = "pensum")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum getPensum() {
     return pensum;
   }
 
-  @JsonProperty("pensum")
+  @JsonProperty(required = true, value = "pensum")
   public void setPensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
     this.pensum = pensum;
   }
@@ -399,10 +395,7 @@ public class AusbildungUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -505,4 +498,3 @@ public class AusbildungUpdateDto  implements Serializable {
     }
   }
 }
-

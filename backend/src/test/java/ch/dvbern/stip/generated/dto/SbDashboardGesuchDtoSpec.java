@@ -45,56 +45,67 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SbDashboardGesuchDtoSpec.JSON_PROPERTY_LETZTE_AKTIVITAET
 })
 @JsonTypeName("SbDashboardGesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SbDashboardGesuchDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  @jakarta.annotation.Nonnull
   private String fallNummer;
 
   public static final String JSON_PROPERTY_TYP = "typ";
+  @jakarta.annotation.Nonnull
   private GesuchTrancheTypDtoSpec typ;
 
   public static final String JSON_PROPERTY_PIA_NACHNAME = "piaNachname";
+  @jakarta.annotation.Nonnull
   private String piaNachname;
 
   public static final String JSON_PROPERTY_PIA_VORNAME = "piaVorname";
+  @jakarta.annotation.Nonnull
   private String piaVorname;
 
   public static final String JSON_PROPERTY_PIA_GEBURTSDATUM = "piaGeburtsdatum";
+  @jakarta.annotation.Nonnull
   private LocalDate piaGeburtsdatum;
 
   public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  @jakarta.annotation.Nonnull
   private GesuchstatusDtoSpec gesuchStatus;
 
   public static final String JSON_PROPERTY_TRANCHE_STATUS = "trancheStatus";
+  @jakarta.annotation.Nonnull
   private GesuchTrancheStatusDtoSpec trancheStatus;
 
   public static final String JSON_PROPERTY_BEARBEITER = "bearbeiter";
+  @jakarta.annotation.Nonnull
   private String bearbeiter;
 
   public static final String JSON_PROPERTY_LETZTE_AKTIVITAET = "letzteAktivitaet";
+  @jakarta.annotation.Nonnull
   private LocalDate letzteAktivitaet;
 
   public SbDashboardGesuchDtoSpec() {
   }
 
-  public SbDashboardGesuchDtoSpec id(UUID id) {
+  public SbDashboardGesuchDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -102,25 +113,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public SbDashboardGesuchDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public SbDashboardGesuchDtoSpec gesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheId
    * @return gesuchTrancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchTrancheId() {
@@ -128,25 +138,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+  public void setGesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
 
-
-  public SbDashboardGesuchDtoSpec fallNummer(String fallNummer) {
+  public SbDashboardGesuchDtoSpec fallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     
     this.fallNummer = fallNummer;
     return this;
   }
 
-   /**
+  /**
    * Get fallNummer
    * @return fallNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
@@ -154,25 +163,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallNummer(String fallNummer) {
+  public void setFallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     this.fallNummer = fallNummer;
   }
 
-
-  public SbDashboardGesuchDtoSpec typ(GesuchTrancheTypDtoSpec typ) {
+  public SbDashboardGesuchDtoSpec typ(@jakarta.annotation.Nonnull GesuchTrancheTypDtoSpec typ) {
     
     this.typ = typ;
     return this;
   }
 
-   /**
+  /**
    * Get typ
    * @return typ
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheTypDtoSpec getTyp() {
@@ -180,25 +188,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTyp(GesuchTrancheTypDtoSpec typ) {
+  public void setTyp(@jakarta.annotation.Nonnull GesuchTrancheTypDtoSpec typ) {
     this.typ = typ;
   }
 
-
-  public SbDashboardGesuchDtoSpec piaNachname(String piaNachname) {
+  public SbDashboardGesuchDtoSpec piaNachname(@jakarta.annotation.Nonnull String piaNachname) {
     
     this.piaNachname = piaNachname;
     return this;
   }
 
-   /**
+  /**
    * Get piaNachname
    * @return piaNachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaNachname() {
@@ -206,25 +213,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPiaNachname(String piaNachname) {
+  public void setPiaNachname(@jakarta.annotation.Nonnull String piaNachname) {
     this.piaNachname = piaNachname;
   }
 
-
-  public SbDashboardGesuchDtoSpec piaVorname(String piaVorname) {
+  public SbDashboardGesuchDtoSpec piaVorname(@jakarta.annotation.Nonnull String piaVorname) {
     
     this.piaVorname = piaVorname;
     return this;
   }
 
-   /**
+  /**
    * Get piaVorname
    * @return piaVorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaVorname() {
@@ -232,25 +238,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPiaVorname(String piaVorname) {
+  public void setPiaVorname(@jakarta.annotation.Nonnull String piaVorname) {
     this.piaVorname = piaVorname;
   }
 
-
-  public SbDashboardGesuchDtoSpec piaGeburtsdatum(LocalDate piaGeburtsdatum) {
+  public SbDashboardGesuchDtoSpec piaGeburtsdatum(@jakarta.annotation.Nonnull LocalDate piaGeburtsdatum) {
     
     this.piaGeburtsdatum = piaGeburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * Get piaGeburtsdatum
    * @return piaGeburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_PIA_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getPiaGeburtsdatum() {
@@ -258,25 +263,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_PIA_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPiaGeburtsdatum(LocalDate piaGeburtsdatum) {
+  public void setPiaGeburtsdatum(@jakarta.annotation.Nonnull LocalDate piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
   }
 
-
-  public SbDashboardGesuchDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public SbDashboardGesuchDtoSpec gesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
     
     this.gesuchStatus = gesuchStatus;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchStatus
    * @return gesuchStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchstatusDtoSpec getGesuchStatus() {
@@ -284,25 +288,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public void setGesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 
-
-  public SbDashboardGesuchDtoSpec trancheStatus(GesuchTrancheStatusDtoSpec trancheStatus) {
+  public SbDashboardGesuchDtoSpec trancheStatus(@jakarta.annotation.Nonnull GesuchTrancheStatusDtoSpec trancheStatus) {
     
     this.trancheStatus = trancheStatus;
     return this;
   }
 
-   /**
+  /**
    * Get trancheStatus
    * @return trancheStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TRANCHE_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_TRANCHE_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheStatusDtoSpec getTrancheStatus() {
@@ -310,25 +313,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TRANCHE_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_TRANCHE_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTrancheStatus(GesuchTrancheStatusDtoSpec trancheStatus) {
+  public void setTrancheStatus(@jakarta.annotation.Nonnull GesuchTrancheStatusDtoSpec trancheStatus) {
     this.trancheStatus = trancheStatus;
   }
 
-
-  public SbDashboardGesuchDtoSpec bearbeiter(String bearbeiter) {
+  public SbDashboardGesuchDtoSpec bearbeiter(@jakarta.annotation.Nonnull String bearbeiter) {
     
     this.bearbeiter = bearbeiter;
     return this;
   }
 
-   /**
+  /**
    * Get bearbeiter
    * @return bearbeiter
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEARBEITER)
+  @JsonProperty(value = JSON_PROPERTY_BEARBEITER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBearbeiter() {
@@ -336,25 +338,24 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEARBEITER)
+  @JsonProperty(value = JSON_PROPERTY_BEARBEITER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBearbeiter(String bearbeiter) {
+  public void setBearbeiter(@jakarta.annotation.Nonnull String bearbeiter) {
     this.bearbeiter = bearbeiter;
   }
 
-
-  public SbDashboardGesuchDtoSpec letzteAktivitaet(LocalDate letzteAktivitaet) {
+  public SbDashboardGesuchDtoSpec letzteAktivitaet(@jakarta.annotation.Nonnull LocalDate letzteAktivitaet) {
     
     this.letzteAktivitaet = letzteAktivitaet;
     return this;
   }
 
-   /**
+  /**
    * Get letzteAktivitaet
    * @return letzteAktivitaet
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
+  @JsonProperty(value = JSON_PROPERTY_LETZTE_AKTIVITAET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getLetzteAktivitaet() {
@@ -362,11 +363,12 @@ public class SbDashboardGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
+  @JsonProperty(value = JSON_PROPERTY_LETZTE_AKTIVITAET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
+  public void setLetzteAktivitaet(@jakarta.annotation.Nonnull LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -419,10 +421,7 @@ public class SbDashboardGesuchDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

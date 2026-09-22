@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FallHeader")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallHeaderDto  implements Serializable {
-  private @Valid UUID fallId;
-  private @Valid Integer unreadNotificationsCount;
-  private @Valid DelegierungSlimDto currentDelegierung;
+  private UUID fallId;
+  private Integer unreadNotificationsCount;
+  private DelegierungSlimDto currentDelegierung;
 
   protected FallHeaderDto(FallHeaderDtoBuilder<?, ?> b) {
     this.fallId = b.fallId;
@@ -42,13 +42,12 @@ public class FallHeaderDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallId")
-  @NotNull
-  public UUID getFallId() {
+  @JsonProperty(required = true, value = "fallId")
+  @NotNull public UUID getFallId() {
     return fallId;
   }
 
-  @JsonProperty("fallId")
+  @JsonProperty(required = true, value = "fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
   }
@@ -61,13 +60,12 @@ public class FallHeaderDto  implements Serializable {
   }
 
   
-  @JsonProperty("unreadNotificationsCount")
-  @NotNull
-  public Integer getUnreadNotificationsCount() {
+  @JsonProperty(required = true, value = "unreadNotificationsCount")
+  @NotNull public Integer getUnreadNotificationsCount() {
     return unreadNotificationsCount;
   }
 
-  @JsonProperty("unreadNotificationsCount")
+  @JsonProperty(required = true, value = "unreadNotificationsCount")
   public void setUnreadNotificationsCount(Integer unreadNotificationsCount) {
     this.unreadNotificationsCount = unreadNotificationsCount;
   }
@@ -81,7 +79,7 @@ public class FallHeaderDto  implements Serializable {
 
   
   @JsonProperty("currentDelegierung")
-  public DelegierungSlimDto getCurrentDelegierung() {
+  @Valid public DelegierungSlimDto getCurrentDelegierung() {
     return currentDelegierung;
   }
 
@@ -127,10 +125,7 @@ public class FallHeaderDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -173,4 +168,3 @@ public class FallHeaderDto  implements Serializable {
     }
   }
 }
-

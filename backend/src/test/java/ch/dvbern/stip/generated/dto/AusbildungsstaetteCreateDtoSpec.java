@@ -34,35 +34,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_NUMMER_TYP
 })
 @JsonTypeName("AusbildungsstaetteCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungsstaetteCreateDtoSpec {
   public static final String JSON_PROPERTY_NAME_DE = "nameDe";
+  @jakarta.annotation.Nonnull
   private String nameDe;
 
   public static final String JSON_PROPERTY_NAME_FR = "nameFr";
+  @jakarta.annotation.Nonnull
   private String nameFr;
 
   public static final String JSON_PROPERTY_NUMMER = "nummer";
+  @jakarta.annotation.Nullable
   private String nummer;
 
   public static final String JSON_PROPERTY_NUMMER_TYP = "nummerTyp";
+  @jakarta.annotation.Nonnull
   private AusbildungsstaetteNummerTypDtoSpec nummerTyp;
 
   public AusbildungsstaetteCreateDtoSpec() {
   }
 
-  public AusbildungsstaetteCreateDtoSpec nameDe(String nameDe) {
+  public AusbildungsstaetteCreateDtoSpec nameDe(@jakarta.annotation.Nonnull String nameDe) {
     
     this.nameDe = nameDe;
     return this;
   }
 
-   /**
+  /**
    * Get nameDe
    * @return nameDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_DE)
+  @JsonProperty(value = JSON_PROPERTY_NAME_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNameDe() {
@@ -70,25 +74,24 @@ public class AusbildungsstaetteCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_DE)
+  @JsonProperty(value = JSON_PROPERTY_NAME_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameDe(String nameDe) {
+  public void setNameDe(@jakarta.annotation.Nonnull String nameDe) {
     this.nameDe = nameDe;
   }
 
-
-  public AusbildungsstaetteCreateDtoSpec nameFr(String nameFr) {
+  public AusbildungsstaetteCreateDtoSpec nameFr(@jakarta.annotation.Nonnull String nameFr) {
     
     this.nameFr = nameFr;
     return this;
   }
 
-   /**
+  /**
    * Get nameFr
    * @return nameFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_FR)
+  @JsonProperty(value = JSON_PROPERTY_NAME_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNameFr() {
@@ -96,25 +99,24 @@ public class AusbildungsstaetteCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_FR)
+  @JsonProperty(value = JSON_PROPERTY_NAME_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameFr(String nameFr) {
+  public void setNameFr(@jakarta.annotation.Nonnull String nameFr) {
     this.nameFr = nameFr;
   }
 
-
-  public AusbildungsstaetteCreateDtoSpec nummer(String nummer) {
+  public AusbildungsstaetteCreateDtoSpec nummer(@jakarta.annotation.Nullable String nummer) {
     
     this.nummer = nummer;
     return this;
   }
 
-   /**
+  /**
    * Get nummer
    * @return nummer
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_NUMMER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getNummer() {
@@ -122,25 +124,24 @@ public class AusbildungsstaetteCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_NUMMER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNummer(String nummer) {
+  public void setNummer(@jakarta.annotation.Nullable String nummer) {
     this.nummer = nummer;
   }
 
-
-  public AusbildungsstaetteCreateDtoSpec nummerTyp(AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
+  public AusbildungsstaetteCreateDtoSpec nummerTyp(@jakarta.annotation.Nonnull AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
     
     this.nummerTyp = nummerTyp;
     return this;
   }
 
-   /**
+  /**
    * Get nummerTyp
    * @return nummerTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NUMMER_TYP)
+  @JsonProperty(value = JSON_PROPERTY_NUMMER_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungsstaetteNummerTypDtoSpec getNummerTyp() {
@@ -148,11 +149,12 @@ public class AusbildungsstaetteCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NUMMER_TYP)
+  @JsonProperty(value = JSON_PROPERTY_NUMMER_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNummerTyp(AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
+  public void setNummerTyp(@jakarta.annotation.Nonnull AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
     this.nummerTyp = nummerTyp;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -191,10 +193,7 @@ public class AusbildungsstaetteCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -15,19 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsgangData")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsgangDataDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
-  private @Valid Boolean aktiv;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
-  private @Valid Boolean askForBerufsmaturitaet;
+  private UUID id;
+  private String bezeichnungDe;
+  private String bezeichnungFr;
+  private ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
+  private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+  private Boolean aktiv;
+  private ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
+  private Boolean askForBerufsmaturitaet;
 
   protected AusbildungsgangDataDto(AusbildungsgangDataDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -51,13 +51,12 @@ public class AusbildungsgangDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -70,13 +69,12 @@ public class AusbildungsgangDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungDe")
-  @NotNull
-  public String getBezeichnungDe() {
+  @JsonProperty(required = true, value = "bezeichnungDe")
+  @NotNull public String getBezeichnungDe() {
     return bezeichnungDe;
   }
 
-  @JsonProperty("bezeichnungDe")
+  @JsonProperty(required = true, value = "bezeichnungDe")
   public void setBezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
@@ -89,13 +87,12 @@ public class AusbildungsgangDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungFr")
-  @NotNull
-  public String getBezeichnungFr() {
+  @JsonProperty(required = true, value = "bezeichnungFr")
+  @NotNull public String getBezeichnungFr() {
     return bezeichnungFr;
   }
 
-  @JsonProperty("bezeichnungFr")
+  @JsonProperty(required = true, value = "bezeichnungFr")
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
@@ -108,13 +105,12 @@ public class AusbildungsgangDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("bildungskategorie")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.Bildungskategorie getBildungskategorie() {
+  @JsonProperty(required = true, value = "bildungskategorie")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.Bildungskategorie getBildungskategorie() {
     return bildungskategorie;
   }
 
-  @JsonProperty("bildungskategorie")
+  @JsonProperty(required = true, value = "bildungskategorie")
   public void setBildungskategorie(ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie) {
     this.bildungskategorie = bildungskategorie;
   }
@@ -127,13 +123,12 @@ public class AusbildungsgangDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("bildungsrichtung")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung getBildungsrichtung() {
+  @JsonProperty(required = true, value = "bildungsrichtung")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung getBildungsrichtung() {
     return bildungsrichtung;
   }
 
-  @JsonProperty("bildungsrichtung")
+  @JsonProperty(required = true, value = "bildungsrichtung")
   public void setBildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
     this.bildungsrichtung = bildungsrichtung;
   }
@@ -146,13 +141,12 @@ public class AusbildungsgangDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("aktiv")
-  @NotNull
-  public Boolean getAktiv() {
+  @JsonProperty(required = true, value = "aktiv")
+  @NotNull public Boolean getAktiv() {
     return aktiv;
   }
 
-  @JsonProperty("aktiv")
+  @JsonProperty(required = true, value = "aktiv")
   public void setAktiv(Boolean aktiv) {
     this.aktiv = aktiv;
   }
@@ -240,10 +234,7 @@ public class AusbildungsgangDataDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -311,4 +302,3 @@ public class AusbildungsgangDataDto  implements Serializable {
     }
   }
 }
-

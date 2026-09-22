@@ -38,32 +38,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   VerfuegtGesuchDtoSpec.JSON_PROPERTY_BERECHNUNG_ID
 })
 @JsonTypeName("VerfuegtGesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class VerfuegtGesuchDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP = "timestamp";
+  @jakarta.annotation.Nonnull
   private LocalDate timestamp;
 
   public static final String JSON_PROPERTY_TRANCHEN = "tranchen";
+  @jakarta.annotation.Nonnull
   private List<GesuchTrancheSlimDtoSpec> tranchen;
 
   public static final String JSON_PROPERTY_BERECHNUNG_ID = "berechnungId";
+  @jakarta.annotation.Nonnull
   private UUID berechnungId;
 
   public VerfuegtGesuchDtoSpec() {
   }
 
-  public VerfuegtGesuchDtoSpec timestamp(LocalDate timestamp) {
+  public VerfuegtGesuchDtoSpec timestamp(@jakarta.annotation.Nonnull LocalDate timestamp) {
     
     this.timestamp = timestamp;
     return this;
   }
 
-   /**
+  /**
    * Get timestamp
    * @return timestamp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getTimestamp() {
@@ -71,14 +74,13 @@ public class VerfuegtGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestamp(LocalDate timestamp) {
+  public void setTimestamp(@jakarta.annotation.Nonnull LocalDate timestamp) {
     this.timestamp = timestamp;
   }
 
-
-  public VerfuegtGesuchDtoSpec tranchen(List<GesuchTrancheSlimDtoSpec> tranchen) {
+  public VerfuegtGesuchDtoSpec tranchen(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> tranchen) {
     
     this.tranchen = tranchen;
     return this;
@@ -92,12 +94,12 @@ public class VerfuegtGesuchDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get tranchen
    * @return tranchen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TRANCHEN)
+  @JsonProperty(value = JSON_PROPERTY_TRANCHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<GesuchTrancheSlimDtoSpec> getTranchen() {
@@ -105,25 +107,24 @@ public class VerfuegtGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TRANCHEN)
+  @JsonProperty(value = JSON_PROPERTY_TRANCHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTranchen(List<GesuchTrancheSlimDtoSpec> tranchen) {
+  public void setTranchen(@jakarta.annotation.Nonnull List<GesuchTrancheSlimDtoSpec> tranchen) {
     this.tranchen = tranchen;
   }
 
-
-  public VerfuegtGesuchDtoSpec berechnungId(UUID berechnungId) {
+  public VerfuegtGesuchDtoSpec berechnungId(@jakarta.annotation.Nonnull UUID berechnungId) {
     
     this.berechnungId = berechnungId;
     return this;
   }
 
-   /**
+  /**
    * Get berechnungId
    * @return berechnungId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getBerechnungId() {
@@ -131,11 +132,12 @@ public class VerfuegtGesuchDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungId(UUID berechnungId) {
+  public void setBerechnungId(@jakarta.annotation.Nonnull UUID berechnungId) {
     this.berechnungId = berechnungId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -172,10 +174,7 @@ public class VerfuegtGesuchDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

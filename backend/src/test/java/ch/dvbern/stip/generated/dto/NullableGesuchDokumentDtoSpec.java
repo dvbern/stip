@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   NullableGesuchDokumentDtoSpec.JSON_PROPERTY_VALUE
 })
 @JsonTypeName("NullableGesuchDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class NullableGesuchDokumentDtoSpec {
   public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private GesuchDokumentDtoSpec value;
 
   public NullableGesuchDokumentDtoSpec() {
   }
 
-  public NullableGesuchDokumentDtoSpec value(GesuchDokumentDtoSpec value) {
+  public NullableGesuchDokumentDtoSpec value(@jakarta.annotation.Nullable GesuchDokumentDtoSpec value) {
     
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchDokumentDtoSpec getValue() {
@@ -58,11 +59,12 @@ public class NullableGesuchDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setValue(GesuchDokumentDtoSpec value) {
+  public void setValue(@jakarta.annotation.Nullable GesuchDokumentDtoSpec value) {
     this.value = value;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class NullableGesuchDokumentDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

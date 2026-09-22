@@ -26,21 +26,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchFormularUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchFormularUpdateDto  implements Serializable {
-  private @Valid PersonInAusbildungUpdateDto personInAusbildung;
-  private @Valid FamiliensituationUpdateDto familiensituation;
-  private @Valid PartnerUpdateDto partner;
-  private @Valid List<ElternUpdateDto> elterns;
-  private @Valid List<GeschwisterUpdateDto> geschwisters;
-  private @Valid List<LebenslaufItemUpdateDto> lebenslaufItems;
-  private @Valid List<KindUpdateDto> kinds;
-  private @Valid EinnahmenKostenUpdateDto einnahmenKosten;
-  private @Valid EinnahmenKostenUpdateDto einnahmenKostenPartner;
-  private @Valid List<SteuererklaerungUpdateDto> steuererklaerung;
+  private PersonInAusbildungUpdateDto personInAusbildung;
+  private FamiliensituationUpdateDto familiensituation;
+  private PartnerUpdateDto partner;
+  private @Valid List<@Valid ElternUpdateDto> elterns = new ArrayList<>();
+  private @Valid List<@Valid GeschwisterUpdateDto> geschwisters = new ArrayList<>();
+  private @Valid List<@Valid LebenslaufItemUpdateDto> lebenslaufItems = new ArrayList<>();
+  private @Valid List<@Valid KindUpdateDto> kinds = new ArrayList<>();
+  private EinnahmenKostenUpdateDto einnahmenKosten;
+  private EinnahmenKostenUpdateDto einnahmenKostenPartner;
+  private @Valid List<@Valid SteuererklaerungUpdateDto> steuererklaerung = new ArrayList<>();
 
   protected GesuchFormularUpdateDto(GesuchFormularUpdateDtoBuilder<?, ?> b) {
     this.personInAusbildung = b.personInAusbildung;
@@ -67,7 +67,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   
   @JsonProperty("personInAusbildung")
-  public PersonInAusbildungUpdateDto getPersonInAusbildung() {
+  @Valid public PersonInAusbildungUpdateDto getPersonInAusbildung() {
     return personInAusbildung;
   }
 
@@ -85,7 +85,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   
   @JsonProperty("familiensituation")
-  public FamiliensituationUpdateDto getFamiliensituation() {
+  @Valid public FamiliensituationUpdateDto getFamiliensituation() {
     return familiensituation;
   }
 
@@ -103,7 +103,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   
   @JsonProperty("partner")
-  public PartnerUpdateDto getPartner() {
+  @Valid public PartnerUpdateDto getPartner() {
     return partner;
   }
 
@@ -114,19 +114,19 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   /**
    **/
-  public GesuchFormularUpdateDto elterns(List<ElternUpdateDto> elterns) {
+  public GesuchFormularUpdateDto elterns(List<@Valid ElternUpdateDto> elterns) {
     this.elterns = elterns;
     return this;
   }
 
   
   @JsonProperty("elterns")
-  public List<ElternUpdateDto> getElterns() {
+  @Valid public List<@Valid ElternUpdateDto> getElterns() {
     return elterns;
   }
 
   @JsonProperty("elterns")
-  public void setElterns(List<ElternUpdateDto> elterns) {
+  public void setElterns(List<@Valid ElternUpdateDto> elterns) {
     this.elterns = elterns;
   }
 
@@ -148,19 +148,19 @@ public class GesuchFormularUpdateDto  implements Serializable {
   }
   /**
    **/
-  public GesuchFormularUpdateDto geschwisters(List<GeschwisterUpdateDto> geschwisters) {
+  public GesuchFormularUpdateDto geschwisters(List<@Valid GeschwisterUpdateDto> geschwisters) {
     this.geschwisters = geschwisters;
     return this;
   }
 
   
   @JsonProperty("geschwisters")
-  public List<GeschwisterUpdateDto> getGeschwisters() {
+  @Valid public List<@Valid GeschwisterUpdateDto> getGeschwisters() {
     return geschwisters;
   }
 
   @JsonProperty("geschwisters")
-  public void setGeschwisters(List<GeschwisterUpdateDto> geschwisters) {
+  public void setGeschwisters(List<@Valid GeschwisterUpdateDto> geschwisters) {
     this.geschwisters = geschwisters;
   }
 
@@ -182,19 +182,19 @@ public class GesuchFormularUpdateDto  implements Serializable {
   }
   /**
    **/
-  public GesuchFormularUpdateDto lebenslaufItems(List<LebenslaufItemUpdateDto> lebenslaufItems) {
+  public GesuchFormularUpdateDto lebenslaufItems(List<@Valid LebenslaufItemUpdateDto> lebenslaufItems) {
     this.lebenslaufItems = lebenslaufItems;
     return this;
   }
 
   
   @JsonProperty("lebenslaufItems")
-  public List<LebenslaufItemUpdateDto> getLebenslaufItems() {
+  @Valid public List<@Valid LebenslaufItemUpdateDto> getLebenslaufItems() {
     return lebenslaufItems;
   }
 
   @JsonProperty("lebenslaufItems")
-  public void setLebenslaufItems(List<LebenslaufItemUpdateDto> lebenslaufItems) {
+  public void setLebenslaufItems(List<@Valid LebenslaufItemUpdateDto> lebenslaufItems) {
     this.lebenslaufItems = lebenslaufItems;
   }
 
@@ -216,19 +216,19 @@ public class GesuchFormularUpdateDto  implements Serializable {
   }
   /**
    **/
-  public GesuchFormularUpdateDto kinds(List<KindUpdateDto> kinds) {
+  public GesuchFormularUpdateDto kinds(List<@Valid KindUpdateDto> kinds) {
     this.kinds = kinds;
     return this;
   }
 
   
   @JsonProperty("kinds")
-  public List<KindUpdateDto> getKinds() {
+  @Valid public List<@Valid KindUpdateDto> getKinds() {
     return kinds;
   }
 
   @JsonProperty("kinds")
-  public void setKinds(List<KindUpdateDto> kinds) {
+  public void setKinds(List<@Valid KindUpdateDto> kinds) {
     this.kinds = kinds;
   }
 
@@ -257,7 +257,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   
   @JsonProperty("einnahmenKosten")
-  public EinnahmenKostenUpdateDto getEinnahmenKosten() {
+  @Valid public EinnahmenKostenUpdateDto getEinnahmenKosten() {
     return einnahmenKosten;
   }
 
@@ -275,7 +275,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   
   @JsonProperty("einnahmenKostenPartner")
-  public EinnahmenKostenUpdateDto getEinnahmenKostenPartner() {
+  @Valid public EinnahmenKostenUpdateDto getEinnahmenKostenPartner() {
     return einnahmenKostenPartner;
   }
 
@@ -286,19 +286,19 @@ public class GesuchFormularUpdateDto  implements Serializable {
 
   /**
    **/
-  public GesuchFormularUpdateDto steuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+  public GesuchFormularUpdateDto steuererklaerung(List<@Valid SteuererklaerungUpdateDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
     return this;
   }
 
   
   @JsonProperty("steuererklaerung")
-  public List<SteuererklaerungUpdateDto> getSteuererklaerung() {
+  @Valid public List<@Valid SteuererklaerungUpdateDto> getSteuererklaerung() {
     return steuererklaerung;
   }
 
   @JsonProperty("steuererklaerung")
-  public void setSteuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+  public void setSteuererklaerung(List<@Valid SteuererklaerungUpdateDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
   }
 
@@ -369,10 +369,7 @@ public class GesuchFormularUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -397,13 +394,13 @@ public class GesuchFormularUpdateDto  implements Serializable {
     private PersonInAusbildungUpdateDto personInAusbildung;
     private FamiliensituationUpdateDto familiensituation;
     private PartnerUpdateDto partner;
-    private List<ElternUpdateDto> elterns;
-    private List<GeschwisterUpdateDto> geschwisters;
-    private List<LebenslaufItemUpdateDto> lebenslaufItems;
-    private List<KindUpdateDto> kinds;
+    private List<ElternUpdateDto> elterns = new ArrayList<>();
+    private List<GeschwisterUpdateDto> geschwisters = new ArrayList<>();
+    private List<LebenslaufItemUpdateDto> lebenslaufItems = new ArrayList<>();
+    private List<KindUpdateDto> kinds = new ArrayList<>();
     private EinnahmenKostenUpdateDto einnahmenKosten;
     private EinnahmenKostenUpdateDto einnahmenKostenPartner;
-    private List<SteuererklaerungUpdateDto> steuererklaerung;
+    private List<SteuererklaerungUpdateDto> steuererklaerung = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -450,4 +447,3 @@ public class GesuchFormularUpdateDto  implements Serializable {
     }
   }
 }
-

@@ -38,41 +38,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_IST
 })
 @JsonTypeName("DemoDataTestBerechnungResultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoDataTestBerechnungResultatDtoSpec {
   public static final String JSON_PROPERTY_DEMO_DATA_ID = "demoDataId";
+  @jakarta.annotation.Nonnull
   private UUID demoDataId;
 
   public static final String JSON_PROPERTY_TEST_FALL = "testFall";
+  @jakarta.annotation.Nonnull
   private String testFall;
 
   public static final String JSON_PROPERTY_VALID = "valid";
+  @jakarta.annotation.Nullable
   private DemoDataTestBerechnungValidDtoSpec valid;
 
   public static final String JSON_PROPERTY_MESSAGE = "message";
+  @jakarta.annotation.Nullable
   private String message;
 
   public static final String JSON_PROPERTY_SOLL = "soll";
+  @jakarta.annotation.Nullable
   private DemoDataTestBerechnungValuesDtoSpec soll;
 
   public static final String JSON_PROPERTY_IST = "ist";
+  @jakarta.annotation.Nullable
   private DemoDataTestBerechnungValuesDtoSpec ist;
 
   public DemoDataTestBerechnungResultatDtoSpec() {
   }
 
-  public DemoDataTestBerechnungResultatDtoSpec demoDataId(UUID demoDataId) {
+  public DemoDataTestBerechnungResultatDtoSpec demoDataId(@jakarta.annotation.Nonnull UUID demoDataId) {
     
     this.demoDataId = demoDataId;
     return this;
   }
 
-   /**
+  /**
    * Get demoDataId
    * @return demoDataId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DEMO_DATA_ID)
+  @JsonProperty(value = JSON_PROPERTY_DEMO_DATA_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getDemoDataId() {
@@ -80,25 +86,24 @@ public class DemoDataTestBerechnungResultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DEMO_DATA_ID)
+  @JsonProperty(value = JSON_PROPERTY_DEMO_DATA_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDemoDataId(UUID demoDataId) {
+  public void setDemoDataId(@jakarta.annotation.Nonnull UUID demoDataId) {
     this.demoDataId = demoDataId;
   }
 
-
-  public DemoDataTestBerechnungResultatDtoSpec testFall(String testFall) {
+  public DemoDataTestBerechnungResultatDtoSpec testFall(@jakarta.annotation.Nonnull String testFall) {
     
     this.testFall = testFall;
     return this;
   }
 
-   /**
+  /**
    * Get testFall
    * @return testFall
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TEST_FALL)
+  @JsonProperty(value = JSON_PROPERTY_TEST_FALL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTestFall() {
@@ -106,25 +111,24 @@ public class DemoDataTestBerechnungResultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEST_FALL)
+  @JsonProperty(value = JSON_PROPERTY_TEST_FALL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTestFall(String testFall) {
+  public void setTestFall(@jakarta.annotation.Nonnull String testFall) {
     this.testFall = testFall;
   }
 
-
-  public DemoDataTestBerechnungResultatDtoSpec valid(DemoDataTestBerechnungValidDtoSpec valid) {
+  public DemoDataTestBerechnungResultatDtoSpec valid(@jakarta.annotation.Nullable DemoDataTestBerechnungValidDtoSpec valid) {
     
     this.valid = valid;
     return this;
   }
 
-   /**
+  /**
    * Get valid
    * @return valid
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VALID)
+  @JsonProperty(value = JSON_PROPERTY_VALID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DemoDataTestBerechnungValidDtoSpec getValid() {
@@ -132,25 +136,24 @@ public class DemoDataTestBerechnungResultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALID)
+  @JsonProperty(value = JSON_PROPERTY_VALID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setValid(DemoDataTestBerechnungValidDtoSpec valid) {
+  public void setValid(@jakarta.annotation.Nullable DemoDataTestBerechnungValidDtoSpec valid) {
     this.valid = valid;
   }
 
-
-  public DemoDataTestBerechnungResultatDtoSpec message(String message) {
+  public DemoDataTestBerechnungResultatDtoSpec message(@jakarta.annotation.Nullable String message) {
     
     this.message = message;
     return this;
   }
 
-   /**
+  /**
    * Get message
    * @return message
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MESSAGE)
+  @JsonProperty(value = JSON_PROPERTY_MESSAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getMessage() {
@@ -158,25 +161,24 @@ public class DemoDataTestBerechnungResultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MESSAGE)
+  @JsonProperty(value = JSON_PROPERTY_MESSAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMessage(String message) {
+  public void setMessage(@jakarta.annotation.Nullable String message) {
     this.message = message;
   }
 
-
-  public DemoDataTestBerechnungResultatDtoSpec soll(DemoDataTestBerechnungValuesDtoSpec soll) {
+  public DemoDataTestBerechnungResultatDtoSpec soll(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec soll) {
     
     this.soll = soll;
     return this;
   }
 
-   /**
+  /**
    * Get soll
    * @return soll
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SOLL)
+  @JsonProperty(value = JSON_PROPERTY_SOLL, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DemoDataTestBerechnungValuesDtoSpec getSoll() {
@@ -184,25 +186,24 @@ public class DemoDataTestBerechnungResultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOLL)
+  @JsonProperty(value = JSON_PROPERTY_SOLL, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSoll(DemoDataTestBerechnungValuesDtoSpec soll) {
+  public void setSoll(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec soll) {
     this.soll = soll;
   }
 
-
-  public DemoDataTestBerechnungResultatDtoSpec ist(DemoDataTestBerechnungValuesDtoSpec ist) {
+  public DemoDataTestBerechnungResultatDtoSpec ist(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec ist) {
     
     this.ist = ist;
     return this;
   }
 
-   /**
+  /**
    * Get ist
    * @return ist
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IST)
+  @JsonProperty(value = JSON_PROPERTY_IST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DemoDataTestBerechnungValuesDtoSpec getIst() {
@@ -210,11 +211,12 @@ public class DemoDataTestBerechnungResultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IST)
+  @JsonProperty(value = JSON_PROPERTY_IST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIst(DemoDataTestBerechnungValuesDtoSpec ist) {
+  public void setIst(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec ist) {
     this.ist = ist;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -257,10 +259,7 @@ public class DemoDataTestBerechnungResultatDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

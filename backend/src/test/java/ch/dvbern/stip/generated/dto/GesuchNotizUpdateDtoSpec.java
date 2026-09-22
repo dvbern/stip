@@ -34,35 +34,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchNotizUpdateDtoSpec.JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN
 })
 @JsonTypeName("GesuchNotizUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchNotizUpdateDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_BETREFF = "betreff";
+  @jakarta.annotation.Nonnull
   private String betreff;
 
   public static final String JSON_PROPERTY_TEXT = "text";
+  @jakarta.annotation.Nonnull
   private String text;
 
   public static final String JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN = "pendenzAbgeschlossen";
+  @jakarta.annotation.Nullable
   private Boolean pendenzAbgeschlossen;
 
   public GesuchNotizUpdateDtoSpec() {
   }
 
-  public GesuchNotizUpdateDtoSpec id(UUID id) {
+  public GesuchNotizUpdateDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -70,25 +74,24 @@ public class GesuchNotizUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public GesuchNotizUpdateDtoSpec betreff(String betreff) {
+  public GesuchNotizUpdateDtoSpec betreff(@jakarta.annotation.Nonnull String betreff) {
     
     this.betreff = betreff;
     return this;
   }
 
-   /**
+  /**
    * Get betreff
    * @return betreff
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonProperty(value = JSON_PROPERTY_BETREFF, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBetreff() {
@@ -96,25 +99,24 @@ public class GesuchNotizUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonProperty(value = JSON_PROPERTY_BETREFF, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetreff(String betreff) {
+  public void setBetreff(@jakarta.annotation.Nonnull String betreff) {
     this.betreff = betreff;
   }
 
-
-  public GesuchNotizUpdateDtoSpec text(String text) {
+  public GesuchNotizUpdateDtoSpec text(@jakarta.annotation.Nonnull String text) {
     
     this.text = text;
     return this;
   }
 
-   /**
+  /**
    * Get text
    * @return text
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_TEXT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getText() {
@@ -122,25 +124,24 @@ public class GesuchNotizUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_TEXT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setText(String text) {
+  public void setText(@jakarta.annotation.Nonnull String text) {
     this.text = text;
   }
 
-
-  public GesuchNotizUpdateDtoSpec pendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+  public GesuchNotizUpdateDtoSpec pendenzAbgeschlossen(@jakarta.annotation.Nullable Boolean pendenzAbgeschlossen) {
     
     this.pendenzAbgeschlossen = pendenzAbgeschlossen;
     return this;
   }
 
-   /**
+  /**
    * Get pendenzAbgeschlossen
    * @return pendenzAbgeschlossen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN)
+  @JsonProperty(value = JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getPendenzAbgeschlossen() {
@@ -148,11 +149,12 @@ public class GesuchNotizUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN)
+  @JsonProperty(value = JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+  public void setPendenzAbgeschlossen(@jakarta.annotation.Nullable Boolean pendenzAbgeschlossen) {
     this.pendenzAbgeschlossen = pendenzAbgeschlossen;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -191,10 +193,7 @@ public class GesuchNotizUpdateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

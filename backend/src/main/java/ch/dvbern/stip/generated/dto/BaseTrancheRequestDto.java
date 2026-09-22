@@ -15,14 +15,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BaseTrancheRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BaseTrancheRequestDto  implements Serializable {
-  private @Valid LocalDate start;
-  private @Valid LocalDate end;
-  private @Valid String comment;
+  private LocalDate start;
+  private LocalDate end;
+  private String comment;
 
   protected BaseTrancheRequestDto(BaseTrancheRequestDtoBuilder<?, ?> b) {
     this.start = b.start;
@@ -124,10 +124,7 @@ public class BaseTrancheRequestDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -170,4 +167,3 @@ public class BaseTrancheRequestDto  implements Serializable {
     }
   }
 }
-

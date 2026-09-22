@@ -107,7 +107,7 @@ public class GesuchTranche extends AbstractTenantEntity {
     private String comment;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuchTranche")
-    private @Valid List<GesuchDokument> gesuchDokuments = new ArrayList<>();
+    private List<@Valid GesuchDokument> gesuchDokuments = new ArrayList<>();
 
     @NotNull
     @Column(name = "typ", nullable = false, updatable = false)

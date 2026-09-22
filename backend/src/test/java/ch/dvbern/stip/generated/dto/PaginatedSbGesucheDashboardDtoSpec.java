@@ -31,30 +31,109 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * PaginatedSbGesucheDashboardDtoSpec
  */
 @JsonPropertyOrder({
-  PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_ENTRIES,
   PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_PAGE,
   PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_PAGE_SIZE,
-  PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES
+  PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES,
+  PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_ENTRIES
 })
 @JsonTypeName("PaginatedSbGesucheDashboard")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PaginatedSbGesucheDashboardDtoSpec {
-  public static final String JSON_PROPERTY_ENTRIES = "entries";
-  private List<SbDashboardGesuchDtoSpec> entries;
-
   public static final String JSON_PROPERTY_PAGE = "page";
+  @jakarta.annotation.Nullable
   private Integer page;
 
   public static final String JSON_PROPERTY_PAGE_SIZE = "pageSize";
+  @jakarta.annotation.Nullable
   private Integer pageSize;
 
   public static final String JSON_PROPERTY_TOTAL_ENTRIES = "totalEntries";
+  @jakarta.annotation.Nullable
   private Integer totalEntries;
+
+  public static final String JSON_PROPERTY_ENTRIES = "entries";
+  @jakarta.annotation.Nullable
+  private List<SbDashboardGesuchDtoSpec> entries;
 
   public PaginatedSbGesucheDashboardDtoSpec() {
   }
 
-  public PaginatedSbGesucheDashboardDtoSpec entries(List<SbDashboardGesuchDtoSpec> entries) {
+  public PaginatedSbGesucheDashboardDtoSpec page(@jakarta.annotation.Nullable Integer page) {
+    
+    this.page = page;
+    return this;
+  }
+
+  /**
+   * Get page
+   * @return page
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getPage() {
+    return page;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPage(@jakarta.annotation.Nullable Integer page) {
+    this.page = page;
+  }
+
+  public PaginatedSbGesucheDashboardDtoSpec pageSize(@jakarta.annotation.Nullable Integer pageSize) {
+    
+    this.pageSize = pageSize;
+    return this;
+  }
+
+  /**
+   * Get pageSize
+   * @return pageSize
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PAGE_SIZE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getPageSize() {
+    return pageSize;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PAGE_SIZE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPageSize(@jakarta.annotation.Nullable Integer pageSize) {
+    this.pageSize = pageSize;
+  }
+
+  public PaginatedSbGesucheDashboardDtoSpec totalEntries(@jakarta.annotation.Nullable Integer totalEntries) {
+    
+    this.totalEntries = totalEntries;
+    return this;
+  }
+
+  /**
+   * Get totalEntries
+   * @return totalEntries
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_ENTRIES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getTotalEntries() {
+    return totalEntries;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_ENTRIES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalEntries(@jakarta.annotation.Nullable Integer totalEntries) {
+    this.totalEntries = totalEntries;
+  }
+
+  public PaginatedSbGesucheDashboardDtoSpec entries(@jakarta.annotation.Nullable List<SbDashboardGesuchDtoSpec> entries) {
     
     this.entries = entries;
     return this;
@@ -68,12 +147,12 @@ public class PaginatedSbGesucheDashboardDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get entries
    * @return entries
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ENTRIES)
+  @JsonProperty(value = JSON_PROPERTY_ENTRIES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<SbDashboardGesuchDtoSpec> getEntries() {
@@ -81,89 +160,12 @@ public class PaginatedSbGesucheDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENTRIES)
+  @JsonProperty(value = JSON_PROPERTY_ENTRIES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEntries(List<SbDashboardGesuchDtoSpec> entries) {
+  public void setEntries(@jakarta.annotation.Nullable List<SbDashboardGesuchDtoSpec> entries) {
     this.entries = entries;
   }
 
-
-  public PaginatedSbGesucheDashboardDtoSpec page(Integer page) {
-    
-    this.page = page;
-    return this;
-  }
-
-   /**
-   * Get page
-   * @return page
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PAGE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPage() {
-    return page;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_PAGE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPage(Integer page) {
-    this.page = page;
-  }
-
-
-  public PaginatedSbGesucheDashboardDtoSpec pageSize(Integer pageSize) {
-    
-    this.pageSize = pageSize;
-    return this;
-  }
-
-   /**
-   * Get pageSize
-   * @return pageSize
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PAGE_SIZE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPageSize() {
-    return pageSize;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_PAGE_SIZE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
-
-
-  public PaginatedSbGesucheDashboardDtoSpec totalEntries(Integer totalEntries) {
-    
-    this.totalEntries = totalEntries;
-    return this;
-  }
-
-   /**
-   * Get totalEntries
-   * @return totalEntries
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TOTAL_ENTRIES)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getTotalEntries() {
-    return totalEntries;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TOTAL_ENTRIES)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTotalEntries(Integer totalEntries) {
-    this.totalEntries = totalEntries;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -174,25 +176,25 @@ public class PaginatedSbGesucheDashboardDtoSpec {
       return false;
     }
     PaginatedSbGesucheDashboardDtoSpec paginatedSbGesucheDashboard = (PaginatedSbGesucheDashboardDtoSpec) o;
-    return Objects.equals(this.entries, paginatedSbGesucheDashboard.entries) &&
-        Objects.equals(this.page, paginatedSbGesucheDashboard.page) &&
+    return Objects.equals(this.page, paginatedSbGesucheDashboard.page) &&
         Objects.equals(this.pageSize, paginatedSbGesucheDashboard.pageSize) &&
-        Objects.equals(this.totalEntries, paginatedSbGesucheDashboard.totalEntries);
+        Objects.equals(this.totalEntries, paginatedSbGesucheDashboard.totalEntries) &&
+        Objects.equals(this.entries, paginatedSbGesucheDashboard.entries);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entries, page, pageSize, totalEntries);
+    return Objects.hash(page, pageSize, totalEntries, entries);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PaginatedSbGesucheDashboardDtoSpec {\n");
-    sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    totalEntries: ").append(toIndentedString(totalEntries)).append("\n");
+    sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -202,10 +204,7 @@ public class PaginatedSbGesucheDashboardDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

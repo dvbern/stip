@@ -17,15 +17,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungCreateResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungCreateResponseDto  implements Serializable {
-  private @Valid AusbildungDto ausbildung;
-  private @Valid UUID gesuchId;
-  private @Valid UUID gesuchTrancheId;
-  private @Valid GesuchsperiodeSelectErrorDto error;
+  private AusbildungDto ausbildung;
+  private UUID gesuchId;
+  private UUID gesuchTrancheId;
+  private GesuchsperiodeSelectErrorDto error;
 
   protected AusbildungCreateResponseDto(AusbildungCreateResponseDtoBuilder<?, ?> b) {
     this.ausbildung = b.ausbildung;
@@ -46,7 +46,7 @@ public class AusbildungCreateResponseDto  implements Serializable {
 
   
   @JsonProperty("ausbildung")
-  public AusbildungDto getAusbildung() {
+  @Valid public AusbildungDto getAusbildung() {
     return ausbildung;
   }
 
@@ -100,7 +100,7 @@ public class AusbildungCreateResponseDto  implements Serializable {
 
   
   @JsonProperty("error")
-  public GesuchsperiodeSelectErrorDto getError() {
+  @Valid public GesuchsperiodeSelectErrorDto getError() {
     return error;
   }
 
@@ -148,10 +148,7 @@ public class AusbildungCreateResponseDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -199,4 +196,3 @@ public class AusbildungCreateResponseDto  implements Serializable {
     }
   }
 }
-

@@ -30,6 +30,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -120,7 +121,7 @@ public class GesuchsjahrApiSpec {
         public CreateGesuchsjahrOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -149,7 +150,7 @@ public class GesuchsjahrApiSpec {
          * @param gesuchsjahrCreateDtoSpec (GesuchsjahrCreateDtoSpec)  (required)
          * @return operation
          */
-        public CreateGesuchsjahrOper body(GesuchsjahrCreateDtoSpec gesuchsjahrCreateDtoSpec) {
+        public CreateGesuchsjahrOper body(@jakarta.annotation.Nonnull GesuchsjahrCreateDtoSpec gesuchsjahrCreateDtoSpec) {
             reqSpec.setBody(gesuchsjahrCreateDtoSpec);
             return this;
         }
@@ -253,7 +254,7 @@ public class GesuchsjahrApiSpec {
 
         public GetGesuchsjahrOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -325,7 +326,7 @@ public class GesuchsjahrApiSpec {
 
         public GetGesuchsjahreOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -462,7 +463,7 @@ public class GesuchsjahrApiSpec {
         public UpdateGesuchsjahrOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -491,7 +492,7 @@ public class GesuchsjahrApiSpec {
          * @param gesuchsjahrUpdateDtoSpec (GesuchsjahrUpdateDtoSpec)  (optional)
          * @return operation
          */
-        public UpdateGesuchsjahrOper body(GesuchsjahrUpdateDtoSpec gesuchsjahrUpdateDtoSpec) {
+        public UpdateGesuchsjahrOper body(@jakarta.annotation.Nullable GesuchsjahrUpdateDtoSpec gesuchsjahrUpdateDtoSpec) {
             reqSpec.setBody(gesuchsjahrUpdateDtoSpec);
             return this;
         }

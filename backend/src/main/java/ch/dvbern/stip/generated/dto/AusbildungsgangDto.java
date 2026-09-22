@@ -17,15 +17,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Ausbildungsgang")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsgangDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid AbschlussDto abschluss;
-  private @Valid AusbildungsstaetteDto ausbildungsstaette;
-  private @Valid Boolean aktiv;
+  private UUID id;
+  private AbschlussDto abschluss;
+  private AusbildungsstaetteDto ausbildungsstaette;
+  private Boolean aktiv;
 
   protected AusbildungsgangDto(AusbildungsgangDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -45,13 +45,12 @@ public class AusbildungsgangDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -64,13 +63,12 @@ public class AusbildungsgangDto  implements Serializable {
   }
 
   
-  @JsonProperty("abschluss")
-  @NotNull
-  public AbschlussDto getAbschluss() {
+  @JsonProperty(required = true, value = "abschluss")
+  @NotNull @Valid public AbschlussDto getAbschluss() {
     return abschluss;
   }
 
-  @JsonProperty("abschluss")
+  @JsonProperty(required = true, value = "abschluss")
   public void setAbschluss(AbschlussDto abschluss) {
     this.abschluss = abschluss;
   }
@@ -83,13 +81,12 @@ public class AusbildungsgangDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungsstaette")
-  @NotNull
-  public AusbildungsstaetteDto getAusbildungsstaette() {
+  @JsonProperty(required = true, value = "ausbildungsstaette")
+  @NotNull @Valid public AusbildungsstaetteDto getAusbildungsstaette() {
     return ausbildungsstaette;
   }
 
-  @JsonProperty("ausbildungsstaette")
+  @JsonProperty(required = true, value = "ausbildungsstaette")
   public void setAusbildungsstaette(AusbildungsstaetteDto ausbildungsstaette) {
     this.ausbildungsstaette = ausbildungsstaette;
   }
@@ -102,13 +99,12 @@ public class AusbildungsgangDto  implements Serializable {
   }
 
   
-  @JsonProperty("aktiv")
-  @NotNull
-  public Boolean getAktiv() {
+  @JsonProperty(required = true, value = "aktiv")
+  @NotNull public Boolean getAktiv() {
     return aktiv;
   }
 
-  @JsonProperty("aktiv")
+  @JsonProperty(required = true, value = "aktiv")
   public void setAktiv(Boolean aktiv) {
     this.aktiv = aktiv;
   }
@@ -152,10 +148,7 @@ public class AusbildungsgangDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -203,4 +196,3 @@ public class AusbildungsgangDto  implements Serializable {
     }
   }
 }
-

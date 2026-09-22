@@ -33,29 +33,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusgewaehlterGrundDtoSpec.JSON_PROPERTY_KANTON
 })
 @JsonTypeName("AusgewaehlterGrund")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusgewaehlterGrundDtoSpec {
   public static final String JSON_PROPERTY_DECISION_ID = "decisionId";
+  @jakarta.annotation.Nonnull
   private UUID decisionId;
 
   public static final String JSON_PROPERTY_KANTON = "kanton";
+  @jakarta.annotation.Nullable
   private KantonDtoSpec kanton;
 
   public AusgewaehlterGrundDtoSpec() {
   }
 
-  public AusgewaehlterGrundDtoSpec decisionId(UUID decisionId) {
+  public AusgewaehlterGrundDtoSpec decisionId(@jakarta.annotation.Nonnull UUID decisionId) {
     
     this.decisionId = decisionId;
     return this;
   }
 
-   /**
+  /**
    * Get decisionId
    * @return decisionId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DECISION_ID)
+  @JsonProperty(value = JSON_PROPERTY_DECISION_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getDecisionId() {
@@ -63,25 +65,24 @@ public class AusgewaehlterGrundDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DECISION_ID)
+  @JsonProperty(value = JSON_PROPERTY_DECISION_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDecisionId(UUID decisionId) {
+  public void setDecisionId(@jakarta.annotation.Nonnull UUID decisionId) {
     this.decisionId = decisionId;
   }
 
-
-  public AusgewaehlterGrundDtoSpec kanton(KantonDtoSpec kanton) {
+  public AusgewaehlterGrundDtoSpec kanton(@jakarta.annotation.Nullable KantonDtoSpec kanton) {
     
     this.kanton = kanton;
     return this;
   }
 
-   /**
+  /**
    * Get kanton
    * @return kanton
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_KANTON)
+  @JsonProperty(value = JSON_PROPERTY_KANTON, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public KantonDtoSpec getKanton() {
@@ -89,11 +90,12 @@ public class AusgewaehlterGrundDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KANTON)
+  @JsonProperty(value = JSON_PROPERTY_KANTON, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setKanton(KantonDtoSpec kanton) {
+  public void setKanton(@jakarta.annotation.Nullable KantonDtoSpec kanton) {
     this.kanton = kanton;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -128,10 +130,7 @@ public class AusgewaehlterGrundDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

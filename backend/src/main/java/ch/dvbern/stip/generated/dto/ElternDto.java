@@ -17,26 +17,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Eltern")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ElternDto  implements Serializable {
-  private @Valid String vorname;
-  private @Valid AdresseDto adresse;
-  private @Valid Boolean identischerZivilrechtlicherWohnsitz;
-  private @Valid String telefonnummer;
-  private @Valid LocalDate geburtsdatum;
-  private @Valid Boolean ausweisbFluechtling;
-  private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
-  private @Valid String nachname;
-  private @Valid Boolean sozialhilfebeitraege;
-  private @Valid String identischerZivilrechtlicherWohnsitzOrt;
-  private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
-  private @Valid String sozialversicherungsnummer;
-  private @Valid UUID id;
-  private @Valid Integer wohnkosten;
-  private @Valid Boolean wiederverheiratet;
+  private String vorname;
+  private AdresseDto adresse;
+  private Boolean identischerZivilrechtlicherWohnsitz;
+  private String telefonnummer;
+  private LocalDate geburtsdatum;
+  private Boolean ausweisbFluechtling;
+  private ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
+  private String nachname;
+  private Boolean sozialhilfebeitraege;
+  private String identischerZivilrechtlicherWohnsitzOrt;
+  private String identischerZivilrechtlicherWohnsitzPLZ;
+  private String sozialversicherungsnummer;
+  private UUID id;
+  private Integer wohnkosten;
+  private Boolean wiederverheiratet;
 
   protected ElternDto(ElternDtoBuilder<?, ?> b) {
     this.vorname = b.vorname;
@@ -67,13 +67,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -86,13 +85,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("adresse")
-  @NotNull
-  public AdresseDto getAdresse() {
+  @JsonProperty(required = true, value = "adresse")
+  @NotNull @Valid public AdresseDto getAdresse() {
     return adresse;
   }
 
-  @JsonProperty("adresse")
+  @JsonProperty(required = true, value = "adresse")
   public void setAdresse(AdresseDto adresse) {
     this.adresse = adresse;
   }
@@ -105,13 +103,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("identischerZivilrechtlicherWohnsitz")
-  @NotNull
-  public Boolean getIdentischerZivilrechtlicherWohnsitz() {
+  @JsonProperty(required = true, value = "identischerZivilrechtlicherWohnsitz")
+  @NotNull public Boolean getIdentischerZivilrechtlicherWohnsitz() {
     return identischerZivilrechtlicherWohnsitz;
   }
 
-  @JsonProperty("identischerZivilrechtlicherWohnsitz")
+  @JsonProperty(required = true, value = "identischerZivilrechtlicherWohnsitz")
   public void setIdentischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
     this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
   }
@@ -124,13 +121,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("telefonnummer")
-  @NotNull
-  public String getTelefonnummer() {
+  @JsonProperty(required = true, value = "telefonnummer")
+  @NotNull public String getTelefonnummer() {
     return telefonnummer;
   }
 
-  @JsonProperty("telefonnummer")
+  @JsonProperty(required = true, value = "telefonnummer")
   public void setTelefonnummer(String telefonnummer) {
     this.telefonnummer = telefonnummer;
   }
@@ -144,13 +140,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
-  public LocalDate getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -163,13 +158,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausweisbFluechtling")
-  @NotNull
-  public Boolean getAusweisbFluechtling() {
+  @JsonProperty(required = true, value = "ausweisbFluechtling")
+  @NotNull public Boolean getAusweisbFluechtling() {
     return ausweisbFluechtling;
   }
 
-  @JsonProperty("ausweisbFluechtling")
+  @JsonProperty(required = true, value = "ausweisbFluechtling")
   public void setAusweisbFluechtling(Boolean ausweisbFluechtling) {
     this.ausweisbFluechtling = ausweisbFluechtling;
   }
@@ -182,13 +176,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("elternTyp")
-  @NotNull
-  public ch.dvbern.stip.api.eltern.type.ElternTyp getElternTyp() {
+  @JsonProperty(required = true, value = "elternTyp")
+  @NotNull public ch.dvbern.stip.api.eltern.type.ElternTyp getElternTyp() {
     return elternTyp;
   }
 
-  @JsonProperty("elternTyp")
+  @JsonProperty(required = true, value = "elternTyp")
   public void setElternTyp(ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp) {
     this.elternTyp = elternTyp;
   }
@@ -201,13 +194,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -220,13 +212,12 @@ public class ElternDto  implements Serializable {
   }
 
   
-  @JsonProperty("sozialhilfebeitraege")
-  @NotNull
-  public Boolean getSozialhilfebeitraege() {
+  @JsonProperty(required = true, value = "sozialhilfebeitraege")
+  @NotNull public Boolean getSozialhilfebeitraege() {
     return sozialhilfebeitraege;
   }
 
-  @JsonProperty("sozialhilfebeitraege")
+  @JsonProperty(required = true, value = "sozialhilfebeitraege")
   public void setSozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
   }
@@ -403,10 +394,7 @@ public class ElternDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -509,4 +497,3 @@ public class ElternDto  implements Serializable {
     }
   }
 }
-

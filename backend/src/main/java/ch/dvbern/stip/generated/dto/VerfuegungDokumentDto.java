@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("VerfuegungDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class VerfuegungDokumentDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid VerfuegungDokumentTypDto typ;
-  private @Valid String filename;
+  private UUID id;
+  private VerfuegungDokumentTypDto typ;
+  private String filename;
 
   protected VerfuegungDokumentDto(VerfuegungDokumentDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -42,13 +42,12 @@ public class VerfuegungDokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -61,13 +60,12 @@ public class VerfuegungDokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("typ")
-  @NotNull
-  public VerfuegungDokumentTypDto getTyp() {
+  @JsonProperty(required = true, value = "typ")
+  @NotNull public VerfuegungDokumentTypDto getTyp() {
     return typ;
   }
 
-  @JsonProperty("typ")
+  @JsonProperty(required = true, value = "typ")
   public void setTyp(VerfuegungDokumentTypDto typ) {
     this.typ = typ;
   }
@@ -80,13 +78,12 @@ public class VerfuegungDokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("filename")
-  @NotNull
-  public String getFilename() {
+  @JsonProperty(required = true, value = "filename")
+  @NotNull public String getFilename() {
     return filename;
   }
 
-  @JsonProperty("filename")
+  @JsonProperty(required = true, value = "filename")
   public void setFilename(String filename) {
     this.filename = filename;
   }
@@ -128,10 +125,7 @@ public class VerfuegungDokumentDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -174,4 +168,3 @@ public class VerfuegungDokumentDto  implements Serializable {
     }
   }
 }
-

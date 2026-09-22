@@ -22,29 +22,29 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("PersoenlichesBudgetresultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid List<String> haushaltNames = new ArrayList<>();
-  private @Valid String vorname;
-  private @Valid String nachname;
-  private @Valid String sozialversicherungsnummer;
-  private @Valid LocalDate geburtsdatum;
-  private @Valid Integer total;
-  private @Valid Integer einnahmenMinusKosten;
-  private @Valid Integer fehlbetrag;
-  private @Valid Boolean eigenerHaushalt;
-  private @Valid Integer budgetTranche;
-  private @Valid Integer anzahlMonate;
-  private @Valid Integer anzahlPersonenImHaushalt;
-  private @Valid PersoenlichesBudgetresultatEinnahmenDto einnahmen;
-  private @Valid PersoenlichesBudgetresultatKostenDto kosten;
-  private @Valid String vornamePartner;
-  private @Valid String nachnamePartner;
-  private @Valid Integer proKopfTeilung;
-  private @Valid Integer totalNachProKopfTeilung;
+  private String vorname;
+  private String nachname;
+  private String sozialversicherungsnummer;
+  private LocalDate geburtsdatum;
+  private Integer total;
+  private Integer einnahmenMinusKosten;
+  private Integer fehlbetrag;
+  private Boolean eigenerHaushalt;
+  private Integer budgetTranche;
+  private Integer anzahlMonate;
+  private Integer anzahlPersonenImHaushalt;
+  private PersoenlichesBudgetresultatEinnahmenDto einnahmen;
+  private PersoenlichesBudgetresultatKostenDto kosten;
+  private String vornamePartner;
+  private String nachnamePartner;
+  private Integer proKopfTeilung;
+  private Integer totalNachProKopfTeilung;
 
   protected PersoenlichesBudgetresultatDto(PersoenlichesBudgetresultatDtoBuilder<?, ?> b) {
     this.haushaltNames = b.haushaltNames;
@@ -78,13 +78,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("haushaltNames")
-  @NotNull
-  public List<String> getHaushaltNames() {
+  @JsonProperty(required = true, value = "haushaltNames")
+  @NotNull public List<String> getHaushaltNames() {
     return haushaltNames;
   }
 
-  @JsonProperty("haushaltNames")
+  @JsonProperty(required = true, value = "haushaltNames")
   public void setHaushaltNames(List<String> haushaltNames) {
     this.haushaltNames = haushaltNames;
   }
@@ -113,13 +112,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -132,13 +130,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -151,13 +148,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("sozialversicherungsnummer")
-  @NotNull
-  public String getSozialversicherungsnummer() {
+  @JsonProperty(required = true, value = "sozialversicherungsnummer")
+  @NotNull public String getSozialversicherungsnummer() {
     return sozialversicherungsnummer;
   }
 
-  @JsonProperty("sozialversicherungsnummer")
+  @JsonProperty(required = true, value = "sozialversicherungsnummer")
   public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
@@ -171,13 +167,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
-  public LocalDate getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -190,13 +185,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("total")
-  @NotNull
-  public Integer getTotal() {
+  @JsonProperty(required = true, value = "total")
+  @NotNull public Integer getTotal() {
     return total;
   }
 
-  @JsonProperty("total")
+  @JsonProperty(required = true, value = "total")
   public void setTotal(Integer total) {
     this.total = total;
   }
@@ -209,13 +203,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("einnahmenMinusKosten")
-  @NotNull
-  public Integer getEinnahmenMinusKosten() {
+  @JsonProperty(required = true, value = "einnahmenMinusKosten")
+  @NotNull public Integer getEinnahmenMinusKosten() {
     return einnahmenMinusKosten;
   }
 
-  @JsonProperty("einnahmenMinusKosten")
+  @JsonProperty(required = true, value = "einnahmenMinusKosten")
   public void setEinnahmenMinusKosten(Integer einnahmenMinusKosten) {
     this.einnahmenMinusKosten = einnahmenMinusKosten;
   }
@@ -228,13 +221,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("fehlbetrag")
-  @NotNull
-  public Integer getFehlbetrag() {
+  @JsonProperty(required = true, value = "fehlbetrag")
+  @NotNull public Integer getFehlbetrag() {
     return fehlbetrag;
   }
 
-  @JsonProperty("fehlbetrag")
+  @JsonProperty(required = true, value = "fehlbetrag")
   public void setFehlbetrag(Integer fehlbetrag) {
     this.fehlbetrag = fehlbetrag;
   }
@@ -247,13 +239,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("eigenerHaushalt")
-  @NotNull
-  public Boolean getEigenerHaushalt() {
+  @JsonProperty(required = true, value = "eigenerHaushalt")
+  @NotNull public Boolean getEigenerHaushalt() {
     return eigenerHaushalt;
   }
 
-  @JsonProperty("eigenerHaushalt")
+  @JsonProperty(required = true, value = "eigenerHaushalt")
   public void setEigenerHaushalt(Boolean eigenerHaushalt) {
     this.eigenerHaushalt = eigenerHaushalt;
   }
@@ -266,13 +257,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("budgetTranche")
-  @NotNull
-  public Integer getBudgetTranche() {
+  @JsonProperty(required = true, value = "budgetTranche")
+  @NotNull public Integer getBudgetTranche() {
     return budgetTranche;
   }
 
-  @JsonProperty("budgetTranche")
+  @JsonProperty(required = true, value = "budgetTranche")
   public void setBudgetTranche(Integer budgetTranche) {
     this.budgetTranche = budgetTranche;
   }
@@ -285,13 +275,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("anzahlMonate")
-  @NotNull
-  public Integer getAnzahlMonate() {
+  @JsonProperty(required = true, value = "anzahlMonate")
+  @NotNull public Integer getAnzahlMonate() {
     return anzahlMonate;
   }
 
-  @JsonProperty("anzahlMonate")
+  @JsonProperty(required = true, value = "anzahlMonate")
   public void setAnzahlMonate(Integer anzahlMonate) {
     this.anzahlMonate = anzahlMonate;
   }
@@ -304,13 +293,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("anzahlPersonenImHaushalt")
-  @NotNull
-  public Integer getAnzahlPersonenImHaushalt() {
+  @JsonProperty(required = true, value = "anzahlPersonenImHaushalt")
+  @NotNull public Integer getAnzahlPersonenImHaushalt() {
     return anzahlPersonenImHaushalt;
   }
 
-  @JsonProperty("anzahlPersonenImHaushalt")
+  @JsonProperty(required = true, value = "anzahlPersonenImHaushalt")
   public void setAnzahlPersonenImHaushalt(Integer anzahlPersonenImHaushalt) {
     this.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
   }
@@ -323,13 +311,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("einnahmen")
-  @NotNull
-  public PersoenlichesBudgetresultatEinnahmenDto getEinnahmen() {
+  @JsonProperty(required = true, value = "einnahmen")
+  @NotNull @Valid public PersoenlichesBudgetresultatEinnahmenDto getEinnahmen() {
     return einnahmen;
   }
 
-  @JsonProperty("einnahmen")
+  @JsonProperty(required = true, value = "einnahmen")
   public void setEinnahmen(PersoenlichesBudgetresultatEinnahmenDto einnahmen) {
     this.einnahmen = einnahmen;
   }
@@ -342,13 +329,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("kosten")
-  @NotNull
-  public PersoenlichesBudgetresultatKostenDto getKosten() {
+  @JsonProperty(required = true, value = "kosten")
+  @NotNull @Valid public PersoenlichesBudgetresultatKostenDto getKosten() {
     return kosten;
   }
 
-  @JsonProperty("kosten")
+  @JsonProperty(required = true, value = "kosten")
   public void setKosten(PersoenlichesBudgetresultatKostenDto kosten) {
     this.kosten = kosten;
   }
@@ -492,10 +478,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -613,4 +596,3 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     }
   }
 }
-

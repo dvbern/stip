@@ -31,6 +31,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -112,7 +113,7 @@ public class BuchhaltungApiSpec {
         public CreateBuchhaltungSaldokorrekturOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -141,7 +142,7 @@ public class BuchhaltungApiSpec {
          * @param buchhaltungSaldokorrekturDtoSpec (BuchhaltungSaldokorrekturDtoSpec)  (required)
          * @return operation
          */
-        public CreateBuchhaltungSaldokorrekturOper body(BuchhaltungSaldokorrekturDtoSpec buchhaltungSaldokorrekturDtoSpec) {
+        public CreateBuchhaltungSaldokorrekturOper body(@jakarta.annotation.Nonnull BuchhaltungSaldokorrekturDtoSpec buchhaltungSaldokorrekturDtoSpec) {
             reqSpec.setBody(buchhaltungSaldokorrekturDtoSpec);
             return this;
         }
@@ -194,7 +195,7 @@ public class BuchhaltungApiSpec {
 
         public GetBuchhaltungEntrysOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -268,7 +269,7 @@ public class BuchhaltungApiSpec {
 
         public GetFailedAuszahlungBuchhaltungEntrysOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -352,7 +353,7 @@ public class BuchhaltungApiSpec {
 
         public RetryFailedAuszahlungBuchhaltungForGesuchOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 

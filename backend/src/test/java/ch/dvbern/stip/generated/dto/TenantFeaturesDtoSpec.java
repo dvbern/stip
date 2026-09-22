@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   TenantFeaturesDtoSpec.JSON_PROPERTY_STEUERDATEN
 })
 @JsonTypeName("TenantFeatures")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class TenantFeaturesDtoSpec {
   public static final String JSON_PROPERTY_STEUERDATEN = "steuerdaten";
+  @jakarta.annotation.Nullable
   private TenantFeatureDtoSpec steuerdaten;
 
   public TenantFeaturesDtoSpec() {
   }
 
-  public TenantFeaturesDtoSpec steuerdaten(TenantFeatureDtoSpec steuerdaten) {
+  public TenantFeaturesDtoSpec steuerdaten(@jakarta.annotation.Nullable TenantFeatureDtoSpec steuerdaten) {
     
     this.steuerdaten = steuerdaten;
     return this;
   }
 
-   /**
+  /**
    * Get steuerdaten
    * @return steuerdaten
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN)
+  @JsonProperty(value = JSON_PROPERTY_STEUERDATEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public TenantFeatureDtoSpec getSteuerdaten() {
@@ -58,11 +59,12 @@ public class TenantFeaturesDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN)
+  @JsonProperty(value = JSON_PROPERTY_STEUERDATEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSteuerdaten(TenantFeatureDtoSpec steuerdaten) {
+  public void setSteuerdaten(@jakarta.annotation.Nullable TenantFeatureDtoSpec steuerdaten) {
     this.steuerdaten = steuerdaten;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class TenantFeaturesDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

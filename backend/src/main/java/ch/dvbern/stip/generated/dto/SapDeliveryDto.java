@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SapDelivery")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SapDeliveryDto  implements Serializable {
-  private @Valid String sapId;
-  private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+  private String sapId;
+  private java.time.LocalDateTime timestampErstellt;
+  private ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
 
   protected SapDeliveryDto(SapDeliveryDtoBuilder<?, ?> b) {
     this.sapId = b.sapId;
@@ -40,13 +40,12 @@ public class SapDeliveryDto  implements Serializable {
   }
 
   
-  @JsonProperty("sapId")
-  @NotNull
-  public String getSapId() {
+  @JsonProperty(required = true, value = "sapId")
+  @NotNull public String getSapId() {
     return sapId;
   }
 
-  @JsonProperty("sapId")
+  @JsonProperty(required = true, value = "sapId")
   public void setSapId(String sapId) {
     this.sapId = sapId;
   }
@@ -59,13 +58,12 @@ public class SapDeliveryDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public java.time.LocalDateTime getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -78,13 +76,12 @@ public class SapDeliveryDto  implements Serializable {
   }
 
   
-  @JsonProperty("sapStatus")
-  @NotNull
-  public ch.dvbern.stip.api.buchhaltung.type.SapStatus getSapStatus() {
+  @JsonProperty(required = true, value = "sapStatus")
+  @NotNull public ch.dvbern.stip.api.buchhaltung.type.SapStatus getSapStatus() {
     return sapStatus;
   }
 
-  @JsonProperty("sapStatus")
+  @JsonProperty(required = true, value = "sapStatus")
   public void setSapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
     this.sapStatus = sapStatus;
   }
@@ -126,10 +123,7 @@ public class SapDeliveryDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -172,4 +166,3 @@ public class SapDeliveryDto  implements Serializable {
     }
   }
 }
-

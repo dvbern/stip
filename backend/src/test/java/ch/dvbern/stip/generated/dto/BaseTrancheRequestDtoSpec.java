@@ -33,32 +33,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BaseTrancheRequestDtoSpec.JSON_PROPERTY_COMMENT
 })
 @JsonTypeName("BaseTrancheRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BaseTrancheRequestDtoSpec {
   public static final String JSON_PROPERTY_START = "start";
+  @jakarta.annotation.Nullable
   private LocalDate start;
 
   public static final String JSON_PROPERTY_END = "end";
+  @jakarta.annotation.Nullable
   private LocalDate end;
 
   public static final String JSON_PROPERTY_COMMENT = "comment";
+  @jakarta.annotation.Nullable
   private String comment;
 
   public BaseTrancheRequestDtoSpec() {
   }
 
-  public BaseTrancheRequestDtoSpec start(LocalDate start) {
+  public BaseTrancheRequestDtoSpec start(@jakarta.annotation.Nullable LocalDate start) {
     
     this.start = start;
     return this;
   }
 
-   /**
+  /**
    * Get start
    * @return start
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_START)
+  @JsonProperty(value = JSON_PROPERTY_START, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getStart() {
@@ -66,25 +69,24 @@ public class BaseTrancheRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_START)
+  @JsonProperty(value = JSON_PROPERTY_START, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStart(LocalDate start) {
+  public void setStart(@jakarta.annotation.Nullable LocalDate start) {
     this.start = start;
   }
 
-
-  public BaseTrancheRequestDtoSpec end(LocalDate end) {
+  public BaseTrancheRequestDtoSpec end(@jakarta.annotation.Nullable LocalDate end) {
     
     this.end = end;
     return this;
   }
 
-   /**
+  /**
    * Get end
    * @return end
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_END)
+  @JsonProperty(value = JSON_PROPERTY_END, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getEnd() {
@@ -92,25 +94,24 @@ public class BaseTrancheRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_END)
+  @JsonProperty(value = JSON_PROPERTY_END, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEnd(LocalDate end) {
+  public void setEnd(@jakarta.annotation.Nullable LocalDate end) {
     this.end = end;
   }
 
-
-  public BaseTrancheRequestDtoSpec comment(String comment) {
+  public BaseTrancheRequestDtoSpec comment(@jakarta.annotation.Nullable String comment) {
     
     this.comment = comment;
     return this;
   }
 
-   /**
+  /**
    * Get comment
    * @return comment
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getComment() {
@@ -118,11 +119,12 @@ public class BaseTrancheRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setComment(String comment) {
+  public void setComment(@jakarta.annotation.Nullable String comment) {
     this.comment = comment;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -159,10 +161,7 @@ public class BaseTrancheRequestDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

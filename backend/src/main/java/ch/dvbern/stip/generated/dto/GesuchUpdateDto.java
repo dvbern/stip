@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchUpdateDto  implements Serializable {
-  private @Valid GesuchTrancheUpdateDto gesuchTrancheToWorkWith;
-  private @Valid String nachfristDokumente;
+  private GesuchTrancheUpdateDto gesuchTrancheToWorkWith;
+  private String nachfristDokumente;
 
   protected GesuchUpdateDto(GesuchUpdateDtoBuilder<?, ?> b) {
     this.gesuchTrancheToWorkWith = b.gesuchTrancheToWorkWith;
@@ -39,13 +39,12 @@ public class GesuchUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchTrancheToWorkWith")
-  @NotNull
-  public GesuchTrancheUpdateDto getGesuchTrancheToWorkWith() {
+  @JsonProperty(required = true, value = "gesuchTrancheToWorkWith")
+  @NotNull @Valid public GesuchTrancheUpdateDto getGesuchTrancheToWorkWith() {
     return gesuchTrancheToWorkWith;
   }
 
-  @JsonProperty("gesuchTrancheToWorkWith")
+  @JsonProperty(required = true, value = "gesuchTrancheToWorkWith")
   public void setGesuchTrancheToWorkWith(GesuchTrancheUpdateDto gesuchTrancheToWorkWith) {
     this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
   }
@@ -103,10 +102,7 @@ public class GesuchUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +140,3 @@ public class GesuchUpdateDto  implements Serializable {
     }
   }
 }
-

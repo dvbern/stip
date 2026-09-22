@@ -43,33 +43,40 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT
 })
 @JsonTypeName("DokumenteToUpload")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DokumenteToUploadDtoSpec {
   public static final String JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS = "customDokumentTyps";
+  @jakarta.annotation.Nullable
   private List<CustomDokumentTypDtoSpec> customDokumentTyps;
 
   public static final String JSON_PROPERTY_REQUIRED = "required";
+  @jakarta.annotation.Nullable
   private List<DokumentTypDtoSpec> required;
 
   public static final String JSON_PROPERTY_REQUIRED_REFS = "requiredRefs";
+  @jakarta.annotation.Nullable
   private List<GesuchDokumentRefDtoSpec> requiredRefs;
 
   public static final String JSON_PROPERTY_UNTERSCHRIFTENBLAETTER = "unterschriftenblaetter";
+  @jakarta.annotation.Nullable
   private List<UnterschriftenblattDokumentTypDtoSpec> unterschriftenblaetter;
 
   public static final String JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN = "sbCanFehlendeDokumenteUebermitteln";
+  @jakarta.annotation.Nullable
   private Boolean sbCanFehlendeDokumenteUebermitteln;
 
   public static final String JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN = "gsCanDokumenteUebermitteln";
+  @jakarta.annotation.Nullable
   private Boolean gsCanDokumenteUebermitteln;
 
   public static final String JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT = "sbCanUploadUnterschriftenblatt";
+  @jakarta.annotation.Nullable
   private Boolean sbCanUploadUnterschriftenblatt;
 
   public DokumenteToUploadDtoSpec() {
   }
 
-  public DokumenteToUploadDtoSpec customDokumentTyps(List<CustomDokumentTypDtoSpec> customDokumentTyps) {
+  public DokumenteToUploadDtoSpec customDokumentTyps(@jakarta.annotation.Nullable List<CustomDokumentTypDtoSpec> customDokumentTyps) {
     
     this.customDokumentTyps = customDokumentTyps;
     return this;
@@ -83,12 +90,12 @@ public class DokumenteToUploadDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get customDokumentTyps
    * @return customDokumentTyps
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS)
+  @JsonProperty(value = JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<CustomDokumentTypDtoSpec> getCustomDokumentTyps() {
@@ -96,14 +103,13 @@ public class DokumenteToUploadDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS)
+  @JsonProperty(value = JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCustomDokumentTyps(List<CustomDokumentTypDtoSpec> customDokumentTyps) {
+  public void setCustomDokumentTyps(@jakarta.annotation.Nullable List<CustomDokumentTypDtoSpec> customDokumentTyps) {
     this.customDokumentTyps = customDokumentTyps;
   }
 
-
-  public DokumenteToUploadDtoSpec required(List<DokumentTypDtoSpec> required) {
+  public DokumenteToUploadDtoSpec required(@jakarta.annotation.Nullable List<DokumentTypDtoSpec> required) {
     
     this.required = required;
     return this;
@@ -117,12 +123,12 @@ public class DokumenteToUploadDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get required
    * @return required
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_REQUIRED)
+  @JsonProperty(value = JSON_PROPERTY_REQUIRED, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<DokumentTypDtoSpec> getRequired() {
@@ -130,14 +136,13 @@ public class DokumenteToUploadDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_REQUIRED)
+  @JsonProperty(value = JSON_PROPERTY_REQUIRED, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRequired(List<DokumentTypDtoSpec> required) {
+  public void setRequired(@jakarta.annotation.Nullable List<DokumentTypDtoSpec> required) {
     this.required = required;
   }
 
-
-  public DokumenteToUploadDtoSpec requiredRefs(List<GesuchDokumentRefDtoSpec> requiredRefs) {
+  public DokumenteToUploadDtoSpec requiredRefs(@jakarta.annotation.Nullable List<GesuchDokumentRefDtoSpec> requiredRefs) {
     
     this.requiredRefs = requiredRefs;
     return this;
@@ -151,12 +156,12 @@ public class DokumenteToUploadDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get requiredRefs
    * @return requiredRefs
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_REQUIRED_REFS)
+  @JsonProperty(value = JSON_PROPERTY_REQUIRED_REFS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<GesuchDokumentRefDtoSpec> getRequiredRefs() {
@@ -164,14 +169,13 @@ public class DokumenteToUploadDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_REQUIRED_REFS)
+  @JsonProperty(value = JSON_PROPERTY_REQUIRED_REFS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRequiredRefs(List<GesuchDokumentRefDtoSpec> requiredRefs) {
+  public void setRequiredRefs(@jakarta.annotation.Nullable List<GesuchDokumentRefDtoSpec> requiredRefs) {
     this.requiredRefs = requiredRefs;
   }
 
-
-  public DokumenteToUploadDtoSpec unterschriftenblaetter(List<UnterschriftenblattDokumentTypDtoSpec> unterschriftenblaetter) {
+  public DokumenteToUploadDtoSpec unterschriftenblaetter(@jakarta.annotation.Nullable List<UnterschriftenblattDokumentTypDtoSpec> unterschriftenblaetter) {
     
     this.unterschriftenblaetter = unterschriftenblaetter;
     return this;
@@ -185,12 +189,12 @@ public class DokumenteToUploadDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get unterschriftenblaetter
    * @return unterschriftenblaetter
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_UNTERSCHRIFTENBLAETTER)
+  @JsonProperty(value = JSON_PROPERTY_UNTERSCHRIFTENBLAETTER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<UnterschriftenblattDokumentTypDtoSpec> getUnterschriftenblaetter() {
@@ -198,25 +202,24 @@ public class DokumenteToUploadDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNTERSCHRIFTENBLAETTER)
+  @JsonProperty(value = JSON_PROPERTY_UNTERSCHRIFTENBLAETTER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUnterschriftenblaetter(List<UnterschriftenblattDokumentTypDtoSpec> unterschriftenblaetter) {
+  public void setUnterschriftenblaetter(@jakarta.annotation.Nullable List<UnterschriftenblattDokumentTypDtoSpec> unterschriftenblaetter) {
     this.unterschriftenblaetter = unterschriftenblaetter;
   }
 
-
-  public DokumenteToUploadDtoSpec sbCanFehlendeDokumenteUebermitteln(Boolean sbCanFehlendeDokumenteUebermitteln) {
+  public DokumenteToUploadDtoSpec sbCanFehlendeDokumenteUebermitteln(@jakarta.annotation.Nullable Boolean sbCanFehlendeDokumenteUebermitteln) {
     
     this.sbCanFehlendeDokumenteUebermitteln = sbCanFehlendeDokumenteUebermitteln;
     return this;
   }
 
-   /**
+  /**
    * Get sbCanFehlendeDokumenteUebermitteln
    * @return sbCanFehlendeDokumenteUebermitteln
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN)
+  @JsonProperty(value = JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getSbCanFehlendeDokumenteUebermitteln() {
@@ -224,25 +227,24 @@ public class DokumenteToUploadDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN)
+  @JsonProperty(value = JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSbCanFehlendeDokumenteUebermitteln(Boolean sbCanFehlendeDokumenteUebermitteln) {
+  public void setSbCanFehlendeDokumenteUebermitteln(@jakarta.annotation.Nullable Boolean sbCanFehlendeDokumenteUebermitteln) {
     this.sbCanFehlendeDokumenteUebermitteln = sbCanFehlendeDokumenteUebermitteln;
   }
 
-
-  public DokumenteToUploadDtoSpec gsCanDokumenteUebermitteln(Boolean gsCanDokumenteUebermitteln) {
+  public DokumenteToUploadDtoSpec gsCanDokumenteUebermitteln(@jakarta.annotation.Nullable Boolean gsCanDokumenteUebermitteln) {
     
     this.gsCanDokumenteUebermitteln = gsCanDokumenteUebermitteln;
     return this;
   }
 
-   /**
+  /**
    * Get gsCanDokumenteUebermitteln
    * @return gsCanDokumenteUebermitteln
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN)
+  @JsonProperty(value = JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getGsCanDokumenteUebermitteln() {
@@ -250,25 +252,24 @@ public class DokumenteToUploadDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN)
+  @JsonProperty(value = JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGsCanDokumenteUebermitteln(Boolean gsCanDokumenteUebermitteln) {
+  public void setGsCanDokumenteUebermitteln(@jakarta.annotation.Nullable Boolean gsCanDokumenteUebermitteln) {
     this.gsCanDokumenteUebermitteln = gsCanDokumenteUebermitteln;
   }
 
-
-  public DokumenteToUploadDtoSpec sbCanUploadUnterschriftenblatt(Boolean sbCanUploadUnterschriftenblatt) {
+  public DokumenteToUploadDtoSpec sbCanUploadUnterschriftenblatt(@jakarta.annotation.Nullable Boolean sbCanUploadUnterschriftenblatt) {
     
     this.sbCanUploadUnterschriftenblatt = sbCanUploadUnterschriftenblatt;
     return this;
   }
 
-   /**
+  /**
    * Get sbCanUploadUnterschriftenblatt
    * @return sbCanUploadUnterschriftenblatt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT)
+  @JsonProperty(value = JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getSbCanUploadUnterschriftenblatt() {
@@ -276,11 +277,12 @@ public class DokumenteToUploadDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT)
+  @JsonProperty(value = JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSbCanUploadUnterschriftenblatt(Boolean sbCanUploadUnterschriftenblatt) {
+  public void setSbCanUploadUnterschriftenblatt(@jakarta.annotation.Nullable Boolean sbCanUploadUnterschriftenblatt) {
     this.sbCanUploadUnterschriftenblatt = sbCanUploadUnterschriftenblatt;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -325,10 +327,7 @@ public class DokumenteToUploadDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

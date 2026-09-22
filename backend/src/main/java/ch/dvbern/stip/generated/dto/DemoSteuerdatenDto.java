@@ -14,26 +14,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoSteuerdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoSteuerdatenDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
-  private @Valid Integer totalEinkuenfte;
-  private @Valid Integer eigenmietwert;
-  private @Valid Boolean isArbeitsverhaeltnisSelbstaendig;
-  private @Valid Integer saeule3a;
-  private @Valid Integer saeule2;
-  private @Valid Integer vermoegen;
-  private @Valid Integer steuernKantonGemeinde;
-  private @Valid Integer steuernBund;
-  private @Valid Integer fahrkosten;
-  private @Valid Integer fahrkostenPartner;
-  private @Valid Integer verpflegung;
-  private @Valid Integer verpflegungPartner;
-  private @Valid Integer steuerjahr;
-  private @Valid String veranlagungsStatus;
+  private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
+  private Integer totalEinkuenfte;
+  private Integer eigenmietwert;
+  private Boolean isArbeitsverhaeltnisSelbstaendig;
+  private Integer saeule3a;
+  private Integer saeule2;
+  private Integer vermoegen;
+  private Integer steuernKantonGemeinde;
+  private Integer steuernBund;
+  private Integer fahrkosten;
+  private Integer fahrkostenPartner;
+  private Integer verpflegung;
+  private Integer verpflegungPartner;
+  private Integer steuerjahr;
+  private String veranlagungsStatus;
 
   protected DemoSteuerdatenDto(DemoSteuerdatenDtoBuilder<?, ?> b) {
     this.type = b.type;
@@ -64,13 +64,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("type")
-  @NotNull
-  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getType() {
+  @JsonProperty(required = true, value = "type")
+  @NotNull public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getType() {
     return type;
   }
 
-  @JsonProperty("type")
+  @JsonProperty(required = true, value = "type")
   public void setType(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type) {
     this.type = type;
   }
@@ -83,13 +82,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("totalEinkuenfte")
-  @NotNull
-  public Integer getTotalEinkuenfte() {
+  @JsonProperty(required = true, value = "totalEinkuenfte")
+  @NotNull public Integer getTotalEinkuenfte() {
     return totalEinkuenfte;
   }
 
-  @JsonProperty("totalEinkuenfte")
+  @JsonProperty(required = true, value = "totalEinkuenfte")
   public void setTotalEinkuenfte(Integer totalEinkuenfte) {
     this.totalEinkuenfte = totalEinkuenfte;
   }
@@ -102,13 +100,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("eigenmietwert")
-  @NotNull
-  public Integer getEigenmietwert() {
+  @JsonProperty(required = true, value = "eigenmietwert")
+  @NotNull public Integer getEigenmietwert() {
     return eigenmietwert;
   }
 
-  @JsonProperty("eigenmietwert")
+  @JsonProperty(required = true, value = "eigenmietwert")
   public void setEigenmietwert(Integer eigenmietwert) {
     this.eigenmietwert = eigenmietwert;
   }
@@ -121,13 +118,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("isArbeitsverhaeltnisSelbstaendig")
-  @NotNull
-  public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
+  @JsonProperty(required = true, value = "isArbeitsverhaeltnisSelbstaendig")
+  @NotNull public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
     return isArbeitsverhaeltnisSelbstaendig;
   }
 
-  @JsonProperty("isArbeitsverhaeltnisSelbstaendig")
+  @JsonProperty(required = true, value = "isArbeitsverhaeltnisSelbstaendig")
   public void setIsArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
     this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
   }
@@ -140,13 +136,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("saeule3a")
-  @NotNull
-  public Integer getSaeule3a() {
+  @JsonProperty(required = true, value = "saeule3a")
+  @NotNull public Integer getSaeule3a() {
     return saeule3a;
   }
 
-  @JsonProperty("saeule3a")
+  @JsonProperty(required = true, value = "saeule3a")
   public void setSaeule3a(Integer saeule3a) {
     this.saeule3a = saeule3a;
   }
@@ -159,13 +154,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("saeule2")
-  @NotNull
-  public Integer getSaeule2() {
+  @JsonProperty(required = true, value = "saeule2")
+  @NotNull public Integer getSaeule2() {
     return saeule2;
   }
 
-  @JsonProperty("saeule2")
+  @JsonProperty(required = true, value = "saeule2")
   public void setSaeule2(Integer saeule2) {
     this.saeule2 = saeule2;
   }
@@ -178,13 +172,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("vermoegen")
-  @NotNull
-  public Integer getVermoegen() {
+  @JsonProperty(required = true, value = "vermoegen")
+  @NotNull public Integer getVermoegen() {
     return vermoegen;
   }
 
-  @JsonProperty("vermoegen")
+  @JsonProperty(required = true, value = "vermoegen")
   public void setVermoegen(Integer vermoegen) {
     this.vermoegen = vermoegen;
   }
@@ -197,13 +190,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuernKantonGemeinde")
-  @NotNull
-  public Integer getSteuernKantonGemeinde() {
+  @JsonProperty(required = true, value = "steuernKantonGemeinde")
+  @NotNull public Integer getSteuernKantonGemeinde() {
     return steuernKantonGemeinde;
   }
 
-  @JsonProperty("steuernKantonGemeinde")
+  @JsonProperty(required = true, value = "steuernKantonGemeinde")
   public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
     this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
@@ -216,13 +208,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuernBund")
-  @NotNull
-  public Integer getSteuernBund() {
+  @JsonProperty(required = true, value = "steuernBund")
+  @NotNull public Integer getSteuernBund() {
     return steuernBund;
   }
 
-  @JsonProperty("steuernBund")
+  @JsonProperty(required = true, value = "steuernBund")
   public void setSteuernBund(Integer steuernBund) {
     this.steuernBund = steuernBund;
   }
@@ -235,13 +226,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fahrkosten")
-  @NotNull
-  public Integer getFahrkosten() {
+  @JsonProperty(required = true, value = "fahrkosten")
+  @NotNull public Integer getFahrkosten() {
     return fahrkosten;
   }
 
-  @JsonProperty("fahrkosten")
+  @JsonProperty(required = true, value = "fahrkosten")
   public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
@@ -254,13 +244,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("fahrkostenPartner")
-  @NotNull
-  public Integer getFahrkostenPartner() {
+  @JsonProperty(required = true, value = "fahrkostenPartner")
+  @NotNull public Integer getFahrkostenPartner() {
     return fahrkostenPartner;
   }
 
-  @JsonProperty("fahrkostenPartner")
+  @JsonProperty(required = true, value = "fahrkostenPartner")
   public void setFahrkostenPartner(Integer fahrkostenPartner) {
     this.fahrkostenPartner = fahrkostenPartner;
   }
@@ -273,13 +262,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("verpflegung")
-  @NotNull
-  public Integer getVerpflegung() {
+  @JsonProperty(required = true, value = "verpflegung")
+  @NotNull public Integer getVerpflegung() {
     return verpflegung;
   }
 
-  @JsonProperty("verpflegung")
+  @JsonProperty(required = true, value = "verpflegung")
   public void setVerpflegung(Integer verpflegung) {
     this.verpflegung = verpflegung;
   }
@@ -292,13 +280,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("verpflegungPartner")
-  @NotNull
-  public Integer getVerpflegungPartner() {
+  @JsonProperty(required = true, value = "verpflegungPartner")
+  @NotNull public Integer getVerpflegungPartner() {
     return verpflegungPartner;
   }
 
-  @JsonProperty("verpflegungPartner")
+  @JsonProperty(required = true, value = "verpflegungPartner")
   public void setVerpflegungPartner(Integer verpflegungPartner) {
     this.verpflegungPartner = verpflegungPartner;
   }
@@ -311,13 +298,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuerjahr")
-  @NotNull
-  public Integer getSteuerjahr() {
+  @JsonProperty(required = true, value = "steuerjahr")
+  @NotNull public Integer getSteuerjahr() {
     return steuerjahr;
   }
 
-  @JsonProperty("steuerjahr")
+  @JsonProperty(required = true, value = "steuerjahr")
   public void setSteuerjahr(Integer steuerjahr) {
     this.steuerjahr = steuerjahr;
   }
@@ -330,13 +316,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("veranlagungsStatus")
-  @NotNull
-  public String getVeranlagungsStatus() {
+  @JsonProperty(required = true, value = "veranlagungsStatus")
+  @NotNull public String getVeranlagungsStatus() {
     return veranlagungsStatus;
   }
 
-  @JsonProperty("veranlagungsStatus")
+  @JsonProperty(required = true, value = "veranlagungsStatus")
   public void setVeranlagungsStatus(String veranlagungsStatus) {
     this.veranlagungsStatus = veranlagungsStatus;
   }
@@ -402,10 +387,7 @@ public class DemoSteuerdatenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -508,4 +490,3 @@ public class DemoSteuerdatenDto  implements Serializable {
     }
   }
 }
-

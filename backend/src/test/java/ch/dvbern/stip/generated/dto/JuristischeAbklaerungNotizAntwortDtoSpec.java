@@ -30,26 +30,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   JuristischeAbklaerungNotizAntwortDtoSpec.JSON_PROPERTY_ANTWORT
 })
 @JsonTypeName("JuristischeAbklaerungNotizAntwort")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class JuristischeAbklaerungNotizAntwortDtoSpec {
   public static final String JSON_PROPERTY_ANTWORT = "antwort";
+  @jakarta.annotation.Nonnull
   private String antwort;
 
   public JuristischeAbklaerungNotizAntwortDtoSpec() {
   }
 
-  public JuristischeAbklaerungNotizAntwortDtoSpec antwort(String antwort) {
+  public JuristischeAbklaerungNotizAntwortDtoSpec antwort(@jakarta.annotation.Nonnull String antwort) {
     
     this.antwort = antwort;
     return this;
   }
 
-   /**
+  /**
    * Get antwort
    * @return antwort
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANTWORT)
+  @JsonProperty(value = JSON_PROPERTY_ANTWORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAntwort() {
@@ -57,11 +58,12 @@ public class JuristischeAbklaerungNotizAntwortDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANTWORT)
+  @JsonProperty(value = JSON_PROPERTY_ANTWORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAntwort(String antwort) {
+  public void setAntwort(@jakarta.annotation.Nonnull String antwort) {
     this.antwort = antwort;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -94,10 +96,7 @@ public class JuristischeAbklaerungNotizAntwortDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

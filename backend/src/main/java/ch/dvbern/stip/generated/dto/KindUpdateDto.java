@@ -16,24 +16,24 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("KindUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class KindUpdateDto  implements Serializable {
-  private @Valid UUID entryId;
-  private @Valid String vorname;
-  private @Valid LocalDate geburtsdatum;
-  private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
-  private @Valid Integer wohnsitzAnteilPia;
-  private @Valid String nachname;
-  private @Valid UUID id;
-  private @Valid Integer unterhaltsbeitraege;
-  private @Valid Integer kinderUndAusbildungszulagen;
-  private @Valid Integer renten;
-  private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer betreuungskosten;
-  private @Valid Integer andereEinnahmen;
+  private UUID entryId;
+  private String vorname;
+  private LocalDate geburtsdatum;
+  private ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+  private Integer wohnsitzAnteilPia;
+  private String nachname;
+  private UUID id;
+  private Integer unterhaltsbeitraege;
+  private Integer kinderUndAusbildungszulagen;
+  private Integer renten;
+  private Integer ergaenzungsleistungen;
+  private Integer betreuungskosten;
+  private Integer andereEinnahmen;
 
   protected KindUpdateDto(KindUpdateDtoBuilder<?, ?> b) {
     this.entryId = b.entryId;
@@ -62,13 +62,12 @@ public class KindUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("entryId")
-  @NotNull
-  public UUID getEntryId() {
+  @JsonProperty(required = true, value = "entryId")
+  @NotNull public UUID getEntryId() {
     return entryId;
   }
 
-  @JsonProperty("entryId")
+  @JsonProperty(required = true, value = "entryId")
   public void setEntryId(UUID entryId) {
     this.entryId = entryId;
   }
@@ -81,13 +80,12 @@ public class KindUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -101,13 +99,12 @@ public class KindUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
-  public LocalDate getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -120,13 +117,12 @@ public class KindUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungssituation")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.Ausbildungssituation getAusbildungssituation() {
+  @JsonProperty(required = true, value = "ausbildungssituation")
+  @NotNull public ch.dvbern.stip.api.common.type.Ausbildungssituation getAusbildungssituation() {
     return ausbildungssituation;
   }
 
-  @JsonProperty("ausbildungssituation")
+  @JsonProperty(required = true, value = "ausbildungssituation")
   public void setAusbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
     this.ausbildungssituation = ausbildungssituation;
   }
@@ -139,13 +135,12 @@ public class KindUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnsitzAnteilPia")
-  @NotNull
-  public Integer getWohnsitzAnteilPia() {
+  @JsonProperty(required = true, value = "wohnsitzAnteilPia")
+  @NotNull public Integer getWohnsitzAnteilPia() {
     return wohnsitzAnteilPia;
   }
 
-  @JsonProperty("wohnsitzAnteilPia")
+  @JsonProperty(required = true, value = "wohnsitzAnteilPia")
   public void setWohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
     this.wohnsitzAnteilPia = wohnsitzAnteilPia;
   }
@@ -158,13 +153,12 @@ public class KindUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -352,10 +346,7 @@ public class KindUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -448,4 +439,3 @@ public class KindUpdateDto  implements Serializable {
     }
   }
 }
-

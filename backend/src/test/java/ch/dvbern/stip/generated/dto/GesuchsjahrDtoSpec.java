@@ -36,38 +36,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsjahrDtoSpec.JSON_PROPERTY_GUELTIGKEIT_STATUS
 })
 @JsonTypeName("Gesuchsjahr")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchsjahrDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  @jakarta.annotation.Nonnull
   private String bezeichnungDe;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  @jakarta.annotation.Nonnull
   private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_TECHNISCHES_JAHR = "technischesJahr";
+  @jakarta.annotation.Nonnull
   private Integer technischesJahr;
 
   public static final String JSON_PROPERTY_GUELTIGKEIT_STATUS = "gueltigkeitStatus";
+  @jakarta.annotation.Nonnull
   private GueltigkeitStatusDtoSpec gueltigkeitStatus;
 
   public GesuchsjahrDtoSpec() {
   }
 
-  public GesuchsjahrDtoSpec id(UUID id) {
+  public GesuchsjahrDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -75,25 +80,24 @@ public class GesuchsjahrDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public GesuchsjahrDtoSpec bezeichnungDe(String bezeichnungDe) {
+  public GesuchsjahrDtoSpec bezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungDe
    * @return bezeichnungDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungDe() {
@@ -101,25 +105,24 @@ public class GesuchsjahrDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
+  public void setBezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
 
-
-  public GesuchsjahrDtoSpec bezeichnungFr(String bezeichnungFr) {
+  public GesuchsjahrDtoSpec bezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungFr
    * @return bezeichnungFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungFr() {
@@ -127,25 +130,24 @@ public class GesuchsjahrDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
+  public void setBezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
 
-
-  public GesuchsjahrDtoSpec technischesJahr(Integer technischesJahr) {
+  public GesuchsjahrDtoSpec technischesJahr(@jakarta.annotation.Nonnull Integer technischesJahr) {
     
     this.technischesJahr = technischesJahr;
     return this;
   }
 
-   /**
+  /**
    * Get technischesJahr
    * @return technischesJahr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TECHNISCHES_JAHR)
+  @JsonProperty(value = JSON_PROPERTY_TECHNISCHES_JAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTechnischesJahr() {
@@ -153,25 +155,24 @@ public class GesuchsjahrDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TECHNISCHES_JAHR)
+  @JsonProperty(value = JSON_PROPERTY_TECHNISCHES_JAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTechnischesJahr(Integer technischesJahr) {
+  public void setTechnischesJahr(@jakarta.annotation.Nonnull Integer technischesJahr) {
     this.technischesJahr = technischesJahr;
   }
 
-
-  public GesuchsjahrDtoSpec gueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
+  public GesuchsjahrDtoSpec gueltigkeitStatus(@jakarta.annotation.Nonnull GueltigkeitStatusDtoSpec gueltigkeitStatus) {
     
     this.gueltigkeitStatus = gueltigkeitStatus;
     return this;
   }
 
-   /**
+  /**
    * Get gueltigkeitStatus
    * @return gueltigkeitStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIGKEIT_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GueltigkeitStatusDtoSpec getGueltigkeitStatus() {
@@ -179,11 +180,12 @@ public class GesuchsjahrDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIGKEIT_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
+  public void setGueltigkeitStatus(@jakarta.annotation.Nonnull GueltigkeitStatusDtoSpec gueltigkeitStatus) {
     this.gueltigkeitStatus = gueltigkeitStatus;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -224,10 +226,7 @@ public class GesuchsjahrDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

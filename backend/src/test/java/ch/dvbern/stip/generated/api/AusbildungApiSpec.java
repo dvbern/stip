@@ -39,6 +39,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -149,7 +150,7 @@ public class AusbildungApiSpec {
         public CreateAusbildungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -178,7 +179,7 @@ public class AusbildungApiSpec {
          * @param ausbildungUpdateDtoSpec (AusbildungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAusbildungOper body(AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec) {
+        public CreateAusbildungOper body(@jakarta.annotation.Nonnull AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec) {
             reqSpec.setBody(ausbildungUpdateDtoSpec);
             return this;
         }
@@ -224,7 +225,7 @@ public class AusbildungApiSpec {
         public CreateAusbildungUnterbruchAntragGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("multipart/form-data");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -289,7 +290,7 @@ public class AusbildungApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateAusbildungUnterbruchAntragGsOper fileUploadMultiPart(File fileUpload) {
+         public CreateAusbildungUnterbruchAntragGsOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -338,7 +339,7 @@ public class AusbildungApiSpec {
         public CreateAusbildungUnterbruchSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("multipart/form-data");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -436,7 +437,7 @@ public class AusbildungApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateAusbildungUnterbruchSbOper fileUploadMultiPart(File fileUpload) {
+         public CreateAusbildungUnterbruchSbOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -551,7 +552,7 @@ public class AusbildungApiSpec {
 
         public GetAusbildungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -624,7 +625,7 @@ public class AusbildungApiSpec {
 
         public GetAusbildungUnterbruchAntragDokumentDownloadTokenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -697,7 +698,7 @@ public class AusbildungApiSpec {
 
         public GetAusbildungUnterbruchAntragsByGesuchIdOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -770,7 +771,7 @@ public class AusbildungApiSpec {
 
         public GetAusbildungUnterbruchLimitsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -845,7 +846,7 @@ public class AusbildungApiSpec {
         public UpdateAusbildungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -874,7 +875,7 @@ public class AusbildungApiSpec {
          * @param ausbildungUpdateDtoSpec (AusbildungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public UpdateAusbildungOper body(AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec) {
+        public UpdateAusbildungOper body(@jakarta.annotation.Nonnull AusbildungUpdateDtoSpec ausbildungUpdateDtoSpec) {
             reqSpec.setBody(ausbildungUpdateDtoSpec);
             return this;
         }
@@ -929,7 +930,7 @@ public class AusbildungApiSpec {
         public UpdateAusbildungUnterbruchAntragSBOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -958,7 +959,7 @@ public class AusbildungApiSpec {
          * @param updateAusbildungUnterbruchAntragSBDtoSpec (UpdateAusbildungUnterbruchAntragSBDtoSpec)  (required)
          * @return operation
          */
-        public UpdateAusbildungUnterbruchAntragSBOper body(UpdateAusbildungUnterbruchAntragSBDtoSpec updateAusbildungUnterbruchAntragSBDtoSpec) {
+        public UpdateAusbildungUnterbruchAntragSBOper body(@jakarta.annotation.Nonnull UpdateAusbildungUnterbruchAntragSBDtoSpec updateAusbildungUnterbruchAntragSBDtoSpec) {
             reqSpec.setBody(updateAusbildungUnterbruchAntragSBDtoSpec);
             return this;
         }
