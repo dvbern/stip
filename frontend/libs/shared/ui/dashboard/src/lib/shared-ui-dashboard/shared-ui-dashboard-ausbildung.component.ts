@@ -13,7 +13,6 @@ import {
   GsDashboardActions,
   SharedModelGsAusbildungView,
 } from '@dv/shared/model/ausbildung';
-import { DarlehenStatus } from '@dv/shared/model/gesuch';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
@@ -39,8 +38,6 @@ export class SharedUiDashboardAusbildungComponent {
   router = inject(Router);
   ausbildungSig = input.required<SharedModelGsAusbildungView>();
   output = output<GsDashboardActions>();
-
-  DarlehenStatus = DarlehenStatus;
 
   @HostBinding('class') defaultClasses =
     'tw:block tw:bg-white tw:dv-container tw:rounded-lg';
