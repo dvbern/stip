@@ -110,7 +110,8 @@ public class GesuchApiSpec {
                 getAenderungChangesSb(),
                 getAllBeschwerdeVerlaufEntrys(),
                 getBerechnungForGesuchSb(),
-                getBerechnungForVerfuegung(),
+                getBerechnungForVerfuegungGs(),
+                getBerechnungForVerfuegungSb(),
                 getBerechnungsblattDownloadToken(),
                 getEingereichtTranche(),
                 getGesuchGS(),
@@ -236,8 +237,12 @@ public class GesuchApiSpec {
         return new GetBerechnungForGesuchSbOper(createReqSpec());
     }
 
-    public GetBerechnungForVerfuegungOper getBerechnungForVerfuegung() {
-        return new GetBerechnungForVerfuegungOper(createReqSpec());
+    public GetBerechnungForVerfuegungGsOper getBerechnungForVerfuegungGs() {
+        return new GetBerechnungForVerfuegungGsOper(createReqSpec());
+    }
+
+    public GetBerechnungForVerfuegungSbOper getBerechnungForVerfuegungSb() {
+        return new GetBerechnungForVerfuegungSbOper(createReqSpec());
     }
 
     public GetBerechnungsblattDownloadTokenOper getBerechnungsblattDownloadToken() {
@@ -2350,28 +2355,28 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Holt die Berechnung für die angegebene Verfügung
+     * Holt die Berechnung für die angegebene Verfügung für GS
      * 
      *
      * @see #verfuegungIdPath  (required)
      * return BerechnungsresultatDtoSpec
      */
-    public static class GetBerechnungForVerfuegungOper implements Oper {
+    public static class GetBerechnungForVerfuegungGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/berechnung/{verfuegungId}";
+        public static final String REQ_URI = "/gesuch/berechnung/{verfuegungId}/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetBerechnungForVerfuegungOper(RequestSpecBuilder reqSpec) {
+        public GetBerechnungForVerfuegungGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/berechnung/{verfuegungId}
+         * GET /gesuch/berechnung/{verfuegungId}/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2382,7 +2387,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/berechnung/{verfuegungId}
+         * GET /gesuch/berechnung/{verfuegungId}/gs
          * @param handler handler
          * @return BerechnungsresultatDtoSpec
          */
@@ -2397,7 +2402,7 @@ public class GesuchApiSpec {
          * @param verfuegungId (UUID)  (required)
          * @return operation
          */
-        public GetBerechnungForVerfuegungOper verfuegungIdPath(Object verfuegungId) {
+        public GetBerechnungForVerfuegungGsOper verfuegungIdPath(Object verfuegungId) {
             reqSpec.addPathParam(VERFUEGUNG_ID_PATH, verfuegungId);
             return this;
         }
@@ -2407,7 +2412,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetBerechnungForVerfuegungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetBerechnungForVerfuegungGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -2417,7 +2422,80 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetBerechnungForVerfuegungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetBerechnungForVerfuegungGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Holt die Berechnung für die angegebene Verfügung für SB
+     * 
+     *
+     * @see #verfuegungIdPath  (required)
+     * return BerechnungsresultatDtoSpec
+     */
+    public static class GetBerechnungForVerfuegungSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/berechnung/{verfuegungId}/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetBerechnungForVerfuegungSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json,text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/berechnung/{verfuegungId}/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/berechnung/{verfuegungId}/sb
+         * @param handler handler
+         * @return BerechnungsresultatDtoSpec
+         */
+        public BerechnungsresultatDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BerechnungsresultatDtoSpec> type = new TypeRef<BerechnungsresultatDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String VERFUEGUNG_ID_PATH = "verfuegungId";
+
+        /**
+         * @param verfuegungId (UUID)  (required)
+         * @return operation
+         */
+        public GetBerechnungForVerfuegungSbOper verfuegungIdPath(Object verfuegungId) {
+            reqSpec.addPathParam(VERFUEGUNG_ID_PATH, verfuegungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetBerechnungForVerfuegungSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetBerechnungForVerfuegungSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

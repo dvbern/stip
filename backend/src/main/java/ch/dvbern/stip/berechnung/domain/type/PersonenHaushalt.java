@@ -17,9 +17,20 @@
 
 package ch.dvbern.stip.berechnung.domain.type;
 
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+
 public enum PersonenHaushalt {
     PIA,
     MUTTER,
     VATER,
-    FAMILIE
+    FAMILIE;
+
+    public SteuerdatenTyp toSteuerdatenTyp() {
+        return switch (this) {
+            case MUTTER -> SteuerdatenTyp.MUTTER;
+            case VATER -> SteuerdatenTyp.VATER;
+            case FAMILIE -> SteuerdatenTyp.FAMILIE;
+            default -> null;
+        };
+    }
 }

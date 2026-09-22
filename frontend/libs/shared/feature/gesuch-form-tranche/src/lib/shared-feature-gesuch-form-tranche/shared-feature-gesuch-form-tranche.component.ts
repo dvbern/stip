@@ -43,6 +43,7 @@ import {
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import {
@@ -61,6 +62,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
     SharedUiHeaderSuffixDirective,
     SharedUiFormReadonlyDirective,

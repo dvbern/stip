@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   input,
   output,
@@ -22,7 +21,6 @@ import {
   CustomDokumentTyp,
   Dokumentstatus,
   GesuchDokument,
-  GesuchDokumentKommentar,
 } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
 import { THREE_LINE_CHARS_COUNT } from '@dv/shared/model/ui-constants';
@@ -35,8 +33,12 @@ import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { RemoteData, isPending } from '@dv/shared/util/remote-data';
+import {
+  RowExpansionOverrides,
+  TypeSafeMatCellDefDirective,
+  isExpanded,
+  toggleRowFn,
+} from '@dv/shared/ui/table-helper';
 
 import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
 
@@ -60,7 +62,6 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
 })
 export class CustomDokumenteComponent {
   dokumentStore = inject(DokumentsStore);
-  expandedRowSig = signal<string | null>(null);
   dialog = inject(MatDialog);
 
   dokumenteViewSig = input.required<{
@@ -72,13 +73,11 @@ export class CustomDokumenteComponent {
     canApproveDecline: boolean;
     isSachbearbeitungApp: boolean;
     customDocumentTypes: CustomDokumentTyp[];
-    kommentare: RemoteData<GesuchDokumentKommentar[]>;
     loading: boolean;
     readonly: boolean;
   }>();
   canCreateCustomDokumentTypSig = input.required<boolean>();
 
-  getGesuchDokumentKommentare = output<SharedModelTableCustomDokument>();
   deleteCustomDokumentTyp = output<SharedModelTableCustomDokument>();
   dokumentAkzeptieren = output<SharedModelTableDokument>();
   dokumentAblehnen = output<SharedModelTableDokument>();
@@ -92,8 +91,9 @@ export class CustomDokumenteComponent {
     'status',
     'actions',
   ];
-
   DokumentStatus = Dokumentstatus;
+
+  rowExpansionOverrides = signal<RowExpansionOverrides>({});
 
   dokumenteDataSourceSig = computed(() => {
     const {
@@ -102,7 +102,6 @@ export class CustomDokumenteComponent {
       allowTypes,
       permissions,
       dokuments,
-      kommentare,
       customDocumentTypes,
       isSachbearbeitungApp,
       readonly,
@@ -111,6 +110,8 @@ export class CustomDokumenteComponent {
     if (!gesuchId || !allowTypes || !trancheId) {
       return new MatTableDataSource<SharedModelTableCustomDokument>([]);
     }
+
+    const overrides = this.rowExpansionOverrides();
 
     const uploadedDokuments = dokuments.map((gesuchDokument) => {
       if (!gesuchDokument.customDokumentTyp) {
@@ -123,8 +124,7 @@ export class CustomDokumenteComponent {
         dokumentTyp: gesuchDokument.customDokumentTyp,
         gesuchDokument,
         canDelete,
-        kommentare: [],
-        kommentarePending: false,
+        isExpanded: true,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
           trancheId,
@@ -142,8 +142,7 @@ export class CustomDokumenteComponent {
         dokumentTyp: dokumentTyp,
         canDelete: false,
         gesuchDokument: undefined,
-        kommentare: [],
-        kommentarePending: false,
+        isExpanded: true,
         dokumentOptions: createCustomDokumentOptions({
           gesuchId,
           trancheId,
@@ -155,13 +154,9 @@ export class CustomDokumenteComponent {
     ]
       .map((dokument) => ({
         ...dokument,
-        kommentarePending: isPending(kommentare),
+        isExpanded: isExpanded(dokument.gesuchDokument, overrides),
         hasLongDescription:
           dokument.dokumentTyp.description.length > THREE_LINE_CHARS_COUNT,
-        kommentare:
-          kommentare.data?.filter(
-            (k) => k.gesuchDokumentId === dokument.gesuchDokument?.id,
-          ) ?? [],
       }))
       .sort((a, b) => {
         const typeA = a.gesuchDokument?.customDokumentTyp?.type ?? 'none';
@@ -170,16 +165,6 @@ export class CustomDokumenteComponent {
       });
     return new MatTableDataSource<SharedModelTableCustomDokument>(list);
   });
-
-  constructor() {
-    effect(() => {
-      const el = this.dokumentStore.expandedComponentList();
-
-      if (el !== 'custom') {
-        this.expandedRowSig.set(null);
-      }
-    });
-  }
 
   showDescription(title: string, message: string) {
     SharedUiInfoDialogComponent.open(this.dialog, {
@@ -191,17 +176,8 @@ export class CustomDokumenteComponent {
     });
   }
 
-  expandRow(dokument: SharedModelTableCustomDokument) {
-    const gesuchDokumentId = dokument.gesuchDokument?.id;
-    if (!gesuchDokumentId) return;
-
-    if (this.expandedRowSig() === gesuchDokumentId) {
-      this.expandedRowSig.set(null);
-    } else {
-      this.dokumentStore.setExpandedList('custom');
-      this.expandedRowSig.set(gesuchDokumentId);
-      this.getGesuchDokumentKommentare.emit(dokument);
-    }
+  toggleRow(tableDok: SharedModelTableCustomDokument) {
+    toggleRowFn(tableDok.gesuchDokument, this.rowExpansionOverrides);
   }
 
   trackByFn(_index: number, item: SharedModelTableCustomDokument) {

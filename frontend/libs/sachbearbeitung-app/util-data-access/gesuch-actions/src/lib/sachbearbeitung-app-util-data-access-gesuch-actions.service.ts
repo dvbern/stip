@@ -8,9 +8,9 @@ import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { StatusUebergang } from '@dv/shared/model/gesuch';
 import { assertUnreachable, lowercased } from '@dv/shared/model/type-util';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
-import { StatusUebergang } from '@dv/shared/util/gesuch';
 import { isPending } from '@dv/shared/util/remote-data';
 
 @Injectable({

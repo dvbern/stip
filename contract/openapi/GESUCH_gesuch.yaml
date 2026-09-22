@@ -1072,7 +1072,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getStatusProtokoll
       summary: Holt das Statusprotokoll für ein Gesuch
-  '/gesuch/berechnung/{verfuegungId}':
+  '/gesuch/berechnung/{verfuegungId}/sb':
     parameters:
       - name: verfuegungId
         schema:
@@ -1099,8 +1099,37 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getBerechnungForVerfuegung
-      summary: Holt die Berechnung für die angegebene Verfügung
+      operationId: getBerechnungForVerfuegungSb
+      summary: Holt die Berechnung für die angegebene Verfügung für SB
+  '/gesuch/berechnung/{verfuegungId}/gs':
+    parameters:
+      - name: verfuegungId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Archivierte Stipendien Berechnung einer Verfügung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getBerechnungForVerfuegungGs
+      summary: Holt die Berechnung für die angegebene Verfügung für GS
   '/gesuch/{gesuchId}/berechnung/sb':
     parameters:
       - name: gesuchId

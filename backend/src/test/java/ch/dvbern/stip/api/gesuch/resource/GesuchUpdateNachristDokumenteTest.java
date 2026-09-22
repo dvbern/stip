@@ -189,7 +189,6 @@ class GesuchUpdateNachristDokumenteTest {
         var kommentar = new GesuchDokumentKommentarDtoSpec();
         kommentar.setKommentar("test");
         kommentar.setGesuchDokumentId(dok.getValue().getId());
-        kommentar.setGesuchTrancheId(gesuchTrancheId);
         gesuchDokumentAblehnenRequest.setKommentar(kommentar);
 
         dokumentApiSpec.gesuchDokumentAblehnen()

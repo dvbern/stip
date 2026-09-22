@@ -1,0 +1,14 @@
+Bonjour {vorname} {nachname}
+
+Des documents/informations manquent encore pour votre demande de subsides de formation.
+Téléversez les documents/informations manquants dans le tableau de bord au plus tard le {nachreichefrist}. Sans les documents/informations manquants, nous ne pouvons pas examiner votre demande.
+
+Si les documents/informations demandés sont remis dans le délai, mais de manière incomplète, à la Section des subsides de formation (SSF), la SSF refuse la demande faute d'éléments suffisants pour effectuer le calcul.
+
+Si les documents/informations demandés ne sont pas remis à la SSF dans le délai imparti, la demande est considérée comme retirée.
+
+Avez-vous besoin de plus de temps ? Vous pouvez demander une prolongation du délai par e-mail avant son échéance. Indiquez-nous la durée supplémentaire dont vous avez besoin.
+
+Meilleures salutations
+
+Section des subsides de formation

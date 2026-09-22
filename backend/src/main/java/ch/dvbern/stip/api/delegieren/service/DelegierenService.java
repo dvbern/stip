@@ -35,7 +35,7 @@ import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.DelegierungNotificationService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
@@ -62,7 +62,7 @@ public class DelegierenService {
     private final PersoenlicheAngabenMapper persoenlicheAngabenMapper;
     private final StipConfig config;
     private final DelegierungMapper delegierungMapper;
-    private final NotificationService notificationService;
+    private final DelegierungNotificationService delegierungNotificationService;
     private final EntityCopyMapper entityCopyMapper;
 
     @Transactional
@@ -87,7 +87,7 @@ public class DelegierenService {
             .setPersoenlicheAngaben(persoenlicheAngabenMapper.toEntity(dto));
         fall.setCurrentDelegierung(newDelegierung);
         fall.getHistoricalDelegierungs().add(newDelegierung);
-        notificationService.createDelegierungEingegebenNotificationAndSendStdMail(newDelegierung);
+        // delegierungNotificationService.createEingegebenNotificationAndSendStdMail(newDelegierung);
 
         delegierungRepository.persist(newDelegierung);
     }
@@ -100,7 +100,7 @@ public class DelegierenService {
         final var mitarbeiterCurrent = delegierung.getDelegierterMitarbeiter();
         delegierung.setDelegierterMitarbeiter(mitarbeiter);
         if (mitarbeiterCurrent == null) {
-            notificationService.createDelegierungAngenommenNotificationAndSendStdMail(delegierung);
+            delegierungNotificationService.createAngenommenNotificationAndSendStdMail(delegierung);
             delegierung.akzeptieren();
         }
     }
@@ -108,7 +108,7 @@ public class DelegierenService {
     @Transactional
     public void delegierungAblehnen(final UUID delegierungId) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
-        notificationService.createDelegierungAbgelehntNotificationAndSendStdMail(delegierung);
+        delegierungNotificationService.createAbgelehntNotificationAndSendStdMail(delegierung);
 
         delegierung.ablehnen();
     }
@@ -118,7 +118,7 @@ public class DelegierenService {
         final var delegierung = delegierungRepository.requireById(delegierungId);
 
         final var auszahlung = delegierung.getFall().getAuszahlung();
-        notificationService.createDelegierungAufgeloestNotificationAndSendStdMail(delegierung);
+        delegierungNotificationService.createAufgeloestNotificationAndSendStdMail(delegierung);
 
         if (auszahlung != null && auszahlung.isAuszahlungAnSozialdienst()) {
             var zahlungsverbindung = entityCopyMapper.createCopy(

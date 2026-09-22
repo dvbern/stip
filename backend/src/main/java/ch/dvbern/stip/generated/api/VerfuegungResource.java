@@ -29,9 +29,14 @@ public interface VerfuegungResource {
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getVerfuegungDokument(@QueryParam("token") @NotNull   String token);
 
     @GET
-    @Path("/dokument/{verfuegungDokumentId}/token")
+    @Path("/dokument/{verfuegungDokumentId}/token/gs")
     @Produces({ "application/json", "text/plain" })
-    FileDownloadTokenDto getVerfuegungDokumentDownloadToken(@PathParam("verfuegungDokumentId") UUID verfuegungDokumentId);
+    FileDownloadTokenDto getVerfuegungDokumentDownloadTokenGs(@PathParam("verfuegungDokumentId") UUID verfuegungDokumentId);
+
+    @GET
+    @Path("/dokument/{verfuegungDokumentId}/token/sb")
+    @Produces({ "application/json", "text/plain" })
+    FileDownloadTokenDto getVerfuegungDokumentDownloadTokenSb(@PathParam("verfuegungDokumentId") UUID verfuegungDokumentId);
 
     @GET
     @Path("/{gesuchId}/verfuegungen")

@@ -1,12 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 
-import { test as baseTest } from '@playwright/test';
+import { Browser, Page, TestInfo } from '@playwright/test';
 import { addSeconds } from 'date-fns';
 
 import {
   BEARER_COOKIE,
-  E2eUser,
   KeycloakResponse,
   REFRESH_COOKIE,
   compress,
@@ -15,210 +14,86 @@ import {
 export * from '@playwright/test';
 
 /**
- * Authenticate a user for the currently running e2e test.
- *
- * @see https://playwright.dev/docs/auth#moderate-one-account-per-parallel-worker
+ * Directory where the `setup` project writes the per-role authentication
+ * storage states that the multi-user fixtures later read.
  */
-export const createTest = (
-  authType: E2eUser,
-  options?: { contextPerTest?: boolean },
-) => {
-  const test = baseTest.extend<object, { workerStorageState: string }>({
-    contextOptions: async ({ baseURL }, use) => {
-      await use({
-        ignoreHTTPSErrors: true,
-        baseURL,
-      });
-    },
+// todo: only one storageStateImpl necessary, really
+export const getAuthDir = (info: TestInfo) =>
+  path.resolve(info.config.rootDir, '../playwright/.auth');
 
-    // Use the same storage state for all tests in this worker.
-    storageState: ({ workerStorageState }, use) => use(workerStorageState),
+export const gsStorageStatePath = (info: TestInfo, workerIndex: number) =>
+  path.join(getAuthDir(info), `gs_${workerIndex}.json`);
 
-    // Authenticate once per worker with a worker-scoped fixture.
-    workerStorageState: [
-      async ({ browser }, use, workerInfo) => {
-        // Use parallelIndex as a unique identifier for each worker.
-        const id = test.info().parallelIndex + 1;
-        const optionalSuffix = options?.contextPerTest
-          ? `_${test.info().testId}`
-          : '';
-        const fileName = path.resolve(
-          test.info().project.outputDir,
-          `.auth/${id}${optionalSuffix}.json`,
-        );
+export const sbStorageStatePath = (info: TestInfo, index = 0) =>
+  path.join(getAuthDir(info), `sb_${index}.json`);
 
-        if (fs.existsSync(fileName)) {
-          // Reuse existing authentication state if any.
-          await use(fileName);
-          return;
-        }
+export const sozStorageStatePath = (info: TestInfo, index = 0) =>
+  path.join(getAuthDir(info), `soz_${index}.json`);
 
-        // Important: make sure we authenticate in a clean environment by unsetting storage state.
-        const page = await browser.newPage({
-          storageState: undefined,
-          // Don't know why it is necessary to set the baseURL again, should be inherited from the use context.
-          baseURL: workerInfo.project.use.baseURL,
-          ignoreHTTPSErrors: true,
-        });
-
-        const username = process.env[`E2E_${authType}_${id}_USERNAME`];
-        const password = process.env[`E2E_${authType}_${id}_PASSWORD`];
-
-        if (!username || !password) {
-          throw new Error(
-            `E2E_${authType}_${id}_USERNAME and E2E_${authType}_${id}_PASSWORD environment variables are required,` +
-              'there are probably more parallel tests running than available users',
-          );
-        }
-
-        await page.goto('/');
-        await page.getByLabel('Username or email').fill(username);
-        await page.getByLabel('Password', { exact: true }).fill(password);
-
-        const responsePromise = page.waitForResponse(
-          '**/realms/bern/protocol/openid-connect/token',
-        );
-
-        await page.getByRole('button', { name: 'Sign In' }).click();
-
-        const response = await responsePromise;
-        const url = new URL(response.url());
-        const body: KeycloakResponse = await response.json();
-        const accessToken = await compress(body.access_token);
-        const refreshToken = await compress(body.refresh_token);
-
-        const unixTime =
-          addSeconds(Date.now(), body.expires_in).getTime() / 1000;
-
-        await page.context().addCookies([
-          {
-            name: BEARER_COOKIE,
-            value: accessToken,
-            domain: url.host,
-            path: '/realms/bern/',
-            expires: unixTime,
-            httpOnly: false,
-            secure: true,
-            sameSite: 'Lax',
-          },
-          {
-            name: REFRESH_COOKIE,
-            value: refreshToken,
-            domain: url.host,
-            path: '/realms/bern/',
-            expires: -1,
-            httpOnly: false,
-            secure: true,
-            sameSite: 'Lax',
-          },
-        ]);
-
-        // End of authentication steps.
-
-        await page.context().storageState({ path: fileName });
-        await page.close();
-        await use(fileName);
-      },
-      { scope: 'worker' },
-    ],
-  });
-  return test;
-};
-
-export interface MultiUserContext {
-  gesuchsteller: string;
-  sachbearbeiter: string;
-}
+const sessionStatePath = (storagePath: string) =>
+  storagePath.replace(/\.json$/, '.session.json');
 
 /**
- * Create authentication for multiple user types in a single test
+ * Restore the sessionStorage captured during authentication for the given app
+ * origin. angular-oauth2-oidc keeps its tokens in sessionStorage, which
+ * Playwright's storageState does not persist, so without this the app finds no
+ * token on the first navigation and redirects to the login screen.
+ *
+ * Must be called before the first navigation of the page.
  */
-export const createMultiUserTest = () => {
-  const test = baseTest.extend<
-    {
-      gsContext: string;
-      sbContext: string;
+export const restoreSessionStorage = async (
+  page: Page,
+  storagePath: string,
+  appOrigin: string,
+) => {
+  const sessionFile = sessionStatePath(storagePath);
+  if (!fs.existsSync(sessionFile)) {
+    return;
+  }
+
+  const sessionStorageJson = await fs.promises.readFile(sessionFile, 'utf-8');
+
+  await page.addInitScript(
+    ({ json, origin }) => {
+      if (window.location.origin !== origin) {
+        return;
+      }
+      const entries: Record<string, string> = JSON.parse(json);
+      for (const [key, value] of Object.entries(entries)) {
+        window.sessionStorage.setItem(key, value);
+      }
     },
-    {
-      workerStorageStates: MultiUserContext;
-    }
-  >({
-    // Worker-scoped fixture for both user types
-    workerStorageStates: [
-      async ({ browser }, use, workerInfo) => {
-        const id = test.info().parallelIndex + 1;
-        const gsFileName = path.resolve(
-          test.info().project.outputDir,
-          `.auth/gs_${id}.json`,
-        );
-        const sbFileName = path.resolve(
-          test.info().project.outputDir,
-          `.auth/sb_shared.json`, // Shared SB context
-        );
-
-        // Authenticate Gesuchsteller
-        if (!fs.existsSync(gsFileName)) {
-          await authenticateUser(
-            browser,
-            'GESUCHSTELLER',
-            id,
-            gsFileName,
-            workerInfo,
-          );
-        }
-
-        // Authenticate Sachbearbeiter (shared across workers)
-        if (!fs.existsSync(sbFileName)) {
-          await authenticateUser(
-            browser,
-            'SACHBEARBEITER',
-            1,
-            sbFileName,
-            workerInfo,
-          );
-        }
-
-        await use({
-          gesuchsteller: gsFileName,
-          sachbearbeiter: sbFileName,
-        });
-      },
-      { scope: 'worker' },
-    ],
-
-    // Test-scoped fixtures
-    gsContext: ({ workerStorageStates }, use) =>
-      use(workerStorageStates.gesuchsteller),
-    sbContext: ({ workerStorageStates }, use) =>
-      use(workerStorageStates.sachbearbeiter),
-  });
-
-  return test;
+    { json: sessionStorageJson, origin: appOrigin },
+  );
 };
 
-async function authenticateUser(
-  browser: any,
-  authType: E2eUser,
-  id: number,
-  fileName: string,
-  workerInfo: any,
-) {
+/**
+ * Perform a Keycloak UI login and persist the resulting storage state to disk.
+ *
+ * Intended to be called from a Playwright `setup` project so authentication
+ * happens once, before the parallel workers start (no per-worker race).
+ */
+export const authenticateAndSaveStorageState = async (
+  browser: Browser,
+  options: {
+    username: string;
+    password: string;
+    storagePath: string;
+    baseURL?: string;
+  },
+) => {
+  const { username, password, storagePath, baseURL } = options;
+
   const page = await browser.newPage({
     storageState: undefined,
-    baseURL: workerInfo.project.use.baseURL,
+    baseURL,
     ignoreHTTPSErrors: true,
   });
 
-  const username = process.env[`E2E_${authType}_${id}_USERNAME`];
-  const password = process.env[`E2E_${authType}_${id}_PASSWORD`];
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-  if (!username || !password) {
-    throw new Error(
-      `E2E_${authType}_${id}_USERNAME and E2E_${authType}_${id}_PASSWORD environment variables are required`,
-    );
-  }
+  // await page.waitForLoadState('networkidle');
 
-  await page.goto('/');
   await page.getByLabel('Username or email').fill(username);
   await page.getByLabel('Password', { exact: true }).fill(password);
 
@@ -260,6 +135,23 @@ async function authenticateUser(
     },
   ]);
 
-  await page.context().storageState({ path: fileName });
+  // angular-oauth2-oidc keeps its tokens in sessionStorage, which Playwright's
+  // storageState does not persist. Capture it so the fixtures can restore it.
+  await page.waitForFunction(
+    () => !!window.sessionStorage.getItem('access_token'),
+    undefined,
+    { timeout: 30_000 },
+  );
+  const sessionStorageJson = await page.evaluate(() =>
+    JSON.stringify(window.sessionStorage),
+  );
+
+  await fs.promises.mkdir(path.dirname(storagePath), { recursive: true });
+  await page.context().storageState({ path: storagePath });
+  await fs.promises.writeFile(
+    sessionStatePath(storagePath),
+    sessionStorageJson,
+    'utf-8',
+  );
   await page.close();
-}
+};

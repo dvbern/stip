@@ -38,7 +38,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.AusbildungNotificationService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
@@ -73,7 +73,7 @@ public class AusbildungUnterbruchAntragService {
     private final DokumentRepository dokumentRepository;
     private final DokumentDeleteService dokumentDeleteService;
     private final DokumentDownloadService dokumentDownloadService;
-    private final NotificationService notificationService;
+    private final AusbildungNotificationService ausbildungNotificationService;
     private final GesuchStatusService gesuchStatusService;
     private final AusbildungService ausbildungService;
     private final StatusprotokollService statusprotokollService;
@@ -200,8 +200,8 @@ public class AusbildungUnterbruchAntragService {
         ausbildungUnterbruchAntragMapper
             .antragEinreichen(createAusbildungUnterbruchAntragGSDto, ausbildungUnterbruchAntrag);
         ausbildungUnterbruchAntragRepository.persistAndFlush(ausbildungUnterbruchAntrag);
-        notificationService
-            .createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(ausbildungUnterbruchAntrag);
+        ausbildungNotificationService
+            .createUnterbruchAntragEingereichtNotificationAndSendStdMail(ausbildungUnterbruchAntrag);
         createStatusprotokollEntry(
             ausbildungUnterbruchAntrag,
             AusbildungUnterbruchAntragStatus.EINGEGEBEN.toString(),
@@ -258,7 +258,7 @@ public class AusbildungUnterbruchAntragService {
         antrag = ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragSBDto, antrag);
         createStatusprotokollEntry(antrag, statusFrom.toString(), antrag.getKommentarSB());
         if (AusbildungUnterbruchAntragStatus.IS_CLOSED.contains(antrag.getStatus())) {
-            notificationService.createAusbildungUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(antrag);
+            ausbildungNotificationService.createUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(antrag);
             if (
                 Objects.nonNull(antrag.getMonateOhneAnspruch())
                 && antrag.getMonateOhneAnspruch() > 0

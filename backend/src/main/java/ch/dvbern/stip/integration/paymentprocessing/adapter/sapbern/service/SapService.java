@@ -40,7 +40,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchResponse.BUSINESSPARTNER;
@@ -74,7 +74,7 @@ public class SapService {
     private final GesuchRepository gesuchRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final AdresseRepository adresseRepository;
-    private final NotificationService notificationService;
+    private final GesuchNotificationService gesuchNotificationService;
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
     private final BuchhaltungMapper buchhaltungMapper;
 
@@ -156,12 +156,16 @@ public class SapService {
         if (status == SapStatus.SUCCESS) {
             final var readResponse =
                 sapEndpointService.readBusinessPartnerByDeliveryId(buchhaltung.getFall(), deliveryid);
-            SapReturnCodeType.assertSuccess(readResponse.getRETURNCODE().get(0).getTYPE());
-            buchhaltung.getFall()
-                .getAuszahlung()
-                .setSapBusinessPartnerId(
-                    Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
-                );
+            if (SapReturnCodeType.isSuccess(readResponse.getRETURNCODE().get(0).getTYPE())) {
+                buchhaltung.getFall()
+                    .getAuszahlung()
+                    .setSapBusinessPartnerId(
+                        Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
+                    );
+            } else {
+                status = SapStatus.FAILURE;
+            }
+
         }
         sapDelivery.setSapStatus(status);
     }
@@ -253,11 +257,9 @@ public class SapService {
                     switch (businessPartnerActionBuchhaltungType) {
                         case BUSINESSPARTNER_CREATE -> {
                             final var response = sapEndpointService.createBusinessPartner(fall, deliveryid);
-                            SapReturnCodeType.assertSuccess(response.getRETURNCODE().get(0).getTYPE());
                         }
                         case BUSINESSPARTNER_CHANGE -> {
                             final var response = sapEndpointService.changeBusinessPartner(fall, deliveryid);
-                            SapReturnCodeType.assertSuccess(response.getRETURNCODE().get(0).getTYPE());
                         }
                         case null, default -> throw new IllegalStateException();
                     }
@@ -282,7 +284,7 @@ public class SapService {
 
         if (businessPartnerActionBuchhaltung.getSapStatus() == SapStatus.FAILURE) {
             fall.setFailedBuchhaltungAuszahlungType(businessPartnerActionBuchhaltungType);
-            notificationService.createFailedAuszahlungBuchhaltungNotificationAndSendStdMail(gesuch);
+            gesuchNotificationService.createAuszahlungFailedNotificationAndSendStdMail(gesuch);
         }
     }
 
@@ -315,10 +317,13 @@ public class SapService {
         final var sapDelivery = sapDeliveryOpt.get();
         final var deliveryid = sapDelivery.getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(buchhaltung.getFall(), deliveryid);
-        SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
 
-        sapDelivery
-            .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+        var status = SapStatus.FAILURE;
+        if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE())) {
+            status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        }
+
+        sapDelivery.setSapStatus(status);
 
     }
 
@@ -375,7 +380,6 @@ public class SapService {
                             getQrIbanAddlInfoString(gesuch),
                             String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
                         );
-                    SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
                 } catch (Exception e) {
                     LOG.error("Failed to send createVendorPosting action", e);
                 }
@@ -389,7 +393,7 @@ public class SapService {
 
         if (buchhaltung.getSapStatus() == SapStatus.FAILURE) {
             gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(buchhaltung.getBuchhaltungType());
-            notificationService.createFailedAuszahlungBuchhaltungNotificationAndSendStdMail(gesuch);
+            gesuchNotificationService.createAuszahlungFailedNotificationAndSendStdMail(gesuch);
         }
     }
 
@@ -492,9 +496,22 @@ public class SapService {
             final var lastBuchhaltungEntry =
                 buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
 
-            var auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo() / 2;
+            var auszahlungsBetrag = 0;
             if (isPastSecondPaymentDate(gesuch)) {
                 auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo();
+            } else {
+                if (
+                    Objects.equals(
+                        relevantStipendienBuchhaltung.getBetrag(),
+                        relevantStipendienBuchhaltung.getStipendium()
+                    )
+                ) {
+                    // Erstverfügung
+                    auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo() / 2;
+                } else {
+                    // Änderungsverfügung
+                    auszahlungsBetrag = relevantStipendienBuchhaltung.getBetrag() / 2;
+                }
             }
 
             auszahlungsBetrag = Integer.min(auszahlungsBetrag, lastBuchhaltungEntry.getSaldo());

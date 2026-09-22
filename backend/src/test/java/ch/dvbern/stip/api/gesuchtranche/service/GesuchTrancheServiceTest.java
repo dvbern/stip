@@ -37,7 +37,7 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.AenderungNotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
@@ -74,7 +74,7 @@ class GesuchTrancheServiceTest {
     GesuchTrancheStatusService gesuchTrancheStatusService;
 
     @InjectSpy
-    NotificationService notificationService;
+    AenderungNotificationService aenderungNotificationService;
 
     @InjectMock
     NotificationRepository notificationRepository;
@@ -257,6 +257,6 @@ class GesuchTrancheServiceTest {
 
         gesuchTrancheService.aenderungEinreichen(aenderung.getId());
 
-        Mockito.verify(notificationService).createAenderungEingereichtNotificationAndSendStdMail(gesuch);
+        Mockito.verify(aenderungNotificationService).createEingereichtNotificationAndSendStdMail(gesuch);
     }
 }

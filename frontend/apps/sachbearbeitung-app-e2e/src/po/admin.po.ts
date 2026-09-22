@@ -32,9 +32,7 @@ export class AdminPO {
   constructor(public page: Page) {
     this.elems = {
       page,
-      adminLink: page
-        .getByTestId('gesuch-step-nav-administration')
-        .locator('visible=true'),
+      adminLink: page.getByTestId('admin-nav-item').locator('visible=true'),
       sozialdienst: {
         link: page
           .getByTestId('option-nav-sozialdienste')

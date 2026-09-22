@@ -1,0 +1,10 @@
+Bonjour {vorname} {nachname}
+
+La délégation a été refusée par {sozialdienst}.
+
+Vous êtes à nouveau responsable de votre demande.
+Si vous avez des questions concernant ce refus, veuillez vous adresser à {sozialdienst}.
+
+Meilleures salutations
+
+Section des subsides de formation

@@ -1,0 +1,8 @@
+Guten Tag {vorname} {nachname}
+
+Ihr Darlehen wurde aus dem folgenden Grund zurückgewiesen:
+{kommentar}
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge
