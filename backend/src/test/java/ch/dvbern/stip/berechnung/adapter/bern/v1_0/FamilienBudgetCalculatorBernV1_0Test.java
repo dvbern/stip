@@ -46,6 +46,7 @@ public class FamilienBudgetCalculatorBernV1_0Test {
         final List<Eltern> eltern =
             gesuchFormular.getElterns().stream().filter(eltern1 -> eltern1.getElternTyp() == ElternTyp.VATER).toList();
         eltern.getFirst().setWohnkosten(18000);
+        eltern.getFirst().setWiederverheiratet(true);
         final Steuerdaten steuerdaten = gesuchFormular.getSteuerdaten()
             .stream()
             .filter(steuerdaten1 -> steuerdaten1.getSteuerdatenTyp() == SteuerdatenTyp.VATER)
@@ -56,7 +57,9 @@ public class FamilienBudgetCalculatorBernV1_0Test {
         steuerdaten.setSteuernKantonGemeinde(1500);
         steuerdaten.setSteuernBund(1500);
         steuerdaten.setFahrkosten(500);
+        steuerdaten.setFahrkostenPartner(666);
         steuerdaten.setVerpflegung(500);
+        steuerdaten.setVerpflegungPartner(444);
         final Steuererklaerung steuererklaerung = gesuchFormular.getSteuererklaerung()
             .stream()
             .filter(steuererklaerung1 -> steuererklaerung1.getSteuerdatenTyp() == SteuerdatenTyp.VATER)
@@ -86,18 +89,18 @@ public class FamilienBudgetCalculatorBernV1_0Test {
         );
 
         assertThat(familienBudgetresultatDto.getSteuerdatenTyp(), is(SteuerdatenTyp.VATER));
-        assertThat(familienBudgetresultatDto.getHaushaltNames(), hasSize(3));
-        assertThat(familienBudgetresultatDto.getTotal(), is(-32926));
+        assertThat(familienBudgetresultatDto.getHaushaltNames(), hasSize(4));
+        assertThat(familienBudgetresultatDto.getTotal(), is(-44440));
         assertThat(familienBudgetresultatDto.getTeilzeitKinderProzente(), is(80));
 
         assertThat(familienBudgetresultatDto.getEinnahmen().getTotal(), is(19750));
         assertThat(familienBudgetresultatDto.getEinnahmen().getAnrechenbaresVermoegen(), is(750));
 
-        assertThat(familienBudgetresultatDto.getKosten().getGrundbedarf(), is(21816));
-        assertThat(familienBudgetresultatDto.getKosten().getWohnkosten(), is(16260));
-        assertThat(familienBudgetresultatDto.getKosten().getMedizinischeGrundversorgung(), is(8200));
-        assertThat(familienBudgetresultatDto.getKosten().getFahrkostenTotal(), is(500));
-        assertThat(familienBudgetresultatDto.getKosten().getVerpflegungTotal(), is(500));
+        assertThat(familienBudgetresultatDto.getKosten().getGrundbedarf(), is(25080));
+        assertThat(familienBudgetresultatDto.getKosten().getWohnkosten(), is(18000));
+        assertThat(familienBudgetresultatDto.getKosten().getMedizinischeGrundversorgung(), is(13600));
+        assertThat(familienBudgetresultatDto.getKosten().getFahrkostenTotal(), is(1166));
+        assertThat(familienBudgetresultatDto.getKosten().getVerpflegungTotal(), is(944));
         assertThat(familienBudgetresultatDto.getKosten().getIntegrationszulageTotal(), is(2400));
     }
 }
