@@ -35,6 +35,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -165,7 +166,7 @@ public class SozialdienstApiSpec {
         public CreateSozialdienstOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -194,7 +195,7 @@ public class SozialdienstApiSpec {
          * @param sozialdienstCreateDtoSpec (SozialdienstCreateDtoSpec)  (optional)
          * @return operation
          */
-        public CreateSozialdienstOper body(SozialdienstCreateDtoSpec sozialdienstCreateDtoSpec) {
+        public CreateSozialdienstOper body(@jakarta.annotation.Nullable SozialdienstCreateDtoSpec sozialdienstCreateDtoSpec) {
             reqSpec.setBody(sozialdienstCreateDtoSpec);
             return this;
         }
@@ -266,7 +267,7 @@ public class SozialdienstApiSpec {
          * @param sozialdienstBenutzerCreateDtoSpec (SozialdienstBenutzerCreateDtoSpec)  (optional)
          * @return operation
          */
-        public CreateSozialdienstBenutzerOper body(SozialdienstBenutzerCreateDtoSpec sozialdienstBenutzerCreateDtoSpec) {
+        public CreateSozialdienstBenutzerOper body(@jakarta.annotation.Nullable SozialdienstBenutzerCreateDtoSpec sozialdienstBenutzerCreateDtoSpec) {
             reqSpec.setBody(sozialdienstBenutzerCreateDtoSpec);
             return this;
         }
@@ -308,7 +309,7 @@ public class SozialdienstApiSpec {
 
         public DeleteSozialdienstOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -442,7 +443,7 @@ public class SozialdienstApiSpec {
 
         public GetAllSozialdiensteOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -503,7 +504,7 @@ public class SozialdienstApiSpec {
 
         public GetAllSozialdiensteForDelegationOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -565,7 +566,7 @@ public class SozialdienstApiSpec {
 
         public GetSozialdienstOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -638,7 +639,7 @@ public class SozialdienstApiSpec {
 
         public GetSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -710,7 +711,7 @@ public class SozialdienstApiSpec {
 
         public GetSozialdienstBenutzerListOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -774,7 +775,7 @@ public class SozialdienstApiSpec {
         public ReplaceSozialdienstAdminOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -803,7 +804,7 @@ public class SozialdienstApiSpec {
          * @param sozialdienstAdminDtoSpec (SozialdienstAdminDtoSpec)  (optional)
          * @return operation
          */
-        public ReplaceSozialdienstAdminOper body(SozialdienstAdminDtoSpec sozialdienstAdminDtoSpec) {
+        public ReplaceSozialdienstAdminOper body(@jakarta.annotation.Nullable SozialdienstAdminDtoSpec sozialdienstAdminDtoSpec) {
             reqSpec.setBody(sozialdienstAdminDtoSpec);
             return this;
         }
@@ -857,7 +858,7 @@ public class SozialdienstApiSpec {
 
         public SetSozialdienstAktivToOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -942,7 +943,7 @@ public class SozialdienstApiSpec {
         public UpdateSozialdienstOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -971,7 +972,7 @@ public class SozialdienstApiSpec {
          * @param sozialdienstUpdateDtoSpec (SozialdienstUpdateDtoSpec)  (optional)
          * @return operation
          */
-        public UpdateSozialdienstOper body(SozialdienstUpdateDtoSpec sozialdienstUpdateDtoSpec) {
+        public UpdateSozialdienstOper body(@jakarta.annotation.Nullable SozialdienstUpdateDtoSpec sozialdienstUpdateDtoSpec) {
             reqSpec.setBody(sozialdienstUpdateDtoSpec);
             return this;
         }
@@ -1014,7 +1015,7 @@ public class SozialdienstApiSpec {
         public UpdateSozialdienstAdminOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1043,7 +1044,7 @@ public class SozialdienstApiSpec {
          * @param sozialdienstBenutzerUpdateDtoSpec (SozialdienstBenutzerUpdateDtoSpec)  (optional)
          * @return operation
          */
-        public UpdateSozialdienstAdminOper body(SozialdienstBenutzerUpdateDtoSpec sozialdienstBenutzerUpdateDtoSpec) {
+        public UpdateSozialdienstAdminOper body(@jakarta.annotation.Nullable SozialdienstBenutzerUpdateDtoSpec sozialdienstBenutzerUpdateDtoSpec) {
             reqSpec.setBody(sozialdienstBenutzerUpdateDtoSpec);
             return this;
         }
@@ -1086,7 +1087,7 @@ public class SozialdienstApiSpec {
         public UpdateSozialdienstBenutzerOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1115,7 +1116,7 @@ public class SozialdienstApiSpec {
          * @param sozialdienstBenutzerUpdateDtoSpec (SozialdienstBenutzerUpdateDtoSpec)  (optional)
          * @return operation
          */
-        public UpdateSozialdienstBenutzerOper body(SozialdienstBenutzerUpdateDtoSpec sozialdienstBenutzerUpdateDtoSpec) {
+        public UpdateSozialdienstBenutzerOper body(@jakarta.annotation.Nullable SozialdienstBenutzerUpdateDtoSpec sozialdienstBenutzerUpdateDtoSpec) {
             reqSpec.setBody(sozialdienstBenutzerUpdateDtoSpec);
             return this;
         }

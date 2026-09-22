@@ -15,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoLebenslaufTaetigkeit")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoLebenslaufTaetigkeitDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
-  private @Valid String taetigkeitsBeschreibung;
-  private @Valid LocalDate von;
-  private @Valid LocalDate bis;
-  private @Valid ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+  private ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
+  private String taetigkeitsBeschreibung;
+  private LocalDate von;
+  private LocalDate bis;
+  private ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
 
   protected DemoLebenslaufTaetigkeitDto(DemoLebenslaufTaetigkeitDtoBuilder<?, ?> b) {
     this.taetigkeitsart = b.taetigkeitsart;
@@ -45,13 +45,12 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
   }
 
   
-  @JsonProperty("taetigkeitsart")
-  @NotNull
-  public ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart getTaetigkeitsart() {
+  @JsonProperty(required = true, value = "taetigkeitsart")
+  @NotNull public ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart getTaetigkeitsart() {
     return taetigkeitsart;
   }
 
-  @JsonProperty("taetigkeitsart")
+  @JsonProperty(required = true, value = "taetigkeitsart")
   public void setTaetigkeitsart(ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart) {
     this.taetigkeitsart = taetigkeitsart;
   }
@@ -64,13 +63,12 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
   }
 
   
-  @JsonProperty("taetigkeitsBeschreibung")
-  @NotNull
-  public String getTaetigkeitsBeschreibung() {
+  @JsonProperty(required = true, value = "taetigkeitsBeschreibung")
+  @NotNull public String getTaetigkeitsBeschreibung() {
     return taetigkeitsBeschreibung;
   }
 
-  @JsonProperty("taetigkeitsBeschreibung")
+  @JsonProperty(required = true, value = "taetigkeitsBeschreibung")
   public void setTaetigkeitsBeschreibung(String taetigkeitsBeschreibung) {
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
   }
@@ -83,13 +81,12 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
   }
 
   
-  @JsonProperty("von")
-  @NotNull
-  public LocalDate getVon() {
+  @JsonProperty(required = true, value = "von")
+  @NotNull public LocalDate getVon() {
     return von;
   }
 
-  @JsonProperty("von")
+  @JsonProperty(required = true, value = "von")
   public void setVon(LocalDate von) {
     this.von = von;
   }
@@ -102,13 +99,12 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
   }
 
   
-  @JsonProperty("bis")
-  @NotNull
-  public LocalDate getBis() {
+  @JsonProperty(required = true, value = "bis")
+  @NotNull public LocalDate getBis() {
     return bis;
   }
 
-  @JsonProperty("bis")
+  @JsonProperty(required = true, value = "bis")
   public void setBis(LocalDate bis) {
     this.bis = bis;
   }
@@ -121,13 +117,12 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnsitz")
-  @NotNull
-  public ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton getWohnsitz() {
+  @JsonProperty(required = true, value = "wohnsitz")
+  @NotNull public ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton getWohnsitz() {
     return wohnsitz;
   }
 
-  @JsonProperty("wohnsitz")
+  @JsonProperty(required = true, value = "wohnsitz")
   public void setWohnsitz(ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz) {
     this.wohnsitz = wohnsitz;
   }
@@ -173,10 +168,7 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -229,4 +221,3 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
     }
   }
 }
-

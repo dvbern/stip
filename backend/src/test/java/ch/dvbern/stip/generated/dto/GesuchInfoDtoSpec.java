@@ -42,53 +42,63 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchInfoDtoSpec.JSON_PROPERTY_STATE
 })
 @JsonTypeName("GesuchInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchInfoDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  @jakarta.annotation.Nonnull
   private String fallNummer;
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private String fallId;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
+  @jakarta.annotation.Nonnull
   private String ausbildungId;
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
+  @jakarta.annotation.Nonnull
   private String gesuchNummer;
 
   public static final String JSON_PROPERTY_START_DATE = "startDate";
+  @jakarta.annotation.Nonnull
   private LocalDate startDate;
 
   public static final String JSON_PROPERTY_END_DATE = "endDate";
+  @jakarta.annotation.Nonnull
   private LocalDate endDate;
 
   public static final String JSON_PROPERTY_PIA_VORNAME = "piaVorname";
+  @jakarta.annotation.Nullable
   private String piaVorname;
 
   public static final String JSON_PROPERTY_PIA_NACHNAME = "piaNachname";
+  @jakarta.annotation.Nullable
   private String piaNachname;
 
   public static final String JSON_PROPERTY_STATE = "state";
+  @jakarta.annotation.Nonnull
   private GesuchStateInfoDtoSpec state;
 
   public GesuchInfoDtoSpec() {
   }
 
-  public GesuchInfoDtoSpec id(UUID id) {
+  public GesuchInfoDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -96,25 +106,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public GesuchInfoDtoSpec fallNummer(String fallNummer) {
+  public GesuchInfoDtoSpec fallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     
     this.fallNummer = fallNummer;
     return this;
   }
 
-   /**
+  /**
    * Get fallNummer
    * @return fallNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
@@ -122,25 +131,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallNummer(String fallNummer) {
+  public void setFallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     this.fallNummer = fallNummer;
   }
 
-
-  public GesuchInfoDtoSpec fallId(String fallId) {
+  public GesuchInfoDtoSpec fallId(@jakarta.annotation.Nonnull String fallId) {
     
     this.fallId = fallId;
     return this;
   }
 
-   /**
+  /**
    * Get fallId
    * @return fallId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallId() {
@@ -148,25 +156,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(String fallId) {
+  public void setFallId(@jakarta.annotation.Nonnull String fallId) {
     this.fallId = fallId;
   }
 
-
-  public GesuchInfoDtoSpec ausbildungId(String ausbildungId) {
+  public GesuchInfoDtoSpec ausbildungId(@jakarta.annotation.Nonnull String ausbildungId) {
     
     this.ausbildungId = ausbildungId;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungId
    * @return ausbildungId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAusbildungId() {
@@ -174,25 +181,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungId(String ausbildungId) {
+  public void setAusbildungId(@jakarta.annotation.Nonnull String ausbildungId) {
     this.ausbildungId = ausbildungId;
   }
 
-
-  public GesuchInfoDtoSpec gesuchNummer(String gesuchNummer) {
+  public GesuchInfoDtoSpec gesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
     
     this.gesuchNummer = gesuchNummer;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchNummer
    * @return gesuchNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getGesuchNummer() {
@@ -200,25 +206,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchNummer(String gesuchNummer) {
+  public void setGesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
 
-
-  public GesuchInfoDtoSpec startDate(LocalDate startDate) {
+  public GesuchInfoDtoSpec startDate(@jakarta.annotation.Nonnull LocalDate startDate) {
     
     this.startDate = startDate;
     return this;
   }
 
-   /**
+  /**
    * Get startDate
    * @return startDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonProperty(value = JSON_PROPERTY_START_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getStartDate() {
@@ -226,25 +231,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonProperty(value = JSON_PROPERTY_START_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStartDate(LocalDate startDate) {
+  public void setStartDate(@jakarta.annotation.Nonnull LocalDate startDate) {
     this.startDate = startDate;
   }
 
-
-  public GesuchInfoDtoSpec endDate(LocalDate endDate) {
+  public GesuchInfoDtoSpec endDate(@jakarta.annotation.Nonnull LocalDate endDate) {
     
     this.endDate = endDate;
     return this;
   }
 
-   /**
+  /**
    * Get endDate
    * @return endDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonProperty(value = JSON_PROPERTY_END_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEndDate() {
@@ -252,25 +256,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonProperty(value = JSON_PROPERTY_END_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEndDate(LocalDate endDate) {
+  public void setEndDate(@jakarta.annotation.Nonnull LocalDate endDate) {
     this.endDate = endDate;
   }
 
-
-  public GesuchInfoDtoSpec piaVorname(String piaVorname) {
+  public GesuchInfoDtoSpec piaVorname(@jakarta.annotation.Nullable String piaVorname) {
     
     this.piaVorname = piaVorname;
     return this;
   }
 
-   /**
+  /**
    * Get piaVorname
    * @return piaVorname
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_VORNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getPiaVorname() {
@@ -278,25 +281,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_VORNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPiaVorname(String piaVorname) {
+  public void setPiaVorname(@jakarta.annotation.Nullable String piaVorname) {
     this.piaVorname = piaVorname;
   }
 
-
-  public GesuchInfoDtoSpec piaNachname(String piaNachname) {
+  public GesuchInfoDtoSpec piaNachname(@jakarta.annotation.Nullable String piaNachname) {
     
     this.piaNachname = piaNachname;
     return this;
   }
 
-   /**
+  /**
    * Get piaNachname
    * @return piaNachname
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_NACHNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getPiaNachname() {
@@ -304,25 +306,24 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_NACHNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPiaNachname(String piaNachname) {
+  public void setPiaNachname(@jakarta.annotation.Nullable String piaNachname) {
     this.piaNachname = piaNachname;
   }
 
-
-  public GesuchInfoDtoSpec state(GesuchStateInfoDtoSpec state) {
+  public GesuchInfoDtoSpec state(@jakarta.annotation.Nonnull GesuchStateInfoDtoSpec state) {
     
     this.state = state;
     return this;
   }
 
-   /**
+  /**
    * Get state
    * @return state
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATE)
+  @JsonProperty(value = JSON_PROPERTY_STATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchStateInfoDtoSpec getState() {
@@ -330,11 +331,12 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATE)
+  @JsonProperty(value = JSON_PROPERTY_STATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setState(GesuchStateInfoDtoSpec state) {
+  public void setState(@jakarta.annotation.Nonnull GesuchStateInfoDtoSpec state) {
     this.state = state;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -385,10 +387,7 @@ public class GesuchInfoDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

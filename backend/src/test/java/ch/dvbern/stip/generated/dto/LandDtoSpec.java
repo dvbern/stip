@@ -40,53 +40,63 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   LandDtoSpec.JSON_PROPERTY_EN_KURZFORM
 })
 @JsonTypeName("Land")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class LandDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_LAENDERCODE_BFS = "laendercodeBfs";
+  @jakarta.annotation.Nonnull
   private String laendercodeBfs;
 
   public static final String JSON_PROPERTY_IS_EU_EFTA = "isEuEfta";
+  @jakarta.annotation.Nonnull
   private Boolean isEuEfta;
 
   public static final String JSON_PROPERTY_ISO2CODE = "iso2code";
+  @jakarta.annotation.Nullable
   private String iso2code;
 
   public static final String JSON_PROPERTY_ISO3CODE = "iso3code";
+  @jakarta.annotation.Nullable
   private String iso3code;
 
   public static final String JSON_PROPERTY_EINTRAG_GUELTIG = "eintragGueltig";
+  @jakarta.annotation.Nonnull
   private Boolean eintragGueltig;
 
   public static final String JSON_PROPERTY_DE_KURZFORM = "deKurzform";
+  @jakarta.annotation.Nonnull
   private String deKurzform;
 
   public static final String JSON_PROPERTY_FR_KURZFORM = "frKurzform";
+  @jakarta.annotation.Nonnull
   private String frKurzform;
 
   public static final String JSON_PROPERTY_IT_KURZFORM = "itKurzform";
+  @jakarta.annotation.Nonnull
   private String itKurzform;
 
   public static final String JSON_PROPERTY_EN_KURZFORM = "enKurzform";
+  @jakarta.annotation.Nonnull
   private String enKurzform;
 
   public LandDtoSpec() {
   }
 
-  public LandDtoSpec id(UUID id) {
+  public LandDtoSpec id(@jakarta.annotation.Nullable UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
@@ -94,25 +104,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nullable UUID id) {
     this.id = id;
   }
 
-
-  public LandDtoSpec laendercodeBfs(String laendercodeBfs) {
+  public LandDtoSpec laendercodeBfs(@jakarta.annotation.Nonnull String laendercodeBfs) {
     
     this.laendercodeBfs = laendercodeBfs;
     return this;
   }
 
-   /**
+  /**
    * Get laendercodeBfs
    * @return laendercodeBfs
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LAENDERCODE_BFS)
+  @JsonProperty(value = JSON_PROPERTY_LAENDERCODE_BFS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getLaendercodeBfs() {
@@ -120,25 +129,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LAENDERCODE_BFS)
+  @JsonProperty(value = JSON_PROPERTY_LAENDERCODE_BFS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLaendercodeBfs(String laendercodeBfs) {
+  public void setLaendercodeBfs(@jakarta.annotation.Nonnull String laendercodeBfs) {
     this.laendercodeBfs = laendercodeBfs;
   }
 
-
-  public LandDtoSpec isEuEfta(Boolean isEuEfta) {
+  public LandDtoSpec isEuEfta(@jakarta.annotation.Nonnull Boolean isEuEfta) {
     
     this.isEuEfta = isEuEfta;
     return this;
   }
 
-   /**
+  /**
    * Get isEuEfta
    * @return isEuEfta
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IS_EU_EFTA)
+  @JsonProperty(value = JSON_PROPERTY_IS_EU_EFTA, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getIsEuEfta() {
@@ -146,25 +154,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_EU_EFTA)
+  @JsonProperty(value = JSON_PROPERTY_IS_EU_EFTA, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIsEuEfta(Boolean isEuEfta) {
+  public void setIsEuEfta(@jakarta.annotation.Nonnull Boolean isEuEfta) {
     this.isEuEfta = isEuEfta;
   }
 
-
-  public LandDtoSpec iso2code(String iso2code) {
+  public LandDtoSpec iso2code(@jakarta.annotation.Nullable String iso2code) {
     
     this.iso2code = iso2code;
     return this;
   }
 
-   /**
+  /**
    * Get iso2code
    * @return iso2code
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ISO2CODE)
+  @JsonProperty(value = JSON_PROPERTY_ISO2CODE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getIso2code() {
@@ -172,25 +179,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ISO2CODE)
+  @JsonProperty(value = JSON_PROPERTY_ISO2CODE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIso2code(String iso2code) {
+  public void setIso2code(@jakarta.annotation.Nullable String iso2code) {
     this.iso2code = iso2code;
   }
 
-
-  public LandDtoSpec iso3code(String iso3code) {
+  public LandDtoSpec iso3code(@jakarta.annotation.Nullable String iso3code) {
     
     this.iso3code = iso3code;
     return this;
   }
 
-   /**
+  /**
    * Get iso3code
    * @return iso3code
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ISO3CODE)
+  @JsonProperty(value = JSON_PROPERTY_ISO3CODE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getIso3code() {
@@ -198,25 +204,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ISO3CODE)
+  @JsonProperty(value = JSON_PROPERTY_ISO3CODE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIso3code(String iso3code) {
+  public void setIso3code(@jakarta.annotation.Nullable String iso3code) {
     this.iso3code = iso3code;
   }
 
-
-  public LandDtoSpec eintragGueltig(Boolean eintragGueltig) {
+  public LandDtoSpec eintragGueltig(@jakarta.annotation.Nonnull Boolean eintragGueltig) {
     
     this.eintragGueltig = eintragGueltig;
     return this;
   }
 
-   /**
+  /**
    * Get eintragGueltig
    * @return eintragGueltig
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINTRAG_GUELTIG)
+  @JsonProperty(value = JSON_PROPERTY_EINTRAG_GUELTIG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getEintragGueltig() {
@@ -224,25 +229,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINTRAG_GUELTIG)
+  @JsonProperty(value = JSON_PROPERTY_EINTRAG_GUELTIG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEintragGueltig(Boolean eintragGueltig) {
+  public void setEintragGueltig(@jakarta.annotation.Nonnull Boolean eintragGueltig) {
     this.eintragGueltig = eintragGueltig;
   }
 
-
-  public LandDtoSpec deKurzform(String deKurzform) {
+  public LandDtoSpec deKurzform(@jakarta.annotation.Nonnull String deKurzform) {
     
     this.deKurzform = deKurzform;
     return this;
   }
 
-   /**
+  /**
    * Get deKurzform
    * @return deKurzform
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DE_KURZFORM)
+  @JsonProperty(value = JSON_PROPERTY_DE_KURZFORM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getDeKurzform() {
@@ -250,25 +254,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DE_KURZFORM)
+  @JsonProperty(value = JSON_PROPERTY_DE_KURZFORM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDeKurzform(String deKurzform) {
+  public void setDeKurzform(@jakarta.annotation.Nonnull String deKurzform) {
     this.deKurzform = deKurzform;
   }
 
-
-  public LandDtoSpec frKurzform(String frKurzform) {
+  public LandDtoSpec frKurzform(@jakarta.annotation.Nonnull String frKurzform) {
     
     this.frKurzform = frKurzform;
     return this;
   }
 
-   /**
+  /**
    * Get frKurzform
    * @return frKurzform
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FR_KURZFORM)
+  @JsonProperty(value = JSON_PROPERTY_FR_KURZFORM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFrKurzform() {
@@ -276,25 +279,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FR_KURZFORM)
+  @JsonProperty(value = JSON_PROPERTY_FR_KURZFORM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFrKurzform(String frKurzform) {
+  public void setFrKurzform(@jakarta.annotation.Nonnull String frKurzform) {
     this.frKurzform = frKurzform;
   }
 
-
-  public LandDtoSpec itKurzform(String itKurzform) {
+  public LandDtoSpec itKurzform(@jakarta.annotation.Nonnull String itKurzform) {
     
     this.itKurzform = itKurzform;
     return this;
   }
 
-   /**
+  /**
    * Get itKurzform
    * @return itKurzform
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IT_KURZFORM)
+  @JsonProperty(value = JSON_PROPERTY_IT_KURZFORM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getItKurzform() {
@@ -302,25 +304,24 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IT_KURZFORM)
+  @JsonProperty(value = JSON_PROPERTY_IT_KURZFORM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setItKurzform(String itKurzform) {
+  public void setItKurzform(@jakarta.annotation.Nonnull String itKurzform) {
     this.itKurzform = itKurzform;
   }
 
-
-  public LandDtoSpec enKurzform(String enKurzform) {
+  public LandDtoSpec enKurzform(@jakarta.annotation.Nonnull String enKurzform) {
     
     this.enKurzform = enKurzform;
     return this;
   }
 
-   /**
+  /**
    * Get enKurzform
    * @return enKurzform
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EN_KURZFORM)
+  @JsonProperty(value = JSON_PROPERTY_EN_KURZFORM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getEnKurzform() {
@@ -328,11 +329,12 @@ public class LandDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EN_KURZFORM)
+  @JsonProperty(value = JSON_PROPERTY_EN_KURZFORM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEnKurzform(String enKurzform) {
+  public void setEnKurzform(@jakarta.annotation.Nonnull String enKurzform) {
     this.enKurzform = enKurzform;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -383,10 +385,7 @@ public class LandDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

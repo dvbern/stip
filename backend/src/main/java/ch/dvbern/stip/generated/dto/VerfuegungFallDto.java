@@ -15,15 +15,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("VerfuegungFall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class VerfuegungFallDto  implements Serializable {
-  private @Valid String timestampErstellt;
-  private @Valid String yearRange;
-  private @Valid Integer totalbetragStipendium;
-  private @Valid VerfuegungDokumentDto dokument;
+  private String timestampErstellt;
+  private String yearRange;
+  private Integer totalbetragStipendium;
+  private VerfuegungDokumentDto dokument;
 
   protected VerfuegungFallDto(VerfuegungFallDtoBuilder<?, ?> b) {
     this.timestampErstellt = b.timestampErstellt;
@@ -43,13 +43,12 @@ public class VerfuegungFallDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public String getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public String getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -62,13 +61,12 @@ public class VerfuegungFallDto  implements Serializable {
   }
 
   
-  @JsonProperty("yearRange")
-  @NotNull
-  public String getYearRange() {
+  @JsonProperty(required = true, value = "yearRange")
+  @NotNull public String getYearRange() {
     return yearRange;
   }
 
-  @JsonProperty("yearRange")
+  @JsonProperty(required = true, value = "yearRange")
   public void setYearRange(String yearRange) {
     this.yearRange = yearRange;
   }
@@ -81,13 +79,12 @@ public class VerfuegungFallDto  implements Serializable {
   }
 
   
-  @JsonProperty("totalbetragStipendium")
-  @NotNull
-  public Integer getTotalbetragStipendium() {
+  @JsonProperty(required = true, value = "totalbetragStipendium")
+  @NotNull public Integer getTotalbetragStipendium() {
     return totalbetragStipendium;
   }
 
-  @JsonProperty("totalbetragStipendium")
+  @JsonProperty(required = true, value = "totalbetragStipendium")
   public void setTotalbetragStipendium(Integer totalbetragStipendium) {
     this.totalbetragStipendium = totalbetragStipendium;
   }
@@ -101,7 +98,7 @@ public class VerfuegungFallDto  implements Serializable {
 
   
   @JsonProperty("dokument")
-  public VerfuegungDokumentDto getDokument() {
+  @Valid public VerfuegungDokumentDto getDokument() {
     return dokument;
   }
 
@@ -149,10 +146,7 @@ public class VerfuegungFallDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -200,4 +194,3 @@ public class VerfuegungFallDto  implements Serializable {
     }
   }
 }
-

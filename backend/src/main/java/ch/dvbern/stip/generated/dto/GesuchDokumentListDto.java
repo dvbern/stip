@@ -19,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDokumentList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentListDto  implements Serializable {
-  private @Valid List<GesuchDokumentEntryDto> entrys = new ArrayList<>();
-  private @Valid List<GesuchDokumentDto> dokuments = new ArrayList<>();
+  private @Valid List<@Valid GesuchDokumentEntryDto> entrys = new ArrayList<>();
+  private @Valid List<@Valid GesuchDokumentDto> dokuments = new ArrayList<>();
 
   protected GesuchDokumentListDto(GesuchDokumentListDtoBuilder<?, ?> b) {
     this.entrys = b.entrys;
@@ -37,20 +37,19 @@ public class GesuchDokumentListDto  implements Serializable {
 
   /**
    **/
-  public GesuchDokumentListDto entrys(List<GesuchDokumentEntryDto> entrys) {
+  public GesuchDokumentListDto entrys(List<@Valid GesuchDokumentEntryDto> entrys) {
     this.entrys = entrys;
     return this;
   }
 
   
-  @JsonProperty("entrys")
-  @NotNull
-  public List<GesuchDokumentEntryDto> getEntrys() {
+  @JsonProperty(required = true, value = "entrys")
+  @NotNull @Valid public List<@Valid GesuchDokumentEntryDto> getEntrys() {
     return entrys;
   }
 
-  @JsonProperty("entrys")
-  public void setEntrys(List<GesuchDokumentEntryDto> entrys) {
+  @JsonProperty(required = true, value = "entrys")
+  public void setEntrys(List<@Valid GesuchDokumentEntryDto> entrys) {
     this.entrys = entrys;
   }
 
@@ -72,20 +71,19 @@ public class GesuchDokumentListDto  implements Serializable {
   }
   /**
    **/
-  public GesuchDokumentListDto dokuments(List<GesuchDokumentDto> dokuments) {
+  public GesuchDokumentListDto dokuments(List<@Valid GesuchDokumentDto> dokuments) {
     this.dokuments = dokuments;
     return this;
   }
 
   
-  @JsonProperty("dokuments")
-  @NotNull
-  public List<GesuchDokumentDto> getDokuments() {
+  @JsonProperty(required = true, value = "dokuments")
+  @NotNull @Valid public List<@Valid GesuchDokumentDto> getDokuments() {
     return dokuments;
   }
 
-  @JsonProperty("dokuments")
-  public void setDokuments(List<GesuchDokumentDto> dokuments) {
+  @JsonProperty(required = true, value = "dokuments")
+  public void setDokuments(List<@Valid GesuchDokumentDto> dokuments) {
     this.dokuments = dokuments;
   }
 
@@ -140,10 +138,7 @@ public class GesuchDokumentListDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -181,4 +176,3 @@ public class GesuchDokumentListDto  implements Serializable {
     }
   }
 }
-

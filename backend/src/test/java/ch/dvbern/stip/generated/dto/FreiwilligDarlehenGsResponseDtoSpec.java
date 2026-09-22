@@ -35,18 +35,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FreiwilligDarlehenGsResponseDtoSpec.JSON_PROPERTY_CAN_CREATE_DARLEHEN
 })
 @JsonTypeName("FreiwilligDarlehenGsResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FreiwilligDarlehenGsResponseDtoSpec {
   public static final String JSON_PROPERTY_DARLEHEN_LIST = "darlehenList";
+  @jakarta.annotation.Nonnull
   private List<FreiwilligDarlehenDtoSpec> darlehenList;
 
   public static final String JSON_PROPERTY_CAN_CREATE_DARLEHEN = "canCreateDarlehen";
+  @jakarta.annotation.Nonnull
   private Boolean canCreateDarlehen;
 
   public FreiwilligDarlehenGsResponseDtoSpec() {
   }
 
-  public FreiwilligDarlehenGsResponseDtoSpec darlehenList(List<FreiwilligDarlehenDtoSpec> darlehenList) {
+  public FreiwilligDarlehenGsResponseDtoSpec darlehenList(@jakarta.annotation.Nonnull List<FreiwilligDarlehenDtoSpec> darlehenList) {
     
     this.darlehenList = darlehenList;
     return this;
@@ -60,12 +62,12 @@ public class FreiwilligDarlehenGsResponseDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get darlehenList
    * @return darlehenList
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_LIST)
+  @JsonProperty(value = JSON_PROPERTY_DARLEHEN_LIST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<FreiwilligDarlehenDtoSpec> getDarlehenList() {
@@ -73,25 +75,24 @@ public class FreiwilligDarlehenGsResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_LIST)
+  @JsonProperty(value = JSON_PROPERTY_DARLEHEN_LIST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDarlehenList(List<FreiwilligDarlehenDtoSpec> darlehenList) {
+  public void setDarlehenList(@jakarta.annotation.Nonnull List<FreiwilligDarlehenDtoSpec> darlehenList) {
     this.darlehenList = darlehenList;
   }
 
-
-  public FreiwilligDarlehenGsResponseDtoSpec canCreateDarlehen(Boolean canCreateDarlehen) {
+  public FreiwilligDarlehenGsResponseDtoSpec canCreateDarlehen(@jakarta.annotation.Nonnull Boolean canCreateDarlehen) {
     
     this.canCreateDarlehen = canCreateDarlehen;
     return this;
   }
 
-   /**
+  /**
    * Get canCreateDarlehen
    * @return canCreateDarlehen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanCreateDarlehen() {
@@ -99,11 +100,12 @@ public class FreiwilligDarlehenGsResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanCreateDarlehen(Boolean canCreateDarlehen) {
+  public void setCanCreateDarlehen(@jakarta.annotation.Nonnull Boolean canCreateDarlehen) {
     this.canCreateDarlehen = canCreateDarlehen;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -138,10 +140,7 @@ public class FreiwilligDarlehenGsResponseDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

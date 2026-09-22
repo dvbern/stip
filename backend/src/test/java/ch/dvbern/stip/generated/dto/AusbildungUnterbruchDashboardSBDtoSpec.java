@@ -35,29 +35,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungUnterbruchDashboardSBDtoSpec.JSON_PROPERTY_AUSBILDUNG_UNTERBRUCHS
 })
 @JsonTypeName("AusbildungUnterbruchDashboardSB")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungUnterbruchDashboardSBDtoSpec {
   public static final String JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH = "canCreateAusbildungUnterbruch";
+  @jakarta.annotation.Nonnull
   private Boolean canCreateAusbildungUnterbruch;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_UNTERBRUCHS = "ausbildungUnterbruchs";
+  @jakarta.annotation.Nonnull
   private List<AusbildungUnterbruchAntragSBDtoSpec> ausbildungUnterbruchs;
 
   public AusbildungUnterbruchDashboardSBDtoSpec() {
   }
 
-  public AusbildungUnterbruchDashboardSBDtoSpec canCreateAusbildungUnterbruch(Boolean canCreateAusbildungUnterbruch) {
+  public AusbildungUnterbruchDashboardSBDtoSpec canCreateAusbildungUnterbruch(@jakarta.annotation.Nonnull Boolean canCreateAusbildungUnterbruch) {
     
     this.canCreateAusbildungUnterbruch = canCreateAusbildungUnterbruch;
     return this;
   }
 
-   /**
+  /**
    * Get canCreateAusbildungUnterbruch
    * @return canCreateAusbildungUnterbruch
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanCreateAusbildungUnterbruch() {
@@ -65,14 +67,13 @@ public class AusbildungUnterbruchDashboardSBDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanCreateAusbildungUnterbruch(Boolean canCreateAusbildungUnterbruch) {
+  public void setCanCreateAusbildungUnterbruch(@jakarta.annotation.Nonnull Boolean canCreateAusbildungUnterbruch) {
     this.canCreateAusbildungUnterbruch = canCreateAusbildungUnterbruch;
   }
 
-
-  public AusbildungUnterbruchDashboardSBDtoSpec ausbildungUnterbruchs(List<AusbildungUnterbruchAntragSBDtoSpec> ausbildungUnterbruchs) {
+  public AusbildungUnterbruchDashboardSBDtoSpec ausbildungUnterbruchs(@jakarta.annotation.Nonnull List<AusbildungUnterbruchAntragSBDtoSpec> ausbildungUnterbruchs) {
     
     this.ausbildungUnterbruchs = ausbildungUnterbruchs;
     return this;
@@ -86,12 +87,12 @@ public class AusbildungUnterbruchDashboardSBDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungUnterbruchs
    * @return ausbildungUnterbruchs
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_UNTERBRUCHS)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_UNTERBRUCHS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<AusbildungUnterbruchAntragSBDtoSpec> getAusbildungUnterbruchs() {
@@ -99,11 +100,12 @@ public class AusbildungUnterbruchDashboardSBDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_UNTERBRUCHS)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_UNTERBRUCHS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungUnterbruchs(List<AusbildungUnterbruchAntragSBDtoSpec> ausbildungUnterbruchs) {
+  public void setAusbildungUnterbruchs(@jakarta.annotation.Nonnull List<AusbildungUnterbruchAntragSBDtoSpec> ausbildungUnterbruchs) {
     this.ausbildungUnterbruchs = ausbildungUnterbruchs;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -138,10 +140,7 @@ public class AusbildungUnterbruchDashboardSBDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

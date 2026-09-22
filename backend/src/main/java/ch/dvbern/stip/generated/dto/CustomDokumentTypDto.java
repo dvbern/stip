@@ -15,14 +15,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("CustomDokumentTyp")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class CustomDokumentTypDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String type;
-  private @Valid String description;
+  private UUID id;
+  private String type;
+  private String description;
 
   protected CustomDokumentTypDto(CustomDokumentTypDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -41,13 +41,12 @@ public class CustomDokumentTypDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -60,13 +59,12 @@ public class CustomDokumentTypDto  implements Serializable {
   }
 
   
-  @JsonProperty("type")
-  @NotNull
-  public String getType() {
+  @JsonProperty(required = true, value = "type")
+  @NotNull public String getType() {
     return type;
   }
 
-  @JsonProperty("type")
+  @JsonProperty(required = true, value = "type")
   public void setType(String type) {
     this.type = type;
   }
@@ -79,13 +77,12 @@ public class CustomDokumentTypDto  implements Serializable {
   }
 
   
-  @JsonProperty("description")
-  @NotNull
-  public String getDescription() {
+  @JsonProperty(required = true, value = "description")
+  @NotNull public String getDescription() {
     return description;
   }
 
-  @JsonProperty("description")
+  @JsonProperty(required = true, value = "description")
   public void setDescription(String description) {
     this.description = description;
   }
@@ -127,10 +124,7 @@ public class CustomDokumentTypDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -173,4 +167,3 @@ public class CustomDokumentTypDto  implements Serializable {
     }
   }
 }
-

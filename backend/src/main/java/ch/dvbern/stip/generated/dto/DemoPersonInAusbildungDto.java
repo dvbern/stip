@@ -15,40 +15,40 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoPersonInAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoPersonInAusbildungDto  implements Serializable {
-  private @Valid String sozialversicherungsnummer;
-  private @Valid ch.dvbern.stip.api.common.type.Anrede anrede;
-  private @Valid String nachname;
-  private @Valid String vorname;
-  private @Valid String strasse;
-  private @Valid String hausnummer;
-  private @Valid String plz;
-  private @Valid String ort;
-  private @Valid String land;
-  private @Valid Boolean identischerZivilrechtlicherWohnsitz;
-  private @Valid String email;
-  private @Valid String telefonnummer;
-  private @Valid String geburtsdatum;
-  private @Valid Integer alter;
-  private @Valid ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
-  private @Valid String nationalitaet;
-  private @Valid ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus;
-  private @Valid LocalDate einreisedatum;
-  private @Valid String heimatort;
-  private @Valid String coAdresse;
-  private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
-  private @Valid String identischerZivilrechtlicherWohnsitzOrt;
-  private @Valid String heimatortPLZ;
-  private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
-  private @Valid Integer wohnsitzAnteilVater;
-  private @Valid Integer wohnsitzAnteilMutter;
-  private @Valid Boolean vormundschaft;
-  private @Valid ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB;
-  private @Valid Boolean sozialhilfebeitraege;
+  private String sozialversicherungsnummer;
+  private ch.dvbern.stip.api.common.type.Anrede anrede;
+  private String nachname;
+  private String vorname;
+  private String strasse;
+  private String hausnummer;
+  private String plz;
+  private String ort;
+  private String land;
+  private Boolean identischerZivilrechtlicherWohnsitz;
+  private String email;
+  private String telefonnummer;
+  private String geburtsdatum;
+  private Integer alter;
+  private ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
+  private String nationalitaet;
+  private ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus;
+  private LocalDate einreisedatum;
+  private String heimatort;
+  private String coAdresse;
+  private String identischerZivilrechtlicherWohnsitzPLZ;
+  private String identischerZivilrechtlicherWohnsitzOrt;
+  private String heimatortPLZ;
+  private ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
+  private Integer wohnsitzAnteilVater;
+  private Integer wohnsitzAnteilMutter;
+  private Boolean vormundschaft;
+  private ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB;
+  private Boolean sozialhilfebeitraege;
 
   protected DemoPersonInAusbildungDto(DemoPersonInAusbildungDtoBuilder<?, ?> b) {
     this.sozialversicherungsnummer = b.sozialversicherungsnummer;
@@ -93,13 +93,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("sozialversicherungsnummer")
-  @NotNull
-  public String getSozialversicherungsnummer() {
+  @JsonProperty(required = true, value = "sozialversicherungsnummer")
+  @NotNull public String getSozialversicherungsnummer() {
     return sozialversicherungsnummer;
   }
 
-  @JsonProperty("sozialversicherungsnummer")
+  @JsonProperty(required = true, value = "sozialversicherungsnummer")
   public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
@@ -112,13 +111,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("anrede")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.Anrede getAnrede() {
+  @JsonProperty(required = true, value = "anrede")
+  @NotNull public ch.dvbern.stip.api.common.type.Anrede getAnrede() {
     return anrede;
   }
 
-  @JsonProperty("anrede")
+  @JsonProperty(required = true, value = "anrede")
   public void setAnrede(ch.dvbern.stip.api.common.type.Anrede anrede) {
     this.anrede = anrede;
   }
@@ -131,13 +129,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -150,13 +147,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -169,13 +165,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("strasse")
-  @NotNull
-  public String getStrasse() {
+  @JsonProperty(required = true, value = "strasse")
+  @NotNull public String getStrasse() {
     return strasse;
   }
 
-  @JsonProperty("strasse")
+  @JsonProperty(required = true, value = "strasse")
   public void setStrasse(String strasse) {
     this.strasse = strasse;
   }
@@ -188,13 +183,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("hausnummer")
-  @NotNull
-  public String getHausnummer() {
+  @JsonProperty(required = true, value = "hausnummer")
+  @NotNull public String getHausnummer() {
     return hausnummer;
   }
 
-  @JsonProperty("hausnummer")
+  @JsonProperty(required = true, value = "hausnummer")
   public void setHausnummer(String hausnummer) {
     this.hausnummer = hausnummer;
   }
@@ -207,13 +201,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("plz")
-  @NotNull
-  public String getPlz() {
+  @JsonProperty(required = true, value = "plz")
+  @NotNull public String getPlz() {
     return plz;
   }
 
-  @JsonProperty("plz")
+  @JsonProperty(required = true, value = "plz")
   public void setPlz(String plz) {
     this.plz = plz;
   }
@@ -226,13 +219,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ort")
-  @NotNull
-  public String getOrt() {
+  @JsonProperty(required = true, value = "ort")
+  @NotNull public String getOrt() {
     return ort;
   }
 
-  @JsonProperty("ort")
+  @JsonProperty(required = true, value = "ort")
   public void setOrt(String ort) {
     this.ort = ort;
   }
@@ -245,13 +237,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("land")
-  @NotNull
-  public String getLand() {
+  @JsonProperty(required = true, value = "land")
+  @NotNull public String getLand() {
     return land;
   }
 
-  @JsonProperty("land")
+  @JsonProperty(required = true, value = "land")
   public void setLand(String land) {
     this.land = land;
   }
@@ -264,13 +255,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("identischerZivilrechtlicherWohnsitz")
-  @NotNull
-  public Boolean getIdentischerZivilrechtlicherWohnsitz() {
+  @JsonProperty(required = true, value = "identischerZivilrechtlicherWohnsitz")
+  @NotNull public Boolean getIdentischerZivilrechtlicherWohnsitz() {
     return identischerZivilrechtlicherWohnsitz;
   }
 
-  @JsonProperty("identischerZivilrechtlicherWohnsitz")
+  @JsonProperty(required = true, value = "identischerZivilrechtlicherWohnsitz")
   public void setIdentischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
     this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
   }
@@ -283,13 +273,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("email")
-  @NotNull
-  public String getEmail() {
+  @JsonProperty(required = true, value = "email")
+  @NotNull  @Email public String getEmail() {
     return email;
   }
 
-  @JsonProperty("email")
+  @JsonProperty(required = true, value = "email")
   public void setEmail(String email) {
     this.email = email;
   }
@@ -302,13 +291,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("telefonnummer")
-  @NotNull
-  public String getTelefonnummer() {
+  @JsonProperty(required = true, value = "telefonnummer")
+  @NotNull public String getTelefonnummer() {
     return telefonnummer;
   }
 
-  @JsonProperty("telefonnummer")
+  @JsonProperty(required = true, value = "telefonnummer")
   public void setTelefonnummer(String telefonnummer) {
     this.telefonnummer = telefonnummer;
   }
@@ -321,13 +309,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
- @Pattern(regexp="^\\d{2}.\\d{2}$")  public String getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull  @Pattern(regexp="^\\d{2}.\\d{2}$")public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -340,13 +327,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("alter")
-  @NotNull
-  public Integer getAlter() {
+  @JsonProperty(required = true, value = "alter")
+  @NotNull public Integer getAlter() {
     return alter;
   }
 
-  @JsonProperty("alter")
+  @JsonProperty(required = true, value = "alter")
   public void setAlter(Integer alter) {
     this.alter = alter;
   }
@@ -359,13 +345,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("zivilstand")
-  @NotNull
-  public ch.dvbern.stip.api.personinausbildung.type.Zivilstand getZivilstand() {
+  @JsonProperty(required = true, value = "zivilstand")
+  @NotNull public ch.dvbern.stip.api.personinausbildung.type.Zivilstand getZivilstand() {
     return zivilstand;
   }
 
-  @JsonProperty("zivilstand")
+  @JsonProperty(required = true, value = "zivilstand")
   public void setZivilstand(ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand) {
     this.zivilstand = zivilstand;
   }
@@ -378,13 +363,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("nationalitaet")
-  @NotNull
-  public String getNationalitaet() {
+  @JsonProperty(required = true, value = "nationalitaet")
+  @NotNull public String getNationalitaet() {
     return nationalitaet;
   }
 
-  @JsonProperty("nationalitaet")
+  @JsonProperty(required = true, value = "nationalitaet")
   public void setNationalitaet(String nationalitaet) {
     this.nationalitaet = nationalitaet;
   }
@@ -397,13 +381,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("niederlassungsstatus")
-  @NotNull
-  public ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus getNiederlassungsstatus() {
+  @JsonProperty(required = true, value = "niederlassungsstatus")
+  @NotNull public ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus getNiederlassungsstatus() {
     return niederlassungsstatus;
   }
 
-  @JsonProperty("niederlassungsstatus")
+  @JsonProperty(required = true, value = "niederlassungsstatus")
   public void setNiederlassungsstatus(ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus) {
     this.niederlassungsstatus = niederlassungsstatus;
   }
@@ -416,13 +399,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("einreisedatum")
-  @NotNull
-  public LocalDate getEinreisedatum() {
+  @JsonProperty(required = true, value = "einreisedatum")
+  @NotNull public LocalDate getEinreisedatum() {
     return einreisedatum;
   }
 
-  @JsonProperty("einreisedatum")
+  @JsonProperty(required = true, value = "einreisedatum")
   public void setEinreisedatum(LocalDate einreisedatum) {
     this.einreisedatum = einreisedatum;
   }
@@ -435,13 +417,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("heimatort")
-  @NotNull
-  public String getHeimatort() {
+  @JsonProperty(required = true, value = "heimatort")
+  @NotNull public String getHeimatort() {
     return heimatort;
   }
 
-  @JsonProperty("heimatort")
+  @JsonProperty(required = true, value = "heimatort")
   public void setHeimatort(String heimatort) {
     this.heimatort = heimatort;
   }
@@ -715,10 +696,7 @@ public class DemoPersonInAusbildungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -891,4 +869,3 @@ public class DemoPersonInAusbildungDto  implements Serializable {
     }
   }
 }
-

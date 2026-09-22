@@ -41,47 +41,55 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataListDtoSpec.JSON_PROPERTY_DEMO_DATAS
 })
 @JsonTypeName("DemoDataList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoDataListDtoSpec {
   public static final String JSON_PROPERTY_IMPORTIERT_VON = "importiertVon";
+  @jakarta.annotation.Nonnull
   private String importiertVon;
 
   public static final String JSON_PROPERTY_LETZTE_AKTIVITAET = "letzteAktivitaet";
+  @jakarta.annotation.Nonnull
   private java.time.LocalDateTime letzteAktivitaet;
 
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  @jakarta.annotation.Nonnull
   private String kommentar;
 
   public static final String JSON_PROPERTY_DOCUMENT_ID = "documentId";
+  @jakarta.annotation.Nonnull
   private String documentId;
 
   public static final String JSON_PROPERTY_FILENAME = "filename";
+  @jakarta.annotation.Nonnull
   private String filename;
 
   public static final String JSON_PROPERTY_FILEPATH = "filepath";
+  @jakarta.annotation.Nonnull
   private String filepath;
 
   public static final String JSON_PROPERTY_FILESIZE = "filesize";
+  @jakarta.annotation.Nonnull
   private Integer filesize;
 
   public static final String JSON_PROPERTY_DEMO_DATAS = "demoDatas";
+  @jakarta.annotation.Nonnull
   private List<DemoDataSlimDtoSpec> demoDatas;
 
   public DemoDataListDtoSpec() {
   }
 
-  public DemoDataListDtoSpec importiertVon(String importiertVon) {
+  public DemoDataListDtoSpec importiertVon(@jakarta.annotation.Nonnull String importiertVon) {
     
     this.importiertVon = importiertVon;
     return this;
   }
 
-   /**
+  /**
    * Get importiertVon
    * @return importiertVon
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IMPORTIERT_VON)
+  @JsonProperty(value = JSON_PROPERTY_IMPORTIERT_VON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getImportiertVon() {
@@ -89,25 +97,24 @@ public class DemoDataListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IMPORTIERT_VON)
+  @JsonProperty(value = JSON_PROPERTY_IMPORTIERT_VON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setImportiertVon(String importiertVon) {
+  public void setImportiertVon(@jakarta.annotation.Nonnull String importiertVon) {
     this.importiertVon = importiertVon;
   }
 
-
-  public DemoDataListDtoSpec letzteAktivitaet(java.time.LocalDateTime letzteAktivitaet) {
+  public DemoDataListDtoSpec letzteAktivitaet(@jakarta.annotation.Nonnull java.time.LocalDateTime letzteAktivitaet) {
     
     this.letzteAktivitaet = letzteAktivitaet;
     return this;
   }
 
-   /**
+  /**
    * Get letzteAktivitaet
    * @return letzteAktivitaet
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
+  @JsonProperty(value = JSON_PROPERTY_LETZTE_AKTIVITAET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public java.time.LocalDateTime getLetzteAktivitaet() {
@@ -115,25 +122,24 @@ public class DemoDataListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
+  @JsonProperty(value = JSON_PROPERTY_LETZTE_AKTIVITAET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLetzteAktivitaet(java.time.LocalDateTime letzteAktivitaet) {
+  public void setLetzteAktivitaet(@jakarta.annotation.Nonnull java.time.LocalDateTime letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
 
-
-  public DemoDataListDtoSpec kommentar(String kommentar) {
+  public DemoDataListDtoSpec kommentar(@jakarta.annotation.Nonnull String kommentar) {
     
     this.kommentar = kommentar;
     return this;
   }
 
-   /**
+  /**
    * Get kommentar
    * @return kommentar
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKommentar() {
@@ -141,25 +147,24 @@ public class DemoDataListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKommentar(String kommentar) {
+  public void setKommentar(@jakarta.annotation.Nonnull String kommentar) {
     this.kommentar = kommentar;
   }
 
-
-  public DemoDataListDtoSpec documentId(String documentId) {
+  public DemoDataListDtoSpec documentId(@jakarta.annotation.Nonnull String documentId) {
     
     this.documentId = documentId;
     return this;
   }
 
-   /**
+  /**
    * Get documentId
    * @return documentId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOCUMENT_ID)
+  @JsonProperty(value = JSON_PROPERTY_DOCUMENT_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getDocumentId() {
@@ -167,25 +172,24 @@ public class DemoDataListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOCUMENT_ID)
+  @JsonProperty(value = JSON_PROPERTY_DOCUMENT_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDocumentId(String documentId) {
+  public void setDocumentId(@jakarta.annotation.Nonnull String documentId) {
     this.documentId = documentId;
   }
 
-
-  public DemoDataListDtoSpec filename(String filename) {
+  public DemoDataListDtoSpec filename(@jakarta.annotation.Nonnull String filename) {
     
     this.filename = filename;
     return this;
   }
 
-   /**
+  /**
    * Get filename
    * @return filename
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILENAME)
+  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilename() {
@@ -193,25 +197,24 @@ public class DemoDataListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILENAME)
+  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilename(String filename) {
+  public void setFilename(@jakarta.annotation.Nonnull String filename) {
     this.filename = filename;
   }
 
-
-  public DemoDataListDtoSpec filepath(String filepath) {
+  public DemoDataListDtoSpec filepath(@jakarta.annotation.Nonnull String filepath) {
     
     this.filepath = filepath;
     return this;
   }
 
-   /**
+  /**
    * Get filepath
    * @return filepath
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILEPATH)
+  @JsonProperty(value = JSON_PROPERTY_FILEPATH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilepath() {
@@ -219,25 +222,24 @@ public class DemoDataListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILEPATH)
+  @JsonProperty(value = JSON_PROPERTY_FILEPATH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilepath(String filepath) {
+  public void setFilepath(@jakarta.annotation.Nonnull String filepath) {
     this.filepath = filepath;
   }
 
-
-  public DemoDataListDtoSpec filesize(Integer filesize) {
+  public DemoDataListDtoSpec filesize(@jakarta.annotation.Nonnull Integer filesize) {
     
     this.filesize = filesize;
     return this;
   }
 
-   /**
+  /**
    * Get filesize
    * @return filesize
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILESIZE)
+  @JsonProperty(value = JSON_PROPERTY_FILESIZE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFilesize() {
@@ -245,14 +247,13 @@ public class DemoDataListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILESIZE)
+  @JsonProperty(value = JSON_PROPERTY_FILESIZE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilesize(Integer filesize) {
+  public void setFilesize(@jakarta.annotation.Nonnull Integer filesize) {
     this.filesize = filesize;
   }
 
-
-  public DemoDataListDtoSpec demoDatas(List<DemoDataSlimDtoSpec> demoDatas) {
+  public DemoDataListDtoSpec demoDatas(@jakarta.annotation.Nonnull List<DemoDataSlimDtoSpec> demoDatas) {
     
     this.demoDatas = demoDatas;
     return this;
@@ -266,12 +267,12 @@ public class DemoDataListDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get demoDatas
    * @return demoDatas
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DEMO_DATAS)
+  @JsonProperty(value = JSON_PROPERTY_DEMO_DATAS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<DemoDataSlimDtoSpec> getDemoDatas() {
@@ -279,11 +280,12 @@ public class DemoDataListDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DEMO_DATAS)
+  @JsonProperty(value = JSON_PROPERTY_DEMO_DATAS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDemoDatas(List<DemoDataSlimDtoSpec> demoDatas) {
+  public void setDemoDatas(@jakarta.annotation.Nonnull List<DemoDataSlimDtoSpec> demoDatas) {
     this.demoDatas = demoDatas;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -330,10 +332,7 @@ public class DemoDataListDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

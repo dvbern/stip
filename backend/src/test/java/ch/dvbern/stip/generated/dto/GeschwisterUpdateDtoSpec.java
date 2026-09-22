@@ -48,59 +48,71 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_HIDDEN
 })
 @JsonTypeName("GeschwisterUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GeschwisterUpdateDtoSpec {
   public static final String JSON_PROPERTY_ENTRY_ID = "entryId";
+  @jakarta.annotation.Nonnull
   private UUID entryId;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  @jakarta.annotation.Nonnull
   private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_WOHNSITZ = "wohnsitz";
+  @jakarta.annotation.Nonnull
   private WohnsitzDtoSpec wohnsitz;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSITUATION = "ausbildungssituation";
+  @jakarta.annotation.Nonnull
   private AusbildungssituationDtoSpec ausbildungssituation;
 
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER = "wohnsitzAnteilMutter";
+  @jakarta.annotation.Nullable
   private BigDecimal wohnsitzAnteilMutter;
 
   public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER = "wohnsitzAnteilVater";
+  @jakarta.annotation.Nullable
   private BigDecimal wohnsitzAnteilVater;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_GESCHWISTER_TYP = "geschwisterTyp";
+  @jakarta.annotation.Nonnull
   private GeschwisterTypDtoSpec geschwisterTyp;
 
   public static final String JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER = "elternteilPiaOfStiefHalbGeschwister";
+  @jakarta.annotation.Nullable
   private ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister;
 
   public static final String JSON_PROPERTY_HIDDEN = "hidden";
+  @jakarta.annotation.Nullable
   private Boolean hidden;
 
   public GeschwisterUpdateDtoSpec() {
   }
 
-  public GeschwisterUpdateDtoSpec entryId(UUID entryId) {
+  public GeschwisterUpdateDtoSpec entryId(@jakarta.annotation.Nonnull UUID entryId) {
     
     this.entryId = entryId;
     return this;
   }
 
-   /**
+  /**
    * Get entryId
    * @return entryId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ENTRY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getEntryId() {
@@ -108,25 +120,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ENTRY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEntryId(UUID entryId) {
+  public void setEntryId(@jakarta.annotation.Nonnull UUID entryId) {
     this.entryId = entryId;
   }
 
-
-  public GeschwisterUpdateDtoSpec vorname(String vorname) {
+  public GeschwisterUpdateDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -134,25 +145,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public GeschwisterUpdateDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public GeschwisterUpdateDtoSpec geburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return geburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGeburtsdatum() {
@@ -160,25 +170,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
-
-  public GeschwisterUpdateDtoSpec wohnsitz(WohnsitzDtoSpec wohnsitz) {
+  public GeschwisterUpdateDtoSpec wohnsitz(@jakarta.annotation.Nonnull WohnsitzDtoSpec wohnsitz) {
     
     this.wohnsitz = wohnsitz;
     return this;
   }
 
-   /**
+  /**
    * Get wohnsitz
    * @return wohnsitz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public WohnsitzDtoSpec getWohnsitz() {
@@ -186,25 +195,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitz(WohnsitzDtoSpec wohnsitz) {
+  public void setWohnsitz(@jakarta.annotation.Nonnull WohnsitzDtoSpec wohnsitz) {
     this.wohnsitz = wohnsitz;
   }
 
-
-  public GeschwisterUpdateDtoSpec ausbildungssituation(AusbildungssituationDtoSpec ausbildungssituation) {
+  public GeschwisterUpdateDtoSpec ausbildungssituation(@jakarta.annotation.Nonnull AusbildungssituationDtoSpec ausbildungssituation) {
     
     this.ausbildungssituation = ausbildungssituation;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungssituation
    * @return ausbildungssituation
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSITUATION)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSITUATION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungssituationDtoSpec getAusbildungssituation() {
@@ -212,25 +220,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSITUATION)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSITUATION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungssituation(AusbildungssituationDtoSpec ausbildungssituation) {
+  public void setAusbildungssituation(@jakarta.annotation.Nonnull AusbildungssituationDtoSpec ausbildungssituation) {
     this.ausbildungssituation = ausbildungssituation;
   }
 
-
-  public GeschwisterUpdateDtoSpec id(UUID id) {
+  public GeschwisterUpdateDtoSpec id(@jakarta.annotation.Nullable UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
@@ -238,25 +245,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nullable UUID id) {
     this.id = id;
   }
 
-
-  public GeschwisterUpdateDtoSpec wohnsitzAnteilMutter(BigDecimal wohnsitzAnteilMutter) {
+  public GeschwisterUpdateDtoSpec wohnsitzAnteilMutter(@jakarta.annotation.Nullable BigDecimal wohnsitzAnteilMutter) {
     
     this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
     return this;
   }
 
-   /**
+  /**
    * Required wenn Wohnsitz.MUTTER_VATER.
    * @return wohnsitzAnteilMutter
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BigDecimal getWohnsitzAnteilMutter() {
@@ -264,25 +270,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWohnsitzAnteilMutter(BigDecimal wohnsitzAnteilMutter) {
+  public void setWohnsitzAnteilMutter(@jakarta.annotation.Nullable BigDecimal wohnsitzAnteilMutter) {
     this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
   }
 
-
-  public GeschwisterUpdateDtoSpec wohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
+  public GeschwisterUpdateDtoSpec wohnsitzAnteilVater(@jakarta.annotation.Nullable BigDecimal wohnsitzAnteilVater) {
     
     this.wohnsitzAnteilVater = wohnsitzAnteilVater;
     return this;
   }
 
-   /**
+  /**
    * Required wenn Wohnsitz.MUTTER_VATER.
    * @return wohnsitzAnteilVater
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BigDecimal getWohnsitzAnteilVater() {
@@ -290,25 +295,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
+  public void setWohnsitzAnteilVater(@jakarta.annotation.Nullable BigDecimal wohnsitzAnteilVater) {
     this.wohnsitzAnteilVater = wohnsitzAnteilVater;
   }
 
-
-  public GeschwisterUpdateDtoSpec nachname(String nachname) {
+  public GeschwisterUpdateDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -316,25 +320,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public GeschwisterUpdateDtoSpec geschwisterTyp(GeschwisterTypDtoSpec geschwisterTyp) {
+  public GeschwisterUpdateDtoSpec geschwisterTyp(@jakarta.annotation.Nonnull GeschwisterTypDtoSpec geschwisterTyp) {
     
     this.geschwisterTyp = geschwisterTyp;
     return this;
   }
 
-   /**
+  /**
    * Get geschwisterTyp
    * @return geschwisterTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESCHWISTER_TYP)
+  @JsonProperty(value = JSON_PROPERTY_GESCHWISTER_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GeschwisterTypDtoSpec getGeschwisterTyp() {
@@ -342,25 +345,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESCHWISTER_TYP)
+  @JsonProperty(value = JSON_PROPERTY_GESCHWISTER_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeschwisterTyp(GeschwisterTypDtoSpec geschwisterTyp) {
+  public void setGeschwisterTyp(@jakarta.annotation.Nonnull GeschwisterTypDtoSpec geschwisterTyp) {
     this.geschwisterTyp = geschwisterTyp;
   }
 
-
-  public GeschwisterUpdateDtoSpec elternteilPiaOfStiefHalbGeschwister(ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister) {
+  public GeschwisterUpdateDtoSpec elternteilPiaOfStiefHalbGeschwister(@jakarta.annotation.Nullable ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister) {
     
     this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
     return this;
   }
 
-   /**
+  /**
    * Get elternteilPiaOfStiefHalbGeschwister
    * @return elternteilPiaOfStiefHalbGeschwister
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER)
+  @JsonProperty(value = JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ElternTypDtoSpec getElternteilPiaOfStiefHalbGeschwister() {
@@ -368,25 +370,24 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER)
+  @JsonProperty(value = JSON_PROPERTY_ELTERNTEIL_PIA_OF_STIEF_HALB_GESCHWISTER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setElternteilPiaOfStiefHalbGeschwister(ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister) {
+  public void setElternteilPiaOfStiefHalbGeschwister(@jakarta.annotation.Nullable ElternTypDtoSpec elternteilPiaOfStiefHalbGeschwister) {
     this.elternteilPiaOfStiefHalbGeschwister = elternteilPiaOfStiefHalbGeschwister;
   }
 
-
-  public GeschwisterUpdateDtoSpec hidden(Boolean hidden) {
+  public GeschwisterUpdateDtoSpec hidden(@jakarta.annotation.Nullable Boolean hidden) {
     
     this.hidden = hidden;
     return this;
   }
 
-   /**
+  /**
    * Get hidden
    * @return hidden
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonProperty(value = JSON_PROPERTY_HIDDEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getHidden() {
@@ -394,11 +395,12 @@ public class GeschwisterUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonProperty(value = JSON_PROPERTY_HIDDEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setHidden(Boolean hidden) {
+  public void setHidden(@jakarta.annotation.Nullable Boolean hidden) {
     this.hidden = hidden;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -453,10 +455,7 @@ public class GeschwisterUpdateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

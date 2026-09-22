@@ -57,62 +57,75 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularDtoSpec.JSON_PROPERTY_STEUERDATEN_TABS
 })
 @JsonTypeName("GesuchFormular")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchFormularDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNG = "ausbildung";
+  @jakarta.annotation.Nonnull
   private AusbildungDtoSpec ausbildung;
 
   public static final String JSON_PROPERTY_PERSON_IN_AUSBILDUNG = "personInAusbildung";
+  @jakarta.annotation.Nullable
   private PersonInAusbildungDtoSpec personInAusbildung;
 
   public static final String JSON_PROPERTY_FAMILIENSITUATION = "familiensituation";
+  @jakarta.annotation.Nullable
   private FamiliensituationDtoSpec familiensituation;
 
   public static final String JSON_PROPERTY_PARTNER = "partner";
+  @jakarta.annotation.Nullable
   private PartnerDtoSpec partner;
 
   public static final String JSON_PROPERTY_VERSTECKTE_ELTERN = "versteckteEltern";
+  @jakarta.annotation.Nullable
   private List<ElternTypDtoSpec> versteckteEltern;
 
   public static final String JSON_PROPERTY_ELTERNS = "elterns";
+  @jakarta.annotation.Nullable
   private List<ElternDtoSpec> elterns;
 
   public static final String JSON_PROPERTY_GESCHWISTERS = "geschwisters";
+  @jakarta.annotation.Nullable
   private List<GeschwisterDtoSpec> geschwisters;
 
   public static final String JSON_PROPERTY_LEBENSLAUF_ITEMS = "lebenslaufItems";
+  @jakarta.annotation.Nullable
   private List<LebenslaufItemDtoSpec> lebenslaufItems;
 
   public static final String JSON_PROPERTY_KINDS = "kinds";
+  @jakarta.annotation.Nullable
   private List<KindDtoSpec> kinds;
 
   public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN = "einnahmenKosten";
+  @jakarta.annotation.Nullable
   private EinnahmenKostenDtoSpec einnahmenKosten;
 
   public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER = "einnahmenKostenPartner";
+  @jakarta.annotation.Nullable
   private EinnahmenKostenDtoSpec einnahmenKostenPartner;
 
   public static final String JSON_PROPERTY_STEUERERKLAERUNG = "steuererklaerung";
+  @jakarta.annotation.Nullable
   private List<SteuererklaerungUpdateDtoSpec> steuererklaerung;
 
   public static final String JSON_PROPERTY_STEUERDATEN_TABS = "steuerdatenTabs";
+  @jakarta.annotation.Nullable
   private List<SteuerdatenTypDtoSpec> steuerdatenTabs;
 
   public GesuchFormularDtoSpec() {
   }
 
-  public GesuchFormularDtoSpec ausbildung(AusbildungDtoSpec ausbildung) {
+  public GesuchFormularDtoSpec ausbildung(@jakarta.annotation.Nonnull AusbildungDtoSpec ausbildung) {
     
     this.ausbildung = ausbildung;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildung
    * @return ausbildung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungDtoSpec getAusbildung() {
@@ -120,25 +133,24 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildung(AusbildungDtoSpec ausbildung) {
+  public void setAusbildung(@jakarta.annotation.Nonnull AusbildungDtoSpec ausbildung) {
     this.ausbildung = ausbildung;
   }
 
-
-  public GesuchFormularDtoSpec personInAusbildung(PersonInAusbildungDtoSpec personInAusbildung) {
+  public GesuchFormularDtoSpec personInAusbildung(@jakarta.annotation.Nullable PersonInAusbildungDtoSpec personInAusbildung) {
     
     this.personInAusbildung = personInAusbildung;
     return this;
   }
 
-   /**
+  /**
    * Get personInAusbildung
    * @return personInAusbildung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PERSON_IN_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_PERSON_IN_AUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public PersonInAusbildungDtoSpec getPersonInAusbildung() {
@@ -146,25 +158,24 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSON_IN_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_PERSON_IN_AUSBILDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPersonInAusbildung(PersonInAusbildungDtoSpec personInAusbildung) {
+  public void setPersonInAusbildung(@jakarta.annotation.Nullable PersonInAusbildungDtoSpec personInAusbildung) {
     this.personInAusbildung = personInAusbildung;
   }
 
-
-  public GesuchFormularDtoSpec familiensituation(FamiliensituationDtoSpec familiensituation) {
+  public GesuchFormularDtoSpec familiensituation(@jakarta.annotation.Nullable FamiliensituationDtoSpec familiensituation) {
     
     this.familiensituation = familiensituation;
     return this;
   }
 
-   /**
+  /**
    * Get familiensituation
    * @return familiensituation
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FAMILIENSITUATION)
+  @JsonProperty(value = JSON_PROPERTY_FAMILIENSITUATION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public FamiliensituationDtoSpec getFamiliensituation() {
@@ -172,25 +183,24 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FAMILIENSITUATION)
+  @JsonProperty(value = JSON_PROPERTY_FAMILIENSITUATION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFamiliensituation(FamiliensituationDtoSpec familiensituation) {
+  public void setFamiliensituation(@jakarta.annotation.Nullable FamiliensituationDtoSpec familiensituation) {
     this.familiensituation = familiensituation;
   }
 
-
-  public GesuchFormularDtoSpec partner(PartnerDtoSpec partner) {
+  public GesuchFormularDtoSpec partner(@jakarta.annotation.Nullable PartnerDtoSpec partner) {
     
     this.partner = partner;
     return this;
   }
 
-   /**
+  /**
    * Get partner
    * @return partner
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public PartnerDtoSpec getPartner() {
@@ -198,14 +208,13 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPartner(PartnerDtoSpec partner) {
+  public void setPartner(@jakarta.annotation.Nullable PartnerDtoSpec partner) {
     this.partner = partner;
   }
 
-
-  public GesuchFormularDtoSpec versteckteEltern(List<ElternTypDtoSpec> versteckteEltern) {
+  public GesuchFormularDtoSpec versteckteEltern(@jakarta.annotation.Nullable List<ElternTypDtoSpec> versteckteEltern) {
     
     this.versteckteEltern = versteckteEltern;
     return this;
@@ -219,12 +228,12 @@ public class GesuchFormularDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get versteckteEltern
    * @return versteckteEltern
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERSTECKTE_ELTERN)
+  @JsonProperty(value = JSON_PROPERTY_VERSTECKTE_ELTERN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<ElternTypDtoSpec> getVersteckteEltern() {
@@ -232,14 +241,13 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERSTECKTE_ELTERN)
+  @JsonProperty(value = JSON_PROPERTY_VERSTECKTE_ELTERN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVersteckteEltern(List<ElternTypDtoSpec> versteckteEltern) {
+  public void setVersteckteEltern(@jakarta.annotation.Nullable List<ElternTypDtoSpec> versteckteEltern) {
     this.versteckteEltern = versteckteEltern;
   }
 
-
-  public GesuchFormularDtoSpec elterns(List<ElternDtoSpec> elterns) {
+  public GesuchFormularDtoSpec elterns(@jakarta.annotation.Nullable List<ElternDtoSpec> elterns) {
     
     this.elterns = elterns;
     return this;
@@ -253,12 +261,12 @@ public class GesuchFormularDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get elterns
    * @return elterns
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ELTERNS)
+  @JsonProperty(value = JSON_PROPERTY_ELTERNS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<ElternDtoSpec> getElterns() {
@@ -266,14 +274,13 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ELTERNS)
+  @JsonProperty(value = JSON_PROPERTY_ELTERNS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setElterns(List<ElternDtoSpec> elterns) {
+  public void setElterns(@jakarta.annotation.Nullable List<ElternDtoSpec> elterns) {
     this.elterns = elterns;
   }
 
-
-  public GesuchFormularDtoSpec geschwisters(List<GeschwisterDtoSpec> geschwisters) {
+  public GesuchFormularDtoSpec geschwisters(@jakarta.annotation.Nullable List<GeschwisterDtoSpec> geschwisters) {
     
     this.geschwisters = geschwisters;
     return this;
@@ -287,12 +294,12 @@ public class GesuchFormularDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get geschwisters
    * @return geschwisters
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESCHWISTERS)
+  @JsonProperty(value = JSON_PROPERTY_GESCHWISTERS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<GeschwisterDtoSpec> getGeschwisters() {
@@ -300,14 +307,13 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESCHWISTERS)
+  @JsonProperty(value = JSON_PROPERTY_GESCHWISTERS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGeschwisters(List<GeschwisterDtoSpec> geschwisters) {
+  public void setGeschwisters(@jakarta.annotation.Nullable List<GeschwisterDtoSpec> geschwisters) {
     this.geschwisters = geschwisters;
   }
 
-
-  public GesuchFormularDtoSpec lebenslaufItems(List<LebenslaufItemDtoSpec> lebenslaufItems) {
+  public GesuchFormularDtoSpec lebenslaufItems(@jakarta.annotation.Nullable List<LebenslaufItemDtoSpec> lebenslaufItems) {
     
     this.lebenslaufItems = lebenslaufItems;
     return this;
@@ -321,12 +327,12 @@ public class GesuchFormularDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get lebenslaufItems
    * @return lebenslaufItems
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_LEBENSLAUF_ITEMS)
+  @JsonProperty(value = JSON_PROPERTY_LEBENSLAUF_ITEMS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<LebenslaufItemDtoSpec> getLebenslaufItems() {
@@ -334,14 +340,13 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LEBENSLAUF_ITEMS)
+  @JsonProperty(value = JSON_PROPERTY_LEBENSLAUF_ITEMS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLebenslaufItems(List<LebenslaufItemDtoSpec> lebenslaufItems) {
+  public void setLebenslaufItems(@jakarta.annotation.Nullable List<LebenslaufItemDtoSpec> lebenslaufItems) {
     this.lebenslaufItems = lebenslaufItems;
   }
 
-
-  public GesuchFormularDtoSpec kinds(List<KindDtoSpec> kinds) {
+  public GesuchFormularDtoSpec kinds(@jakarta.annotation.Nullable List<KindDtoSpec> kinds) {
     
     this.kinds = kinds;
     return this;
@@ -355,12 +360,12 @@ public class GesuchFormularDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get kinds
    * @return kinds
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_KINDS)
+  @JsonProperty(value = JSON_PROPERTY_KINDS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<KindDtoSpec> getKinds() {
@@ -368,25 +373,24 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KINDS)
+  @JsonProperty(value = JSON_PROPERTY_KINDS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setKinds(List<KindDtoSpec> kinds) {
+  public void setKinds(@jakarta.annotation.Nullable List<KindDtoSpec> kinds) {
     this.kinds = kinds;
   }
 
-
-  public GesuchFormularDtoSpec einnahmenKosten(EinnahmenKostenDtoSpec einnahmenKosten) {
+  public GesuchFormularDtoSpec einnahmenKosten(@jakarta.annotation.Nullable EinnahmenKostenDtoSpec einnahmenKosten) {
     
     this.einnahmenKosten = einnahmenKosten;
     return this;
   }
 
-   /**
+  /**
    * Get einnahmenKosten
    * @return einnahmenKosten
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EINNAHMEN_KOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_EINNAHMEN_KOSTEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public EinnahmenKostenDtoSpec getEinnahmenKosten() {
@@ -394,25 +398,24 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINNAHMEN_KOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_EINNAHMEN_KOSTEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEinnahmenKosten(EinnahmenKostenDtoSpec einnahmenKosten) {
+  public void setEinnahmenKosten(@jakarta.annotation.Nullable EinnahmenKostenDtoSpec einnahmenKosten) {
     this.einnahmenKosten = einnahmenKosten;
   }
 
-
-  public GesuchFormularDtoSpec einnahmenKostenPartner(EinnahmenKostenDtoSpec einnahmenKostenPartner) {
+  public GesuchFormularDtoSpec einnahmenKostenPartner(@jakarta.annotation.Nullable EinnahmenKostenDtoSpec einnahmenKostenPartner) {
     
     this.einnahmenKostenPartner = einnahmenKostenPartner;
     return this;
   }
 
-   /**
+  /**
    * Get einnahmenKostenPartner
    * @return einnahmenKostenPartner
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public EinnahmenKostenDtoSpec getEinnahmenKostenPartner() {
@@ -420,14 +423,13 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEinnahmenKostenPartner(EinnahmenKostenDtoSpec einnahmenKostenPartner) {
+  public void setEinnahmenKostenPartner(@jakarta.annotation.Nullable EinnahmenKostenDtoSpec einnahmenKostenPartner) {
     this.einnahmenKostenPartner = einnahmenKostenPartner;
   }
 
-
-  public GesuchFormularDtoSpec steuererklaerung(List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
+  public GesuchFormularDtoSpec steuererklaerung(@jakarta.annotation.Nullable List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
     
     this.steuererklaerung = steuererklaerung;
     return this;
@@ -441,12 +443,12 @@ public class GesuchFormularDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get steuererklaerung
    * @return steuererklaerung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STEUERERKLAERUNG)
+  @JsonProperty(value = JSON_PROPERTY_STEUERERKLAERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<SteuererklaerungUpdateDtoSpec> getSteuererklaerung() {
@@ -454,14 +456,13 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERERKLAERUNG)
+  @JsonProperty(value = JSON_PROPERTY_STEUERERKLAERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSteuererklaerung(List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
+  public void setSteuererklaerung(@jakarta.annotation.Nullable List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
   }
 
-
-  public GesuchFormularDtoSpec steuerdatenTabs(List<SteuerdatenTypDtoSpec> steuerdatenTabs) {
+  public GesuchFormularDtoSpec steuerdatenTabs(@jakarta.annotation.Nullable List<SteuerdatenTypDtoSpec> steuerdatenTabs) {
     
     this.steuerdatenTabs = steuerdatenTabs;
     return this;
@@ -475,12 +476,12 @@ public class GesuchFormularDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get steuerdatenTabs
    * @return steuerdatenTabs
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN_TABS)
+  @JsonProperty(value = JSON_PROPERTY_STEUERDATEN_TABS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<SteuerdatenTypDtoSpec> getSteuerdatenTabs() {
@@ -488,11 +489,12 @@ public class GesuchFormularDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERDATEN_TABS)
+  @JsonProperty(value = JSON_PROPERTY_STEUERDATEN_TABS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSteuerdatenTabs(List<SteuerdatenTypDtoSpec> steuerdatenTabs) {
+  public void setSteuerdatenTabs(@jakarta.annotation.Nullable List<SteuerdatenTypDtoSpec> steuerdatenTabs) {
     this.steuerdatenTabs = steuerdatenTabs;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -549,10 +551,7 @@ public class GesuchFormularDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

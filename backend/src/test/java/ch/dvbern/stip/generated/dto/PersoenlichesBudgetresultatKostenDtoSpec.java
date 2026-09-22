@@ -49,71 +49,87 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN
 })
 @JsonTypeName("PersoenlichesBudgetresultatKosten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PersoenlichesBudgetresultatKostenDtoSpec {
   public static final String JSON_PROPERTY_TOTAL = "total";
+  @jakarta.annotation.Nonnull
   private Integer total;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN = "ausbildungskosten";
+  @jakarta.annotation.Nonnull
   private Integer ausbildungskosten;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL = "ausbildungskostenTotal";
+  @jakarta.annotation.Nonnull
   private Integer ausbildungskostenTotal;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
+  @jakarta.annotation.Nonnull
   private Integer fahrkosten;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN_TOTAL = "fahrkostenTotal";
+  @jakarta.annotation.Nonnull
   private Integer fahrkostenTotal;
 
   public static final String JSON_PROPERTY_VERPFLEGUNGSKOSTEN = "verpflegungskosten";
+  @jakarta.annotation.Nonnull
   private Integer verpflegungskosten;
 
   public static final String JSON_PROPERTY_GRUNDBEDARF = "grundbedarf";
+  @jakarta.annotation.Nonnull
   private Integer grundbedarf;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
+  @jakarta.annotation.Nonnull
   private Integer wohnkosten;
 
   public static final String JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG = "medizinischeGrundversorgung";
+  @jakarta.annotation.Nonnull
   private List<PersonValueItemDtoSpec> medizinischeGrundversorgung;
 
   public static final String JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL = "medizinischeGrundversorgungTotal";
+  @jakarta.annotation.Nonnull
   private Integer medizinischeGrundversorgungTotal;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN_PARTNER = "fahrkostenPartner";
+  @jakarta.annotation.Nullable
   private Integer fahrkostenPartner;
 
   public static final String JSON_PROPERTY_VERPFLEGUNG_PARTNER = "verpflegungPartner";
+  @jakarta.annotation.Nullable
   private Integer verpflegungPartner;
 
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN = "betreuungskosten";
+  @jakarta.annotation.Nonnull
   private List<PersonValueItemDtoSpec> betreuungskosten;
 
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL = "betreuungskostenTotal";
+  @jakarta.annotation.Nonnull
   private Integer betreuungskostenTotal;
 
   public static final String JSON_PROPERTY_STEUERN = "steuern";
+  @jakarta.annotation.Nonnull
   private Integer steuern;
 
   public static final String JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN = "anteilLebenshaltungskosten";
+  @jakarta.annotation.Nonnull
   private Integer anteilLebenshaltungskosten;
 
   public PersoenlichesBudgetresultatKostenDtoSpec() {
   }
 
-  public PersoenlichesBudgetresultatKostenDtoSpec total(Integer total) {
+  public PersoenlichesBudgetresultatKostenDtoSpec total(@jakarta.annotation.Nonnull Integer total) {
     
     this.total = total;
     return this;
   }
 
-   /**
+  /**
    * Get total
    * @return total
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotal() {
@@ -121,25 +137,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotal(Integer total) {
+  public void setTotal(@jakarta.annotation.Nonnull Integer total) {
     this.total = total;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec ausbildungskosten(Integer ausbildungskosten) {
+  public PersoenlichesBudgetresultatKostenDtoSpec ausbildungskosten(@jakarta.annotation.Nonnull Integer ausbildungskosten) {
     
     this.ausbildungskosten = ausbildungskosten;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungskosten
    * @return ausbildungskosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAusbildungskosten() {
@@ -147,25 +162,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungskosten(Integer ausbildungskosten) {
+  public void setAusbildungskosten(@jakarta.annotation.Nonnull Integer ausbildungskosten) {
     this.ausbildungskosten = ausbildungskosten;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec ausbildungskostenTotal(Integer ausbildungskostenTotal) {
+  public PersoenlichesBudgetresultatKostenDtoSpec ausbildungskostenTotal(@jakarta.annotation.Nonnull Integer ausbildungskostenTotal) {
     
     this.ausbildungskostenTotal = ausbildungskostenTotal;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungskostenTotal
    * @return ausbildungskostenTotal
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAusbildungskostenTotal() {
@@ -173,25 +187,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungskostenTotal(Integer ausbildungskostenTotal) {
+  public void setAusbildungskostenTotal(@jakarta.annotation.Nonnull Integer ausbildungskostenTotal) {
     this.ausbildungskostenTotal = ausbildungskostenTotal;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec fahrkosten(Integer fahrkosten) {
+  public PersoenlichesBudgetresultatKostenDtoSpec fahrkosten(@jakarta.annotation.Nonnull Integer fahrkosten) {
     
     this.fahrkosten = fahrkosten;
     return this;
   }
 
-   /**
+  /**
    * Get fahrkosten
    * @return fahrkosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFahrkosten() {
@@ -199,25 +212,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFahrkosten(Integer fahrkosten) {
+  public void setFahrkosten(@jakarta.annotation.Nonnull Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec fahrkostenTotal(Integer fahrkostenTotal) {
+  public PersoenlichesBudgetresultatKostenDtoSpec fahrkostenTotal(@jakarta.annotation.Nonnull Integer fahrkostenTotal) {
     
     this.fahrkostenTotal = fahrkostenTotal;
     return this;
   }
 
-   /**
+  /**
    * Get fahrkostenTotal
    * @return fahrkostenTotal
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFahrkostenTotal() {
@@ -225,25 +237,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFahrkostenTotal(Integer fahrkostenTotal) {
+  public void setFahrkostenTotal(@jakarta.annotation.Nonnull Integer fahrkostenTotal) {
     this.fahrkostenTotal = fahrkostenTotal;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec verpflegungskosten(Integer verpflegungskosten) {
+  public PersoenlichesBudgetresultatKostenDtoSpec verpflegungskosten(@jakarta.annotation.Nonnull Integer verpflegungskosten) {
     
     this.verpflegungskosten = verpflegungskosten;
     return this;
   }
 
-   /**
+  /**
    * Get verpflegungskosten
    * @return verpflegungskosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_VERPFLEGUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVerpflegungskosten() {
@@ -251,25 +262,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_VERPFLEGUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVerpflegungskosten(Integer verpflegungskosten) {
+  public void setVerpflegungskosten(@jakarta.annotation.Nonnull Integer verpflegungskosten) {
     this.verpflegungskosten = verpflegungskosten;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec grundbedarf(Integer grundbedarf) {
+  public PersoenlichesBudgetresultatKostenDtoSpec grundbedarf(@jakarta.annotation.Nonnull Integer grundbedarf) {
     
     this.grundbedarf = grundbedarf;
     return this;
   }
 
-   /**
+  /**
    * Get grundbedarf
    * @return grundbedarf
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GRUNDBEDARF)
+  @JsonProperty(value = JSON_PROPERTY_GRUNDBEDARF, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getGrundbedarf() {
@@ -277,25 +287,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUNDBEDARF)
+  @JsonProperty(value = JSON_PROPERTY_GRUNDBEDARF, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGrundbedarf(Integer grundbedarf) {
+  public void setGrundbedarf(@jakarta.annotation.Nonnull Integer grundbedarf) {
     this.grundbedarf = grundbedarf;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec wohnkosten(Integer wohnkosten) {
+  public PersoenlichesBudgetresultatKostenDtoSpec wohnkosten(@jakarta.annotation.Nonnull Integer wohnkosten) {
     
     this.wohnkosten = wohnkosten;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkosten
    * @return wohnkosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkosten() {
@@ -303,14 +312,13 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkosten(Integer wohnkosten) {
+  public void setWohnkosten(@jakarta.annotation.Nonnull Integer wohnkosten) {
     this.wohnkosten = wohnkosten;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec medizinischeGrundversorgung(List<PersonValueItemDtoSpec> medizinischeGrundversorgung) {
+  public PersoenlichesBudgetresultatKostenDtoSpec medizinischeGrundversorgung(@jakarta.annotation.Nonnull List<PersonValueItemDtoSpec> medizinischeGrundversorgung) {
     
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
     return this;
@@ -324,12 +332,12 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get medizinischeGrundversorgung
    * @return medizinischeGrundversorgung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG)
+  @JsonProperty(value = JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<PersonValueItemDtoSpec> getMedizinischeGrundversorgung() {
@@ -337,25 +345,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG)
+  @JsonProperty(value = JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMedizinischeGrundversorgung(List<PersonValueItemDtoSpec> medizinischeGrundversorgung) {
+  public void setMedizinischeGrundversorgung(@jakarta.annotation.Nonnull List<PersonValueItemDtoSpec> medizinischeGrundversorgung) {
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec medizinischeGrundversorgungTotal(Integer medizinischeGrundversorgungTotal) {
+  public PersoenlichesBudgetresultatKostenDtoSpec medizinischeGrundversorgungTotal(@jakarta.annotation.Nonnull Integer medizinischeGrundversorgungTotal) {
     
     this.medizinischeGrundversorgungTotal = medizinischeGrundversorgungTotal;
     return this;
   }
 
-   /**
+  /**
    * Get medizinischeGrundversorgungTotal
    * @return medizinischeGrundversorgungTotal
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getMedizinischeGrundversorgungTotal() {
@@ -363,25 +370,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMedizinischeGrundversorgungTotal(Integer medizinischeGrundversorgungTotal) {
+  public void setMedizinischeGrundversorgungTotal(@jakarta.annotation.Nonnull Integer medizinischeGrundversorgungTotal) {
     this.medizinischeGrundversorgungTotal = medizinischeGrundversorgungTotal;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec fahrkostenPartner(Integer fahrkostenPartner) {
+  public PersoenlichesBudgetresultatKostenDtoSpec fahrkostenPartner(@jakarta.annotation.Nullable Integer fahrkostenPartner) {
     
     this.fahrkostenPartner = fahrkostenPartner;
     return this;
   }
 
-   /**
+  /**
    * Get fahrkostenPartner
    * @return fahrkostenPartner
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getFahrkostenPartner() {
@@ -389,25 +395,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFahrkostenPartner(Integer fahrkostenPartner) {
+  public void setFahrkostenPartner(@jakarta.annotation.Nullable Integer fahrkostenPartner) {
     this.fahrkostenPartner = fahrkostenPartner;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec verpflegungPartner(Integer verpflegungPartner) {
+  public PersoenlichesBudgetresultatKostenDtoSpec verpflegungPartner(@jakarta.annotation.Nullable Integer verpflegungPartner) {
     
     this.verpflegungPartner = verpflegungPartner;
     return this;
   }
 
-   /**
+  /**
    * Get verpflegungPartner
    * @return verpflegungPartner
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNG_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_VERPFLEGUNG_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getVerpflegungPartner() {
@@ -415,14 +420,13 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNG_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_VERPFLEGUNG_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerpflegungPartner(Integer verpflegungPartner) {
+  public void setVerpflegungPartner(@jakarta.annotation.Nullable Integer verpflegungPartner) {
     this.verpflegungPartner = verpflegungPartner;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec betreuungskosten(List<PersonValueItemDtoSpec> betreuungskosten) {
+  public PersoenlichesBudgetresultatKostenDtoSpec betreuungskosten(@jakarta.annotation.Nonnull List<PersonValueItemDtoSpec> betreuungskosten) {
     
     this.betreuungskosten = betreuungskosten;
     return this;
@@ -436,12 +440,12 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get betreuungskosten
    * @return betreuungskosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_BETREUUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<PersonValueItemDtoSpec> getBetreuungskosten() {
@@ -449,25 +453,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_BETREUUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetreuungskosten(List<PersonValueItemDtoSpec> betreuungskosten) {
+  public void setBetreuungskosten(@jakarta.annotation.Nonnull List<PersonValueItemDtoSpec> betreuungskosten) {
     this.betreuungskosten = betreuungskosten;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec betreuungskostenTotal(Integer betreuungskostenTotal) {
+  public PersoenlichesBudgetresultatKostenDtoSpec betreuungskostenTotal(@jakarta.annotation.Nonnull Integer betreuungskostenTotal) {
     
     this.betreuungskostenTotal = betreuungskostenTotal;
     return this;
   }
 
-   /**
+  /**
    * Get betreuungskostenTotal
    * @return betreuungskostenTotal
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBetreuungskostenTotal() {
@@ -475,25 +478,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_BETREUUNGSKOSTEN_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetreuungskostenTotal(Integer betreuungskostenTotal) {
+  public void setBetreuungskostenTotal(@jakarta.annotation.Nonnull Integer betreuungskostenTotal) {
     this.betreuungskostenTotal = betreuungskostenTotal;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec steuern(Integer steuern) {
+  public PersoenlichesBudgetresultatKostenDtoSpec steuern(@jakarta.annotation.Nonnull Integer steuern) {
     
     this.steuern = steuern;
     return this;
   }
 
-   /**
+  /**
    * Get steuern
    * @return steuern
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN)
+  @JsonProperty(value = JSON_PROPERTY_STEUERN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuern() {
@@ -501,25 +503,24 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN)
+  @JsonProperty(value = JSON_PROPERTY_STEUERN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuern(Integer steuern) {
+  public void setSteuern(@jakarta.annotation.Nonnull Integer steuern) {
     this.steuern = steuern;
   }
 
-
-  public PersoenlichesBudgetresultatKostenDtoSpec anteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+  public PersoenlichesBudgetresultatKostenDtoSpec anteilLebenshaltungskosten(@jakarta.annotation.Nonnull Integer anteilLebenshaltungskosten) {
     
     this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
     return this;
   }
 
-   /**
+  /**
    * Get anteilLebenshaltungskosten
    * @return anteilLebenshaltungskosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnteilLebenshaltungskosten() {
@@ -527,11 +528,12 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+  public void setAnteilLebenshaltungskosten(@jakarta.annotation.Nonnull Integer anteilLebenshaltungskosten) {
     this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -594,10 +596,7 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

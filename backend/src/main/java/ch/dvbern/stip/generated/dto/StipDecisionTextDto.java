@@ -15,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("StipDecisionText")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class StipDecisionTextDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid ch.dvbern.stip.api.common.type.StipDecision stipDecision;
-  private @Valid String titleDe;
-  private @Valid String textDe;
-  private @Valid String textFr;
+  private UUID id;
+  private ch.dvbern.stip.api.common.type.StipDecision stipDecision;
+  private String titleDe;
+  private String textDe;
+  private String textFr;
 
   protected StipDecisionTextDto(StipDecisionTextDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -45,13 +45,12 @@ public class StipDecisionTextDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -64,13 +63,12 @@ public class StipDecisionTextDto  implements Serializable {
   }
 
   
-  @JsonProperty("stipDecision")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.StipDecision getStipDecision() {
+  @JsonProperty(required = true, value = "stipDecision")
+  @NotNull public ch.dvbern.stip.api.common.type.StipDecision getStipDecision() {
     return stipDecision;
   }
 
-  @JsonProperty("stipDecision")
+  @JsonProperty(required = true, value = "stipDecision")
   public void setStipDecision(ch.dvbern.stip.api.common.type.StipDecision stipDecision) {
     this.stipDecision = stipDecision;
   }
@@ -83,13 +81,12 @@ public class StipDecisionTextDto  implements Serializable {
   }
 
   
-  @JsonProperty("titleDe")
-  @NotNull
-  public String getTitleDe() {
+  @JsonProperty(required = true, value = "titleDe")
+  @NotNull public String getTitleDe() {
     return titleDe;
   }
 
-  @JsonProperty("titleDe")
+  @JsonProperty(required = true, value = "titleDe")
   public void setTitleDe(String titleDe) {
     this.titleDe = titleDe;
   }
@@ -102,13 +99,12 @@ public class StipDecisionTextDto  implements Serializable {
   }
 
   
-  @JsonProperty("textDe")
-  @NotNull
-  public String getTextDe() {
+  @JsonProperty(required = true, value = "textDe")
+  @NotNull public String getTextDe() {
     return textDe;
   }
 
-  @JsonProperty("textDe")
+  @JsonProperty(required = true, value = "textDe")
   public void setTextDe(String textDe) {
     this.textDe = textDe;
   }
@@ -121,13 +117,12 @@ public class StipDecisionTextDto  implements Serializable {
   }
 
   
-  @JsonProperty("textFr")
-  @NotNull
-  public String getTextFr() {
+  @JsonProperty(required = true, value = "textFr")
+  @NotNull public String getTextFr() {
     return textFr;
   }
 
-  @JsonProperty("textFr")
+  @JsonProperty(required = true, value = "textFr")
   public void setTextFr(String textFr) {
     this.textFr = textFr;
   }
@@ -173,10 +168,7 @@ public class StipDecisionTextDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -229,4 +221,3 @@ public class StipDecisionTextDto  implements Serializable {
     }
   }
 }
-

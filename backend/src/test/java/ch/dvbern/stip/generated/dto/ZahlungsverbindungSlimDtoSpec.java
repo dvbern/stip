@@ -34,35 +34,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ZahlungsverbindungSlimDtoSpec.JSON_PROPERTY_ADRESSE
 })
 @JsonTypeName("ZahlungsverbindungSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class ZahlungsverbindungSlimDtoSpec {
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nullable
   private String vorname;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nullable
   private String nachname;
 
   public static final String JSON_PROPERTY_INSTITUTION = "institution";
+  @jakarta.annotation.Nullable
   private String institution;
 
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
+  @jakarta.annotation.Nonnull
   private AdresseDtoSpec adresse;
 
   public ZahlungsverbindungSlimDtoSpec() {
   }
 
-  public ZahlungsverbindungSlimDtoSpec vorname(String vorname) {
+  public ZahlungsverbindungSlimDtoSpec vorname(@jakarta.annotation.Nullable String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getVorname() {
@@ -70,25 +74,24 @@ public class ZahlungsverbindungSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nullable String vorname) {
     this.vorname = vorname;
   }
 
-
-  public ZahlungsverbindungSlimDtoSpec nachname(String nachname) {
+  public ZahlungsverbindungSlimDtoSpec nachname(@jakarta.annotation.Nullable String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getNachname() {
@@ -96,25 +99,24 @@ public class ZahlungsverbindungSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nullable String nachname) {
     this.nachname = nachname;
   }
 
-
-  public ZahlungsverbindungSlimDtoSpec institution(String institution) {
+  public ZahlungsverbindungSlimDtoSpec institution(@jakarta.annotation.Nullable String institution) {
     
     this.institution = institution;
     return this;
   }
 
-   /**
+  /**
    * Get institution
    * @return institution
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_INSTITUTION)
+  @JsonProperty(value = JSON_PROPERTY_INSTITUTION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getInstitution() {
@@ -122,25 +124,24 @@ public class ZahlungsverbindungSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_INSTITUTION)
+  @JsonProperty(value = JSON_PROPERTY_INSTITUTION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInstitution(String institution) {
+  public void setInstitution(@jakarta.annotation.Nullable String institution) {
     this.institution = institution;
   }
 
-
-  public ZahlungsverbindungSlimDtoSpec adresse(AdresseDtoSpec adresse) {
+  public ZahlungsverbindungSlimDtoSpec adresse(@jakarta.annotation.Nonnull AdresseDtoSpec adresse) {
     
     this.adresse = adresse;
     return this;
   }
 
-   /**
+  /**
    * Get adresse
    * @return adresse
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_ADRESSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AdresseDtoSpec getAdresse() {
@@ -148,11 +149,12 @@ public class ZahlungsverbindungSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_ADRESSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdresse(AdresseDtoSpec adresse) {
+  public void setAdresse(@jakarta.annotation.Nonnull AdresseDtoSpec adresse) {
     this.adresse = adresse;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -191,10 +193,7 @@ public class ZahlungsverbindungSlimDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -35,10 +35,7 @@ import ch.dvbern.stip.integration.paymentprocessing.domain.model.PaymentProcessi
 import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPort;
 import ch.dvbern.stip.integration.paymentprocessing.domain.qualifier.PaymentProcessingQualifier;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,8 +45,7 @@ import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.BUSINESSPARTNE
 @Slf4j
 @RequestScoped
 @PaymentProcessingQualifier(PaymentProcessingAdapterType.DUMMY)
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class DummyPaymentProcessingAdapter implements PaymentProcessingPort {
     final GesuchService gesuchService;
     final GesuchRepository gesuchRepository;

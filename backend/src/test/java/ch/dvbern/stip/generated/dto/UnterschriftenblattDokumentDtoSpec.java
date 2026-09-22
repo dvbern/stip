@@ -38,32 +38,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   UnterschriftenblattDokumentDtoSpec.JSON_PROPERTY_DOKUMENTE
 })
 @JsonTypeName("UnterschriftenblattDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class UnterschriftenblattDokumentDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_DOKUMENT_TYP = "dokumentTyp";
+  @jakarta.annotation.Nonnull
   private UnterschriftenblattDokumentTypDtoSpec dokumentTyp;
 
   public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
+  @jakarta.annotation.Nonnull
   private List<DokumentDtoSpec> dokumente;
 
   public UnterschriftenblattDokumentDtoSpec() {
   }
 
-  public UnterschriftenblattDokumentDtoSpec id(UUID id) {
+  public UnterschriftenblattDokumentDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -71,25 +74,24 @@ public class UnterschriftenblattDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public UnterschriftenblattDokumentDtoSpec dokumentTyp(UnterschriftenblattDokumentTypDtoSpec dokumentTyp) {
+  public UnterschriftenblattDokumentDtoSpec dokumentTyp(@jakarta.annotation.Nonnull UnterschriftenblattDokumentTypDtoSpec dokumentTyp) {
     
     this.dokumentTyp = dokumentTyp;
     return this;
   }
 
-   /**
+  /**
    * Get dokumentTyp
    * @return dokumentTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UnterschriftenblattDokumentTypDtoSpec getDokumentTyp() {
@@ -97,14 +99,13 @@ public class UnterschriftenblattDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENT_TYP)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumentTyp(UnterschriftenblattDokumentTypDtoSpec dokumentTyp) {
+  public void setDokumentTyp(@jakarta.annotation.Nonnull UnterschriftenblattDokumentTypDtoSpec dokumentTyp) {
     this.dokumentTyp = dokumentTyp;
   }
 
-
-  public UnterschriftenblattDokumentDtoSpec dokumente(List<DokumentDtoSpec> dokumente) {
+  public UnterschriftenblattDokumentDtoSpec dokumente(@jakarta.annotation.Nonnull List<DokumentDtoSpec> dokumente) {
     
     this.dokumente = dokumente;
     return this;
@@ -118,12 +119,12 @@ public class UnterschriftenblattDokumentDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get dokumente
    * @return dokumente
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<DokumentDtoSpec> getDokumente() {
@@ -131,11 +132,12 @@ public class UnterschriftenblattDokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumente(List<DokumentDtoSpec> dokumente) {
+  public void setDokumente(@jakarta.annotation.Nonnull List<DokumentDtoSpec> dokumente) {
     this.dokumente = dokumente;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -172,10 +174,7 @@ public class UnterschriftenblattDokumentDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

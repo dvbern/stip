@@ -15,12 +15,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DelegierterMitarbeiterAendern")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierterMitarbeiterAendernDto  implements Serializable {
-  private @Valid UUID mitarbeiterId;
+  private UUID mitarbeiterId;
 
   protected DelegierterMitarbeiterAendernDto(DelegierterMitarbeiterAendernDtoBuilder<?, ?> b) {
     this.mitarbeiterId = b.mitarbeiterId;
@@ -37,13 +37,12 @@ public class DelegierterMitarbeiterAendernDto  implements Serializable {
   }
 
   
-  @JsonProperty("mitarbeiterId")
-  @NotNull
-  public UUID getMitarbeiterId() {
+  @JsonProperty(required = true, value = "mitarbeiterId")
+  @NotNull public UUID getMitarbeiterId() {
     return mitarbeiterId;
   }
 
-  @JsonProperty("mitarbeiterId")
+  @JsonProperty(required = true, value = "mitarbeiterId")
   public void setMitarbeiterId(UUID mitarbeiterId) {
     this.mitarbeiterId = mitarbeiterId;
   }
@@ -81,10 +80,7 @@ public class DelegierterMitarbeiterAendernDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -117,4 +113,3 @@ public class DelegierterMitarbeiterAendernDto  implements Serializable {
     }
   }
 }
-

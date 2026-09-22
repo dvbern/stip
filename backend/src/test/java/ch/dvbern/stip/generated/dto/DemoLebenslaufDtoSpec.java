@@ -36,18 +36,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoLebenslaufDtoSpec.JSON_PROPERTY_TAETIGKEITEN
 })
 @JsonTypeName("DemoLebenslauf")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoLebenslaufDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNG = "ausbildung";
+  @jakarta.annotation.Nonnull
   private List<DemoLebenslaufAusbildungDtoSpec> ausbildung;
 
   public static final String JSON_PROPERTY_TAETIGKEITEN = "taetigkeiten";
+  @jakarta.annotation.Nonnull
   private List<DemoLebenslaufTaetigkeitDtoSpec> taetigkeiten;
 
   public DemoLebenslaufDtoSpec() {
   }
 
-  public DemoLebenslaufDtoSpec ausbildung(List<DemoLebenslaufAusbildungDtoSpec> ausbildung) {
+  public DemoLebenslaufDtoSpec ausbildung(@jakarta.annotation.Nonnull List<DemoLebenslaufAusbildungDtoSpec> ausbildung) {
     
     this.ausbildung = ausbildung;
     return this;
@@ -61,12 +63,12 @@ public class DemoLebenslaufDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get ausbildung
    * @return ausbildung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<DemoLebenslaufAusbildungDtoSpec> getAusbildung() {
@@ -74,14 +76,13 @@ public class DemoLebenslaufDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildung(List<DemoLebenslaufAusbildungDtoSpec> ausbildung) {
+  public void setAusbildung(@jakarta.annotation.Nonnull List<DemoLebenslaufAusbildungDtoSpec> ausbildung) {
     this.ausbildung = ausbildung;
   }
 
-
-  public DemoLebenslaufDtoSpec taetigkeiten(List<DemoLebenslaufTaetigkeitDtoSpec> taetigkeiten) {
+  public DemoLebenslaufDtoSpec taetigkeiten(@jakarta.annotation.Nonnull List<DemoLebenslaufTaetigkeitDtoSpec> taetigkeiten) {
     
     this.taetigkeiten = taetigkeiten;
     return this;
@@ -95,12 +96,12 @@ public class DemoLebenslaufDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get taetigkeiten
    * @return taetigkeiten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITEN)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<DemoLebenslaufTaetigkeitDtoSpec> getTaetigkeiten() {
@@ -108,11 +109,12 @@ public class DemoLebenslaufDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITEN)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTaetigkeiten(List<DemoLebenslaufTaetigkeitDtoSpec> taetigkeiten) {
+  public void setTaetigkeiten(@jakarta.annotation.Nonnull List<DemoLebenslaufTaetigkeitDtoSpec> taetigkeiten) {
     this.taetigkeiten = taetigkeiten;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -147,10 +149,7 @@ public class DemoLebenslaufDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

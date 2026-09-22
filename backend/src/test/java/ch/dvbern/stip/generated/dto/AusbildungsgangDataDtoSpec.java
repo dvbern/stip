@@ -41,47 +41,55 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsgangDataDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("AusbildungsgangData")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungsgangDataDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  @jakarta.annotation.Nonnull
   private String bezeichnungDe;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  @jakarta.annotation.Nonnull
   private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_BILDUNGSKATEGORIE = "bildungskategorie";
+  @jakarta.annotation.Nonnull
   private BildungskategorieDtoSpec bildungskategorie;
 
   public static final String JSON_PROPERTY_BILDUNGSRICHTUNG = "bildungsrichtung";
+  @jakarta.annotation.Nonnull
   private BildungsrichtungDtoSpec bildungsrichtung;
 
   public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
+  @jakarta.annotation.Nullable
   private AbschlussZusatzfrageDtoSpec zusatzfrage;
 
   public static final String JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET = "askForBerufsmaturitaet";
+  @jakarta.annotation.Nullable
   private Boolean askForBerufsmaturitaet;
 
   public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  @jakarta.annotation.Nonnull
   private Boolean aktiv;
 
   public AusbildungsgangDataDtoSpec() {
   }
 
-  public AusbildungsgangDataDtoSpec id(UUID id) {
+  public AusbildungsgangDataDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -89,25 +97,24 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public AusbildungsgangDataDtoSpec bezeichnungDe(String bezeichnungDe) {
+  public AusbildungsgangDataDtoSpec bezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungDe
    * @return bezeichnungDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungDe() {
@@ -115,25 +122,24 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
+  public void setBezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
 
-
-  public AusbildungsgangDataDtoSpec bezeichnungFr(String bezeichnungFr) {
+  public AusbildungsgangDataDtoSpec bezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungFr
    * @return bezeichnungFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungFr() {
@@ -141,25 +147,24 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
+  public void setBezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
 
-
-  public AusbildungsgangDataDtoSpec bildungskategorie(BildungskategorieDtoSpec bildungskategorie) {
+  public AusbildungsgangDataDtoSpec bildungskategorie(@jakarta.annotation.Nonnull BildungskategorieDtoSpec bildungskategorie) {
     
     this.bildungskategorie = bildungskategorie;
     return this;
   }
 
-   /**
+  /**
    * Get bildungskategorie
    * @return bildungskategorie
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSKATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public BildungskategorieDtoSpec getBildungskategorie() {
@@ -167,25 +172,24 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BILDUNGSKATEGORIE)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSKATEGORIE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBildungskategorie(BildungskategorieDtoSpec bildungskategorie) {
+  public void setBildungskategorie(@jakarta.annotation.Nonnull BildungskategorieDtoSpec bildungskategorie) {
     this.bildungskategorie = bildungskategorie;
   }
 
-
-  public AusbildungsgangDataDtoSpec bildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+  public AusbildungsgangDataDtoSpec bildungsrichtung(@jakarta.annotation.Nonnull BildungsrichtungDtoSpec bildungsrichtung) {
     
     this.bildungsrichtung = bildungsrichtung;
     return this;
   }
 
-   /**
+  /**
    * Get bildungsrichtung
    * @return bildungsrichtung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSRICHTUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public BildungsrichtungDtoSpec getBildungsrichtung() {
@@ -193,25 +197,24 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonProperty(value = JSON_PROPERTY_BILDUNGSRICHTUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+  public void setBildungsrichtung(@jakarta.annotation.Nonnull BildungsrichtungDtoSpec bildungsrichtung) {
     this.bildungsrichtung = bildungsrichtung;
   }
 
-
-  public AusbildungsgangDataDtoSpec zusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
+  public AusbildungsgangDataDtoSpec zusatzfrage(@jakarta.annotation.Nullable AbschlussZusatzfrageDtoSpec zusatzfrage) {
     
     this.zusatzfrage = zusatzfrage;
     return this;
   }
 
-   /**
+  /**
    * Get zusatzfrage
    * @return zusatzfrage
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ZUSATZFRAGE)
+  @JsonProperty(value = JSON_PROPERTY_ZUSATZFRAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public AbschlussZusatzfrageDtoSpec getZusatzfrage() {
@@ -219,25 +222,24 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZUSATZFRAGE)
+  @JsonProperty(value = JSON_PROPERTY_ZUSATZFRAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setZusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
+  public void setZusatzfrage(@jakarta.annotation.Nullable AbschlussZusatzfrageDtoSpec zusatzfrage) {
     this.zusatzfrage = zusatzfrage;
   }
 
-
-  public AusbildungsgangDataDtoSpec askForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+  public AusbildungsgangDataDtoSpec askForBerufsmaturitaet(@jakarta.annotation.Nullable Boolean askForBerufsmaturitaet) {
     
     this.askForBerufsmaturitaet = askForBerufsmaturitaet;
     return this;
   }
 
-   /**
+  /**
    * Get askForBerufsmaturitaet
    * @return askForBerufsmaturitaet
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET)
+  @JsonProperty(value = JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getAskForBerufsmaturitaet() {
@@ -245,25 +247,24 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET)
+  @JsonProperty(value = JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAskForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+  public void setAskForBerufsmaturitaet(@jakarta.annotation.Nullable Boolean askForBerufsmaturitaet) {
     this.askForBerufsmaturitaet = askForBerufsmaturitaet;
   }
 
-
-  public AusbildungsgangDataDtoSpec aktiv(Boolean aktiv) {
+  public AusbildungsgangDataDtoSpec aktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     
     this.aktiv = aktiv;
     return this;
   }
 
-   /**
+  /**
    * Get aktiv
    * @return aktiv
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAktiv() {
@@ -271,11 +272,12 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAktiv(Boolean aktiv) {
+  public void setAktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     this.aktiv = aktiv;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -322,10 +324,7 @@ public class AusbildungsgangDataDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

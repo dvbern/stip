@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Gets or Sets DatenschutzbriefTyp
  */
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public enum DatenschutzbriefTypDto {
   
   MANUELL("MANUELL"),
@@ -26,7 +27,7 @@ public enum DatenschutzbriefTypDto {
      * Convert a String into String, as specified in the
      * <a href="https://download.oracle.com/otndocs/jcp/jaxrs-2_0-fr-eval-spec/index.html">See JAX RS 2.0 Specification, section 3.2, p. 12</a>
      */
-	public static DatenschutzbriefTypDto fromString(String s) {
+    public static DatenschutzbriefTypDto fromString(String s) {
       for (DatenschutzbriefTypDto b : DatenschutzbriefTypDto.values()) {
         // using Objects.toString() to be safe if value type non-object type
         // because types like 'int' etc. will be auto-boxed
@@ -35,8 +36,8 @@ public enum DatenschutzbriefTypDto {
         }
       }
       throw new IllegalArgumentException("Unexpected string value '" + s + "'");
-	}
-	
+    }
+
   @Override
   @JsonValue
   public String toString() {

@@ -37,44 +37,51 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FailedAuszahlungBuchhaltungDtoSpec.JSON_PROPERTY_LAST_TRY_DATE
 })
 @JsonTypeName("FailedAuszahlungBuchhaltung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FailedAuszahlungBuchhaltungDtoSpec {
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private UUID fallId;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  @jakarta.annotation.Nonnull
   private String fallNummer;
 
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchId;
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
+  @jakarta.annotation.Nonnull
   private String gesuchNummer;
 
   public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nonnull
   private String name;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_LAST_TRY_DATE = "lastTryDate";
+  @jakarta.annotation.Nonnull
   private java.time.LocalDateTime lastTryDate;
 
   public FailedAuszahlungBuchhaltungDtoSpec() {
   }
 
-  public FailedAuszahlungBuchhaltungDtoSpec fallId(UUID fallId) {
+  public FailedAuszahlungBuchhaltungDtoSpec fallId(@jakarta.annotation.Nonnull UUID fallId) {
     
     this.fallId = fallId;
     return this;
   }
 
-   /**
+  /**
    * Get fallId
    * @return fallId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getFallId() {
@@ -82,25 +89,24 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
+  public void setFallId(@jakarta.annotation.Nonnull UUID fallId) {
     this.fallId = fallId;
   }
 
-
-  public FailedAuszahlungBuchhaltungDtoSpec fallNummer(String fallNummer) {
+  public FailedAuszahlungBuchhaltungDtoSpec fallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     
     this.fallNummer = fallNummer;
     return this;
   }
 
-   /**
+  /**
    * Get fallNummer
    * @return fallNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
@@ -108,25 +114,24 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallNummer(String fallNummer) {
+  public void setFallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     this.fallNummer = fallNummer;
   }
 
-
-  public FailedAuszahlungBuchhaltungDtoSpec gesuchId(UUID gesuchId) {
+  public FailedAuszahlungBuchhaltungDtoSpec gesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchId
    * @return gesuchId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchId() {
@@ -134,25 +139,24 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
+  public void setGesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
 
-
-  public FailedAuszahlungBuchhaltungDtoSpec gesuchNummer(String gesuchNummer) {
+  public FailedAuszahlungBuchhaltungDtoSpec gesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
     
     this.gesuchNummer = gesuchNummer;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchNummer
    * @return gesuchNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getGesuchNummer() {
@@ -160,25 +164,24 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchNummer(String gesuchNummer) {
+  public void setGesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
 
-
-  public FailedAuszahlungBuchhaltungDtoSpec name(String name) {
+  public FailedAuszahlungBuchhaltungDtoSpec name(@jakarta.annotation.Nonnull String name) {
     
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getName() {
@@ -186,25 +189,24 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setName(String name) {
+  public void setName(@jakarta.annotation.Nonnull String name) {
     this.name = name;
   }
 
-
-  public FailedAuszahlungBuchhaltungDtoSpec vorname(String vorname) {
+  public FailedAuszahlungBuchhaltungDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -212,25 +214,24 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public FailedAuszahlungBuchhaltungDtoSpec lastTryDate(java.time.LocalDateTime lastTryDate) {
+  public FailedAuszahlungBuchhaltungDtoSpec lastTryDate(@jakarta.annotation.Nonnull java.time.LocalDateTime lastTryDate) {
     
     this.lastTryDate = lastTryDate;
     return this;
   }
 
-   /**
+  /**
    * Get lastTryDate
    * @return lastTryDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LAST_TRY_DATE)
+  @JsonProperty(value = JSON_PROPERTY_LAST_TRY_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public java.time.LocalDateTime getLastTryDate() {
@@ -238,11 +239,12 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LAST_TRY_DATE)
+  @JsonProperty(value = JSON_PROPERTY_LAST_TRY_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLastTryDate(java.time.LocalDateTime lastTryDate) {
+  public void setLastTryDate(@jakarta.annotation.Nonnull java.time.LocalDateTime lastTryDate) {
     this.lastTryDate = lastTryDate;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -287,10 +289,7 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

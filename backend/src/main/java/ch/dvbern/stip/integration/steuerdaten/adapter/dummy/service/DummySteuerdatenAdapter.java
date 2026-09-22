@@ -24,15 +24,11 @@ import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPort;
 import ch.dvbern.stip.integration.steuerdaten.domain.qualifier.SteuerdatenAdapterQualifier;
 import ch.dvbern.stip.integration.steuerdaten.domain.service.SteuerdatenAccessService;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
 @SteuerdatenAdapterQualifier(SteuerdatenAdapterType.DUMMY)
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class DummySteuerdatenAdapter implements SteuerdatenPort {
 
     private final SteuerdatenAccessService steuerdatenAccessService;

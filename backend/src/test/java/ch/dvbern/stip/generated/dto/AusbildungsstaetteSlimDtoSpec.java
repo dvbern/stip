@@ -39,38 +39,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsstaetteSlimDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("AusbildungsstaetteSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungsstaetteSlimDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_NAME_DE = "nameDe";
+  @jakarta.annotation.Nonnull
   private String nameDe;
 
   public static final String JSON_PROPERTY_NAME_FR = "nameFr";
+  @jakarta.annotation.Nonnull
   private String nameFr;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSGAENGE = "ausbildungsgaenge";
+  @jakarta.annotation.Nonnull
   private List<AusbildungsgangDataDtoSpec> ausbildungsgaenge;
 
   public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  @jakarta.annotation.Nonnull
   private Boolean aktiv;
 
   public AusbildungsstaetteSlimDtoSpec() {
   }
 
-  public AusbildungsstaetteSlimDtoSpec id(UUID id) {
+  public AusbildungsstaetteSlimDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -78,25 +83,24 @@ public class AusbildungsstaetteSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public AusbildungsstaetteSlimDtoSpec nameDe(String nameDe) {
+  public AusbildungsstaetteSlimDtoSpec nameDe(@jakarta.annotation.Nonnull String nameDe) {
     
     this.nameDe = nameDe;
     return this;
   }
 
-   /**
+  /**
    * Get nameDe
    * @return nameDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_DE)
+  @JsonProperty(value = JSON_PROPERTY_NAME_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNameDe() {
@@ -104,25 +108,24 @@ public class AusbildungsstaetteSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_DE)
+  @JsonProperty(value = JSON_PROPERTY_NAME_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameDe(String nameDe) {
+  public void setNameDe(@jakarta.annotation.Nonnull String nameDe) {
     this.nameDe = nameDe;
   }
 
-
-  public AusbildungsstaetteSlimDtoSpec nameFr(String nameFr) {
+  public AusbildungsstaetteSlimDtoSpec nameFr(@jakarta.annotation.Nonnull String nameFr) {
     
     this.nameFr = nameFr;
     return this;
   }
 
-   /**
+  /**
    * Get nameFr
    * @return nameFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_FR)
+  @JsonProperty(value = JSON_PROPERTY_NAME_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNameFr() {
@@ -130,14 +133,13 @@ public class AusbildungsstaetteSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_FR)
+  @JsonProperty(value = JSON_PROPERTY_NAME_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameFr(String nameFr) {
+  public void setNameFr(@jakarta.annotation.Nonnull String nameFr) {
     this.nameFr = nameFr;
   }
 
-
-  public AusbildungsstaetteSlimDtoSpec ausbildungsgaenge(List<AusbildungsgangDataDtoSpec> ausbildungsgaenge) {
+  public AusbildungsstaetteSlimDtoSpec ausbildungsgaenge(@jakarta.annotation.Nonnull List<AusbildungsgangDataDtoSpec> ausbildungsgaenge) {
     
     this.ausbildungsgaenge = ausbildungsgaenge;
     return this;
@@ -151,12 +153,12 @@ public class AusbildungsstaetteSlimDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungsgaenge
    * @return ausbildungsgaenge
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGAENGE)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSGAENGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<AusbildungsgangDataDtoSpec> getAusbildungsgaenge() {
@@ -164,25 +166,24 @@ public class AusbildungsstaetteSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGAENGE)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSGAENGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsgaenge(List<AusbildungsgangDataDtoSpec> ausbildungsgaenge) {
+  public void setAusbildungsgaenge(@jakarta.annotation.Nonnull List<AusbildungsgangDataDtoSpec> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;
   }
 
-
-  public AusbildungsstaetteSlimDtoSpec aktiv(Boolean aktiv) {
+  public AusbildungsstaetteSlimDtoSpec aktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     
     this.aktiv = aktiv;
     return this;
   }
 
-   /**
+  /**
    * Get aktiv
    * @return aktiv
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAktiv() {
@@ -190,11 +191,12 @@ public class AusbildungsstaetteSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAktiv(Boolean aktiv) {
+  public void setAktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     this.aktiv = aktiv;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -235,10 +237,7 @@ public class AusbildungsstaetteSlimDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

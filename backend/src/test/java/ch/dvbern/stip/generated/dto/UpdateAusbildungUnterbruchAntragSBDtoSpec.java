@@ -36,38 +36,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   UpdateAusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_MONATE_OHNE_ANSPRUCH
 })
 @JsonTypeName("UpdateAusbildungUnterbruchAntragSB")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class UpdateAusbildungUnterbruchAntragSBDtoSpec {
   public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nonnull
   private AusbildungUnterbruchAntragStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_KOMMENTAR_S_B = "kommentarSB";
+  @jakarta.annotation.Nonnull
   private String kommentarSB;
 
   public static final String JSON_PROPERTY_START_DATE = "startDate";
+  @jakarta.annotation.Nonnull
   private LocalDate startDate;
 
   public static final String JSON_PROPERTY_END_DATE = "endDate";
+  @jakarta.annotation.Nonnull
   private LocalDate endDate;
 
   public static final String JSON_PROPERTY_MONATE_OHNE_ANSPRUCH = "monateOhneAnspruch";
+  @jakarta.annotation.Nullable
   private Integer monateOhneAnspruch;
 
   public UpdateAusbildungUnterbruchAntragSBDtoSpec() {
   }
 
-  public UpdateAusbildungUnterbruchAntragSBDtoSpec status(AusbildungUnterbruchAntragStatusDtoSpec status) {
+  public UpdateAusbildungUnterbruchAntragSBDtoSpec status(@jakarta.annotation.Nonnull AusbildungUnterbruchAntragStatusDtoSpec status) {
     
     this.status = status;
     return this;
   }
 
-   /**
+  /**
    * Get status
    * @return status
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungUnterbruchAntragStatusDtoSpec getStatus() {
@@ -75,25 +80,24 @@ public class UpdateAusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(AusbildungUnterbruchAntragStatusDtoSpec status) {
+  public void setStatus(@jakarta.annotation.Nonnull AusbildungUnterbruchAntragStatusDtoSpec status) {
     this.status = status;
   }
 
-
-  public UpdateAusbildungUnterbruchAntragSBDtoSpec kommentarSB(String kommentarSB) {
+  public UpdateAusbildungUnterbruchAntragSBDtoSpec kommentarSB(@jakarta.annotation.Nonnull String kommentarSB) {
     
     this.kommentarSB = kommentarSB;
     return this;
   }
 
-   /**
+  /**
    * Get kommentarSB
    * @return kommentarSB
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR_S_B)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR_S_B, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKommentarSB() {
@@ -101,25 +105,24 @@ public class UpdateAusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR_S_B)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR_S_B, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKommentarSB(String kommentarSB) {
+  public void setKommentarSB(@jakarta.annotation.Nonnull String kommentarSB) {
     this.kommentarSB = kommentarSB;
   }
 
-
-  public UpdateAusbildungUnterbruchAntragSBDtoSpec startDate(LocalDate startDate) {
+  public UpdateAusbildungUnterbruchAntragSBDtoSpec startDate(@jakarta.annotation.Nonnull LocalDate startDate) {
     
     this.startDate = startDate;
     return this;
   }
 
-   /**
+  /**
    * Get startDate
    * @return startDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonProperty(value = JSON_PROPERTY_START_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getStartDate() {
@@ -127,25 +130,24 @@ public class UpdateAusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonProperty(value = JSON_PROPERTY_START_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStartDate(LocalDate startDate) {
+  public void setStartDate(@jakarta.annotation.Nonnull LocalDate startDate) {
     this.startDate = startDate;
   }
 
-
-  public UpdateAusbildungUnterbruchAntragSBDtoSpec endDate(LocalDate endDate) {
+  public UpdateAusbildungUnterbruchAntragSBDtoSpec endDate(@jakarta.annotation.Nonnull LocalDate endDate) {
     
     this.endDate = endDate;
     return this;
   }
 
-   /**
+  /**
    * Get endDate
    * @return endDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonProperty(value = JSON_PROPERTY_END_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEndDate() {
@@ -153,25 +155,24 @@ public class UpdateAusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonProperty(value = JSON_PROPERTY_END_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEndDate(LocalDate endDate) {
+  public void setEndDate(@jakarta.annotation.Nonnull LocalDate endDate) {
     this.endDate = endDate;
   }
 
-
-  public UpdateAusbildungUnterbruchAntragSBDtoSpec monateOhneAnspruch(Integer monateOhneAnspruch) {
+  public UpdateAusbildungUnterbruchAntragSBDtoSpec monateOhneAnspruch(@jakarta.annotation.Nullable Integer monateOhneAnspruch) {
     
     this.monateOhneAnspruch = monateOhneAnspruch;
     return this;
   }
 
-   /**
+  /**
    * Get monateOhneAnspruch
    * @return monateOhneAnspruch
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MONATE_OHNE_ANSPRUCH)
+  @JsonProperty(value = JSON_PROPERTY_MONATE_OHNE_ANSPRUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getMonateOhneAnspruch() {
@@ -179,11 +180,12 @@ public class UpdateAusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MONATE_OHNE_ANSPRUCH)
+  @JsonProperty(value = JSON_PROPERTY_MONATE_OHNE_ANSPRUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMonateOhneAnspruch(Integer monateOhneAnspruch) {
+  public void setMonateOhneAnspruch(@jakarta.annotation.Nullable Integer monateOhneAnspruch) {
     this.monateOhneAnspruch = monateOhneAnspruch;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -224,10 +226,7 @@ public class UpdateAusbildungUnterbruchAntragSBDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

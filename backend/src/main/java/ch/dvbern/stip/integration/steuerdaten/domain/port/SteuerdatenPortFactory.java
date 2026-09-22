@@ -22,18 +22,13 @@ import ch.dvbern.stip.integration.steuerdaten.domain.qualifier.SteuerdatenAdapte
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 public class SteuerdatenPortFactory {
 
     @Any
-    @Inject
     Instance<SteuerdatenPort> steuerdatenPorts;
     private final TenantService tenantService;
 

@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FallAuszahlungDtoSpec.JSON_PROPERTY_IS_DELEGATED
 })
 @JsonTypeName("FallAuszahlung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FallAuszahlungDtoSpec {
   public static final String JSON_PROPERTY_AUSZAHLUNG = "auszahlung";
+  @jakarta.annotation.Nullable
   private AuszahlungUpdateDtoSpec auszahlung;
 
   public static final String JSON_PROPERTY_IS_DELEGATED = "isDelegated";
+  @jakarta.annotation.Nonnull
   private Boolean isDelegated;
 
   public FallAuszahlungDtoSpec() {
   }
 
-  public FallAuszahlungDtoSpec auszahlung(AuszahlungUpdateDtoSpec auszahlung) {
+  public FallAuszahlungDtoSpec auszahlung(@jakarta.annotation.Nullable AuszahlungUpdateDtoSpec auszahlung) {
     
     this.auszahlung = auszahlung;
     return this;
   }
 
-   /**
+  /**
    * Get auszahlung
    * @return auszahlung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSZAHLUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public AuszahlungUpdateDtoSpec getAuszahlung() {
@@ -62,25 +64,24 @@ public class FallAuszahlungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSZAHLUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAuszahlung(AuszahlungUpdateDtoSpec auszahlung) {
+  public void setAuszahlung(@jakarta.annotation.Nullable AuszahlungUpdateDtoSpec auszahlung) {
     this.auszahlung = auszahlung;
   }
 
-
-  public FallAuszahlungDtoSpec isDelegated(Boolean isDelegated) {
+  public FallAuszahlungDtoSpec isDelegated(@jakarta.annotation.Nonnull Boolean isDelegated) {
     
     this.isDelegated = isDelegated;
     return this;
   }
 
-   /**
+  /**
    * Get isDelegated
    * @return isDelegated
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IS_DELEGATED)
+  @JsonProperty(value = JSON_PROPERTY_IS_DELEGATED, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getIsDelegated() {
@@ -88,11 +89,12 @@ public class FallAuszahlungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_DELEGATED)
+  @JsonProperty(value = JSON_PROPERTY_IS_DELEGATED, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIsDelegated(Boolean isDelegated) {
+  public void setIsDelegated(@jakarta.annotation.Nonnull Boolean isDelegated) {
     this.isDelegated = isDelegated;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class FallAuszahlungDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

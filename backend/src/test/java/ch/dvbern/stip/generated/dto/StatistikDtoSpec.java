@@ -38,47 +38,55 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   StatistikDtoSpec.JSON_PROPERTY_FILESIZE
 })
 @JsonTypeName("Statistik")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class StatistikDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
   private java.time.LocalDateTime timestampErstellt;
 
   public static final String JSON_PROPERTY_VALID = "valid";
+  @jakarta.annotation.Nonnull
   private Boolean valid;
 
   public static final String JSON_PROPERTY_USER_TRIGGERED_CREATION = "userTriggeredCreation";
+  @jakarta.annotation.Nonnull
   private String userTriggeredCreation;
 
   public static final String JSON_PROPERTY_YEAR = "year";
+  @jakarta.annotation.Nonnull
   private Integer year;
 
   public static final String JSON_PROPERTY_ERROR = "error";
+  @jakarta.annotation.Nullable
   private String error;
 
   public static final String JSON_PROPERTY_FILENAME = "filename";
+  @jakarta.annotation.Nullable
   private String filename;
 
   public static final String JSON_PROPERTY_FILESIZE = "filesize";
+  @jakarta.annotation.Nullable
   private String filesize;
 
   public StatistikDtoSpec() {
   }
 
-  public StatistikDtoSpec id(UUID id) {
+  public StatistikDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -86,25 +94,24 @@ public class StatistikDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public StatistikDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+  public StatistikDtoSpec timestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public java.time.LocalDateTime getTimestampErstellt() {
@@ -112,25 +119,24 @@ public class StatistikDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public StatistikDtoSpec valid(Boolean valid) {
+  public StatistikDtoSpec valid(@jakarta.annotation.Nonnull Boolean valid) {
     
     this.valid = valid;
     return this;
   }
 
-   /**
+  /**
    * Get valid
    * @return valid
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VALID)
+  @JsonProperty(value = JSON_PROPERTY_VALID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getValid() {
@@ -138,25 +144,24 @@ public class StatistikDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALID)
+  @JsonProperty(value = JSON_PROPERTY_VALID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setValid(Boolean valid) {
+  public void setValid(@jakarta.annotation.Nonnull Boolean valid) {
     this.valid = valid;
   }
 
-
-  public StatistikDtoSpec userTriggeredCreation(String userTriggeredCreation) {
+  public StatistikDtoSpec userTriggeredCreation(@jakarta.annotation.Nonnull String userTriggeredCreation) {
     
     this.userTriggeredCreation = userTriggeredCreation;
     return this;
   }
 
-   /**
+  /**
    * Get userTriggeredCreation
    * @return userTriggeredCreation
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_TRIGGERED_CREATION)
+  @JsonProperty(value = JSON_PROPERTY_USER_TRIGGERED_CREATION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getUserTriggeredCreation() {
@@ -164,25 +169,24 @@ public class StatistikDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER_TRIGGERED_CREATION)
+  @JsonProperty(value = JSON_PROPERTY_USER_TRIGGERED_CREATION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserTriggeredCreation(String userTriggeredCreation) {
+  public void setUserTriggeredCreation(@jakarta.annotation.Nonnull String userTriggeredCreation) {
     this.userTriggeredCreation = userTriggeredCreation;
   }
 
-
-  public StatistikDtoSpec year(Integer year) {
+  public StatistikDtoSpec year(@jakarta.annotation.Nonnull Integer year) {
     
     this.year = year;
     return this;
   }
 
-   /**
+  /**
    * Get year
    * @return year
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_YEAR)
+  @JsonProperty(value = JSON_PROPERTY_YEAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getYear() {
@@ -190,25 +194,24 @@ public class StatistikDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_YEAR)
+  @JsonProperty(value = JSON_PROPERTY_YEAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setYear(Integer year) {
+  public void setYear(@jakarta.annotation.Nonnull Integer year) {
     this.year = year;
   }
 
-
-  public StatistikDtoSpec error(String error) {
+  public StatistikDtoSpec error(@jakarta.annotation.Nullable String error) {
     
     this.error = error;
     return this;
   }
 
-   /**
+  /**
    * Get error
    * @return error
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonProperty(value = JSON_PROPERTY_ERROR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getError() {
@@ -216,25 +219,24 @@ public class StatistikDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonProperty(value = JSON_PROPERTY_ERROR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setError(String error) {
+  public void setError(@jakarta.annotation.Nullable String error) {
     this.error = error;
   }
 
-
-  public StatistikDtoSpec filename(String filename) {
+  public StatistikDtoSpec filename(@jakarta.annotation.Nullable String filename) {
     
     this.filename = filename;
     return this;
   }
 
-   /**
+  /**
    * Get filename
    * @return filename
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FILENAME)
+  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getFilename() {
@@ -242,25 +244,24 @@ public class StatistikDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILENAME)
+  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFilename(String filename) {
+  public void setFilename(@jakarta.annotation.Nullable String filename) {
     this.filename = filename;
   }
 
-
-  public StatistikDtoSpec filesize(String filesize) {
+  public StatistikDtoSpec filesize(@jakarta.annotation.Nullable String filesize) {
     
     this.filesize = filesize;
     return this;
   }
 
-   /**
+  /**
    * Get filesize
    * @return filesize
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FILESIZE)
+  @JsonProperty(value = JSON_PROPERTY_FILESIZE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getFilesize() {
@@ -268,11 +269,12 @@ public class StatistikDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILESIZE)
+  @JsonProperty(value = JSON_PROPERTY_FILESIZE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFilesize(String filesize) {
+  public void setFilesize(@jakarta.annotation.Nullable String filesize) {
     this.filesize = filesize;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -319,10 +321,7 @@ public class StatistikDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

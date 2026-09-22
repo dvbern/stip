@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchUpdateDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH
 })
 @JsonTypeName("GesuchUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchUpdateDtoSpec {
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
+  @jakarta.annotation.Nullable
   private String nachfristDokumente;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH = "gesuchTrancheToWorkWith";
+  @jakarta.annotation.Nonnull
   private GesuchTrancheUpdateDtoSpec gesuchTrancheToWorkWith;
 
   public GesuchUpdateDtoSpec() {
   }
 
-  public GesuchUpdateDtoSpec nachfristDokumente(String nachfristDokumente) {
+  public GesuchUpdateDtoSpec nachfristDokumente(@jakarta.annotation.Nullable String nachfristDokumente) {
     
     this.nachfristDokumente = nachfristDokumente;
     return this;
   }
 
-   /**
+  /**
    * Get nachfristDokumente
    * @return nachfristDokumente
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_NACHFRIST_DOKUMENTE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getNachfristDokumente() {
@@ -62,25 +64,24 @@ public class GesuchUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_NACHFRIST_DOKUMENTE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachfristDokumente(String nachfristDokumente) {
+  public void setNachfristDokumente(@jakarta.annotation.Nullable String nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
   }
 
-
-  public GesuchUpdateDtoSpec gesuchTrancheToWorkWith(GesuchTrancheUpdateDtoSpec gesuchTrancheToWorkWith) {
+  public GesuchUpdateDtoSpec gesuchTrancheToWorkWith(@jakarta.annotation.Nonnull GesuchTrancheUpdateDtoSpec gesuchTrancheToWorkWith) {
     
     this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheToWorkWith
    * @return gesuchTrancheToWorkWith
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheUpdateDtoSpec getGesuchTrancheToWorkWith() {
@@ -88,11 +89,12 @@ public class GesuchUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheToWorkWith(GesuchTrancheUpdateDtoSpec gesuchTrancheToWorkWith) {
+  public void setGesuchTrancheToWorkWith(@jakarta.annotation.Nonnull GesuchTrancheUpdateDtoSpec gesuchTrancheToWorkWith) {
     this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class GesuchUpdateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

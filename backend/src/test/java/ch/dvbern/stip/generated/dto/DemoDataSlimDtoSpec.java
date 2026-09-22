@@ -35,38 +35,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataSlimDtoSpec.JSON_PROPERTY_DESCRIPTION
 })
 @JsonTypeName("DemoDataSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoDataSlimDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private String id;
 
   public static final String JSON_PROPERTY_TYP = "typ";
+  @jakarta.annotation.Nonnull
   private GesuchTrancheTypDtoSpec typ;
 
   public static final String JSON_PROPERTY_TEST_FALL = "testFall";
+  @jakarta.annotation.Nonnull
   private String testFall;
 
   public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nonnull
   private String name;
 
   public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nonnull
   private String description;
 
   public DemoDataSlimDtoSpec() {
   }
 
-  public DemoDataSlimDtoSpec id(String id) {
+  public DemoDataSlimDtoSpec id(@jakarta.annotation.Nonnull String id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getId() {
@@ -74,25 +79,24 @@ public class DemoDataSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(String id) {
+  public void setId(@jakarta.annotation.Nonnull String id) {
     this.id = id;
   }
 
-
-  public DemoDataSlimDtoSpec typ(GesuchTrancheTypDtoSpec typ) {
+  public DemoDataSlimDtoSpec typ(@jakarta.annotation.Nonnull GesuchTrancheTypDtoSpec typ) {
     
     this.typ = typ;
     return this;
   }
 
-   /**
+  /**
    * Get typ
    * @return typ
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchTrancheTypDtoSpec getTyp() {
@@ -100,25 +104,24 @@ public class DemoDataSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTyp(GesuchTrancheTypDtoSpec typ) {
+  public void setTyp(@jakarta.annotation.Nonnull GesuchTrancheTypDtoSpec typ) {
     this.typ = typ;
   }
 
-
-  public DemoDataSlimDtoSpec testFall(String testFall) {
+  public DemoDataSlimDtoSpec testFall(@jakarta.annotation.Nonnull String testFall) {
     
     this.testFall = testFall;
     return this;
   }
 
-   /**
+  /**
    * Get testFall
    * @return testFall
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TEST_FALL)
+  @JsonProperty(value = JSON_PROPERTY_TEST_FALL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTestFall() {
@@ -126,25 +129,24 @@ public class DemoDataSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEST_FALL)
+  @JsonProperty(value = JSON_PROPERTY_TEST_FALL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTestFall(String testFall) {
+  public void setTestFall(@jakarta.annotation.Nonnull String testFall) {
     this.testFall = testFall;
   }
 
-
-  public DemoDataSlimDtoSpec name(String name) {
+  public DemoDataSlimDtoSpec name(@jakarta.annotation.Nonnull String name) {
     
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getName() {
@@ -152,25 +154,24 @@ public class DemoDataSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setName(String name) {
+  public void setName(@jakarta.annotation.Nonnull String name) {
     this.name = name;
   }
 
-
-  public DemoDataSlimDtoSpec description(String description) {
+  public DemoDataSlimDtoSpec description(@jakarta.annotation.Nonnull String description) {
     
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonProperty(value = JSON_PROPERTY_DESCRIPTION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getDescription() {
@@ -178,11 +179,12 @@ public class DemoDataSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonProperty(value = JSON_PROPERTY_DESCRIPTION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDescription(String description) {
+  public void setDescription(@jakarta.annotation.Nonnull String description) {
     this.description = description;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -223,10 +225,7 @@ public class DemoDataSlimDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

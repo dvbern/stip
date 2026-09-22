@@ -26,26 +26,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("TranchenBerechnungsresultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TranchenBerechnungsresultatDto  implements Serializable {
-  private @Valid Integer total;
-  private @Valid Integer ungekuerztTotal;
-  private @Valid LocalDate gueltigAb;
-  private @Valid LocalDate gueltigBis;
-  private @Valid String ausbildungAb;
-  private @Valid String ausbildungBis;
-  private @Valid String yearRange;
-  private @Valid UUID gesuchTrancheId;
-  private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
-  private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
-  private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
-  private @Valid List<PersonenHaushaltGruppeDto> personenHaushaltGroups = new ArrayList<>();
-  private @Valid BigDecimal berechnungsanteilKinderDerEltern;
-  private @Valid Boolean teilzeitKinderBeiPiaAnrechnen;
-  private @Valid BigDecimal berechnungsanteilKinderPia;
+  private Integer total;
+  private Integer ungekuerztTotal;
+  private LocalDate gueltigAb;
+  private LocalDate gueltigBis;
+  private String ausbildungAb;
+  private String ausbildungBis;
+  private String yearRange;
+  private UUID gesuchTrancheId;
+  private BerechnungsStammdatenDto berechnungsStammdaten;
+  private PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
+  private @Valid List<@Valid FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
+  private @Valid List<@Valid PersonenHaushaltGruppeDto> personenHaushaltGroups = new ArrayList<>();
+  private BigDecimal berechnungsanteilKinderDerEltern;
+  private Boolean teilzeitKinderBeiPiaAnrechnen;
+  private BigDecimal berechnungsanteilKinderPia;
 
   protected TranchenBerechnungsresultatDto(TranchenBerechnungsresultatDtoBuilder<?, ?> b) {
     this.total = b.total;
@@ -77,13 +77,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("total")
-  @NotNull
-  public Integer getTotal() {
+  @JsonProperty(required = true, value = "total")
+  @NotNull public Integer getTotal() {
     return total;
   }
 
-  @JsonProperty("total")
+  @JsonProperty(required = true, value = "total")
   public void setTotal(Integer total) {
     this.total = total;
   }
@@ -97,13 +96,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("ungekuerztTotal")
-  @NotNull
-  public Integer getUngekuerztTotal() {
+  @JsonProperty(required = true, value = "ungekuerztTotal")
+  @NotNull public Integer getUngekuerztTotal() {
     return ungekuerztTotal;
   }
 
-  @JsonProperty("ungekuerztTotal")
+  @JsonProperty(required = true, value = "ungekuerztTotal")
   public void setUngekuerztTotal(Integer ungekuerztTotal) {
     this.ungekuerztTotal = ungekuerztTotal;
   }
@@ -116,13 +114,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("gueltigAb")
-  @NotNull
-  public LocalDate getGueltigAb() {
+  @JsonProperty(required = true, value = "gueltigAb")
+  @NotNull public LocalDate getGueltigAb() {
     return gueltigAb;
   }
 
-  @JsonProperty("gueltigAb")
+  @JsonProperty(required = true, value = "gueltigAb")
   public void setGueltigAb(LocalDate gueltigAb) {
     this.gueltigAb = gueltigAb;
   }
@@ -135,13 +132,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("gueltigBis")
-  @NotNull
-  public LocalDate getGueltigBis() {
+  @JsonProperty(required = true, value = "gueltigBis")
+  @NotNull public LocalDate getGueltigBis() {
     return gueltigBis;
   }
 
-  @JsonProperty("gueltigBis")
+  @JsonProperty(required = true, value = "gueltigBis")
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
   }
@@ -154,13 +150,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungAb")
-  @NotNull
-  public String getAusbildungAb() {
+  @JsonProperty(required = true, value = "ausbildungAb")
+  @NotNull public String getAusbildungAb() {
     return ausbildungAb;
   }
 
-  @JsonProperty("ausbildungAb")
+  @JsonProperty(required = true, value = "ausbildungAb")
   public void setAusbildungAb(String ausbildungAb) {
     this.ausbildungAb = ausbildungAb;
   }
@@ -173,13 +168,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungBis")
-  @NotNull
-  public String getAusbildungBis() {
+  @JsonProperty(required = true, value = "ausbildungBis")
+  @NotNull public String getAusbildungBis() {
     return ausbildungBis;
   }
 
-  @JsonProperty("ausbildungBis")
+  @JsonProperty(required = true, value = "ausbildungBis")
   public void setAusbildungBis(String ausbildungBis) {
     this.ausbildungBis = ausbildungBis;
   }
@@ -192,13 +186,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("yearRange")
-  @NotNull
-  public String getYearRange() {
+  @JsonProperty(required = true, value = "yearRange")
+  @NotNull public String getYearRange() {
     return yearRange;
   }
 
-  @JsonProperty("yearRange")
+  @JsonProperty(required = true, value = "yearRange")
   public void setYearRange(String yearRange) {
     this.yearRange = yearRange;
   }
@@ -211,13 +204,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchTrancheId")
-  @NotNull
-  public UUID getGesuchTrancheId() {
+  @JsonProperty(required = true, value = "gesuchTrancheId")
+  @NotNull public UUID getGesuchTrancheId() {
     return gesuchTrancheId;
   }
 
-  @JsonProperty("gesuchTrancheId")
+  @JsonProperty(required = true, value = "gesuchTrancheId")
   public void setGesuchTrancheId(UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
@@ -230,13 +222,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("berechnungsStammdaten")
-  @NotNull
-  public BerechnungsStammdatenDto getBerechnungsStammdaten() {
+  @JsonProperty(required = true, value = "berechnungsStammdaten")
+  @NotNull @Valid public BerechnungsStammdatenDto getBerechnungsStammdaten() {
     return berechnungsStammdaten;
   }
 
-  @JsonProperty("berechnungsStammdaten")
+  @JsonProperty(required = true, value = "berechnungsStammdaten")
   public void setBerechnungsStammdaten(BerechnungsStammdatenDto berechnungsStammdaten) {
     this.berechnungsStammdaten = berechnungsStammdaten;
   }
@@ -249,13 +240,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   
-  @JsonProperty("persoenlichesBudgetresultat")
-  @NotNull
-  public PersoenlichesBudgetresultatDto getPersoenlichesBudgetresultat() {
+  @JsonProperty(required = true, value = "persoenlichesBudgetresultat")
+  @NotNull @Valid public PersoenlichesBudgetresultatDto getPersoenlichesBudgetresultat() {
     return persoenlichesBudgetresultat;
   }
 
-  @JsonProperty("persoenlichesBudgetresultat")
+  @JsonProperty(required = true, value = "persoenlichesBudgetresultat")
   public void setPersoenlichesBudgetresultat(PersoenlichesBudgetresultatDto persoenlichesBudgetresultat) {
     this.persoenlichesBudgetresultat = persoenlichesBudgetresultat;
   }
@@ -263,20 +253,19 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   /**
    * Berechnungsdaten der Familienbudgets
    **/
-  public TranchenBerechnungsresultatDto familienBudgetresultate(List<FamilienBudgetresultatDto> familienBudgetresultate) {
+  public TranchenBerechnungsresultatDto familienBudgetresultate(List<@Valid FamilienBudgetresultatDto> familienBudgetresultate) {
     this.familienBudgetresultate = familienBudgetresultate;
     return this;
   }
 
   
-  @JsonProperty("familienBudgetresultate")
-  @NotNull
-  public List<FamilienBudgetresultatDto> getFamilienBudgetresultate() {
+  @JsonProperty(required = true, value = "familienBudgetresultate")
+  @NotNull @Valid public List<@Valid FamilienBudgetresultatDto> getFamilienBudgetresultate() {
     return familienBudgetresultate;
   }
 
-  @JsonProperty("familienBudgetresultate")
-  public void setFamilienBudgetresultate(List<FamilienBudgetresultatDto> familienBudgetresultate) {
+  @JsonProperty(required = true, value = "familienBudgetresultate")
+  public void setFamilienBudgetresultate(List<@Valid FamilienBudgetresultatDto> familienBudgetresultate) {
     this.familienBudgetresultate = familienBudgetresultate;
   }
 
@@ -299,20 +288,19 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   /**
    * Enthällt eine Liste aller relevanten Personen für die jeweiligen Personen Haushalt Gruppen
    **/
-  public TranchenBerechnungsresultatDto personenHaushaltGroups(List<PersonenHaushaltGruppeDto> personenHaushaltGroups) {
+  public TranchenBerechnungsresultatDto personenHaushaltGroups(List<@Valid PersonenHaushaltGruppeDto> personenHaushaltGroups) {
     this.personenHaushaltGroups = personenHaushaltGroups;
     return this;
   }
 
   
-  @JsonProperty("personenHaushaltGroups")
-  @NotNull
-  public List<PersonenHaushaltGruppeDto> getPersonenHaushaltGroups() {
+  @JsonProperty(required = true, value = "personenHaushaltGroups")
+  @NotNull @Valid public List<@Valid PersonenHaushaltGruppeDto> getPersonenHaushaltGroups() {
     return personenHaushaltGroups;
   }
 
-  @JsonProperty("personenHaushaltGroups")
-  public void setPersonenHaushaltGroups(List<PersonenHaushaltGruppeDto> personenHaushaltGroups) {
+  @JsonProperty(required = true, value = "personenHaushaltGroups")
+  public void setPersonenHaushaltGroups(List<@Valid PersonenHaushaltGruppeDto> personenHaushaltGroups) {
     this.personenHaushaltGroups = personenHaushaltGroups;
   }
 
@@ -342,7 +330,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
   
   @JsonProperty("berechnungsanteilKinderDerEltern")
-  public BigDecimal getBerechnungsanteilKinderDerEltern() {
+  @Valid public BigDecimal getBerechnungsanteilKinderDerEltern() {
     return berechnungsanteilKinderDerEltern;
   }
 
@@ -380,7 +368,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
   
   @JsonProperty("berechnungsanteilKinderPia")
-  public BigDecimal getBerechnungsanteilKinderPia() {
+  @Valid public BigDecimal getBerechnungsanteilKinderPia() {
     return berechnungsanteilKinderPia;
   }
 
@@ -450,10 +438,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -556,4 +541,3 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     }
   }
 }
-

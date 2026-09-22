@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstCreateDto  implements Serializable {
-  private @Valid String name;
-  private @Valid ZahlungsverbindungDto zahlungsverbindung;
-  private @Valid SozialdienstAdminDto sozialdienstAdmin;
+  private String name;
+  private ZahlungsverbindungDto zahlungsverbindung;
+  private SozialdienstAdminDto sozialdienstAdmin;
 
   protected SozialdienstCreateDto(SozialdienstCreateDtoBuilder<?, ?> b) {
     this.name = b.name;
@@ -42,13 +42,12 @@ public class SozialdienstCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("name")
-  @NotNull
-  public String getName() {
+  @JsonProperty(required = true, value = "name")
+  @NotNull public String getName() {
     return name;
   }
 
-  @JsonProperty("name")
+  @JsonProperty(required = true, value = "name")
   public void setName(String name) {
     this.name = name;
   }
@@ -61,13 +60,12 @@ public class SozialdienstCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("zahlungsverbindung")
-  @NotNull
-  public ZahlungsverbindungDto getZahlungsverbindung() {
+  @JsonProperty(required = true, value = "zahlungsverbindung")
+  @NotNull @Valid public ZahlungsverbindungDto getZahlungsverbindung() {
     return zahlungsverbindung;
   }
 
-  @JsonProperty("zahlungsverbindung")
+  @JsonProperty(required = true, value = "zahlungsverbindung")
   public void setZahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
   }
@@ -80,13 +78,12 @@ public class SozialdienstCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("sozialdienstAdmin")
-  @NotNull
-  public SozialdienstAdminDto getSozialdienstAdmin() {
+  @JsonProperty(required = true, value = "sozialdienstAdmin")
+  @NotNull @Valid public SozialdienstAdminDto getSozialdienstAdmin() {
     return sozialdienstAdmin;
   }
 
-  @JsonProperty("sozialdienstAdmin")
+  @JsonProperty(required = true, value = "sozialdienstAdmin")
   public void setSozialdienstAdmin(SozialdienstAdminDto sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
   }
@@ -128,10 +125,7 @@ public class SozialdienstCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -174,4 +168,3 @@ public class SozialdienstCreateDto  implements Serializable {
     }
   }
 }
-

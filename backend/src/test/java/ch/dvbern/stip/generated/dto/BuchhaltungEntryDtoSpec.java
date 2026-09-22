@@ -52,68 +52,83 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_DELIVERYS
 })
 @JsonTypeName("BuchhaltungEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BuchhaltungEntryDtoSpec {
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  @jakarta.annotation.Nonnull
   private String userErstellt;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
   private java.time.LocalDateTime timestampErstellt;
 
   public static final String JSON_PROPERTY_BUCHHALTUNG_TYPE = "buchhaltungType";
+  @jakarta.annotation.Nonnull
   private BuchhaltungTypeDtoSpec buchhaltungType;
 
   public static final String JSON_PROPERTY_STIPENDIEN_BETRAG = "stipendienBetrag";
+  @jakarta.annotation.Nullable
   private Integer stipendienBetrag;
 
   public static final String JSON_PROPERTY_AUSZAHLUNG = "auszahlung";
+  @jakarta.annotation.Nullable
   private Integer auszahlung;
 
   public static final String JSON_PROPERTY_RUECKFORDERUNG = "rueckforderung";
+  @jakarta.annotation.Nullable
   private Integer rueckforderung;
 
   public static final String JSON_PROPERTY_SALDO_AENDERUNG = "saldoAenderung";
+  @jakarta.annotation.Nonnull
   private Integer saldoAenderung;
 
   public static final String JSON_PROPERTY_SALDO = "saldo";
+  @jakarta.annotation.Nonnull
   private Integer saldo;
 
   public static final String JSON_PROPERTY_BUSINESS_PARTNER_ID = "businessPartnerId";
+  @jakarta.annotation.Nullable
   private Integer businessPartnerId;
 
   public static final String JSON_PROPERTY_COMMENT = "comment";
+  @jakarta.annotation.Nonnull
   private String comment;
 
   public static final String JSON_PROPERTY_VERFUEGUNG_ID = "verfuegungId";
+  @jakarta.annotation.Nullable
   private UUID verfuegungId;
 
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  @jakarta.annotation.Nullable
   private UUID gesuchId;
 
   public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  @jakarta.annotation.Nullable
   private ZahlungsverbindungDtoSpec zahlungsverbindung;
 
   public static final String JSON_PROPERTY_SAP_STATUS = "sapStatus";
+  @jakarta.annotation.Nullable
   private SapStatusDtoSpec sapStatus;
 
   public static final String JSON_PROPERTY_SAP_DELIVERYS = "sapDeliverys";
+  @jakarta.annotation.Nullable
   private List<SapDeliveryDtoSpec> sapDeliverys;
 
   public BuchhaltungEntryDtoSpec() {
   }
 
-  public BuchhaltungEntryDtoSpec userErstellt(String userErstellt) {
+  public BuchhaltungEntryDtoSpec userErstellt(@jakarta.annotation.Nonnull String userErstellt) {
     
     this.userErstellt = userErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get userErstellt
    * @return userErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getUserErstellt() {
@@ -121,25 +136,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserErstellt(String userErstellt) {
+  public void setUserErstellt(@jakarta.annotation.Nonnull String userErstellt) {
     this.userErstellt = userErstellt;
   }
 
-
-  public BuchhaltungEntryDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+  public BuchhaltungEntryDtoSpec timestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public java.time.LocalDateTime getTimestampErstellt() {
@@ -147,25 +161,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public BuchhaltungEntryDtoSpec buchhaltungType(BuchhaltungTypeDtoSpec buchhaltungType) {
+  public BuchhaltungEntryDtoSpec buchhaltungType(@jakarta.annotation.Nonnull BuchhaltungTypeDtoSpec buchhaltungType) {
     
     this.buchhaltungType = buchhaltungType;
     return this;
   }
 
-   /**
+  /**
    * Get buchhaltungType
    * @return buchhaltungType
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BUCHHALTUNG_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_BUCHHALTUNG_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public BuchhaltungTypeDtoSpec getBuchhaltungType() {
@@ -173,25 +186,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BUCHHALTUNG_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_BUCHHALTUNG_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBuchhaltungType(BuchhaltungTypeDtoSpec buchhaltungType) {
+  public void setBuchhaltungType(@jakarta.annotation.Nonnull BuchhaltungTypeDtoSpec buchhaltungType) {
     this.buchhaltungType = buchhaltungType;
   }
 
-
-  public BuchhaltungEntryDtoSpec stipendienBetrag(Integer stipendienBetrag) {
+  public BuchhaltungEntryDtoSpec stipendienBetrag(@jakarta.annotation.Nullable Integer stipendienBetrag) {
     
     this.stipendienBetrag = stipendienBetrag;
     return this;
   }
 
-   /**
+  /**
    * Get stipendienBetrag
    * @return stipendienBetrag
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STIPENDIEN_BETRAG)
+  @JsonProperty(value = JSON_PROPERTY_STIPENDIEN_BETRAG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getStipendienBetrag() {
@@ -199,25 +211,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STIPENDIEN_BETRAG)
+  @JsonProperty(value = JSON_PROPERTY_STIPENDIEN_BETRAG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStipendienBetrag(Integer stipendienBetrag) {
+  public void setStipendienBetrag(@jakarta.annotation.Nullable Integer stipendienBetrag) {
     this.stipendienBetrag = stipendienBetrag;
   }
 
-
-  public BuchhaltungEntryDtoSpec auszahlung(Integer auszahlung) {
+  public BuchhaltungEntryDtoSpec auszahlung(@jakarta.annotation.Nullable Integer auszahlung) {
     
     this.auszahlung = auszahlung;
     return this;
   }
 
-   /**
+  /**
    * Get auszahlung
    * @return auszahlung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSZAHLUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getAuszahlung() {
@@ -225,25 +236,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG)
+  @JsonProperty(value = JSON_PROPERTY_AUSZAHLUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAuszahlung(Integer auszahlung) {
+  public void setAuszahlung(@jakarta.annotation.Nullable Integer auszahlung) {
     this.auszahlung = auszahlung;
   }
 
-
-  public BuchhaltungEntryDtoSpec rueckforderung(Integer rueckforderung) {
+  public BuchhaltungEntryDtoSpec rueckforderung(@jakarta.annotation.Nullable Integer rueckforderung) {
     
     this.rueckforderung = rueckforderung;
     return this;
   }
 
-   /**
+  /**
    * Get rueckforderung
    * @return rueckforderung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_RUECKFORDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_RUECKFORDERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getRueckforderung() {
@@ -251,25 +261,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_RUECKFORDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_RUECKFORDERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRueckforderung(Integer rueckforderung) {
+  public void setRueckforderung(@jakarta.annotation.Nullable Integer rueckforderung) {
     this.rueckforderung = rueckforderung;
   }
 
-
-  public BuchhaltungEntryDtoSpec saldoAenderung(Integer saldoAenderung) {
+  public BuchhaltungEntryDtoSpec saldoAenderung(@jakarta.annotation.Nonnull Integer saldoAenderung) {
     
     this.saldoAenderung = saldoAenderung;
     return this;
   }
 
-   /**
+  /**
    * Get saldoAenderung
    * @return saldoAenderung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SALDO_AENDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_SALDO_AENDERUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSaldoAenderung() {
@@ -277,25 +286,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SALDO_AENDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_SALDO_AENDERUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSaldoAenderung(Integer saldoAenderung) {
+  public void setSaldoAenderung(@jakarta.annotation.Nonnull Integer saldoAenderung) {
     this.saldoAenderung = saldoAenderung;
   }
 
-
-  public BuchhaltungEntryDtoSpec saldo(Integer saldo) {
+  public BuchhaltungEntryDtoSpec saldo(@jakarta.annotation.Nonnull Integer saldo) {
     
     this.saldo = saldo;
     return this;
   }
 
-   /**
+  /**
    * Get saldo
    * @return saldo
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SALDO)
+  @JsonProperty(value = JSON_PROPERTY_SALDO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSaldo() {
@@ -303,25 +311,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SALDO)
+  @JsonProperty(value = JSON_PROPERTY_SALDO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSaldo(Integer saldo) {
+  public void setSaldo(@jakarta.annotation.Nonnull Integer saldo) {
     this.saldo = saldo;
   }
 
-
-  public BuchhaltungEntryDtoSpec businessPartnerId(Integer businessPartnerId) {
+  public BuchhaltungEntryDtoSpec businessPartnerId(@jakarta.annotation.Nullable Integer businessPartnerId) {
     
     this.businessPartnerId = businessPartnerId;
     return this;
   }
 
-   /**
+  /**
    * Get businessPartnerId
    * @return businessPartnerId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BUSINESS_PARTNER_ID)
+  @JsonProperty(value = JSON_PROPERTY_BUSINESS_PARTNER_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getBusinessPartnerId() {
@@ -329,25 +336,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BUSINESS_PARTNER_ID)
+  @JsonProperty(value = JSON_PROPERTY_BUSINESS_PARTNER_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBusinessPartnerId(Integer businessPartnerId) {
+  public void setBusinessPartnerId(@jakarta.annotation.Nullable Integer businessPartnerId) {
     this.businessPartnerId = businessPartnerId;
   }
 
-
-  public BuchhaltungEntryDtoSpec comment(String comment) {
+  public BuchhaltungEntryDtoSpec comment(@jakarta.annotation.Nonnull String comment) {
     
     this.comment = comment;
     return this;
   }
 
-   /**
+  /**
    * Get comment
    * @return comment
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getComment() {
@@ -355,25 +361,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setComment(String comment) {
+  public void setComment(@jakarta.annotation.Nonnull String comment) {
     this.comment = comment;
   }
 
-
-  public BuchhaltungEntryDtoSpec verfuegungId(UUID verfuegungId) {
+  public BuchhaltungEntryDtoSpec verfuegungId(@jakarta.annotation.Nullable UUID verfuegungId) {
     
     this.verfuegungId = verfuegungId;
     return this;
   }
 
-   /**
+  /**
    * Get verfuegungId
    * @return verfuegungId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERFUEGUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGUNG_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getVerfuegungId() {
@@ -381,25 +386,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERFUEGUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGUNG_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerfuegungId(UUID verfuegungId) {
+  public void setVerfuegungId(@jakarta.annotation.Nullable UUID verfuegungId) {
     this.verfuegungId = verfuegungId;
   }
 
-
-  public BuchhaltungEntryDtoSpec gesuchId(UUID gesuchId) {
+  public BuchhaltungEntryDtoSpec gesuchId(@jakarta.annotation.Nullable UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchId
    * @return gesuchId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getGesuchId() {
@@ -407,25 +411,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuchId(UUID gesuchId) {
+  public void setGesuchId(@jakarta.annotation.Nullable UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
 
-
-  public BuchhaltungEntryDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+  public BuchhaltungEntryDtoSpec zahlungsverbindung(@jakarta.annotation.Nullable ZahlungsverbindungDtoSpec zahlungsverbindung) {
     
     this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
 
-   /**
+  /**
    * Get zahlungsverbindung
    * @return zahlungsverbindung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZAHLUNGSVERBINDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ZahlungsverbindungDtoSpec getZahlungsverbindung() {
@@ -433,25 +436,24 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZAHLUNGSVERBINDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setZahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+  public void setZahlungsverbindung(@jakarta.annotation.Nullable ZahlungsverbindungDtoSpec zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
   }
 
-
-  public BuchhaltungEntryDtoSpec sapStatus(SapStatusDtoSpec sapStatus) {
+  public BuchhaltungEntryDtoSpec sapStatus(@jakarta.annotation.Nullable SapStatusDtoSpec sapStatus) {
     
     this.sapStatus = sapStatus;
     return this;
   }
 
-   /**
+  /**
    * Get sapStatus
    * @return sapStatus
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SAP_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_SAP_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public SapStatusDtoSpec getSapStatus() {
@@ -459,14 +461,13 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SAP_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_SAP_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSapStatus(SapStatusDtoSpec sapStatus) {
+  public void setSapStatus(@jakarta.annotation.Nullable SapStatusDtoSpec sapStatus) {
     this.sapStatus = sapStatus;
   }
 
-
-  public BuchhaltungEntryDtoSpec sapDeliverys(List<SapDeliveryDtoSpec> sapDeliverys) {
+  public BuchhaltungEntryDtoSpec sapDeliverys(@jakarta.annotation.Nullable List<SapDeliveryDtoSpec> sapDeliverys) {
     
     this.sapDeliverys = sapDeliverys;
     return this;
@@ -480,12 +481,12 @@ public class BuchhaltungEntryDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get sapDeliverys
    * @return sapDeliverys
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SAP_DELIVERYS)
+  @JsonProperty(value = JSON_PROPERTY_SAP_DELIVERYS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<SapDeliveryDtoSpec> getSapDeliverys() {
@@ -493,11 +494,12 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SAP_DELIVERYS)
+  @JsonProperty(value = JSON_PROPERTY_SAP_DELIVERYS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSapDeliverys(List<SapDeliveryDtoSpec> sapDeliverys) {
+  public void setSapDeliverys(@jakarta.annotation.Nullable List<SapDeliveryDtoSpec> sapDeliverys) {
     this.sapDeliverys = sapDeliverys;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -558,10 +560,7 @@ public class BuchhaltungEntryDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

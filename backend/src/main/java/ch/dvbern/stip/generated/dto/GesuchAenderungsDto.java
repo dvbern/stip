@@ -18,18 +18,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchAenderungs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchAenderungsDto  implements Serializable {
-  private @Valid List<GesuchTrancheSlimDto> manuell = new ArrayList<>();
-  private @Valid List<GesuchTrancheSlimDto> akzeptiert = new ArrayList<>();
-  private @Valid List<GesuchTrancheSlimDto> abgelehnt = new ArrayList<>();
-  private @Valid List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
-  private @Valid Boolean canAenderungEinreichen;
-  private @Valid GesuchTrancheSlimDto offen;
-  private @Valid GesuchTrancheSlimDto eingereicht;
+  private @Valid List<@Valid GesuchTrancheSlimDto> manuell = new ArrayList<>();
+  private @Valid List<@Valid GesuchTrancheSlimDto> akzeptiert = new ArrayList<>();
+  private @Valid List<@Valid GesuchTrancheSlimDto> abgelehnt = new ArrayList<>();
+  private @Valid List<@Valid GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
+  private Boolean canAenderungEinreichen;
+  private GesuchTrancheSlimDto offen;
+  private GesuchTrancheSlimDto eingereicht;
 
   protected GesuchAenderungsDto(GesuchAenderungsDtoBuilder<?, ?> b) {
     this.manuell = b.manuell;
@@ -46,20 +46,19 @@ public class GesuchAenderungsDto  implements Serializable {
 
   /**
    **/
-  public GesuchAenderungsDto manuell(List<GesuchTrancheSlimDto> manuell) {
+  public GesuchAenderungsDto manuell(List<@Valid GesuchTrancheSlimDto> manuell) {
     this.manuell = manuell;
     return this;
   }
 
   
-  @JsonProperty("manuell")
-  @NotNull
-  public List<GesuchTrancheSlimDto> getManuell() {
+  @JsonProperty(required = true, value = "manuell")
+  @NotNull @Valid public List<@Valid GesuchTrancheSlimDto> getManuell() {
     return manuell;
   }
 
-  @JsonProperty("manuell")
-  public void setManuell(List<GesuchTrancheSlimDto> manuell) {
+  @JsonProperty(required = true, value = "manuell")
+  public void setManuell(List<@Valid GesuchTrancheSlimDto> manuell) {
     this.manuell = manuell;
   }
 
@@ -81,20 +80,19 @@ public class GesuchAenderungsDto  implements Serializable {
   }
   /**
    **/
-  public GesuchAenderungsDto akzeptiert(List<GesuchTrancheSlimDto> akzeptiert) {
+  public GesuchAenderungsDto akzeptiert(List<@Valid GesuchTrancheSlimDto> akzeptiert) {
     this.akzeptiert = akzeptiert;
     return this;
   }
 
   
-  @JsonProperty("akzeptiert")
-  @NotNull
-  public List<GesuchTrancheSlimDto> getAkzeptiert() {
+  @JsonProperty(required = true, value = "akzeptiert")
+  @NotNull @Valid public List<@Valid GesuchTrancheSlimDto> getAkzeptiert() {
     return akzeptiert;
   }
 
-  @JsonProperty("akzeptiert")
-  public void setAkzeptiert(List<GesuchTrancheSlimDto> akzeptiert) {
+  @JsonProperty(required = true, value = "akzeptiert")
+  public void setAkzeptiert(List<@Valid GesuchTrancheSlimDto> akzeptiert) {
     this.akzeptiert = akzeptiert;
   }
 
@@ -116,20 +114,19 @@ public class GesuchAenderungsDto  implements Serializable {
   }
   /**
    **/
-  public GesuchAenderungsDto abgelehnt(List<GesuchTrancheSlimDto> abgelehnt) {
+  public GesuchAenderungsDto abgelehnt(List<@Valid GesuchTrancheSlimDto> abgelehnt) {
     this.abgelehnt = abgelehnt;
     return this;
   }
 
   
-  @JsonProperty("abgelehnt")
-  @NotNull
-  public List<GesuchTrancheSlimDto> getAbgelehnt() {
+  @JsonProperty(required = true, value = "abgelehnt")
+  @NotNull @Valid public List<@Valid GesuchTrancheSlimDto> getAbgelehnt() {
     return abgelehnt;
   }
 
-  @JsonProperty("abgelehnt")
-  public void setAbgelehnt(List<GesuchTrancheSlimDto> abgelehnt) {
+  @JsonProperty(required = true, value = "abgelehnt")
+  public void setAbgelehnt(List<@Valid GesuchTrancheSlimDto> abgelehnt) {
     this.abgelehnt = abgelehnt;
   }
 
@@ -151,20 +148,19 @@ public class GesuchAenderungsDto  implements Serializable {
   }
   /**
    **/
-  public GesuchAenderungsDto fehlendeDokumente(List<GesuchTrancheSlimDto> fehlendeDokumente) {
+  public GesuchAenderungsDto fehlendeDokumente(List<@Valid GesuchTrancheSlimDto> fehlendeDokumente) {
     this.fehlendeDokumente = fehlendeDokumente;
     return this;
   }
 
   
-  @JsonProperty("fehlendeDokumente")
-  @NotNull
-  public List<GesuchTrancheSlimDto> getFehlendeDokumente() {
+  @JsonProperty(required = true, value = "fehlendeDokumente")
+  @NotNull @Valid public List<@Valid GesuchTrancheSlimDto> getFehlendeDokumente() {
     return fehlendeDokumente;
   }
 
-  @JsonProperty("fehlendeDokumente")
-  public void setFehlendeDokumente(List<GesuchTrancheSlimDto> fehlendeDokumente) {
+  @JsonProperty(required = true, value = "fehlendeDokumente")
+  public void setFehlendeDokumente(List<@Valid GesuchTrancheSlimDto> fehlendeDokumente) {
     this.fehlendeDokumente = fehlendeDokumente;
   }
 
@@ -192,13 +188,12 @@ public class GesuchAenderungsDto  implements Serializable {
   }
 
   
-  @JsonProperty("canAenderungEinreichen")
-  @NotNull
-  public Boolean getCanAenderungEinreichen() {
+  @JsonProperty(required = true, value = "canAenderungEinreichen")
+  @NotNull public Boolean getCanAenderungEinreichen() {
     return canAenderungEinreichen;
   }
 
-  @JsonProperty("canAenderungEinreichen")
+  @JsonProperty(required = true, value = "canAenderungEinreichen")
   public void setCanAenderungEinreichen(Boolean canAenderungEinreichen) {
     this.canAenderungEinreichen = canAenderungEinreichen;
   }
@@ -212,7 +207,7 @@ public class GesuchAenderungsDto  implements Serializable {
 
   
   @JsonProperty("offen")
-  public GesuchTrancheSlimDto getOffen() {
+  @Valid public GesuchTrancheSlimDto getOffen() {
     return offen;
   }
 
@@ -230,7 +225,7 @@ public class GesuchAenderungsDto  implements Serializable {
 
   
   @JsonProperty("eingereicht")
-  public GesuchTrancheSlimDto getEingereicht() {
+  @Valid public GesuchTrancheSlimDto getEingereicht() {
     return eingereicht;
   }
 
@@ -284,10 +279,7 @@ public class GesuchAenderungsDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -350,4 +342,3 @@ public class GesuchAenderungsDto  implements Serializable {
     }
   }
 }
-

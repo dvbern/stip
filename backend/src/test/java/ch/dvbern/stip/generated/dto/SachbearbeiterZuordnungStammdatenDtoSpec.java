@@ -31,29 +31,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SachbearbeiterZuordnungStammdatenDtoSpec.JSON_PROPERTY_BUCHSTABEN_FR
 })
 @JsonTypeName("SachbearbeiterZuordnungStammdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SachbearbeiterZuordnungStammdatenDtoSpec {
   public static final String JSON_PROPERTY_BUCHSTABEN_DE = "buchstabenDe";
+  @jakarta.annotation.Nullable
   private String buchstabenDe;
 
   public static final String JSON_PROPERTY_BUCHSTABEN_FR = "buchstabenFr";
+  @jakarta.annotation.Nullable
   private String buchstabenFr;
 
   public SachbearbeiterZuordnungStammdatenDtoSpec() {
   }
 
-  public SachbearbeiterZuordnungStammdatenDtoSpec buchstabenDe(String buchstabenDe) {
+  public SachbearbeiterZuordnungStammdatenDtoSpec buchstabenDe(@jakarta.annotation.Nullable String buchstabenDe) {
     
     this.buchstabenDe = buchstabenDe;
     return this;
   }
 
-   /**
+  /**
    * Get buchstabenDe
    * @return buchstabenDe
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BUCHSTABEN_DE)
+  @JsonProperty(value = JSON_PROPERTY_BUCHSTABEN_DE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getBuchstabenDe() {
@@ -61,25 +63,24 @@ public class SachbearbeiterZuordnungStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BUCHSTABEN_DE)
+  @JsonProperty(value = JSON_PROPERTY_BUCHSTABEN_DE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBuchstabenDe(String buchstabenDe) {
+  public void setBuchstabenDe(@jakarta.annotation.Nullable String buchstabenDe) {
     this.buchstabenDe = buchstabenDe;
   }
 
-
-  public SachbearbeiterZuordnungStammdatenDtoSpec buchstabenFr(String buchstabenFr) {
+  public SachbearbeiterZuordnungStammdatenDtoSpec buchstabenFr(@jakarta.annotation.Nullable String buchstabenFr) {
     
     this.buchstabenFr = buchstabenFr;
     return this;
   }
 
-   /**
+  /**
    * Get buchstabenFr
    * @return buchstabenFr
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BUCHSTABEN_FR)
+  @JsonProperty(value = JSON_PROPERTY_BUCHSTABEN_FR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getBuchstabenFr() {
@@ -87,11 +88,12 @@ public class SachbearbeiterZuordnungStammdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BUCHSTABEN_FR)
+  @JsonProperty(value = JSON_PROPERTY_BUCHSTABEN_FR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBuchstabenFr(String buchstabenFr) {
+  public void setBuchstabenFr(@jakarta.annotation.Nullable String buchstabenFr) {
     this.buchstabenFr = buchstabenFr;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -126,10 +128,7 @@ public class SachbearbeiterZuordnungStammdatenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

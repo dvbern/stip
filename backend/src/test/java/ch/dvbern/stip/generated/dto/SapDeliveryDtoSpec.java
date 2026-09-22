@@ -33,32 +33,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SapDeliveryDtoSpec.JSON_PROPERTY_SAP_STATUS
 })
 @JsonTypeName("SapDelivery")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SapDeliveryDtoSpec {
   public static final String JSON_PROPERTY_SAP_ID = "sapId";
+  @jakarta.annotation.Nonnull
   private String sapId;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
   private java.time.LocalDateTime timestampErstellt;
 
   public static final String JSON_PROPERTY_SAP_STATUS = "sapStatus";
+  @jakarta.annotation.Nonnull
   private SapStatusDtoSpec sapStatus;
 
   public SapDeliveryDtoSpec() {
   }
 
-  public SapDeliveryDtoSpec sapId(String sapId) {
+  public SapDeliveryDtoSpec sapId(@jakarta.annotation.Nonnull String sapId) {
     
     this.sapId = sapId;
     return this;
   }
 
-   /**
+  /**
    * Get sapId
    * @return sapId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SAP_ID)
+  @JsonProperty(value = JSON_PROPERTY_SAP_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getSapId() {
@@ -66,25 +69,24 @@ public class SapDeliveryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SAP_ID)
+  @JsonProperty(value = JSON_PROPERTY_SAP_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSapId(String sapId) {
+  public void setSapId(@jakarta.annotation.Nonnull String sapId) {
     this.sapId = sapId;
   }
 
-
-  public SapDeliveryDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+  public SapDeliveryDtoSpec timestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public java.time.LocalDateTime getTimestampErstellt() {
@@ -92,25 +94,24 @@ public class SapDeliveryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public SapDeliveryDtoSpec sapStatus(SapStatusDtoSpec sapStatus) {
+  public SapDeliveryDtoSpec sapStatus(@jakarta.annotation.Nonnull SapStatusDtoSpec sapStatus) {
     
     this.sapStatus = sapStatus;
     return this;
   }
 
-   /**
+  /**
    * Get sapStatus
    * @return sapStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SAP_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_SAP_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SapStatusDtoSpec getSapStatus() {
@@ -118,11 +119,12 @@ public class SapDeliveryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SAP_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_SAP_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSapStatus(SapStatusDtoSpec sapStatus) {
+  public void setSapStatus(@jakarta.annotation.Nonnull SapStatusDtoSpec sapStatus) {
     this.sapStatus = sapStatus;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -159,10 +161,7 @@ public class SapDeliveryDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

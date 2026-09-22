@@ -22,30 +22,30 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchWithChanges")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchWithChangesDto  implements Serializable {
-  private @Valid UUID fallId;
-  private @Valid String fallNummer;
-  private @Valid UUID ausbildungId;
-  private @Valid Boolean hasPendingAusbildungUnterbruchAntrag;
-  private @Valid GesuchsperiodeDto gesuchsperiode;
-  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
-  private @Valid String gesuchNummer;
-  private @Valid UUID id;
-  private @Valid LocalDate aenderungsdatum;
-  private @Valid GesuchTrancheDto gesuchTrancheToWorkWith;
-  private @Valid Boolean verfuegt;
-  private @Valid String bearbeiter;
-  private @Valid LocalDate einreichedatum;
-  private @Valid Boolean hadDelegierungs;
-  private @Valid LocalDate minDateEigenerWohnsitz;
-  private @Valid DelegierungSlimDto delegierung;
-  private @Valid LocalDate nachfristDokumente;
-  private @Valid List<GesuchTrancheDto> changes;
-  private @Valid Boolean isInitial;
+  private UUID fallId;
+  private String fallNummer;
+  private UUID ausbildungId;
+  private Boolean hasPendingAusbildungUnterbruchAntrag;
+  private GesuchsperiodeDto gesuchsperiode;
+  private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+  private String gesuchNummer;
+  private UUID id;
+  private LocalDate aenderungsdatum;
+  private GesuchTrancheDto gesuchTrancheToWorkWith;
+  private Boolean verfuegt;
+  private String bearbeiter;
+  private LocalDate einreichedatum;
+  private Boolean hadDelegierungs;
+  private LocalDate minDateEigenerWohnsitz;
+  private DelegierungSlimDto delegierung;
+  private LocalDate nachfristDokumente;
+  private @Valid List<@Valid GesuchTrancheDto> changes = new ArrayList<>();
+  private Boolean isInitial;
 
   protected GesuchWithChangesDto(GesuchWithChangesDtoBuilder<?, ?> b) {
     this.fallId = b.fallId;
@@ -80,13 +80,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallId")
-  @NotNull
-  public UUID getFallId() {
+  @JsonProperty(required = true, value = "fallId")
+  @NotNull public UUID getFallId() {
     return fallId;
   }
 
-  @JsonProperty("fallId")
+  @JsonProperty(required = true, value = "fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
   }
@@ -99,13 +98,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallNummer")
-  @NotNull
-  public String getFallNummer() {
+  @JsonProperty(required = true, value = "fallNummer")
+  @NotNull public String getFallNummer() {
     return fallNummer;
   }
 
-  @JsonProperty("fallNummer")
+  @JsonProperty(required = true, value = "fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -118,13 +116,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungId")
-  @NotNull
-  public UUID getAusbildungId() {
+  @JsonProperty(required = true, value = "ausbildungId")
+  @NotNull public UUID getAusbildungId() {
     return ausbildungId;
   }
 
-  @JsonProperty("ausbildungId")
+  @JsonProperty(required = true, value = "ausbildungId")
   public void setAusbildungId(UUID ausbildungId) {
     this.ausbildungId = ausbildungId;
   }
@@ -137,13 +134,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("hasPendingAusbildungUnterbruchAntrag")
-  @NotNull
-  public Boolean getHasPendingAusbildungUnterbruchAntrag() {
+  @JsonProperty(required = true, value = "hasPendingAusbildungUnterbruchAntrag")
+  @NotNull public Boolean getHasPendingAusbildungUnterbruchAntrag() {
     return hasPendingAusbildungUnterbruchAntrag;
   }
 
-  @JsonProperty("hasPendingAusbildungUnterbruchAntrag")
+  @JsonProperty(required = true, value = "hasPendingAusbildungUnterbruchAntrag")
   public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
     this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
   }
@@ -156,13 +152,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchsperiode")
-  @NotNull
-  public GesuchsperiodeDto getGesuchsperiode() {
+  @JsonProperty(required = true, value = "gesuchsperiode")
+  @NotNull @Valid public GesuchsperiodeDto getGesuchsperiode() {
     return gesuchsperiode;
   }
 
-  @JsonProperty("gesuchsperiode")
+  @JsonProperty(required = true, value = "gesuchsperiode")
   public void setGesuchsperiode(GesuchsperiodeDto gesuchsperiode) {
     this.gesuchsperiode = gesuchsperiode;
   }
@@ -175,13 +170,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchStatus")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
+  @JsonProperty(required = true, value = "gesuchStatus")
+  @NotNull public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
-  @JsonProperty("gesuchStatus")
+  @JsonProperty(required = true, value = "gesuchStatus")
   public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
@@ -194,13 +188,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchNummer")
-  @NotNull
-  public String getGesuchNummer() {
+  @JsonProperty(required = true, value = "gesuchNummer")
+  @NotNull public String getGesuchNummer() {
     return gesuchNummer;
   }
 
-  @JsonProperty("gesuchNummer")
+  @JsonProperty(required = true, value = "gesuchNummer")
   public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
@@ -213,13 +206,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -232,13 +224,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("aenderungsdatum")
-  @NotNull
-  public LocalDate getAenderungsdatum() {
+  @JsonProperty(required = true, value = "aenderungsdatum")
+  @NotNull public LocalDate getAenderungsdatum() {
     return aenderungsdatum;
   }
 
-  @JsonProperty("aenderungsdatum")
+  @JsonProperty(required = true, value = "aenderungsdatum")
   public void setAenderungsdatum(LocalDate aenderungsdatum) {
     this.aenderungsdatum = aenderungsdatum;
   }
@@ -251,13 +242,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchTrancheToWorkWith")
-  @NotNull
-  public GesuchTrancheDto getGesuchTrancheToWorkWith() {
+  @JsonProperty(required = true, value = "gesuchTrancheToWorkWith")
+  @NotNull @Valid public GesuchTrancheDto getGesuchTrancheToWorkWith() {
     return gesuchTrancheToWorkWith;
   }
 
-  @JsonProperty("gesuchTrancheToWorkWith")
+  @JsonProperty(required = true, value = "gesuchTrancheToWorkWith")
   public void setGesuchTrancheToWorkWith(GesuchTrancheDto gesuchTrancheToWorkWith) {
     this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
   }
@@ -270,13 +260,12 @@ public class GesuchWithChangesDto  implements Serializable {
   }
 
   
-  @JsonProperty("verfuegt")
-  @NotNull
-  public Boolean getVerfuegt() {
+  @JsonProperty(required = true, value = "verfuegt")
+  @NotNull public Boolean getVerfuegt() {
     return verfuegt;
   }
 
-  @JsonProperty("verfuegt")
+  @JsonProperty(required = true, value = "verfuegt")
   public void setVerfuegt(Boolean verfuegt) {
     this.verfuegt = verfuegt;
   }
@@ -363,7 +352,7 @@ public class GesuchWithChangesDto  implements Serializable {
 
   
   @JsonProperty("delegierung")
-  public DelegierungSlimDto getDelegierung() {
+  @Valid public DelegierungSlimDto getDelegierung() {
     return delegierung;
   }
 
@@ -392,19 +381,19 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
-  public GesuchWithChangesDto changes(List<GesuchTrancheDto> changes) {
+  public GesuchWithChangesDto changes(List<@Valid GesuchTrancheDto> changes) {
     this.changes = changes;
     return this;
   }
 
   
   @JsonProperty("changes")
-  public List<GesuchTrancheDto> getChanges() {
+  @Valid public List<@Valid GesuchTrancheDto> getChanges() {
     return changes;
   }
 
   @JsonProperty("changes")
-  public void setChanges(List<GesuchTrancheDto> changes) {
+  public void setChanges(List<@Valid GesuchTrancheDto> changes) {
     this.changes = changes;
   }
 
@@ -511,10 +500,7 @@ public class GesuchWithChangesDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -553,7 +539,7 @@ public class GesuchWithChangesDto  implements Serializable {
     private LocalDate minDateEigenerWohnsitz;
     private DelegierungSlimDto delegierung;
     private LocalDate nachfristDokumente;
-    private List<GesuchTrancheDto> changes;
+    private List<GesuchTrancheDto> changes = new ArrayList<>();
     private Boolean isInitial;
     protected abstract B self();
 
@@ -637,4 +623,3 @@ public class GesuchWithChangesDto  implements Serializable {
     }
   }
 }
-

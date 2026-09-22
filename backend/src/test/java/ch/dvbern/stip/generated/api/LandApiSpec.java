@@ -28,6 +28,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -103,7 +104,7 @@ public class LandApiSpec {
         public CreateLandOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -132,7 +133,7 @@ public class LandApiSpec {
          * @param landDtoSpec (LandDtoSpec)  (required)
          * @return operation
          */
-        public CreateLandOper body(LandDtoSpec landDtoSpec) {
+        public CreateLandOper body(@jakarta.annotation.Nonnull LandDtoSpec landDtoSpec) {
             reqSpec.setBody(landDtoSpec);
             return this;
         }
@@ -173,7 +174,7 @@ public class LandApiSpec {
 
         public GetLaenderOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -237,7 +238,7 @@ public class LandApiSpec {
         public UpdateLandOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -266,7 +267,7 @@ public class LandApiSpec {
          * @param landDtoSpec (LandDtoSpec)  (required)
          * @return operation
          */
-        public UpdateLandOper body(LandDtoSpec landDtoSpec) {
+        public UpdateLandOper body(@jakarta.annotation.Nonnull LandDtoSpec landDtoSpec) {
             reqSpec.setBody(landDtoSpec);
             return this;
         }

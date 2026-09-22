@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FallAuszahlung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallAuszahlungDto  implements Serializable {
-  private @Valid Boolean isDelegated;
-  private @Valid AuszahlungUpdateDto auszahlung;
+  private Boolean isDelegated;
+  private AuszahlungUpdateDto auszahlung;
 
   protected FallAuszahlungDto(FallAuszahlungDtoBuilder<?, ?> b) {
     this.isDelegated = b.isDelegated;
@@ -39,13 +39,12 @@ public class FallAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("isDelegated")
-  @NotNull
-  public Boolean getIsDelegated() {
+  @JsonProperty(required = true, value = "isDelegated")
+  @NotNull public Boolean getIsDelegated() {
     return isDelegated;
   }
 
-  @JsonProperty("isDelegated")
+  @JsonProperty(required = true, value = "isDelegated")
   public void setIsDelegated(Boolean isDelegated) {
     this.isDelegated = isDelegated;
   }
@@ -59,7 +58,7 @@ public class FallAuszahlungDto  implements Serializable {
 
   
   @JsonProperty("auszahlung")
-  public AuszahlungUpdateDto getAuszahlung() {
+  @Valid public AuszahlungUpdateDto getAuszahlung() {
     return auszahlung;
   }
 
@@ -103,10 +102,7 @@ public class FallAuszahlungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +140,3 @@ public class FallAuszahlungDto  implements Serializable {
     }
   }
 }
-

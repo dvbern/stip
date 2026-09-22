@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * Gets or Sets SozDashboardColumn
  */
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public enum SozDashboardColumnDto {
   
   FALLNUMMER("FALLNUMMER"),
@@ -32,7 +33,7 @@ public enum SozDashboardColumnDto {
      * Convert a String into String, as specified in the
      * <a href="https://download.oracle.com/otndocs/jcp/jaxrs-2_0-fr-eval-spec/index.html">See JAX RS 2.0 Specification, section 3.2, p. 12</a>
      */
-	public static SozDashboardColumnDto fromString(String s) {
+    public static SozDashboardColumnDto fromString(String s) {
       for (SozDashboardColumnDto b : SozDashboardColumnDto.values()) {
         // using Objects.toString() to be safe if value type non-object type
         // because types like 'int' etc. will be auto-boxed
@@ -41,8 +42,8 @@ public enum SozDashboardColumnDto {
         }
       }
       throw new IllegalArgumentException("Unexpected string value '" + s + "'");
-	}
-	
+    }
+
   @Override
   @JsonValue
   public String toString() {

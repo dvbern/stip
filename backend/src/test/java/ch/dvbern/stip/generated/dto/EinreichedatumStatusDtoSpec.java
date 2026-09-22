@@ -30,26 +30,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinreichedatumStatusDtoSpec.JSON_PROPERTY_CAN_AENDERN
 })
 @JsonTypeName("EinreichedatumStatus")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class EinreichedatumStatusDtoSpec {
   public static final String JSON_PROPERTY_CAN_AENDERN = "canAendern";
+  @jakarta.annotation.Nonnull
   private Boolean canAendern;
 
   public EinreichedatumStatusDtoSpec() {
   }
 
-  public EinreichedatumStatusDtoSpec canAendern(Boolean canAendern) {
+  public EinreichedatumStatusDtoSpec canAendern(@jakarta.annotation.Nonnull Boolean canAendern) {
     
     this.canAendern = canAendern;
     return this;
   }
 
-   /**
+  /**
    * Get canAendern
    * @return canAendern
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_AENDERN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_AENDERN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanAendern() {
@@ -57,11 +58,12 @@ public class EinreichedatumStatusDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_AENDERN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_AENDERN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanAendern(Boolean canAendern) {
+  public void setCanAendern(@jakarta.annotation.Nonnull Boolean canAendern) {
     this.canAendern = canAendern;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -94,10 +96,7 @@ public class EinreichedatumStatusDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

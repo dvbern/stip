@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FileDownloadToken")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FileDownloadTokenDto  implements Serializable {
-  private @Valid String token;
+  private String token;
 
   protected FileDownloadTokenDto(FileDownloadTokenDtoBuilder<?, ?> b) {
     this.token = b.token;
@@ -36,13 +36,12 @@ public class FileDownloadTokenDto  implements Serializable {
   }
 
   
-  @JsonProperty("token")
-  @NotNull
-  public String getToken() {
+  @JsonProperty(required = true, value = "token")
+  @NotNull public String getToken() {
     return token;
   }
 
-  @JsonProperty("token")
+  @JsonProperty(required = true, value = "token")
   public void setToken(String token) {
     this.token = token;
   }
@@ -80,10 +79,7 @@ public class FileDownloadTokenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -116,4 +112,3 @@ public class FileDownloadTokenDto  implements Serializable {
     }
   }
 }
-

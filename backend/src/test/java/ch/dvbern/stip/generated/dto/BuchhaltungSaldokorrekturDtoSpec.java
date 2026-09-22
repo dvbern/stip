@@ -31,29 +31,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BuchhaltungSaldokorrekturDtoSpec.JSON_PROPERTY_COMMENT
 })
 @JsonTypeName("BuchhaltungSaldokorrektur")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BuchhaltungSaldokorrekturDtoSpec {
   public static final String JSON_PROPERTY_BETRAG = "betrag";
+  @jakarta.annotation.Nonnull
   private Integer betrag;
 
   public static final String JSON_PROPERTY_COMMENT = "comment";
+  @jakarta.annotation.Nonnull
   private String comment;
 
   public BuchhaltungSaldokorrekturDtoSpec() {
   }
 
-  public BuchhaltungSaldokorrekturDtoSpec betrag(Integer betrag) {
+  public BuchhaltungSaldokorrekturDtoSpec betrag(@jakarta.annotation.Nonnull Integer betrag) {
     
     this.betrag = betrag;
     return this;
   }
 
-   /**
+  /**
    * Get betrag
    * @return betrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETRAG)
+  @JsonProperty(value = JSON_PROPERTY_BETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBetrag() {
@@ -61,25 +63,24 @@ public class BuchhaltungSaldokorrekturDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETRAG)
+  @JsonProperty(value = JSON_PROPERTY_BETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetrag(Integer betrag) {
+  public void setBetrag(@jakarta.annotation.Nonnull Integer betrag) {
     this.betrag = betrag;
   }
 
-
-  public BuchhaltungSaldokorrekturDtoSpec comment(String comment) {
+  public BuchhaltungSaldokorrekturDtoSpec comment(@jakarta.annotation.Nonnull String comment) {
     
     this.comment = comment;
     return this;
   }
 
-   /**
+  /**
    * Get comment
    * @return comment
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getComment() {
@@ -87,11 +88,12 @@ public class BuchhaltungSaldokorrekturDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setComment(String comment) {
+  public void setComment(@jakarta.annotation.Nonnull String comment) {
     this.comment = comment;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -126,10 +128,7 @@ public class BuchhaltungSaldokorrekturDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

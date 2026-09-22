@@ -18,7 +18,7 @@ import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
+import org.jboss.resteasy.reactive.ResponseStatus;
 
 
 
@@ -30,7 +30,7 @@ import jakarta.validation.Valid;
 
 
 @Path("")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public interface AusbildungsstaetteResource {
 
     @POST

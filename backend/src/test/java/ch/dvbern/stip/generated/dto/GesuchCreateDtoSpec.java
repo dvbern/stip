@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchCreateDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID
 })
 @JsonTypeName("GesuchCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchCreateDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
+  @jakarta.annotation.Nonnull
   private UUID ausbildungId;
 
   public GesuchCreateDtoSpec() {
   }
 
-  public GesuchCreateDtoSpec ausbildungId(UUID ausbildungId) {
+  public GesuchCreateDtoSpec ausbildungId(@jakarta.annotation.Nonnull UUID ausbildungId) {
     
     this.ausbildungId = ausbildungId;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungId
    * @return ausbildungId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getAusbildungId() {
@@ -58,11 +59,12 @@ public class GesuchCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ID)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungId(UUID ausbildungId) {
+  public void setAusbildungId(@jakarta.annotation.Nonnull UUID ausbildungId) {
     this.ausbildungId = ausbildungId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class GesuchCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

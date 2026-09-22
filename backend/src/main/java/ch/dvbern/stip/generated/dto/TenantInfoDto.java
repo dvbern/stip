@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("TenantInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TenantInfoDto  implements Serializable {
-  private @Valid TenantAuthConfigDto clientAuth;
-  private @Valid TenantFeaturesDto features;
-  private @Valid String identifier;
+  private TenantAuthConfigDto clientAuth;
+  private TenantFeaturesDto features;
+  private String identifier;
 
   protected TenantInfoDto(TenantInfoDtoBuilder<?, ?> b) {
     this.clientAuth = b.clientAuth;
@@ -42,13 +42,12 @@ public class TenantInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("clientAuth")
-  @NotNull
-  public TenantAuthConfigDto getClientAuth() {
+  @JsonProperty(required = true, value = "clientAuth")
+  @NotNull @Valid public TenantAuthConfigDto getClientAuth() {
     return clientAuth;
   }
 
-  @JsonProperty("clientAuth")
+  @JsonProperty(required = true, value = "clientAuth")
   public void setClientAuth(TenantAuthConfigDto clientAuth) {
     this.clientAuth = clientAuth;
   }
@@ -61,13 +60,12 @@ public class TenantInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("features")
-  @NotNull
-  public TenantFeaturesDto getFeatures() {
+  @JsonProperty(required = true, value = "features")
+  @NotNull @Valid public TenantFeaturesDto getFeatures() {
     return features;
   }
 
-  @JsonProperty("features")
+  @JsonProperty(required = true, value = "features")
   public void setFeatures(TenantFeaturesDto features) {
     this.features = features;
   }
@@ -80,13 +78,12 @@ public class TenantInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("identifier")
-  @NotNull
-  public String getIdentifier() {
+  @JsonProperty(required = true, value = "identifier")
+  @NotNull public String getIdentifier() {
     return identifier;
   }
 
-  @JsonProperty("identifier")
+  @JsonProperty(required = true, value = "identifier")
   public void setIdentifier(String identifier) {
     this.identifier = identifier;
   }
@@ -128,10 +125,7 @@ public class TenantInfoDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -174,4 +168,3 @@ public class TenantInfoDto  implements Serializable {
     }
   }
 }
-

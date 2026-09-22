@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("JuristischeAbklaerungNotizAntwort")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
-  private @Valid String antwort;
+  private String antwort;
 
   protected JuristischeAbklaerungNotizAntwortDto(JuristischeAbklaerungNotizAntwortDtoBuilder<?, ?> b) {
     this.antwort = b.antwort;
@@ -36,13 +36,12 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
   }
 
   
-  @JsonProperty("antwort")
-  @NotNull
-  public String getAntwort() {
+  @JsonProperty(required = true, value = "antwort")
+  @NotNull public String getAntwort() {
     return antwort;
   }
 
-  @JsonProperty("antwort")
+  @JsonProperty(required = true, value = "antwort")
   public void setAntwort(String antwort) {
     this.antwort = antwort;
   }
@@ -80,10 +79,7 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -116,4 +112,3 @@ public class JuristischeAbklaerungNotizAntwortDto  implements Serializable {
     }
   }
 }
-

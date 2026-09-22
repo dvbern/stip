@@ -15,14 +15,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("CreateGesuchTrancheRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class CreateGesuchTrancheRequestDto  implements Serializable {
-  private @Valid LocalDate start;
-  private @Valid String comment;
-  private @Valid LocalDate end;
+  private LocalDate start;
+  private String comment;
+  private LocalDate end;
 
   protected CreateGesuchTrancheRequestDto(CreateGesuchTrancheRequestDtoBuilder<?, ?> b) {
     this.start = b.start;
@@ -41,13 +41,12 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
   }
 
   
-  @JsonProperty("start")
-  @NotNull
-  public LocalDate getStart() {
+  @JsonProperty(required = true, value = "start")
+  @NotNull public LocalDate getStart() {
     return start;
   }
 
-  @JsonProperty("start")
+  @JsonProperty(required = true, value = "start")
   public void setStart(LocalDate start) {
     this.start = start;
   }
@@ -60,13 +59,12 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
   }
 
   
-  @JsonProperty("comment")
-  @NotNull
-  public String getComment() {
+  @JsonProperty(required = true, value = "comment")
+  @NotNull public String getComment() {
     return comment;
   }
 
-  @JsonProperty("comment")
+  @JsonProperty(required = true, value = "comment")
   public void setComment(String comment) {
     this.comment = comment;
   }
@@ -126,10 +124,7 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -172,4 +167,3 @@ public class CreateGesuchTrancheRequestDto  implements Serializable {
     }
   }
 }
-

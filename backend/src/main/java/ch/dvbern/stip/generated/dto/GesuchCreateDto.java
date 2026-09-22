@@ -15,12 +15,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchCreateDto  implements Serializable {
-  private @Valid UUID ausbildungId;
+  private UUID ausbildungId;
 
   protected GesuchCreateDto(GesuchCreateDtoBuilder<?, ?> b) {
     this.ausbildungId = b.ausbildungId;
@@ -37,13 +37,12 @@ public class GesuchCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungId")
-  @NotNull
-  public UUID getAusbildungId() {
+  @JsonProperty(required = true, value = "ausbildungId")
+  @NotNull public UUID getAusbildungId() {
     return ausbildungId;
   }
 
-  @JsonProperty("ausbildungId")
+  @JsonProperty(required = true, value = "ausbildungId")
   public void setAusbildungId(UUID ausbildungId) {
     this.ausbildungId = ausbildungId;
   }
@@ -81,10 +80,7 @@ public class GesuchCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -117,4 +113,3 @@ public class GesuchCreateDto  implements Serializable {
     }
   }
 }
-

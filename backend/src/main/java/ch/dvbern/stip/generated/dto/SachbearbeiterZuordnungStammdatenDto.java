@@ -14,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SachbearbeiterZuordnungStammdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
-  private @Valid String buchstabenDe;
-  private @Valid String buchstabenFr;
+  private String buchstabenDe;
+  private String buchstabenFr;
 
   protected SachbearbeiterZuordnungStammdatenDto(SachbearbeiterZuordnungStammdatenDtoBuilder<?, ?> b) {
     this.buchstabenDe = b.buchstabenDe;
@@ -101,10 +101,7 @@ public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -142,4 +139,3 @@ public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
     }
   }
 }
-

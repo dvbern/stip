@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusgewaehlterGrund")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusgewaehlterGrundDto  implements Serializable {
-  private @Valid UUID decisionId;
-  private @Valid ch.dvbern.stip.api.common.type.Kanton kanton;
+  private UUID decisionId;
+  private ch.dvbern.stip.api.common.type.Kanton kanton;
 
   protected AusgewaehlterGrundDto(AusgewaehlterGrundDtoBuilder<?, ?> b) {
     this.decisionId = b.decisionId;
@@ -39,13 +39,12 @@ public class AusgewaehlterGrundDto  implements Serializable {
   }
 
   
-  @JsonProperty("decisionId")
-  @NotNull
-  public UUID getDecisionId() {
+  @JsonProperty(required = true, value = "decisionId")
+  @NotNull public UUID getDecisionId() {
     return decisionId;
   }
 
-  @JsonProperty("decisionId")
+  @JsonProperty(required = true, value = "decisionId")
   public void setDecisionId(UUID decisionId) {
     this.decisionId = decisionId;
   }
@@ -103,10 +102,7 @@ public class AusgewaehlterGrundDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +140,3 @@ public class AusgewaehlterGrundDto  implements Serializable {
     }
   }
 }
-

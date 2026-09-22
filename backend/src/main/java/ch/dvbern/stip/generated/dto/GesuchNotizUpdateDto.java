@@ -15,15 +15,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchNotizUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchNotizUpdateDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String betreff;
-  private @Valid String text;
-  private @Valid Boolean pendenzAbgeschlossen;
+  private UUID id;
+  private String betreff;
+  private String text;
+  private Boolean pendenzAbgeschlossen;
 
   protected GesuchNotizUpdateDto(GesuchNotizUpdateDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -43,13 +43,12 @@ public class GesuchNotizUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -62,13 +61,12 @@ public class GesuchNotizUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("betreff")
-  @NotNull
-  public String getBetreff() {
+  @JsonProperty(required = true, value = "betreff")
+  @NotNull public String getBetreff() {
     return betreff;
   }
 
-  @JsonProperty("betreff")
+  @JsonProperty(required = true, value = "betreff")
   public void setBetreff(String betreff) {
     this.betreff = betreff;
   }
@@ -81,13 +79,12 @@ public class GesuchNotizUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("text")
-  @NotNull
-  public String getText() {
+  @JsonProperty(required = true, value = "text")
+  @NotNull public String getText() {
     return text;
   }
 
-  @JsonProperty("text")
+  @JsonProperty(required = true, value = "text")
   public void setText(String text) {
     this.text = text;
   }
@@ -149,10 +146,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -200,4 +194,3 @@ public class GesuchNotizUpdateDto  implements Serializable {
     }
   }
 }
-

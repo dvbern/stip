@@ -29,6 +29,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -105,7 +106,7 @@ public class AuszahlungApiSpec {
         public CreateAuszahlungForGesuchOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -134,7 +135,7 @@ public class AuszahlungApiSpec {
          * @param auszahlungUpdateDtoSpec (AuszahlungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public CreateAuszahlungForGesuchOper body(AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
+        public CreateAuszahlungForGesuchOper body(@jakarta.annotation.Nonnull AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
             reqSpec.setBody(auszahlungUpdateDtoSpec);
             return this;
         }
@@ -187,7 +188,7 @@ public class AuszahlungApiSpec {
 
         public GetAuszahlungForGesuchOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -262,7 +263,7 @@ public class AuszahlungApiSpec {
         public UpdateAuszahlungForGesuchOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -291,7 +292,7 @@ public class AuszahlungApiSpec {
          * @param auszahlungUpdateDtoSpec (AuszahlungUpdateDtoSpec)  (required)
          * @return operation
          */
-        public UpdateAuszahlungForGesuchOper body(AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
+        public UpdateAuszahlungForGesuchOper body(@jakarta.annotation.Nonnull AuszahlungUpdateDtoSpec auszahlungUpdateDtoSpec) {
             reqSpec.setBody(auszahlungUpdateDtoSpec);
             return this;
         }

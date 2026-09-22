@@ -19,21 +19,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Sachbearbeiter")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterDto  implements Serializable {
-  private @Valid String vorname;
-  private @Valid String nachname;
-  private @Valid String telefonnummer;
-  private @Valid String email;
-  private @Valid String funktionDe;
-  private @Valid String funktionFr;
+  private String vorname;
+  private String nachname;
+  private String telefonnummer;
+  private String email;
+  private String funktionDe;
+  private String funktionFr;
   private @Valid List<String> sachbearbeiterRollen = new ArrayList<>();
-  private @Valid UUID id;
-  private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
-  private @Valid Boolean nutzungsbedingungenAkzeptiert;
+  private UUID id;
+  private BenutzereinstellungenUpdateDto benutzereinstellungen;
+  private Boolean nutzungsbedingungenAkzeptiert;
 
   protected SachbearbeiterDto(SachbearbeiterDtoBuilder<?, ?> b) {
     this.vorname = b.vorname;
@@ -59,13 +59,12 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -78,13 +77,12 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -97,13 +95,12 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
   
-  @JsonProperty("telefonnummer")
-  @NotNull
-  public String getTelefonnummer() {
+  @JsonProperty(required = true, value = "telefonnummer")
+  @NotNull public String getTelefonnummer() {
     return telefonnummer;
   }
 
-  @JsonProperty("telefonnummer")
+  @JsonProperty(required = true, value = "telefonnummer")
   public void setTelefonnummer(String telefonnummer) {
     this.telefonnummer = telefonnummer;
   }
@@ -116,13 +113,12 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
   
-  @JsonProperty("email")
-  @NotNull
-  public String getEmail() {
+  @JsonProperty(required = true, value = "email")
+  @NotNull public String getEmail() {
     return email;
   }
 
-  @JsonProperty("email")
+  @JsonProperty(required = true, value = "email")
   public void setEmail(String email) {
     this.email = email;
   }
@@ -135,13 +131,12 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
   
-  @JsonProperty("funktionDe")
-  @NotNull
-  public String getFunktionDe() {
+  @JsonProperty(required = true, value = "funktionDe")
+  @NotNull public String getFunktionDe() {
     return funktionDe;
   }
 
-  @JsonProperty("funktionDe")
+  @JsonProperty(required = true, value = "funktionDe")
   public void setFunktionDe(String funktionDe) {
     this.funktionDe = funktionDe;
   }
@@ -154,13 +149,12 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
   
-  @JsonProperty("funktionFr")
-  @NotNull
-  public String getFunktionFr() {
+  @JsonProperty(required = true, value = "funktionFr")
+  @NotNull public String getFunktionFr() {
     return funktionFr;
   }
 
-  @JsonProperty("funktionFr")
+  @JsonProperty(required = true, value = "funktionFr")
   public void setFunktionFr(String funktionFr) {
     this.funktionFr = funktionFr;
   }
@@ -173,13 +167,12 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
   
-  @JsonProperty("sachbearbeiterRollen")
-  @NotNull
-  public List<String> getSachbearbeiterRollen() {
+  @JsonProperty(required = true, value = "sachbearbeiterRollen")
+  @NotNull public List<String> getSachbearbeiterRollen() {
     return sachbearbeiterRollen;
   }
 
-  @JsonProperty("sachbearbeiterRollen")
+  @JsonProperty(required = true, value = "sachbearbeiterRollen")
   public void setSachbearbeiterRollen(List<String> sachbearbeiterRollen) {
     this.sachbearbeiterRollen = sachbearbeiterRollen;
   }
@@ -208,13 +201,12 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -228,7 +220,7 @@ public class SachbearbeiterDto  implements Serializable {
 
   
   @JsonProperty("benutzereinstellungen")
-  public BenutzereinstellungenUpdateDto getBenutzereinstellungen() {
+  @Valid public BenutzereinstellungenUpdateDto getBenutzereinstellungen() {
     return benutzereinstellungen;
   }
 
@@ -306,10 +298,7 @@ public class SachbearbeiterDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -387,4 +376,3 @@ public class SachbearbeiterDto  implements Serializable {
     }
   }
 }
-

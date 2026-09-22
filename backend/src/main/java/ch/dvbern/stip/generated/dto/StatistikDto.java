@@ -15,19 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Statistik")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class StatistikDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid Boolean valid;
-  private @Valid String userTriggeredCreation;
-  private @Valid Integer year;
-  private @Valid String error;
-  private @Valid String filename;
-  private @Valid String filesize;
+  private UUID id;
+  private java.time.LocalDateTime timestampErstellt;
+  private Boolean valid;
+  private String userTriggeredCreation;
+  private Integer year;
+  private String error;
+  private String filename;
+  private String filesize;
 
   protected StatistikDto(StatistikDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -51,13 +51,12 @@ public class StatistikDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -70,13 +69,12 @@ public class StatistikDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public java.time.LocalDateTime getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public java.time.LocalDateTime getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -89,13 +87,12 @@ public class StatistikDto  implements Serializable {
   }
 
   
-  @JsonProperty("valid")
-  @NotNull
-  public Boolean getValid() {
+  @JsonProperty(required = true, value = "valid")
+  @NotNull public Boolean getValid() {
     return valid;
   }
 
-  @JsonProperty("valid")
+  @JsonProperty(required = true, value = "valid")
   public void setValid(Boolean valid) {
     this.valid = valid;
   }
@@ -108,13 +105,12 @@ public class StatistikDto  implements Serializable {
   }
 
   
-  @JsonProperty("userTriggeredCreation")
-  @NotNull
-  public String getUserTriggeredCreation() {
+  @JsonProperty(required = true, value = "userTriggeredCreation")
+  @NotNull public String getUserTriggeredCreation() {
     return userTriggeredCreation;
   }
 
-  @JsonProperty("userTriggeredCreation")
+  @JsonProperty(required = true, value = "userTriggeredCreation")
   public void setUserTriggeredCreation(String userTriggeredCreation) {
     this.userTriggeredCreation = userTriggeredCreation;
   }
@@ -127,13 +123,12 @@ public class StatistikDto  implements Serializable {
   }
 
   
-  @JsonProperty("year")
-  @NotNull
-  public Integer getYear() {
+  @JsonProperty(required = true, value = "year")
+  @NotNull public Integer getYear() {
     return year;
   }
 
-  @JsonProperty("year")
+  @JsonProperty(required = true, value = "year")
   public void setYear(Integer year) {
     this.year = year;
   }
@@ -239,10 +234,7 @@ public class StatistikDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -310,4 +302,3 @@ public class StatistikDto  implements Serializable {
     }
   }
 }
-

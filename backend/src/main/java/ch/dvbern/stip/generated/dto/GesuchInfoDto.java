@@ -17,21 +17,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchInfoDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String fallNummer;
-  private @Valid String fallId;
-  private @Valid String ausbildungId;
-  private @Valid String gesuchNummer;
-  private @Valid LocalDate startDate;
-  private @Valid LocalDate endDate;
-  private @Valid GesuchStateInfoDto state;
-  private @Valid String piaVorname;
-  private @Valid String piaNachname;
+  private UUID id;
+  private String fallNummer;
+  private String fallId;
+  private String ausbildungId;
+  private String gesuchNummer;
+  private LocalDate startDate;
+  private LocalDate endDate;
+  private GesuchStateInfoDto state;
+  private String piaVorname;
+  private String piaNachname;
 
   protected GesuchInfoDto(GesuchInfoDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -57,13 +57,12 @@ public class GesuchInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -76,13 +75,12 @@ public class GesuchInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallNummer")
-  @NotNull
-  public String getFallNummer() {
+  @JsonProperty(required = true, value = "fallNummer")
+  @NotNull public String getFallNummer() {
     return fallNummer;
   }
 
-  @JsonProperty("fallNummer")
+  @JsonProperty(required = true, value = "fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -95,13 +93,12 @@ public class GesuchInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallId")
-  @NotNull
-  public String getFallId() {
+  @JsonProperty(required = true, value = "fallId")
+  @NotNull public String getFallId() {
     return fallId;
   }
 
-  @JsonProperty("fallId")
+  @JsonProperty(required = true, value = "fallId")
   public void setFallId(String fallId) {
     this.fallId = fallId;
   }
@@ -114,13 +111,12 @@ public class GesuchInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungId")
-  @NotNull
-  public String getAusbildungId() {
+  @JsonProperty(required = true, value = "ausbildungId")
+  @NotNull public String getAusbildungId() {
     return ausbildungId;
   }
 
-  @JsonProperty("ausbildungId")
+  @JsonProperty(required = true, value = "ausbildungId")
   public void setAusbildungId(String ausbildungId) {
     this.ausbildungId = ausbildungId;
   }
@@ -133,13 +129,12 @@ public class GesuchInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchNummer")
-  @NotNull
-  public String getGesuchNummer() {
+  @JsonProperty(required = true, value = "gesuchNummer")
+  @NotNull public String getGesuchNummer() {
     return gesuchNummer;
   }
 
-  @JsonProperty("gesuchNummer")
+  @JsonProperty(required = true, value = "gesuchNummer")
   public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
@@ -152,13 +147,12 @@ public class GesuchInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("startDate")
-  @NotNull
-  public LocalDate getStartDate() {
+  @JsonProperty(required = true, value = "startDate")
+  @NotNull public LocalDate getStartDate() {
     return startDate;
   }
 
-  @JsonProperty("startDate")
+  @JsonProperty(required = true, value = "startDate")
   public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
@@ -171,13 +165,12 @@ public class GesuchInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("endDate")
-  @NotNull
-  public LocalDate getEndDate() {
+  @JsonProperty(required = true, value = "endDate")
+  @NotNull public LocalDate getEndDate() {
     return endDate;
   }
 
-  @JsonProperty("endDate")
+  @JsonProperty(required = true, value = "endDate")
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
   }
@@ -190,13 +183,12 @@ public class GesuchInfoDto  implements Serializable {
   }
 
   
-  @JsonProperty("state")
-  @NotNull
-  public GesuchStateInfoDto getState() {
+  @JsonProperty(required = true, value = "state")
+  @NotNull @Valid public GesuchStateInfoDto getState() {
     return state;
   }
 
-  @JsonProperty("state")
+  @JsonProperty(required = true, value = "state")
   public void setState(GesuchStateInfoDto state) {
     this.state = state;
   }
@@ -288,10 +280,7 @@ public class GesuchInfoDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -369,4 +358,3 @@ public class GesuchInfoDto  implements Serializable {
     }
   }
 }
-

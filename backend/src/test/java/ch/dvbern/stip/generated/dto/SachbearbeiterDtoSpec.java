@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -29,71 +32,75 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * SachbearbeiterDtoSpec
  */
 @JsonPropertyOrder({
-  SachbearbeiterDtoSpec.JSON_PROPERTY_ID,
   SachbearbeiterDtoSpec.JSON_PROPERTY_VORNAME,
   SachbearbeiterDtoSpec.JSON_PROPERTY_NACHNAME,
   SachbearbeiterDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN,
-  SachbearbeiterDtoSpec.JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT
+  SachbearbeiterDtoSpec.JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_TELEFONNUMMER,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_EMAIL,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_FUNKTION_DE,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_FUNKTION_FR,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_SACHBEARBEITER_ROLLEN,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_ID
 })
 @JsonTypeName("Sachbearbeiter")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SachbearbeiterDtoSpec {
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
-
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_BENUTZEREINSTELLUNGEN = "benutzereinstellungen";
+  @jakarta.annotation.Nullable
   private BenutzereinstellungenUpdateDtoSpec benutzereinstellungen;
 
   public static final String JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT = "nutzungsbedingungenAkzeptiert";
+  @jakarta.annotation.Nullable
   private Boolean nutzungsbedingungenAkzeptiert;
+
+  public static final String JSON_PROPERTY_TELEFONNUMMER = "telefonnummer";
+  @jakarta.annotation.Nonnull
+  private String telefonnummer;
+
+  public static final String JSON_PROPERTY_EMAIL = "email";
+  @jakarta.annotation.Nonnull
+  private String email;
+
+  public static final String JSON_PROPERTY_FUNKTION_DE = "funktionDe";
+  @jakarta.annotation.Nonnull
+  private String funktionDe;
+
+  public static final String JSON_PROPERTY_FUNKTION_FR = "funktionFr";
+  @jakarta.annotation.Nonnull
+  private String funktionFr;
+
+  public static final String JSON_PROPERTY_SACHBEARBEITER_ROLLEN = "sachbearbeiterRollen";
+  @jakarta.annotation.Nonnull
+  private List<String> sachbearbeiterRollen;
+
+  public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
+  private UUID id;
 
   public SachbearbeiterDtoSpec() {
   }
 
-  public SachbearbeiterDtoSpec id(UUID id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getId() {
-    return id;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-
-  public SachbearbeiterDtoSpec vorname(String vorname) {
+  public SachbearbeiterDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -101,25 +108,24 @@ public class SachbearbeiterDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public SachbearbeiterDtoSpec nachname(String nachname) {
+  public SachbearbeiterDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -127,25 +133,24 @@ public class SachbearbeiterDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public SachbearbeiterDtoSpec benutzereinstellungen(BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
+  public SachbearbeiterDtoSpec benutzereinstellungen(@jakarta.annotation.Nullable BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
     
     this.benutzereinstellungen = benutzereinstellungen;
     return this;
   }
 
-   /**
+  /**
    * Get benutzereinstellungen
    * @return benutzereinstellungen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BENUTZEREINSTELLUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_BENUTZEREINSTELLUNGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BenutzereinstellungenUpdateDtoSpec getBenutzereinstellungen() {
@@ -153,25 +158,24 @@ public class SachbearbeiterDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BENUTZEREINSTELLUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_BENUTZEREINSTELLUNGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBenutzereinstellungen(BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
+  public void setBenutzereinstellungen(@jakarta.annotation.Nullable BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
     this.benutzereinstellungen = benutzereinstellungen;
   }
 
-
-  public SachbearbeiterDtoSpec nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+  public SachbearbeiterDtoSpec nutzungsbedingungenAkzeptiert(@jakarta.annotation.Nullable Boolean nutzungsbedingungenAkzeptiert) {
     
     this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
     return this;
   }
 
-   /**
+  /**
    * Get nutzungsbedingungenAkzeptiert
    * @return nutzungsbedingungenAkzeptiert
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonProperty(value = JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getNutzungsbedingungenAkzeptiert() {
@@ -179,11 +183,170 @@ public class SachbearbeiterDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonProperty(value = JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+  public void setNutzungsbedingungenAkzeptiert(@jakarta.annotation.Nullable Boolean nutzungsbedingungenAkzeptiert) {
     this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
   }
+
+  public SachbearbeiterDtoSpec telefonnummer(@jakarta.annotation.Nonnull String telefonnummer) {
+    
+    this.telefonnummer = telefonnummer;
+    return this;
+  }
+
+  /**
+   * Get telefonnummer
+   * @return telefonnummer
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_TELEFONNUMMER, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getTelefonnummer() {
+    return telefonnummer;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TELEFONNUMMER, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTelefonnummer(@jakarta.annotation.Nonnull String telefonnummer) {
+    this.telefonnummer = telefonnummer;
+  }
+
+  public SachbearbeiterDtoSpec email(@jakarta.annotation.Nonnull String email) {
+    
+    this.email = email;
+    return this;
+  }
+
+  /**
+   * Get email
+   * @return email
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_EMAIL, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getEmail() {
+    return email;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_EMAIL, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEmail(@jakarta.annotation.Nonnull String email) {
+    this.email = email;
+  }
+
+  public SachbearbeiterDtoSpec funktionDe(@jakarta.annotation.Nonnull String funktionDe) {
+    
+    this.funktionDe = funktionDe;
+    return this;
+  }
+
+  /**
+   * Get funktionDe
+   * @return funktionDe
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_FUNKTION_DE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getFunktionDe() {
+    return funktionDe;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_FUNKTION_DE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFunktionDe(@jakarta.annotation.Nonnull String funktionDe) {
+    this.funktionDe = funktionDe;
+  }
+
+  public SachbearbeiterDtoSpec funktionFr(@jakarta.annotation.Nonnull String funktionFr) {
+    
+    this.funktionFr = funktionFr;
+    return this;
+  }
+
+  /**
+   * Get funktionFr
+   * @return funktionFr
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_FUNKTION_FR, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getFunktionFr() {
+    return funktionFr;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_FUNKTION_FR, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFunktionFr(@jakarta.annotation.Nonnull String funktionFr) {
+    this.funktionFr = funktionFr;
+  }
+
+  public SachbearbeiterDtoSpec sachbearbeiterRollen(@jakarta.annotation.Nonnull List<String> sachbearbeiterRollen) {
+    
+    this.sachbearbeiterRollen = sachbearbeiterRollen;
+    return this;
+  }
+
+  public SachbearbeiterDtoSpec addSachbearbeiterRollenItem(String sachbearbeiterRollenItem) {
+    if (this.sachbearbeiterRollen == null) {
+      this.sachbearbeiterRollen = new ArrayList<>();
+    }
+    this.sachbearbeiterRollen.add(sachbearbeiterRollenItem);
+    return this;
+  }
+
+  /**
+   * Get sachbearbeiterRollen
+   * @return sachbearbeiterRollen
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITER_ROLLEN, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<String> getSachbearbeiterRollen() {
+    return sachbearbeiterRollen;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITER_ROLLEN, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setSachbearbeiterRollen(@jakarta.annotation.Nonnull List<String> sachbearbeiterRollen) {
+    this.sachbearbeiterRollen = sachbearbeiterRollen;
+  }
+
+  public SachbearbeiterDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
+    this.id = id;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -194,27 +357,37 @@ public class SachbearbeiterDtoSpec {
       return false;
     }
     SachbearbeiterDtoSpec sachbearbeiter = (SachbearbeiterDtoSpec) o;
-    return Objects.equals(this.id, sachbearbeiter.id) &&
-        Objects.equals(this.vorname, sachbearbeiter.vorname) &&
+    return Objects.equals(this.vorname, sachbearbeiter.vorname) &&
         Objects.equals(this.nachname, sachbearbeiter.nachname) &&
         Objects.equals(this.benutzereinstellungen, sachbearbeiter.benutzereinstellungen) &&
-        Objects.equals(this.nutzungsbedingungenAkzeptiert, sachbearbeiter.nutzungsbedingungenAkzeptiert);
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, sachbearbeiter.nutzungsbedingungenAkzeptiert) &&
+        Objects.equals(this.telefonnummer, sachbearbeiter.telefonnummer) &&
+        Objects.equals(this.email, sachbearbeiter.email) &&
+        Objects.equals(this.funktionDe, sachbearbeiter.funktionDe) &&
+        Objects.equals(this.funktionFr, sachbearbeiter.funktionFr) &&
+        Objects.equals(this.sachbearbeiterRollen, sachbearbeiter.sachbearbeiterRollen) &&
+        Objects.equals(this.id, sachbearbeiter.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, vorname, nachname, benutzereinstellungen, nutzungsbedingungenAkzeptiert);
+    return Objects.hash(vorname, nachname, benutzereinstellungen, nutzungsbedingungenAkzeptiert, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, id);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SachbearbeiterDtoSpec {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
     sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
+    sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    funktionDe: ").append(toIndentedString(funktionDe)).append("\n");
+    sb.append("    funktionFr: ").append(toIndentedString(funktionFr)).append("\n");
+    sb.append("    sachbearbeiterRollen: ").append(toIndentedString(sachbearbeiterRollen)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -224,10 +397,7 @@ public class SachbearbeiterDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

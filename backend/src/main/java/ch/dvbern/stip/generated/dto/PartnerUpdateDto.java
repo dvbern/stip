@@ -16,18 +16,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PartnerUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PartnerUpdateDto  implements Serializable {
-  private @Valid AdresseDto adresse;
-  private @Valid String vorname;
-  private @Valid LocalDate geburtsdatum;
-  private @Valid String sozialversicherungsnummer;
-  private @Valid String nachname;
-  private @Valid Boolean inAusbildung;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum ausbildungspensum;
+  private AdresseDto adresse;
+  private String vorname;
+  private LocalDate geburtsdatum;
+  private String sozialversicherungsnummer;
+  private String nachname;
+  private Boolean inAusbildung;
+  private ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum ausbildungspensum;
 
   protected PartnerUpdateDto(PartnerUpdateDtoBuilder<?, ?> b) {
     this.adresse = b.adresse;
@@ -50,13 +50,12 @@ public class PartnerUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("adresse")
-  @NotNull
-  public AdresseDto getAdresse() {
+  @JsonProperty(required = true, value = "adresse")
+  @NotNull @Valid public AdresseDto getAdresse() {
     return adresse;
   }
 
-  @JsonProperty("adresse")
+  @JsonProperty(required = true, value = "adresse")
   public void setAdresse(AdresseDto adresse) {
     this.adresse = adresse;
   }
@@ -69,13 +68,12 @@ public class PartnerUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -88,13 +86,12 @@ public class PartnerUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
-  public LocalDate getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -107,13 +104,12 @@ public class PartnerUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("sozialversicherungsnummer")
-  @NotNull
-  public String getSozialversicherungsnummer() {
+  @JsonProperty(required = true, value = "sozialversicherungsnummer")
+  @NotNull public String getSozialversicherungsnummer() {
     return sozialversicherungsnummer;
   }
 
-  @JsonProperty("sozialversicherungsnummer")
+  @JsonProperty(required = true, value = "sozialversicherungsnummer")
   public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
@@ -126,13 +122,12 @@ public class PartnerUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -218,10 +213,7 @@ public class PartnerUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -284,4 +276,3 @@ public class PartnerUpdateDto  implements Serializable {
     }
   }
 }
-

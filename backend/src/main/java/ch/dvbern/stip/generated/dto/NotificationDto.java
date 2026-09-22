@@ -18,20 +18,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("Notification")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class NotificationDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid ch.dvbern.stip.api.notification.type.NotificationType notificationType;
-  private @Valid UUID fallId;
-  private @Valid String userErstellt;
-  private @Valid LocalDate timestampErstellt;
-  private @Valid String absender;
-  private @Valid Boolean read;
-  private @Valid String notificationText;
-  private @Valid UUID contextId;
+  private UUID id;
+  private ch.dvbern.stip.api.notification.type.NotificationType notificationType;
+  private UUID fallId;
+  private String userErstellt;
+  private LocalDate timestampErstellt;
+  private String absender;
+  private Boolean read;
+  private String notificationText;
+  private UUID contextId;
 
   protected NotificationDto(NotificationDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -56,13 +56,12 @@ public class NotificationDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -75,13 +74,12 @@ public class NotificationDto  implements Serializable {
   }
 
   
-  @JsonProperty("notificationType")
-  @NotNull
-  public ch.dvbern.stip.api.notification.type.NotificationType getNotificationType() {
+  @JsonProperty(required = true, value = "notificationType")
+  @NotNull public ch.dvbern.stip.api.notification.type.NotificationType getNotificationType() {
     return notificationType;
   }
 
-  @JsonProperty("notificationType")
+  @JsonProperty(required = true, value = "notificationType")
   public void setNotificationType(ch.dvbern.stip.api.notification.type.NotificationType notificationType) {
     this.notificationType = notificationType;
   }
@@ -94,13 +92,12 @@ public class NotificationDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallId")
-  @NotNull
-  public UUID getFallId() {
+  @JsonProperty(required = true, value = "fallId")
+  @NotNull public UUID getFallId() {
     return fallId;
   }
 
-  @JsonProperty("fallId")
+  @JsonProperty(required = true, value = "fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
   }
@@ -113,13 +110,12 @@ public class NotificationDto  implements Serializable {
   }
 
   
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
+  @JsonProperty(required = true, value = "userErstellt")
+  @NotNull public String getUserErstellt() {
     return userErstellt;
   }
 
-  @JsonProperty("userErstellt")
+  @JsonProperty(required = true, value = "userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
   }
@@ -132,13 +128,12 @@ public class NotificationDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public LocalDate getTimestampErstellt() {
+  @JsonProperty(required = true, value = "timestampErstellt")
+  @NotNull public LocalDate getTimestampErstellt() {
     return timestampErstellt;
   }
 
-  @JsonProperty("timestampErstellt")
+  @JsonProperty(required = true, value = "timestampErstellt")
   public void setTimestampErstellt(LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -151,13 +146,12 @@ public class NotificationDto  implements Serializable {
   }
 
   
-  @JsonProperty("absender")
-  @NotNull
-  public String getAbsender() {
+  @JsonProperty(required = true, value = "absender")
+  @NotNull public String getAbsender() {
     return absender;
   }
 
-  @JsonProperty("absender")
+  @JsonProperty(required = true, value = "absender")
   public void setAbsender(String absender) {
     this.absender = absender;
   }
@@ -170,13 +164,12 @@ public class NotificationDto  implements Serializable {
   }
 
   
-  @JsonProperty("read")
-  @NotNull
-  public Boolean getRead() {
+  @JsonProperty(required = true, value = "read")
+  @NotNull public Boolean getRead() {
     return read;
   }
 
-  @JsonProperty("read")
+  @JsonProperty(required = true, value = "read")
   public void setRead(Boolean read) {
     this.read = read;
   }
@@ -266,10 +259,7 @@ public class NotificationDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -342,4 +332,3 @@ public class NotificationDto  implements Serializable {
     }
   }
 }
-

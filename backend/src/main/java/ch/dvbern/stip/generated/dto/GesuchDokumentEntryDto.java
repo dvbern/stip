@@ -18,13 +18,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDokumentEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentEntryDto  implements Serializable {
-  private @Valid UUID entryId;
-  private @Valid String name;
+  private UUID entryId;
+  private String name;
   private @Valid List<ch.dvbern.stip.api.dokument.type.DokumentTyp> dokumentTyps = new ArrayList<>();
 
   protected GesuchDokumentEntryDto(GesuchDokumentEntryDtoBuilder<?, ?> b) {
@@ -44,13 +44,12 @@ public class GesuchDokumentEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("entryId")
-  @NotNull
-  public UUID getEntryId() {
+  @JsonProperty(required = true, value = "entryId")
+  @NotNull public UUID getEntryId() {
     return entryId;
   }
 
-  @JsonProperty("entryId")
+  @JsonProperty(required = true, value = "entryId")
   public void setEntryId(UUID entryId) {
     this.entryId = entryId;
   }
@@ -63,13 +62,12 @@ public class GesuchDokumentEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("name")
-  @NotNull
-  public String getName() {
+  @JsonProperty(required = true, value = "name")
+  @NotNull public String getName() {
     return name;
   }
 
-  @JsonProperty("name")
+  @JsonProperty(required = true, value = "name")
   public void setName(String name) {
     this.name = name;
   }
@@ -82,13 +80,12 @@ public class GesuchDokumentEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("dokumentTyps")
-  @NotNull
-  public List<ch.dvbern.stip.api.dokument.type.DokumentTyp> getDokumentTyps() {
+  @JsonProperty(required = true, value = "dokumentTyps")
+  @NotNull public List<ch.dvbern.stip.api.dokument.type.DokumentTyp> getDokumentTyps() {
     return dokumentTyps;
   }
 
-  @JsonProperty("dokumentTyps")
+  @JsonProperty(required = true, value = "dokumentTyps")
   public void setDokumentTyps(List<ch.dvbern.stip.api.dokument.type.DokumentTyp> dokumentTyps) {
     this.dokumentTyps = dokumentTyps;
   }
@@ -146,10 +143,7 @@ public class GesuchDokumentEntryDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -192,4 +186,3 @@ public class GesuchDokumentEntryDto  implements Serializable {
     }
   }
 }
-

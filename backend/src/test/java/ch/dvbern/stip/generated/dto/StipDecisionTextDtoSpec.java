@@ -36,38 +36,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   StipDecisionTextDtoSpec.JSON_PROPERTY_TEXT_FR
 })
 @JsonTypeName("StipDecisionText")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class StipDecisionTextDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_STIP_DECISION = "stipDecision";
+  @jakarta.annotation.Nonnull
   private StipDecisionDtoSpec stipDecision;
 
   public static final String JSON_PROPERTY_TITLE_DE = "titleDe";
+  @jakarta.annotation.Nonnull
   private String titleDe;
 
   public static final String JSON_PROPERTY_TEXT_DE = "textDe";
+  @jakarta.annotation.Nonnull
   private String textDe;
 
   public static final String JSON_PROPERTY_TEXT_FR = "textFr";
+  @jakarta.annotation.Nonnull
   private String textFr;
 
   public StipDecisionTextDtoSpec() {
   }
 
-  public StipDecisionTextDtoSpec id(UUID id) {
+  public StipDecisionTextDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -75,25 +80,24 @@ public class StipDecisionTextDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public StipDecisionTextDtoSpec stipDecision(StipDecisionDtoSpec stipDecision) {
+  public StipDecisionTextDtoSpec stipDecision(@jakarta.annotation.Nonnull StipDecisionDtoSpec stipDecision) {
     
     this.stipDecision = stipDecision;
     return this;
   }
 
-   /**
+  /**
    * Get stipDecision
    * @return stipDecision
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STIP_DECISION)
+  @JsonProperty(value = JSON_PROPERTY_STIP_DECISION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public StipDecisionDtoSpec getStipDecision() {
@@ -101,25 +105,24 @@ public class StipDecisionTextDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STIP_DECISION)
+  @JsonProperty(value = JSON_PROPERTY_STIP_DECISION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStipDecision(StipDecisionDtoSpec stipDecision) {
+  public void setStipDecision(@jakarta.annotation.Nonnull StipDecisionDtoSpec stipDecision) {
     this.stipDecision = stipDecision;
   }
 
-
-  public StipDecisionTextDtoSpec titleDe(String titleDe) {
+  public StipDecisionTextDtoSpec titleDe(@jakarta.annotation.Nonnull String titleDe) {
     
     this.titleDe = titleDe;
     return this;
   }
 
-   /**
+  /**
    * Get titleDe
    * @return titleDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TITLE_DE)
+  @JsonProperty(value = JSON_PROPERTY_TITLE_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTitleDe() {
@@ -127,25 +130,24 @@ public class StipDecisionTextDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TITLE_DE)
+  @JsonProperty(value = JSON_PROPERTY_TITLE_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTitleDe(String titleDe) {
+  public void setTitleDe(@jakarta.annotation.Nonnull String titleDe) {
     this.titleDe = titleDe;
   }
 
-
-  public StipDecisionTextDtoSpec textDe(String textDe) {
+  public StipDecisionTextDtoSpec textDe(@jakarta.annotation.Nonnull String textDe) {
     
     this.textDe = textDe;
     return this;
   }
 
-   /**
+  /**
    * Get textDe
    * @return textDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TEXT_DE)
+  @JsonProperty(value = JSON_PROPERTY_TEXT_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTextDe() {
@@ -153,25 +155,24 @@ public class StipDecisionTextDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEXT_DE)
+  @JsonProperty(value = JSON_PROPERTY_TEXT_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTextDe(String textDe) {
+  public void setTextDe(@jakarta.annotation.Nonnull String textDe) {
     this.textDe = textDe;
   }
 
-
-  public StipDecisionTextDtoSpec textFr(String textFr) {
+  public StipDecisionTextDtoSpec textFr(@jakarta.annotation.Nonnull String textFr) {
     
     this.textFr = textFr;
     return this;
   }
 
-   /**
+  /**
    * Get textFr
    * @return textFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TEXT_FR)
+  @JsonProperty(value = JSON_PROPERTY_TEXT_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTextFr() {
@@ -179,11 +180,12 @@ public class StipDecisionTextDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEXT_FR)
+  @JsonProperty(value = JSON_PROPERTY_TEXT_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTextFr(String textFr) {
+  public void setTextFr(@jakarta.annotation.Nonnull String textFr) {
     this.textFr = textFr;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -224,10 +226,7 @@ public class StipDecisionTextDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

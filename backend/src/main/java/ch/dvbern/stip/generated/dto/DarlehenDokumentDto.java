@@ -19,14 +19,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DarlehenDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DarlehenDokumentDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType;
-  private @Valid List<DokumentDto> dokumente = new ArrayList<>();
+  private UUID id;
+  private ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType;
+  private @Valid List<@Valid DokumentDto> dokumente = new ArrayList<>();
 
   protected DarlehenDokumentDto(DarlehenDokumentDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -45,13 +45,12 @@ public class DarlehenDokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -64,33 +63,31 @@ public class DarlehenDokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("dokumentType")
-  @NotNull
-  public ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType getDokumentType() {
+  @JsonProperty(required = true, value = "dokumentType")
+  @NotNull public ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType getDokumentType() {
     return dokumentType;
   }
 
-  @JsonProperty("dokumentType")
+  @JsonProperty(required = true, value = "dokumentType")
   public void setDokumentType(ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType) {
     this.dokumentType = dokumentType;
   }
 
   /**
    **/
-  public DarlehenDokumentDto dokumente(List<DokumentDto> dokumente) {
+  public DarlehenDokumentDto dokumente(List<@Valid DokumentDto> dokumente) {
     this.dokumente = dokumente;
     return this;
   }
 
   
-  @JsonProperty("dokumente")
-  @NotNull
-  public List<DokumentDto> getDokumente() {
+  @JsonProperty(required = true, value = "dokumente")
+  @NotNull @Valid public List<@Valid DokumentDto> getDokumente() {
     return dokumente;
   }
 
-  @JsonProperty("dokumente")
-  public void setDokumente(List<DokumentDto> dokumente) {
+  @JsonProperty(required = true, value = "dokumente")
+  public void setDokumente(List<@Valid DokumentDto> dokumente) {
     this.dokumente = dokumente;
   }
 
@@ -147,10 +144,7 @@ public class DarlehenDokumentDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -193,4 +187,3 @@ public class DarlehenDokumentDto  implements Serializable {
     }
   }
 }
-

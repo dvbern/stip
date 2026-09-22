@@ -33,29 +33,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   InitialGesuchsDtoSpec.JSON_PROPERTY_VERFUEGT_GESUCH
 })
 @JsonTypeName("InitialGesuchs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class InitialGesuchsDtoSpec {
   public static final String JSON_PROPERTY_EINGEREICHT_GESUCH = "eingereichtGesuch";
+  @jakarta.annotation.Nullable
   private GesuchTrancheSlimDtoSpec eingereichtGesuch;
 
   public static final String JSON_PROPERTY_VERFUEGT_GESUCH = "verfuegtGesuch";
+  @jakarta.annotation.Nullable
   private VerfuegtGesuchDtoSpec verfuegtGesuch;
 
   public InitialGesuchsDtoSpec() {
   }
 
-  public InitialGesuchsDtoSpec eingereichtGesuch(GesuchTrancheSlimDtoSpec eingereichtGesuch) {
+  public InitialGesuchsDtoSpec eingereichtGesuch(@jakarta.annotation.Nullable GesuchTrancheSlimDtoSpec eingereichtGesuch) {
     
     this.eingereichtGesuch = eingereichtGesuch;
     return this;
   }
 
-   /**
+  /**
    * Get eingereichtGesuch
    * @return eingereichtGesuch
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EINGEREICHT_GESUCH)
+  @JsonProperty(value = JSON_PROPERTY_EINGEREICHT_GESUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchTrancheSlimDtoSpec getEingereichtGesuch() {
@@ -63,25 +65,24 @@ public class InitialGesuchsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINGEREICHT_GESUCH)
+  @JsonProperty(value = JSON_PROPERTY_EINGEREICHT_GESUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEingereichtGesuch(GesuchTrancheSlimDtoSpec eingereichtGesuch) {
+  public void setEingereichtGesuch(@jakarta.annotation.Nullable GesuchTrancheSlimDtoSpec eingereichtGesuch) {
     this.eingereichtGesuch = eingereichtGesuch;
   }
 
-
-  public InitialGesuchsDtoSpec verfuegtGesuch(VerfuegtGesuchDtoSpec verfuegtGesuch) {
+  public InitialGesuchsDtoSpec verfuegtGesuch(@jakarta.annotation.Nullable VerfuegtGesuchDtoSpec verfuegtGesuch) {
     
     this.verfuegtGesuch = verfuegtGesuch;
     return this;
   }
 
-   /**
+  /**
    * Get verfuegtGesuch
    * @return verfuegtGesuch
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERFUEGT_GESUCH)
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGT_GESUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public VerfuegtGesuchDtoSpec getVerfuegtGesuch() {
@@ -89,11 +90,12 @@ public class InitialGesuchsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERFUEGT_GESUCH)
+  @JsonProperty(value = JSON_PROPERTY_VERFUEGT_GESUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerfuegtGesuch(VerfuegtGesuchDtoSpec verfuegtGesuch) {
+  public void setVerfuegtGesuch(@jakarta.annotation.Nullable VerfuegtGesuchDtoSpec verfuegtGesuch) {
     this.verfuegtGesuch = verfuegtGesuch;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -128,10 +130,7 @@ public class InitialGesuchsDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

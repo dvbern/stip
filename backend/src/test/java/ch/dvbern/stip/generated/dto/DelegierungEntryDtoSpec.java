@@ -45,56 +45,67 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DelegierungEntryDtoSpec.JSON_PROPERTY_TOTAL_COUNT
 })
 @JsonTypeName("DelegierungEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DelegierungEntryDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  @jakarta.annotation.Nonnull
   private String fallNummer;
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private UUID fallId;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  @jakarta.annotation.Nonnull
   private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_WOHNORT = "wohnort";
+  @jakarta.annotation.Nonnull
   private String wohnort;
 
   public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nonnull
   private DelegierungStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  @jakarta.annotation.Nullable
   private GesuchstatusDtoSpec gesuchStatus;
 
   public static final String JSON_PROPERTY_AENDERUNG_STATUS = "aenderungStatus";
+  @jakarta.annotation.Nullable
   private GesuchTrancheStatusDtoSpec aenderungStatus;
 
   public static final String JSON_PROPERTY_TOTAL_COUNT = "totalCount";
+  @jakarta.annotation.Nonnull
   private Integer totalCount;
 
   public DelegierungEntryDtoSpec() {
   }
 
-  public DelegierungEntryDtoSpec id(UUID id) {
+  public DelegierungEntryDtoSpec id(@jakarta.annotation.Nullable UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
@@ -102,25 +113,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nullable UUID id) {
     this.id = id;
   }
 
-
-  public DelegierungEntryDtoSpec fallNummer(String fallNummer) {
+  public DelegierungEntryDtoSpec fallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     
     this.fallNummer = fallNummer;
     return this;
   }
 
-   /**
+  /**
    * Get fallNummer
    * @return fallNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
@@ -128,25 +138,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallNummer(String fallNummer) {
+  public void setFallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     this.fallNummer = fallNummer;
   }
 
-
-  public DelegierungEntryDtoSpec fallId(UUID fallId) {
+  public DelegierungEntryDtoSpec fallId(@jakarta.annotation.Nonnull UUID fallId) {
     
     this.fallId = fallId;
     return this;
   }
 
-   /**
+  /**
    * Get fallId
    * @return fallId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getFallId() {
@@ -154,25 +163,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
+  public void setFallId(@jakarta.annotation.Nonnull UUID fallId) {
     this.fallId = fallId;
   }
 
-
-  public DelegierungEntryDtoSpec nachname(String nachname) {
+  public DelegierungEntryDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -180,25 +188,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public DelegierungEntryDtoSpec vorname(String vorname) {
+  public DelegierungEntryDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -206,25 +213,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public DelegierungEntryDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public DelegierungEntryDtoSpec geburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * Get geburtsdatum
    * @return geburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGeburtsdatum() {
@@ -232,25 +238,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
-
-  public DelegierungEntryDtoSpec wohnort(String wohnort) {
+  public DelegierungEntryDtoSpec wohnort(@jakarta.annotation.Nonnull String wohnort) {
     
     this.wohnort = wohnort;
     return this;
   }
 
-   /**
+  /**
    * Get wohnort
    * @return wohnort
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNORT)
+  @JsonProperty(value = JSON_PROPERTY_WOHNORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getWohnort() {
@@ -258,25 +263,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNORT)
+  @JsonProperty(value = JSON_PROPERTY_WOHNORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnort(String wohnort) {
+  public void setWohnort(@jakarta.annotation.Nonnull String wohnort) {
     this.wohnort = wohnort;
   }
 
-
-  public DelegierungEntryDtoSpec status(DelegierungStatusDtoSpec status) {
+  public DelegierungEntryDtoSpec status(@jakarta.annotation.Nonnull DelegierungStatusDtoSpec status) {
     
     this.status = status;
     return this;
   }
 
-   /**
+  /**
    * Get status
    * @return status
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DelegierungStatusDtoSpec getStatus() {
@@ -284,25 +288,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(DelegierungStatusDtoSpec status) {
+  public void setStatus(@jakarta.annotation.Nonnull DelegierungStatusDtoSpec status) {
     this.status = status;
   }
 
-
-  public DelegierungEntryDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public DelegierungEntryDtoSpec gesuchStatus(@jakarta.annotation.Nullable GesuchstatusDtoSpec gesuchStatus) {
     
     this.gesuchStatus = gesuchStatus;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchStatus
    * @return gesuchStatus
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchstatusDtoSpec getGesuchStatus() {
@@ -310,25 +313,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public void setGesuchStatus(@jakarta.annotation.Nullable GesuchstatusDtoSpec gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 
-
-  public DelegierungEntryDtoSpec aenderungStatus(GesuchTrancheStatusDtoSpec aenderungStatus) {
+  public DelegierungEntryDtoSpec aenderungStatus(@jakarta.annotation.Nullable GesuchTrancheStatusDtoSpec aenderungStatus) {
     
     this.aenderungStatus = aenderungStatus;
     return this;
   }
 
-   /**
+  /**
    * Get aenderungStatus
    * @return aenderungStatus
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AENDERUNG_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_AENDERUNG_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchTrancheStatusDtoSpec getAenderungStatus() {
@@ -336,25 +338,24 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AENDERUNG_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_AENDERUNG_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAenderungStatus(GesuchTrancheStatusDtoSpec aenderungStatus) {
+  public void setAenderungStatus(@jakarta.annotation.Nullable GesuchTrancheStatusDtoSpec aenderungStatus) {
     this.aenderungStatus = aenderungStatus;
   }
 
-
-  public DelegierungEntryDtoSpec totalCount(Integer totalCount) {
+  public DelegierungEntryDtoSpec totalCount(@jakarta.annotation.Nonnull Integer totalCount) {
     
     this.totalCount = totalCount;
     return this;
   }
 
-   /**
+  /**
    * Get totalCount
    * @return totalCount
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTAL_COUNT)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_COUNT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotalCount() {
@@ -362,11 +363,12 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL_COUNT)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_COUNT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotalCount(Integer totalCount) {
+  public void setTotalCount(@jakarta.annotation.Nonnull Integer totalCount) {
     this.totalCount = totalCount;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -419,10 +421,7 @@ public class DelegierungEntryDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

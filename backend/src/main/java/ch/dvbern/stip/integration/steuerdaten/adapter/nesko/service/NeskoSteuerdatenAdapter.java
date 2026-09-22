@@ -34,16 +34,12 @@ import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPort;
 import ch.dvbern.stip.integration.steuerdaten.domain.qualifier.SteuerdatenAdapterQualifier;
 import ch.dvbern.stip.integration.steuerdaten.domain.service.SteuerdatenAccessService;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.xml.ws.soap.SOAPFaultException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@RequiredArgsConstructor
 @SteuerdatenAdapterQualifier(SteuerdatenAdapterType.NESKO)
 public class NeskoSteuerdatenAdapter implements SteuerdatenPort {
 

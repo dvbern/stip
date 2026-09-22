@@ -35,35 +35,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SozialdienstSlimDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
 @JsonTypeName("SozialdienstSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SozialdienstSlimDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nonnull
   private String name;
 
   public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  @jakarta.annotation.Nonnull
   private Boolean aktiv;
 
   public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  @jakarta.annotation.Nonnull
   private ZahlungsverbindungSlimDtoSpec zahlungsverbindung;
 
   public SozialdienstSlimDtoSpec() {
   }
 
-  public SozialdienstSlimDtoSpec id(UUID id) {
+  public SozialdienstSlimDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -71,25 +75,24 @@ public class SozialdienstSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public SozialdienstSlimDtoSpec name(String name) {
+  public SozialdienstSlimDtoSpec name(@jakarta.annotation.Nonnull String name) {
     
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getName() {
@@ -97,25 +100,24 @@ public class SozialdienstSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setName(String name) {
+  public void setName(@jakarta.annotation.Nonnull String name) {
     this.name = name;
   }
 
-
-  public SozialdienstSlimDtoSpec aktiv(Boolean aktiv) {
+  public SozialdienstSlimDtoSpec aktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     
     this.aktiv = aktiv;
     return this;
   }
 
-   /**
+  /**
    * Get aktiv
    * @return aktiv
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAktiv() {
@@ -123,25 +125,24 @@ public class SozialdienstSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonProperty(value = JSON_PROPERTY_AKTIV, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAktiv(Boolean aktiv) {
+  public void setAktiv(@jakarta.annotation.Nonnull Boolean aktiv) {
     this.aktiv = aktiv;
   }
 
-
-  public SozialdienstSlimDtoSpec zahlungsverbindung(ZahlungsverbindungSlimDtoSpec zahlungsverbindung) {
+  public SozialdienstSlimDtoSpec zahlungsverbindung(@jakarta.annotation.Nonnull ZahlungsverbindungSlimDtoSpec zahlungsverbindung) {
     
     this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
 
-   /**
+  /**
    * Get zahlungsverbindung
    * @return zahlungsverbindung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZAHLUNGSVERBINDUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public ZahlungsverbindungSlimDtoSpec getZahlungsverbindung() {
@@ -149,11 +150,12 @@ public class SozialdienstSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZAHLUNGSVERBINDUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setZahlungsverbindung(ZahlungsverbindungSlimDtoSpec zahlungsverbindung) {
+  public void setZahlungsverbindung(@jakarta.annotation.Nonnull ZahlungsverbindungSlimDtoSpec zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -192,10 +194,7 @@ public class SozialdienstSlimDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

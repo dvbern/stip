@@ -31,26 +31,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoData")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataDto  implements Serializable {
-  private @Valid DemoAusbildungDto ausbildung;
-  private @Valid DemoPersonInAusbildungDto personInAusbildung;
-  private @Valid DemoLebenslaufDto lebenslauf;
-  private @Valid List<DemoKindDto> kinder = new ArrayList<>();
-  private @Valid DemoEinnahmenKostenDto einnahmenKosten;
-  private @Valid DemoFamiliensituationDto familiensituation;
-  private @Valid List<DemoElternteilDto> elterns = new ArrayList<>();
-  private @Valid List<DemoSteuererklaerungDto> steuererklaerung = new ArrayList<>();
-  private @Valid List<DemoSteuerdatenDto> steuerdaten = new ArrayList<>();
-  private @Valid List<DemoGeschwisterDto> geschwister = new ArrayList<>();
-  private @Valid DemoAuszahlungDto auszahlung;
-  private @Valid DemoDarlehenDto darlehen;
-  private @Valid DemoPartnerDto partner;
-  private @Valid DemoEinnahmenKostenDto einnahmenKostenPartner;
-  private @Valid DemoDataTestBerechnungValuesDto berechnungValues;
+  private DemoAusbildungDto ausbildung;
+  private DemoPersonInAusbildungDto personInAusbildung;
+  private DemoLebenslaufDto lebenslauf;
+  private @Valid List<@Valid DemoKindDto> kinder = new ArrayList<>();
+  private DemoEinnahmenKostenDto einnahmenKosten;
+  private DemoFamiliensituationDto familiensituation;
+  private @Valid List<@Valid DemoElternteilDto> elterns = new ArrayList<>();
+  private @Valid List<@Valid DemoSteuererklaerungDto> steuererklaerung = new ArrayList<>();
+  private @Valid List<@Valid DemoSteuerdatenDto> steuerdaten = new ArrayList<>();
+  private @Valid List<@Valid DemoGeschwisterDto> geschwister = new ArrayList<>();
+  private DemoAuszahlungDto auszahlung;
+  private DemoDarlehenDto darlehen;
+  private DemoPartnerDto partner;
+  private DemoEinnahmenKostenDto einnahmenKostenPartner;
+  private DemoDataTestBerechnungValuesDto berechnungValues;
 
   protected DemoDataDto(DemoDataDtoBuilder<?, ?> b) {
     this.ausbildung = b.ausbildung;
@@ -81,13 +81,12 @@ public class DemoDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildung")
-  @NotNull
-  public DemoAusbildungDto getAusbildung() {
+  @JsonProperty(required = true, value = "ausbildung")
+  @NotNull @Valid public DemoAusbildungDto getAusbildung() {
     return ausbildung;
   }
 
-  @JsonProperty("ausbildung")
+  @JsonProperty(required = true, value = "ausbildung")
   public void setAusbildung(DemoAusbildungDto ausbildung) {
     this.ausbildung = ausbildung;
   }
@@ -100,13 +99,12 @@ public class DemoDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("personInAusbildung")
-  @NotNull
-  public DemoPersonInAusbildungDto getPersonInAusbildung() {
+  @JsonProperty(required = true, value = "personInAusbildung")
+  @NotNull @Valid public DemoPersonInAusbildungDto getPersonInAusbildung() {
     return personInAusbildung;
   }
 
-  @JsonProperty("personInAusbildung")
+  @JsonProperty(required = true, value = "personInAusbildung")
   public void setPersonInAusbildung(DemoPersonInAusbildungDto personInAusbildung) {
     this.personInAusbildung = personInAusbildung;
   }
@@ -119,33 +117,31 @@ public class DemoDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("lebenslauf")
-  @NotNull
-  public DemoLebenslaufDto getLebenslauf() {
+  @JsonProperty(required = true, value = "lebenslauf")
+  @NotNull @Valid public DemoLebenslaufDto getLebenslauf() {
     return lebenslauf;
   }
 
-  @JsonProperty("lebenslauf")
+  @JsonProperty(required = true, value = "lebenslauf")
   public void setLebenslauf(DemoLebenslaufDto lebenslauf) {
     this.lebenslauf = lebenslauf;
   }
 
   /**
    **/
-  public DemoDataDto kinder(List<DemoKindDto> kinder) {
+  public DemoDataDto kinder(List<@Valid DemoKindDto> kinder) {
     this.kinder = kinder;
     return this;
   }
 
   
-  @JsonProperty("kinder")
-  @NotNull
-  public List<DemoKindDto> getKinder() {
+  @JsonProperty(required = true, value = "kinder")
+  @NotNull @Valid public List<@Valid DemoKindDto> getKinder() {
     return kinder;
   }
 
-  @JsonProperty("kinder")
-  public void setKinder(List<DemoKindDto> kinder) {
+  @JsonProperty(required = true, value = "kinder")
+  public void setKinder(List<@Valid DemoKindDto> kinder) {
     this.kinder = kinder;
   }
 
@@ -173,13 +169,12 @@ public class DemoDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("einnahmenKosten")
-  @NotNull
-  public DemoEinnahmenKostenDto getEinnahmenKosten() {
+  @JsonProperty(required = true, value = "einnahmenKosten")
+  @NotNull @Valid public DemoEinnahmenKostenDto getEinnahmenKosten() {
     return einnahmenKosten;
   }
 
-  @JsonProperty("einnahmenKosten")
+  @JsonProperty(required = true, value = "einnahmenKosten")
   public void setEinnahmenKosten(DemoEinnahmenKostenDto einnahmenKosten) {
     this.einnahmenKosten = einnahmenKosten;
   }
@@ -192,33 +187,31 @@ public class DemoDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("familiensituation")
-  @NotNull
-  public DemoFamiliensituationDto getFamiliensituation() {
+  @JsonProperty(required = true, value = "familiensituation")
+  @NotNull @Valid public DemoFamiliensituationDto getFamiliensituation() {
     return familiensituation;
   }
 
-  @JsonProperty("familiensituation")
+  @JsonProperty(required = true, value = "familiensituation")
   public void setFamiliensituation(DemoFamiliensituationDto familiensituation) {
     this.familiensituation = familiensituation;
   }
 
   /**
    **/
-  public DemoDataDto elterns(List<DemoElternteilDto> elterns) {
+  public DemoDataDto elterns(List<@Valid DemoElternteilDto> elterns) {
     this.elterns = elterns;
     return this;
   }
 
   
-  @JsonProperty("elterns")
-  @NotNull
-  public List<DemoElternteilDto> getElterns() {
+  @JsonProperty(required = true, value = "elterns")
+  @NotNull @Valid public List<@Valid DemoElternteilDto> getElterns() {
     return elterns;
   }
 
-  @JsonProperty("elterns")
-  public void setElterns(List<DemoElternteilDto> elterns) {
+  @JsonProperty(required = true, value = "elterns")
+  public void setElterns(List<@Valid DemoElternteilDto> elterns) {
     this.elterns = elterns;
   }
 
@@ -240,20 +233,19 @@ public class DemoDataDto  implements Serializable {
   }
   /**
    **/
-  public DemoDataDto steuererklaerung(List<DemoSteuererklaerungDto> steuererklaerung) {
+  public DemoDataDto steuererklaerung(List<@Valid DemoSteuererklaerungDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
     return this;
   }
 
   
-  @JsonProperty("steuererklaerung")
-  @NotNull
-  public List<DemoSteuererklaerungDto> getSteuererklaerung() {
+  @JsonProperty(required = true, value = "steuererklaerung")
+  @NotNull @Valid public List<@Valid DemoSteuererklaerungDto> getSteuererklaerung() {
     return steuererklaerung;
   }
 
-  @JsonProperty("steuererklaerung")
-  public void setSteuererklaerung(List<DemoSteuererklaerungDto> steuererklaerung) {
+  @JsonProperty(required = true, value = "steuererklaerung")
+  public void setSteuererklaerung(List<@Valid DemoSteuererklaerungDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
   }
 
@@ -275,20 +267,19 @@ public class DemoDataDto  implements Serializable {
   }
   /**
    **/
-  public DemoDataDto steuerdaten(List<DemoSteuerdatenDto> steuerdaten) {
+  public DemoDataDto steuerdaten(List<@Valid DemoSteuerdatenDto> steuerdaten) {
     this.steuerdaten = steuerdaten;
     return this;
   }
 
   
-  @JsonProperty("steuerdaten")
-  @NotNull
-  public List<DemoSteuerdatenDto> getSteuerdaten() {
+  @JsonProperty(required = true, value = "steuerdaten")
+  @NotNull @Valid public List<@Valid DemoSteuerdatenDto> getSteuerdaten() {
     return steuerdaten;
   }
 
-  @JsonProperty("steuerdaten")
-  public void setSteuerdaten(List<DemoSteuerdatenDto> steuerdaten) {
+  @JsonProperty(required = true, value = "steuerdaten")
+  public void setSteuerdaten(List<@Valid DemoSteuerdatenDto> steuerdaten) {
     this.steuerdaten = steuerdaten;
   }
 
@@ -310,20 +301,19 @@ public class DemoDataDto  implements Serializable {
   }
   /**
    **/
-  public DemoDataDto geschwister(List<DemoGeschwisterDto> geschwister) {
+  public DemoDataDto geschwister(List<@Valid DemoGeschwisterDto> geschwister) {
     this.geschwister = geschwister;
     return this;
   }
 
   
-  @JsonProperty("geschwister")
-  @NotNull
-  public List<DemoGeschwisterDto> getGeschwister() {
+  @JsonProperty(required = true, value = "geschwister")
+  @NotNull @Valid public List<@Valid DemoGeschwisterDto> getGeschwister() {
     return geschwister;
   }
 
-  @JsonProperty("geschwister")
-  public void setGeschwister(List<DemoGeschwisterDto> geschwister) {
+  @JsonProperty(required = true, value = "geschwister")
+  public void setGeschwister(List<@Valid DemoGeschwisterDto> geschwister) {
     this.geschwister = geschwister;
   }
 
@@ -351,13 +341,12 @@ public class DemoDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("auszahlung")
-  @NotNull
-  public DemoAuszahlungDto getAuszahlung() {
+  @JsonProperty(required = true, value = "auszahlung")
+  @NotNull @Valid public DemoAuszahlungDto getAuszahlung() {
     return auszahlung;
   }
 
-  @JsonProperty("auszahlung")
+  @JsonProperty(required = true, value = "auszahlung")
   public void setAuszahlung(DemoAuszahlungDto auszahlung) {
     this.auszahlung = auszahlung;
   }
@@ -370,13 +359,12 @@ public class DemoDataDto  implements Serializable {
   }
 
   
-  @JsonProperty("darlehen")
-  @NotNull
-  public DemoDarlehenDto getDarlehen() {
+  @JsonProperty(required = true, value = "darlehen")
+  @NotNull @Valid public DemoDarlehenDto getDarlehen() {
     return darlehen;
   }
 
-  @JsonProperty("darlehen")
+  @JsonProperty(required = true, value = "darlehen")
   public void setDarlehen(DemoDarlehenDto darlehen) {
     this.darlehen = darlehen;
   }
@@ -390,7 +378,7 @@ public class DemoDataDto  implements Serializable {
 
   
   @JsonProperty("partner")
-  public DemoPartnerDto getPartner() {
+  @Valid public DemoPartnerDto getPartner() {
     return partner;
   }
 
@@ -408,7 +396,7 @@ public class DemoDataDto  implements Serializable {
 
   
   @JsonProperty("einnahmenKostenPartner")
-  public DemoEinnahmenKostenDto getEinnahmenKostenPartner() {
+  @Valid public DemoEinnahmenKostenDto getEinnahmenKostenPartner() {
     return einnahmenKostenPartner;
   }
 
@@ -426,7 +414,7 @@ public class DemoDataDto  implements Serializable {
 
   
   @JsonProperty("berechnungValues")
-  public DemoDataTestBerechnungValuesDto getBerechnungValues() {
+  @Valid public DemoDataTestBerechnungValuesDto getBerechnungValues() {
     return berechnungValues;
   }
 
@@ -496,10 +484,7 @@ public class DemoDataDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -602,4 +587,3 @@ public class DemoDataDto  implements Serializable {
     }
   }
 }
-

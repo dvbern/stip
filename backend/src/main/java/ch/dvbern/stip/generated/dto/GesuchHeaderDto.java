@@ -23,18 +23,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchHeader")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchHeaderDto  implements Serializable {
-  private @Valid List<VerfuegtGesuchDto> versions = new ArrayList<>();
-  private @Valid GesuchAenderungsDto aenderungs;
-  private @Valid List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
-  private @Valid GesuchInfoDto gesuchInfo;
-  private @Valid InitialGesuchsDto initial;
-  private @Valid UUID latestVerfuegungId;
-  private @Valid java.time.LocalDateTime latestVerfuegtAt;
+  private @Valid List<@Valid VerfuegtGesuchDto> versions = new ArrayList<>();
+  private GesuchAenderungsDto aenderungs;
+  private @Valid List<@Valid GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
+  private GesuchInfoDto gesuchInfo;
+  private InitialGesuchsDto initial;
+  private UUID latestVerfuegungId;
+  private java.time.LocalDateTime latestVerfuegtAt;
 
   protected GesuchHeaderDto(GesuchHeaderDtoBuilder<?, ?> b) {
     this.versions = b.versions;
@@ -51,20 +51,19 @@ public class GesuchHeaderDto  implements Serializable {
 
   /**
    **/
-  public GesuchHeaderDto versions(List<VerfuegtGesuchDto> versions) {
+  public GesuchHeaderDto versions(List<@Valid VerfuegtGesuchDto> versions) {
     this.versions = versions;
     return this;
   }
 
   
-  @JsonProperty("versions")
-  @NotNull
-  public List<VerfuegtGesuchDto> getVersions() {
+  @JsonProperty(required = true, value = "versions")
+  @NotNull @Valid public List<@Valid VerfuegtGesuchDto> getVersions() {
     return versions;
   }
 
-  @JsonProperty("versions")
-  public void setVersions(List<VerfuegtGesuchDto> versions) {
+  @JsonProperty(required = true, value = "versions")
+  public void setVersions(List<@Valid VerfuegtGesuchDto> versions) {
     this.versions = versions;
   }
 
@@ -92,33 +91,31 @@ public class GesuchHeaderDto  implements Serializable {
   }
 
   
-  @JsonProperty("aenderungs")
-  @NotNull
-  public GesuchAenderungsDto getAenderungs() {
+  @JsonProperty(required = true, value = "aenderungs")
+  @NotNull @Valid public GesuchAenderungsDto getAenderungs() {
     return aenderungs;
   }
 
-  @JsonProperty("aenderungs")
+  @JsonProperty(required = true, value = "aenderungs")
   public void setAenderungs(GesuchAenderungsDto aenderungs) {
     this.aenderungs = aenderungs;
   }
 
   /**
    **/
-  public GesuchHeaderDto currentTranches(List<GesuchTrancheSlimDto> currentTranches) {
+  public GesuchHeaderDto currentTranches(List<@Valid GesuchTrancheSlimDto> currentTranches) {
     this.currentTranches = currentTranches;
     return this;
   }
 
   
-  @JsonProperty("currentTranches")
-  @NotNull
-  public List<GesuchTrancheSlimDto> getCurrentTranches() {
+  @JsonProperty(required = true, value = "currentTranches")
+  @NotNull @Valid public List<@Valid GesuchTrancheSlimDto> getCurrentTranches() {
     return currentTranches;
   }
 
-  @JsonProperty("currentTranches")
-  public void setCurrentTranches(List<GesuchTrancheSlimDto> currentTranches) {
+  @JsonProperty(required = true, value = "currentTranches")
+  public void setCurrentTranches(List<@Valid GesuchTrancheSlimDto> currentTranches) {
     this.currentTranches = currentTranches;
   }
 
@@ -146,13 +143,12 @@ public class GesuchHeaderDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchInfo")
-  @NotNull
-  public GesuchInfoDto getGesuchInfo() {
+  @JsonProperty(required = true, value = "gesuchInfo")
+  @NotNull @Valid public GesuchInfoDto getGesuchInfo() {
     return gesuchInfo;
   }
 
-  @JsonProperty("gesuchInfo")
+  @JsonProperty(required = true, value = "gesuchInfo")
   public void setGesuchInfo(GesuchInfoDto gesuchInfo) {
     this.gesuchInfo = gesuchInfo;
   }
@@ -166,7 +162,7 @@ public class GesuchHeaderDto  implements Serializable {
 
   
   @JsonProperty("initial")
-  public InitialGesuchsDto getInitial() {
+  @Valid public InitialGesuchsDto getInitial() {
     return initial;
   }
 
@@ -256,10 +252,7 @@ public class GesuchHeaderDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -322,4 +315,3 @@ public class GesuchHeaderDto  implements Serializable {
     }
   }
 }
-

@@ -32,10 +32,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * AusbildungDtoSpec
  */
 @JsonPropertyOrder({
-  AusbildungDtoSpec.JSON_PROPERTY_STATUS,
-  AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSGANG,
-  AusbildungDtoSpec.JSON_PROPERTY_EDITABLE,
-  AusbildungDtoSpec.JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START,
   AusbildungDtoSpec.JSON_PROPERTY_ID,
   AusbildungDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungDtoSpec.JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG,
@@ -49,184 +45,102 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT,
   AusbildungDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND,
-  AusbildungDtoSpec.JSON_PROPERTY_LAND_ID
+  AusbildungDtoSpec.JSON_PROPERTY_LAND_ID,
+  AusbildungDtoSpec.JSON_PROPERTY_STATUS,
+  AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSGANG,
+  AusbildungDtoSpec.JSON_PROPERTY_EDITABLE,
+  AusbildungDtoSpec.JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START
 })
 @JsonTypeName("Ausbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungDtoSpec {
-  public static final String JSON_PROPERTY_STATUS = "status";
-  private AusbildungsStatusDtoSpec status;
-
-  public static final String JSON_PROPERTY_AUSBILDUNGSGANG = "ausbildungsgang";
-  private AusbildungsgangDtoSpec ausbildungsgang;
-
-  public static final String JSON_PROPERTY_EDITABLE = "editable";
-  private Boolean editable;
-
-  public static final String JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START = "earliestActiveGesuchPeriodeStart";
-  private LocalDate earliestActiveGesuchPeriodeStart;
-
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private UUID fallId;
 
   public static final String JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG = "fachrichtungBerufsbezeichnung";
+  @jakarta.annotation.Nullable
   private String fachrichtungBerufsbezeichnung;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN = "ausbildungNichtGefunden";
+  @jakarta.annotation.Nullable
   private Boolean ausbildungNichtGefunden;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_BEGIN = "ausbildungBegin";
+  @jakarta.annotation.Nonnull
   private String ausbildungBegin;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_END = "ausbildungEnd";
+  @jakarta.annotation.Nonnull
   private String ausbildungEnd;
 
   public static final String JSON_PROPERTY_BESUCHT_B_M_S = "besuchtBMS";
+  @jakarta.annotation.Nullable
   private Boolean besuchtBMS;
 
   public static final String JSON_PROPERTY_PENSUM = "pensum";
+  @jakarta.annotation.Nonnull
   private AusbildungsPensumDtoSpec pensum;
 
   public static final String JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE = "alternativeAusbildungsstaette";
+  @jakarta.annotation.Nullable
   private String alternativeAusbildungsstaette;
 
   public static final String JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG = "alternativeAusbildungsgang";
+  @jakarta.annotation.Nullable
   private String alternativeAusbildungsgang;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z = "ausbildungsortPLZ";
+  @jakarta.annotation.Nullable
   private String ausbildungsortPLZ;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSORT = "ausbildungsort";
+  @jakarta.annotation.Nullable
   private String ausbildungsort;
 
   public static final String JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND = "isAusbildungAusland";
+  @jakarta.annotation.Nullable
   private Boolean isAusbildungAusland;
 
   public static final String JSON_PROPERTY_LAND_ID = "landId";
+  @jakarta.annotation.Nullable
   private UUID landId;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nonnull
+  private AusbildungsStatusDtoSpec status;
+
+  public static final String JSON_PROPERTY_AUSBILDUNGSGANG = "ausbildungsgang";
+  @jakarta.annotation.Nullable
+  private AusbildungsgangDtoSpec ausbildungsgang;
+
+  public static final String JSON_PROPERTY_EDITABLE = "editable";
+  @jakarta.annotation.Nonnull
+  private Boolean editable;
+
+  public static final String JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START = "earliestActiveGesuchPeriodeStart";
+  @jakarta.annotation.Nullable
+  private LocalDate earliestActiveGesuchPeriodeStart;
 
   public AusbildungDtoSpec() {
   }
 
-  public AusbildungDtoSpec status(AusbildungsStatusDtoSpec status) {
-    
-    this.status = status;
-    return this;
-  }
-
-   /**
-   * Get status
-   * @return status
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public AusbildungsStatusDtoSpec getStatus() {
-    return status;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(AusbildungsStatusDtoSpec status) {
-    this.status = status;
-  }
-
-
-  public AusbildungDtoSpec ausbildungsgang(AusbildungsgangDtoSpec ausbildungsgang) {
-    
-    this.ausbildungsgang = ausbildungsgang;
-    return this;
-  }
-
-   /**
-   * Get ausbildungsgang
-   * @return ausbildungsgang
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGANG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public AusbildungsgangDtoSpec getAusbildungsgang() {
-    return ausbildungsgang;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSGANG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungsgang(AusbildungsgangDtoSpec ausbildungsgang) {
-    this.ausbildungsgang = ausbildungsgang;
-  }
-
-
-  public AusbildungDtoSpec editable(Boolean editable) {
-    
-    this.editable = editable;
-    return this;
-  }
-
-   /**
-   * Get editable
-   * @return editable
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EDITABLE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getEditable() {
-    return editable;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_EDITABLE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEditable(Boolean editable) {
-    this.editable = editable;
-  }
-
-
-  public AusbildungDtoSpec earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
-    
-    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
-    return this;
-  }
-
-   /**
-   * Get earliestActiveGesuchPeriodeStart
-   * @return earliestActiveGesuchPeriodeStart
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public LocalDate getEarliestActiveGesuchPeriodeStart() {
-    return earliestActiveGesuchPeriodeStart;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEarliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
-    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
-  }
-
-
-  public AusbildungDtoSpec id(UUID id) {
+  public AusbildungDtoSpec id(@jakarta.annotation.Nullable UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
@@ -234,25 +148,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nullable UUID id) {
     this.id = id;
   }
 
-
-  public AusbildungDtoSpec fallId(UUID fallId) {
+  public AusbildungDtoSpec fallId(@jakarta.annotation.Nonnull UUID fallId) {
     
     this.fallId = fallId;
     return this;
   }
 
-   /**
+  /**
    * Get fallId
    * @return fallId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getFallId() {
@@ -260,25 +173,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
+  public void setFallId(@jakarta.annotation.Nonnull UUID fallId) {
     this.fallId = fallId;
   }
 
-
-  public AusbildungDtoSpec fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+  public AusbildungDtoSpec fachrichtungBerufsbezeichnung(@jakarta.annotation.Nullable String fachrichtungBerufsbezeichnung) {
     
     this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
     return this;
   }
 
-   /**
+  /**
    * Get fachrichtungBerufsbezeichnung
    * @return fachrichtungBerufsbezeichnung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
+  @JsonProperty(value = JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getFachrichtungBerufsbezeichnung() {
@@ -286,25 +198,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
+  @JsonProperty(value = JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+  public void setFachrichtungBerufsbezeichnung(@jakarta.annotation.Nullable String fachrichtungBerufsbezeichnung) {
     this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
   }
 
-
-  public AusbildungDtoSpec ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+  public AusbildungDtoSpec ausbildungNichtGefunden(@jakarta.annotation.Nullable Boolean ausbildungNichtGefunden) {
     
     this.ausbildungNichtGefunden = ausbildungNichtGefunden;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungNichtGefunden
    * @return ausbildungNichtGefunden
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getAusbildungNichtGefunden() {
@@ -312,25 +223,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+  public void setAusbildungNichtGefunden(@jakarta.annotation.Nullable Boolean ausbildungNichtGefunden) {
     this.ausbildungNichtGefunden = ausbildungNichtGefunden;
   }
 
-
-  public AusbildungDtoSpec ausbildungBegin(String ausbildungBegin) {
+  public AusbildungDtoSpec ausbildungBegin(@jakarta.annotation.Nonnull String ausbildungBegin) {
     
     this.ausbildungBegin = ausbildungBegin;
     return this;
   }
 
-   /**
+  /**
    * Datum im Format mm.YYYY
    * @return ausbildungBegin
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BEGIN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_BEGIN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAusbildungBegin() {
@@ -338,25 +248,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BEGIN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_BEGIN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungBegin(String ausbildungBegin) {
+  public void setAusbildungBegin(@jakarta.annotation.Nonnull String ausbildungBegin) {
     this.ausbildungBegin = ausbildungBegin;
   }
 
-
-  public AusbildungDtoSpec ausbildungEnd(String ausbildungEnd) {
+  public AusbildungDtoSpec ausbildungEnd(@jakarta.annotation.Nonnull String ausbildungEnd) {
     
     this.ausbildungEnd = ausbildungEnd;
     return this;
   }
 
-   /**
+  /**
    * Datum im Format mm.YYYY
    * @return ausbildungEnd
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_END)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_END, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getAusbildungEnd() {
@@ -364,25 +273,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_END)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_END, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungEnd(String ausbildungEnd) {
+  public void setAusbildungEnd(@jakarta.annotation.Nonnull String ausbildungEnd) {
     this.ausbildungEnd = ausbildungEnd;
   }
 
-
-  public AusbildungDtoSpec besuchtBMS(Boolean besuchtBMS) {
+  public AusbildungDtoSpec besuchtBMS(@jakarta.annotation.Nullable Boolean besuchtBMS) {
     
     this.besuchtBMS = besuchtBMS;
     return this;
   }
 
-   /**
+  /**
    * Required wenn Abschluss.askForBerufsmaturitaet &#x3D; true
    * @return besuchtBMS
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BESUCHT_B_M_S)
+  @JsonProperty(value = JSON_PROPERTY_BESUCHT_B_M_S, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getBesuchtBMS() {
@@ -390,25 +298,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BESUCHT_B_M_S)
+  @JsonProperty(value = JSON_PROPERTY_BESUCHT_B_M_S, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBesuchtBMS(Boolean besuchtBMS) {
+  public void setBesuchtBMS(@jakarta.annotation.Nullable Boolean besuchtBMS) {
     this.besuchtBMS = besuchtBMS;
   }
 
-
-  public AusbildungDtoSpec pensum(AusbildungsPensumDtoSpec pensum) {
+  public AusbildungDtoSpec pensum(@jakarta.annotation.Nonnull AusbildungsPensumDtoSpec pensum) {
     
     this.pensum = pensum;
     return this;
   }
 
-   /**
+  /**
    * Get pensum
    * @return pensum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PENSUM)
+  @JsonProperty(value = JSON_PROPERTY_PENSUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AusbildungsPensumDtoSpec getPensum() {
@@ -416,25 +323,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PENSUM)
+  @JsonProperty(value = JSON_PROPERTY_PENSUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPensum(AusbildungsPensumDtoSpec pensum) {
+  public void setPensum(@jakarta.annotation.Nonnull AusbildungsPensumDtoSpec pensum) {
     this.pensum = pensum;
   }
 
-
-  public AusbildungDtoSpec alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
+  public AusbildungDtoSpec alternativeAusbildungsstaette(@jakarta.annotation.Nullable String alternativeAusbildungsstaette) {
     
     this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
     return this;
   }
 
-   /**
+  /**
    * Required wenn andere ausbildungNichtGefunden &#x3D; true
    * @return alternativeAusbildungsstaette
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE)
+  @JsonProperty(value = JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getAlternativeAusbildungsstaette() {
@@ -442,25 +348,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE)
+  @JsonProperty(value = JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAlternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
+  public void setAlternativeAusbildungsstaette(@jakarta.annotation.Nullable String alternativeAusbildungsstaette) {
     this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
   }
 
-
-  public AusbildungDtoSpec alternativeAusbildungsgang(String alternativeAusbildungsgang) {
+  public AusbildungDtoSpec alternativeAusbildungsgang(@jakarta.annotation.Nullable String alternativeAusbildungsgang) {
     
     this.alternativeAusbildungsgang = alternativeAusbildungsgang;
     return this;
   }
 
-   /**
+  /**
    * Required wenn andere ausbildungNichtGefunden &#x3D; true
    * @return alternativeAusbildungsgang
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG)
+  @JsonProperty(value = JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getAlternativeAusbildungsgang() {
@@ -468,25 +373,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG)
+  @JsonProperty(value = JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAlternativeAusbildungsgang(String alternativeAusbildungsgang) {
+  public void setAlternativeAusbildungsgang(@jakarta.annotation.Nullable String alternativeAusbildungsgang) {
     this.alternativeAusbildungsgang = alternativeAusbildungsgang;
   }
 
-
-  public AusbildungDtoSpec ausbildungsortPLZ(String ausbildungsortPLZ) {
+  public AusbildungDtoSpec ausbildungsortPLZ(@jakarta.annotation.Nullable String ausbildungsortPLZ) {
     
     this.ausbildungsortPLZ = ausbildungsortPLZ;
     return this;
   }
 
-   /**
+  /**
    * Not required if isAusbildungAusland &#x3D; true
    * @return ausbildungsortPLZ
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getAusbildungsortPLZ() {
@@ -494,25 +398,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungsortPLZ(String ausbildungsortPLZ) {
+  public void setAusbildungsortPLZ(@jakarta.annotation.Nullable String ausbildungsortPLZ) {
     this.ausbildungsortPLZ = ausbildungsortPLZ;
   }
 
-
-  public AusbildungDtoSpec ausbildungsort(String ausbildungsort) {
+  public AusbildungDtoSpec ausbildungsort(@jakarta.annotation.Nullable String ausbildungsort) {
     
     this.ausbildungsort = ausbildungsort;
     return this;
   }
 
-   /**
+  /**
    * Not required if isAusbildungAusland &#x3D; true
    * @return ausbildungsort
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSORT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getAusbildungsort() {
@@ -520,25 +423,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSORT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungsort(String ausbildungsort) {
+  public void setAusbildungsort(@jakarta.annotation.Nullable String ausbildungsort) {
     this.ausbildungsort = ausbildungsort;
   }
 
-
-  public AusbildungDtoSpec isAusbildungAusland(Boolean isAusbildungAusland) {
+  public AusbildungDtoSpec isAusbildungAusland(@jakarta.annotation.Nullable Boolean isAusbildungAusland) {
     
     this.isAusbildungAusland = isAusbildungAusland;
     return this;
   }
 
-   /**
+  /**
    * Get isAusbildungAusland
    * @return isAusbildungAusland
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND)
+  @JsonProperty(value = JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getIsAusbildungAusland() {
@@ -546,25 +448,24 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND)
+  @JsonProperty(value = JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIsAusbildungAusland(Boolean isAusbildungAusland) {
+  public void setIsAusbildungAusland(@jakarta.annotation.Nullable Boolean isAusbildungAusland) {
     this.isAusbildungAusland = isAusbildungAusland;
   }
 
-
-  public AusbildungDtoSpec landId(UUID landId) {
+  public AusbildungDtoSpec landId(@jakarta.annotation.Nullable UUID landId) {
     
     this.landId = landId;
     return this;
   }
 
-   /**
+  /**
    * Get landId
    * @return landId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_LAND_ID)
+  @JsonProperty(value = JSON_PROPERTY_LAND_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getLandId() {
@@ -572,11 +473,112 @@ public class AusbildungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LAND_ID)
+  @JsonProperty(value = JSON_PROPERTY_LAND_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLandId(UUID landId) {
+  public void setLandId(@jakarta.annotation.Nullable UUID landId) {
     this.landId = landId;
   }
+
+  public AusbildungDtoSpec status(@jakarta.annotation.Nonnull AusbildungsStatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+  /**
+   * Get status
+   * @return status
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public AusbildungsStatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStatus(@jakarta.annotation.Nonnull AusbildungsStatusDtoSpec status) {
+    this.status = status;
+  }
+
+  public AusbildungDtoSpec ausbildungsgang(@jakarta.annotation.Nullable AusbildungsgangDtoSpec ausbildungsgang) {
+    
+    this.ausbildungsgang = ausbildungsgang;
+    return this;
+  }
+
+  /**
+   * Get ausbildungsgang
+   * @return ausbildungsgang
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSGANG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public AusbildungsgangDtoSpec getAusbildungsgang() {
+    return ausbildungsgang;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSGANG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAusbildungsgang(@jakarta.annotation.Nullable AusbildungsgangDtoSpec ausbildungsgang) {
+    this.ausbildungsgang = ausbildungsgang;
+  }
+
+  public AusbildungDtoSpec editable(@jakarta.annotation.Nonnull Boolean editable) {
+    
+    this.editable = editable;
+    return this;
+  }
+
+  /**
+   * Get editable
+   * @return editable
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_EDITABLE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getEditable() {
+    return editable;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_EDITABLE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEditable(@jakarta.annotation.Nonnull Boolean editable) {
+    this.editable = editable;
+  }
+
+  public AusbildungDtoSpec earliestActiveGesuchPeriodeStart(@jakarta.annotation.Nullable LocalDate earliestActiveGesuchPeriodeStart) {
+    
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+    return this;
+  }
+
+  /**
+   * Get earliestActiveGesuchPeriodeStart
+   * @return earliestActiveGesuchPeriodeStart
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEarliestActiveGesuchPeriodeStart() {
+    return earliestActiveGesuchPeriodeStart;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEarliestActiveGesuchPeriodeStart(@jakarta.annotation.Nullable LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -587,11 +589,7 @@ public class AusbildungDtoSpec {
       return false;
     }
     AusbildungDtoSpec ausbildung = (AusbildungDtoSpec) o;
-    return Objects.equals(this.status, ausbildung.status) &&
-        Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
-        Objects.equals(this.editable, ausbildung.editable) &&
-        Objects.equals(this.earliestActiveGesuchPeriodeStart, ausbildung.earliestActiveGesuchPeriodeStart) &&
-        Objects.equals(this.id, ausbildung.id) &&
+    return Objects.equals(this.id, ausbildung.id) &&
         Objects.equals(this.fallId, ausbildung.fallId) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildung.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
@@ -604,22 +602,22 @@ public class AusbildungDtoSpec {
         Objects.equals(this.ausbildungsortPLZ, ausbildung.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildung.isAusbildungAusland) &&
-        Objects.equals(this.landId, ausbildung.landId);
+        Objects.equals(this.landId, ausbildung.landId) &&
+        Objects.equals(this.status, ausbildung.status) &&
+        Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
+        Objects.equals(this.editable, ausbildung.editable) &&
+        Objects.equals(this.earliestActiveGesuchPeriodeStart, ausbildung.earliestActiveGesuchPeriodeStart);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, ausbildungsgang, editable, earliestActiveGesuchPeriodeStart, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
+    return Objects.hash(id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, status, ausbildungsgang, editable, earliestActiveGesuchPeriodeStart);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungDtoSpec {\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
-    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
-    sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
@@ -634,6 +632,10 @@ public class AusbildungDtoSpec {
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
+    sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -643,10 +645,7 @@ public class AusbildungDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

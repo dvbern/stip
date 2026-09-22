@@ -37,35 +37,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataErrorDtoSpec.JSON_PROPERTY_VALIDATION_ERRORS
 })
 @JsonTypeName("DemoDataError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoDataErrorDtoSpec {
   public static final String JSON_PROPERTY_INTERNAL_MESSAGE = "internalMessage";
+  @jakarta.annotation.Nonnull
   private String internalMessage;
 
   public static final String JSON_PROPERTY_ERROR_CLASS = "errorClass";
+  @jakarta.annotation.Nonnull
   private String errorClass;
 
   public static final String JSON_PROPERTY_CAUSE = "cause";
+  @jakarta.annotation.Nullable
   private String cause;
 
   public static final String JSON_PROPERTY_VALIDATION_ERRORS = "validationErrors";
+  @jakarta.annotation.Nullable
   private List<ValidationMessageDtoSpec> validationErrors;
 
   public DemoDataErrorDtoSpec() {
   }
 
-  public DemoDataErrorDtoSpec internalMessage(String internalMessage) {
+  public DemoDataErrorDtoSpec internalMessage(@jakarta.annotation.Nonnull String internalMessage) {
     
     this.internalMessage = internalMessage;
     return this;
   }
 
-   /**
+  /**
    * Get internalMessage
    * @return internalMessage
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_INTERNAL_MESSAGE)
+  @JsonProperty(value = JSON_PROPERTY_INTERNAL_MESSAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getInternalMessage() {
@@ -73,25 +77,24 @@ public class DemoDataErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_INTERNAL_MESSAGE)
+  @JsonProperty(value = JSON_PROPERTY_INTERNAL_MESSAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setInternalMessage(String internalMessage) {
+  public void setInternalMessage(@jakarta.annotation.Nonnull String internalMessage) {
     this.internalMessage = internalMessage;
   }
 
-
-  public DemoDataErrorDtoSpec errorClass(String errorClass) {
+  public DemoDataErrorDtoSpec errorClass(@jakarta.annotation.Nonnull String errorClass) {
     
     this.errorClass = errorClass;
     return this;
   }
 
-   /**
+  /**
    * Get errorClass
    * @return errorClass
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ERROR_CLASS)
+  @JsonProperty(value = JSON_PROPERTY_ERROR_CLASS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getErrorClass() {
@@ -99,25 +102,24 @@ public class DemoDataErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERROR_CLASS)
+  @JsonProperty(value = JSON_PROPERTY_ERROR_CLASS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setErrorClass(String errorClass) {
+  public void setErrorClass(@jakarta.annotation.Nonnull String errorClass) {
     this.errorClass = errorClass;
   }
 
-
-  public DemoDataErrorDtoSpec cause(String cause) {
+  public DemoDataErrorDtoSpec cause(@jakarta.annotation.Nullable String cause) {
     
     this.cause = cause;
     return this;
   }
 
-   /**
+  /**
    * Get cause
    * @return cause
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CAUSE)
+  @JsonProperty(value = JSON_PROPERTY_CAUSE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getCause() {
@@ -125,14 +127,13 @@ public class DemoDataErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAUSE)
+  @JsonProperty(value = JSON_PROPERTY_CAUSE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCause(String cause) {
+  public void setCause(@jakarta.annotation.Nullable String cause) {
     this.cause = cause;
   }
 
-
-  public DemoDataErrorDtoSpec validationErrors(List<ValidationMessageDtoSpec> validationErrors) {
+  public DemoDataErrorDtoSpec validationErrors(@jakarta.annotation.Nullable List<ValidationMessageDtoSpec> validationErrors) {
     
     this.validationErrors = validationErrors;
     return this;
@@ -146,12 +147,12 @@ public class DemoDataErrorDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get validationErrors
    * @return validationErrors
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VALIDATION_ERRORS)
+  @JsonProperty(value = JSON_PROPERTY_VALIDATION_ERRORS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<ValidationMessageDtoSpec> getValidationErrors() {
@@ -159,11 +160,12 @@ public class DemoDataErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALIDATION_ERRORS)
+  @JsonProperty(value = JSON_PROPERTY_VALIDATION_ERRORS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setValidationErrors(List<ValidationMessageDtoSpec> validationErrors) {
+  public void setValidationErrors(@jakarta.annotation.Nullable List<ValidationMessageDtoSpec> validationErrors) {
     this.validationErrors = validationErrors;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -202,10 +204,7 @@ public class DemoDataErrorDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

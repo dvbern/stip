@@ -15,17 +15,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Dokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DokumentDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String filename;
-  private @Valid String filepath;
-  private @Valid String filesize;
-  private @Valid String objectId;
-  private @Valid String timestampErstellt;
+  private UUID id;
+  private String filename;
+  private String filepath;
+  private String filesize;
+  private String objectId;
+  private String timestampErstellt;
 
   protected DokumentDto(DokumentDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -47,13 +47,12 @@ public class DokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -66,13 +65,12 @@ public class DokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("filename")
-  @NotNull
-  public String getFilename() {
+  @JsonProperty(required = true, value = "filename")
+  @NotNull public String getFilename() {
     return filename;
   }
 
-  @JsonProperty("filename")
+  @JsonProperty(required = true, value = "filename")
   public void setFilename(String filename) {
     this.filename = filename;
   }
@@ -85,13 +83,12 @@ public class DokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("filepath")
-  @NotNull
-  public String getFilepath() {
+  @JsonProperty(required = true, value = "filepath")
+  @NotNull public String getFilepath() {
     return filepath;
   }
 
-  @JsonProperty("filepath")
+  @JsonProperty(required = true, value = "filepath")
   public void setFilepath(String filepath) {
     this.filepath = filepath;
   }
@@ -104,13 +101,12 @@ public class DokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("filesize")
-  @NotNull
-  public String getFilesize() {
+  @JsonProperty(required = true, value = "filesize")
+  @NotNull public String getFilesize() {
     return filesize;
   }
 
-  @JsonProperty("filesize")
+  @JsonProperty(required = true, value = "filesize")
   public void setFilesize(String filesize) {
     this.filesize = filesize;
   }
@@ -123,13 +119,12 @@ public class DokumentDto  implements Serializable {
   }
 
   
-  @JsonProperty("objectId")
-  @NotNull
-  public String getObjectId() {
+  @JsonProperty(required = true, value = "objectId")
+  @NotNull public String getObjectId() {
     return objectId;
   }
 
-  @JsonProperty("objectId")
+  @JsonProperty(required = true, value = "objectId")
   public void setObjectId(String objectId) {
     this.objectId = objectId;
   }
@@ -195,10 +190,7 @@ public class DokumentDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -256,4 +248,3 @@ public class DokumentDto  implements Serializable {
     }
   }
 }
-

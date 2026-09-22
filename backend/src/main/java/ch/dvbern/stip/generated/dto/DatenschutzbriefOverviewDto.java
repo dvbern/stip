@@ -17,20 +17,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DatenschutzbriefOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DatenschutzbriefOverviewDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String userErstellt;
-  private @Valid String sozialversicherungsnummer;
-  private @Valid String nachname;
-  private @Valid String vorname;
-  private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
-  private @Valid LocalDate timestampErstellt;
-  private @Valid DokumentDto dokument;
-  private @Valid UUID massendruckJobId;
+  private UUID id;
+  private String userErstellt;
+  private String sozialversicherungsnummer;
+  private String nachname;
+  private String vorname;
+  private ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
+  private LocalDate timestampErstellt;
+  private DokumentDto dokument;
+  private UUID massendruckJobId;
 
   protected DatenschutzbriefOverviewDto(DatenschutzbriefOverviewDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -55,13 +55,12 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -74,13 +73,12 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
+  @JsonProperty(required = true, value = "userErstellt")
+  @NotNull public String getUserErstellt() {
     return userErstellt;
   }
 
-  @JsonProperty("userErstellt")
+  @JsonProperty(required = true, value = "userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
   }
@@ -93,13 +91,12 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("sozialversicherungsnummer")
-  @NotNull
-  public String getSozialversicherungsnummer() {
+  @JsonProperty(required = true, value = "sozialversicherungsnummer")
+  @NotNull public String getSozialversicherungsnummer() {
     return sozialversicherungsnummer;
   }
 
-  @JsonProperty("sozialversicherungsnummer")
+  @JsonProperty(required = true, value = "sozialversicherungsnummer")
   public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
@@ -112,13 +109,12 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -131,13 +127,12 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -150,13 +145,12 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("elternTyp")
-  @NotNull
-  public ch.dvbern.stip.api.eltern.type.ElternTyp getElternTyp() {
+  @JsonProperty(required = true, value = "elternTyp")
+  @NotNull public ch.dvbern.stip.api.eltern.type.ElternTyp getElternTyp() {
     return elternTyp;
   }
 
-  @JsonProperty("elternTyp")
+  @JsonProperty(required = true, value = "elternTyp")
   public void setElternTyp(ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp) {
     this.elternTyp = elternTyp;
   }
@@ -188,7 +182,7 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
 
   
   @JsonProperty("dokument")
-  public DokumentDto getDokument() {
+  @Valid public DokumentDto getDokument() {
     return dokument;
   }
 
@@ -264,10 +258,7 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -340,4 +331,3 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
     }
   }
 }
-

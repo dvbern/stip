@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsgangCreateDtoSpec.JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID
 })
 @JsonTypeName("AusbildungsgangCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungsgangCreateDtoSpec {
   public static final String JSON_PROPERTY_ABSCHLUSS_ID = "abschlussId";
+  @jakarta.annotation.Nonnull
   private UUID abschlussId;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID = "ausbildungsstaetteId";
+  @jakarta.annotation.Nonnull
   private UUID ausbildungsstaetteId;
 
   public AusbildungsgangCreateDtoSpec() {
   }
 
-  public AusbildungsgangCreateDtoSpec abschlussId(UUID abschlussId) {
+  public AusbildungsgangCreateDtoSpec abschlussId(@jakarta.annotation.Nonnull UUID abschlussId) {
     
     this.abschlussId = abschlussId;
     return this;
   }
 
-   /**
+  /**
    * Get abschlussId
    * @return abschlussId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_ID)
+  @JsonProperty(value = JSON_PROPERTY_ABSCHLUSS_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getAbschlussId() {
@@ -62,25 +64,24 @@ public class AusbildungsgangCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_ID)
+  @JsonProperty(value = JSON_PROPERTY_ABSCHLUSS_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAbschlussId(UUID abschlussId) {
+  public void setAbschlussId(@jakarta.annotation.Nonnull UUID abschlussId) {
     this.abschlussId = abschlussId;
   }
 
-
-  public AusbildungsgangCreateDtoSpec ausbildungsstaetteId(UUID ausbildungsstaetteId) {
+  public AusbildungsgangCreateDtoSpec ausbildungsstaetteId(@jakarta.annotation.Nonnull UUID ausbildungsstaetteId) {
     
     this.ausbildungsstaetteId = ausbildungsstaetteId;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungsstaetteId
    * @return ausbildungsstaetteId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getAusbildungsstaetteId() {
@@ -88,11 +89,12 @@ public class AusbildungsgangCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSSTAETTE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungsstaetteId(UUID ausbildungsstaetteId) {
+  public void setAusbildungsstaetteId(@jakarta.annotation.Nonnull UUID ausbildungsstaetteId) {
     this.ausbildungsstaetteId = ausbildungsstaetteId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class AusbildungsgangCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -14,20 +14,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoAuszahlung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoAuszahlungDto  implements Serializable {
-  private @Valid String nachname;
-  private @Valid String vorname;
-  private @Valid String strasse;
-  private @Valid String hausnummer;
-  private @Valid String plz;
-  private @Valid String ort;
-  private @Valid String land;
-  private @Valid String iban;
-  private @Valid String coAdresse;
+  private String nachname;
+  private String vorname;
+  private String strasse;
+  private String hausnummer;
+  private String plz;
+  private String ort;
+  private String land;
+  private String iban;
+  private String coAdresse;
 
   protected DemoAuszahlungDto(DemoAuszahlungDtoBuilder<?, ?> b) {
     this.nachname = b.nachname;
@@ -52,13 +52,12 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -71,13 +70,12 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -90,13 +88,12 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("strasse")
-  @NotNull
-  public String getStrasse() {
+  @JsonProperty(required = true, value = "strasse")
+  @NotNull public String getStrasse() {
     return strasse;
   }
 
-  @JsonProperty("strasse")
+  @JsonProperty(required = true, value = "strasse")
   public void setStrasse(String strasse) {
     this.strasse = strasse;
   }
@@ -109,13 +106,12 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("hausnummer")
-  @NotNull
-  public String getHausnummer() {
+  @JsonProperty(required = true, value = "hausnummer")
+  @NotNull public String getHausnummer() {
     return hausnummer;
   }
 
-  @JsonProperty("hausnummer")
+  @JsonProperty(required = true, value = "hausnummer")
   public void setHausnummer(String hausnummer) {
     this.hausnummer = hausnummer;
   }
@@ -128,13 +124,12 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("plz")
-  @NotNull
-  public String getPlz() {
+  @JsonProperty(required = true, value = "plz")
+  @NotNull public String getPlz() {
     return plz;
   }
 
-  @JsonProperty("plz")
+  @JsonProperty(required = true, value = "plz")
   public void setPlz(String plz) {
     this.plz = plz;
   }
@@ -147,13 +142,12 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ort")
-  @NotNull
-  public String getOrt() {
+  @JsonProperty(required = true, value = "ort")
+  @NotNull public String getOrt() {
     return ort;
   }
 
-  @JsonProperty("ort")
+  @JsonProperty(required = true, value = "ort")
   public void setOrt(String ort) {
     this.ort = ort;
   }
@@ -166,13 +160,12 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("land")
-  @NotNull
-  public String getLand() {
+  @JsonProperty(required = true, value = "land")
+  @NotNull public String getLand() {
     return land;
   }
 
-  @JsonProperty("land")
+  @JsonProperty(required = true, value = "land")
   public void setLand(String land) {
     this.land = land;
   }
@@ -185,13 +178,12 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
   
-  @JsonProperty("iban")
-  @NotNull
-  public String getIban() {
+  @JsonProperty(required = true, value = "iban")
+  @NotNull public String getIban() {
     return iban;
   }
 
-  @JsonProperty("iban")
+  @JsonProperty(required = true, value = "iban")
   public void setIban(String iban) {
     this.iban = iban;
   }
@@ -263,10 +255,7 @@ public class DemoAuszahlungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -339,4 +328,3 @@ public class DemoAuszahlungDto  implements Serializable {
     }
   }
 }
-

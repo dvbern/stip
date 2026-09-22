@@ -37,35 +37,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DarlehenBuchhaltungOverviewDtoSpec.JSON_PROPERTY_DARLEHEN_BUCHHALTUNG_ENTRYS
 })
 @JsonTypeName("DarlehenBuchhaltungOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DarlehenBuchhaltungOverviewDtoSpec {
   public static final String JSON_PROPERTY_TOTAL = "total";
+  @jakarta.annotation.Nonnull
   private Integer total;
 
   public static final String JSON_PROPERTY_TOTAL_FREIWILLIG = "totalFreiwillig";
+  @jakarta.annotation.Nonnull
   private Integer totalFreiwillig;
 
   public static final String JSON_PROPERTY_TOTAL_GESETZLICH = "totalGesetzlich";
+  @jakarta.annotation.Nonnull
   private Integer totalGesetzlich;
 
   public static final String JSON_PROPERTY_DARLEHEN_BUCHHALTUNG_ENTRYS = "darlehenBuchhaltungEntrys";
+  @jakarta.annotation.Nonnull
   private List<DarlehenBuchhaltungEntryDtoSpec> darlehenBuchhaltungEntrys;
 
   public DarlehenBuchhaltungOverviewDtoSpec() {
   }
 
-  public DarlehenBuchhaltungOverviewDtoSpec total(Integer total) {
+  public DarlehenBuchhaltungOverviewDtoSpec total(@jakarta.annotation.Nonnull Integer total) {
     
     this.total = total;
     return this;
   }
 
-   /**
+  /**
    * Get total
    * @return total
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotal() {
@@ -73,25 +77,24 @@ public class DarlehenBuchhaltungOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotal(Integer total) {
+  public void setTotal(@jakarta.annotation.Nonnull Integer total) {
     this.total = total;
   }
 
-
-  public DarlehenBuchhaltungOverviewDtoSpec totalFreiwillig(Integer totalFreiwillig) {
+  public DarlehenBuchhaltungOverviewDtoSpec totalFreiwillig(@jakarta.annotation.Nonnull Integer totalFreiwillig) {
     
     this.totalFreiwillig = totalFreiwillig;
     return this;
   }
 
-   /**
+  /**
    * Get totalFreiwillig
    * @return totalFreiwillig
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTAL_FREIWILLIG)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_FREIWILLIG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotalFreiwillig() {
@@ -99,25 +102,24 @@ public class DarlehenBuchhaltungOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL_FREIWILLIG)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_FREIWILLIG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotalFreiwillig(Integer totalFreiwillig) {
+  public void setTotalFreiwillig(@jakarta.annotation.Nonnull Integer totalFreiwillig) {
     this.totalFreiwillig = totalFreiwillig;
   }
 
-
-  public DarlehenBuchhaltungOverviewDtoSpec totalGesetzlich(Integer totalGesetzlich) {
+  public DarlehenBuchhaltungOverviewDtoSpec totalGesetzlich(@jakarta.annotation.Nonnull Integer totalGesetzlich) {
     
     this.totalGesetzlich = totalGesetzlich;
     return this;
   }
 
-   /**
+  /**
    * Get totalGesetzlich
    * @return totalGesetzlich
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTAL_GESETZLICH)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_GESETZLICH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotalGesetzlich() {
@@ -125,14 +127,13 @@ public class DarlehenBuchhaltungOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL_GESETZLICH)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_GESETZLICH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotalGesetzlich(Integer totalGesetzlich) {
+  public void setTotalGesetzlich(@jakarta.annotation.Nonnull Integer totalGesetzlich) {
     this.totalGesetzlich = totalGesetzlich;
   }
 
-
-  public DarlehenBuchhaltungOverviewDtoSpec darlehenBuchhaltungEntrys(List<DarlehenBuchhaltungEntryDtoSpec> darlehenBuchhaltungEntrys) {
+  public DarlehenBuchhaltungOverviewDtoSpec darlehenBuchhaltungEntrys(@jakarta.annotation.Nonnull List<DarlehenBuchhaltungEntryDtoSpec> darlehenBuchhaltungEntrys) {
     
     this.darlehenBuchhaltungEntrys = darlehenBuchhaltungEntrys;
     return this;
@@ -146,12 +147,12 @@ public class DarlehenBuchhaltungOverviewDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get darlehenBuchhaltungEntrys
    * @return darlehenBuchhaltungEntrys
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BUCHHALTUNG_ENTRYS)
+  @JsonProperty(value = JSON_PROPERTY_DARLEHEN_BUCHHALTUNG_ENTRYS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<DarlehenBuchhaltungEntryDtoSpec> getDarlehenBuchhaltungEntrys() {
@@ -159,11 +160,12 @@ public class DarlehenBuchhaltungOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BUCHHALTUNG_ENTRYS)
+  @JsonProperty(value = JSON_PROPERTY_DARLEHEN_BUCHHALTUNG_ENTRYS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDarlehenBuchhaltungEntrys(List<DarlehenBuchhaltungEntryDtoSpec> darlehenBuchhaltungEntrys) {
+  public void setDarlehenBuchhaltungEntrys(@jakarta.annotation.Nonnull List<DarlehenBuchhaltungEntryDtoSpec> darlehenBuchhaltungEntrys) {
     this.darlehenBuchhaltungEntrys = darlehenBuchhaltungEntrys;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -202,10 +204,7 @@ public class DarlehenBuchhaltungOverviewDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

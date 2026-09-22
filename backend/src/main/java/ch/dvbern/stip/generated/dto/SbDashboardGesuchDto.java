@@ -16,22 +16,22 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SbDashboardGesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SbDashboardGesuchDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid UUID gesuchTrancheId;
-  private @Valid String fallNummer;
-  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
-  private @Valid String piaNachname;
-  private @Valid String piaVorname;
-  private @Valid LocalDate piaGeburtsdatum;
-  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
-  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus;
-  private @Valid String bearbeiter;
-  private @Valid LocalDate letzteAktivitaet;
+  private UUID id;
+  private UUID gesuchTrancheId;
+  private String fallNummer;
+  private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
+  private String piaNachname;
+  private String piaVorname;
+  private LocalDate piaGeburtsdatum;
+  private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+  private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus;
+  private String bearbeiter;
+  private LocalDate letzteAktivitaet;
 
   protected SbDashboardGesuchDto(SbDashboardGesuchDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -58,13 +58,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -77,13 +76,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchTrancheId")
-  @NotNull
-  public UUID getGesuchTrancheId() {
+  @JsonProperty(required = true, value = "gesuchTrancheId")
+  @NotNull public UUID getGesuchTrancheId() {
     return gesuchTrancheId;
   }
 
-  @JsonProperty("gesuchTrancheId")
+  @JsonProperty(required = true, value = "gesuchTrancheId")
   public void setGesuchTrancheId(UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
@@ -96,13 +94,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallNummer")
-  @NotNull
-  public String getFallNummer() {
+  @JsonProperty(required = true, value = "fallNummer")
+  @NotNull public String getFallNummer() {
     return fallNummer;
   }
 
-  @JsonProperty("fallNummer")
+  @JsonProperty(required = true, value = "fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -115,13 +112,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("typ")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
+  @JsonProperty(required = true, value = "typ")
+  @NotNull public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
 
-  @JsonProperty("typ")
+  @JsonProperty(required = true, value = "typ")
   public void setTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
   }
@@ -134,13 +130,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("piaNachname")
-  @NotNull
-  public String getPiaNachname() {
+  @JsonProperty(required = true, value = "piaNachname")
+  @NotNull public String getPiaNachname() {
     return piaNachname;
   }
 
-  @JsonProperty("piaNachname")
+  @JsonProperty(required = true, value = "piaNachname")
   public void setPiaNachname(String piaNachname) {
     this.piaNachname = piaNachname;
   }
@@ -153,13 +148,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("piaVorname")
-  @NotNull
-  public String getPiaVorname() {
+  @JsonProperty(required = true, value = "piaVorname")
+  @NotNull public String getPiaVorname() {
     return piaVorname;
   }
 
-  @JsonProperty("piaVorname")
+  @JsonProperty(required = true, value = "piaVorname")
   public void setPiaVorname(String piaVorname) {
     this.piaVorname = piaVorname;
   }
@@ -172,13 +166,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("piaGeburtsdatum")
-  @NotNull
-  public LocalDate getPiaGeburtsdatum() {
+  @JsonProperty(required = true, value = "piaGeburtsdatum")
+  @NotNull public LocalDate getPiaGeburtsdatum() {
     return piaGeburtsdatum;
   }
 
-  @JsonProperty("piaGeburtsdatum")
+  @JsonProperty(required = true, value = "piaGeburtsdatum")
   public void setPiaGeburtsdatum(LocalDate piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
   }
@@ -191,13 +184,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchStatus")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
+  @JsonProperty(required = true, value = "gesuchStatus")
+  @NotNull public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
-  @JsonProperty("gesuchStatus")
+  @JsonProperty(required = true, value = "gesuchStatus")
   public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
@@ -210,13 +202,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("trancheStatus")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getTrancheStatus() {
+  @JsonProperty(required = true, value = "trancheStatus")
+  @NotNull public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getTrancheStatus() {
     return trancheStatus;
   }
 
-  @JsonProperty("trancheStatus")
+  @JsonProperty(required = true, value = "trancheStatus")
   public void setTrancheStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus trancheStatus) {
     this.trancheStatus = trancheStatus;
   }
@@ -229,13 +220,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("bearbeiter")
-  @NotNull
-  public String getBearbeiter() {
+  @JsonProperty(required = true, value = "bearbeiter")
+  @NotNull public String getBearbeiter() {
     return bearbeiter;
   }
 
-  @JsonProperty("bearbeiter")
+  @JsonProperty(required = true, value = "bearbeiter")
   public void setBearbeiter(String bearbeiter) {
     this.bearbeiter = bearbeiter;
   }
@@ -248,13 +238,12 @@ public class SbDashboardGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("letzteAktivitaet")
-  @NotNull
-  public LocalDate getLetzteAktivitaet() {
+  @JsonProperty(required = true, value = "letzteAktivitaet")
+  @NotNull public LocalDate getLetzteAktivitaet() {
     return letzteAktivitaet;
   }
 
-  @JsonProperty("letzteAktivitaet")
+  @JsonProperty(required = true, value = "letzteAktivitaet")
   public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
@@ -312,10 +301,7 @@ public class SbDashboardGesuchDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -398,4 +384,3 @@ public class SbDashboardGesuchDto  implements Serializable {
     }
   }
 }
-

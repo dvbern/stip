@@ -17,14 +17,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DeploymentConfig")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DeploymentConfigDto  implements Serializable {
-  private @Valid String environment;
-  private @Valid String version;
-  private @Valid List<String> allowedMimeTypes;
+  private String environment;
+  private String version;
+  private @Valid List<String> allowedMimeTypes = new ArrayList<>();
 
   protected DeploymentConfigDto(DeploymentConfigDtoBuilder<?, ?> b) {
     this.environment = b.environment;
@@ -142,10 +142,7 @@ public class DeploymentConfigDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -169,7 +166,7 @@ public class DeploymentConfigDto  implements Serializable {
   public static abstract class DeploymentConfigDtoBuilder<C extends DeploymentConfigDto, B extends DeploymentConfigDtoBuilder<C, B>>  {
     private String environment;
     private String version;
-    private List<String> allowedMimeTypes;
+    private List<String> allowedMimeTypes = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -188,4 +185,3 @@ public class DeploymentConfigDto  implements Serializable {
     }
   }
 }
-

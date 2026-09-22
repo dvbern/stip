@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungUnterbruchLimits")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungUnterbruchLimitsDto  implements Serializable {
-  private @Valid LocalDate unterbruchLatestEndDate;
-  private @Valid LocalDate unterbruchEarliestStartDate;
+  private LocalDate unterbruchLatestEndDate;
+  private LocalDate unterbruchEarliestStartDate;
 
   protected AusbildungUnterbruchLimitsDto(AusbildungUnterbruchLimitsDtoBuilder<?, ?> b) {
     this.unterbruchLatestEndDate = b.unterbruchLatestEndDate;
@@ -39,13 +39,12 @@ public class AusbildungUnterbruchLimitsDto  implements Serializable {
   }
 
   
-  @JsonProperty("unterbruchLatestEndDate")
-  @NotNull
-  public LocalDate getUnterbruchLatestEndDate() {
+  @JsonProperty(required = true, value = "unterbruchLatestEndDate")
+  @NotNull public LocalDate getUnterbruchLatestEndDate() {
     return unterbruchLatestEndDate;
   }
 
-  @JsonProperty("unterbruchLatestEndDate")
+  @JsonProperty(required = true, value = "unterbruchLatestEndDate")
   public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
     this.unterbruchLatestEndDate = unterbruchLatestEndDate;
   }
@@ -58,13 +57,12 @@ public class AusbildungUnterbruchLimitsDto  implements Serializable {
   }
 
   
-  @JsonProperty("unterbruchEarliestStartDate")
-  @NotNull
-  public LocalDate getUnterbruchEarliestStartDate() {
+  @JsonProperty(required = true, value = "unterbruchEarliestStartDate")
+  @NotNull public LocalDate getUnterbruchEarliestStartDate() {
     return unterbruchEarliestStartDate;
   }
 
-  @JsonProperty("unterbruchEarliestStartDate")
+  @JsonProperty(required = true, value = "unterbruchEarliestStartDate")
   public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
     this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
@@ -104,10 +102,7 @@ public class AusbildungUnterbruchLimitsDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -145,4 +140,3 @@ public class AusbildungUnterbruchLimitsDto  implements Serializable {
     }
   }
 }
-

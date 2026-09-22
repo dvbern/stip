@@ -32,32 +32,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PaginatedResultDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES
 })
 @JsonTypeName("PaginatedResult")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PaginatedResultDtoSpec {
   public static final String JSON_PROPERTY_PAGE = "page";
+  @jakarta.annotation.Nullable
   private Integer page;
 
   public static final String JSON_PROPERTY_PAGE_SIZE = "pageSize";
+  @jakarta.annotation.Nullable
   private Integer pageSize;
 
   public static final String JSON_PROPERTY_TOTAL_ENTRIES = "totalEntries";
+  @jakarta.annotation.Nullable
   private Integer totalEntries;
 
   public PaginatedResultDtoSpec() {
   }
 
-  public PaginatedResultDtoSpec page(Integer page) {
+  public PaginatedResultDtoSpec page(@jakarta.annotation.Nullable Integer page) {
     
     this.page = page;
     return this;
   }
 
-   /**
+  /**
    * Get page
    * @return page
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PAGE)
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getPage() {
@@ -65,25 +68,24 @@ public class PaginatedResultDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PAGE)
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPage(Integer page) {
+  public void setPage(@jakarta.annotation.Nullable Integer page) {
     this.page = page;
   }
 
-
-  public PaginatedResultDtoSpec pageSize(Integer pageSize) {
+  public PaginatedResultDtoSpec pageSize(@jakarta.annotation.Nullable Integer pageSize) {
     
     this.pageSize = pageSize;
     return this;
   }
 
-   /**
+  /**
    * Get pageSize
    * @return pageSize
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PAGE_SIZE)
+  @JsonProperty(value = JSON_PROPERTY_PAGE_SIZE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getPageSize() {
@@ -91,25 +93,24 @@ public class PaginatedResultDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PAGE_SIZE)
+  @JsonProperty(value = JSON_PROPERTY_PAGE_SIZE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPageSize(Integer pageSize) {
+  public void setPageSize(@jakarta.annotation.Nullable Integer pageSize) {
     this.pageSize = pageSize;
   }
 
-
-  public PaginatedResultDtoSpec totalEntries(Integer totalEntries) {
+  public PaginatedResultDtoSpec totalEntries(@jakarta.annotation.Nullable Integer totalEntries) {
     
     this.totalEntries = totalEntries;
     return this;
   }
 
-   /**
+  /**
    * Get totalEntries
    * @return totalEntries
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TOTAL_ENTRIES)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_ENTRIES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getTotalEntries() {
@@ -117,11 +118,12 @@ public class PaginatedResultDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL_ENTRIES)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_ENTRIES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTotalEntries(Integer totalEntries) {
+  public void setTotalEntries(@jakarta.annotation.Nullable Integer totalEntries) {
     this.totalEntries = totalEntries;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -158,10 +160,7 @@ public class PaginatedResultDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

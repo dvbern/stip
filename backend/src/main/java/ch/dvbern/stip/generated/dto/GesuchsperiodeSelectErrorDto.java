@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchsperiodeSelectError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsperiodeSelectErrorDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type;
-  private @Valid LocalDate context;
+  private ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type;
+  private LocalDate context;
 
   protected GesuchsperiodeSelectErrorDto(GesuchsperiodeSelectErrorDtoBuilder<?, ?> b) {
     this.type = b.type;
@@ -39,13 +39,12 @@ public class GesuchsperiodeSelectErrorDto  implements Serializable {
   }
 
   
-  @JsonProperty("type")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType getType() {
+  @JsonProperty(required = true, value = "type")
+  @NotNull public ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType getType() {
     return type;
   }
 
-  @JsonProperty("type")
+  @JsonProperty(required = true, value = "type")
   public void setType(ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type) {
     this.type = type;
   }
@@ -103,10 +102,7 @@ public class GesuchsperiodeSelectErrorDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +140,3 @@ public class GesuchsperiodeSelectErrorDto  implements Serializable {
     }
   }
 }
-

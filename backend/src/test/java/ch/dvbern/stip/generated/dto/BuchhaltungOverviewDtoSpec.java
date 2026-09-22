@@ -35,29 +35,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BuchhaltungOverviewDtoSpec.JSON_PROPERTY_BUCHHALTUNG_ENTRYS
 })
 @JsonTypeName("BuchhaltungOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BuchhaltungOverviewDtoSpec {
   public static final String JSON_PROPERTY_CAN_RETRY_AUSZAHLUNG = "canRetryAuszahlung";
+  @jakarta.annotation.Nonnull
   private Boolean canRetryAuszahlung;
 
   public static final String JSON_PROPERTY_BUCHHALTUNG_ENTRYS = "buchhaltungEntrys";
+  @jakarta.annotation.Nonnull
   private List<BuchhaltungEntryDtoSpec> buchhaltungEntrys;
 
   public BuchhaltungOverviewDtoSpec() {
   }
 
-  public BuchhaltungOverviewDtoSpec canRetryAuszahlung(Boolean canRetryAuszahlung) {
+  public BuchhaltungOverviewDtoSpec canRetryAuszahlung(@jakarta.annotation.Nonnull Boolean canRetryAuszahlung) {
     
     this.canRetryAuszahlung = canRetryAuszahlung;
     return this;
   }
 
-   /**
+  /**
    * Get canRetryAuszahlung
    * @return canRetryAuszahlung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_RETRY_AUSZAHLUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_RETRY_AUSZAHLUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanRetryAuszahlung() {
@@ -65,14 +67,13 @@ public class BuchhaltungOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_RETRY_AUSZAHLUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_RETRY_AUSZAHLUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanRetryAuszahlung(Boolean canRetryAuszahlung) {
+  public void setCanRetryAuszahlung(@jakarta.annotation.Nonnull Boolean canRetryAuszahlung) {
     this.canRetryAuszahlung = canRetryAuszahlung;
   }
 
-
-  public BuchhaltungOverviewDtoSpec buchhaltungEntrys(List<BuchhaltungEntryDtoSpec> buchhaltungEntrys) {
+  public BuchhaltungOverviewDtoSpec buchhaltungEntrys(@jakarta.annotation.Nonnull List<BuchhaltungEntryDtoSpec> buchhaltungEntrys) {
     
     this.buchhaltungEntrys = buchhaltungEntrys;
     return this;
@@ -86,12 +87,12 @@ public class BuchhaltungOverviewDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get buchhaltungEntrys
    * @return buchhaltungEntrys
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BUCHHALTUNG_ENTRYS)
+  @JsonProperty(value = JSON_PROPERTY_BUCHHALTUNG_ENTRYS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<BuchhaltungEntryDtoSpec> getBuchhaltungEntrys() {
@@ -99,11 +100,12 @@ public class BuchhaltungOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BUCHHALTUNG_ENTRYS)
+  @JsonProperty(value = JSON_PROPERTY_BUCHHALTUNG_ENTRYS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBuchhaltungEntrys(List<BuchhaltungEntryDtoSpec> buchhaltungEntrys) {
+  public void setBuchhaltungEntrys(@jakarta.annotation.Nonnull List<BuchhaltungEntryDtoSpec> buchhaltungEntrys) {
     this.buchhaltungEntrys = buchhaltungEntrys;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -138,10 +140,7 @@ public class BuchhaltungOverviewDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

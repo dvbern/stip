@@ -33,6 +33,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -172,7 +173,7 @@ public class BenutzerApiSpec {
          * @param sachbearbeiterZuordnungStammdatenDtoSpec (SachbearbeiterZuordnungStammdatenDtoSpec)  (required)
          * @return operation
          */
-        public CreateOrUpdateSachbearbeiterStammdatenOper body(SachbearbeiterZuordnungStammdatenDtoSpec sachbearbeiterZuordnungStammdatenDtoSpec) {
+        public CreateOrUpdateSachbearbeiterStammdatenOper body(@jakarta.annotation.Nonnull SachbearbeiterZuordnungStammdatenDtoSpec sachbearbeiterZuordnungStammdatenDtoSpec) {
             reqSpec.setBody(sachbearbeiterZuordnungStammdatenDtoSpec);
             return this;
         }
@@ -225,7 +226,7 @@ public class BenutzerApiSpec {
         public CreateOrUpdateSachbearbeiterStammdatenListOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -244,7 +245,7 @@ public class BenutzerApiSpec {
          * @param sachbearbeiterZuordnungStammdatenListDtoSpec (List&lt;SachbearbeiterZuordnungStammdatenListDtoSpec&gt;)  (optional)
          * @return operation
          */
-        public CreateOrUpdateSachbearbeiterStammdatenListOper body(List<SachbearbeiterZuordnungStammdatenListDtoSpec> sachbearbeiterZuordnungStammdatenListDtoSpec) {
+        public CreateOrUpdateSachbearbeiterStammdatenListOper body(@jakarta.annotation.Nullable List<SachbearbeiterZuordnungStammdatenListDtoSpec> sachbearbeiterZuordnungStammdatenListDtoSpec) {
             reqSpec.setBody(sachbearbeiterZuordnungStammdatenListDtoSpec);
             return this;
         }
@@ -287,7 +288,7 @@ public class BenutzerApiSpec {
         public CreateSachbearbeiterOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -316,7 +317,7 @@ public class BenutzerApiSpec {
          * @param sachbearbeiterUpdateDtoSpec (SachbearbeiterUpdateDtoSpec)  (required)
          * @return operation
          */
-        public CreateSachbearbeiterOper body(SachbearbeiterUpdateDtoSpec sachbearbeiterUpdateDtoSpec) {
+        public CreateSachbearbeiterOper body(@jakarta.annotation.Nonnull SachbearbeiterUpdateDtoSpec sachbearbeiterUpdateDtoSpec) {
             reqSpec.setBody(sachbearbeiterUpdateDtoSpec);
             return this;
         }
@@ -357,7 +358,7 @@ public class BenutzerApiSpec {
 
         public DeleteBenutzerOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -481,7 +482,7 @@ public class BenutzerApiSpec {
 
         public GetSachbearbeitendeOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -543,7 +544,7 @@ public class BenutzerApiSpec {
 
         public GetSachbearbeiterForManagementOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -616,7 +617,7 @@ public class BenutzerApiSpec {
 
         public GetSachbearbeiterStammdatenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -688,7 +689,7 @@ public class BenutzerApiSpec {
 
         public GetSachbearbeitersForManagementOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -750,7 +751,7 @@ public class BenutzerApiSpec {
 
         public NutzungsbedingungenAkzeptierenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -822,7 +823,7 @@ public class BenutzerApiSpec {
 
         public PrepareCurrentBenutzerOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -886,7 +887,7 @@ public class BenutzerApiSpec {
         public UpdateSachbearbeiterOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -915,7 +916,7 @@ public class BenutzerApiSpec {
          * @param sachbearbeiterUpdateDtoSpec (SachbearbeiterUpdateDtoSpec)  (required)
          * @return operation
          */
-        public UpdateSachbearbeiterOper body(SachbearbeiterUpdateDtoSpec sachbearbeiterUpdateDtoSpec) {
+        public UpdateSachbearbeiterOper body(@jakarta.annotation.Nonnull SachbearbeiterUpdateDtoSpec sachbearbeiterUpdateDtoSpec) {
             reqSpec.setBody(sachbearbeiterUpdateDtoSpec);
             return this;
         }

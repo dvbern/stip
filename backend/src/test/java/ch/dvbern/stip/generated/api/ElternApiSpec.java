@@ -29,6 +29,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -95,7 +96,7 @@ public class ElternApiSpec {
         public SetVersteckteElternOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -124,7 +125,7 @@ public class ElternApiSpec {
          * @param elternTypDtoSpec (List&lt;ElternTypDtoSpec&gt;)  (required)
          * @return operation
          */
-        public SetVersteckteElternOper body(List<ElternTypDtoSpec> elternTypDtoSpec) {
+        public SetVersteckteElternOper body(@jakarta.annotation.Nonnull List<ElternTypDtoSpec> elternTypDtoSpec) {
             reqSpec.setBody(elternTypDtoSpec);
             return this;
         }

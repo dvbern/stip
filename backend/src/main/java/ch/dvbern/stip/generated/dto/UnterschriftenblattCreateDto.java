@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("UnterschriftenblattCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class UnterschriftenblattCreateDto  implements Serializable {
-  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
+  private org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
 
   protected UnterschriftenblattCreateDto(UnterschriftenblattCreateDtoBuilder<?, ?> b) {
     this.fileUpload = b.fileUpload;
@@ -36,13 +36,12 @@ public class UnterschriftenblattCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("fileUpload")
-  @NotNull
-  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
+  @JsonProperty(required = true, value = "fileUpload")
+  @NotNull @Valid public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
     return fileUpload;
   }
 
-  @JsonProperty("fileUpload")
+  @JsonProperty(required = true, value = "fileUpload")
   public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
     this.fileUpload = fileUpload;
   }
@@ -80,10 +79,7 @@ public class UnterschriftenblattCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -116,4 +112,3 @@ public class UnterschriftenblattCreateDto  implements Serializable {
     }
   }
 }
-

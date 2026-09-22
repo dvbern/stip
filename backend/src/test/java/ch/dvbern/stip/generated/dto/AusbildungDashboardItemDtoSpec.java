@@ -16,12 +16,15 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungsPensumDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsStatusDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDashboardItemDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,9 +36,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * AusbildungDashboardItemDtoSpec
  */
 @JsonPropertyOrder({
-  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_GESUCHS,
-  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG,
-  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG,
@@ -49,66 +49,556 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND,
-  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_LAND_ID
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_LAND_ID,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_STATUS,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNGSGANG,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_EDITABLE,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_GESUCHS,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG
 })
 @JsonTypeName("AusbildungDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungDashboardItemDtoSpec {
-  public static final String JSON_PROPERTY_GESUCHS = "gesuchs";
-  private List<GesuchDashboardItemDtoSpec> gesuchs;
-
-  public static final String JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG = "canCreateAusbildungUnterbruchAntrag";
-  private Boolean canCreateAusbildungUnterbruchAntrag;
-
-  public static final String JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG = "hasPendingAusbildungUnterbruchAntrag";
-  private Boolean hasPendingAusbildungUnterbruchAntrag;
-
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private UUID fallId;
 
   public static final String JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG = "fachrichtungBerufsbezeichnung";
+  @jakarta.annotation.Nullable
   private String fachrichtungBerufsbezeichnung;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN = "ausbildungNichtGefunden";
+  @jakarta.annotation.Nullable
   private Boolean ausbildungNichtGefunden;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_BEGIN = "ausbildungBegin";
+  @jakarta.annotation.Nonnull
   private String ausbildungBegin;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_END = "ausbildungEnd";
+  @jakarta.annotation.Nonnull
   private String ausbildungEnd;
 
   public static final String JSON_PROPERTY_BESUCHT_B_M_S = "besuchtBMS";
+  @jakarta.annotation.Nullable
   private Boolean besuchtBMS;
 
   public static final String JSON_PROPERTY_PENSUM = "pensum";
+  @jakarta.annotation.Nonnull
   private AusbildungsPensumDtoSpec pensum;
 
   public static final String JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE = "alternativeAusbildungsstaette";
+  @jakarta.annotation.Nullable
   private String alternativeAusbildungsstaette;
 
   public static final String JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG = "alternativeAusbildungsgang";
+  @jakarta.annotation.Nullable
   private String alternativeAusbildungsgang;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z = "ausbildungsortPLZ";
+  @jakarta.annotation.Nullable
   private String ausbildungsortPLZ;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSORT = "ausbildungsort";
+  @jakarta.annotation.Nullable
   private String ausbildungsort;
 
   public static final String JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND = "isAusbildungAusland";
+  @jakarta.annotation.Nullable
   private Boolean isAusbildungAusland;
 
   public static final String JSON_PROPERTY_LAND_ID = "landId";
+  @jakarta.annotation.Nullable
   private UUID landId;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nonnull
+  private AusbildungsStatusDtoSpec status;
+
+  public static final String JSON_PROPERTY_AUSBILDUNGSGANG = "ausbildungsgang";
+  @jakarta.annotation.Nullable
+  private AusbildungsgangDtoSpec ausbildungsgang;
+
+  public static final String JSON_PROPERTY_EDITABLE = "editable";
+  @jakarta.annotation.Nonnull
+  private Boolean editable;
+
+  public static final String JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START = "earliestActiveGesuchPeriodeStart";
+  @jakarta.annotation.Nullable
+  private LocalDate earliestActiveGesuchPeriodeStart;
+
+  public static final String JSON_PROPERTY_GESUCHS = "gesuchs";
+  @jakarta.annotation.Nullable
+  private List<GesuchDashboardItemDtoSpec> gesuchs;
+
+  public static final String JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG = "canCreateAusbildungUnterbruchAntrag";
+  @jakarta.annotation.Nonnull
+  private Boolean canCreateAusbildungUnterbruchAntrag;
+
+  public static final String JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG = "hasPendingAusbildungUnterbruchAntrag";
+  @jakarta.annotation.Nonnull
+  private Boolean hasPendingAusbildungUnterbruchAntrag;
 
   public AusbildungDashboardItemDtoSpec() {
   }
 
-  public AusbildungDashboardItemDtoSpec gesuchs(List<GesuchDashboardItemDtoSpec> gesuchs) {
+  public AusbildungDashboardItemDtoSpec id(@jakarta.annotation.Nullable UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(@jakarta.annotation.Nullable UUID id) {
+    this.id = id;
+  }
+
+  public AusbildungDashboardItemDtoSpec fallId(@jakarta.annotation.Nonnull UUID fallId) {
+    
+    this.fallId = fallId;
+    return this;
+  }
+
+  /**
+   * Get fallId
+   * @return fallId
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getFallId() {
+    return fallId;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallId(@jakarta.annotation.Nonnull UUID fallId) {
+    this.fallId = fallId;
+  }
+
+  public AusbildungDashboardItemDtoSpec fachrichtungBerufsbezeichnung(@jakarta.annotation.Nullable String fachrichtungBerufsbezeichnung) {
+    
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
+    return this;
+  }
+
+  /**
+   * Get fachrichtungBerufsbezeichnung
+   * @return fachrichtungBerufsbezeichnung
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getFachrichtungBerufsbezeichnung() {
+    return fachrichtungBerufsbezeichnung;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFachrichtungBerufsbezeichnung(@jakarta.annotation.Nullable String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
+  }
+
+  public AusbildungDashboardItemDtoSpec ausbildungNichtGefunden(@jakarta.annotation.Nullable Boolean ausbildungNichtGefunden) {
+    
+    this.ausbildungNichtGefunden = ausbildungNichtGefunden;
+    return this;
+  }
+
+  /**
+   * Get ausbildungNichtGefunden
+   * @return ausbildungNichtGefunden
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getAusbildungNichtGefunden() {
+    return ausbildungNichtGefunden;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAusbildungNichtGefunden(@jakarta.annotation.Nullable Boolean ausbildungNichtGefunden) {
+    this.ausbildungNichtGefunden = ausbildungNichtGefunden;
+  }
+
+  public AusbildungDashboardItemDtoSpec ausbildungBegin(@jakarta.annotation.Nonnull String ausbildungBegin) {
+    
+    this.ausbildungBegin = ausbildungBegin;
+    return this;
+  }
+
+  /**
+   * Datum im Format mm.YYYY
+   * @return ausbildungBegin
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_BEGIN, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungBegin() {
+    return ausbildungBegin;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_BEGIN, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungBegin(@jakarta.annotation.Nonnull String ausbildungBegin) {
+    this.ausbildungBegin = ausbildungBegin;
+  }
+
+  public AusbildungDashboardItemDtoSpec ausbildungEnd(@jakarta.annotation.Nonnull String ausbildungEnd) {
+    
+    this.ausbildungEnd = ausbildungEnd;
+    return this;
+  }
+
+  /**
+   * Datum im Format mm.YYYY
+   * @return ausbildungEnd
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_END, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungEnd() {
+    return ausbildungEnd;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_END, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungEnd(@jakarta.annotation.Nonnull String ausbildungEnd) {
+    this.ausbildungEnd = ausbildungEnd;
+  }
+
+  public AusbildungDashboardItemDtoSpec besuchtBMS(@jakarta.annotation.Nullable Boolean besuchtBMS) {
+    
+    this.besuchtBMS = besuchtBMS;
+    return this;
+  }
+
+  /**
+   * Required wenn Abschluss.askForBerufsmaturitaet &#x3D; true
+   * @return besuchtBMS
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_BESUCHT_B_M_S, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getBesuchtBMS() {
+    return besuchtBMS;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_BESUCHT_B_M_S, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBesuchtBMS(@jakarta.annotation.Nullable Boolean besuchtBMS) {
+    this.besuchtBMS = besuchtBMS;
+  }
+
+  public AusbildungDashboardItemDtoSpec pensum(@jakarta.annotation.Nonnull AusbildungsPensumDtoSpec pensum) {
+    
+    this.pensum = pensum;
+    return this;
+  }
+
+  /**
+   * Get pensum
+   * @return pensum
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_PENSUM, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public AusbildungsPensumDtoSpec getPensum() {
+    return pensum;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PENSUM, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPensum(@jakarta.annotation.Nonnull AusbildungsPensumDtoSpec pensum) {
+    this.pensum = pensum;
+  }
+
+  public AusbildungDashboardItemDtoSpec alternativeAusbildungsstaette(@jakarta.annotation.Nullable String alternativeAusbildungsstaette) {
+    
+    this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
+    return this;
+  }
+
+  /**
+   * Required wenn andere ausbildungNichtGefunden &#x3D; true
+   * @return alternativeAusbildungsstaette
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAlternativeAusbildungsstaette() {
+    return alternativeAusbildungsstaette;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAlternativeAusbildungsstaette(@jakarta.annotation.Nullable String alternativeAusbildungsstaette) {
+    this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
+  }
+
+  public AusbildungDashboardItemDtoSpec alternativeAusbildungsgang(@jakarta.annotation.Nullable String alternativeAusbildungsgang) {
+    
+    this.alternativeAusbildungsgang = alternativeAusbildungsgang;
+    return this;
+  }
+
+  /**
+   * Required wenn andere ausbildungNichtGefunden &#x3D; true
+   * @return alternativeAusbildungsgang
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAlternativeAusbildungsgang() {
+    return alternativeAusbildungsgang;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAlternativeAusbildungsgang(@jakarta.annotation.Nullable String alternativeAusbildungsgang) {
+    this.alternativeAusbildungsgang = alternativeAusbildungsgang;
+  }
+
+  public AusbildungDashboardItemDtoSpec ausbildungsortPLZ(@jakarta.annotation.Nullable String ausbildungsortPLZ) {
+    
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+    return this;
+  }
+
+  /**
+   * Not required if isAusbildungAusland &#x3D; true
+   * @return ausbildungsortPLZ
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAusbildungsortPLZ() {
+    return ausbildungsortPLZ;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAusbildungsortPLZ(@jakarta.annotation.Nullable String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+  }
+
+  public AusbildungDashboardItemDtoSpec ausbildungsort(@jakarta.annotation.Nullable String ausbildungsort) {
+    
+    this.ausbildungsort = ausbildungsort;
+    return this;
+  }
+
+  /**
+   * Not required if isAusbildungAusland &#x3D; true
+   * @return ausbildungsort
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSORT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAusbildungsort() {
+    return ausbildungsort;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSORT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAusbildungsort(@jakarta.annotation.Nullable String ausbildungsort) {
+    this.ausbildungsort = ausbildungsort;
+  }
+
+  public AusbildungDashboardItemDtoSpec isAusbildungAusland(@jakarta.annotation.Nullable Boolean isAusbildungAusland) {
+    
+    this.isAusbildungAusland = isAusbildungAusland;
+    return this;
+  }
+
+  /**
+   * Get isAusbildungAusland
+   * @return isAusbildungAusland
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getIsAusbildungAusland() {
+    return isAusbildungAusland;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIsAusbildungAusland(@jakarta.annotation.Nullable Boolean isAusbildungAusland) {
+    this.isAusbildungAusland = isAusbildungAusland;
+  }
+
+  public AusbildungDashboardItemDtoSpec landId(@jakarta.annotation.Nullable UUID landId) {
+    
+    this.landId = landId;
+    return this;
+  }
+
+  /**
+   * Get landId
+   * @return landId
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_LAND_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getLandId() {
+    return landId;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_LAND_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLandId(@jakarta.annotation.Nullable UUID landId) {
+    this.landId = landId;
+  }
+
+  public AusbildungDashboardItemDtoSpec status(@jakarta.annotation.Nonnull AusbildungsStatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+  /**
+   * Get status
+   * @return status
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public AusbildungsStatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStatus(@jakarta.annotation.Nonnull AusbildungsStatusDtoSpec status) {
+    this.status = status;
+  }
+
+  public AusbildungDashboardItemDtoSpec ausbildungsgang(@jakarta.annotation.Nullable AusbildungsgangDtoSpec ausbildungsgang) {
+    
+    this.ausbildungsgang = ausbildungsgang;
+    return this;
+  }
+
+  /**
+   * Get ausbildungsgang
+   * @return ausbildungsgang
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSGANG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public AusbildungsgangDtoSpec getAusbildungsgang() {
+    return ausbildungsgang;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNGSGANG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAusbildungsgang(@jakarta.annotation.Nullable AusbildungsgangDtoSpec ausbildungsgang) {
+    this.ausbildungsgang = ausbildungsgang;
+  }
+
+  public AusbildungDashboardItemDtoSpec editable(@jakarta.annotation.Nonnull Boolean editable) {
+    
+    this.editable = editable;
+    return this;
+  }
+
+  /**
+   * Get editable
+   * @return editable
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_EDITABLE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getEditable() {
+    return editable;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_EDITABLE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEditable(@jakarta.annotation.Nonnull Boolean editable) {
+    this.editable = editable;
+  }
+
+  public AusbildungDashboardItemDtoSpec earliestActiveGesuchPeriodeStart(@jakarta.annotation.Nullable LocalDate earliestActiveGesuchPeriodeStart) {
+    
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+    return this;
+  }
+
+  /**
+   * Get earliestActiveGesuchPeriodeStart
+   * @return earliestActiveGesuchPeriodeStart
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEarliestActiveGesuchPeriodeStart() {
+    return earliestActiveGesuchPeriodeStart;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEarliestActiveGesuchPeriodeStart(@jakarta.annotation.Nullable LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+  }
+
+  public AusbildungDashboardItemDtoSpec gesuchs(@jakarta.annotation.Nullable List<GesuchDashboardItemDtoSpec> gesuchs) {
     
     this.gesuchs = gesuchs;
     return this;
@@ -122,12 +612,12 @@ public class AusbildungDashboardItemDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get gesuchs
    * @return gesuchs
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCHS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<GesuchDashboardItemDtoSpec> getGesuchs() {
@@ -135,25 +625,24 @@ public class AusbildungDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuchs(List<GesuchDashboardItemDtoSpec> gesuchs) {
+  public void setGesuchs(@jakarta.annotation.Nullable List<GesuchDashboardItemDtoSpec> gesuchs) {
     this.gesuchs = gesuchs;
   }
 
-
-  public AusbildungDashboardItemDtoSpec canCreateAusbildungUnterbruchAntrag(Boolean canCreateAusbildungUnterbruchAntrag) {
+  public AusbildungDashboardItemDtoSpec canCreateAusbildungUnterbruchAntrag(@jakarta.annotation.Nonnull Boolean canCreateAusbildungUnterbruchAntrag) {
     
     this.canCreateAusbildungUnterbruchAntrag = canCreateAusbildungUnterbruchAntrag;
     return this;
   }
 
-   /**
+  /**
    * Get canCreateAusbildungUnterbruchAntrag
    * @return canCreateAusbildungUnterbruchAntrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanCreateAusbildungUnterbruchAntrag() {
@@ -161,25 +650,24 @@ public class AusbildungDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanCreateAusbildungUnterbruchAntrag(Boolean canCreateAusbildungUnterbruchAntrag) {
+  public void setCanCreateAusbildungUnterbruchAntrag(@jakarta.annotation.Nonnull Boolean canCreateAusbildungUnterbruchAntrag) {
     this.canCreateAusbildungUnterbruchAntrag = canCreateAusbildungUnterbruchAntrag;
   }
 
-
-  public AusbildungDashboardItemDtoSpec hasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+  public AusbildungDashboardItemDtoSpec hasPendingAusbildungUnterbruchAntrag(@jakarta.annotation.Nonnull Boolean hasPendingAusbildungUnterbruchAntrag) {
     
     this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
     return this;
   }
 
-   /**
+  /**
    * Get hasPendingAusbildungUnterbruchAntrag
    * @return hasPendingAusbildungUnterbruchAntrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
+  @JsonProperty(value = JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getHasPendingAusbildungUnterbruchAntrag() {
@@ -187,375 +675,12 @@ public class AusbildungDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
+  @JsonProperty(value = JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+  public void setHasPendingAusbildungUnterbruchAntrag(@jakarta.annotation.Nonnull Boolean hasPendingAusbildungUnterbruchAntrag) {
     this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
   }
 
-
-  public AusbildungDashboardItemDtoSpec id(UUID id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public UUID getId() {
-    return id;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec fallId(UUID fallId) {
-    
-    this.fallId = fallId;
-    return this;
-  }
-
-   /**
-   * Get fallId
-   * @return fallId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getFallId() {
-    return fallId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
-    this.fallId = fallId;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
-    
-    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
-    return this;
-  }
-
-   /**
-   * Get fachrichtungBerufsbezeichnung
-   * @return fachrichtungBerufsbezeichnung
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getFachrichtungBerufsbezeichnung() {
-    return fachrichtungBerufsbezeichnung;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
-    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
-    
-    this.ausbildungNichtGefunden = ausbildungNichtGefunden;
-    return this;
-  }
-
-   /**
-   * Get ausbildungNichtGefunden
-   * @return ausbildungNichtGefunden
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getAusbildungNichtGefunden() {
-    return ausbildungNichtGefunden;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
-    this.ausbildungNichtGefunden = ausbildungNichtGefunden;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec ausbildungBegin(String ausbildungBegin) {
-    
-    this.ausbildungBegin = ausbildungBegin;
-    return this;
-  }
-
-   /**
-   * Datum im Format mm.YYYY
-   * @return ausbildungBegin
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BEGIN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getAusbildungBegin() {
-    return ausbildungBegin;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BEGIN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungBegin(String ausbildungBegin) {
-    this.ausbildungBegin = ausbildungBegin;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec ausbildungEnd(String ausbildungEnd) {
-    
-    this.ausbildungEnd = ausbildungEnd;
-    return this;
-  }
-
-   /**
-   * Datum im Format mm.YYYY
-   * @return ausbildungEnd
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_END)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getAusbildungEnd() {
-    return ausbildungEnd;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_END)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungEnd(String ausbildungEnd) {
-    this.ausbildungEnd = ausbildungEnd;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec besuchtBMS(Boolean besuchtBMS) {
-    
-    this.besuchtBMS = besuchtBMS;
-    return this;
-  }
-
-   /**
-   * Required wenn Abschluss.askForBerufsmaturitaet &#x3D; true
-   * @return besuchtBMS
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BESUCHT_B_M_S)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getBesuchtBMS() {
-    return besuchtBMS;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BESUCHT_B_M_S)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBesuchtBMS(Boolean besuchtBMS) {
-    this.besuchtBMS = besuchtBMS;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec pensum(AusbildungsPensumDtoSpec pensum) {
-    
-    this.pensum = pensum;
-    return this;
-  }
-
-   /**
-   * Get pensum
-   * @return pensum
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PENSUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public AusbildungsPensumDtoSpec getPensum() {
-    return pensum;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_PENSUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPensum(AusbildungsPensumDtoSpec pensum) {
-    this.pensum = pensum;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
-    
-    this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
-    return this;
-  }
-
-   /**
-   * Required wenn andere ausbildungNichtGefunden &#x3D; true
-   * @return alternativeAusbildungsstaette
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getAlternativeAusbildungsstaette() {
-    return alternativeAusbildungsstaette;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAlternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
-    this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec alternativeAusbildungsgang(String alternativeAusbildungsgang) {
-    
-    this.alternativeAusbildungsgang = alternativeAusbildungsgang;
-    return this;
-  }
-
-   /**
-   * Required wenn andere ausbildungNichtGefunden &#x3D; true
-   * @return alternativeAusbildungsgang
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getAlternativeAusbildungsgang() {
-    return alternativeAusbildungsgang;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAlternativeAusbildungsgang(String alternativeAusbildungsgang) {
-    this.alternativeAusbildungsgang = alternativeAusbildungsgang;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec ausbildungsortPLZ(String ausbildungsortPLZ) {
-    
-    this.ausbildungsortPLZ = ausbildungsortPLZ;
-    return this;
-  }
-
-   /**
-   * Not required if isAusbildungAusland &#x3D; true
-   * @return ausbildungsortPLZ
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getAusbildungsortPLZ() {
-    return ausbildungsortPLZ;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungsortPLZ(String ausbildungsortPLZ) {
-    this.ausbildungsortPLZ = ausbildungsortPLZ;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec ausbildungsort(String ausbildungsort) {
-    
-    this.ausbildungsort = ausbildungsort;
-    return this;
-  }
-
-   /**
-   * Not required if isAusbildungAusland &#x3D; true
-   * @return ausbildungsort
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getAusbildungsort() {
-    return ausbildungsort;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungsort(String ausbildungsort) {
-    this.ausbildungsort = ausbildungsort;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec isAusbildungAusland(Boolean isAusbildungAusland) {
-    
-    this.isAusbildungAusland = isAusbildungAusland;
-    return this;
-  }
-
-   /**
-   * Get isAusbildungAusland
-   * @return isAusbildungAusland
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getIsAusbildungAusland() {
-    return isAusbildungAusland;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIsAusbildungAusland(Boolean isAusbildungAusland) {
-    this.isAusbildungAusland = isAusbildungAusland;
-  }
-
-
-  public AusbildungDashboardItemDtoSpec landId(UUID landId) {
-    
-    this.landId = landId;
-    return this;
-  }
-
-   /**
-   * Get landId
-   * @return landId
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_LAND_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public UUID getLandId() {
-    return landId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_LAND_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLandId(UUID landId) {
-    this.landId = landId;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -566,10 +691,7 @@ public class AusbildungDashboardItemDtoSpec {
       return false;
     }
     AusbildungDashboardItemDtoSpec ausbildungDashboardItem = (AusbildungDashboardItemDtoSpec) o;
-    return Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
-        Objects.equals(this.canCreateAusbildungUnterbruchAntrag, ausbildungDashboardItem.canCreateAusbildungUnterbruchAntrag) &&
-        Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, ausbildungDashboardItem.hasPendingAusbildungUnterbruchAntrag) &&
-        Objects.equals(this.id, ausbildungDashboardItem.id) &&
+    return Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildungDashboardItem.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
@@ -582,21 +704,25 @@ public class AusbildungDashboardItemDtoSpec {
         Objects.equals(this.ausbildungsortPLZ, ausbildungDashboardItem.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildungDashboardItem.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland) &&
-        Objects.equals(this.landId, ausbildungDashboardItem.landId);
+        Objects.equals(this.landId, ausbildungDashboardItem.landId) &&
+        Objects.equals(this.status, ausbildungDashboardItem.status) &&
+        Objects.equals(this.ausbildungsgang, ausbildungDashboardItem.ausbildungsgang) &&
+        Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
+        Objects.equals(this.earliestActiveGesuchPeriodeStart, ausbildungDashboardItem.earliestActiveGesuchPeriodeStart) &&
+        Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
+        Objects.equals(this.canCreateAusbildungUnterbruchAntrag, ausbildungDashboardItem.canCreateAusbildungUnterbruchAntrag) &&
+        Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, ausbildungDashboardItem.hasPendingAusbildungUnterbruchAntrag);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchs, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
+    return Objects.hash(id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, status, ausbildungsgang, editable, earliestActiveGesuchPeriodeStart, gesuchs, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusbildungDashboardItemDtoSpec {\n");
-    sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
-    sb.append("    canCreateAusbildungUnterbruchAntrag: ").append(toIndentedString(canCreateAusbildungUnterbruchAntrag)).append("\n");
-    sb.append("    hasPendingAusbildungUnterbruchAntrag: ").append(toIndentedString(hasPendingAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
@@ -611,6 +737,13 @@ public class AusbildungDashboardItemDtoSpec {
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
+    sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
+    sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
+    sb.append("    canCreateAusbildungUnterbruchAntrag: ").append(toIndentedString(canCreateAusbildungUnterbruchAntrag)).append("\n");
+    sb.append("    hasPendingAusbildungUnterbruchAntrag: ").append(toIndentedString(hasPendingAusbildungUnterbruchAntrag)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -620,10 +753,7 @@ public class AusbildungDashboardItemDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

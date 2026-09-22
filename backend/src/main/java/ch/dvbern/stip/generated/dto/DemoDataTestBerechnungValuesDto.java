@@ -14,16 +14,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataTestBerechnungValues")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataTestBerechnungValuesDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus status;
-  private @Valid Integer ungekuerztStipendien;
-  private @Valid Integer ungekuerztDarlehen;
-  private @Valid Integer stipendien;
-  private @Valid Integer darlehen;
+  private ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus status;
+  private Integer ungekuerztStipendien;
+  private Integer ungekuerztDarlehen;
+  private Integer stipendien;
+  private Integer darlehen;
 
   protected DemoDataTestBerechnungValuesDto(DemoDataTestBerechnungValuesDtoBuilder<?, ?> b) {
     this.status = b.status;
@@ -167,10 +167,7 @@ public class DemoDataTestBerechnungValuesDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -223,4 +220,3 @@ public class DemoDataTestBerechnungValuesDto  implements Serializable {
     }
   }
 }
-

@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BrueckenangebotCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BrueckenangebotCreateDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
-  private @Valid String bezeichnungDe;
-  private @Valid String bezeichnungFr;
+  private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+  private String bezeichnungDe;
+  private String bezeichnungFr;
 
   protected BrueckenangebotCreateDto(BrueckenangebotCreateDtoBuilder<?, ?> b) {
     this.bildungsrichtung = b.bildungsrichtung;
@@ -40,13 +40,12 @@ public class BrueckenangebotCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("bildungsrichtung")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung getBildungsrichtung() {
+  @JsonProperty(required = true, value = "bildungsrichtung")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung getBildungsrichtung() {
     return bildungsrichtung;
   }
 
-  @JsonProperty("bildungsrichtung")
+  @JsonProperty(required = true, value = "bildungsrichtung")
   public void setBildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
     this.bildungsrichtung = bildungsrichtung;
   }
@@ -59,13 +58,12 @@ public class BrueckenangebotCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungDe")
-  @NotNull
-  public String getBezeichnungDe() {
+  @JsonProperty(required = true, value = "bezeichnungDe")
+  @NotNull public String getBezeichnungDe() {
     return bezeichnungDe;
   }
 
-  @JsonProperty("bezeichnungDe")
+  @JsonProperty(required = true, value = "bezeichnungDe")
   public void setBezeichnungDe(String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
@@ -78,13 +76,12 @@ public class BrueckenangebotCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("bezeichnungFr")
-  @NotNull
-  public String getBezeichnungFr() {
+  @JsonProperty(required = true, value = "bezeichnungFr")
+  @NotNull public String getBezeichnungFr() {
     return bezeichnungFr;
   }
 
-  @JsonProperty("bezeichnungFr")
+  @JsonProperty(required = true, value = "bezeichnungFr")
   public void setBezeichnungFr(String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
@@ -126,10 +123,7 @@ public class BrueckenangebotCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -172,4 +166,3 @@ public class BrueckenangebotCreateDto  implements Serializable {
     }
   }
 }
-

@@ -14,25 +14,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FamilienBudgetresultatEinnahmen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
-  private @Valid Integer total;
-  private @Valid Integer totalEinkuenfte;
-  private @Valid Integer einnahmenBGSA;
-  private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer andereEinnahmen;
-  private @Valid Integer eigenmietwert;
-  private @Valid Integer unterhaltsbeitraege;
-  private @Valid Integer sauele3;
-  private @Valid Integer sauele2;
-  private @Valid Integer renten;
-  private @Valid Integer einkommensfreibetrag;
-  private @Valid Integer zwischentotal;
-  private @Valid Integer anrechenbaresVermoegen;
-  private @Valid Integer steuerbaresVermoegen;
+  private Integer total;
+  private Integer totalEinkuenfte;
+  private Integer einnahmenBGSA;
+  private Integer ergaenzungsleistungen;
+  private Integer andereEinnahmen;
+  private Integer eigenmietwert;
+  private Integer unterhaltsbeitraege;
+  private Integer sauele3;
+  private Integer sauele2;
+  private Integer renten;
+  private Integer einkommensfreibetrag;
+  private Integer zwischentotal;
+  private Integer anrechenbaresVermoegen;
+  private Integer steuerbaresVermoegen;
 
   protected FamilienBudgetresultatEinnahmenDto(FamilienBudgetresultatEinnahmenDtoBuilder<?, ?> b) {
     this.total = b.total;
@@ -62,13 +62,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("total")
-  @NotNull
-  public Integer getTotal() {
+  @JsonProperty(required = true, value = "total")
+  @NotNull public Integer getTotal() {
     return total;
   }
 
-  @JsonProperty("total")
+  @JsonProperty(required = true, value = "total")
   public void setTotal(Integer total) {
     this.total = total;
   }
@@ -81,13 +80,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("totalEinkuenfte")
-  @NotNull
-  public Integer getTotalEinkuenfte() {
+  @JsonProperty(required = true, value = "totalEinkuenfte")
+  @NotNull public Integer getTotalEinkuenfte() {
     return totalEinkuenfte;
   }
 
-  @JsonProperty("totalEinkuenfte")
+  @JsonProperty(required = true, value = "totalEinkuenfte")
   public void setTotalEinkuenfte(Integer totalEinkuenfte) {
     this.totalEinkuenfte = totalEinkuenfte;
   }
@@ -100,13 +98,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("einnahmenBGSA")
-  @NotNull
-  public Integer getEinnahmenBGSA() {
+  @JsonProperty(required = true, value = "einnahmenBGSA")
+  @NotNull public Integer getEinnahmenBGSA() {
     return einnahmenBGSA;
   }
 
-  @JsonProperty("einnahmenBGSA")
+  @JsonProperty(required = true, value = "einnahmenBGSA")
   public void setEinnahmenBGSA(Integer einnahmenBGSA) {
     this.einnahmenBGSA = einnahmenBGSA;
   }
@@ -119,13 +116,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("ergaenzungsleistungen")
-  @NotNull
-  public Integer getErgaenzungsleistungen() {
+  @JsonProperty(required = true, value = "ergaenzungsleistungen")
+  @NotNull public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
   }
 
-  @JsonProperty("ergaenzungsleistungen")
+  @JsonProperty(required = true, value = "ergaenzungsleistungen")
   public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
   }
@@ -138,13 +134,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("andereEinnahmen")
-  @NotNull
-  public Integer getAndereEinnahmen() {
+  @JsonProperty(required = true, value = "andereEinnahmen")
+  @NotNull public Integer getAndereEinnahmen() {
     return andereEinnahmen;
   }
 
-  @JsonProperty("andereEinnahmen")
+  @JsonProperty(required = true, value = "andereEinnahmen")
   public void setAndereEinnahmen(Integer andereEinnahmen) {
     this.andereEinnahmen = andereEinnahmen;
   }
@@ -157,13 +152,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("eigenmietwert")
-  @NotNull
-  public Integer getEigenmietwert() {
+  @JsonProperty(required = true, value = "eigenmietwert")
+  @NotNull public Integer getEigenmietwert() {
     return eigenmietwert;
   }
 
-  @JsonProperty("eigenmietwert")
+  @JsonProperty(required = true, value = "eigenmietwert")
   public void setEigenmietwert(Integer eigenmietwert) {
     this.eigenmietwert = eigenmietwert;
   }
@@ -176,13 +170,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("unterhaltsbeitraege")
-  @NotNull
-  public Integer getUnterhaltsbeitraege() {
+  @JsonProperty(required = true, value = "unterhaltsbeitraege")
+  @NotNull public Integer getUnterhaltsbeitraege() {
     return unterhaltsbeitraege;
   }
 
-  @JsonProperty("unterhaltsbeitraege")
+  @JsonProperty(required = true, value = "unterhaltsbeitraege")
   public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
     this.unterhaltsbeitraege = unterhaltsbeitraege;
   }
@@ -195,13 +188,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("sauele3")
-  @NotNull
-  public Integer getSauele3() {
+  @JsonProperty(required = true, value = "sauele3")
+  @NotNull public Integer getSauele3() {
     return sauele3;
   }
 
-  @JsonProperty("sauele3")
+  @JsonProperty(required = true, value = "sauele3")
   public void setSauele3(Integer sauele3) {
     this.sauele3 = sauele3;
   }
@@ -214,13 +206,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("sauele2")
-  @NotNull
-  public Integer getSauele2() {
+  @JsonProperty(required = true, value = "sauele2")
+  @NotNull public Integer getSauele2() {
     return sauele2;
   }
 
-  @JsonProperty("sauele2")
+  @JsonProperty(required = true, value = "sauele2")
   public void setSauele2(Integer sauele2) {
     this.sauele2 = sauele2;
   }
@@ -233,13 +224,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("renten")
-  @NotNull
-  public Integer getRenten() {
+  @JsonProperty(required = true, value = "renten")
+  @NotNull public Integer getRenten() {
     return renten;
   }
 
-  @JsonProperty("renten")
+  @JsonProperty(required = true, value = "renten")
   public void setRenten(Integer renten) {
     this.renten = renten;
   }
@@ -252,13 +242,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("einkommensfreibetrag")
-  @NotNull
-  public Integer getEinkommensfreibetrag() {
+  @JsonProperty(required = true, value = "einkommensfreibetrag")
+  @NotNull public Integer getEinkommensfreibetrag() {
     return einkommensfreibetrag;
   }
 
-  @JsonProperty("einkommensfreibetrag")
+  @JsonProperty(required = true, value = "einkommensfreibetrag")
   public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
   }
@@ -271,13 +260,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("zwischentotal")
-  @NotNull
-  public Integer getZwischentotal() {
+  @JsonProperty(required = true, value = "zwischentotal")
+  @NotNull public Integer getZwischentotal() {
     return zwischentotal;
   }
 
-  @JsonProperty("zwischentotal")
+  @JsonProperty(required = true, value = "zwischentotal")
   public void setZwischentotal(Integer zwischentotal) {
     this.zwischentotal = zwischentotal;
   }
@@ -290,13 +278,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("anrechenbaresVermoegen")
-  @NotNull
-  public Integer getAnrechenbaresVermoegen() {
+  @JsonProperty(required = true, value = "anrechenbaresVermoegen")
+  @NotNull public Integer getAnrechenbaresVermoegen() {
     return anrechenbaresVermoegen;
   }
 
-  @JsonProperty("anrechenbaresVermoegen")
+  @JsonProperty(required = true, value = "anrechenbaresVermoegen")
   public void setAnrechenbaresVermoegen(Integer anrechenbaresVermoegen) {
     this.anrechenbaresVermoegen = anrechenbaresVermoegen;
   }
@@ -309,13 +296,12 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuerbaresVermoegen")
-  @NotNull
-  public Integer getSteuerbaresVermoegen() {
+  @JsonProperty(required = true, value = "steuerbaresVermoegen")
+  @NotNull public Integer getSteuerbaresVermoegen() {
     return steuerbaresVermoegen;
   }
 
-  @JsonProperty("steuerbaresVermoegen")
+  @JsonProperty(required = true, value = "steuerbaresVermoegen")
   public void setSteuerbaresVermoegen(Integer steuerbaresVermoegen) {
     this.steuerbaresVermoegen = steuerbaresVermoegen;
   }
@@ -379,10 +365,7 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -480,4 +463,3 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
     }
   }
 }
-
