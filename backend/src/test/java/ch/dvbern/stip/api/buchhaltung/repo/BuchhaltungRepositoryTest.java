@@ -17,7 +17,10 @@
 
 package ch.dvbern.stip.api.buchhaltung.repo;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.entity.SapDeliverysLengthConstraintValidator;
@@ -25,6 +28,7 @@ import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.generator.entities.fall.FallTestBuilder;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -42,6 +46,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -67,38 +72,17 @@ public class BuchhaltungRepositoryTest {
 
     @Transactional
     @BeforeEach
-    @TestAsSachbearbeiter
-    void setUp() {
-        benutzerService.getOrCreateAndUpdateCurrentBenutzer();
+    @TestAsGesuchsteller
+    void setUpGs() {
         fall = fallRepository.findFallForGsOptional(benutzerService.getCurrentBenutzer().getId())
             .orElseGet(() -> {
-                final var newFall = new Fall();
-                newFall.setFallNummer("BE.T.999999");
+                final var newFall = FallTestBuilder.empty(LocalDate.now()).build();
+                newFall.setId(null);
+                newFall.setFallNummer("BE.F.999999");
                 newFall.setGesuchsteller(benutzerService.getCurrentBenutzer());
                 fallRepository.persistAndFlush(newFall);
                 return newFall;
             });
-    }
-
-    @Transactional
-    Buchhaltung createBuchhaltung(final BuchhaltungType type) {
-        final var b = new Buchhaltung();
-        b.setBuchhaltungType(type);
-        b.setBetrag(100);
-        b.setSaldo(100);
-        b.setComment("test");
-        b.setFall(fall);
-        buchhaltungRepository.persistAndFlush(b);
-        return b;
-    }
-
-    @Transactional
-    void addSapDelivery(final Buchhaltung buchhaltung, final SapStatus status) {
-        final var delivery = new SapDelivery();
-        delivery.setSapStatus(status);
-        delivery.setBuchhaltung(buchhaltung);
-        sapDeliveryRepository.persistAndFlush(delivery);
-        buchhaltung.getSapDeliverys().add(delivery);
     }
 
     @Test
@@ -106,14 +90,14 @@ public class BuchhaltungRepositoryTest {
     @TestAsSachbearbeiter
     @SneakyThrows
     void businesspartnerAction_noDeliveries() {
-        final var b = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
+        final var buchhaltung = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
 
         final var result = buchhaltungRepository
             .findPendingBusinesspartnerActionBuchhaltung()
             .toList();
 
         assertThat(result, hasSize(1));
-        assertThat(result.get(0).getId(), org.hamcrest.Matchers.is(b.getId()));
+        assertThat(result.get(0).getId(), is(buchhaltung.getId()));
         tm.setRollbackOnly();
     }
 
@@ -122,15 +106,15 @@ public class BuchhaltungRepositoryTest {
     @TestAsSachbearbeiter
     @SneakyThrows
     void businesspartnerAction_inProgressDelivery() {
-        final var b = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
-        addSapDelivery(b, SapStatus.IN_PROGRESS);
+        final var buchhaltung = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
+        addSapDelivery(buchhaltung, SapStatus.IN_PROGRESS);
 
         final var result = buchhaltungRepository
             .findPendingBusinesspartnerActionBuchhaltung()
             .toList();
 
         assertThat(result, hasSize(1));
-        assertThat(result.get(0).getId(), org.hamcrest.Matchers.is(b.getId()));
+        assertThat(result.get(0).getId(), is(buchhaltung.getId()));
         tm.setRollbackOnly();
     }
 
@@ -139,15 +123,15 @@ public class BuchhaltungRepositoryTest {
     @TestAsSachbearbeiter
     @SneakyThrows
     void businesspartnerAction_oneFailureDelivery() {
-        final var b = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
-        addSapDelivery(b, SapStatus.FAILURE);
+        final var buchhaltung = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
+        addSapDelivery(buchhaltung, SapStatus.FAILURE);
 
         final var result = buchhaltungRepository
             .findPendingBusinesspartnerActionBuchhaltung()
             .toList();
 
         assertThat(result, hasSize(1));
-        assertThat(result.get(0).getId(), org.hamcrest.Matchers.is(b.getId()));
+        assertThat(result.get(0).getId(), is(buchhaltung.getId()));
         tm.setRollbackOnly();
     }
 
@@ -156,8 +140,8 @@ public class BuchhaltungRepositoryTest {
     @TestAsSachbearbeiter
     @SneakyThrows
     void businesspartnerAction_successDelivery() {
-        final var b = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
-        addSapDelivery(b, SapStatus.SUCCESS);
+        final var buchhaltung = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
+        addSapDelivery(buchhaltung, SapStatus.SUCCESS);
 
         final var result = buchhaltungRepository
             .findPendingBusinesspartnerActionBuchhaltung()
@@ -172,9 +156,9 @@ public class BuchhaltungRepositoryTest {
     @TestAsSachbearbeiter
     @SneakyThrows
     void businesspartnerAction_maxFailedDeliveries() {
-        final var b = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
+        final var buchhaltung = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
         for (int i = 0; i < SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_BUSINESSPARTNER_ACTION; i++) {
-            addSapDelivery(b, SapStatus.FAILURE);
+            addSapDelivery(buchhaltung, SapStatus.FAILURE);
         }
 
         final var result = buchhaltungRepository
@@ -190,9 +174,9 @@ public class BuchhaltungRepositoryTest {
     @TestAsSachbearbeiter
     @SneakyThrows
     void businesspartnerAction_successAndFailureDeliveries() {
-        final var b = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
-        addSapDelivery(b, SapStatus.FAILURE);
-        addSapDelivery(b, SapStatus.SUCCESS);
+        final var buchhaltung = createBuchhaltung(BuchhaltungType.BUSINESSPARTNER_CREATE);
+        addSapDelivery(buchhaltung, SapStatus.FAILURE);
+        addSapDelivery(buchhaltung, SapStatus.SUCCESS);
 
         final var result = buchhaltungRepository
             .findPendingBusinesspartnerActionBuchhaltung()
@@ -200,5 +184,24 @@ public class BuchhaltungRepositoryTest {
 
         assertThat(result, empty());
         tm.setRollbackOnly();
+    }
+
+    private Buchhaltung createBuchhaltung(final BuchhaltungType type) {
+        final var buchhaltung = new Buchhaltung();
+        buchhaltung.setBuchhaltungType(type);
+        buchhaltung.setBetrag(100);
+        buchhaltung.setSaldo(100);
+        buchhaltung.setComment("test");
+        buchhaltung.setFall(fall);
+        buchhaltungRepository.persistAndFlush(buchhaltung);
+        return buchhaltung;
+    }
+
+    private void addSapDelivery(final Buchhaltung buchhaltung, final SapStatus status) {
+        final var delivery = new SapDelivery();
+        delivery.setSapStatus(status);
+        delivery.setBuchhaltung(buchhaltung);
+        sapDeliveryRepository.persistAndFlush(delivery);
+        buchhaltung.getSapDeliverys().add(delivery);
     }
 }
