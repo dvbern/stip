@@ -53,10 +53,11 @@ public class GesuchDokumentKommentarService {
 
     @Transactional
     public void deleteForGesuchTrancheId(final UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        final var gesuchDokuments = gesuchTranche.getGesuchDokuments();
-        gesuchDokuments
-            .forEach(dokument -> gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(dokument.getId()));
+        gesuchDokumentKommentarRepository.deleteAllByGesuchTrancheId(gesuchTrancheId);
+    }
+
+    public void deleteForGesuchTrancheIds(final List<UUID> gesuchTrancheIds) {
+        gesuchDokumentKommentarRepository.deleteAllByGesuchTrancheIds(gesuchTrancheIds);
     }
 
     @Transactional
