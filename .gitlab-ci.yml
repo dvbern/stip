@@ -194,6 +194,12 @@ nx-e2e-test:
   stage: e2e
   resource_group: 'e2e'
   allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+    reports:
+      junit: results.xml
   variables:
     E2E_BASEURL_GS: 'https://dv-e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SB: 'https://dv-e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'

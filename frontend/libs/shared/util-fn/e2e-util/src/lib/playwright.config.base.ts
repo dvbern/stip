@@ -79,6 +79,12 @@ export const baseConfig = defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 1,
+  reporter: process.env.CI
+    ? [
+        ['junit', { outputFile: 'results.xml' }],
+        ['html', { open: 'never' }],
+      ]
+    : [['list']],
 });
 
 export const compress = async (value: string) => {
