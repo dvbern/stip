@@ -31,30 +31,109 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * PaginatedAusbildungsgangDtoSpec
  */
 @JsonPropertyOrder({
-  PaginatedAusbildungsgangDtoSpec.JSON_PROPERTY_ENTRIES,
   PaginatedAusbildungsgangDtoSpec.JSON_PROPERTY_PAGE,
   PaginatedAusbildungsgangDtoSpec.JSON_PROPERTY_PAGE_SIZE,
-  PaginatedAusbildungsgangDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES
+  PaginatedAusbildungsgangDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES,
+  PaginatedAusbildungsgangDtoSpec.JSON_PROPERTY_ENTRIES
 })
 @JsonTypeName("PaginatedAusbildungsgang")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PaginatedAusbildungsgangDtoSpec {
-  public static final String JSON_PROPERTY_ENTRIES = "entries";
-  private List<AusbildungsgangDtoSpec> entries;
-
   public static final String JSON_PROPERTY_PAGE = "page";
+  @jakarta.annotation.Nullable
   private Integer page;
 
   public static final String JSON_PROPERTY_PAGE_SIZE = "pageSize";
+  @jakarta.annotation.Nullable
   private Integer pageSize;
 
   public static final String JSON_PROPERTY_TOTAL_ENTRIES = "totalEntries";
+  @jakarta.annotation.Nullable
   private Integer totalEntries;
+
+  public static final String JSON_PROPERTY_ENTRIES = "entries";
+  @jakarta.annotation.Nullable
+  private List<AusbildungsgangDtoSpec> entries;
 
   public PaginatedAusbildungsgangDtoSpec() {
   }
 
-  public PaginatedAusbildungsgangDtoSpec entries(List<AusbildungsgangDtoSpec> entries) {
+  public PaginatedAusbildungsgangDtoSpec page(@jakarta.annotation.Nullable Integer page) {
+    
+    this.page = page;
+    return this;
+  }
+
+  /**
+   * Get page
+   * @return page
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getPage() {
+    return page;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPage(@jakarta.annotation.Nullable Integer page) {
+    this.page = page;
+  }
+
+  public PaginatedAusbildungsgangDtoSpec pageSize(@jakarta.annotation.Nullable Integer pageSize) {
+    
+    this.pageSize = pageSize;
+    return this;
+  }
+
+  /**
+   * Get pageSize
+   * @return pageSize
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PAGE_SIZE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getPageSize() {
+    return pageSize;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PAGE_SIZE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPageSize(@jakarta.annotation.Nullable Integer pageSize) {
+    this.pageSize = pageSize;
+  }
+
+  public PaginatedAusbildungsgangDtoSpec totalEntries(@jakarta.annotation.Nullable Integer totalEntries) {
+    
+    this.totalEntries = totalEntries;
+    return this;
+  }
+
+  /**
+   * Get totalEntries
+   * @return totalEntries
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_ENTRIES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getTotalEntries() {
+    return totalEntries;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_ENTRIES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalEntries(@jakarta.annotation.Nullable Integer totalEntries) {
+    this.totalEntries = totalEntries;
+  }
+
+  public PaginatedAusbildungsgangDtoSpec entries(@jakarta.annotation.Nullable List<AusbildungsgangDtoSpec> entries) {
     
     this.entries = entries;
     return this;
@@ -68,12 +147,12 @@ public class PaginatedAusbildungsgangDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get entries
    * @return entries
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ENTRIES)
+  @JsonProperty(value = JSON_PROPERTY_ENTRIES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<AusbildungsgangDtoSpec> getEntries() {
@@ -81,89 +160,12 @@ public class PaginatedAusbildungsgangDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENTRIES)
+  @JsonProperty(value = JSON_PROPERTY_ENTRIES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEntries(List<AusbildungsgangDtoSpec> entries) {
+  public void setEntries(@jakarta.annotation.Nullable List<AusbildungsgangDtoSpec> entries) {
     this.entries = entries;
   }
 
-
-  public PaginatedAusbildungsgangDtoSpec page(Integer page) {
-    
-    this.page = page;
-    return this;
-  }
-
-   /**
-   * Get page
-   * @return page
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PAGE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPage() {
-    return page;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_PAGE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPage(Integer page) {
-    this.page = page;
-  }
-
-
-  public PaginatedAusbildungsgangDtoSpec pageSize(Integer pageSize) {
-    
-    this.pageSize = pageSize;
-    return this;
-  }
-
-   /**
-   * Get pageSize
-   * @return pageSize
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PAGE_SIZE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPageSize() {
-    return pageSize;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_PAGE_SIZE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
-
-
-  public PaginatedAusbildungsgangDtoSpec totalEntries(Integer totalEntries) {
-    
-    this.totalEntries = totalEntries;
-    return this;
-  }
-
-   /**
-   * Get totalEntries
-   * @return totalEntries
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TOTAL_ENTRIES)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getTotalEntries() {
-    return totalEntries;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TOTAL_ENTRIES)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTotalEntries(Integer totalEntries) {
-    this.totalEntries = totalEntries;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -174,25 +176,25 @@ public class PaginatedAusbildungsgangDtoSpec {
       return false;
     }
     PaginatedAusbildungsgangDtoSpec paginatedAusbildungsgang = (PaginatedAusbildungsgangDtoSpec) o;
-    return Objects.equals(this.entries, paginatedAusbildungsgang.entries) &&
-        Objects.equals(this.page, paginatedAusbildungsgang.page) &&
+    return Objects.equals(this.page, paginatedAusbildungsgang.page) &&
         Objects.equals(this.pageSize, paginatedAusbildungsgang.pageSize) &&
-        Objects.equals(this.totalEntries, paginatedAusbildungsgang.totalEntries);
+        Objects.equals(this.totalEntries, paginatedAusbildungsgang.totalEntries) &&
+        Objects.equals(this.entries, paginatedAusbildungsgang.entries);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entries, page, pageSize, totalEntries);
+    return Objects.hash(page, pageSize, totalEntries, entries);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PaginatedAusbildungsgangDtoSpec {\n");
-    sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    totalEntries: ").append(toIndentedString(totalEntries)).append("\n");
+    sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -202,10 +204,7 @@ public class PaginatedAusbildungsgangDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDashboardItem_missingDocuments")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
-  private @Valid UUID trancheId;
-  private @Valid Integer count;
+  private UUID trancheId;
+  private Integer count;
 
   protected GesuchDashboardItemMissingDocumentsDto(GesuchDashboardItemMissingDocumentsDtoBuilder<?, ?> b) {
     this.trancheId = b.trancheId;
@@ -39,13 +39,12 @@ public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
   }
 
   
-  @JsonProperty("trancheId")
-  @NotNull
-  public UUID getTrancheId() {
+  @JsonProperty(required = true, value = "trancheId")
+  @NotNull public UUID getTrancheId() {
     return trancheId;
   }
 
-  @JsonProperty("trancheId")
+  @JsonProperty(required = true, value = "trancheId")
   public void setTrancheId(UUID trancheId) {
     this.trancheId = trancheId;
   }
@@ -58,13 +57,12 @@ public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
   }
 
   
-  @JsonProperty("count")
-  @NotNull
-  public Integer getCount() {
+  @JsonProperty(required = true, value = "count")
+  @NotNull public Integer getCount() {
     return count;
   }
 
-  @JsonProperty("count")
+  @JsonProperty(required = true, value = "count")
   public void setCount(Integer count) {
     this.count = count;
   }
@@ -104,10 +102,7 @@ public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -145,4 +140,3 @@ public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
     }
   }
 }
-

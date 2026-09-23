@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DelegierterMitarbeiterAendernDtoSpec.JSON_PROPERTY_MITARBEITER_ID
 })
 @JsonTypeName("DelegierterMitarbeiterAendern")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DelegierterMitarbeiterAendernDtoSpec {
   public static final String JSON_PROPERTY_MITARBEITER_ID = "mitarbeiterId";
+  @jakarta.annotation.Nonnull
   private UUID mitarbeiterId;
 
   public DelegierterMitarbeiterAendernDtoSpec() {
   }
 
-  public DelegierterMitarbeiterAendernDtoSpec mitarbeiterId(UUID mitarbeiterId) {
+  public DelegierterMitarbeiterAendernDtoSpec mitarbeiterId(@jakarta.annotation.Nonnull UUID mitarbeiterId) {
     
     this.mitarbeiterId = mitarbeiterId;
     return this;
   }
 
-   /**
+  /**
    * Get mitarbeiterId
    * @return mitarbeiterId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MITARBEITER_ID)
+  @JsonProperty(value = JSON_PROPERTY_MITARBEITER_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getMitarbeiterId() {
@@ -58,11 +59,12 @@ public class DelegierterMitarbeiterAendernDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MITARBEITER_ID)
+  @JsonProperty(value = JSON_PROPERTY_MITARBEITER_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMitarbeiterId(UUID mitarbeiterId) {
+  public void setMitarbeiterId(@jakarta.annotation.Nonnull UUID mitarbeiterId) {
     this.mitarbeiterId = mitarbeiterId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class DelegierterMitarbeiterAendernDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

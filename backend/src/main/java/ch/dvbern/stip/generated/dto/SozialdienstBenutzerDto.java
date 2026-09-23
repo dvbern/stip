@@ -15,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstBenutzer")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstBenutzerDto  implements Serializable {
-  private @Valid String vorname;
-  private @Valid String nachname;
-  private @Valid String email;
-  private @Valid UUID id;
-  private @Valid Boolean isAdmin;
+  private String vorname;
+  private String nachname;
+  private String email;
+  private UUID id;
+  private Boolean isAdmin;
 
   protected SozialdienstBenutzerDto(SozialdienstBenutzerDtoBuilder<?, ?> b) {
     this.vorname = b.vorname;
@@ -45,13 +45,12 @@ public class SozialdienstBenutzerDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -64,13 +63,12 @@ public class SozialdienstBenutzerDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -83,13 +81,12 @@ public class SozialdienstBenutzerDto  implements Serializable {
   }
 
   
-  @JsonProperty("email")
-  @NotNull
-  public String getEmail() {
+  @JsonProperty(required = true, value = "email")
+  @NotNull public String getEmail() {
     return email;
   }
 
-  @JsonProperty("email")
+  @JsonProperty(required = true, value = "email")
   public void setEmail(String email) {
     this.email = email;
   }
@@ -102,13 +99,12 @@ public class SozialdienstBenutzerDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -172,10 +168,7 @@ public class SozialdienstBenutzerDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -228,4 +221,3 @@ public class SozialdienstBenutzerDto  implements Serializable {
     }
   }
 }
-

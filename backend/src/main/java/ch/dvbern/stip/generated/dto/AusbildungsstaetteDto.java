@@ -15,17 +15,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Ausbildungsstaette")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsstaetteDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String nameDe;
-  private @Valid String nameFr;
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
-  private @Valid Boolean aktiv;
-  private @Valid String nummer;
+  private UUID id;
+  private String nameDe;
+  private String nameFr;
+  private ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
+  private Boolean aktiv;
+  private String nummer;
 
   protected AusbildungsstaetteDto(AusbildungsstaetteDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -47,13 +47,12 @@ public class AusbildungsstaetteDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -66,13 +65,12 @@ public class AusbildungsstaetteDto  implements Serializable {
   }
 
   
-  @JsonProperty("nameDe")
-  @NotNull
-  public String getNameDe() {
+  @JsonProperty(required = true, value = "nameDe")
+  @NotNull public String getNameDe() {
     return nameDe;
   }
 
-  @JsonProperty("nameDe")
+  @JsonProperty(required = true, value = "nameDe")
   public void setNameDe(String nameDe) {
     this.nameDe = nameDe;
   }
@@ -85,13 +83,12 @@ public class AusbildungsstaetteDto  implements Serializable {
   }
 
   
-  @JsonProperty("nameFr")
-  @NotNull
-  public String getNameFr() {
+  @JsonProperty(required = true, value = "nameFr")
+  @NotNull public String getNameFr() {
     return nameFr;
   }
 
-  @JsonProperty("nameFr")
+  @JsonProperty(required = true, value = "nameFr")
   public void setNameFr(String nameFr) {
     this.nameFr = nameFr;
   }
@@ -104,13 +101,12 @@ public class AusbildungsstaetteDto  implements Serializable {
   }
 
   
-  @JsonProperty("nummerTyp")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp getNummerTyp() {
+  @JsonProperty(required = true, value = "nummerTyp")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp getNummerTyp() {
     return nummerTyp;
   }
 
-  @JsonProperty("nummerTyp")
+  @JsonProperty(required = true, value = "nummerTyp")
   public void setNummerTyp(ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp) {
     this.nummerTyp = nummerTyp;
   }
@@ -123,13 +119,12 @@ public class AusbildungsstaetteDto  implements Serializable {
   }
 
   
-  @JsonProperty("aktiv")
-  @NotNull
-  public Boolean getAktiv() {
+  @JsonProperty(required = true, value = "aktiv")
+  @NotNull public Boolean getAktiv() {
     return aktiv;
   }
 
-  @JsonProperty("aktiv")
+  @JsonProperty(required = true, value = "aktiv")
   public void setAktiv(Boolean aktiv) {
     this.aktiv = aktiv;
   }
@@ -195,10 +190,7 @@ public class AusbildungsstaetteDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -256,4 +248,3 @@ public class AusbildungsstaetteDto  implements Serializable {
     }
   }
 }
-

@@ -14,16 +14,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDarlehen_gruende")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDarlehenGruendeDto  implements Serializable {
-  private @Valid Boolean grundNichtBerechtigt;
-  private @Valid Boolean grundAusbildungZwoelfJahre;
-  private @Valid Boolean grundHoheGebuehren;
-  private @Valid Boolean grundAnschaffungenFuerAusbildung;
-  private @Valid Boolean grundZweitausbildung;
+  private Boolean grundNichtBerechtigt;
+  private Boolean grundAusbildungZwoelfJahre;
+  private Boolean grundHoheGebuehren;
+  private Boolean grundAnschaffungenFuerAusbildung;
+  private Boolean grundZweitausbildung;
 
   protected DemoDarlehenGruendeDto(DemoDarlehenGruendeDtoBuilder<?, ?> b) {
     this.grundNichtBerechtigt = b.grundNichtBerechtigt;
@@ -167,10 +167,7 @@ public class DemoDarlehenGruendeDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -223,4 +220,3 @@ public class DemoDarlehenGruendeDto  implements Serializable {
     }
   }
 }
-

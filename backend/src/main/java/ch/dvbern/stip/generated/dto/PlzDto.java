@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("plz")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PlzDto  implements Serializable {
-  private @Valid String plz;
-  private @Valid String ort;
-  private @Valid String kantonskuerzel;
+  private String plz;
+  private String ort;
+  private String kantonskuerzel;
 
   protected PlzDto(PlzDtoBuilder<?, ?> b) {
     this.plz = b.plz;
@@ -42,13 +42,12 @@ public class PlzDto  implements Serializable {
   }
 
   
-  @JsonProperty("plz")
-  @NotNull
-  public String getPlz() {
+  @JsonProperty(required = true, value = "plz")
+  @NotNull public String getPlz() {
     return plz;
   }
 
-  @JsonProperty("plz")
+  @JsonProperty(required = true, value = "plz")
   public void setPlz(String plz) {
     this.plz = plz;
   }
@@ -61,13 +60,12 @@ public class PlzDto  implements Serializable {
   }
 
   
-  @JsonProperty("ort")
-  @NotNull
-  public String getOrt() {
+  @JsonProperty(required = true, value = "ort")
+  @NotNull public String getOrt() {
     return ort;
   }
 
-  @JsonProperty("ort")
+  @JsonProperty(required = true, value = "ort")
   public void setOrt(String ort) {
     this.ort = ort;
   }
@@ -80,13 +78,12 @@ public class PlzDto  implements Serializable {
   }
 
   
-  @JsonProperty("kantonskuerzel")
-  @NotNull
-  public String getKantonskuerzel() {
+  @JsonProperty(required = true, value = "kantonskuerzel")
+  @NotNull public String getKantonskuerzel() {
     return kantonskuerzel;
   }
 
-  @JsonProperty("kantonskuerzel")
+  @JsonProperty(required = true, value = "kantonskuerzel")
   public void setKantonskuerzel(String kantonskuerzel) {
     this.kantonskuerzel = kantonskuerzel;
   }
@@ -128,10 +125,7 @@ public class PlzDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -174,4 +168,3 @@ public class PlzDto  implements Serializable {
     }
   }
 }
-

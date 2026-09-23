@@ -16,19 +16,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DelegierungCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierungCreateDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.common.type.Anrede anrede;
-  private @Valid String nachname;
-  private @Valid String vorname;
-  private @Valid LocalDate geburtsdatum;
-  private @Valid String email;
-  private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
-  private @Valid AdresseDto adresse;
-  private @Valid Boolean nutzungsbedingungenAkzeptiert;
+  private ch.dvbern.stip.api.common.type.Anrede anrede;
+  private String nachname;
+  private String vorname;
+  private LocalDate geburtsdatum;
+  private String email;
+  private ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
+  private AdresseDto adresse;
+  private Boolean nutzungsbedingungenAkzeptiert;
 
   protected DelegierungCreateDto(DelegierungCreateDtoBuilder<?, ?> b) {
     this.anrede = b.anrede;
@@ -52,13 +52,12 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("anrede")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.Anrede getAnrede() {
+  @JsonProperty(required = true, value = "anrede")
+  @NotNull public ch.dvbern.stip.api.common.type.Anrede getAnrede() {
     return anrede;
   }
 
-  @JsonProperty("anrede")
+  @JsonProperty(required = true, value = "anrede")
   public void setAnrede(ch.dvbern.stip.api.common.type.Anrede anrede) {
     this.anrede = anrede;
   }
@@ -71,13 +70,12 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -90,13 +88,12 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -109,13 +106,12 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
-  public LocalDate getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -128,13 +124,12 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("email")
-  @NotNull
-  public String getEmail() {
+  @JsonProperty(required = true, value = "email")
+  @NotNull public String getEmail() {
     return email;
   }
 
-  @JsonProperty("email")
+  @JsonProperty(required = true, value = "email")
   public void setEmail(String email) {
     this.email = email;
   }
@@ -147,13 +142,12 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("sprache")
-  @NotNull
-  public ch.dvbern.stip.api.personinausbildung.type.Sprache getSprache() {
+  @JsonProperty(required = true, value = "sprache")
+  @NotNull public ch.dvbern.stip.api.personinausbildung.type.Sprache getSprache() {
     return sprache;
   }
 
-  @JsonProperty("sprache")
+  @JsonProperty(required = true, value = "sprache")
   public void setSprache(ch.dvbern.stip.api.personinausbildung.type.Sprache sprache) {
     this.sprache = sprache;
   }
@@ -166,13 +160,12 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("adresse")
-  @NotNull
-  public AdresseDto getAdresse() {
+  @JsonProperty(required = true, value = "adresse")
+  @NotNull @Valid public AdresseDto getAdresse() {
     return adresse;
   }
 
-  @JsonProperty("adresse")
+  @JsonProperty(required = true, value = "adresse")
   public void setAdresse(AdresseDto adresse) {
     this.adresse = adresse;
   }
@@ -185,13 +178,12 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("nutzungsbedingungenAkzeptiert")
-  @NotNull
-  public Boolean getNutzungsbedingungenAkzeptiert() {
+  @JsonProperty(required = true, value = "nutzungsbedingungenAkzeptiert")
+  @NotNull public Boolean getNutzungsbedingungenAkzeptiert() {
     return nutzungsbedingungenAkzeptiert;
   }
 
-  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  @JsonProperty(required = true, value = "nutzungsbedingungenAkzeptiert")
   public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
     this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
   }
@@ -243,10 +235,7 @@ public class DelegierungCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -314,4 +303,3 @@ public class DelegierungCreateDto  implements Serializable {
     }
   }
 }
-

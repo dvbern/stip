@@ -50,83 +50,103 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoElternteilDtoSpec.JSON_PROPERTY_WIEDERVERHEIRATET
 })
 @JsonTypeName("DemoElternteil")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoElternteilDtoSpec {
   public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nonnull
   private ElternTypDtoSpec type;
 
   public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
+  @jakarta.annotation.Nonnull
   private String sozialversicherungsnummer;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_STRASSE = "strasse";
+  @jakarta.annotation.Nonnull
   private String strasse;
 
   public static final String JSON_PROPERTY_HAUSNUMMER = "hausnummer";
+  @jakarta.annotation.Nonnull
   private String hausnummer;
 
   public static final String JSON_PROPERTY_PLZ = "plz";
+  @jakarta.annotation.Nonnull
   private String plz;
 
   public static final String JSON_PROPERTY_ORT = "ort";
+  @jakarta.annotation.Nonnull
   private String ort;
 
   public static final String JSON_PROPERTY_CO_ADRESSE = "coAdresse";
+  @jakarta.annotation.Nullable
   private String coAdresse;
 
   public static final String JSON_PROPERTY_LAND = "land";
+  @jakarta.annotation.Nonnull
   private String land;
 
   public static final String JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ = "identischerZivilrechtlicherWohnsitz";
+  @jakarta.annotation.Nonnull
   private Boolean identischerZivilrechtlicherWohnsitz;
 
   public static final String JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z = "identischerZivilrechtlicherWohnsitzPLZ";
+  @jakarta.annotation.Nullable
   private String identischerZivilrechtlicherWohnsitzPLZ;
 
   public static final String JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT = "identischerZivilrechtlicherWohnsitzOrt";
+  @jakarta.annotation.Nullable
   private String identischerZivilrechtlicherWohnsitzOrt;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
+  @jakarta.annotation.Nullable
   private Integer wohnkosten;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  @jakarta.annotation.Nonnull
   private String geburtsdatum;
 
   public static final String JSON_PROPERTY_ALTER = "alter";
+  @jakarta.annotation.Nonnull
   private Integer alter;
 
   public static final String JSON_PROPERTY_TELEFONNUMMER = "telefonnummer";
+  @jakarta.annotation.Nonnull
   private String telefonnummer;
 
   public static final String JSON_PROPERTY_SOZIALHILFEBEITRAEGE = "sozialhilfebeitraege";
+  @jakarta.annotation.Nonnull
   private Boolean sozialhilfebeitraege;
 
   public static final String JSON_PROPERTY_AUSWEISB_FLUECHTLING = "ausweisbFluechtling";
+  @jakarta.annotation.Nonnull
   private Boolean ausweisbFluechtling;
 
   public static final String JSON_PROPERTY_WIEDERVERHEIRATET = "wiederverheiratet";
+  @jakarta.annotation.Nullable
   private Boolean wiederverheiratet;
 
   public DemoElternteilDtoSpec() {
   }
 
-  public DemoElternteilDtoSpec type(ElternTypDtoSpec type) {
+  public DemoElternteilDtoSpec type(@jakarta.annotation.Nonnull ElternTypDtoSpec type) {
     
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public ElternTypDtoSpec getType() {
@@ -134,25 +154,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setType(ElternTypDtoSpec type) {
+  public void setType(@jakarta.annotation.Nonnull ElternTypDtoSpec type) {
     this.type = type;
   }
 
-
-  public DemoElternteilDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
+  public DemoElternteilDtoSpec sozialversicherungsnummer(@jakarta.annotation.Nonnull String sozialversicherungsnummer) {
     
     this.sozialversicherungsnummer = sozialversicherungsnummer;
     return this;
   }
 
-   /**
+  /**
    * Get sozialversicherungsnummer
    * @return sozialversicherungsnummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getSozialversicherungsnummer() {
@@ -160,25 +179,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+  public void setSozialversicherungsnummer(@jakarta.annotation.Nonnull String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
 
-
-  public DemoElternteilDtoSpec nachname(String nachname) {
+  public DemoElternteilDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -186,25 +204,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public DemoElternteilDtoSpec vorname(String vorname) {
+  public DemoElternteilDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -212,25 +229,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public DemoElternteilDtoSpec strasse(String strasse) {
+  public DemoElternteilDtoSpec strasse(@jakarta.annotation.Nonnull String strasse) {
     
     this.strasse = strasse;
     return this;
   }
 
-   /**
+  /**
    * Get strasse
    * @return strasse
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STRASSE)
+  @JsonProperty(value = JSON_PROPERTY_STRASSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getStrasse() {
@@ -238,25 +254,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STRASSE)
+  @JsonProperty(value = JSON_PROPERTY_STRASSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStrasse(String strasse) {
+  public void setStrasse(@jakarta.annotation.Nonnull String strasse) {
     this.strasse = strasse;
   }
 
-
-  public DemoElternteilDtoSpec hausnummer(String hausnummer) {
+  public DemoElternteilDtoSpec hausnummer(@jakarta.annotation.Nonnull String hausnummer) {
     
     this.hausnummer = hausnummer;
     return this;
   }
 
-   /**
+  /**
    * Get hausnummer
    * @return hausnummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_HAUSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_HAUSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getHausnummer() {
@@ -264,25 +279,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_HAUSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_HAUSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setHausnummer(String hausnummer) {
+  public void setHausnummer(@jakarta.annotation.Nonnull String hausnummer) {
     this.hausnummer = hausnummer;
   }
 
-
-  public DemoElternteilDtoSpec plz(String plz) {
+  public DemoElternteilDtoSpec plz(@jakarta.annotation.Nonnull String plz) {
     
     this.plz = plz;
     return this;
   }
 
-   /**
+  /**
    * Get plz
    * @return plz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PLZ)
+  @JsonProperty(value = JSON_PROPERTY_PLZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPlz() {
@@ -290,25 +304,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PLZ)
+  @JsonProperty(value = JSON_PROPERTY_PLZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPlz(String plz) {
+  public void setPlz(@jakarta.annotation.Nonnull String plz) {
     this.plz = plz;
   }
 
-
-  public DemoElternteilDtoSpec ort(String ort) {
+  public DemoElternteilDtoSpec ort(@jakarta.annotation.Nonnull String ort) {
     
     this.ort = ort;
     return this;
   }
 
-   /**
+  /**
    * Get ort
    * @return ort
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ORT)
+  @JsonProperty(value = JSON_PROPERTY_ORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getOrt() {
@@ -316,25 +329,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ORT)
+  @JsonProperty(value = JSON_PROPERTY_ORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setOrt(String ort) {
+  public void setOrt(@jakarta.annotation.Nonnull String ort) {
     this.ort = ort;
   }
 
-
-  public DemoElternteilDtoSpec coAdresse(String coAdresse) {
+  public DemoElternteilDtoSpec coAdresse(@jakarta.annotation.Nullable String coAdresse) {
     
     this.coAdresse = coAdresse;
     return this;
   }
 
-   /**
+  /**
    * Get coAdresse
    * @return coAdresse
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CO_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_CO_ADRESSE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getCoAdresse() {
@@ -342,25 +354,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CO_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_CO_ADRESSE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCoAdresse(String coAdresse) {
+  public void setCoAdresse(@jakarta.annotation.Nullable String coAdresse) {
     this.coAdresse = coAdresse;
   }
 
-
-  public DemoElternteilDtoSpec land(String land) {
+  public DemoElternteilDtoSpec land(@jakarta.annotation.Nonnull String land) {
     
     this.land = land;
     return this;
   }
 
-   /**
+  /**
    * Get land
    * @return land
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LAND)
+  @JsonProperty(value = JSON_PROPERTY_LAND, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getLand() {
@@ -368,25 +379,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LAND)
+  @JsonProperty(value = JSON_PROPERTY_LAND, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLand(String land) {
+  public void setLand(@jakarta.annotation.Nonnull String land) {
     this.land = land;
   }
 
-
-  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
+  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitz(@jakarta.annotation.Nonnull Boolean identischerZivilrechtlicherWohnsitz) {
     
     this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
     return this;
   }
 
-   /**
+  /**
    * Get identischerZivilrechtlicherWohnsitz
    * @return identischerZivilrechtlicherWohnsitz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getIdentischerZivilrechtlicherWohnsitz() {
@@ -394,25 +404,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIdentischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
+  public void setIdentischerZivilrechtlicherWohnsitz(@jakarta.annotation.Nonnull Boolean identischerZivilrechtlicherWohnsitz) {
     this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
   }
 
-
-  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
+  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitzPLZ(@jakarta.annotation.Nullable String identischerZivilrechtlicherWohnsitzPLZ) {
     
     this.identischerZivilrechtlicherWohnsitzPLZ = identischerZivilrechtlicherWohnsitzPLZ;
     return this;
   }
 
-   /**
+  /**
    * Get identischerZivilrechtlicherWohnsitzPLZ
    * @return identischerZivilrechtlicherWohnsitzPLZ
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z)
+  @JsonProperty(value = JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getIdentischerZivilrechtlicherWohnsitzPLZ() {
@@ -420,25 +429,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z)
+  @JsonProperty(value = JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIdentischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
+  public void setIdentischerZivilrechtlicherWohnsitzPLZ(@jakarta.annotation.Nullable String identischerZivilrechtlicherWohnsitzPLZ) {
     this.identischerZivilrechtlicherWohnsitzPLZ = identischerZivilrechtlicherWohnsitzPLZ;
   }
 
-
-  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
+  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitzOrt(@jakarta.annotation.Nullable String identischerZivilrechtlicherWohnsitzOrt) {
     
     this.identischerZivilrechtlicherWohnsitzOrt = identischerZivilrechtlicherWohnsitzOrt;
     return this;
   }
 
-   /**
+  /**
    * Get identischerZivilrechtlicherWohnsitzOrt
    * @return identischerZivilrechtlicherWohnsitzOrt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT)
+  @JsonProperty(value = JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getIdentischerZivilrechtlicherWohnsitzOrt() {
@@ -446,25 +454,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT)
+  @JsonProperty(value = JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIdentischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
+  public void setIdentischerZivilrechtlicherWohnsitzOrt(@jakarta.annotation.Nullable String identischerZivilrechtlicherWohnsitzOrt) {
     this.identischerZivilrechtlicherWohnsitzOrt = identischerZivilrechtlicherWohnsitzOrt;
   }
 
-
-  public DemoElternteilDtoSpec wohnkosten(Integer wohnkosten) {
+  public DemoElternteilDtoSpec wohnkosten(@jakarta.annotation.Nullable Integer wohnkosten) {
     
     this.wohnkosten = wohnkosten;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkosten
    * @return wohnkosten
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getWohnkosten() {
@@ -472,25 +479,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWohnkosten(Integer wohnkosten) {
+  public void setWohnkosten(@jakarta.annotation.Nullable Integer wohnkosten) {
     this.wohnkosten = wohnkosten;
   }
 
-
-  public DemoElternteilDtoSpec geburtsdatum(String geburtsdatum) {
+  public DemoElternteilDtoSpec geburtsdatum(@jakarta.annotation.Nonnull String geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * Get geburtsdatum
    * @return geburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getGeburtsdatum() {
@@ -498,25 +504,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(@jakarta.annotation.Nonnull String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
-
-  public DemoElternteilDtoSpec alter(Integer alter) {
+  public DemoElternteilDtoSpec alter(@jakarta.annotation.Nonnull Integer alter) {
     
     this.alter = alter;
     return this;
   }
 
-   /**
+  /**
    * Get alter
    * @return alter
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonProperty(value = JSON_PROPERTY_ALTER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAlter() {
@@ -524,25 +529,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonProperty(value = JSON_PROPERTY_ALTER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAlter(Integer alter) {
+  public void setAlter(@jakarta.annotation.Nonnull Integer alter) {
     this.alter = alter;
   }
 
-
-  public DemoElternteilDtoSpec telefonnummer(String telefonnummer) {
+  public DemoElternteilDtoSpec telefonnummer(@jakarta.annotation.Nonnull String telefonnummer) {
     
     this.telefonnummer = telefonnummer;
     return this;
   }
 
-   /**
+  /**
    * Get telefonnummer
    * @return telefonnummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TELEFONNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_TELEFONNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTelefonnummer() {
@@ -550,25 +554,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TELEFONNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_TELEFONNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTelefonnummer(String telefonnummer) {
+  public void setTelefonnummer(@jakarta.annotation.Nonnull String telefonnummer) {
     this.telefonnummer = telefonnummer;
   }
 
-
-  public DemoElternteilDtoSpec sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
+  public DemoElternteilDtoSpec sozialhilfebeitraege(@jakarta.annotation.Nonnull Boolean sozialhilfebeitraege) {
     
     this.sozialhilfebeitraege = sozialhilfebeitraege;
     return this;
   }
 
-   /**
+  /**
    * Get sozialhilfebeitraege
    * @return sozialhilfebeitraege
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALHILFEBEITRAEGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getSozialhilfebeitraege() {
@@ -576,25 +579,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOZIALHILFEBEITRAEGE)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALHILFEBEITRAEGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialhilfebeitraege(Boolean sozialhilfebeitraege) {
+  public void setSozialhilfebeitraege(@jakarta.annotation.Nonnull Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
   }
 
-
-  public DemoElternteilDtoSpec ausweisbFluechtling(Boolean ausweisbFluechtling) {
+  public DemoElternteilDtoSpec ausweisbFluechtling(@jakarta.annotation.Nonnull Boolean ausweisbFluechtling) {
     
     this.ausweisbFluechtling = ausweisbFluechtling;
     return this;
   }
 
-   /**
+  /**
    * Get ausweisbFluechtling
    * @return ausweisbFluechtling
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSWEISB_FLUECHTLING)
+  @JsonProperty(value = JSON_PROPERTY_AUSWEISB_FLUECHTLING, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAusweisbFluechtling() {
@@ -602,25 +604,24 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSWEISB_FLUECHTLING)
+  @JsonProperty(value = JSON_PROPERTY_AUSWEISB_FLUECHTLING, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusweisbFluechtling(Boolean ausweisbFluechtling) {
+  public void setAusweisbFluechtling(@jakarta.annotation.Nonnull Boolean ausweisbFluechtling) {
     this.ausweisbFluechtling = ausweisbFluechtling;
   }
 
-
-  public DemoElternteilDtoSpec wiederverheiratet(Boolean wiederverheiratet) {
+  public DemoElternteilDtoSpec wiederverheiratet(@jakarta.annotation.Nullable Boolean wiederverheiratet) {
     
     this.wiederverheiratet = wiederverheiratet;
     return this;
   }
 
-   /**
+  /**
    * Get wiederverheiratet
    * @return wiederverheiratet
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WIEDERVERHEIRATET)
+  @JsonProperty(value = JSON_PROPERTY_WIEDERVERHEIRATET, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getWiederverheiratet() {
@@ -628,11 +629,12 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WIEDERVERHEIRATET)
+  @JsonProperty(value = JSON_PROPERTY_WIEDERVERHEIRATET, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWiederverheiratet(Boolean wiederverheiratet) {
+  public void setWiederverheiratet(@jakarta.annotation.Nullable Boolean wiederverheiratet) {
     this.wiederverheiratet = wiederverheiratet;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -703,10 +705,7 @@ public class DemoElternteilDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

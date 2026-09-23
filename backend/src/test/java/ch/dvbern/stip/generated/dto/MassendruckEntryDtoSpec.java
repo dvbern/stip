@@ -37,44 +37,51 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   MassendruckEntryDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID
 })
 @JsonTypeName("MassendruckEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class MassendruckEntryDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_IS_VERSENDET = "isVersendet";
+  @jakarta.annotation.Nonnull
   private Boolean isVersendet;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
+  @jakarta.annotation.Nonnull
   private String gesuchNummer;
 
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchId;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchTrancheId;
 
   public MassendruckEntryDtoSpec() {
   }
 
-  public MassendruckEntryDtoSpec id(UUID id) {
+  public MassendruckEntryDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -82,25 +89,24 @@ public class MassendruckEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public MassendruckEntryDtoSpec isVersendet(Boolean isVersendet) {
+  public MassendruckEntryDtoSpec isVersendet(@jakarta.annotation.Nonnull Boolean isVersendet) {
     
     this.isVersendet = isVersendet;
     return this;
   }
 
-   /**
+  /**
    * Get isVersendet
    * @return isVersendet
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IS_VERSENDET)
+  @JsonProperty(value = JSON_PROPERTY_IS_VERSENDET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getIsVersendet() {
@@ -108,25 +114,24 @@ public class MassendruckEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_VERSENDET)
+  @JsonProperty(value = JSON_PROPERTY_IS_VERSENDET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIsVersendet(Boolean isVersendet) {
+  public void setIsVersendet(@jakarta.annotation.Nonnull Boolean isVersendet) {
     this.isVersendet = isVersendet;
   }
 
-
-  public MassendruckEntryDtoSpec nachname(String nachname) {
+  public MassendruckEntryDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -134,25 +139,24 @@ public class MassendruckEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public MassendruckEntryDtoSpec vorname(String vorname) {
+  public MassendruckEntryDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -160,25 +164,24 @@ public class MassendruckEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public MassendruckEntryDtoSpec gesuchNummer(String gesuchNummer) {
+  public MassendruckEntryDtoSpec gesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
     
     this.gesuchNummer = gesuchNummer;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchNummer
    * @return gesuchNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getGesuchNummer() {
@@ -186,25 +189,24 @@ public class MassendruckEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchNummer(String gesuchNummer) {
+  public void setGesuchNummer(@jakarta.annotation.Nonnull String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
 
-
-  public MassendruckEntryDtoSpec gesuchId(UUID gesuchId) {
+  public MassendruckEntryDtoSpec gesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchId
    * @return gesuchId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchId() {
@@ -212,25 +214,24 @@ public class MassendruckEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
+  public void setGesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
 
-
-  public MassendruckEntryDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public MassendruckEntryDtoSpec gesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheId
    * @return gesuchTrancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchTrancheId() {
@@ -238,11 +239,12 @@ public class MassendruckEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+  public void setGesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -287,10 +289,7 @@ public class MassendruckEntryDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

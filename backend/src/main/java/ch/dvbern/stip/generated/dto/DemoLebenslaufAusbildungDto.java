@@ -15,17 +15,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoLebenslaufAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoLebenslaufAusbildungDto  implements Serializable {
-  private @Valid String abschluss;
-  private @Valid LocalDate von;
-  private @Valid LocalDate bis;
-  private @Valid ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
-  private @Valid Boolean ausbildungAbgeschlossen;
-  private @Valid String berufsbezeichnungFachrichtung;
+  private String abschluss;
+  private LocalDate von;
+  private LocalDate bis;
+  private ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+  private Boolean ausbildungAbgeschlossen;
+  private String berufsbezeichnungFachrichtung;
 
   protected DemoLebenslaufAusbildungDto(DemoLebenslaufAusbildungDtoBuilder<?, ?> b) {
     this.abschluss = b.abschluss;
@@ -47,13 +47,12 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("abschluss")
-  @NotNull
-  public String getAbschluss() {
+  @JsonProperty(required = true, value = "abschluss")
+  @NotNull public String getAbschluss() {
     return abschluss;
   }
 
-  @JsonProperty("abschluss")
+  @JsonProperty(required = true, value = "abschluss")
   public void setAbschluss(String abschluss) {
     this.abschluss = abschluss;
   }
@@ -66,13 +65,12 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("von")
-  @NotNull
-  public LocalDate getVon() {
+  @JsonProperty(required = true, value = "von")
+  @NotNull public LocalDate getVon() {
     return von;
   }
 
-  @JsonProperty("von")
+  @JsonProperty(required = true, value = "von")
   public void setVon(LocalDate von) {
     this.von = von;
   }
@@ -85,13 +83,12 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("bis")
-  @NotNull
-  public LocalDate getBis() {
+  @JsonProperty(required = true, value = "bis")
+  @NotNull public LocalDate getBis() {
     return bis;
   }
 
-  @JsonProperty("bis")
+  @JsonProperty(required = true, value = "bis")
   public void setBis(LocalDate bis) {
     this.bis = bis;
   }
@@ -104,13 +101,12 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnsitz")
-  @NotNull
-  public ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton getWohnsitz() {
+  @JsonProperty(required = true, value = "wohnsitz")
+  @NotNull public ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton getWohnsitz() {
     return wohnsitz;
   }
 
-  @JsonProperty("wohnsitz")
+  @JsonProperty(required = true, value = "wohnsitz")
   public void setWohnsitz(ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz) {
     this.wohnsitz = wohnsitz;
   }
@@ -123,13 +119,12 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungAbgeschlossen")
-  @NotNull
-  public Boolean getAusbildungAbgeschlossen() {
+  @JsonProperty(required = true, value = "ausbildungAbgeschlossen")
+  @NotNull public Boolean getAusbildungAbgeschlossen() {
     return ausbildungAbgeschlossen;
   }
 
-  @JsonProperty("ausbildungAbgeschlossen")
+  @JsonProperty(required = true, value = "ausbildungAbgeschlossen")
   public void setAusbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
     this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
   }
@@ -195,10 +190,7 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -256,4 +248,3 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
     }
   }
 }
-

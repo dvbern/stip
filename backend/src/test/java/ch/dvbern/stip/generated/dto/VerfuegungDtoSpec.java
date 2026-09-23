@@ -37,32 +37,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   VerfuegungDtoSpec.JSON_PROPERTY_DOKUMENTE
 })
 @JsonTypeName("Verfuegung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class VerfuegungDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nullable
   private String timestampErstellt;
 
   public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
+  @jakarta.annotation.Nonnull
   private List<VerfuegungDokumentDtoSpec> dokumente;
 
   public VerfuegungDtoSpec() {
   }
 
-  public VerfuegungDtoSpec id(UUID id) {
+  public VerfuegungDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -70,25 +73,24 @@ public class VerfuegungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public VerfuegungDtoSpec timestampErstellt(String timestampErstellt) {
+  public VerfuegungDtoSpec timestampErstellt(@jakarta.annotation.Nullable String timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getTimestampErstellt() {
@@ -96,14 +98,13 @@ public class VerfuegungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTimestampErstellt(String timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nullable String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public VerfuegungDtoSpec dokumente(List<VerfuegungDokumentDtoSpec> dokumente) {
+  public VerfuegungDtoSpec dokumente(@jakarta.annotation.Nonnull List<VerfuegungDokumentDtoSpec> dokumente) {
     
     this.dokumente = dokumente;
     return this;
@@ -117,12 +118,12 @@ public class VerfuegungDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get dokumente
    * @return dokumente
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<VerfuegungDokumentDtoSpec> getDokumente() {
@@ -130,11 +131,12 @@ public class VerfuegungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumente(List<VerfuegungDokumentDtoSpec> dokumente) {
+  public void setDokumente(@jakarta.annotation.Nonnull List<VerfuegungDokumentDtoSpec> dokumente) {
     this.dokumente = dokumente;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -171,10 +173,7 @@ public class VerfuegungDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

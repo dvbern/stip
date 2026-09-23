@@ -31,29 +31,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SachbearbeiterGesuchDokumentCreateDtoSpec.JSON_PROPERTY_DESCRIPTION
 })
 @JsonTypeName("SachbearbeiterGesuchDokumentCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SachbearbeiterGesuchDokumentCreateDtoSpec {
   public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nonnull
   private String type;
 
   public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nonnull
   private String description;
 
   public SachbearbeiterGesuchDokumentCreateDtoSpec() {
   }
 
-  public SachbearbeiterGesuchDokumentCreateDtoSpec type(String type) {
+  public SachbearbeiterGesuchDokumentCreateDtoSpec type(@jakarta.annotation.Nonnull String type) {
     
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getType() {
@@ -61,25 +63,24 @@ public class SachbearbeiterGesuchDokumentCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setType(String type) {
+  public void setType(@jakarta.annotation.Nonnull String type) {
     this.type = type;
   }
 
-
-  public SachbearbeiterGesuchDokumentCreateDtoSpec description(String description) {
+  public SachbearbeiterGesuchDokumentCreateDtoSpec description(@jakarta.annotation.Nonnull String description) {
     
     this.description = description;
     return this;
   }
 
-   /**
+  /**
    * Get description
    * @return description
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonProperty(value = JSON_PROPERTY_DESCRIPTION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getDescription() {
@@ -87,11 +88,12 @@ public class SachbearbeiterGesuchDokumentCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DESCRIPTION)
+  @JsonProperty(value = JSON_PROPERTY_DESCRIPTION, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDescription(String description) {
+  public void setDescription(@jakarta.annotation.Nonnull String description) {
     this.description = description;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -126,10 +128,7 @@ public class SachbearbeiterGesuchDokumentCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

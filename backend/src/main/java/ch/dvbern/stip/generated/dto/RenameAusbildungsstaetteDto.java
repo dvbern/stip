@@ -14,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("RenameAusbildungsstaette")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class RenameAusbildungsstaetteDto  implements Serializable {
-  private @Valid String nameDe;
-  private @Valid String nameFr;
+  private String nameDe;
+  private String nameFr;
 
   protected RenameAusbildungsstaetteDto(RenameAusbildungsstaetteDtoBuilder<?, ?> b) {
     this.nameDe = b.nameDe;
@@ -38,13 +38,12 @@ public class RenameAusbildungsstaetteDto  implements Serializable {
   }
 
   
-  @JsonProperty("nameDe")
-  @NotNull
-  public String getNameDe() {
+  @JsonProperty(required = true, value = "nameDe")
+  @NotNull public String getNameDe() {
     return nameDe;
   }
 
-  @JsonProperty("nameDe")
+  @JsonProperty(required = true, value = "nameDe")
   public void setNameDe(String nameDe) {
     this.nameDe = nameDe;
   }
@@ -57,13 +56,12 @@ public class RenameAusbildungsstaetteDto  implements Serializable {
   }
 
   
-  @JsonProperty("nameFr")
-  @NotNull
-  public String getNameFr() {
+  @JsonProperty(required = true, value = "nameFr")
+  @NotNull public String getNameFr() {
     return nameFr;
   }
 
-  @JsonProperty("nameFr")
+  @JsonProperty(required = true, value = "nameFr")
   public void setNameFr(String nameFr) {
     this.nameFr = nameFr;
   }
@@ -103,10 +101,7 @@ public class RenameAusbildungsstaetteDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +139,3 @@ public class RenameAusbildungsstaetteDto  implements Serializable {
     }
   }
 }
-

@@ -36,41 +36,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   StatusprotokollEntryDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
 @JsonTypeName("StatusprotokollEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class StatusprotokollEntryDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP = "timestamp";
+  @jakarta.annotation.Nonnull
   private java.time.LocalDateTime timestamp;
 
   public static final String JSON_PROPERTY_STATUS_FROM = "statusFrom";
+  @jakarta.annotation.Nullable
   private String statusFrom;
 
   public static final String JSON_PROPERTY_STATUS_TO = "statusTo";
+  @jakarta.annotation.Nonnull
   private String statusTo;
 
   public static final String JSON_PROPERTY_TYP = "typ";
+  @jakarta.annotation.Nonnull
   private StatusprotokollEntryTypDtoSpec typ;
 
   public static final String JSON_PROPERTY_BENUTZER = "benutzer";
+  @jakarta.annotation.Nonnull
   private String benutzer;
 
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  @jakarta.annotation.Nonnull
   private String kommentar;
 
   public StatusprotokollEntryDtoSpec() {
   }
 
-  public StatusprotokollEntryDtoSpec timestamp(java.time.LocalDateTime timestamp) {
+  public StatusprotokollEntryDtoSpec timestamp(@jakarta.annotation.Nonnull java.time.LocalDateTime timestamp) {
     
     this.timestamp = timestamp;
     return this;
   }
 
-   /**
+  /**
    * Datum und Zeit vom wechsel zu status, ISO 8601 formatiert
    * @return timestamp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public java.time.LocalDateTime getTimestamp() {
@@ -78,25 +84,24 @@ public class StatusprotokollEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestamp(java.time.LocalDateTime timestamp) {
+  public void setTimestamp(@jakarta.annotation.Nonnull java.time.LocalDateTime timestamp) {
     this.timestamp = timestamp;
   }
 
-
-  public StatusprotokollEntryDtoSpec statusFrom(String statusFrom) {
+  public StatusprotokollEntryDtoSpec statusFrom(@jakarta.annotation.Nullable String statusFrom) {
     
     this.statusFrom = statusFrom;
     return this;
   }
 
-   /**
+  /**
    * Get statusFrom
    * @return statusFrom
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STATUS_FROM)
+  @JsonProperty(value = JSON_PROPERTY_STATUS_FROM, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getStatusFrom() {
@@ -104,25 +109,24 @@ public class StatusprotokollEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS_FROM)
+  @JsonProperty(value = JSON_PROPERTY_STATUS_FROM, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStatusFrom(String statusFrom) {
+  public void setStatusFrom(@jakarta.annotation.Nullable String statusFrom) {
     this.statusFrom = statusFrom;
   }
 
-
-  public StatusprotokollEntryDtoSpec statusTo(String statusTo) {
+  public StatusprotokollEntryDtoSpec statusTo(@jakarta.annotation.Nonnull String statusTo) {
     
     this.statusTo = statusTo;
     return this;
   }
 
-   /**
+  /**
    * Get statusTo
    * @return statusTo
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS_TO)
+  @JsonProperty(value = JSON_PROPERTY_STATUS_TO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getStatusTo() {
@@ -130,25 +134,24 @@ public class StatusprotokollEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS_TO)
+  @JsonProperty(value = JSON_PROPERTY_STATUS_TO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatusTo(String statusTo) {
+  public void setStatusTo(@jakarta.annotation.Nonnull String statusTo) {
     this.statusTo = statusTo;
   }
 
-
-  public StatusprotokollEntryDtoSpec typ(StatusprotokollEntryTypDtoSpec typ) {
+  public StatusprotokollEntryDtoSpec typ(@jakarta.annotation.Nonnull StatusprotokollEntryTypDtoSpec typ) {
     
     this.typ = typ;
     return this;
   }
 
-   /**
+  /**
    * Get typ
    * @return typ
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public StatusprotokollEntryTypDtoSpec getTyp() {
@@ -156,25 +159,24 @@ public class StatusprotokollEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTyp(StatusprotokollEntryTypDtoSpec typ) {
+  public void setTyp(@jakarta.annotation.Nonnull StatusprotokollEntryTypDtoSpec typ) {
     this.typ = typ;
   }
 
-
-  public StatusprotokollEntryDtoSpec benutzer(String benutzer) {
+  public StatusprotokollEntryDtoSpec benutzer(@jakarta.annotation.Nonnull String benutzer) {
     
     this.benutzer = benutzer;
     return this;
   }
 
-   /**
+  /**
    * Der Benutzer welcher den Statuswechsel ausgelöst hat
    * @return benutzer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BENUTZER)
+  @JsonProperty(value = JSON_PROPERTY_BENUTZER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBenutzer() {
@@ -182,25 +184,24 @@ public class StatusprotokollEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BENUTZER)
+  @JsonProperty(value = JSON_PROPERTY_BENUTZER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBenutzer(String benutzer) {
+  public void setBenutzer(@jakarta.annotation.Nonnull String benutzer) {
     this.benutzer = benutzer;
   }
 
-
-  public StatusprotokollEntryDtoSpec kommentar(String kommentar) {
+  public StatusprotokollEntryDtoSpec kommentar(@jakarta.annotation.Nonnull String kommentar) {
     
     this.kommentar = kommentar;
     return this;
   }
 
-   /**
+  /**
    * Kommentar vom SB über die Statusänderung
    * @return kommentar
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKommentar() {
@@ -208,11 +209,12 @@ public class StatusprotokollEntryDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKommentar(String kommentar) {
+  public void setKommentar(@jakarta.annotation.Nonnull String kommentar) {
     this.kommentar = kommentar;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -255,10 +257,7 @@ public class StatusprotokollEntryDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

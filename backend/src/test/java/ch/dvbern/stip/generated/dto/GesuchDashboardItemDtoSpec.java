@@ -51,59 +51,71 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_MISSING_DOCUMENTS
 })
 @JsonTypeName("GesuchDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_NACHFRIST_DOKUMENTE = "nachfristDokumente";
+  @jakarta.annotation.Nullable
   private LocalDate nachfristDokumente;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE = "gesuchsperiode";
+  @jakarta.annotation.Nonnull
   private GesuchsperiodeDtoSpec gesuchsperiode;
 
   public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  @jakarta.annotation.Nonnull
   private GesuchstatusDtoSpec gesuchStatus;
 
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_CURRENT_TRANCHE_ID = "currentTrancheId";
+  @jakarta.annotation.Nonnull
   private UUID currentTrancheId;
 
   public static final String JSON_PROPERTY_OFFENE_AENDERUNG = "offeneAenderung";
+  @jakarta.annotation.Nullable
   private GesuchTrancheSlimDtoSpec offeneAenderung;
 
   public static final String JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST = "freiwilligeDarlehenList";
+  @jakarta.annotation.Nonnull
   private List<FreiwilligDarlehenDtoSpec> freiwilligeDarlehenList;
 
   public static final String JSON_PROPERTY_START_DATE = "startDate";
+  @jakarta.annotation.Nonnull
   private LocalDate startDate;
 
   public static final String JSON_PROPERTY_END_DATE = "endDate";
+  @jakarta.annotation.Nonnull
   private LocalDate endDate;
 
   public static final String JSON_PROPERTY_CAN_CREATE_AENDERUNG = "canCreateAenderung";
+  @jakarta.annotation.Nonnull
   private Boolean canCreateAenderung;
 
   public static final String JSON_PROPERTY_CAN_CREATE_DARLEHEN = "canCreateDarlehen";
+  @jakarta.annotation.Nonnull
   private Boolean canCreateDarlehen;
 
   public static final String JSON_PROPERTY_MISSING_DOCUMENTS = "missingDocuments";
+  @jakarta.annotation.Nullable
   private GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments;
 
   public GesuchDashboardItemDtoSpec() {
   }
 
-  public GesuchDashboardItemDtoSpec nachfristDokumente(LocalDate nachfristDokumente) {
+  public GesuchDashboardItemDtoSpec nachfristDokumente(@jakarta.annotation.Nullable LocalDate nachfristDokumente) {
     
     this.nachfristDokumente = nachfristDokumente;
     return this;
   }
 
-   /**
+  /**
    * Get nachfristDokumente
    * @return nachfristDokumente
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_NACHFRIST_DOKUMENTE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getNachfristDokumente() {
@@ -111,25 +123,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHFRIST_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_NACHFRIST_DOKUMENTE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachfristDokumente(LocalDate nachfristDokumente) {
+  public void setNachfristDokumente(@jakarta.annotation.Nullable LocalDate nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
   }
 
-
-  public GesuchDashboardItemDtoSpec gesuchsperiode(GesuchsperiodeDtoSpec gesuchsperiode) {
+  public GesuchDashboardItemDtoSpec gesuchsperiode(@jakarta.annotation.Nonnull GesuchsperiodeDtoSpec gesuchsperiode) {
     
     this.gesuchsperiode = gesuchsperiode;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchsperiode
    * @return gesuchsperiode
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchsperiodeDtoSpec getGesuchsperiode() {
@@ -137,25 +148,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsperiode(GesuchsperiodeDtoSpec gesuchsperiode) {
+  public void setGesuchsperiode(@jakarta.annotation.Nonnull GesuchsperiodeDtoSpec gesuchsperiode) {
     this.gesuchsperiode = gesuchsperiode;
   }
 
-
-  public GesuchDashboardItemDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public GesuchDashboardItemDtoSpec gesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
     
     this.gesuchStatus = gesuchStatus;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchStatus
    * @return gesuchStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchstatusDtoSpec getGesuchStatus() {
@@ -163,25 +173,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public void setGesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 
-
-  public GesuchDashboardItemDtoSpec id(UUID id) {
+  public GesuchDashboardItemDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -189,25 +198,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public GesuchDashboardItemDtoSpec currentTrancheId(UUID currentTrancheId) {
+  public GesuchDashboardItemDtoSpec currentTrancheId(@jakarta.annotation.Nonnull UUID currentTrancheId) {
     
     this.currentTrancheId = currentTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get currentTrancheId
    * @return currentTrancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CURRENT_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_CURRENT_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getCurrentTrancheId() {
@@ -215,25 +223,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CURRENT_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_CURRENT_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCurrentTrancheId(UUID currentTrancheId) {
+  public void setCurrentTrancheId(@jakarta.annotation.Nonnull UUID currentTrancheId) {
     this.currentTrancheId = currentTrancheId;
   }
 
-
-  public GesuchDashboardItemDtoSpec offeneAenderung(GesuchTrancheSlimDtoSpec offeneAenderung) {
+  public GesuchDashboardItemDtoSpec offeneAenderung(@jakarta.annotation.Nullable GesuchTrancheSlimDtoSpec offeneAenderung) {
     
     this.offeneAenderung = offeneAenderung;
     return this;
   }
 
-   /**
+  /**
    * Get offeneAenderung
    * @return offeneAenderung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_OFFENE_AENDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_OFFENE_AENDERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchTrancheSlimDtoSpec getOffeneAenderung() {
@@ -241,14 +248,13 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_OFFENE_AENDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_OFFENE_AENDERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setOffeneAenderung(GesuchTrancheSlimDtoSpec offeneAenderung) {
+  public void setOffeneAenderung(@jakarta.annotation.Nullable GesuchTrancheSlimDtoSpec offeneAenderung) {
     this.offeneAenderung = offeneAenderung;
   }
 
-
-  public GesuchDashboardItemDtoSpec freiwilligeDarlehenList(List<FreiwilligDarlehenDtoSpec> freiwilligeDarlehenList) {
+  public GesuchDashboardItemDtoSpec freiwilligeDarlehenList(@jakarta.annotation.Nonnull List<FreiwilligDarlehenDtoSpec> freiwilligeDarlehenList) {
     
     this.freiwilligeDarlehenList = freiwilligeDarlehenList;
     return this;
@@ -262,12 +268,12 @@ public class GesuchDashboardItemDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get freiwilligeDarlehenList
    * @return freiwilligeDarlehenList
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST)
+  @JsonProperty(value = JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<FreiwilligDarlehenDtoSpec> getFreiwilligeDarlehenList() {
@@ -275,25 +281,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST)
+  @JsonProperty(value = JSON_PROPERTY_FREIWILLIGE_DARLEHEN_LIST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFreiwilligeDarlehenList(List<FreiwilligDarlehenDtoSpec> freiwilligeDarlehenList) {
+  public void setFreiwilligeDarlehenList(@jakarta.annotation.Nonnull List<FreiwilligDarlehenDtoSpec> freiwilligeDarlehenList) {
     this.freiwilligeDarlehenList = freiwilligeDarlehenList;
   }
 
-
-  public GesuchDashboardItemDtoSpec startDate(LocalDate startDate) {
+  public GesuchDashboardItemDtoSpec startDate(@jakarta.annotation.Nonnull LocalDate startDate) {
     
     this.startDate = startDate;
     return this;
   }
 
-   /**
+  /**
    * Get startDate
    * @return startDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonProperty(value = JSON_PROPERTY_START_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getStartDate() {
@@ -301,25 +306,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonProperty(value = JSON_PROPERTY_START_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStartDate(LocalDate startDate) {
+  public void setStartDate(@jakarta.annotation.Nonnull LocalDate startDate) {
     this.startDate = startDate;
   }
 
-
-  public GesuchDashboardItemDtoSpec endDate(LocalDate endDate) {
+  public GesuchDashboardItemDtoSpec endDate(@jakarta.annotation.Nonnull LocalDate endDate) {
     
     this.endDate = endDate;
     return this;
   }
 
-   /**
+  /**
    * Get endDate
    * @return endDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonProperty(value = JSON_PROPERTY_END_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEndDate() {
@@ -327,25 +331,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonProperty(value = JSON_PROPERTY_END_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEndDate(LocalDate endDate) {
+  public void setEndDate(@jakarta.annotation.Nonnull LocalDate endDate) {
     this.endDate = endDate;
   }
 
-
-  public GesuchDashboardItemDtoSpec canCreateAenderung(Boolean canCreateAenderung) {
+  public GesuchDashboardItemDtoSpec canCreateAenderung(@jakarta.annotation.Nonnull Boolean canCreateAenderung) {
     
     this.canCreateAenderung = canCreateAenderung;
     return this;
   }
 
-   /**
+  /**
    * Get canCreateAenderung
    * @return canCreateAenderung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_AENDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_AENDERUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanCreateAenderung() {
@@ -353,25 +356,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_AENDERUNG)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_AENDERUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanCreateAenderung(Boolean canCreateAenderung) {
+  public void setCanCreateAenderung(@jakarta.annotation.Nonnull Boolean canCreateAenderung) {
     this.canCreateAenderung = canCreateAenderung;
   }
 
-
-  public GesuchDashboardItemDtoSpec canCreateDarlehen(Boolean canCreateDarlehen) {
+  public GesuchDashboardItemDtoSpec canCreateDarlehen(@jakarta.annotation.Nonnull Boolean canCreateDarlehen) {
     
     this.canCreateDarlehen = canCreateDarlehen;
     return this;
   }
 
-   /**
+  /**
    * Get canCreateDarlehen
    * @return canCreateDarlehen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getCanCreateDarlehen() {
@@ -379,25 +381,24 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_CREATE_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_CAN_CREATE_DARLEHEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanCreateDarlehen(Boolean canCreateDarlehen) {
+  public void setCanCreateDarlehen(@jakarta.annotation.Nonnull Boolean canCreateDarlehen) {
     this.canCreateDarlehen = canCreateDarlehen;
   }
 
-
-  public GesuchDashboardItemDtoSpec missingDocuments(GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
+  public GesuchDashboardItemDtoSpec missingDocuments(@jakarta.annotation.Nullable GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
     
     this.missingDocuments = missingDocuments;
     return this;
   }
 
-   /**
+  /**
    * Get missingDocuments
    * @return missingDocuments
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MISSING_DOCUMENTS)
+  @JsonProperty(value = JSON_PROPERTY_MISSING_DOCUMENTS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchDashboardItemMissingDocumentsDtoSpec getMissingDocuments() {
@@ -405,11 +406,12 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MISSING_DOCUMENTS)
+  @JsonProperty(value = JSON_PROPERTY_MISSING_DOCUMENTS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMissingDocuments(GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
+  public void setMissingDocuments(@jakarta.annotation.Nullable GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
     this.missingDocuments = missingDocuments;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -464,10 +466,7 @@ public class GesuchDashboardItemDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

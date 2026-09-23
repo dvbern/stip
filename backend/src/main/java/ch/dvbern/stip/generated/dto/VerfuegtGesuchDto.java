@@ -20,14 +20,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("VerfuegtGesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class VerfuegtGesuchDto  implements Serializable {
-  private @Valid LocalDate timestamp;
-  private @Valid List<GesuchTrancheSlimDto> tranchen = new ArrayList<>();
-  private @Valid UUID berechnungId;
+  private LocalDate timestamp;
+  private @Valid List<@Valid GesuchTrancheSlimDto> tranchen = new ArrayList<>();
+  private UUID berechnungId;
 
   protected VerfuegtGesuchDto(VerfuegtGesuchDtoBuilder<?, ?> b) {
     this.timestamp = b.timestamp;
@@ -46,33 +46,31 @@ public class VerfuegtGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("timestamp")
-  @NotNull
-  public LocalDate getTimestamp() {
+  @JsonProperty(required = true, value = "timestamp")
+  @NotNull public LocalDate getTimestamp() {
     return timestamp;
   }
 
-  @JsonProperty("timestamp")
+  @JsonProperty(required = true, value = "timestamp")
   public void setTimestamp(LocalDate timestamp) {
     this.timestamp = timestamp;
   }
 
   /**
    **/
-  public VerfuegtGesuchDto tranchen(List<GesuchTrancheSlimDto> tranchen) {
+  public VerfuegtGesuchDto tranchen(List<@Valid GesuchTrancheSlimDto> tranchen) {
     this.tranchen = tranchen;
     return this;
   }
 
   
-  @JsonProperty("tranchen")
-  @NotNull
-  public List<GesuchTrancheSlimDto> getTranchen() {
+  @JsonProperty(required = true, value = "tranchen")
+  @NotNull @Valid public List<@Valid GesuchTrancheSlimDto> getTranchen() {
     return tranchen;
   }
 
-  @JsonProperty("tranchen")
-  public void setTranchen(List<GesuchTrancheSlimDto> tranchen) {
+  @JsonProperty(required = true, value = "tranchen")
+  public void setTranchen(List<@Valid GesuchTrancheSlimDto> tranchen) {
     this.tranchen = tranchen;
   }
 
@@ -100,13 +98,12 @@ public class VerfuegtGesuchDto  implements Serializable {
   }
 
   
-  @JsonProperty("berechnungId")
-  @NotNull
-  public UUID getBerechnungId() {
+  @JsonProperty(required = true, value = "berechnungId")
+  @NotNull public UUID getBerechnungId() {
     return berechnungId;
   }
 
-  @JsonProperty("berechnungId")
+  @JsonProperty(required = true, value = "berechnungId")
   public void setBerechnungId(UUID berechnungId) {
     this.berechnungId = berechnungId;
   }
@@ -148,10 +145,7 @@ public class VerfuegtGesuchDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -194,4 +188,3 @@ public class VerfuegtGesuchDto  implements Serializable {
     }
   }
 }
-

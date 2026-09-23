@@ -364,25 +364,25 @@ public class GesuchFormular extends AbstractTenantEntity {
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("von")
     @HasPageValidation(LebenslaufItemPageValidation.class)
-    private @Valid Set<LebenslaufItem> lebenslaufItems = new LinkedHashSet<>();
+    private Set<@Valid LebenslaufItem> lebenslaufItems = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     @HasPageValidation(GeschwisterPageValidation.class)
-    private @Valid Set<Geschwister> geschwisters = new LinkedHashSet<>();
+    private Set<@Valid Geschwister> geschwisters = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     @HasPageValidation(ElternPageValidation.class)
-    private @Valid Set<Eltern> elterns = new LinkedHashSet<>();
+    private Set<@Valid Eltern> elterns = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @OrderBy("geburtsdatum")
     @HasPageValidation(KindPageValidation.class)
-    private @Valid Set<Kind> kinds = new LinkedHashSet<>();
+    private Set<@Valid Kind> kinds = new LinkedHashSet<>();
 
     @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchFormular")
     private @Valid GesuchTranche tranche;
@@ -390,18 +390,18 @@ public class GesuchFormular extends AbstractTenantEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuerdatenPageValidation.class)
-    private @Valid Set<Steuerdaten> steuerdaten = new LinkedHashSet<>();
+    private Set<@Valid Steuerdaten> steuerdaten = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuererklaerungPageValidation.class)
-    private @Valid Set<Steuererklaerung> steuererklaerung = new LinkedHashSet<>();
+    private Set<@Valid Steuererklaerung> steuererklaerung = new LinkedHashSet<>();
 
     @NotNull
     @Column(name = "versteckte_eltern", nullable = false)
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ElternTyp.class)
-    private @Valid Set<ElternTyp> versteckteEltern = new LinkedHashSet<>();
+    private Set<@Valid ElternTyp> versteckteEltern = new LinkedHashSet<>();
 
     public Optional<Eltern> getElternteilOfTyp(final ElternTyp elternTyp) {
         return elterns.stream().filter(elternteil -> elternteil.getElternTyp() == elternTyp).findFirst();

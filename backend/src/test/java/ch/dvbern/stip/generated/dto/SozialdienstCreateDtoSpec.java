@@ -34,32 +34,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SozialdienstCreateDtoSpec.JSON_PROPERTY_SOZIALDIENST_ADMIN
 })
 @JsonTypeName("SozialdienstCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SozialdienstCreateDtoSpec {
   public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nonnull
   private String name;
 
   public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  @jakarta.annotation.Nonnull
   private ZahlungsverbindungDtoSpec zahlungsverbindung;
 
   public static final String JSON_PROPERTY_SOZIALDIENST_ADMIN = "sozialdienstAdmin";
+  @jakarta.annotation.Nonnull
   private SozialdienstAdminDtoSpec sozialdienstAdmin;
 
   public SozialdienstCreateDtoSpec() {
   }
 
-  public SozialdienstCreateDtoSpec name(String name) {
+  public SozialdienstCreateDtoSpec name(@jakarta.annotation.Nonnull String name) {
     
     this.name = name;
     return this;
   }
 
-   /**
+  /**
    * Get name
    * @return name
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getName() {
@@ -67,25 +70,24 @@ public class SozialdienstCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME)
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setName(String name) {
+  public void setName(@jakarta.annotation.Nonnull String name) {
     this.name = name;
   }
 
-
-  public SozialdienstCreateDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+  public SozialdienstCreateDtoSpec zahlungsverbindung(@jakarta.annotation.Nonnull ZahlungsverbindungDtoSpec zahlungsverbindung) {
     
     this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
 
-   /**
+  /**
    * Get zahlungsverbindung
    * @return zahlungsverbindung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZAHLUNGSVERBINDUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public ZahlungsverbindungDtoSpec getZahlungsverbindung() {
@@ -93,25 +95,24 @@ public class SozialdienstCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZAHLUNGSVERBINDUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setZahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+  public void setZahlungsverbindung(@jakarta.annotation.Nonnull ZahlungsverbindungDtoSpec zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
   }
 
-
-  public SozialdienstCreateDtoSpec sozialdienstAdmin(SozialdienstAdminDtoSpec sozialdienstAdmin) {
+  public SozialdienstCreateDtoSpec sozialdienstAdmin(@jakarta.annotation.Nonnull SozialdienstAdminDtoSpec sozialdienstAdmin) {
     
     this.sozialdienstAdmin = sozialdienstAdmin;
     return this;
   }
 
-   /**
+  /**
    * Get sozialdienstAdmin
    * @return sozialdienstAdmin
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALDIENST_ADMIN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SozialdienstAdminDtoSpec getSozialdienstAdmin() {
@@ -119,11 +120,12 @@ public class SozialdienstCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOZIALDIENST_ADMIN)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALDIENST_ADMIN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialdienstAdmin(SozialdienstAdminDtoSpec sozialdienstAdmin) {
+  public void setSozialdienstAdmin(@jakarta.annotation.Nonnull SozialdienstAdminDtoSpec sozialdienstAdmin) {
     this.sozialdienstAdmin = sozialdienstAdmin;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -160,10 +162,7 @@ public class SozialdienstCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

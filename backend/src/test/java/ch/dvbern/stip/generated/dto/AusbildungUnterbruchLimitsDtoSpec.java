@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungUnterbruchLimitsDtoSpec.JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE
 })
 @JsonTypeName("AusbildungUnterbruchLimits")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AusbildungUnterbruchLimitsDtoSpec {
   public static final String JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE = "unterbruchLatestEndDate";
+  @jakarta.annotation.Nonnull
   private LocalDate unterbruchLatestEndDate;
 
   public static final String JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE = "unterbruchEarliestStartDate";
+  @jakarta.annotation.Nonnull
   private LocalDate unterbruchEarliestStartDate;
 
   public AusbildungUnterbruchLimitsDtoSpec() {
   }
 
-  public AusbildungUnterbruchLimitsDtoSpec unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+  public AusbildungUnterbruchLimitsDtoSpec unterbruchLatestEndDate(@jakarta.annotation.Nonnull LocalDate unterbruchLatestEndDate) {
     
     this.unterbruchLatestEndDate = unterbruchLatestEndDate;
     return this;
   }
 
-   /**
+  /**
    * Get unterbruchLatestEndDate
    * @return unterbruchLatestEndDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonProperty(value = JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getUnterbruchLatestEndDate() {
@@ -62,25 +64,24 @@ public class AusbildungUnterbruchLimitsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonProperty(value = JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+  public void setUnterbruchLatestEndDate(@jakarta.annotation.Nonnull LocalDate unterbruchLatestEndDate) {
     this.unterbruchLatestEndDate = unterbruchLatestEndDate;
   }
 
-
-  public AusbildungUnterbruchLimitsDtoSpec unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+  public AusbildungUnterbruchLimitsDtoSpec unterbruchEarliestStartDate(@jakarta.annotation.Nonnull LocalDate unterbruchEarliestStartDate) {
     
     this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
     return this;
   }
 
-   /**
+  /**
    * Get unterbruchEarliestStartDate
    * @return unterbruchEarliestStartDate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonProperty(value = JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getUnterbruchEarliestStartDate() {
@@ -88,11 +89,12 @@ public class AusbildungUnterbruchLimitsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonProperty(value = JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+  public void setUnterbruchEarliestStartDate(@jakarta.annotation.Nonnull LocalDate unterbruchEarliestStartDate) {
     this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class AusbildungUnterbruchLimitsDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

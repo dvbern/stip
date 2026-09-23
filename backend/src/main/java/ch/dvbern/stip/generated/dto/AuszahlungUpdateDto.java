@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AuszahlungUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AuszahlungUpdateDto  implements Serializable {
-  private @Valid Boolean auszahlungAnSozialdienst;
-  private @Valid ZahlungsverbindungDto zahlungsverbindung;
+  private Boolean auszahlungAnSozialdienst;
+  private ZahlungsverbindungDto zahlungsverbindung;
 
   protected AuszahlungUpdateDto(AuszahlungUpdateDtoBuilder<?, ?> b) {
     this.auszahlungAnSozialdienst = b.auszahlungAnSozialdienst;
@@ -39,13 +39,12 @@ public class AuszahlungUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("auszahlungAnSozialdienst")
-  @NotNull
-  public Boolean getAuszahlungAnSozialdienst() {
+  @JsonProperty(required = true, value = "auszahlungAnSozialdienst")
+  @NotNull public Boolean getAuszahlungAnSozialdienst() {
     return auszahlungAnSozialdienst;
   }
 
-  @JsonProperty("auszahlungAnSozialdienst")
+  @JsonProperty(required = true, value = "auszahlungAnSozialdienst")
   public void setAuszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
     this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
   }
@@ -59,7 +58,7 @@ public class AuszahlungUpdateDto  implements Serializable {
 
   
   @JsonProperty("zahlungsverbindung")
-  public ZahlungsverbindungDto getZahlungsverbindung() {
+  @Valid public ZahlungsverbindungDto getZahlungsverbindung() {
     return zahlungsverbindung;
   }
 
@@ -103,10 +102,7 @@ public class AuszahlungUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -144,4 +140,3 @@ public class AuszahlungUpdateDto  implements Serializable {
     }
   }
 }
-

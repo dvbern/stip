@@ -40,35 +40,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FallDashboardItemDtoSpec.JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START
 })
 @JsonTypeName("FallDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FallDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_FALL = "fall";
+  @jakarta.annotation.Nonnull
   private FallDtoSpec fall;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS = "ausbildungDashboardItems";
+  @jakarta.annotation.Nonnull
   private List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems;
 
   public static final String JSON_PROPERTY_CURRENT_DELEGIERUNG = "currentDelegierung";
+  @jakarta.annotation.Nullable
   private DelegierungSlimDtoSpec currentDelegierung;
 
   public static final String JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START = "earliestActiveGesuchPeriodeStart";
+  @jakarta.annotation.Nullable
   private LocalDate earliestActiveGesuchPeriodeStart;
 
   public FallDashboardItemDtoSpec() {
   }
 
-  public FallDashboardItemDtoSpec fall(FallDtoSpec fall) {
+  public FallDashboardItemDtoSpec fall(@jakarta.annotation.Nonnull FallDtoSpec fall) {
     
     this.fall = fall;
     return this;
   }
 
-   /**
+  /**
    * Get fall
    * @return fall
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL)
+  @JsonProperty(value = JSON_PROPERTY_FALL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public FallDtoSpec getFall() {
@@ -76,14 +80,13 @@ public class FallDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL)
+  @JsonProperty(value = JSON_PROPERTY_FALL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFall(FallDtoSpec fall) {
+  public void setFall(@jakarta.annotation.Nonnull FallDtoSpec fall) {
     this.fall = fall;
   }
 
-
-  public FallDashboardItemDtoSpec ausbildungDashboardItems(List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems) {
+  public FallDashboardItemDtoSpec ausbildungDashboardItems(@jakarta.annotation.Nonnull List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems) {
     
     this.ausbildungDashboardItems = ausbildungDashboardItems;
     return this;
@@ -97,12 +100,12 @@ public class FallDashboardItemDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungDashboardItems
    * @return ausbildungDashboardItems
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<AusbildungDashboardItemDtoSpec> getAusbildungDashboardItems() {
@@ -110,25 +113,24 @@ public class FallDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbildungDashboardItems(List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems) {
+  public void setAusbildungDashboardItems(@jakarta.annotation.Nonnull List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems) {
     this.ausbildungDashboardItems = ausbildungDashboardItems;
   }
 
-
-  public FallDashboardItemDtoSpec currentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
+  public FallDashboardItemDtoSpec currentDelegierung(@jakarta.annotation.Nullable DelegierungSlimDtoSpec currentDelegierung) {
     
     this.currentDelegierung = currentDelegierung;
     return this;
   }
 
-   /**
+  /**
    * Get currentDelegierung
    * @return currentDelegierung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CURRENT_DELEGIERUNG)
+  @JsonProperty(value = JSON_PROPERTY_CURRENT_DELEGIERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DelegierungSlimDtoSpec getCurrentDelegierung() {
@@ -136,25 +138,24 @@ public class FallDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CURRENT_DELEGIERUNG)
+  @JsonProperty(value = JSON_PROPERTY_CURRENT_DELEGIERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCurrentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
+  public void setCurrentDelegierung(@jakarta.annotation.Nullable DelegierungSlimDtoSpec currentDelegierung) {
     this.currentDelegierung = currentDelegierung;
   }
 
-
-  public FallDashboardItemDtoSpec earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+  public FallDashboardItemDtoSpec earliestActiveGesuchPeriodeStart(@jakarta.annotation.Nullable LocalDate earliestActiveGesuchPeriodeStart) {
     
     this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
     return this;
   }
 
-   /**
+  /**
    * Get earliestActiveGesuchPeriodeStart
    * @return earliestActiveGesuchPeriodeStart
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START)
+  @JsonProperty(value = JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getEarliestActiveGesuchPeriodeStart() {
@@ -162,11 +163,12 @@ public class FallDashboardItemDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START)
+  @JsonProperty(value = JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEarliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+  public void setEarliestActiveGesuchPeriodeStart(@jakarta.annotation.Nullable LocalDate earliestActiveGesuchPeriodeStart) {
     this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -205,10 +207,7 @@ public class FallDashboardItemDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

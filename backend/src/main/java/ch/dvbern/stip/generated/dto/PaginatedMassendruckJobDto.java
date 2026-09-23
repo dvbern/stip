@@ -18,15 +18,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedMassendruckJob")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedMassendruckJobDto  implements Serializable {
-  private @Valid Integer page;
-  private @Valid Integer pageSize;
-  private @Valid Integer totalEntries;
-  private @Valid List<MassendruckJobDto> entries;
+  private Integer page;
+  private Integer pageSize;
+  private Integer totalEntries;
+  private @Valid List<@Valid MassendruckJobDto> entries = new ArrayList<>();
 
   protected PaginatedMassendruckJobDto(PaginatedMassendruckJobDtoBuilder<?, ?> b) {
     this.page = b.page;
@@ -94,19 +94,19 @@ public class PaginatedMassendruckJobDto  implements Serializable {
 
   /**
    **/
-  public PaginatedMassendruckJobDto entries(List<MassendruckJobDto> entries) {
+  public PaginatedMassendruckJobDto entries(List<@Valid MassendruckJobDto> entries) {
     this.entries = entries;
     return this;
   }
 
   
   @JsonProperty("entries")
-  public List<MassendruckJobDto> getEntries() {
+  @Valid public List<@Valid MassendruckJobDto> getEntries() {
     return entries;
   }
 
   @JsonProperty("entries")
-  public void setEntries(List<MassendruckJobDto> entries) {
+  public void setEntries(List<@Valid MassendruckJobDto> entries) {
     this.entries = entries;
   }
 
@@ -165,10 +165,7 @@ public class PaginatedMassendruckJobDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -193,7 +190,7 @@ public class PaginatedMassendruckJobDto  implements Serializable {
     private Integer page;
     private Integer pageSize;
     private Integer totalEntries;
-    private List<MassendruckJobDto> entries;
+    private List<MassendruckJobDto> entries = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -216,4 +213,3 @@ public class PaginatedMassendruckJobDto  implements Serializable {
     }
   }
 }
-

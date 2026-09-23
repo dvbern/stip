@@ -30,8 +30,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchsperiodeWithDatenDtoSpec
  */
 @JsonPropertyOrder({
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ID,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_GUELTIGKEIT_STATUS,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_EINREICHFRIST,
@@ -84,243 +82,248 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE,
   GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT,
-  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_ID,
+  GesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_GUELTIGKEIT_STATUS
 })
 @JsonTypeName("GesuchsperiodeWithDaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchsperiodeWithDatenDtoSpec {
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
-
-  public static final String JSON_PROPERTY_GUELTIGKEIT_STATUS = "gueltigkeitStatus";
-  private GueltigkeitStatusDtoSpec gueltigkeitStatus;
-
   public static final String JSON_PROPERTY_BEZEICHNUNG_DE = "bezeichnungDe";
+  @jakarta.annotation.Nonnull
   private String bezeichnungDe;
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
+  @jakarta.annotation.Nonnull
   private String bezeichnungFr;
 
   public static final String JSON_PROPERTY_EINREICHFRIST = "einreichfrist";
+  @jakarta.annotation.Nullable
   private LocalDate einreichfrist;
 
   public static final String JSON_PROPERTY_FISKALJAHR = "fiskaljahr";
+  @jakarta.annotation.Nonnull
   private Integer fiskaljahr;
 
   public static final String JSON_PROPERTY_GESUCHSJAHR_ID = "gesuchsjahrId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchsjahrId;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE_START = "gesuchsperiodeStart";
+  @jakarta.annotation.Nonnull
   private LocalDate gesuchsperiodeStart;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE_STOPP = "gesuchsperiodeStopp";
+  @jakarta.annotation.Nonnull
   private LocalDate gesuchsperiodeStopp;
 
   public static final String JSON_PROPERTY_AUFSCHALTTERMIN_START = "aufschaltterminStart";
+  @jakarta.annotation.Nonnull
   private LocalDate aufschaltterminStart;
 
   public static final String JSON_PROPERTY_EINREICHEFRIST_NORMAL = "einreichefristNormal";
+  @jakarta.annotation.Nonnull
   private LocalDate einreichefristNormal;
 
   public static final String JSON_PROPERTY_EINREICHEFRIST_REDUZIERT = "einreichefristReduziert";
+  @jakarta.annotation.Nonnull
   private LocalDate einreichefristReduziert;
 
   public static final String JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I = "ausbKosten_SekII";
+  @jakarta.annotation.Nonnull
   private Integer ausbKostenSekII;
 
   public static final String JSON_PROPERTY_AUSB_KOSTEN_TERTIAER = "ausbKosten_Tertiaer";
+  @jakarta.annotation.Nonnull
   private Integer ausbKostenTertiaer;
 
   public static final String JSON_PROPERTY_FREIBETRAG_VERMOEGEN = "freibetrag_vermoegen";
+  @jakarta.annotation.Nonnull
   private Integer freibetragVermoegen;
 
   public static final String JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN = "freibetrag_erwerbseinkommen";
+  @jakarta.annotation.Nonnull
   private Integer freibetragErwerbseinkommen;
 
   public static final String JSON_PROPERTY_EINKOMMENSFREIBETRAG = "einkommensfreibetrag";
+  @jakarta.annotation.Nonnull
   private Integer einkommensfreibetrag;
 
   public static final String JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ = "elternbeteiligungssatz";
+  @jakarta.annotation.Nonnull
   private Integer elternbeteiligungssatz;
 
   public static final String JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET = "vermogenSatzAngerechnet";
+  @jakarta.annotation.Nonnull
   private Integer vermogenSatzAngerechnet;
 
   public static final String JSON_PROPERTY_INTEGRATIONSZULAGE = "integrationszulage";
+  @jakarta.annotation.Nonnull
   private Integer integrationszulage;
 
   public static final String JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE = "limite_EkFreibetrag_Integrationszulage";
+  @jakarta.annotation.Nonnull
   private Integer limiteEkFreibetragIntegrationszulage;
 
   public static final String JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM = "stipLimite_Minimalstipendium";
+  @jakarta.annotation.Nonnull
   private Integer stipLimiteMinimalstipendium;
 
   public static final String JSON_PROPERTY_PERSON1 = "person_1";
+  @jakarta.annotation.Nonnull
   private Integer person1;
 
   public static final String JSON_PROPERTY_PERSONEN2 = "personen_2";
+  @jakarta.annotation.Nonnull
   private Integer personen2;
 
   public static final String JSON_PROPERTY_PERSONEN3 = "personen_3";
+  @jakarta.annotation.Nonnull
   private Integer personen3;
 
   public static final String JSON_PROPERTY_PERSONEN4 = "personen_4";
+  @jakarta.annotation.Nonnull
   private Integer personen4;
 
   public static final String JSON_PROPERTY_PERSONEN5 = "personen_5";
+  @jakarta.annotation.Nonnull
   private Integer personen5;
 
   public static final String JSON_PROPERTY_PERSONEN6 = "personen_6";
+  @jakarta.annotation.Nonnull
   private Integer personen6;
 
   public static final String JSON_PROPERTY_PERSONEN7 = "personen_7";
+  @jakarta.annotation.Nonnull
   private Integer personen7;
 
   public static final String JSON_PROPERTY_PRO_WEITERE_PERSON = "proWeiterePerson";
+  @jakarta.annotation.Nonnull
   private Integer proWeiterePerson;
 
   public static final String JSON_PROPERTY_KINDER0017 = "kinder_00_17";
+  @jakarta.annotation.Nonnull
   private Integer kinder0017;
 
   public static final String JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824 = "jugendliche_erwachsene_18_24";
+  @jakarta.annotation.Nonnull
   private Integer jugendlicheErwachsene1824;
 
   public static final String JSON_PROPERTY_ERWACHSENE2599 = "erwachsene_25_99";
+  @jakarta.annotation.Nonnull
   private Integer erwachsene2599;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM1PERS = "wohnkosten_fam_1pers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenFam1pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM2PERS = "wohnkosten_fam_2pers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenFam2pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM3PERS = "wohnkosten_fam_3pers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenFam3pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM4PERS = "wohnkosten_fam_4pers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenFam4pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS = "wohnkosten_fam_5pluspers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenFam5pluspers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS = "wohnkosten_persoenlich_1pers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenPersoenlich1pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS = "wohnkosten_persoenlich_2pers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenPersoenlich2pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS = "wohnkosten_persoenlich_3pers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenPersoenlich3pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS = "wohnkosten_persoenlich_4pers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenPersoenlich4pers;
 
   public static final String JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS = "wohnkosten_persoenlich_5pluspers";
+  @jakarta.annotation.Nonnull
   private Integer wohnkostenPersoenlich5pluspers;
 
   public static final String JSON_PROPERTY_PREIS_PRO_MAHLZEIT = "preisProMahlzeit";
+  @jakarta.annotation.Nonnull
   private Integer preisProMahlzeit;
 
   public static final String JSON_PROPERTY_MAX_SAEULE3A = "maxSaeule3a";
+  @jakarta.annotation.Nonnull
   private Integer maxSaeule3a;
 
   public static final String JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE = "anzahlWochenLehre";
+  @jakarta.annotation.Nonnull
   private Integer anzahlWochenLehre;
 
   public static final String JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE = "anzahlWochenSchule";
+  @jakarta.annotation.Nonnull
   private Integer anzahlWochenSchule;
 
   public static final String JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT = "vermoegensanteilInProzent";
+  @jakarta.annotation.Nonnull
   private Integer vermoegensanteilInProzent;
 
   public static final String JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS = "reduzierungDesGrundbedarfs";
+  @jakarta.annotation.Nonnull
   private Integer reduzierungDesGrundbedarfs;
 
   public static final String JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG = "limiteAlterAntragsstellerHalbierungElternbeitrag";
+  @jakarta.annotation.Nonnull
   private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
 
   public static final String JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT = "zweiterAuszahlungsterminMonat";
+  @jakarta.annotation.Nonnull
   private Integer zweiterAuszahlungsterminMonat;
 
   public static final String JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG = "zweiterAuszahlungsterminTag";
+  @jakarta.annotation.Nonnull
   private Integer zweiterAuszahlungsterminTag;
 
   public static final String JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE = "fristNachreichenDokumente";
+  @jakarta.annotation.Nonnull
   private Integer fristNachreichenDokumente;
 
   public static final String JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT = "fristUploadUnterschriftenblatt";
+  @jakarta.annotation.Nonnull
   private Integer fristUploadUnterschriftenblatt;
 
   public static final String JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG = "stichtagVolljaehrigkeitMedizinischeGrundversorgung";
+  @jakarta.annotation.Nonnull
   private LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+
+  public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
+  private UUID id;
+
+  public static final String JSON_PROPERTY_GUELTIGKEIT_STATUS = "gueltigkeitStatus";
+  @jakarta.annotation.Nonnull
+  private GueltigkeitStatusDtoSpec gueltigkeitStatus;
 
   public GesuchsperiodeWithDatenDtoSpec() {
   }
 
-  public GesuchsperiodeWithDatenDtoSpec id(UUID id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getId() {
-    return id;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-
-  public GesuchsperiodeWithDatenDtoSpec gueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
-    
-    this.gueltigkeitStatus = gueltigkeitStatus;
-    return this;
-  }
-
-   /**
-   * Get gueltigkeitStatus
-   * @return gueltigkeitStatus
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public GueltigkeitStatusDtoSpec getGueltigkeitStatus() {
-    return gueltigkeitStatus;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GUELTIGKEIT_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigkeitStatus(GueltigkeitStatusDtoSpec gueltigkeitStatus) {
-    this.gueltigkeitStatus = gueltigkeitStatus;
-  }
-
-
-  public GesuchsperiodeWithDatenDtoSpec bezeichnungDe(String bezeichnungDe) {
+  public GesuchsperiodeWithDatenDtoSpec bezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     
     this.bezeichnungDe = bezeichnungDe;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungDe
    * @return bezeichnungDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungDe() {
@@ -328,25 +331,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_DE)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungDe(String bezeichnungDe) {
+  public void setBezeichnungDe(@jakarta.annotation.Nonnull String bezeichnungDe) {
     this.bezeichnungDe = bezeichnungDe;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec bezeichnungFr(String bezeichnungFr) {
+  public GesuchsperiodeWithDatenDtoSpec bezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     
     this.bezeichnungFr = bezeichnungFr;
     return this;
   }
 
-   /**
+  /**
    * Get bezeichnungFr
    * @return bezeichnungFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBezeichnungFr() {
@@ -354,25 +356,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEZEICHNUNG_FR)
+  @JsonProperty(value = JSON_PROPERTY_BEZEICHNUNG_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBezeichnungFr(String bezeichnungFr) {
+  public void setBezeichnungFr(@jakarta.annotation.Nonnull String bezeichnungFr) {
     this.bezeichnungFr = bezeichnungFr;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec einreichfrist(LocalDate einreichfrist) {
+  public GesuchsperiodeWithDatenDtoSpec einreichfrist(@jakarta.annotation.Nullable LocalDate einreichfrist) {
     
     this.einreichfrist = einreichfrist;
     return this;
   }
 
-   /**
+  /**
    * Get einreichfrist
    * @return einreichfrist
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_EINREICHFRIST)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHFRIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getEinreichfrist() {
@@ -380,25 +381,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINREICHFRIST)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHFRIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEinreichfrist(LocalDate einreichfrist) {
+  public void setEinreichfrist(@jakarta.annotation.Nullable LocalDate einreichfrist) {
     this.einreichfrist = einreichfrist;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec fiskaljahr(Integer fiskaljahr) {
+  public GesuchsperiodeWithDatenDtoSpec fiskaljahr(@jakarta.annotation.Nonnull Integer fiskaljahr) {
     
     this.fiskaljahr = fiskaljahr;
     return this;
   }
 
-   /**
+  /**
    * Get fiskaljahr
    * @return fiskaljahr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FISKALJAHR)
+  @JsonProperty(value = JSON_PROPERTY_FISKALJAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFiskaljahr() {
@@ -406,25 +406,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FISKALJAHR)
+  @JsonProperty(value = JSON_PROPERTY_FISKALJAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFiskaljahr(Integer fiskaljahr) {
+  public void setFiskaljahr(@jakarta.annotation.Nonnull Integer fiskaljahr) {
     this.fiskaljahr = fiskaljahr;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec gesuchsjahrId(UUID gesuchsjahrId) {
+  public GesuchsperiodeWithDatenDtoSpec gesuchsjahrId(@jakarta.annotation.Nonnull UUID gesuchsjahrId) {
     
     this.gesuchsjahrId = gesuchsjahrId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchsjahrId
    * @return gesuchsjahrId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSJAHR_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchsjahrId() {
@@ -432,25 +431,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSJAHR_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSJAHR_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsjahrId(UUID gesuchsjahrId) {
+  public void setGesuchsjahrId(@jakarta.annotation.Nonnull UUID gesuchsjahrId) {
     this.gesuchsjahrId = gesuchsjahrId;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+  public GesuchsperiodeWithDatenDtoSpec gesuchsperiodeStart(@jakarta.annotation.Nonnull LocalDate gesuchsperiodeStart) {
     
     this.gesuchsperiodeStart = gesuchsperiodeStart;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return gesuchsperiodeStart
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_START)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGesuchsperiodeStart() {
@@ -458,25 +456,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_START)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+  public void setGesuchsperiodeStart(@jakarta.annotation.Nonnull LocalDate gesuchsperiodeStart) {
     this.gesuchsperiodeStart = gesuchsperiodeStart;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+  public GesuchsperiodeWithDatenDtoSpec gesuchsperiodeStopp(@jakarta.annotation.Nonnull LocalDate gesuchsperiodeStopp) {
     
     this.gesuchsperiodeStopp = gesuchsperiodeStopp;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return gesuchsperiodeStopp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_STOPP)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE_STOPP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGesuchsperiodeStopp() {
@@ -484,25 +481,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCHSPERIODE_STOPP)
+  @JsonProperty(value = JSON_PROPERTY_GESUCHSPERIODE_STOPP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+  public void setGesuchsperiodeStopp(@jakarta.annotation.Nonnull LocalDate gesuchsperiodeStopp) {
     this.gesuchsperiodeStopp = gesuchsperiodeStopp;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec aufschaltterminStart(LocalDate aufschaltterminStart) {
+  public GesuchsperiodeWithDatenDtoSpec aufschaltterminStart(@jakarta.annotation.Nonnull LocalDate aufschaltterminStart) {
     
     this.aufschaltterminStart = aufschaltterminStart;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return aufschaltterminStart
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_START)
+  @JsonProperty(value = JSON_PROPERTY_AUFSCHALTTERMIN_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getAufschaltterminStart() {
@@ -510,25 +506,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUFSCHALTTERMIN_START)
+  @JsonProperty(value = JSON_PROPERTY_AUFSCHALTTERMIN_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAufschaltterminStart(LocalDate aufschaltterminStart) {
+  public void setAufschaltterminStart(@jakarta.annotation.Nonnull LocalDate aufschaltterminStart) {
     this.aufschaltterminStart = aufschaltterminStart;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec einreichefristNormal(LocalDate einreichefristNormal) {
+  public GesuchsperiodeWithDatenDtoSpec einreichefristNormal(@jakarta.annotation.Nonnull LocalDate einreichefristNormal) {
     
     this.einreichefristNormal = einreichefristNormal;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return einreichefristNormal
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEFRIST_NORMAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEinreichefristNormal() {
@@ -536,25 +531,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_NORMAL)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEFRIST_NORMAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinreichefristNormal(LocalDate einreichefristNormal) {
+  public void setEinreichefristNormal(@jakarta.annotation.Nonnull LocalDate einreichefristNormal) {
     this.einreichefristNormal = einreichefristNormal;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec einreichefristReduziert(LocalDate einreichefristReduziert) {
+  public GesuchsperiodeWithDatenDtoSpec einreichefristReduziert(@jakarta.annotation.Nonnull LocalDate einreichefristReduziert) {
     
     this.einreichefristReduziert = einreichefristReduziert;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return einreichefristReduziert
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEFRIST_REDUZIERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getEinreichefristReduziert() {
@@ -562,25 +556,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINREICHEFRIST_REDUZIERT)
+  @JsonProperty(value = JSON_PROPERTY_EINREICHEFRIST_REDUZIERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinreichefristReduziert(LocalDate einreichefristReduziert) {
+  public void setEinreichefristReduziert(@jakarta.annotation.Nonnull LocalDate einreichefristReduziert) {
     this.einreichefristReduziert = einreichefristReduziert;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec ausbKostenSekII(Integer ausbKostenSekII) {
+  public GesuchsperiodeWithDatenDtoSpec ausbKostenSekII(@jakarta.annotation.Nonnull Integer ausbKostenSekII) {
     
     this.ausbKostenSekII = ausbKostenSekII;
     return this;
   }
 
-   /**
+  /**
    * Get ausbKostenSekII
    * @return ausbKostenSekII
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
+  @JsonProperty(value = JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAusbKostenSekII() {
@@ -588,25 +581,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I)
+  @JsonProperty(value = JSON_PROPERTY_AUSB_KOSTEN_SEK_I_I, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbKostenSekII(Integer ausbKostenSekII) {
+  public void setAusbKostenSekII(@jakarta.annotation.Nonnull Integer ausbKostenSekII) {
     this.ausbKostenSekII = ausbKostenSekII;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec ausbKostenTertiaer(Integer ausbKostenTertiaer) {
+  public GesuchsperiodeWithDatenDtoSpec ausbKostenTertiaer(@jakarta.annotation.Nonnull Integer ausbKostenTertiaer) {
     
     this.ausbKostenTertiaer = ausbKostenTertiaer;
     return this;
   }
 
-   /**
+  /**
    * Get ausbKostenTertiaer
    * @return ausbKostenTertiaer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
+  @JsonProperty(value = JSON_PROPERTY_AUSB_KOSTEN_TERTIAER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAusbKostenTertiaer() {
@@ -614,25 +606,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSB_KOSTEN_TERTIAER)
+  @JsonProperty(value = JSON_PROPERTY_AUSB_KOSTEN_TERTIAER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAusbKostenTertiaer(Integer ausbKostenTertiaer) {
+  public void setAusbKostenTertiaer(@jakarta.annotation.Nonnull Integer ausbKostenTertiaer) {
     this.ausbKostenTertiaer = ausbKostenTertiaer;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec freibetragVermoegen(Integer freibetragVermoegen) {
+  public GesuchsperiodeWithDatenDtoSpec freibetragVermoegen(@jakarta.annotation.Nonnull Integer freibetragVermoegen) {
     
     this.freibetragVermoegen = freibetragVermoegen;
     return this;
   }
 
-   /**
+  /**
    * Get freibetragVermoegen
    * @return freibetragVermoegen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
+  @JsonProperty(value = JSON_PROPERTY_FREIBETRAG_VERMOEGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFreibetragVermoegen() {
@@ -640,25 +631,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_VERMOEGEN)
+  @JsonProperty(value = JSON_PROPERTY_FREIBETRAG_VERMOEGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFreibetragVermoegen(Integer freibetragVermoegen) {
+  public void setFreibetragVermoegen(@jakarta.annotation.Nonnull Integer freibetragVermoegen) {
     this.freibetragVermoegen = freibetragVermoegen;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec freibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
+  public GesuchsperiodeWithDatenDtoSpec freibetragErwerbseinkommen(@jakarta.annotation.Nonnull Integer freibetragErwerbseinkommen) {
     
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
     return this;
   }
 
-   /**
+  /**
    * Get freibetragErwerbseinkommen
    * @return freibetragErwerbseinkommen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN)
+  @JsonProperty(value = JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFreibetragErwerbseinkommen() {
@@ -666,25 +656,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN)
+  @JsonProperty(value = JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFreibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
+  public void setFreibetragErwerbseinkommen(@jakarta.annotation.Nonnull Integer freibetragErwerbseinkommen) {
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec einkommensfreibetrag(Integer einkommensfreibetrag) {
+  public GesuchsperiodeWithDatenDtoSpec einkommensfreibetrag(@jakarta.annotation.Nonnull Integer einkommensfreibetrag) {
     
     this.einkommensfreibetrag = einkommensfreibetrag;
     return this;
   }
 
-   /**
+  /**
    * Get einkommensfreibetrag
    * @return einkommensfreibetrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
+  @JsonProperty(value = JSON_PROPERTY_EINKOMMENSFREIBETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEinkommensfreibetrag() {
@@ -692,25 +681,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINKOMMENSFREIBETRAG)
+  @JsonProperty(value = JSON_PROPERTY_EINKOMMENSFREIBETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
+  public void setEinkommensfreibetrag(@jakarta.annotation.Nonnull Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec elternbeteiligungssatz(Integer elternbeteiligungssatz) {
+  public GesuchsperiodeWithDatenDtoSpec elternbeteiligungssatz(@jakarta.annotation.Nonnull Integer elternbeteiligungssatz) {
     
     this.elternbeteiligungssatz = elternbeteiligungssatz;
     return this;
   }
 
-   /**
+  /**
    * Get elternbeteiligungssatz
    * @return elternbeteiligungssatz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ)
+  @JsonProperty(value = JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getElternbeteiligungssatz() {
@@ -718,25 +706,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ)
+  @JsonProperty(value = JSON_PROPERTY_ELTERNBETEILIGUNGSSATZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setElternbeteiligungssatz(Integer elternbeteiligungssatz) {
+  public void setElternbeteiligungssatz(@jakarta.annotation.Nonnull Integer elternbeteiligungssatz) {
     this.elternbeteiligungssatz = elternbeteiligungssatz;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+  public GesuchsperiodeWithDatenDtoSpec vermogenSatzAngerechnet(@jakarta.annotation.Nonnull Integer vermogenSatzAngerechnet) {
     
     this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
     return this;
   }
 
-   /**
+  /**
    * Get vermogenSatzAngerechnet
    * @return vermogenSatzAngerechnet
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET)
+  @JsonProperty(value = JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVermogenSatzAngerechnet() {
@@ -744,25 +731,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET)
+  @JsonProperty(value = JSON_PROPERTY_VERMOGEN_SATZ_ANGERECHNET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+  public void setVermogenSatzAngerechnet(@jakarta.annotation.Nonnull Integer vermogenSatzAngerechnet) {
     this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec integrationszulage(Integer integrationszulage) {
+  public GesuchsperiodeWithDatenDtoSpec integrationszulage(@jakarta.annotation.Nonnull Integer integrationszulage) {
     
     this.integrationszulage = integrationszulage;
     return this;
   }
 
-   /**
+  /**
    * Get integrationszulage
    * @return integrationszulage
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_INTEGRATIONSZULAGE)
+  @JsonProperty(value = JSON_PROPERTY_INTEGRATIONSZULAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getIntegrationszulage() {
@@ -770,25 +756,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_INTEGRATIONSZULAGE)
+  @JsonProperty(value = JSON_PROPERTY_INTEGRATIONSZULAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIntegrationszulage(Integer integrationszulage) {
+  public void setIntegrationszulage(@jakarta.annotation.Nonnull Integer integrationszulage) {
     this.integrationszulage = integrationszulage;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec limiteEkFreibetragIntegrationszulage(Integer limiteEkFreibetragIntegrationszulage) {
+  public GesuchsperiodeWithDatenDtoSpec limiteEkFreibetragIntegrationszulage(@jakarta.annotation.Nonnull Integer limiteEkFreibetragIntegrationszulage) {
     
     this.limiteEkFreibetragIntegrationszulage = limiteEkFreibetragIntegrationszulage;
     return this;
   }
 
-   /**
+  /**
    * Get limiteEkFreibetragIntegrationszulage
    * @return limiteEkFreibetragIntegrationszulage
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE)
+  @JsonProperty(value = JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getLimiteEkFreibetragIntegrationszulage() {
@@ -796,25 +781,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE)
+  @JsonProperty(value = JSON_PROPERTY_LIMITE_EK_FREIBETRAG_INTEGRATIONSZULAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLimiteEkFreibetragIntegrationszulage(Integer limiteEkFreibetragIntegrationszulage) {
+  public void setLimiteEkFreibetragIntegrationszulage(@jakarta.annotation.Nonnull Integer limiteEkFreibetragIntegrationszulage) {
     this.limiteEkFreibetragIntegrationszulage = limiteEkFreibetragIntegrationszulage;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec stipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
+  public GesuchsperiodeWithDatenDtoSpec stipLimiteMinimalstipendium(@jakarta.annotation.Nonnull Integer stipLimiteMinimalstipendium) {
     
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
     return this;
   }
 
-   /**
+  /**
    * Get stipLimiteMinimalstipendium
    * @return stipLimiteMinimalstipendium
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM)
+  @JsonProperty(value = JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getStipLimiteMinimalstipendium() {
@@ -822,25 +806,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM)
+  @JsonProperty(value = JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
+  public void setStipLimiteMinimalstipendium(@jakarta.annotation.Nonnull Integer stipLimiteMinimalstipendium) {
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec person1(Integer person1) {
+  public GesuchsperiodeWithDatenDtoSpec person1(@jakarta.annotation.Nonnull Integer person1) {
     
     this.person1 = person1;
     return this;
   }
 
-   /**
+  /**
    * Get person1
    * @return person1
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSON1)
+  @JsonProperty(value = JSON_PROPERTY_PERSON1, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPerson1() {
@@ -848,25 +831,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSON1)
+  @JsonProperty(value = JSON_PROPERTY_PERSON1, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPerson1(Integer person1) {
+  public void setPerson1(@jakarta.annotation.Nonnull Integer person1) {
     this.person1 = person1;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec personen2(Integer personen2) {
+  public GesuchsperiodeWithDatenDtoSpec personen2(@jakarta.annotation.Nonnull Integer personen2) {
     
     this.personen2 = personen2;
     return this;
   }
 
-   /**
+  /**
    * Get personen2
    * @return personen2
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSONEN2)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN2, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPersonen2() {
@@ -874,25 +856,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSONEN2)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN2, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen2(Integer personen2) {
+  public void setPersonen2(@jakarta.annotation.Nonnull Integer personen2) {
     this.personen2 = personen2;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec personen3(Integer personen3) {
+  public GesuchsperiodeWithDatenDtoSpec personen3(@jakarta.annotation.Nonnull Integer personen3) {
     
     this.personen3 = personen3;
     return this;
   }
 
-   /**
+  /**
    * Get personen3
    * @return personen3
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSONEN3)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN3, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPersonen3() {
@@ -900,25 +881,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSONEN3)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN3, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen3(Integer personen3) {
+  public void setPersonen3(@jakarta.annotation.Nonnull Integer personen3) {
     this.personen3 = personen3;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec personen4(Integer personen4) {
+  public GesuchsperiodeWithDatenDtoSpec personen4(@jakarta.annotation.Nonnull Integer personen4) {
     
     this.personen4 = personen4;
     return this;
   }
 
-   /**
+  /**
    * Get personen4
    * @return personen4
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSONEN4)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN4, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPersonen4() {
@@ -926,25 +906,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSONEN4)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN4, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen4(Integer personen4) {
+  public void setPersonen4(@jakarta.annotation.Nonnull Integer personen4) {
     this.personen4 = personen4;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec personen5(Integer personen5) {
+  public GesuchsperiodeWithDatenDtoSpec personen5(@jakarta.annotation.Nonnull Integer personen5) {
     
     this.personen5 = personen5;
     return this;
   }
 
-   /**
+  /**
    * Get personen5
    * @return personen5
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSONEN5)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN5, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPersonen5() {
@@ -952,25 +931,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSONEN5)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN5, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen5(Integer personen5) {
+  public void setPersonen5(@jakarta.annotation.Nonnull Integer personen5) {
     this.personen5 = personen5;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec personen6(Integer personen6) {
+  public GesuchsperiodeWithDatenDtoSpec personen6(@jakarta.annotation.Nonnull Integer personen6) {
     
     this.personen6 = personen6;
     return this;
   }
 
-   /**
+  /**
    * Get personen6
    * @return personen6
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSONEN6)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN6, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPersonen6() {
@@ -978,25 +956,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSONEN6)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN6, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen6(Integer personen6) {
+  public void setPersonen6(@jakarta.annotation.Nonnull Integer personen6) {
     this.personen6 = personen6;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec personen7(Integer personen7) {
+  public GesuchsperiodeWithDatenDtoSpec personen7(@jakarta.annotation.Nonnull Integer personen7) {
     
     this.personen7 = personen7;
     return this;
   }
 
-   /**
+  /**
    * Get personen7
    * @return personen7
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSONEN7)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN7, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPersonen7() {
@@ -1004,25 +981,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSONEN7)
+  @JsonProperty(value = JSON_PROPERTY_PERSONEN7, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersonen7(Integer personen7) {
+  public void setPersonen7(@jakarta.annotation.Nonnull Integer personen7) {
     this.personen7 = personen7;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec proWeiterePerson(Integer proWeiterePerson) {
+  public GesuchsperiodeWithDatenDtoSpec proWeiterePerson(@jakarta.annotation.Nonnull Integer proWeiterePerson) {
     
     this.proWeiterePerson = proWeiterePerson;
     return this;
   }
 
-   /**
+  /**
    * Get proWeiterePerson
    * @return proWeiterePerson
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PRO_WEITERE_PERSON)
+  @JsonProperty(value = JSON_PROPERTY_PRO_WEITERE_PERSON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getProWeiterePerson() {
@@ -1030,25 +1006,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PRO_WEITERE_PERSON)
+  @JsonProperty(value = JSON_PROPERTY_PRO_WEITERE_PERSON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setProWeiterePerson(Integer proWeiterePerson) {
+  public void setProWeiterePerson(@jakarta.annotation.Nonnull Integer proWeiterePerson) {
     this.proWeiterePerson = proWeiterePerson;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec kinder0017(Integer kinder0017) {
+  public GesuchsperiodeWithDatenDtoSpec kinder0017(@jakarta.annotation.Nonnull Integer kinder0017) {
     
     this.kinder0017 = kinder0017;
     return this;
   }
 
-   /**
+  /**
    * Get kinder0017
    * @return kinder0017
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KINDER0017)
+  @JsonProperty(value = JSON_PROPERTY_KINDER0017, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getKinder0017() {
@@ -1056,25 +1031,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KINDER0017)
+  @JsonProperty(value = JSON_PROPERTY_KINDER0017, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKinder0017(Integer kinder0017) {
+  public void setKinder0017(@jakarta.annotation.Nonnull Integer kinder0017) {
     this.kinder0017 = kinder0017;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec jugendlicheErwachsene1824(Integer jugendlicheErwachsene1824) {
+  public GesuchsperiodeWithDatenDtoSpec jugendlicheErwachsene1824(@jakarta.annotation.Nonnull Integer jugendlicheErwachsene1824) {
     
     this.jugendlicheErwachsene1824 = jugendlicheErwachsene1824;
     return this;
   }
 
-   /**
+  /**
    * Get jugendlicheErwachsene1824
    * @return jugendlicheErwachsene1824
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824)
+  @JsonProperty(value = JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getJugendlicheErwachsene1824() {
@@ -1082,25 +1056,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824)
+  @JsonProperty(value = JSON_PROPERTY_JUGENDLICHE_ERWACHSENE1824, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setJugendlicheErwachsene1824(Integer jugendlicheErwachsene1824) {
+  public void setJugendlicheErwachsene1824(@jakarta.annotation.Nonnull Integer jugendlicheErwachsene1824) {
     this.jugendlicheErwachsene1824 = jugendlicheErwachsene1824;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec erwachsene2599(Integer erwachsene2599) {
+  public GesuchsperiodeWithDatenDtoSpec erwachsene2599(@jakarta.annotation.Nonnull Integer erwachsene2599) {
     
     this.erwachsene2599 = erwachsene2599;
     return this;
   }
 
-   /**
+  /**
    * Get erwachsene2599
    * @return erwachsene2599
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ERWACHSENE2599)
+  @JsonProperty(value = JSON_PROPERTY_ERWACHSENE2599, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getErwachsene2599() {
@@ -1108,25 +1081,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERWACHSENE2599)
+  @JsonProperty(value = JSON_PROPERTY_ERWACHSENE2599, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setErwachsene2599(Integer erwachsene2599) {
+  public void setErwachsene2599(@jakarta.annotation.Nonnull Integer erwachsene2599) {
     this.erwachsene2599 = erwachsene2599;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam1pers(Integer wohnkostenFam1pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam1pers(@jakarta.annotation.Nonnull Integer wohnkostenFam1pers) {
     
     this.wohnkostenFam1pers = wohnkostenFam1pers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenFam1pers
    * @return wohnkostenFam1pers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM1PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM1PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenFam1pers() {
@@ -1134,25 +1106,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM1PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM1PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam1pers(Integer wohnkostenFam1pers) {
+  public void setWohnkostenFam1pers(@jakarta.annotation.Nonnull Integer wohnkostenFam1pers) {
     this.wohnkostenFam1pers = wohnkostenFam1pers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam2pers(Integer wohnkostenFam2pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam2pers(@jakarta.annotation.Nonnull Integer wohnkostenFam2pers) {
     
     this.wohnkostenFam2pers = wohnkostenFam2pers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenFam2pers
    * @return wohnkostenFam2pers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM2PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM2PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenFam2pers() {
@@ -1160,25 +1131,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM2PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM2PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam2pers(Integer wohnkostenFam2pers) {
+  public void setWohnkostenFam2pers(@jakarta.annotation.Nonnull Integer wohnkostenFam2pers) {
     this.wohnkostenFam2pers = wohnkostenFam2pers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam3pers(Integer wohnkostenFam3pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam3pers(@jakarta.annotation.Nonnull Integer wohnkostenFam3pers) {
     
     this.wohnkostenFam3pers = wohnkostenFam3pers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenFam3pers
    * @return wohnkostenFam3pers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM3PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM3PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenFam3pers() {
@@ -1186,25 +1156,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM3PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM3PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam3pers(Integer wohnkostenFam3pers) {
+  public void setWohnkostenFam3pers(@jakarta.annotation.Nonnull Integer wohnkostenFam3pers) {
     this.wohnkostenFam3pers = wohnkostenFam3pers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam4pers(Integer wohnkostenFam4pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam4pers(@jakarta.annotation.Nonnull Integer wohnkostenFam4pers) {
     
     this.wohnkostenFam4pers = wohnkostenFam4pers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenFam4pers
    * @return wohnkostenFam4pers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM4PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM4PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenFam4pers() {
@@ -1212,25 +1181,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM4PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM4PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam4pers(Integer wohnkostenFam4pers) {
+  public void setWohnkostenFam4pers(@jakarta.annotation.Nonnull Integer wohnkostenFam4pers) {
     this.wohnkostenFam4pers = wohnkostenFam4pers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenFam5pluspers(@jakarta.annotation.Nonnull Integer wohnkostenFam5pluspers) {
     
     this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenFam5pluspers
    * @return wohnkostenFam5pluspers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenFam5pluspers() {
@@ -1238,25 +1206,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_FAM5PLUSPERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
+  public void setWohnkostenFam5pluspers(@jakarta.annotation.Nonnull Integer wohnkostenFam5pluspers) {
     this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich1pers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich1pers) {
     
     this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenPersoenlich1pers
    * @return wohnkostenPersoenlich1pers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenPersoenlich1pers() {
@@ -1264,25 +1231,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH1PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
+  public void setWohnkostenPersoenlich1pers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich1pers) {
     this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich2pers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich2pers) {
     
     this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenPersoenlich2pers
    * @return wohnkostenPersoenlich2pers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenPersoenlich2pers() {
@@ -1290,25 +1256,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH2PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
+  public void setWohnkostenPersoenlich2pers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich2pers) {
     this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich3pers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich3pers) {
     
     this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenPersoenlich3pers
    * @return wohnkostenPersoenlich3pers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenPersoenlich3pers() {
@@ -1316,25 +1281,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH3PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
+  public void setWohnkostenPersoenlich3pers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich3pers) {
     this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich4pers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich4pers) {
     
     this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenPersoenlich4pers
    * @return wohnkostenPersoenlich4pers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenPersoenlich4pers() {
@@ -1342,25 +1306,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH4PERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
+  public void setWohnkostenPersoenlich4pers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich4pers) {
     this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
+  public GesuchsperiodeWithDatenDtoSpec wohnkostenPersoenlich5pluspers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich5pluspers) {
     
     this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
     return this;
   }
 
-   /**
+  /**
    * Get wohnkostenPersoenlich5pluspers
    * @return wohnkostenPersoenlich5pluspers
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getWohnkostenPersoenlich5pluspers() {
@@ -1368,25 +1331,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS)
+  @JsonProperty(value = JSON_PROPERTY_WOHNKOSTEN_PERSOENLICH5PLUSPERS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
+  public void setWohnkostenPersoenlich5pluspers(@jakarta.annotation.Nonnull Integer wohnkostenPersoenlich5pluspers) {
     this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec preisProMahlzeit(Integer preisProMahlzeit) {
+  public GesuchsperiodeWithDatenDtoSpec preisProMahlzeit(@jakarta.annotation.Nonnull Integer preisProMahlzeit) {
     
     this.preisProMahlzeit = preisProMahlzeit;
     return this;
   }
 
-   /**
+  /**
    * Get preisProMahlzeit
    * @return preisProMahlzeit
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PREIS_PRO_MAHLZEIT)
+  @JsonProperty(value = JSON_PROPERTY_PREIS_PRO_MAHLZEIT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getPreisProMahlzeit() {
@@ -1394,25 +1356,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PREIS_PRO_MAHLZEIT)
+  @JsonProperty(value = JSON_PROPERTY_PREIS_PRO_MAHLZEIT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPreisProMahlzeit(Integer preisProMahlzeit) {
+  public void setPreisProMahlzeit(@jakarta.annotation.Nonnull Integer preisProMahlzeit) {
     this.preisProMahlzeit = preisProMahlzeit;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec maxSaeule3a(Integer maxSaeule3a) {
+  public GesuchsperiodeWithDatenDtoSpec maxSaeule3a(@jakarta.annotation.Nonnull Integer maxSaeule3a) {
     
     this.maxSaeule3a = maxSaeule3a;
     return this;
   }
 
-   /**
+  /**
    * Get maxSaeule3a
    * @return maxSaeule3a
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MAX_SAEULE3A)
+  @JsonProperty(value = JSON_PROPERTY_MAX_SAEULE3A, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getMaxSaeule3a() {
@@ -1420,25 +1381,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MAX_SAEULE3A)
+  @JsonProperty(value = JSON_PROPERTY_MAX_SAEULE3A, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMaxSaeule3a(Integer maxSaeule3a) {
+  public void setMaxSaeule3a(@jakarta.annotation.Nonnull Integer maxSaeule3a) {
     this.maxSaeule3a = maxSaeule3a;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec anzahlWochenLehre(Integer anzahlWochenLehre) {
+  public GesuchsperiodeWithDatenDtoSpec anzahlWochenLehre(@jakarta.annotation.Nonnull Integer anzahlWochenLehre) {
     
     this.anzahlWochenLehre = anzahlWochenLehre;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlWochenLehre
    * @return anzahlWochenLehre
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlWochenLehre() {
@@ -1446,25 +1406,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_WOCHEN_LEHRE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlWochenLehre(Integer anzahlWochenLehre) {
+  public void setAnzahlWochenLehre(@jakarta.annotation.Nonnull Integer anzahlWochenLehre) {
     this.anzahlWochenLehre = anzahlWochenLehre;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec anzahlWochenSchule(Integer anzahlWochenSchule) {
+  public GesuchsperiodeWithDatenDtoSpec anzahlWochenSchule(@jakarta.annotation.Nonnull Integer anzahlWochenSchule) {
     
     this.anzahlWochenSchule = anzahlWochenSchule;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlWochenSchule
    * @return anzahlWochenSchule
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlWochenSchule() {
@@ -1472,25 +1431,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlWochenSchule(Integer anzahlWochenSchule) {
+  public void setAnzahlWochenSchule(@jakarta.annotation.Nonnull Integer anzahlWochenSchule) {
     this.anzahlWochenSchule = anzahlWochenSchule;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec vermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+  public GesuchsperiodeWithDatenDtoSpec vermoegensanteilInProzent(@jakarta.annotation.Nonnull Integer vermoegensanteilInProzent) {
     
     this.vermoegensanteilInProzent = vermoegensanteilInProzent;
     return this;
   }
 
-   /**
+  /**
    * Get vermoegensanteilInProzent
    * @return vermoegensanteilInProzent
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT)
+  @JsonProperty(value = JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVermoegensanteilInProzent() {
@@ -1498,25 +1456,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT)
+  @JsonProperty(value = JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+  public void setVermoegensanteilInProzent(@jakarta.annotation.Nonnull Integer vermoegensanteilInProzent) {
     this.vermoegensanteilInProzent = vermoegensanteilInProzent;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec reduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+  public GesuchsperiodeWithDatenDtoSpec reduzierungDesGrundbedarfs(@jakarta.annotation.Nonnull Integer reduzierungDesGrundbedarfs) {
     
     this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
     return this;
   }
 
-   /**
+  /**
    * Get reduzierungDesGrundbedarfs
    * @return reduzierungDesGrundbedarfs
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS)
+  @JsonProperty(value = JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getReduzierungDesGrundbedarfs() {
@@ -1524,25 +1481,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS)
+  @JsonProperty(value = JSON_PROPERTY_REDUZIERUNG_DES_GRUNDBEDARFS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setReduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+  public void setReduzierungDesGrundbedarfs(@jakarta.annotation.Nonnull Integer reduzierungDesGrundbedarfs) {
     this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec limiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
+  public GesuchsperiodeWithDatenDtoSpec limiteAlterAntragsstellerHalbierungElternbeitrag(@jakarta.annotation.Nonnull Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
     
     this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
     return this;
   }
 
-   /**
+  /**
    * Get limiteAlterAntragsstellerHalbierungElternbeitrag
    * @return limiteAlterAntragsstellerHalbierungElternbeitrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG)
+  @JsonProperty(value = JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getLimiteAlterAntragsstellerHalbierungElternbeitrag() {
@@ -1550,25 +1506,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG)
+  @JsonProperty(value = JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLimiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
+  public void setLimiteAlterAntragsstellerHalbierungElternbeitrag(@jakarta.annotation.Nonnull Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
     this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec zweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+  public GesuchsperiodeWithDatenDtoSpec zweiterAuszahlungsterminMonat(@jakarta.annotation.Nonnull Integer zweiterAuszahlungsterminMonat) {
     
     this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
     return this;
   }
 
-   /**
+  /**
    * Get zweiterAuszahlungsterminMonat
    * @return zweiterAuszahlungsterminMonat
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT)
+  @JsonProperty(value = JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getZweiterAuszahlungsterminMonat() {
@@ -1576,25 +1531,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT)
+  @JsonProperty(value = JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setZweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+  public void setZweiterAuszahlungsterminMonat(@jakarta.annotation.Nonnull Integer zweiterAuszahlungsterminMonat) {
     this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec zweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+  public GesuchsperiodeWithDatenDtoSpec zweiterAuszahlungsterminTag(@jakarta.annotation.Nonnull Integer zweiterAuszahlungsterminTag) {
     
     this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
     return this;
   }
 
-   /**
+  /**
    * Get zweiterAuszahlungsterminTag
    * @return zweiterAuszahlungsterminTag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG)
+  @JsonProperty(value = JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getZweiterAuszahlungsterminTag() {
@@ -1602,25 +1556,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG)
+  @JsonProperty(value = JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setZweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+  public void setZweiterAuszahlungsterminTag(@jakarta.annotation.Nonnull Integer zweiterAuszahlungsterminTag) {
     this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec fristNachreichenDokumente(Integer fristNachreichenDokumente) {
+  public GesuchsperiodeWithDatenDtoSpec fristNachreichenDokumente(@jakarta.annotation.Nonnull Integer fristNachreichenDokumente) {
     
     this.fristNachreichenDokumente = fristNachreichenDokumente;
     return this;
   }
 
-   /**
+  /**
    * Get fristNachreichenDokumente
    * @return fristNachreichenDokumente
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFristNachreichenDokumente() {
@@ -1628,25 +1581,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE)
+  @JsonProperty(value = JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFristNachreichenDokumente(Integer fristNachreichenDokumente) {
+  public void setFristNachreichenDokumente(@jakarta.annotation.Nonnull Integer fristNachreichenDokumente) {
     this.fristNachreichenDokumente = fristNachreichenDokumente;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec fristUploadUnterschriftenblatt(Integer fristUploadUnterschriftenblatt) {
+  public GesuchsperiodeWithDatenDtoSpec fristUploadUnterschriftenblatt(@jakarta.annotation.Nonnull Integer fristUploadUnterschriftenblatt) {
     
     this.fristUploadUnterschriftenblatt = fristUploadUnterschriftenblatt;
     return this;
   }
 
-   /**
+  /**
    * Get fristUploadUnterschriftenblatt
    * @return fristUploadUnterschriftenblatt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT)
+  @JsonProperty(value = JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFristUploadUnterschriftenblatt() {
@@ -1654,25 +1606,24 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT)
+  @JsonProperty(value = JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFristUploadUnterschriftenblatt(Integer fristUploadUnterschriftenblatt) {
+  public void setFristUploadUnterschriftenblatt(@jakarta.annotation.Nonnull Integer fristUploadUnterschriftenblatt) {
     this.fristUploadUnterschriftenblatt = fristUploadUnterschriftenblatt;
   }
 
-
-  public GesuchsperiodeWithDatenDtoSpec stichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
+  public GesuchsperiodeWithDatenDtoSpec stichtagVolljaehrigkeitMedizinischeGrundversorgung(@jakarta.annotation.Nonnull LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
     
     this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return stichtagVolljaehrigkeitMedizinischeGrundversorgung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG)
+  @JsonProperty(value = JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getStichtagVolljaehrigkeitMedizinischeGrundversorgung() {
@@ -1680,11 +1631,62 @@ public class GesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG)
+  @JsonProperty(value = JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
+  public void setStichtagVolljaehrigkeitMedizinischeGrundversorgung(@jakarta.annotation.Nonnull LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
     this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
   }
+
+  public GesuchsperiodeWithDatenDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
+    this.id = id;
+  }
+
+  public GesuchsperiodeWithDatenDtoSpec gueltigkeitStatus(@jakarta.annotation.Nonnull GueltigkeitStatusDtoSpec gueltigkeitStatus) {
+    
+    this.gueltigkeitStatus = gueltigkeitStatus;
+    return this;
+  }
+
+  /**
+   * Get gueltigkeitStatus
+   * @return gueltigkeitStatus
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_GUELTIGKEIT_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GueltigkeitStatusDtoSpec getGueltigkeitStatus() {
+    return gueltigkeitStatus;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_GUELTIGKEIT_STATUS, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGueltigkeitStatus(@jakarta.annotation.Nonnull GueltigkeitStatusDtoSpec gueltigkeitStatus) {
+    this.gueltigkeitStatus = gueltigkeitStatus;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -1695,9 +1697,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
       return false;
     }
     GesuchsperiodeWithDatenDtoSpec gesuchsperiodeWithDaten = (GesuchsperiodeWithDatenDtoSpec) o;
-    return Objects.equals(this.id, gesuchsperiodeWithDaten.id) &&
-        Objects.equals(this.gueltigkeitStatus, gesuchsperiodeWithDaten.gueltigkeitStatus) &&
-        Objects.equals(this.bezeichnungDe, gesuchsperiodeWithDaten.bezeichnungDe) &&
+    return Objects.equals(this.bezeichnungDe, gesuchsperiodeWithDaten.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, gesuchsperiodeWithDaten.bezeichnungFr) &&
         Objects.equals(this.einreichfrist, gesuchsperiodeWithDaten.einreichfrist) &&
         Objects.equals(this.fiskaljahr, gesuchsperiodeWithDaten.fiskaljahr) &&
@@ -1749,20 +1749,20 @@ public class GesuchsperiodeWithDatenDtoSpec {
         Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeWithDaten.zweiterAuszahlungsterminTag) &&
         Objects.equals(this.fristNachreichenDokumente, gesuchsperiodeWithDaten.fristNachreichenDokumente) &&
         Objects.equals(this.fristUploadUnterschriftenblatt, gesuchsperiodeWithDaten.fristUploadUnterschriftenblatt) &&
-        Objects.equals(this.stichtagVolljaehrigkeitMedizinischeGrundversorgung, gesuchsperiodeWithDaten.stichtagVolljaehrigkeitMedizinischeGrundversorgung);
+        Objects.equals(this.stichtagVolljaehrigkeitMedizinischeGrundversorgung, gesuchsperiodeWithDaten.stichtagVolljaehrigkeitMedizinischeGrundversorgung) &&
+        Objects.equals(this.id, gesuchsperiodeWithDaten.id) &&
+        Objects.equals(this.gueltigkeitStatus, gesuchsperiodeWithDaten.gueltigkeitStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigkeitStatus, bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, fristUploadUnterschriftenblatt, stichtagVolljaehrigkeitMedizinischeGrundversorgung);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, fristUploadUnterschriftenblatt, stichtagVolljaehrigkeitMedizinischeGrundversorgung, id, gueltigkeitStatus);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchsperiodeWithDatenDtoSpec {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    einreichfrist: ").append(toIndentedString(einreichfrist)).append("\n");
@@ -1816,6 +1816,8 @@ public class GesuchsperiodeWithDatenDtoSpec {
     sb.append("    fristNachreichenDokumente: ").append(toIndentedString(fristNachreichenDokumente)).append("\n");
     sb.append("    fristUploadUnterschriftenblatt: ").append(toIndentedString(fristUploadUnterschriftenblatt)).append("\n");
     sb.append("    stichtagVolljaehrigkeitMedizinischeGrundversorgung: ").append(toIndentedString(stichtagVolljaehrigkeitMedizinischeGrundversorgung)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -1825,10 +1827,7 @@ public class GesuchsperiodeWithDatenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

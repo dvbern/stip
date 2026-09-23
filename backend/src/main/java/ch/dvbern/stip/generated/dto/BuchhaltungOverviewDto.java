@@ -18,13 +18,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BuchhaltungOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BuchhaltungOverviewDto  implements Serializable {
-  private @Valid Boolean canRetryAuszahlung;
-  private @Valid List<BuchhaltungEntryDto> buchhaltungEntrys = new ArrayList<>();
+  private Boolean canRetryAuszahlung;
+  private @Valid List<@Valid BuchhaltungEntryDto> buchhaltungEntrys = new ArrayList<>();
 
   protected BuchhaltungOverviewDto(BuchhaltungOverviewDtoBuilder<?, ?> b) {
     this.canRetryAuszahlung = b.canRetryAuszahlung;
@@ -42,33 +42,31 @@ public class BuchhaltungOverviewDto  implements Serializable {
   }
 
   
-  @JsonProperty("canRetryAuszahlung")
-  @NotNull
-  public Boolean getCanRetryAuszahlung() {
+  @JsonProperty(required = true, value = "canRetryAuszahlung")
+  @NotNull public Boolean getCanRetryAuszahlung() {
     return canRetryAuszahlung;
   }
 
-  @JsonProperty("canRetryAuszahlung")
+  @JsonProperty(required = true, value = "canRetryAuszahlung")
   public void setCanRetryAuszahlung(Boolean canRetryAuszahlung) {
     this.canRetryAuszahlung = canRetryAuszahlung;
   }
 
   /**
    **/
-  public BuchhaltungOverviewDto buchhaltungEntrys(List<BuchhaltungEntryDto> buchhaltungEntrys) {
+  public BuchhaltungOverviewDto buchhaltungEntrys(List<@Valid BuchhaltungEntryDto> buchhaltungEntrys) {
     this.buchhaltungEntrys = buchhaltungEntrys;
     return this;
   }
 
   
-  @JsonProperty("buchhaltungEntrys")
-  @NotNull
-  public List<BuchhaltungEntryDto> getBuchhaltungEntrys() {
+  @JsonProperty(required = true, value = "buchhaltungEntrys")
+  @NotNull @Valid public List<@Valid BuchhaltungEntryDto> getBuchhaltungEntrys() {
     return buchhaltungEntrys;
   }
 
-  @JsonProperty("buchhaltungEntrys")
-  public void setBuchhaltungEntrys(List<BuchhaltungEntryDto> buchhaltungEntrys) {
+  @JsonProperty(required = true, value = "buchhaltungEntrys")
+  public void setBuchhaltungEntrys(List<@Valid BuchhaltungEntryDto> buchhaltungEntrys) {
     this.buchhaltungEntrys = buchhaltungEntrys;
   }
 
@@ -123,10 +121,7 @@ public class BuchhaltungOverviewDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -164,4 +159,3 @@ public class BuchhaltungOverviewDto  implements Serializable {
     }
   }
 }
-

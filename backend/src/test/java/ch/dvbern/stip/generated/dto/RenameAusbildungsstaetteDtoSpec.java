@@ -31,29 +31,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   RenameAusbildungsstaetteDtoSpec.JSON_PROPERTY_NAME_FR
 })
 @JsonTypeName("RenameAusbildungsstaette")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class RenameAusbildungsstaetteDtoSpec {
   public static final String JSON_PROPERTY_NAME_DE = "nameDe";
+  @jakarta.annotation.Nonnull
   private String nameDe;
 
   public static final String JSON_PROPERTY_NAME_FR = "nameFr";
+  @jakarta.annotation.Nonnull
   private String nameFr;
 
   public RenameAusbildungsstaetteDtoSpec() {
   }
 
-  public RenameAusbildungsstaetteDtoSpec nameDe(String nameDe) {
+  public RenameAusbildungsstaetteDtoSpec nameDe(@jakarta.annotation.Nonnull String nameDe) {
     
     this.nameDe = nameDe;
     return this;
   }
 
-   /**
+  /**
    * Get nameDe
    * @return nameDe
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_DE)
+  @JsonProperty(value = JSON_PROPERTY_NAME_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNameDe() {
@@ -61,25 +63,24 @@ public class RenameAusbildungsstaetteDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_DE)
+  @JsonProperty(value = JSON_PROPERTY_NAME_DE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameDe(String nameDe) {
+  public void setNameDe(@jakarta.annotation.Nonnull String nameDe) {
     this.nameDe = nameDe;
   }
 
-
-  public RenameAusbildungsstaetteDtoSpec nameFr(String nameFr) {
+  public RenameAusbildungsstaetteDtoSpec nameFr(@jakarta.annotation.Nonnull String nameFr) {
     
     this.nameFr = nameFr;
     return this;
   }
 
-   /**
+  /**
    * Get nameFr
    * @return nameFr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_FR)
+  @JsonProperty(value = JSON_PROPERTY_NAME_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNameFr() {
@@ -87,11 +88,12 @@ public class RenameAusbildungsstaetteDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_FR)
+  @JsonProperty(value = JSON_PROPERTY_NAME_FR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameFr(String nameFr) {
+  public void setNameFr(@jakarta.annotation.Nonnull String nameFr) {
     this.nameFr = nameFr;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -126,10 +128,7 @@ public class RenameAusbildungsstaetteDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

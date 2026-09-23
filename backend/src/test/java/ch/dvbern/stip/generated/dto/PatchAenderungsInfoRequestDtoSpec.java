@@ -33,32 +33,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PatchAenderungsInfoRequestDtoSpec.JSON_PROPERTY_COMMENT
 })
 @JsonTypeName("PatchAenderungsInfoRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PatchAenderungsInfoRequestDtoSpec {
   public static final String JSON_PROPERTY_START = "start";
+  @jakarta.annotation.Nonnull
   private LocalDate start;
 
   public static final String JSON_PROPERTY_END = "end";
+  @jakarta.annotation.Nullable
   private LocalDate end;
 
   public static final String JSON_PROPERTY_COMMENT = "comment";
+  @jakarta.annotation.Nonnull
   private String comment;
 
   public PatchAenderungsInfoRequestDtoSpec() {
   }
 
-  public PatchAenderungsInfoRequestDtoSpec start(LocalDate start) {
+  public PatchAenderungsInfoRequestDtoSpec start(@jakarta.annotation.Nonnull LocalDate start) {
     
     this.start = start;
     return this;
   }
 
-   /**
+  /**
    * Get start
    * @return start
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_START)
+  @JsonProperty(value = JSON_PROPERTY_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getStart() {
@@ -66,25 +69,24 @@ public class PatchAenderungsInfoRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_START)
+  @JsonProperty(value = JSON_PROPERTY_START, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStart(LocalDate start) {
+  public void setStart(@jakarta.annotation.Nonnull LocalDate start) {
     this.start = start;
   }
 
-
-  public PatchAenderungsInfoRequestDtoSpec end(LocalDate end) {
+  public PatchAenderungsInfoRequestDtoSpec end(@jakarta.annotation.Nullable LocalDate end) {
     
     this.end = end;
     return this;
   }
 
-   /**
+  /**
    * Get end
    * @return end
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_END)
+  @JsonProperty(value = JSON_PROPERTY_END, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getEnd() {
@@ -92,25 +94,24 @@ public class PatchAenderungsInfoRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_END)
+  @JsonProperty(value = JSON_PROPERTY_END, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEnd(LocalDate end) {
+  public void setEnd(@jakarta.annotation.Nullable LocalDate end) {
     this.end = end;
   }
 
-
-  public PatchAenderungsInfoRequestDtoSpec comment(String comment) {
+  public PatchAenderungsInfoRequestDtoSpec comment(@jakarta.annotation.Nonnull String comment) {
     
     this.comment = comment;
     return this;
   }
 
-   /**
+  /**
    * Get comment
    * @return comment
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getComment() {
@@ -118,11 +119,12 @@ public class PatchAenderungsInfoRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_COMMENT)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setComment(String comment) {
+  public void setComment(@jakarta.annotation.Nonnull String comment) {
     this.comment = comment;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -159,10 +161,7 @@ public class PatchAenderungsInfoRequestDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

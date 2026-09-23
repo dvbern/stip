@@ -15,12 +15,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DatenschutzbriefCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DatenschutzbriefCreateDto  implements Serializable {
-  private @Valid UUID elternId;
+  private UUID elternId;
 
   protected DatenschutzbriefCreateDto(DatenschutzbriefCreateDtoBuilder<?, ?> b) {
     this.elternId = b.elternId;
@@ -37,13 +37,12 @@ public class DatenschutzbriefCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("elternId")
-  @NotNull
-  public UUID getElternId() {
+  @JsonProperty(required = true, value = "elternId")
+  @NotNull public UUID getElternId() {
     return elternId;
   }
 
-  @JsonProperty("elternId")
+  @JsonProperty(required = true, value = "elternId")
   public void setElternId(UUID elternId) {
     this.elternId = elternId;
   }
@@ -81,10 +80,7 @@ public class DatenschutzbriefCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -117,4 +113,3 @@ public class DatenschutzbriefCreateDto  implements Serializable {
     }
   }
 }
-

@@ -19,26 +19,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid UUID fallId;
-  private @Valid UUID relatedGesuchId;
-  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
-  private @Valid Boolean gewaehren;
-  private @Valid DokumentDto negativeVerfuegung;
-  private @Valid Integer betrag;
-  private @Valid String kommentar;
-  private @Valid Integer betragGewuenscht;
-  private @Valid Integer schulden;
-  private @Valid Integer anzahlBetreibungen;
-  private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
-  private @Valid Boolean isDelegiert;
-  private @Valid String timestampErstellt;
-  private @Valid DokumentDto verfuegung;
+  private UUID id;
+  private UUID fallId;
+  private UUID relatedGesuchId;
+  private ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
+  private Boolean gewaehren;
+  private DokumentDto negativeVerfuegung;
+  private Integer betrag;
+  private String kommentar;
+  private Integer betragGewuenscht;
+  private Integer schulden;
+  private Integer anzahlBetreibungen;
+  private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende = new ArrayList<>();
+  private Boolean isDelegiert;
+  private String timestampErstellt;
+  private DokumentDto verfuegung;
 
   protected FreiwilligDarlehenDto(FreiwilligDarlehenDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -69,13 +69,12 @@ public class FreiwilligDarlehenDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -161,7 +160,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
 
   
   @JsonProperty("negativeVerfuegung")
-  public DokumentDto getNegativeVerfuegung() {
+  @Valid public DokumentDto getNegativeVerfuegung() {
     return negativeVerfuegung;
   }
 
@@ -180,7 +179,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
 
   
   @JsonProperty("betrag")
- @Min(0)  public Integer getBetrag() {
+   @Min(0)public Integer getBetrag() {
     return betrag;
   }
 
@@ -217,7 +216,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
 
   
   @JsonProperty("betragGewuenscht")
- @Min(0)  public Integer getBetragGewuenscht() {
+   @Min(0)public Integer getBetragGewuenscht() {
     return betragGewuenscht;
   }
 
@@ -236,7 +235,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
 
   
   @JsonProperty("schulden")
- @Min(0)  public Integer getSchulden() {
+   @Min(0)public Integer getSchulden() {
     return schulden;
   }
 
@@ -255,7 +254,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
 
   
   @JsonProperty("anzahlBetreibungen")
- @Min(0)  public Integer getAnzahlBetreibungen() {
+   @Min(0)public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
   }
 
@@ -343,7 +342,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
 
   
   @JsonProperty("verfuegung")
-  public DokumentDto getVerfuegung() {
+  @Valid public DokumentDto getVerfuegung() {
     return verfuegung;
   }
 
@@ -413,10 +412,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -449,7 +445,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
     private Integer betragGewuenscht;
     private Integer schulden;
     private Integer anzahlBetreibungen;
-    private List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+    private List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende = new ArrayList<>();
     private Boolean isDelegiert;
     private String timestampErstellt;
     private DokumentDto verfuegung;
@@ -519,4 +515,3 @@ public class FreiwilligDarlehenDto  implements Serializable {
     }
   }
 }
-

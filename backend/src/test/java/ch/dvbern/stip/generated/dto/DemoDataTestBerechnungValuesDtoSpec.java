@@ -35,38 +35,43 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataTestBerechnungValuesDtoSpec.JSON_PROPERTY_DARLEHEN
 })
 @JsonTypeName("DemoDataTestBerechnungValues")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoDataTestBerechnungValuesDtoSpec {
   public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nullable
   private VerfuegungStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_UNGEKUERZT_STIPENDIEN = "ungekuerztStipendien";
+  @jakarta.annotation.Nullable
   private Integer ungekuerztStipendien;
 
   public static final String JSON_PROPERTY_UNGEKUERZT_DARLEHEN = "ungekuerztDarlehen";
+  @jakarta.annotation.Nullable
   private Integer ungekuerztDarlehen;
 
   public static final String JSON_PROPERTY_STIPENDIEN = "stipendien";
+  @jakarta.annotation.Nullable
   private Integer stipendien;
 
   public static final String JSON_PROPERTY_DARLEHEN = "darlehen";
+  @jakarta.annotation.Nullable
   private Integer darlehen;
 
   public DemoDataTestBerechnungValuesDtoSpec() {
   }
 
-  public DemoDataTestBerechnungValuesDtoSpec status(VerfuegungStatusDtoSpec status) {
+  public DemoDataTestBerechnungValuesDtoSpec status(@jakarta.annotation.Nullable VerfuegungStatusDtoSpec status) {
     
     this.status = status;
     return this;
   }
 
-   /**
+  /**
    * Get status
    * @return status
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public VerfuegungStatusDtoSpec getStatus() {
@@ -74,25 +79,24 @@ public class DemoDataTestBerechnungValuesDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStatus(VerfuegungStatusDtoSpec status) {
+  public void setStatus(@jakarta.annotation.Nullable VerfuegungStatusDtoSpec status) {
     this.status = status;
   }
 
-
-  public DemoDataTestBerechnungValuesDtoSpec ungekuerztStipendien(Integer ungekuerztStipendien) {
+  public DemoDataTestBerechnungValuesDtoSpec ungekuerztStipendien(@jakarta.annotation.Nullable Integer ungekuerztStipendien) {
     
     this.ungekuerztStipendien = ungekuerztStipendien;
     return this;
   }
 
-   /**
+  /**
    * Get ungekuerztStipendien
    * @return ungekuerztStipendien
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_STIPENDIEN)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_STIPENDIEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getUngekuerztStipendien() {
@@ -100,25 +104,24 @@ public class DemoDataTestBerechnungValuesDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_STIPENDIEN)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_STIPENDIEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUngekuerztStipendien(Integer ungekuerztStipendien) {
+  public void setUngekuerztStipendien(@jakarta.annotation.Nullable Integer ungekuerztStipendien) {
     this.ungekuerztStipendien = ungekuerztStipendien;
   }
 
-
-  public DemoDataTestBerechnungValuesDtoSpec ungekuerztDarlehen(Integer ungekuerztDarlehen) {
+  public DemoDataTestBerechnungValuesDtoSpec ungekuerztDarlehen(@jakarta.annotation.Nullable Integer ungekuerztDarlehen) {
     
     this.ungekuerztDarlehen = ungekuerztDarlehen;
     return this;
   }
 
-   /**
+  /**
    * Get ungekuerztDarlehen
    * @return ungekuerztDarlehen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_DARLEHEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getUngekuerztDarlehen() {
@@ -126,25 +129,24 @@ public class DemoDataTestBerechnungValuesDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_UNGEKUERZT_DARLEHEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUngekuerztDarlehen(Integer ungekuerztDarlehen) {
+  public void setUngekuerztDarlehen(@jakarta.annotation.Nullable Integer ungekuerztDarlehen) {
     this.ungekuerztDarlehen = ungekuerztDarlehen;
   }
 
-
-  public DemoDataTestBerechnungValuesDtoSpec stipendien(Integer stipendien) {
+  public DemoDataTestBerechnungValuesDtoSpec stipendien(@jakarta.annotation.Nullable Integer stipendien) {
     
     this.stipendien = stipendien;
     return this;
   }
 
-   /**
+  /**
    * Get stipendien
    * @return stipendien
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STIPENDIEN)
+  @JsonProperty(value = JSON_PROPERTY_STIPENDIEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getStipendien() {
@@ -152,25 +154,24 @@ public class DemoDataTestBerechnungValuesDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STIPENDIEN)
+  @JsonProperty(value = JSON_PROPERTY_STIPENDIEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStipendien(Integer stipendien) {
+  public void setStipendien(@jakarta.annotation.Nullable Integer stipendien) {
     this.stipendien = stipendien;
   }
 
-
-  public DemoDataTestBerechnungValuesDtoSpec darlehen(Integer darlehen) {
+  public DemoDataTestBerechnungValuesDtoSpec darlehen(@jakarta.annotation.Nullable Integer darlehen) {
     
     this.darlehen = darlehen;
     return this;
   }
 
-   /**
+  /**
    * Get darlehen
    * @return darlehen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_DARLEHEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getDarlehen() {
@@ -178,11 +179,12 @@ public class DemoDataTestBerechnungValuesDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN)
+  @JsonProperty(value = JSON_PROPERTY_DARLEHEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDarlehen(Integer darlehen) {
+  public void setDarlehen(@jakarta.annotation.Nullable Integer darlehen) {
     this.darlehen = darlehen;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -223,10 +225,7 @@ public class DemoDataTestBerechnungValuesDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

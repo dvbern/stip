@@ -15,14 +15,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchZurueckweisenResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchZurueckweisenResponseDto  implements Serializable {
-  private @Valid UUID gesuchId;
-  private @Valid UUID gesuchTrancheId;
-  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp;
+  private UUID gesuchId;
+  private UUID gesuchTrancheId;
+  private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp;
 
   protected GesuchZurueckweisenResponseDto(GesuchZurueckweisenResponseDtoBuilder<?, ?> b) {
     this.gesuchId = b.gesuchId;
@@ -41,13 +41,12 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
+  @JsonProperty(required = true, value = "gesuchId")
+  @NotNull public UUID getGesuchId() {
     return gesuchId;
   }
 
-  @JsonProperty("gesuchId")
+  @JsonProperty(required = true, value = "gesuchId")
   public void setGesuchId(UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
@@ -60,13 +59,12 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchTrancheId")
-  @NotNull
-  public UUID getGesuchTrancheId() {
+  @JsonProperty(required = true, value = "gesuchTrancheId")
+  @NotNull public UUID getGesuchTrancheId() {
     return gesuchTrancheId;
   }
 
-  @JsonProperty("gesuchTrancheId")
+  @JsonProperty(required = true, value = "gesuchTrancheId")
   public void setGesuchTrancheId(UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
@@ -79,13 +77,12 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchTrancheTyp")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getGesuchTrancheTyp() {
+  @JsonProperty(required = true, value = "gesuchTrancheTyp")
+  @NotNull public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getGesuchTrancheTyp() {
     return gesuchTrancheTyp;
   }
 
-  @JsonProperty("gesuchTrancheTyp")
+  @JsonProperty(required = true, value = "gesuchTrancheTyp")
   public void setGesuchTrancheTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp) {
     this.gesuchTrancheTyp = gesuchTrancheTyp;
   }
@@ -127,10 +124,7 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -173,4 +167,3 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
     }
   }
 }
-

@@ -33,32 +33,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinreichedatumAendernRequestDtoSpec.JSON_PROPERTY_TEXT
 })
 @JsonTypeName("EinreichedatumAendernRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class EinreichedatumAendernRequestDtoSpec {
   public static final String JSON_PROPERTY_NEW_EINREICHEDATUM = "newEinreichedatum";
+  @jakarta.annotation.Nonnull
   private LocalDate newEinreichedatum;
 
   public static final String JSON_PROPERTY_BETREFF = "betreff";
+  @jakarta.annotation.Nullable
   private String betreff;
 
   public static final String JSON_PROPERTY_TEXT = "text";
+  @jakarta.annotation.Nullable
   private String text;
 
   public EinreichedatumAendernRequestDtoSpec() {
   }
 
-  public EinreichedatumAendernRequestDtoSpec newEinreichedatum(LocalDate newEinreichedatum) {
+  public EinreichedatumAendernRequestDtoSpec newEinreichedatum(@jakarta.annotation.Nonnull LocalDate newEinreichedatum) {
     
     this.newEinreichedatum = newEinreichedatum;
     return this;
   }
 
-   /**
+  /**
    * Get newEinreichedatum
    * @return newEinreichedatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NEW_EINREICHEDATUM)
+  @JsonProperty(value = JSON_PROPERTY_NEW_EINREICHEDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getNewEinreichedatum() {
@@ -66,25 +69,24 @@ public class EinreichedatumAendernRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NEW_EINREICHEDATUM)
+  @JsonProperty(value = JSON_PROPERTY_NEW_EINREICHEDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNewEinreichedatum(LocalDate newEinreichedatum) {
+  public void setNewEinreichedatum(@jakarta.annotation.Nonnull LocalDate newEinreichedatum) {
     this.newEinreichedatum = newEinreichedatum;
   }
 
-
-  public EinreichedatumAendernRequestDtoSpec betreff(String betreff) {
+  public EinreichedatumAendernRequestDtoSpec betreff(@jakarta.annotation.Nullable String betreff) {
     
     this.betreff = betreff;
     return this;
   }
 
-   /**
+  /**
    * Get betreff
    * @return betreff
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonProperty(value = JSON_PROPERTY_BETREFF, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getBetreff() {
@@ -92,25 +94,24 @@ public class EinreichedatumAendernRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETREFF)
+  @JsonProperty(value = JSON_PROPERTY_BETREFF, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetreff(String betreff) {
+  public void setBetreff(@jakarta.annotation.Nullable String betreff) {
     this.betreff = betreff;
   }
 
-
-  public EinreichedatumAendernRequestDtoSpec text(String text) {
+  public EinreichedatumAendernRequestDtoSpec text(@jakarta.annotation.Nullable String text) {
     
     this.text = text;
     return this;
   }
 
-   /**
+  /**
    * Get text
    * @return text
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_TEXT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getText() {
@@ -118,11 +119,12 @@ public class EinreichedatumAendernRequestDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TEXT)
+  @JsonProperty(value = JSON_PROPERTY_TEXT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setText(String text) {
+  public void setText(@jakarta.annotation.Nullable String text) {
     this.text = text;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -159,10 +161,7 @@ public class EinreichedatumAendernRequestDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

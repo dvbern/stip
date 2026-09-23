@@ -14,23 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoKind")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoKindDto  implements Serializable {
-  private @Valid String nachname;
-  private @Valid String vorname;
-  private @Valid String geburtsdatum;
-  private @Valid Integer alter;
-  private @Valid Integer wohnsitzAnteilPia;
-  private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
-  private @Valid Integer unterhaltsbeitraege;
-  private @Valid Integer kinderUndAusbildungszulagen;
-  private @Valid Integer renten;
-  private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer betreuungskosten;
-  private @Valid Integer andereEinnahmen;
+  private String nachname;
+  private String vorname;
+  private String geburtsdatum;
+  private Integer alter;
+  private Integer wohnsitzAnteilPia;
+  private ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+  private Integer unterhaltsbeitraege;
+  private Integer kinderUndAusbildungszulagen;
+  private Integer renten;
+  private Integer ergaenzungsleistungen;
+  private Integer betreuungskosten;
+  private Integer andereEinnahmen;
 
   protected DemoKindDto(DemoKindDtoBuilder<?, ?> b) {
     this.nachname = b.nachname;
@@ -58,13 +58,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -77,13 +76,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -96,13 +94,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
- @Pattern(regexp="^\\d{2}.\\d{2}$")  public String getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull  @Pattern(regexp="^\\d{2}.\\d{2}$")public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -115,13 +112,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("alter")
-  @NotNull
-  public Integer getAlter() {
+  @JsonProperty(required = true, value = "alter")
+  @NotNull public Integer getAlter() {
     return alter;
   }
 
-  @JsonProperty("alter")
+  @JsonProperty(required = true, value = "alter")
   public void setAlter(Integer alter) {
     this.alter = alter;
   }
@@ -134,13 +130,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnsitzAnteilPia")
-  @NotNull
-  public Integer getWohnsitzAnteilPia() {
+  @JsonProperty(required = true, value = "wohnsitzAnteilPia")
+  @NotNull public Integer getWohnsitzAnteilPia() {
     return wohnsitzAnteilPia;
   }
 
-  @JsonProperty("wohnsitzAnteilPia")
+  @JsonProperty(required = true, value = "wohnsitzAnteilPia")
   public void setWohnsitzAnteilPia(Integer wohnsitzAnteilPia) {
     this.wohnsitzAnteilPia = wohnsitzAnteilPia;
   }
@@ -153,13 +148,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungssituation")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.Ausbildungssituation getAusbildungssituation() {
+  @JsonProperty(required = true, value = "ausbildungssituation")
+  @NotNull public ch.dvbern.stip.api.common.type.Ausbildungssituation getAusbildungssituation() {
     return ausbildungssituation;
   }
 
-  @JsonProperty("ausbildungssituation")
+  @JsonProperty(required = true, value = "ausbildungssituation")
   public void setAusbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
     this.ausbildungssituation = ausbildungssituation;
   }
@@ -172,13 +166,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("unterhaltsbeitraege")
-  @NotNull
-  public Integer getUnterhaltsbeitraege() {
+  @JsonProperty(required = true, value = "unterhaltsbeitraege")
+  @NotNull public Integer getUnterhaltsbeitraege() {
     return unterhaltsbeitraege;
   }
 
-  @JsonProperty("unterhaltsbeitraege")
+  @JsonProperty(required = true, value = "unterhaltsbeitraege")
   public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
     this.unterhaltsbeitraege = unterhaltsbeitraege;
   }
@@ -191,13 +184,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("kinderUndAusbildungszulagen")
-  @NotNull
-  public Integer getKinderUndAusbildungszulagen() {
+  @JsonProperty(required = true, value = "kinderUndAusbildungszulagen")
+  @NotNull public Integer getKinderUndAusbildungszulagen() {
     return kinderUndAusbildungszulagen;
   }
 
-  @JsonProperty("kinderUndAusbildungszulagen")
+  @JsonProperty(required = true, value = "kinderUndAusbildungszulagen")
   public void setKinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
     this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
   }
@@ -210,13 +202,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("renten")
-  @NotNull
-  public Integer getRenten() {
+  @JsonProperty(required = true, value = "renten")
+  @NotNull public Integer getRenten() {
     return renten;
   }
 
-  @JsonProperty("renten")
+  @JsonProperty(required = true, value = "renten")
   public void setRenten(Integer renten) {
     this.renten = renten;
   }
@@ -229,13 +220,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("ergaenzungsleistungen")
-  @NotNull
-  public Integer getErgaenzungsleistungen() {
+  @JsonProperty(required = true, value = "ergaenzungsleistungen")
+  @NotNull public Integer getErgaenzungsleistungen() {
     return ergaenzungsleistungen;
   }
 
-  @JsonProperty("ergaenzungsleistungen")
+  @JsonProperty(required = true, value = "ergaenzungsleistungen")
   public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
   }
@@ -248,13 +238,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("betreuungskosten")
-  @NotNull
-  public Integer getBetreuungskosten() {
+  @JsonProperty(required = true, value = "betreuungskosten")
+  @NotNull public Integer getBetreuungskosten() {
     return betreuungskosten;
   }
 
-  @JsonProperty("betreuungskosten")
+  @JsonProperty(required = true, value = "betreuungskosten")
   public void setBetreuungskosten(Integer betreuungskosten) {
     this.betreuungskosten = betreuungskosten;
   }
@@ -267,13 +256,12 @@ public class DemoKindDto  implements Serializable {
   }
 
   
-  @JsonProperty("andereEinnahmen")
-  @NotNull
-  public Integer getAndereEinnahmen() {
+  @JsonProperty(required = true, value = "andereEinnahmen")
+  @NotNull public Integer getAndereEinnahmen() {
     return andereEinnahmen;
   }
 
-  @JsonProperty("andereEinnahmen")
+  @JsonProperty(required = true, value = "andereEinnahmen")
   public void setAndereEinnahmen(Integer andereEinnahmen) {
     this.andereEinnahmen = andereEinnahmen;
   }
@@ -333,10 +321,7 @@ public class DemoKindDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -424,4 +409,3 @@ public class DemoKindDto  implements Serializable {
     }
   }
 }
-

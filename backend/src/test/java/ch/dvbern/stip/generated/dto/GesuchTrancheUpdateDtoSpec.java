@@ -33,29 +33,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchTrancheUpdateDtoSpec.JSON_PROPERTY_ID
 })
 @JsonTypeName("GesuchTrancheUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchTrancheUpdateDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_FORMULAR = "gesuchFormular";
+  @jakarta.annotation.Nonnull
   private GesuchFormularUpdateDtoSpec gesuchFormular;
 
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public GesuchTrancheUpdateDtoSpec() {
   }
 
-  public GesuchTrancheUpdateDtoSpec gesuchFormular(GesuchFormularUpdateDtoSpec gesuchFormular) {
+  public GesuchTrancheUpdateDtoSpec gesuchFormular(@jakarta.annotation.Nonnull GesuchFormularUpdateDtoSpec gesuchFormular) {
     
     this.gesuchFormular = gesuchFormular;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchFormular
    * @return gesuchFormular
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_FORMULAR)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_FORMULAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchFormularUpdateDtoSpec getGesuchFormular() {
@@ -63,25 +65,24 @@ public class GesuchTrancheUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_FORMULAR)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_FORMULAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchFormular(GesuchFormularUpdateDtoSpec gesuchFormular) {
+  public void setGesuchFormular(@jakarta.annotation.Nonnull GesuchFormularUpdateDtoSpec gesuchFormular) {
     this.gesuchFormular = gesuchFormular;
   }
 
-
-  public GesuchTrancheUpdateDtoSpec id(UUID id) {
+  public GesuchTrancheUpdateDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -89,11 +90,12 @@ public class GesuchTrancheUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -128,10 +130,7 @@ public class GesuchTrancheUpdateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

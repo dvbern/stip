@@ -28,97 +28,50 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * SozialdienstBenutzerDtoSpec
  */
 @JsonPropertyOrder({
-  SozialdienstBenutzerDtoSpec.JSON_PROPERTY_ID,
-  SozialdienstBenutzerDtoSpec.JSON_PROPERTY_IS_ADMIN,
   SozialdienstBenutzerDtoSpec.JSON_PROPERTY_VORNAME,
   SozialdienstBenutzerDtoSpec.JSON_PROPERTY_NACHNAME,
-  SozialdienstBenutzerDtoSpec.JSON_PROPERTY_EMAIL
+  SozialdienstBenutzerDtoSpec.JSON_PROPERTY_EMAIL,
+  SozialdienstBenutzerDtoSpec.JSON_PROPERTY_ID,
+  SozialdienstBenutzerDtoSpec.JSON_PROPERTY_IS_ADMIN
 })
 @JsonTypeName("SozialdienstBenutzer")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SozialdienstBenutzerDtoSpec {
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
-
-  public static final String JSON_PROPERTY_IS_ADMIN = "isAdmin";
-  private Boolean isAdmin;
-
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_EMAIL = "email";
+  @jakarta.annotation.Nonnull
   private String email;
+
+  public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
+  private UUID id;
+
+  public static final String JSON_PROPERTY_IS_ADMIN = "isAdmin";
+  @jakarta.annotation.Nullable
+  private Boolean isAdmin;
 
   public SozialdienstBenutzerDtoSpec() {
   }
 
-  public SozialdienstBenutzerDtoSpec id(UUID id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getId() {
-    return id;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-
-  public SozialdienstBenutzerDtoSpec isAdmin(Boolean isAdmin) {
-    
-    this.isAdmin = isAdmin;
-    return this;
-  }
-
-   /**
-   * Get isAdmin
-   * @return isAdmin
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_IS_ADMIN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getIsAdmin() {
-    return isAdmin;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_IS_ADMIN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIsAdmin(Boolean isAdmin) {
-    this.isAdmin = isAdmin;
-  }
-
-
-  public SozialdienstBenutzerDtoSpec vorname(String vorname) {
+  public SozialdienstBenutzerDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -126,25 +79,24 @@ public class SozialdienstBenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public SozialdienstBenutzerDtoSpec nachname(String nachname) {
+  public SozialdienstBenutzerDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -152,25 +104,24 @@ public class SozialdienstBenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public SozialdienstBenutzerDtoSpec email(String email) {
+  public SozialdienstBenutzerDtoSpec email(@jakarta.annotation.Nonnull String email) {
     
     this.email = email;
     return this;
   }
 
-   /**
+  /**
    * Get email
    * @return email
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonProperty(value = JSON_PROPERTY_EMAIL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getEmail() {
@@ -178,11 +129,62 @@ public class SozialdienstBenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonProperty(value = JSON_PROPERTY_EMAIL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEmail(String email) {
+  public void setEmail(@jakarta.annotation.Nonnull String email) {
     this.email = email;
   }
+
+  public SozialdienstBenutzerDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
+    this.id = id;
+  }
+
+  public SozialdienstBenutzerDtoSpec isAdmin(@jakarta.annotation.Nullable Boolean isAdmin) {
+    
+    this.isAdmin = isAdmin;
+    return this;
+  }
+
+  /**
+   * Get isAdmin
+   * @return isAdmin
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_IS_ADMIN, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getIsAdmin() {
+    return isAdmin;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_IS_ADMIN, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIsAdmin(@jakarta.annotation.Nullable Boolean isAdmin) {
+    this.isAdmin = isAdmin;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -193,27 +195,27 @@ public class SozialdienstBenutzerDtoSpec {
       return false;
     }
     SozialdienstBenutzerDtoSpec sozialdienstBenutzer = (SozialdienstBenutzerDtoSpec) o;
-    return Objects.equals(this.id, sozialdienstBenutzer.id) &&
-        Objects.equals(this.isAdmin, sozialdienstBenutzer.isAdmin) &&
-        Objects.equals(this.vorname, sozialdienstBenutzer.vorname) &&
+    return Objects.equals(this.vorname, sozialdienstBenutzer.vorname) &&
         Objects.equals(this.nachname, sozialdienstBenutzer.nachname) &&
-        Objects.equals(this.email, sozialdienstBenutzer.email);
+        Objects.equals(this.email, sozialdienstBenutzer.email) &&
+        Objects.equals(this.id, sozialdienstBenutzer.id) &&
+        Objects.equals(this.isAdmin, sozialdienstBenutzer.isAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, isAdmin, vorname, nachname, email);
+    return Objects.hash(vorname, nachname, email, id, isAdmin);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SozialdienstBenutzerDtoSpec {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    isAdmin: ").append(toIndentedString(isAdmin)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    isAdmin: ").append(toIndentedString(isAdmin)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -223,10 +225,7 @@ public class SozialdienstBenutzerDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

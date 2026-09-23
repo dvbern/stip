@@ -34,35 +34,39 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   VerfuegungFallDtoSpec.JSON_PROPERTY_DOKUMENT
 })
 @JsonTypeName("VerfuegungFall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class VerfuegungFallDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nonnull
   private String timestampErstellt;
 
   public static final String JSON_PROPERTY_YEAR_RANGE = "yearRange";
+  @jakarta.annotation.Nonnull
   private String yearRange;
 
   public static final String JSON_PROPERTY_TOTALBETRAG_STIPENDIUM = "totalbetragStipendium";
+  @jakarta.annotation.Nonnull
   private Integer totalbetragStipendium;
 
   public static final String JSON_PROPERTY_DOKUMENT = "dokument";
+  @jakarta.annotation.Nullable
   private VerfuegungDokumentDtoSpec dokument;
 
   public VerfuegungFallDtoSpec() {
   }
 
-  public VerfuegungFallDtoSpec timestampErstellt(String timestampErstellt) {
+  public VerfuegungFallDtoSpec timestampErstellt(@jakarta.annotation.Nonnull String timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getTimestampErstellt() {
@@ -70,25 +74,24 @@ public class VerfuegungFallDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTimestampErstellt(String timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nonnull String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public VerfuegungFallDtoSpec yearRange(String yearRange) {
+  public VerfuegungFallDtoSpec yearRange(@jakarta.annotation.Nonnull String yearRange) {
     
     this.yearRange = yearRange;
     return this;
   }
 
-   /**
+  /**
    * Get yearRange
    * @return yearRange
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonProperty(value = JSON_PROPERTY_YEAR_RANGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getYearRange() {
@@ -96,25 +99,24 @@ public class VerfuegungFallDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonProperty(value = JSON_PROPERTY_YEAR_RANGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setYearRange(String yearRange) {
+  public void setYearRange(@jakarta.annotation.Nonnull String yearRange) {
     this.yearRange = yearRange;
   }
 
-
-  public VerfuegungFallDtoSpec totalbetragStipendium(Integer totalbetragStipendium) {
+  public VerfuegungFallDtoSpec totalbetragStipendium(@jakarta.annotation.Nonnull Integer totalbetragStipendium) {
     
     this.totalbetragStipendium = totalbetragStipendium;
     return this;
   }
 
-   /**
+  /**
    * Get totalbetragStipendium
    * @return totalbetragStipendium
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTALBETRAG_STIPENDIUM)
+  @JsonProperty(value = JSON_PROPERTY_TOTALBETRAG_STIPENDIUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotalbetragStipendium() {
@@ -122,25 +124,24 @@ public class VerfuegungFallDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTALBETRAG_STIPENDIUM)
+  @JsonProperty(value = JSON_PROPERTY_TOTALBETRAG_STIPENDIUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotalbetragStipendium(Integer totalbetragStipendium) {
+  public void setTotalbetragStipendium(@jakarta.annotation.Nonnull Integer totalbetragStipendium) {
     this.totalbetragStipendium = totalbetragStipendium;
   }
 
-
-  public VerfuegungFallDtoSpec dokument(VerfuegungDokumentDtoSpec dokument) {
+  public VerfuegungFallDtoSpec dokument(@jakarta.annotation.Nullable VerfuegungDokumentDtoSpec dokument) {
     
     this.dokument = dokument;
     return this;
   }
 
-   /**
+  /**
    * Get dokument
    * @return dokument
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DOKUMENT)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public VerfuegungDokumentDtoSpec getDokument() {
@@ -148,11 +149,12 @@ public class VerfuegungFallDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENT)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDokument(VerfuegungDokumentDtoSpec dokument) {
+  public void setDokument(@jakarta.annotation.Nullable VerfuegungDokumentDtoSpec dokument) {
     this.dokument = dokument;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -191,10 +193,7 @@ public class VerfuegungFallDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

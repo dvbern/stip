@@ -31,29 +31,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BeschwerdeVerlaufEntryCreateDtoSpec.JSON_PROPERTY_BESCHWERDE_SET_TO
 })
 @JsonTypeName("BeschwerdeVerlaufEntryCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BeschwerdeVerlaufEntryCreateDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  @jakarta.annotation.Nonnull
   private String kommentar;
 
   public static final String JSON_PROPERTY_BESCHWERDE_SET_TO = "beschwerdeSetTo";
+  @jakarta.annotation.Nonnull
   private Boolean beschwerdeSetTo;
 
   public BeschwerdeVerlaufEntryCreateDtoSpec() {
   }
 
-  public BeschwerdeVerlaufEntryCreateDtoSpec kommentar(String kommentar) {
+  public BeschwerdeVerlaufEntryCreateDtoSpec kommentar(@jakarta.annotation.Nonnull String kommentar) {
     
     this.kommentar = kommentar;
     return this;
   }
 
-   /**
+  /**
    * Get kommentar
    * @return kommentar
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKommentar() {
@@ -61,25 +63,24 @@ public class BeschwerdeVerlaufEntryCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKommentar(String kommentar) {
+  public void setKommentar(@jakarta.annotation.Nonnull String kommentar) {
     this.kommentar = kommentar;
   }
 
-
-  public BeschwerdeVerlaufEntryCreateDtoSpec beschwerdeSetTo(Boolean beschwerdeSetTo) {
+  public BeschwerdeVerlaufEntryCreateDtoSpec beschwerdeSetTo(@jakarta.annotation.Nonnull Boolean beschwerdeSetTo) {
     
     this.beschwerdeSetTo = beschwerdeSetTo;
     return this;
   }
 
-   /**
+  /**
    * Get beschwerdeSetTo
    * @return beschwerdeSetTo
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_SET_TO)
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_SET_TO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getBeschwerdeSetTo() {
@@ -87,11 +88,12 @@ public class BeschwerdeVerlaufEntryCreateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_SET_TO)
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_SET_TO, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBeschwerdeSetTo(Boolean beschwerdeSetTo) {
+  public void setBeschwerdeSetTo(@jakarta.annotation.Nonnull Boolean beschwerdeSetTo) {
     this.beschwerdeSetTo = beschwerdeSetTo;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -126,10 +128,7 @@ public class BeschwerdeVerlaufEntryCreateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

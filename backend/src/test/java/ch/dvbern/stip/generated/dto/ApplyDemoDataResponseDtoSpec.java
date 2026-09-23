@@ -39,41 +39,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_BERECHNUNG_RESULTAT
 })
 @JsonTypeName("ApplyDemoDataResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class ApplyDemoDataResponseDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchId;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  @jakarta.annotation.Nonnull
   private UUID gesuchTrancheId;
 
   public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
+  @jakarta.annotation.Nonnull
   private LocalDate gueltigAb;
 
   public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
+  @jakarta.annotation.Nonnull
   private LocalDate gueltigBis;
 
   public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  @jakarta.annotation.Nonnull
   private GesuchstatusDtoSpec gesuchStatus;
 
   public static final String JSON_PROPERTY_BERECHNUNG_RESULTAT = "berechnungResultat";
+  @jakarta.annotation.Nonnull
   private DemoDataTestBerechnungResultatDtoSpec berechnungResultat;
 
   public ApplyDemoDataResponseDtoSpec() {
   }
 
-  public ApplyDemoDataResponseDtoSpec gesuchId(UUID gesuchId) {
+  public ApplyDemoDataResponseDtoSpec gesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchId
    * @return gesuchId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchId() {
@@ -81,25 +87,24 @@ public class ApplyDemoDataResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
+  public void setGesuchId(@jakarta.annotation.Nonnull UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
 
-
-  public ApplyDemoDataResponseDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public ApplyDemoDataResponseDtoSpec gesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchTrancheId
    * @return gesuchTrancheId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getGesuchTrancheId() {
@@ -107,25 +112,24 @@ public class ApplyDemoDataResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_TRANCHE_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+  public void setGesuchTrancheId(@jakarta.annotation.Nonnull UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
 
-
-  public ApplyDemoDataResponseDtoSpec gueltigAb(LocalDate gueltigAb) {
+  public ApplyDemoDataResponseDtoSpec gueltigAb(@jakarta.annotation.Nonnull LocalDate gueltigAb) {
     
     this.gueltigAb = gueltigAb;
     return this;
   }
 
-   /**
+  /**
    * Get gueltigAb
    * @return gueltigAb
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_AB, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGueltigAb() {
@@ -133,25 +137,24 @@ public class ApplyDemoDataResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_AB, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigAb(LocalDate gueltigAb) {
+  public void setGueltigAb(@jakarta.annotation.Nonnull LocalDate gueltigAb) {
     this.gueltigAb = gueltigAb;
   }
 
-
-  public ApplyDemoDataResponseDtoSpec gueltigBis(LocalDate gueltigBis) {
+  public ApplyDemoDataResponseDtoSpec gueltigBis(@jakarta.annotation.Nonnull LocalDate gueltigBis) {
     
     this.gueltigBis = gueltigBis;
     return this;
   }
 
-   /**
+  /**
    * Get gueltigBis
    * @return gueltigBis
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGueltigBis() {
@@ -159,25 +162,24 @@ public class ApplyDemoDataResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonProperty(value = JSON_PROPERTY_GUELTIG_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGueltigBis(LocalDate gueltigBis) {
+  public void setGueltigBis(@jakarta.annotation.Nonnull LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
   }
 
-
-  public ApplyDemoDataResponseDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public ApplyDemoDataResponseDtoSpec gesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
     
     this.gesuchStatus = gesuchStatus;
     return this;
   }
 
-   /**
+  /**
    * Get gesuchStatus
    * @return gesuchStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GesuchstatusDtoSpec getGesuchStatus() {
@@ -185,25 +187,24 @@ public class ApplyDemoDataResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
+  public void setGesuchStatus(@jakarta.annotation.Nonnull GesuchstatusDtoSpec gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
 
-
-  public ApplyDemoDataResponseDtoSpec berechnungResultat(DemoDataTestBerechnungResultatDtoSpec berechnungResultat) {
+  public ApplyDemoDataResponseDtoSpec berechnungResultat(@jakarta.annotation.Nonnull DemoDataTestBerechnungResultatDtoSpec berechnungResultat) {
     
     this.berechnungResultat = berechnungResultat;
     return this;
   }
 
-   /**
+  /**
    * Get berechnungResultat
    * @return berechnungResultat
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_RESULTAT)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_RESULTAT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DemoDataTestBerechnungResultatDtoSpec getBerechnungResultat() {
@@ -211,11 +212,12 @@ public class ApplyDemoDataResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_RESULTAT)
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_RESULTAT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungResultat(DemoDataTestBerechnungResultatDtoSpec berechnungResultat) {
+  public void setBerechnungResultat(@jakarta.annotation.Nonnull DemoDataTestBerechnungResultatDtoSpec berechnungResultat) {
     this.berechnungResultat = berechnungResultat;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -258,10 +260,7 @@ public class ApplyDemoDataResponseDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

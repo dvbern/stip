@@ -35,29 +35,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonenHaushaltGruppeDtoSpec.JSON_PROPERTY_NAMES
 })
 @JsonTypeName("PersonenHaushaltGruppe")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PersonenHaushaltGruppeDtoSpec {
   public static final String JSON_PROPERTY_TYP = "typ";
+  @jakarta.annotation.Nonnull
   private PersonenHaushaltDtoSpec typ;
 
   public static final String JSON_PROPERTY_NAMES = "names";
+  @jakarta.annotation.Nonnull
   private List<String> names;
 
   public PersonenHaushaltGruppeDtoSpec() {
   }
 
-  public PersonenHaushaltGruppeDtoSpec typ(PersonenHaushaltDtoSpec typ) {
+  public PersonenHaushaltGruppeDtoSpec typ(@jakarta.annotation.Nonnull PersonenHaushaltDtoSpec typ) {
     
     this.typ = typ;
     return this;
   }
 
-   /**
+  /**
    * Get typ
    * @return typ
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public PersonenHaushaltDtoSpec getTyp() {
@@ -65,14 +67,13 @@ public class PersonenHaushaltGruppeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonProperty(value = JSON_PROPERTY_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTyp(PersonenHaushaltDtoSpec typ) {
+  public void setTyp(@jakarta.annotation.Nonnull PersonenHaushaltDtoSpec typ) {
     this.typ = typ;
   }
 
-
-  public PersonenHaushaltGruppeDtoSpec names(List<String> names) {
+  public PersonenHaushaltGruppeDtoSpec names(@jakarta.annotation.Nonnull List<String> names) {
     
     this.names = names;
     return this;
@@ -86,12 +87,12 @@ public class PersonenHaushaltGruppeDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get names
    * @return names
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAMES)
+  @JsonProperty(value = JSON_PROPERTY_NAMES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<String> getNames() {
@@ -99,11 +100,12 @@ public class PersonenHaushaltGruppeDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAMES)
+  @JsonProperty(value = JSON_PROPERTY_NAMES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNames(List<String> names) {
+  public void setNames(@jakarta.annotation.Nonnull List<String> names) {
     this.names = names;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -138,10 +140,7 @@ public class PersonenHaushaltGruppeDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

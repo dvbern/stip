@@ -17,17 +17,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Benutzer")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BenutzerDto  implements Serializable {
-  private @Valid String vorname;
-  private @Valid String nachname;
-  private @Valid UUID id;
-  private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
-  private @Valid Boolean nutzungsbedingungenAkzeptiert;
-  private @Valid SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten;
+  private String vorname;
+  private String nachname;
+  private UUID id;
+  private BenutzereinstellungenUpdateDto benutzereinstellungen;
+  private Boolean nutzungsbedingungenAkzeptiert;
+  private SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten;
 
   protected BenutzerDto(BenutzerDtoBuilder<?, ?> b) {
     this.vorname = b.vorname;
@@ -49,13 +49,12 @@ public class BenutzerDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -68,13 +67,12 @@ public class BenutzerDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -87,13 +85,12 @@ public class BenutzerDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -107,7 +104,7 @@ public class BenutzerDto  implements Serializable {
 
   
   @JsonProperty("benutzereinstellungen")
-  public BenutzereinstellungenUpdateDto getBenutzereinstellungen() {
+  @Valid public BenutzereinstellungenUpdateDto getBenutzereinstellungen() {
     return benutzereinstellungen;
   }
 
@@ -143,7 +140,7 @@ public class BenutzerDto  implements Serializable {
 
   
   @JsonProperty("sachbearbeiterZuordnungStammdaten")
-  public SachbearbeiterZuordnungStammdatenDto getSachbearbeiterZuordnungStammdaten() {
+  @Valid public SachbearbeiterZuordnungStammdatenDto getSachbearbeiterZuordnungStammdaten() {
     return sachbearbeiterZuordnungStammdaten;
   }
 
@@ -195,10 +192,7 @@ public class BenutzerDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -256,4 +250,3 @@ public class BenutzerDto  implements Serializable {
     }
   }
 }
-

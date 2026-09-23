@@ -35,32 +35,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DelegierungSlimDtoSpec.JSON_PROPERTY_PERSOENLICHE_ANGABEN
 })
 @JsonTypeName("DelegierungSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DelegierungSlimDtoSpec {
   public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nonnull
   private DelegierungStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_SOZIALDIENST = "sozialdienst";
+  @jakarta.annotation.Nonnull
   private SozialdienstSlimDtoSpec sozialdienst;
 
   public static final String JSON_PROPERTY_PERSOENLICHE_ANGABEN = "persoenlicheAngaben";
+  @jakarta.annotation.Nonnull
   private PersoenlicheAngabenDtoSpec persoenlicheAngaben;
 
   public DelegierungSlimDtoSpec() {
   }
 
-  public DelegierungSlimDtoSpec status(DelegierungStatusDtoSpec status) {
+  public DelegierungSlimDtoSpec status(@jakarta.annotation.Nonnull DelegierungStatusDtoSpec status) {
     
     this.status = status;
     return this;
   }
 
-   /**
+  /**
    * Get status
    * @return status
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DelegierungStatusDtoSpec getStatus() {
@@ -68,25 +71,24 @@ public class DelegierungSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(DelegierungStatusDtoSpec status) {
+  public void setStatus(@jakarta.annotation.Nonnull DelegierungStatusDtoSpec status) {
     this.status = status;
   }
 
-
-  public DelegierungSlimDtoSpec sozialdienst(SozialdienstSlimDtoSpec sozialdienst) {
+  public DelegierungSlimDtoSpec sozialdienst(@jakarta.annotation.Nonnull SozialdienstSlimDtoSpec sozialdienst) {
     
     this.sozialdienst = sozialdienst;
     return this;
   }
 
-   /**
+  /**
    * Get sozialdienst
    * @return sozialdienst
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALDIENST)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALDIENST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SozialdienstSlimDtoSpec getSozialdienst() {
@@ -94,25 +96,24 @@ public class DelegierungSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOZIALDIENST)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALDIENST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialdienst(SozialdienstSlimDtoSpec sozialdienst) {
+  public void setSozialdienst(@jakarta.annotation.Nonnull SozialdienstSlimDtoSpec sozialdienst) {
     this.sozialdienst = sozialdienst;
   }
 
-
-  public DelegierungSlimDtoSpec persoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
+  public DelegierungSlimDtoSpec persoenlicheAngaben(@jakarta.annotation.Nonnull PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
     
     this.persoenlicheAngaben = persoenlicheAngaben;
     return this;
   }
 
-   /**
+  /**
    * Get persoenlicheAngaben
    * @return persoenlicheAngaben
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
+  @JsonProperty(value = JSON_PROPERTY_PERSOENLICHE_ANGABEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public PersoenlicheAngabenDtoSpec getPersoenlicheAngaben() {
@@ -120,11 +121,12 @@ public class DelegierungSlimDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
+  @JsonProperty(value = JSON_PROPERTY_PERSOENLICHE_ANGABEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPersoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
+  public void setPersoenlicheAngaben(@jakarta.annotation.Nonnull PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
     this.persoenlicheAngaben = persoenlicheAngaben;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -161,10 +163,7 @@ public class DelegierungSlimDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -14,16 +14,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataSlimDto  implements Serializable {
-  private @Valid String id;
-  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
-  private @Valid String testFall;
-  private @Valid String name;
-  private @Valid String description;
+  private String id;
+  private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
+  private String testFall;
+  private String name;
+  private String description;
 
   protected DemoDataSlimDto(DemoDataSlimDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -44,13 +44,12 @@ public class DemoDataSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public String getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public String getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(String id) {
     this.id = id;
   }
@@ -63,13 +62,12 @@ public class DemoDataSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("typ")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
+  @JsonProperty(required = true, value = "typ")
+  @NotNull public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
 
-  @JsonProperty("typ")
+  @JsonProperty(required = true, value = "typ")
   public void setTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
   }
@@ -82,13 +80,12 @@ public class DemoDataSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("testFall")
-  @NotNull
-  public String getTestFall() {
+  @JsonProperty(required = true, value = "testFall")
+  @NotNull public String getTestFall() {
     return testFall;
   }
 
-  @JsonProperty("testFall")
+  @JsonProperty(required = true, value = "testFall")
   public void setTestFall(String testFall) {
     this.testFall = testFall;
   }
@@ -101,13 +98,12 @@ public class DemoDataSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("name")
-  @NotNull
-  public String getName() {
+  @JsonProperty(required = true, value = "name")
+  @NotNull public String getName() {
     return name;
   }
 
-  @JsonProperty("name")
+  @JsonProperty(required = true, value = "name")
   public void setName(String name) {
     this.name = name;
   }
@@ -120,13 +116,12 @@ public class DemoDataSlimDto  implements Serializable {
   }
 
   
-  @JsonProperty("description")
-  @NotNull
-  public String getDescription() {
+  @JsonProperty(required = true, value = "description")
+  @NotNull public String getDescription() {
     return description;
   }
 
-  @JsonProperty("description")
+  @JsonProperty(required = true, value = "description")
   public void setDescription(String description) {
     this.description = description;
   }
@@ -172,10 +167,7 @@ public class DemoDataSlimDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -228,4 +220,3 @@ public class DemoDataSlimDto  implements Serializable {
     }
   }
 }
-

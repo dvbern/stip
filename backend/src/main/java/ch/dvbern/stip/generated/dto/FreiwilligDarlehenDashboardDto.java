@@ -16,21 +16,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehenDashboard")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenDashboardDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid UUID fallId;
-  private @Valid UUID relatedGesuchId;
-  private @Valid String fallNummer;
-  private @Valid String piaVorname;
-  private @Valid String piaNachname;
-  private @Valid String piaGeburtsdatum;
-  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
-  private @Valid String bearbeiter;
-  private @Valid LocalDate letzteAktivitaet;
+  private UUID id;
+  private UUID fallId;
+  private UUID relatedGesuchId;
+  private String fallNummer;
+  private String piaVorname;
+  private String piaNachname;
+  private String piaGeburtsdatum;
+  private ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
+  private String bearbeiter;
+  private LocalDate letzteAktivitaet;
 
   protected FreiwilligDarlehenDashboardDto(FreiwilligDarlehenDashboardDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -56,13 +56,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -75,13 +74,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallId")
-  @NotNull
-  public UUID getFallId() {
+  @JsonProperty(required = true, value = "fallId")
+  @NotNull public UUID getFallId() {
     return fallId;
   }
 
-  @JsonProperty("fallId")
+  @JsonProperty(required = true, value = "fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
   }
@@ -94,13 +92,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("relatedGesuchId")
-  @NotNull
-  public UUID getRelatedGesuchId() {
+  @JsonProperty(required = true, value = "relatedGesuchId")
+  @NotNull public UUID getRelatedGesuchId() {
     return relatedGesuchId;
   }
 
-  @JsonProperty("relatedGesuchId")
+  @JsonProperty(required = true, value = "relatedGesuchId")
   public void setRelatedGesuchId(UUID relatedGesuchId) {
     this.relatedGesuchId = relatedGesuchId;
   }
@@ -113,13 +110,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallNummer")
-  @NotNull
-  public String getFallNummer() {
+  @JsonProperty(required = true, value = "fallNummer")
+  @NotNull public String getFallNummer() {
     return fallNummer;
   }
 
-  @JsonProperty("fallNummer")
+  @JsonProperty(required = true, value = "fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -132,13 +128,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("piaVorname")
-  @NotNull
-  public String getPiaVorname() {
+  @JsonProperty(required = true, value = "piaVorname")
+  @NotNull public String getPiaVorname() {
     return piaVorname;
   }
 
-  @JsonProperty("piaVorname")
+  @JsonProperty(required = true, value = "piaVorname")
   public void setPiaVorname(String piaVorname) {
     this.piaVorname = piaVorname;
   }
@@ -151,13 +146,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("piaNachname")
-  @NotNull
-  public String getPiaNachname() {
+  @JsonProperty(required = true, value = "piaNachname")
+  @NotNull public String getPiaNachname() {
     return piaNachname;
   }
 
-  @JsonProperty("piaNachname")
+  @JsonProperty(required = true, value = "piaNachname")
   public void setPiaNachname(String piaNachname) {
     this.piaNachname = piaNachname;
   }
@@ -170,13 +164,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("piaGeburtsdatum")
-  @NotNull
-  public String getPiaGeburtsdatum() {
+  @JsonProperty(required = true, value = "piaGeburtsdatum")
+  @NotNull public String getPiaGeburtsdatum() {
     return piaGeburtsdatum;
   }
 
-  @JsonProperty("piaGeburtsdatum")
+  @JsonProperty(required = true, value = "piaGeburtsdatum")
   public void setPiaGeburtsdatum(String piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
   }
@@ -189,13 +182,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("status")
-  @NotNull
-  public ch.dvbern.stip.api.darlehen.type.DarlehenStatus getStatus() {
+  @JsonProperty(required = true, value = "status")
+  @NotNull public ch.dvbern.stip.api.darlehen.type.DarlehenStatus getStatus() {
     return status;
   }
 
-  @JsonProperty("status")
+  @JsonProperty(required = true, value = "status")
   public void setStatus(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
     this.status = status;
   }
@@ -208,13 +200,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("bearbeiter")
-  @NotNull
-  public String getBearbeiter() {
+  @JsonProperty(required = true, value = "bearbeiter")
+  @NotNull public String getBearbeiter() {
     return bearbeiter;
   }
 
-  @JsonProperty("bearbeiter")
+  @JsonProperty(required = true, value = "bearbeiter")
   public void setBearbeiter(String bearbeiter) {
     this.bearbeiter = bearbeiter;
   }
@@ -227,13 +218,12 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
   
-  @JsonProperty("letzteAktivitaet")
-  @NotNull
-  public LocalDate getLetzteAktivitaet() {
+  @JsonProperty(required = true, value = "letzteAktivitaet")
+  @NotNull public LocalDate getLetzteAktivitaet() {
     return letzteAktivitaet;
   }
 
-  @JsonProperty("letzteAktivitaet")
+  @JsonProperty(required = true, value = "letzteAktivitaet")
   public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
@@ -289,10 +279,7 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -370,4 +357,3 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
     }
   }
 }
-

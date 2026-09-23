@@ -15,12 +15,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("TenantFeatures")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TenantFeaturesDto  implements Serializable {
-  private @Valid TenantFeatureDto steuerdaten;
+  private TenantFeatureDto steuerdaten;
 
   protected TenantFeaturesDto(TenantFeaturesDtoBuilder<?, ?> b) {
     this.steuerdaten = b.steuerdaten;
@@ -38,7 +38,7 @@ public class TenantFeaturesDto  implements Serializable {
 
   
   @JsonProperty("steuerdaten")
-  public TenantFeatureDto getSteuerdaten() {
+  @Valid public TenantFeatureDto getSteuerdaten() {
     return steuerdaten;
   }
 
@@ -80,10 +80,7 @@ public class TenantFeaturesDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -116,4 +113,3 @@ public class TenantFeaturesDto  implements Serializable {
     }
   }
 }
-

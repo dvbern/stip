@@ -36,21 +36,24 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ValidationReportDtoSpec.JSON_PROPERTY_HAS_DOCUMENTS
 })
 @JsonTypeName("ValidationReport")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class ValidationReportDtoSpec {
   public static final String JSON_PROPERTY_VALIDATION_ERRORS = "validationErrors";
+  @jakarta.annotation.Nonnull
   private List<ValidationMessageDtoSpec> validationErrors;
 
   public static final String JSON_PROPERTY_VALIDATION_WARNINGS = "validationWarnings";
+  @jakarta.annotation.Nonnull
   private List<ValidationMessageDtoSpec> validationWarnings;
 
   public static final String JSON_PROPERTY_HAS_DOCUMENTS = "hasDocuments";
+  @jakarta.annotation.Nullable
   private Boolean hasDocuments;
 
   public ValidationReportDtoSpec() {
   }
 
-  public ValidationReportDtoSpec validationErrors(List<ValidationMessageDtoSpec> validationErrors) {
+  public ValidationReportDtoSpec validationErrors(@jakarta.annotation.Nonnull List<ValidationMessageDtoSpec> validationErrors) {
     
     this.validationErrors = validationErrors;
     return this;
@@ -64,12 +67,12 @@ public class ValidationReportDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get validationErrors
    * @return validationErrors
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VALIDATION_ERRORS)
+  @JsonProperty(value = JSON_PROPERTY_VALIDATION_ERRORS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<ValidationMessageDtoSpec> getValidationErrors() {
@@ -77,14 +80,13 @@ public class ValidationReportDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALIDATION_ERRORS)
+  @JsonProperty(value = JSON_PROPERTY_VALIDATION_ERRORS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setValidationErrors(List<ValidationMessageDtoSpec> validationErrors) {
+  public void setValidationErrors(@jakarta.annotation.Nonnull List<ValidationMessageDtoSpec> validationErrors) {
     this.validationErrors = validationErrors;
   }
 
-
-  public ValidationReportDtoSpec validationWarnings(List<ValidationMessageDtoSpec> validationWarnings) {
+  public ValidationReportDtoSpec validationWarnings(@jakarta.annotation.Nonnull List<ValidationMessageDtoSpec> validationWarnings) {
     
     this.validationWarnings = validationWarnings;
     return this;
@@ -98,12 +100,12 @@ public class ValidationReportDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get validationWarnings
    * @return validationWarnings
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VALIDATION_WARNINGS)
+  @JsonProperty(value = JSON_PROPERTY_VALIDATION_WARNINGS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<ValidationMessageDtoSpec> getValidationWarnings() {
@@ -111,25 +113,24 @@ public class ValidationReportDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALIDATION_WARNINGS)
+  @JsonProperty(value = JSON_PROPERTY_VALIDATION_WARNINGS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setValidationWarnings(List<ValidationMessageDtoSpec> validationWarnings) {
+  public void setValidationWarnings(@jakarta.annotation.Nonnull List<ValidationMessageDtoSpec> validationWarnings) {
     this.validationWarnings = validationWarnings;
   }
 
-
-  public ValidationReportDtoSpec hasDocuments(Boolean hasDocuments) {
+  public ValidationReportDtoSpec hasDocuments(@jakarta.annotation.Nullable Boolean hasDocuments) {
     
     this.hasDocuments = hasDocuments;
     return this;
   }
 
-   /**
+  /**
    * Whether or not the Gesuch validated has one or more GesuchDokument attached
    * @return hasDocuments
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_HAS_DOCUMENTS)
+  @JsonProperty(value = JSON_PROPERTY_HAS_DOCUMENTS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getHasDocuments() {
@@ -137,11 +138,12 @@ public class ValidationReportDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_HAS_DOCUMENTS)
+  @JsonProperty(value = JSON_PROPERTY_HAS_DOCUMENTS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setHasDocuments(Boolean hasDocuments) {
+  public void setHasDocuments(@jakarta.annotation.Nullable Boolean hasDocuments) {
     this.hasDocuments = hasDocuments;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -178,10 +180,7 @@ public class ValidationReportDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -40,6 +40,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
+
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -230,7 +231,7 @@ public class DokumentApiSpec {
         public CreateCustomDokumentTypOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -259,7 +260,7 @@ public class DokumentApiSpec {
          * @param customDokumentTypCreateDtoSpec (CustomDokumentTypCreateDtoSpec)  (required)
          * @return operation
          */
-        public CreateCustomDokumentTypOper body(CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec) {
+        public CreateCustomDokumentTypOper body(@jakarta.annotation.Nonnull CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec) {
             reqSpec.setBody(customDokumentTypCreateDtoSpec);
             return this;
         }
@@ -358,7 +359,7 @@ public class DokumentApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateDokumentGSOper fileUploadMultiPart(File fileUpload) {
+         public CreateDokumentGSOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -457,7 +458,7 @@ public class DokumentApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateDokumentSBOper fileUploadMultiPart(File fileUpload) {
+         public CreateDokumentSBOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -501,7 +502,7 @@ public class DokumentApiSpec {
         public CreateSachbearbeiterGesuchDokumentOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -530,7 +531,7 @@ public class DokumentApiSpec {
          * @param sachbearbeiterGesuchDokumentCreateDtoSpec (SachbearbeiterGesuchDokumentCreateDtoSpec)  (optional)
          * @return operation
          */
-        public CreateSachbearbeiterGesuchDokumentOper body(SachbearbeiterGesuchDokumentCreateDtoSpec sachbearbeiterGesuchDokumentCreateDtoSpec) {
+        public CreateSachbearbeiterGesuchDokumentOper body(@jakarta.annotation.Nullable SachbearbeiterGesuchDokumentCreateDtoSpec sachbearbeiterGesuchDokumentCreateDtoSpec) {
             reqSpec.setBody(sachbearbeiterGesuchDokumentCreateDtoSpec);
             return this;
         }
@@ -628,7 +629,7 @@ public class DokumentApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateUnterschriftenblattOper fileUploadMultiPart(File fileUpload) {
+         public CreateUnterschriftenblattOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -1062,7 +1063,7 @@ public class DokumentApiSpec {
          * @param gesuchDokumentAblehnenRequestDtoSpec (GesuchDokumentAblehnenRequestDtoSpec)  (optional)
          * @return operation
          */
-        public GesuchDokumentAblehnenOper body(GesuchDokumentAblehnenRequestDtoSpec gesuchDokumentAblehnenRequestDtoSpec) {
+        public GesuchDokumentAblehnenOper body(@jakarta.annotation.Nullable GesuchDokumentAblehnenRequestDtoSpec gesuchDokumentAblehnenRequestDtoSpec) {
             reqSpec.setBody(gesuchDokumentAblehnenRequestDtoSpec);
             return this;
         }
@@ -1177,7 +1178,7 @@ public class DokumentApiSpec {
 
         public GetAllSachbearbeiterGesuchDokumentsOfGesuchOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1250,7 +1251,7 @@ public class DokumentApiSpec {
 
         public GetCustomGesuchDokumentForTypGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1323,7 +1324,7 @@ public class DokumentApiSpec {
 
         public GetCustomGesuchDokumentForTypSBOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1481,7 +1482,7 @@ public class DokumentApiSpec {
 
         public GetDokumentDownloadTokenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1556,7 +1557,7 @@ public class DokumentApiSpec {
 
         public GetGesuchDokumentForTypGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1653,7 +1654,7 @@ public class DokumentApiSpec {
 
         public GetGesuchDokumentForTypSBOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1821,7 +1822,7 @@ public class DokumentApiSpec {
 
         public GetSachbearbeiterGesuchDokumentDokumentDownloadTokenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -1894,7 +1895,7 @@ public class DokumentApiSpec {
 
         public GetUnterschriftenblaetterForGesuchOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
+            reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
@@ -2000,7 +2001,7 @@ public class DokumentApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public UploadCustomGesuchDokumentGSOper fileUploadMultiPart(File fileUpload) {
+         public UploadCustomGesuchDokumentGSOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -2075,7 +2076,7 @@ public class DokumentApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public UploadCustomGesuchDokumentSBOper fileUploadMultiPart(File fileUpload) {
+         public UploadCustomGesuchDokumentSBOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }
@@ -2150,7 +2151,7 @@ public class DokumentApiSpec {
          * @param fileUpload (File)  (required)
          * @return operation
          */
-         public UploadSachbearbeiterGesuchDokumentOper fileUploadMultiPart(File fileUpload) {
+         public UploadSachbearbeiterGesuchDokumentOper fileUploadMultiPart(@jakarta.annotation.Nonnull File fileUpload) {
             reqSpec.addMultiPart(fileUpload);
             return this;
          }

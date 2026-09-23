@@ -14,18 +14,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SteuererklaerungUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SteuererklaerungUpdateDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
-  private @Valid Boolean steuererklaerungInBern;
-  private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer unterhaltsbeitraege;
-  private @Valid Integer renten;
-  private @Valid Integer einnahmenBGSA;
-  private @Valid Integer andereEinnahmen;
+  private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
+  private Boolean steuererklaerungInBern;
+  private Integer ergaenzungsleistungen;
+  private Integer unterhaltsbeitraege;
+  private Integer renten;
+  private Integer einnahmenBGSA;
+  private Integer andereEinnahmen;
 
   protected SteuererklaerungUpdateDto(SteuererklaerungUpdateDtoBuilder<?, ?> b) {
     this.steuerdatenTyp = b.steuerdatenTyp;
@@ -48,13 +48,12 @@ public class SteuererklaerungUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuerdatenTyp")
-  @NotNull
-  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getSteuerdatenTyp() {
+  @JsonProperty(required = true, value = "steuerdatenTyp")
+  @NotNull public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getSteuerdatenTyp() {
     return steuerdatenTyp;
   }
 
-  @JsonProperty("steuerdatenTyp")
+  @JsonProperty(required = true, value = "steuerdatenTyp")
   public void setSteuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
     this.steuerdatenTyp = steuerdatenTyp;
   }
@@ -67,13 +66,12 @@ public class SteuererklaerungUpdateDto  implements Serializable {
   }
 
   
-  @JsonProperty("steuererklaerungInBern")
-  @NotNull
-  public Boolean getSteuererklaerungInBern() {
+  @JsonProperty(required = true, value = "steuererklaerungInBern")
+  @NotNull public Boolean getSteuererklaerungInBern() {
     return steuererklaerungInBern;
   }
 
-  @JsonProperty("steuererklaerungInBern")
+  @JsonProperty(required = true, value = "steuererklaerungInBern")
   public void setSteuererklaerungInBern(Boolean steuererklaerungInBern) {
     this.steuererklaerungInBern = steuererklaerungInBern;
   }
@@ -213,10 +211,7 @@ public class SteuererklaerungUpdateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -279,4 +274,3 @@ public class SteuererklaerungUpdateDto  implements Serializable {
     }
   }
 }
-

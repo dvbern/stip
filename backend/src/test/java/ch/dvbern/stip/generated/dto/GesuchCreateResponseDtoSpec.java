@@ -33,29 +33,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchCreateResponseDtoSpec.JSON_PROPERTY_ERROR
 })
 @JsonTypeName("GesuchCreateResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class GesuchCreateResponseDtoSpec {
   public static final String JSON_PROPERTY_GESUCH = "gesuch";
+  @jakarta.annotation.Nullable
   private UUID gesuch;
 
   public static final String JSON_PROPERTY_ERROR = "error";
+  @jakarta.annotation.Nullable
   private GesuchsperiodeSelectErrorDtoSpec error;
 
   public GesuchCreateResponseDtoSpec() {
   }
 
-  public GesuchCreateResponseDtoSpec gesuch(UUID gesuch) {
+  public GesuchCreateResponseDtoSpec gesuch(@jakarta.annotation.Nullable UUID gesuch) {
     
     this.gesuch = gesuch;
     return this;
   }
 
-   /**
+  /**
    * Get gesuch
    * @return gesuch
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GESUCH)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getGesuch() {
@@ -63,25 +65,24 @@ public class GesuchCreateResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH)
+  @JsonProperty(value = JSON_PROPERTY_GESUCH, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGesuch(UUID gesuch) {
+  public void setGesuch(@jakarta.annotation.Nullable UUID gesuch) {
     this.gesuch = gesuch;
   }
 
-
-  public GesuchCreateResponseDtoSpec error(GesuchsperiodeSelectErrorDtoSpec error) {
+  public GesuchCreateResponseDtoSpec error(@jakarta.annotation.Nullable GesuchsperiodeSelectErrorDtoSpec error) {
     
     this.error = error;
     return this;
   }
 
-   /**
+  /**
    * Get error
    * @return error
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonProperty(value = JSON_PROPERTY_ERROR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchsperiodeSelectErrorDtoSpec getError() {
@@ -89,11 +90,12 @@ public class GesuchCreateResponseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonProperty(value = JSON_PROPERTY_ERROR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setError(GesuchsperiodeSelectErrorDtoSpec error) {
+  public void setError(@jakarta.annotation.Nullable GesuchsperiodeSelectErrorDtoSpec error) {
     this.error = error;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -128,10 +130,7 @@ public class GesuchCreateResponseDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

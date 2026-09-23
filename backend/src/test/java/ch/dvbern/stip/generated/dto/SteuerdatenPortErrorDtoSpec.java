@@ -32,32 +32,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SteuerdatenPortErrorDtoSpec.JSON_PROPERTY_USER_MESSAGE
 })
 @JsonTypeName("SteuerdatenPortError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class SteuerdatenPortErrorDtoSpec {
   public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nonnull
   private String type;
 
   public static final String JSON_PROPERTY_ERROR = "error";
+  @jakarta.annotation.Nonnull
   private String error;
 
   public static final String JSON_PROPERTY_USER_MESSAGE = "userMessage";
+  @jakarta.annotation.Nonnull
   private String userMessage;
 
   public SteuerdatenPortErrorDtoSpec() {
   }
 
-  public SteuerdatenPortErrorDtoSpec type(String type) {
+  public SteuerdatenPortErrorDtoSpec type(@jakarta.annotation.Nonnull String type) {
     
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getType() {
@@ -65,25 +68,24 @@ public class SteuerdatenPortErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setType(String type) {
+  public void setType(@jakarta.annotation.Nonnull String type) {
     this.type = type;
   }
 
-
-  public SteuerdatenPortErrorDtoSpec error(String error) {
+  public SteuerdatenPortErrorDtoSpec error(@jakarta.annotation.Nonnull String error) {
     
     this.error = error;
     return this;
   }
 
-   /**
+  /**
    * Get error
    * @return error
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonProperty(value = JSON_PROPERTY_ERROR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getError() {
@@ -91,25 +93,24 @@ public class SteuerdatenPortErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERROR)
+  @JsonProperty(value = JSON_PROPERTY_ERROR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setError(String error) {
+  public void setError(@jakarta.annotation.Nonnull String error) {
     this.error = error;
   }
 
-
-  public SteuerdatenPortErrorDtoSpec userMessage(String userMessage) {
+  public SteuerdatenPortErrorDtoSpec userMessage(@jakarta.annotation.Nonnull String userMessage) {
     
     this.userMessage = userMessage;
     return this;
   }
 
-   /**
+  /**
    * Get userMessage
    * @return userMessage
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_MESSAGE)
+  @JsonProperty(value = JSON_PROPERTY_USER_MESSAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getUserMessage() {
@@ -117,11 +118,12 @@ public class SteuerdatenPortErrorDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER_MESSAGE)
+  @JsonProperty(value = JSON_PROPERTY_USER_MESSAGE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserMessage(String userMessage) {
+  public void setUserMessage(@jakarta.annotation.Nonnull String userMessage) {
     this.userMessage = userMessage;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -158,10 +160,7 @@ public class SteuerdatenPortErrorDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

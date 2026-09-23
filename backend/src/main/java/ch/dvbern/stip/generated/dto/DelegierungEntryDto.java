@@ -16,22 +16,22 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DelegierungEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierungEntryDto  implements Serializable {
-  private @Valid String fallNummer;
-  private @Valid UUID fallId;
-  private @Valid String nachname;
-  private @Valid String vorname;
-  private @Valid LocalDate geburtsdatum;
-  private @Valid String wohnort;
-  private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
-  private @Valid Integer totalCount;
-  private @Valid UUID id;
-  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
-  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus aenderungStatus;
+  private String fallNummer;
+  private UUID fallId;
+  private String nachname;
+  private String vorname;
+  private LocalDate geburtsdatum;
+  private String wohnort;
+  private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
+  private Integer totalCount;
+  private UUID id;
+  private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+  private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus aenderungStatus;
 
   protected DelegierungEntryDto(DelegierungEntryDtoBuilder<?, ?> b) {
     this.fallNummer = b.fallNummer;
@@ -58,13 +58,12 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallNummer")
-  @NotNull
-  public String getFallNummer() {
+  @JsonProperty(required = true, value = "fallNummer")
+  @NotNull public String getFallNummer() {
     return fallNummer;
   }
 
-  @JsonProperty("fallNummer")
+  @JsonProperty(required = true, value = "fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -77,13 +76,12 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallId")
-  @NotNull
-  public UUID getFallId() {
+  @JsonProperty(required = true, value = "fallId")
+  @NotNull public UUID getFallId() {
     return fallId;
   }
 
-  @JsonProperty("fallId")
+  @JsonProperty(required = true, value = "fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
   }
@@ -96,13 +94,12 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -115,13 +112,12 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -134,13 +130,12 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("geburtsdatum")
-  @NotNull
-  public LocalDate getGeburtsdatum() {
+  @JsonProperty(required = true, value = "geburtsdatum")
+  @NotNull public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
-  @JsonProperty("geburtsdatum")
+  @JsonProperty(required = true, value = "geburtsdatum")
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
@@ -153,13 +148,12 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("wohnort")
-  @NotNull
-  public String getWohnort() {
+  @JsonProperty(required = true, value = "wohnort")
+  @NotNull public String getWohnort() {
     return wohnort;
   }
 
-  @JsonProperty("wohnort")
+  @JsonProperty(required = true, value = "wohnort")
   public void setWohnort(String wohnort) {
     this.wohnort = wohnort;
   }
@@ -172,13 +166,12 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("status")
-  @NotNull
-  public ch.dvbern.stip.api.delegieren.type.DelegierungStatus getStatus() {
+  @JsonProperty(required = true, value = "status")
+  @NotNull public ch.dvbern.stip.api.delegieren.type.DelegierungStatus getStatus() {
     return status;
   }
 
-  @JsonProperty("status")
+  @JsonProperty(required = true, value = "status")
   public void setStatus(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
     this.status = status;
   }
@@ -191,13 +184,12 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("totalCount")
-  @NotNull
-  public Integer getTotalCount() {
+  @JsonProperty(required = true, value = "totalCount")
+  @NotNull public Integer getTotalCount() {
     return totalCount;
   }
 
-  @JsonProperty("totalCount")
+  @JsonProperty(required = true, value = "totalCount")
   public void setTotalCount(Integer totalCount) {
     this.totalCount = totalCount;
   }
@@ -309,10 +301,7 @@ public class DelegierungEntryDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -395,4 +384,3 @@ public class DelegierungEntryDto  implements Serializable {
     }
   }
 }
-

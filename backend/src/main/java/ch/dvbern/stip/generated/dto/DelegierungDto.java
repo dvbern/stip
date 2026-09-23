@@ -19,19 +19,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Delegierung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierungDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String fallNummer;
-  private @Valid SozialdienstSlimDto sozialdienst;
-  private @Valid PersoenlicheAngabenDto persoenlicheAngaben;
-  private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
-  private @Valid SozialdienstBenutzerDto delegierterMitarbeiter;
-  private @Valid LocalDate startDate;
-  private @Valid LocalDate endDate;
+  private UUID id;
+  private String fallNummer;
+  private SozialdienstSlimDto sozialdienst;
+  private PersoenlicheAngabenDto persoenlicheAngaben;
+  private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
+  private SozialdienstBenutzerDto delegierterMitarbeiter;
+  private LocalDate startDate;
+  private LocalDate endDate;
 
   protected DelegierungDto(DelegierungDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -55,13 +55,12 @@ public class DelegierungDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -74,13 +73,12 @@ public class DelegierungDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallNummer")
-  @NotNull
-  public String getFallNummer() {
+  @JsonProperty(required = true, value = "fallNummer")
+  @NotNull public String getFallNummer() {
     return fallNummer;
   }
 
-  @JsonProperty("fallNummer")
+  @JsonProperty(required = true, value = "fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -93,13 +91,12 @@ public class DelegierungDto  implements Serializable {
   }
 
   
-  @JsonProperty("sozialdienst")
-  @NotNull
-  public SozialdienstSlimDto getSozialdienst() {
+  @JsonProperty(required = true, value = "sozialdienst")
+  @NotNull @Valid public SozialdienstSlimDto getSozialdienst() {
     return sozialdienst;
   }
 
-  @JsonProperty("sozialdienst")
+  @JsonProperty(required = true, value = "sozialdienst")
   public void setSozialdienst(SozialdienstSlimDto sozialdienst) {
     this.sozialdienst = sozialdienst;
   }
@@ -112,13 +109,12 @@ public class DelegierungDto  implements Serializable {
   }
 
   
-  @JsonProperty("persoenlicheAngaben")
-  @NotNull
-  public PersoenlicheAngabenDto getPersoenlicheAngaben() {
+  @JsonProperty(required = true, value = "persoenlicheAngaben")
+  @NotNull @Valid public PersoenlicheAngabenDto getPersoenlicheAngaben() {
     return persoenlicheAngaben;
   }
 
-  @JsonProperty("persoenlicheAngaben")
+  @JsonProperty(required = true, value = "persoenlicheAngaben")
   public void setPersoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
     this.persoenlicheAngaben = persoenlicheAngaben;
   }
@@ -131,13 +127,12 @@ public class DelegierungDto  implements Serializable {
   }
 
   
-  @JsonProperty("status")
-  @NotNull
-  public ch.dvbern.stip.api.delegieren.type.DelegierungStatus getStatus() {
+  @JsonProperty(required = true, value = "status")
+  @NotNull public ch.dvbern.stip.api.delegieren.type.DelegierungStatus getStatus() {
     return status;
   }
 
-  @JsonProperty("status")
+  @JsonProperty(required = true, value = "status")
   public void setStatus(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
     this.status = status;
   }
@@ -151,7 +146,7 @@ public class DelegierungDto  implements Serializable {
 
   
   @JsonProperty("delegierterMitarbeiter")
-  public SozialdienstBenutzerDto getDelegierterMitarbeiter() {
+  @Valid public SozialdienstBenutzerDto getDelegierterMitarbeiter() {
     return delegierterMitarbeiter;
   }
 
@@ -243,10 +238,7 @@ public class DelegierungDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -314,4 +306,3 @@ public class DelegierungDto  implements Serializable {
     }
   }
 }
-

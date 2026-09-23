@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsgangCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsgangCreateDto  implements Serializable {
-  private @Valid UUID abschlussId;
-  private @Valid UUID ausbildungsstaetteId;
+  private UUID abschlussId;
+  private UUID ausbildungsstaetteId;
 
   protected AusbildungsgangCreateDto(AusbildungsgangCreateDtoBuilder<?, ?> b) {
     this.abschlussId = b.abschlussId;
@@ -39,13 +39,12 @@ public class AusbildungsgangCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("abschlussId")
-  @NotNull
-  public UUID getAbschlussId() {
+  @JsonProperty(required = true, value = "abschlussId")
+  @NotNull public UUID getAbschlussId() {
     return abschlussId;
   }
 
-  @JsonProperty("abschlussId")
+  @JsonProperty(required = true, value = "abschlussId")
   public void setAbschlussId(UUID abschlussId) {
     this.abschlussId = abschlussId;
   }
@@ -58,13 +57,12 @@ public class AusbildungsgangCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("ausbildungsstaetteId")
-  @NotNull
-  public UUID getAusbildungsstaetteId() {
+  @JsonProperty(required = true, value = "ausbildungsstaetteId")
+  @NotNull public UUID getAusbildungsstaetteId() {
     return ausbildungsstaetteId;
   }
 
-  @JsonProperty("ausbildungsstaetteId")
+  @JsonProperty(required = true, value = "ausbildungsstaetteId")
   public void setAusbildungsstaetteId(UUID ausbildungsstaetteId) {
     this.ausbildungsstaetteId = ausbildungsstaetteId;
   }
@@ -104,10 +102,7 @@ public class AusbildungsgangCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -145,4 +140,3 @@ public class AusbildungsgangCreateDto  implements Serializable {
     }
   }
 }
-

@@ -15,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("UpdateAusbildungUnterbruchAntragSB")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
-  private @Valid String kommentarSB;
-  private @Valid LocalDate startDate;
-  private @Valid LocalDate endDate;
-  private @Valid Integer monateOhneAnspruch;
+  private ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
+  private String kommentarSB;
+  private LocalDate startDate;
+  private LocalDate endDate;
+  private Integer monateOhneAnspruch;
 
   protected UpdateAusbildungUnterbruchAntragSBDto(UpdateAusbildungUnterbruchAntragSBDtoBuilder<?, ?> b) {
     this.status = b.status;
@@ -45,13 +45,12 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("status")
-  @NotNull
-  public ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus getStatus() {
+  @JsonProperty(required = true, value = "status")
+  @NotNull public ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus getStatus() {
     return status;
   }
 
-  @JsonProperty("status")
+  @JsonProperty(required = true, value = "status")
   public void setStatus(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
     this.status = status;
   }
@@ -64,13 +63,12 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentarSB")
-  @NotNull
-  public String getKommentarSB() {
+  @JsonProperty(required = true, value = "kommentarSB")
+  @NotNull public String getKommentarSB() {
     return kommentarSB;
   }
 
-  @JsonProperty("kommentarSB")
+  @JsonProperty(required = true, value = "kommentarSB")
   public void setKommentarSB(String kommentarSB) {
     this.kommentarSB = kommentarSB;
   }
@@ -83,13 +81,12 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("startDate")
-  @NotNull
-  public LocalDate getStartDate() {
+  @JsonProperty(required = true, value = "startDate")
+  @NotNull public LocalDate getStartDate() {
     return startDate;
   }
 
-  @JsonProperty("startDate")
+  @JsonProperty(required = true, value = "startDate")
   public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
@@ -102,13 +99,12 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("endDate")
-  @NotNull
-  public LocalDate getEndDate() {
+  @JsonProperty(required = true, value = "endDate")
+  @NotNull public LocalDate getEndDate() {
     return endDate;
   }
 
-  @JsonProperty("endDate")
+  @JsonProperty(required = true, value = "endDate")
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
   }
@@ -172,10 +168,7 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -228,4 +221,3 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
     }
   }
 }
-

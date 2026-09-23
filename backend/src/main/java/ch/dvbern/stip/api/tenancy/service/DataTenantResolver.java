@@ -28,7 +28,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.DEFAULT_TENANT_IDENTIFIER;
 import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENTIFIER_CONTEXT_NAME;
 
 @PersistenceUnitExtension
@@ -41,14 +40,16 @@ public class DataTenantResolver implements TenantResolver {
 
     @Override
     public String getDefaultTenantId() {
-        throw new RuntimeException("No Default Tenant");
+        return TenantIdentifier.BERN.getIdentifier();
     }
 
     @Override
     public String resolveTenantId() {
         if (Objects.isNull(tenantContext.getTenantIdentifier())) {
-            String tenantId = Objects
-                .requireNonNullElse(context.get().get(TENANT_IDENTIFIER_CONTEXT_NAME), DEFAULT_TENANT_IDENTIFIER);
+            String tenantId = Objects.requireNonNullElse(
+                context.get().get(TENANT_IDENTIFIER_CONTEXT_NAME),
+                "No tenant identifier resolved"
+            );
             tenantContext.setTenantIdentifier(TenantIdentifier.of(tenantId));
         }
 

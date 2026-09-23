@@ -42,53 +42,63 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_LETZTE_AKTIVITAET
 })
 @JsonTypeName("FreiwilligDarlehenDashboard")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FreiwilligDarlehenDashboardDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private UUID fallId;
 
   public static final String JSON_PROPERTY_RELATED_GESUCH_ID = "relatedGesuchId";
+  @jakarta.annotation.Nonnull
   private UUID relatedGesuchId;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  @jakarta.annotation.Nonnull
   private String fallNummer;
 
   public static final String JSON_PROPERTY_PIA_VORNAME = "piaVorname";
+  @jakarta.annotation.Nonnull
   private String piaVorname;
 
   public static final String JSON_PROPERTY_PIA_NACHNAME = "piaNachname";
+  @jakarta.annotation.Nonnull
   private String piaNachname;
 
   public static final String JSON_PROPERTY_PIA_GEBURTSDATUM = "piaGeburtsdatum";
+  @jakarta.annotation.Nonnull
   private String piaGeburtsdatum;
 
   public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nonnull
   private DarlehenStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_BEARBEITER = "bearbeiter";
+  @jakarta.annotation.Nonnull
   private String bearbeiter;
 
   public static final String JSON_PROPERTY_LETZTE_AKTIVITAET = "letzteAktivitaet";
+  @jakarta.annotation.Nonnull
   private LocalDate letzteAktivitaet;
 
   public FreiwilligDarlehenDashboardDtoSpec() {
   }
 
-  public FreiwilligDarlehenDashboardDtoSpec id(UUID id) {
+  public FreiwilligDarlehenDashboardDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -96,25 +106,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec fallId(UUID fallId) {
+  public FreiwilligDarlehenDashboardDtoSpec fallId(@jakarta.annotation.Nonnull UUID fallId) {
     
     this.fallId = fallId;
     return this;
   }
 
-   /**
+  /**
    * Get fallId
    * @return fallId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getFallId() {
@@ -122,25 +131,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
+  public void setFallId(@jakarta.annotation.Nonnull UUID fallId) {
     this.fallId = fallId;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec relatedGesuchId(UUID relatedGesuchId) {
+  public FreiwilligDarlehenDashboardDtoSpec relatedGesuchId(@jakarta.annotation.Nonnull UUID relatedGesuchId) {
     
     this.relatedGesuchId = relatedGesuchId;
     return this;
   }
 
-   /**
+  /**
    * Get relatedGesuchId
    * @return relatedGesuchId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_RELATED_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_RELATED_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getRelatedGesuchId() {
@@ -148,25 +156,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_RELATED_GESUCH_ID)
+  @JsonProperty(value = JSON_PROPERTY_RELATED_GESUCH_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setRelatedGesuchId(UUID relatedGesuchId) {
+  public void setRelatedGesuchId(@jakarta.annotation.Nonnull UUID relatedGesuchId) {
     this.relatedGesuchId = relatedGesuchId;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec fallNummer(String fallNummer) {
+  public FreiwilligDarlehenDashboardDtoSpec fallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     
     this.fallNummer = fallNummer;
     return this;
   }
 
-   /**
+  /**
    * Get fallNummer
    * @return fallNummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
@@ -174,25 +181,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonProperty(value = JSON_PROPERTY_FALL_NUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallNummer(String fallNummer) {
+  public void setFallNummer(@jakarta.annotation.Nonnull String fallNummer) {
     this.fallNummer = fallNummer;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec piaVorname(String piaVorname) {
+  public FreiwilligDarlehenDashboardDtoSpec piaVorname(@jakarta.annotation.Nonnull String piaVorname) {
     
     this.piaVorname = piaVorname;
     return this;
   }
 
-   /**
+  /**
    * Get piaVorname
    * @return piaVorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaVorname() {
@@ -200,25 +206,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPiaVorname(String piaVorname) {
+  public void setPiaVorname(@jakarta.annotation.Nonnull String piaVorname) {
     this.piaVorname = piaVorname;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec piaNachname(String piaNachname) {
+  public FreiwilligDarlehenDashboardDtoSpec piaNachname(@jakarta.annotation.Nonnull String piaNachname) {
     
     this.piaNachname = piaNachname;
     return this;
   }
 
-   /**
+  /**
    * Get piaNachname
    * @return piaNachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaNachname() {
@@ -226,25 +231,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_PIA_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPiaNachname(String piaNachname) {
+  public void setPiaNachname(@jakarta.annotation.Nonnull String piaNachname) {
     this.piaNachname = piaNachname;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec piaGeburtsdatum(String piaGeburtsdatum) {
+  public FreiwilligDarlehenDashboardDtoSpec piaGeburtsdatum(@jakarta.annotation.Nonnull String piaGeburtsdatum) {
     
     this.piaGeburtsdatum = piaGeburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * Get piaGeburtsdatum
    * @return piaGeburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_PIA_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaGeburtsdatum() {
@@ -252,25 +256,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_PIA_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPiaGeburtsdatum(String piaGeburtsdatum) {
+  public void setPiaGeburtsdatum(@jakarta.annotation.Nonnull String piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec status(DarlehenStatusDtoSpec status) {
+  public FreiwilligDarlehenDashboardDtoSpec status(@jakarta.annotation.Nonnull DarlehenStatusDtoSpec status) {
     
     this.status = status;
     return this;
   }
 
-   /**
+  /**
    * Get status
    * @return status
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DarlehenStatusDtoSpec getStatus() {
@@ -278,25 +281,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(DarlehenStatusDtoSpec status) {
+  public void setStatus(@jakarta.annotation.Nonnull DarlehenStatusDtoSpec status) {
     this.status = status;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec bearbeiter(String bearbeiter) {
+  public FreiwilligDarlehenDashboardDtoSpec bearbeiter(@jakarta.annotation.Nonnull String bearbeiter) {
     
     this.bearbeiter = bearbeiter;
     return this;
   }
 
-   /**
+  /**
    * Get bearbeiter
    * @return bearbeiter
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BEARBEITER)
+  @JsonProperty(value = JSON_PROPERTY_BEARBEITER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBearbeiter() {
@@ -304,25 +306,24 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BEARBEITER)
+  @JsonProperty(value = JSON_PROPERTY_BEARBEITER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBearbeiter(String bearbeiter) {
+  public void setBearbeiter(@jakarta.annotation.Nonnull String bearbeiter) {
     this.bearbeiter = bearbeiter;
   }
 
-
-  public FreiwilligDarlehenDashboardDtoSpec letzteAktivitaet(LocalDate letzteAktivitaet) {
+  public FreiwilligDarlehenDashboardDtoSpec letzteAktivitaet(@jakarta.annotation.Nonnull LocalDate letzteAktivitaet) {
     
     this.letzteAktivitaet = letzteAktivitaet;
     return this;
   }
 
-   /**
+  /**
    * Get letzteAktivitaet
    * @return letzteAktivitaet
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
+  @JsonProperty(value = JSON_PROPERTY_LETZTE_AKTIVITAET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getLetzteAktivitaet() {
@@ -330,11 +331,12 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
+  @JsonProperty(value = JSON_PROPERTY_LETZTE_AKTIVITAET, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
+  public void setLetzteAktivitaet(@jakarta.annotation.Nonnull LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -385,10 +387,7 @@ public class FreiwilligDarlehenDashboardDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

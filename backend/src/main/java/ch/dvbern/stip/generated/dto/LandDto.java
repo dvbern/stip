@@ -15,21 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Land")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class LandDto  implements Serializable {
-  private @Valid String laendercodeBfs;
-  private @Valid Boolean isEuEfta;
-  private @Valid Boolean eintragGueltig;
-  private @Valid String deKurzform;
-  private @Valid String frKurzform;
-  private @Valid String itKurzform;
-  private @Valid String enKurzform;
-  private @Valid UUID id;
-  private @Valid String iso2code;
-  private @Valid String iso3code;
+  private String laendercodeBfs;
+  private Boolean isEuEfta;
+  private Boolean eintragGueltig;
+  private String deKurzform;
+  private String frKurzform;
+  private String itKurzform;
+  private String enKurzform;
+  private UUID id;
+  private String iso2code;
+  private String iso3code;
 
   protected LandDto(LandDtoBuilder<?, ?> b) {
     this.laendercodeBfs = b.laendercodeBfs;
@@ -55,13 +55,12 @@ public class LandDto  implements Serializable {
   }
 
   
-  @JsonProperty("laendercodeBfs")
-  @NotNull
-  public String getLaendercodeBfs() {
+  @JsonProperty(required = true, value = "laendercodeBfs")
+  @NotNull public String getLaendercodeBfs() {
     return laendercodeBfs;
   }
 
-  @JsonProperty("laendercodeBfs")
+  @JsonProperty(required = true, value = "laendercodeBfs")
   public void setLaendercodeBfs(String laendercodeBfs) {
     this.laendercodeBfs = laendercodeBfs;
   }
@@ -74,13 +73,12 @@ public class LandDto  implements Serializable {
   }
 
   
-  @JsonProperty("isEuEfta")
-  @NotNull
-  public Boolean getIsEuEfta() {
+  @JsonProperty(required = true, value = "isEuEfta")
+  @NotNull public Boolean getIsEuEfta() {
     return isEuEfta;
   }
 
-  @JsonProperty("isEuEfta")
+  @JsonProperty(required = true, value = "isEuEfta")
   public void setIsEuEfta(Boolean isEuEfta) {
     this.isEuEfta = isEuEfta;
   }
@@ -93,13 +91,12 @@ public class LandDto  implements Serializable {
   }
 
   
-  @JsonProperty("eintragGueltig")
-  @NotNull
-  public Boolean getEintragGueltig() {
+  @JsonProperty(required = true, value = "eintragGueltig")
+  @NotNull public Boolean getEintragGueltig() {
     return eintragGueltig;
   }
 
-  @JsonProperty("eintragGueltig")
+  @JsonProperty(required = true, value = "eintragGueltig")
   public void setEintragGueltig(Boolean eintragGueltig) {
     this.eintragGueltig = eintragGueltig;
   }
@@ -112,13 +109,12 @@ public class LandDto  implements Serializable {
   }
 
   
-  @JsonProperty("deKurzform")
-  @NotNull
-  public String getDeKurzform() {
+  @JsonProperty(required = true, value = "deKurzform")
+  @NotNull public String getDeKurzform() {
     return deKurzform;
   }
 
-  @JsonProperty("deKurzform")
+  @JsonProperty(required = true, value = "deKurzform")
   public void setDeKurzform(String deKurzform) {
     this.deKurzform = deKurzform;
   }
@@ -131,13 +127,12 @@ public class LandDto  implements Serializable {
   }
 
   
-  @JsonProperty("frKurzform")
-  @NotNull
-  public String getFrKurzform() {
+  @JsonProperty(required = true, value = "frKurzform")
+  @NotNull public String getFrKurzform() {
     return frKurzform;
   }
 
-  @JsonProperty("frKurzform")
+  @JsonProperty(required = true, value = "frKurzform")
   public void setFrKurzform(String frKurzform) {
     this.frKurzform = frKurzform;
   }
@@ -150,13 +145,12 @@ public class LandDto  implements Serializable {
   }
 
   
-  @JsonProperty("itKurzform")
-  @NotNull
-  public String getItKurzform() {
+  @JsonProperty(required = true, value = "itKurzform")
+  @NotNull public String getItKurzform() {
     return itKurzform;
   }
 
-  @JsonProperty("itKurzform")
+  @JsonProperty(required = true, value = "itKurzform")
   public void setItKurzform(String itKurzform) {
     this.itKurzform = itKurzform;
   }
@@ -169,13 +163,12 @@ public class LandDto  implements Serializable {
   }
 
   
-  @JsonProperty("enKurzform")
-  @NotNull
-  public String getEnKurzform() {
+  @JsonProperty(required = true, value = "enKurzform")
+  @NotNull public String getEnKurzform() {
     return enKurzform;
   }
 
-  @JsonProperty("enKurzform")
+  @JsonProperty(required = true, value = "enKurzform")
   public void setEnKurzform(String enKurzform) {
     this.enKurzform = enKurzform;
   }
@@ -285,10 +278,7 @@ public class LandDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -366,4 +356,3 @@ public class LandDto  implements Serializable {
     }
   }
 }
-

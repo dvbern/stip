@@ -31,26 +31,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   NullableGesuchsperiodeWithDatenDtoSpec.JSON_PROPERTY_VALUE
 })
 @JsonTypeName("NullableGesuchsperiodeWithDaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class NullableGesuchsperiodeWithDatenDtoSpec {
   public static final String JSON_PROPERTY_VALUE = "value";
+  @jakarta.annotation.Nullable
   private GesuchsperiodeWithDatenDtoSpec value;
 
   public NullableGesuchsperiodeWithDatenDtoSpec() {
   }
 
-  public NullableGesuchsperiodeWithDatenDtoSpec value(GesuchsperiodeWithDatenDtoSpec value) {
+  public NullableGesuchsperiodeWithDatenDtoSpec value(@jakarta.annotation.Nullable GesuchsperiodeWithDatenDtoSpec value) {
     
     this.value = value;
     return this;
   }
 
-   /**
+  /**
    * Get value
    * @return value
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public GesuchsperiodeWithDatenDtoSpec getValue() {
@@ -58,11 +59,12 @@ public class NullableGesuchsperiodeWithDatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VALUE)
+  @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setValue(GesuchsperiodeWithDatenDtoSpec value) {
+  public void setValue(@jakarta.annotation.Nullable GesuchsperiodeWithDatenDtoSpec value) {
     this.value = value;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -95,10 +97,7 @@ public class NullableGesuchsperiodeWithDatenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

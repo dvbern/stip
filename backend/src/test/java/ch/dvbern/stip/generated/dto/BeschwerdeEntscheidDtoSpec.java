@@ -33,32 +33,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_DOKUMENT
 })
 @JsonTypeName("BeschwerdeEntscheid")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BeschwerdeEntscheidDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  @jakarta.annotation.Nonnull
   private String kommentar;
 
   public static final String JSON_PROPERTY_BESCHWERDE_ERFOLGREICH = "beschwerdeErfolgreich";
+  @jakarta.annotation.Nonnull
   private Boolean beschwerdeErfolgreich;
 
   public static final String JSON_PROPERTY_DOKUMENT = "dokument";
+  @jakarta.annotation.Nonnull
   private DokumentDtoSpec dokument;
 
   public BeschwerdeEntscheidDtoSpec() {
   }
 
-  public BeschwerdeEntscheidDtoSpec kommentar(String kommentar) {
+  public BeschwerdeEntscheidDtoSpec kommentar(@jakarta.annotation.Nonnull String kommentar) {
     
     this.kommentar = kommentar;
     return this;
   }
 
-   /**
+  /**
    * Get kommentar
    * @return kommentar
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKommentar() {
@@ -66,25 +69,24 @@ public class BeschwerdeEntscheidDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonProperty(value = JSON_PROPERTY_KOMMENTAR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKommentar(String kommentar) {
+  public void setKommentar(@jakarta.annotation.Nonnull String kommentar) {
     this.kommentar = kommentar;
   }
 
-
-  public BeschwerdeEntscheidDtoSpec beschwerdeErfolgreich(Boolean beschwerdeErfolgreich) {
+  public BeschwerdeEntscheidDtoSpec beschwerdeErfolgreich(@jakarta.annotation.Nonnull Boolean beschwerdeErfolgreich) {
     
     this.beschwerdeErfolgreich = beschwerdeErfolgreich;
     return this;
   }
 
-   /**
+  /**
    * Get beschwerdeErfolgreich
    * @return beschwerdeErfolgreich
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_ERFOLGREICH)
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_ERFOLGREICH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getBeschwerdeErfolgreich() {
@@ -92,25 +94,24 @@ public class BeschwerdeEntscheidDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_ERFOLGREICH)
+  @JsonProperty(value = JSON_PROPERTY_BESCHWERDE_ERFOLGREICH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBeschwerdeErfolgreich(Boolean beschwerdeErfolgreich) {
+  public void setBeschwerdeErfolgreich(@jakarta.annotation.Nonnull Boolean beschwerdeErfolgreich) {
     this.beschwerdeErfolgreich = beschwerdeErfolgreich;
   }
 
-
-  public BeschwerdeEntscheidDtoSpec dokument(DokumentDtoSpec dokument) {
+  public BeschwerdeEntscheidDtoSpec dokument(@jakarta.annotation.Nonnull DokumentDtoSpec dokument) {
     
     this.dokument = dokument;
     return this;
   }
 
-   /**
+  /**
    * Get dokument
    * @return dokument
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENT)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DokumentDtoSpec getDokument() {
@@ -118,11 +119,12 @@ public class BeschwerdeEntscheidDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENT)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokument(DokumentDtoSpec dokument) {
+  public void setDokument(@jakarta.annotation.Nonnull DokumentDtoSpec dokument) {
     this.dokument = dokument;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -159,10 +161,7 @@ public class BeschwerdeEntscheidDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

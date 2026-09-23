@@ -15,15 +15,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchNotizCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchNotizCreateDto  implements Serializable {
-  private @Valid UUID gesuchId;
-  private @Valid String betreff;
-  private @Valid String text;
-  private @Valid ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
+  private UUID gesuchId;
+  private String betreff;
+  private String text;
+  private ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
 
   protected GesuchNotizCreateDto(GesuchNotizCreateDtoBuilder<?, ?> b) {
     this.gesuchId = b.gesuchId;
@@ -43,13 +43,12 @@ public class GesuchNotizCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
+  @JsonProperty(required = true, value = "gesuchId")
+  @NotNull public UUID getGesuchId() {
     return gesuchId;
   }
 
-  @JsonProperty("gesuchId")
+  @JsonProperty(required = true, value = "gesuchId")
   public void setGesuchId(UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
@@ -62,13 +61,12 @@ public class GesuchNotizCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("betreff")
-  @NotNull
-  public String getBetreff() {
+  @JsonProperty(required = true, value = "betreff")
+  @NotNull public String getBetreff() {
     return betreff;
   }
 
-  @JsonProperty("betreff")
+  @JsonProperty(required = true, value = "betreff")
   public void setBetreff(String betreff) {
     this.betreff = betreff;
   }
@@ -81,13 +79,12 @@ public class GesuchNotizCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("text")
-  @NotNull
-  public String getText() {
+  @JsonProperty(required = true, value = "text")
+  @NotNull public String getText() {
     return text;
   }
 
-  @JsonProperty("text")
+  @JsonProperty(required = true, value = "text")
   public void setText(String text) {
     this.text = text;
   }
@@ -100,13 +97,12 @@ public class GesuchNotizCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("notizTyp")
-  @NotNull
-  public ch.dvbern.stip.api.notiz.type.GesuchNotizTyp getNotizTyp() {
+  @JsonProperty(required = true, value = "notizTyp")
+  @NotNull public ch.dvbern.stip.api.notiz.type.GesuchNotizTyp getNotizTyp() {
     return notizTyp;
   }
 
-  @JsonProperty("notizTyp")
+  @JsonProperty(required = true, value = "notizTyp")
   public void setNotizTyp(ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp) {
     this.notizTyp = notizTyp;
   }
@@ -150,10 +146,7 @@ public class GesuchNotizCreateDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -201,4 +194,3 @@ public class GesuchNotizCreateDto  implements Serializable {
     }
   }
 }
-

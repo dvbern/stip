@@ -15,15 +15,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("CreateAusbildungUnterbruchAntragGS")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class CreateAusbildungUnterbruchAntragGSDto  implements Serializable {
-  private @Valid String kommentarGS;
-  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
-  private @Valid LocalDate startDate;
-  private @Valid LocalDate endDate;
+  private String kommentarGS;
+  private org.jboss.resteasy.reactive.multipart.FileUpload fileUpload;
+  private LocalDate startDate;
+  private LocalDate endDate;
 
   protected CreateAusbildungUnterbruchAntragGSDto(CreateAusbildungUnterbruchAntragGSDtoBuilder<?, ?> b) {
     this.kommentarGS = b.kommentarGS;
@@ -43,13 +43,12 @@ public class CreateAusbildungUnterbruchAntragGSDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentarGS")
-  @NotNull
-  public String getKommentarGS() {
+  @JsonProperty(required = true, value = "kommentarGS")
+  @NotNull public String getKommentarGS() {
     return kommentarGS;
   }
 
-  @JsonProperty("kommentarGS")
+  @JsonProperty(required = true, value = "kommentarGS")
   public void setKommentarGS(String kommentarGS) {
     this.kommentarGS = kommentarGS;
   }
@@ -62,13 +61,12 @@ public class CreateAusbildungUnterbruchAntragGSDto  implements Serializable {
   }
 
   
-  @JsonProperty("fileUpload")
-  @NotNull
-  public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
+  @JsonProperty(required = true, value = "fileUpload")
+  @NotNull @Valid public org.jboss.resteasy.reactive.multipart.FileUpload getFileUpload() {
     return fileUpload;
   }
 
-  @JsonProperty("fileUpload")
+  @JsonProperty(required = true, value = "fileUpload")
   public void setFileUpload(org.jboss.resteasy.reactive.multipart.FileUpload fileUpload) {
     this.fileUpload = fileUpload;
   }
@@ -81,13 +79,12 @@ public class CreateAusbildungUnterbruchAntragGSDto  implements Serializable {
   }
 
   
-  @JsonProperty("startDate")
-  @NotNull
-  public LocalDate getStartDate() {
+  @JsonProperty(required = true, value = "startDate")
+  @NotNull public LocalDate getStartDate() {
     return startDate;
   }
 
-  @JsonProperty("startDate")
+  @JsonProperty(required = true, value = "startDate")
   public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
@@ -100,13 +97,12 @@ public class CreateAusbildungUnterbruchAntragGSDto  implements Serializable {
   }
 
   
-  @JsonProperty("endDate")
-  @NotNull
-  public LocalDate getEndDate() {
+  @JsonProperty(required = true, value = "endDate")
+  @NotNull public LocalDate getEndDate() {
     return endDate;
   }
 
-  @JsonProperty("endDate")
+  @JsonProperty(required = true, value = "endDate")
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
   }
@@ -150,10 +146,7 @@ public class CreateAusbildungUnterbruchAntragGSDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -201,4 +194,3 @@ public class CreateAusbildungUnterbruchAntragGSDto  implements Serializable {
     }
   }
 }
-

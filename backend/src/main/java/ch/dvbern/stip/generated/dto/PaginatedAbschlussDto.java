@@ -18,15 +18,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedAbschluss")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedAbschlussDto  implements Serializable {
-  private @Valid Integer page;
-  private @Valid Integer pageSize;
-  private @Valid Integer totalEntries;
-  private @Valid List<AbschlussDto> entries;
+  private Integer page;
+  private Integer pageSize;
+  private Integer totalEntries;
+  private @Valid List<@Valid AbschlussDto> entries = new ArrayList<>();
 
   protected PaginatedAbschlussDto(PaginatedAbschlussDtoBuilder<?, ?> b) {
     this.page = b.page;
@@ -94,19 +94,19 @@ public class PaginatedAbschlussDto  implements Serializable {
 
   /**
    **/
-  public PaginatedAbschlussDto entries(List<AbschlussDto> entries) {
+  public PaginatedAbschlussDto entries(List<@Valid AbschlussDto> entries) {
     this.entries = entries;
     return this;
   }
 
   
   @JsonProperty("entries")
-  public List<AbschlussDto> getEntries() {
+  @Valid public List<@Valid AbschlussDto> getEntries() {
     return entries;
   }
 
   @JsonProperty("entries")
-  public void setEntries(List<AbschlussDto> entries) {
+  public void setEntries(List<@Valid AbschlussDto> entries) {
     this.entries = entries;
   }
 
@@ -165,10 +165,7 @@ public class PaginatedAbschlussDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -193,7 +190,7 @@ public class PaginatedAbschlussDto  implements Serializable {
     private Integer page;
     private Integer pageSize;
     private Integer totalEntries;
-    private List<AbschlussDto> entries;
+    private List<AbschlussDto> entries = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -216,4 +213,3 @@ public class PaginatedAbschlussDto  implements Serializable {
     }
   }
 }
-

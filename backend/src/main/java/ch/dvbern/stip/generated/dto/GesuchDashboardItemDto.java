@@ -23,23 +23,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDashboardItemDto  implements Serializable {
-  private @Valid GesuchsperiodeDto gesuchsperiode;
-  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
-  private @Valid UUID id;
-  private @Valid UUID currentTrancheId;
-  private @Valid List<FreiwilligDarlehenDto> freiwilligeDarlehenList = new ArrayList<>();
-  private @Valid LocalDate startDate;
-  private @Valid LocalDate endDate;
-  private @Valid Boolean canCreateAenderung;
-  private @Valid Boolean canCreateDarlehen;
-  private @Valid LocalDate nachfristDokumente;
-  private @Valid GesuchTrancheSlimDto offeneAenderung;
-  private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
+  private GesuchsperiodeDto gesuchsperiode;
+  private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+  private UUID id;
+  private UUID currentTrancheId;
+  private @Valid List<@Valid FreiwilligDarlehenDto> freiwilligeDarlehenList = new ArrayList<>();
+  private LocalDate startDate;
+  private LocalDate endDate;
+  private Boolean canCreateAenderung;
+  private Boolean canCreateDarlehen;
+  private LocalDate nachfristDokumente;
+  private GesuchTrancheSlimDto offeneAenderung;
+  private GesuchDashboardItemMissingDocumentsDto missingDocuments;
 
   protected GesuchDashboardItemDto(GesuchDashboardItemDtoBuilder<?, ?> b) {
     this.gesuchsperiode = b.gesuchsperiode;
@@ -67,13 +67,12 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchsperiode")
-  @NotNull
-  public GesuchsperiodeDto getGesuchsperiode() {
+  @JsonProperty(required = true, value = "gesuchsperiode")
+  @NotNull @Valid public GesuchsperiodeDto getGesuchsperiode() {
     return gesuchsperiode;
   }
 
-  @JsonProperty("gesuchsperiode")
+  @JsonProperty(required = true, value = "gesuchsperiode")
   public void setGesuchsperiode(GesuchsperiodeDto gesuchsperiode) {
     this.gesuchsperiode = gesuchsperiode;
   }
@@ -86,13 +85,12 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchStatus")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
+  @JsonProperty(required = true, value = "gesuchStatus")
+  @NotNull public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
-  @JsonProperty("gesuchStatus")
+  @JsonProperty(required = true, value = "gesuchStatus")
   public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
   }
@@ -105,13 +103,12 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -124,33 +121,31 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("currentTrancheId")
-  @NotNull
-  public UUID getCurrentTrancheId() {
+  @JsonProperty(required = true, value = "currentTrancheId")
+  @NotNull public UUID getCurrentTrancheId() {
     return currentTrancheId;
   }
 
-  @JsonProperty("currentTrancheId")
+  @JsonProperty(required = true, value = "currentTrancheId")
   public void setCurrentTrancheId(UUID currentTrancheId) {
     this.currentTrancheId = currentTrancheId;
   }
 
   /**
    **/
-  public GesuchDashboardItemDto freiwilligeDarlehenList(List<FreiwilligDarlehenDto> freiwilligeDarlehenList) {
+  public GesuchDashboardItemDto freiwilligeDarlehenList(List<@Valid FreiwilligDarlehenDto> freiwilligeDarlehenList) {
     this.freiwilligeDarlehenList = freiwilligeDarlehenList;
     return this;
   }
 
   
-  @JsonProperty("freiwilligeDarlehenList")
-  @NotNull
-  public List<FreiwilligDarlehenDto> getFreiwilligeDarlehenList() {
+  @JsonProperty(required = true, value = "freiwilligeDarlehenList")
+  @NotNull @Valid public List<@Valid FreiwilligDarlehenDto> getFreiwilligeDarlehenList() {
     return freiwilligeDarlehenList;
   }
 
-  @JsonProperty("freiwilligeDarlehenList")
-  public void setFreiwilligeDarlehenList(List<FreiwilligDarlehenDto> freiwilligeDarlehenList) {
+  @JsonProperty(required = true, value = "freiwilligeDarlehenList")
+  public void setFreiwilligeDarlehenList(List<@Valid FreiwilligDarlehenDto> freiwilligeDarlehenList) {
     this.freiwilligeDarlehenList = freiwilligeDarlehenList;
   }
 
@@ -178,13 +173,12 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("startDate")
-  @NotNull
-  public LocalDate getStartDate() {
+  @JsonProperty(required = true, value = "startDate")
+  @NotNull public LocalDate getStartDate() {
     return startDate;
   }
 
-  @JsonProperty("startDate")
+  @JsonProperty(required = true, value = "startDate")
   public void setStartDate(LocalDate startDate) {
     this.startDate = startDate;
   }
@@ -197,13 +191,12 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("endDate")
-  @NotNull
-  public LocalDate getEndDate() {
+  @JsonProperty(required = true, value = "endDate")
+  @NotNull public LocalDate getEndDate() {
     return endDate;
   }
 
-  @JsonProperty("endDate")
+  @JsonProperty(required = true, value = "endDate")
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
   }
@@ -216,13 +209,12 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("canCreateAenderung")
-  @NotNull
-  public Boolean getCanCreateAenderung() {
+  @JsonProperty(required = true, value = "canCreateAenderung")
+  @NotNull public Boolean getCanCreateAenderung() {
     return canCreateAenderung;
   }
 
-  @JsonProperty("canCreateAenderung")
+  @JsonProperty(required = true, value = "canCreateAenderung")
   public void setCanCreateAenderung(Boolean canCreateAenderung) {
     this.canCreateAenderung = canCreateAenderung;
   }
@@ -235,13 +227,12 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
   
-  @JsonProperty("canCreateDarlehen")
-  @NotNull
-  public Boolean getCanCreateDarlehen() {
+  @JsonProperty(required = true, value = "canCreateDarlehen")
+  @NotNull public Boolean getCanCreateDarlehen() {
     return canCreateDarlehen;
   }
 
-  @JsonProperty("canCreateDarlehen")
+  @JsonProperty(required = true, value = "canCreateDarlehen")
   public void setCanCreateDarlehen(Boolean canCreateDarlehen) {
     this.canCreateDarlehen = canCreateDarlehen;
   }
@@ -273,7 +264,7 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   
   @JsonProperty("offeneAenderung")
-  public GesuchTrancheSlimDto getOffeneAenderung() {
+  @Valid public GesuchTrancheSlimDto getOffeneAenderung() {
     return offeneAenderung;
   }
 
@@ -291,7 +282,7 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   
   @JsonProperty("missingDocuments")
-  public GesuchDashboardItemMissingDocumentsDto getMissingDocuments() {
+  @Valid public GesuchDashboardItemMissingDocumentsDto getMissingDocuments() {
     return missingDocuments;
   }
 
@@ -355,10 +346,7 @@ public class GesuchDashboardItemDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -446,4 +434,3 @@ public class GesuchDashboardItemDto  implements Serializable {
     }
   }
 }
-

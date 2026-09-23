@@ -37,44 +37,51 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AdresseDtoSpec.JSON_PROPERTY_ORT
 })
 @JsonTypeName("Adresse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AdresseDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_LAND_ID = "landId";
+  @jakarta.annotation.Nonnull
   private UUID landId;
 
   public static final String JSON_PROPERTY_CO_ADRESSE = "coAdresse";
+  @jakarta.annotation.Nullable
   private String coAdresse;
 
   public static final String JSON_PROPERTY_STRASSE = "strasse";
+  @jakarta.annotation.Nonnull
   private String strasse;
 
   public static final String JSON_PROPERTY_HAUSNUMMER = "hausnummer";
+  @jakarta.annotation.Nullable
   private String hausnummer;
 
   public static final String JSON_PROPERTY_PLZ = "plz";
+  @jakarta.annotation.Nonnull
   private String plz;
 
   public static final String JSON_PROPERTY_ORT = "ort";
+  @jakarta.annotation.Nonnull
   private String ort;
 
   public AdresseDtoSpec() {
   }
 
-  public AdresseDtoSpec id(UUID id) {
+  public AdresseDtoSpec id(@jakarta.annotation.Nullable UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
@@ -82,25 +89,24 @@ public class AdresseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nullable UUID id) {
     this.id = id;
   }
 
-
-  public AdresseDtoSpec landId(UUID landId) {
+  public AdresseDtoSpec landId(@jakarta.annotation.Nonnull UUID landId) {
     
     this.landId = landId;
     return this;
   }
 
-   /**
+  /**
    * Get landId
    * @return landId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_LAND_ID)
+  @JsonProperty(value = JSON_PROPERTY_LAND_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getLandId() {
@@ -108,25 +114,24 @@ public class AdresseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_LAND_ID)
+  @JsonProperty(value = JSON_PROPERTY_LAND_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLandId(UUID landId) {
+  public void setLandId(@jakarta.annotation.Nonnull UUID landId) {
     this.landId = landId;
   }
 
-
-  public AdresseDtoSpec coAdresse(String coAdresse) {
+  public AdresseDtoSpec coAdresse(@jakarta.annotation.Nullable String coAdresse) {
     
     this.coAdresse = coAdresse;
     return this;
   }
 
-   /**
+  /**
    * Get coAdresse
    * @return coAdresse
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CO_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_CO_ADRESSE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getCoAdresse() {
@@ -134,25 +139,24 @@ public class AdresseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CO_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_CO_ADRESSE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCoAdresse(String coAdresse) {
+  public void setCoAdresse(@jakarta.annotation.Nullable String coAdresse) {
     this.coAdresse = coAdresse;
   }
 
-
-  public AdresseDtoSpec strasse(String strasse) {
+  public AdresseDtoSpec strasse(@jakarta.annotation.Nonnull String strasse) {
     
     this.strasse = strasse;
     return this;
   }
 
-   /**
+  /**
    * Get strasse
    * @return strasse
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STRASSE)
+  @JsonProperty(value = JSON_PROPERTY_STRASSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getStrasse() {
@@ -160,25 +164,24 @@ public class AdresseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STRASSE)
+  @JsonProperty(value = JSON_PROPERTY_STRASSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStrasse(String strasse) {
+  public void setStrasse(@jakarta.annotation.Nonnull String strasse) {
     this.strasse = strasse;
   }
 
-
-  public AdresseDtoSpec hausnummer(String hausnummer) {
+  public AdresseDtoSpec hausnummer(@jakarta.annotation.Nullable String hausnummer) {
     
     this.hausnummer = hausnummer;
     return this;
   }
 
-   /**
+  /**
    * Get hausnummer
    * @return hausnummer
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_HAUSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_HAUSNUMMER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getHausnummer() {
@@ -186,25 +189,24 @@ public class AdresseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_HAUSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_HAUSNUMMER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setHausnummer(String hausnummer) {
+  public void setHausnummer(@jakarta.annotation.Nullable String hausnummer) {
     this.hausnummer = hausnummer;
   }
 
-
-  public AdresseDtoSpec plz(String plz) {
+  public AdresseDtoSpec plz(@jakarta.annotation.Nonnull String plz) {
     
     this.plz = plz;
     return this;
   }
 
-   /**
+  /**
    * Get plz
    * @return plz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_PLZ)
+  @JsonProperty(value = JSON_PROPERTY_PLZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPlz() {
@@ -212,25 +214,24 @@ public class AdresseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PLZ)
+  @JsonProperty(value = JSON_PROPERTY_PLZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPlz(String plz) {
+  public void setPlz(@jakarta.annotation.Nonnull String plz) {
     this.plz = plz;
   }
 
-
-  public AdresseDtoSpec ort(String ort) {
+  public AdresseDtoSpec ort(@jakarta.annotation.Nonnull String ort) {
     
     this.ort = ort;
     return this;
   }
 
-   /**
+  /**
    * Get ort
    * @return ort
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ORT)
+  @JsonProperty(value = JSON_PROPERTY_ORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getOrt() {
@@ -238,11 +239,12 @@ public class AdresseDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ORT)
+  @JsonProperty(value = JSON_PROPERTY_ORT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setOrt(String ort) {
+  public void setOrt(@jakarta.annotation.Nonnull String ort) {
     this.ort = ort;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -287,10 +289,7 @@ public class AdresseDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

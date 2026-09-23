@@ -15,18 +15,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("MassendruckEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class MassendruckEntryDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid Boolean isVersendet;
-  private @Valid String nachname;
-  private @Valid String vorname;
-  private @Valid String gesuchNummer;
-  private @Valid UUID gesuchId;
-  private @Valid UUID gesuchTrancheId;
+  private UUID id;
+  private Boolean isVersendet;
+  private String nachname;
+  private String vorname;
+  private String gesuchNummer;
+  private UUID gesuchId;
+  private UUID gesuchTrancheId;
 
   protected MassendruckEntryDto(MassendruckEntryDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -49,13 +49,12 @@ public class MassendruckEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -68,13 +67,12 @@ public class MassendruckEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("isVersendet")
-  @NotNull
-  public Boolean getIsVersendet() {
+  @JsonProperty(required = true, value = "isVersendet")
+  @NotNull public Boolean getIsVersendet() {
     return isVersendet;
   }
 
-  @JsonProperty("isVersendet")
+  @JsonProperty(required = true, value = "isVersendet")
   public void setIsVersendet(Boolean isVersendet) {
     this.isVersendet = isVersendet;
   }
@@ -87,13 +85,12 @@ public class MassendruckEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("nachname")
-  @NotNull
-  public String getNachname() {
+  @JsonProperty(required = true, value = "nachname")
+  @NotNull public String getNachname() {
     return nachname;
   }
 
-  @JsonProperty("nachname")
+  @JsonProperty(required = true, value = "nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
   }
@@ -106,13 +103,12 @@ public class MassendruckEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
+  @JsonProperty(required = true, value = "vorname")
+  @NotNull public String getVorname() {
     return vorname;
   }
 
-  @JsonProperty("vorname")
+  @JsonProperty(required = true, value = "vorname")
   public void setVorname(String vorname) {
     this.vorname = vorname;
   }
@@ -125,13 +121,12 @@ public class MassendruckEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchNummer")
-  @NotNull
-  public String getGesuchNummer() {
+  @JsonProperty(required = true, value = "gesuchNummer")
+  @NotNull public String getGesuchNummer() {
     return gesuchNummer;
   }
 
-  @JsonProperty("gesuchNummer")
+  @JsonProperty(required = true, value = "gesuchNummer")
   public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
   }
@@ -144,13 +139,12 @@ public class MassendruckEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
+  @JsonProperty(required = true, value = "gesuchId")
+  @NotNull public UUID getGesuchId() {
     return gesuchId;
   }
 
-  @JsonProperty("gesuchId")
+  @JsonProperty(required = true, value = "gesuchId")
   public void setGesuchId(UUID gesuchId) {
     this.gesuchId = gesuchId;
   }
@@ -163,13 +157,12 @@ public class MassendruckEntryDto  implements Serializable {
   }
 
   
-  @JsonProperty("gesuchTrancheId")
-  @NotNull
-  public UUID getGesuchTrancheId() {
+  @JsonProperty(required = true, value = "gesuchTrancheId")
+  @NotNull public UUID getGesuchTrancheId() {
     return gesuchTrancheId;
   }
 
-  @JsonProperty("gesuchTrancheId")
+  @JsonProperty(required = true, value = "gesuchTrancheId")
   public void setGesuchTrancheId(UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
   }
@@ -219,10 +212,7 @@ public class MassendruckEntryDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -285,4 +275,3 @@ public class MassendruckEntryDto  implements Serializable {
     }
   }
 }
-

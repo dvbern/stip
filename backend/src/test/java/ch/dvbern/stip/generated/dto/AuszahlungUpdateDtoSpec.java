@@ -32,29 +32,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AuszahlungUpdateDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
 @JsonTypeName("AuszahlungUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class AuszahlungUpdateDtoSpec {
   public static final String JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST = "auszahlungAnSozialdienst";
+  @jakarta.annotation.Nonnull
   private Boolean auszahlungAnSozialdienst;
 
   public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  @jakarta.annotation.Nullable
   private ZahlungsverbindungDtoSpec zahlungsverbindung;
 
   public AuszahlungUpdateDtoSpec() {
   }
 
-  public AuszahlungUpdateDtoSpec auszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
+  public AuszahlungUpdateDtoSpec auszahlungAnSozialdienst(@jakarta.annotation.Nonnull Boolean auszahlungAnSozialdienst) {
     
     this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
     return this;
   }
 
-   /**
+  /**
    * Get auszahlungAnSozialdienst
    * @return auszahlungAnSozialdienst
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST)
+  @JsonProperty(value = JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getAuszahlungAnSozialdienst() {
@@ -62,25 +64,24 @@ public class AuszahlungUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST)
+  @JsonProperty(value = JSON_PROPERTY_AUSZAHLUNG_AN_SOZIALDIENST, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAuszahlungAnSozialdienst(Boolean auszahlungAnSozialdienst) {
+  public void setAuszahlungAnSozialdienst(@jakarta.annotation.Nonnull Boolean auszahlungAnSozialdienst) {
     this.auszahlungAnSozialdienst = auszahlungAnSozialdienst;
   }
 
-
-  public AuszahlungUpdateDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+  public AuszahlungUpdateDtoSpec zahlungsverbindung(@jakarta.annotation.Nullable ZahlungsverbindungDtoSpec zahlungsverbindung) {
     
     this.zahlungsverbindung = zahlungsverbindung;
     return this;
   }
 
-   /**
+  /**
    * Get zahlungsverbindung
    * @return zahlungsverbindung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZAHLUNGSVERBINDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ZahlungsverbindungDtoSpec getZahlungsverbindung() {
@@ -88,11 +89,12 @@ public class AuszahlungUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonProperty(value = JSON_PROPERTY_ZAHLUNGSVERBINDUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setZahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+  public void setZahlungsverbindung(@jakarta.annotation.Nullable ZahlungsverbindungDtoSpec zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -127,10 +129,7 @@ public class AuszahlungUpdateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -53,66 +53,84 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KOSTEN
 })
 @JsonTypeName("PersoenlichesBudgetresultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class PersoenlichesBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_HAUSHALT_NAMES = "haushaltNames";
+  @jakarta.annotation.Nonnull
   private List<String> haushaltNames;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_VORNAME_PARTNER = "vornamePartner";
+  @jakarta.annotation.Nullable
   private String vornamePartner;
 
   public static final String JSON_PROPERTY_NACHNAME_PARTNER = "nachnamePartner";
+  @jakarta.annotation.Nullable
   private String nachnamePartner;
 
   public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
+  @jakarta.annotation.Nonnull
   private String sozialversicherungsnummer;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  @jakarta.annotation.Nonnull
   private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_TOTAL = "total";
+  @jakarta.annotation.Nonnull
   private Integer total;
 
   public static final String JSON_PROPERTY_EINNAHMEN_MINUS_KOSTEN = "einnahmenMinusKosten";
+  @jakarta.annotation.Nonnull
   private Integer einnahmenMinusKosten;
 
   public static final String JSON_PROPERTY_FEHLBETRAG = "fehlbetrag";
+  @jakarta.annotation.Nonnull
   private Integer fehlbetrag;
 
   public static final String JSON_PROPERTY_PRO_KOPF_TEILUNG = "proKopfTeilung";
+  @jakarta.annotation.Nullable
   private Integer proKopfTeilung;
 
   public static final String JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG = "totalNachProKopfTeilung";
+  @jakarta.annotation.Nullable
   private Integer totalNachProKopfTeilung;
 
   public static final String JSON_PROPERTY_EIGENER_HAUSHALT = "eigenerHaushalt";
+  @jakarta.annotation.Nonnull
   private Boolean eigenerHaushalt;
 
   public static final String JSON_PROPERTY_BUDGET_TRANCHE = "budgetTranche";
+  @jakarta.annotation.Nonnull
   private Integer budgetTranche;
 
   public static final String JSON_PROPERTY_ANZAHL_MONATE = "anzahlMonate";
+  @jakarta.annotation.Nonnull
   private Integer anzahlMonate;
 
   public static final String JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT = "anzahlPersonenImHaushalt";
+  @jakarta.annotation.Nonnull
   private Integer anzahlPersonenImHaushalt;
 
   public static final String JSON_PROPERTY_EINNAHMEN = "einnahmen";
+  @jakarta.annotation.Nonnull
   private PersoenlichesBudgetresultatEinnahmenDtoSpec einnahmen;
 
   public static final String JSON_PROPERTY_KOSTEN = "kosten";
+  @jakarta.annotation.Nonnull
   private PersoenlichesBudgetresultatKostenDtoSpec kosten;
 
   public PersoenlichesBudgetresultatDtoSpec() {
   }
 
-  public PersoenlichesBudgetresultatDtoSpec haushaltNames(List<String> haushaltNames) {
+  public PersoenlichesBudgetresultatDtoSpec haushaltNames(@jakarta.annotation.Nonnull List<String> haushaltNames) {
     
     this.haushaltNames = haushaltNames;
     return this;
@@ -126,12 +144,12 @@ public class PersoenlichesBudgetresultatDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get haushaltNames
    * @return haushaltNames
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_HAUSHALT_NAMES)
+  @JsonProperty(value = JSON_PROPERTY_HAUSHALT_NAMES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<String> getHaushaltNames() {
@@ -139,25 +157,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_HAUSHALT_NAMES)
+  @JsonProperty(value = JSON_PROPERTY_HAUSHALT_NAMES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setHaushaltNames(List<String> haushaltNames) {
+  public void setHaushaltNames(@jakarta.annotation.Nonnull List<String> haushaltNames) {
     this.haushaltNames = haushaltNames;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec vorname(String vorname) {
+  public PersoenlichesBudgetresultatDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -165,25 +182,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec nachname(String nachname) {
+  public PersoenlichesBudgetresultatDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -191,25 +207,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec vornamePartner(String vornamePartner) {
+  public PersoenlichesBudgetresultatDtoSpec vornamePartner(@jakarta.annotation.Nullable String vornamePartner) {
     
     this.vornamePartner = vornamePartner;
     return this;
   }
 
-   /**
+  /**
    * Get vornamePartner
    * @return vornamePartner
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VORNAME_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getVornamePartner() {
@@ -217,25 +232,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVornamePartner(String vornamePartner) {
+  public void setVornamePartner(@jakarta.annotation.Nullable String vornamePartner) {
     this.vornamePartner = vornamePartner;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec nachnamePartner(String nachnamePartner) {
+  public PersoenlichesBudgetresultatDtoSpec nachnamePartner(@jakarta.annotation.Nullable String nachnamePartner) {
     
     this.nachnamePartner = nachnamePartner;
     return this;
   }
 
-   /**
+  /**
    * Get nachnamePartner
    * @return nachnamePartner
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NACHNAME_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getNachnamePartner() {
@@ -243,25 +257,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME_PARTNER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachnamePartner(String nachnamePartner) {
+  public void setNachnamePartner(@jakarta.annotation.Nullable String nachnamePartner) {
     this.nachnamePartner = nachnamePartner;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
+  public PersoenlichesBudgetresultatDtoSpec sozialversicherungsnummer(@jakarta.annotation.Nonnull String sozialversicherungsnummer) {
     
     this.sozialversicherungsnummer = sozialversicherungsnummer;
     return this;
   }
 
-   /**
+  /**
    * Get sozialversicherungsnummer
    * @return sozialversicherungsnummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getSozialversicherungsnummer() {
@@ -269,25 +282,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+  public void setSozialversicherungsnummer(@jakarta.annotation.Nonnull String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public PersoenlichesBudgetresultatDtoSpec geburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
   }
 
-   /**
+  /**
    * dd.MM.yyyy
    * @return geburtsdatum
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getGeburtsdatum() {
@@ -295,25 +307,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonProperty(value = JSON_PROPERTY_GEBURTSDATUM, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(@jakarta.annotation.Nonnull LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec total(Integer total) {
+  public PersoenlichesBudgetresultatDtoSpec total(@jakarta.annotation.Nonnull Integer total) {
     
     this.total = total;
     return this;
   }
 
-   /**
+  /**
    * Get total
    * @return total
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotal() {
@@ -321,25 +332,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotal(Integer total) {
+  public void setTotal(@jakarta.annotation.Nonnull Integer total) {
     this.total = total;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec einnahmenMinusKosten(Integer einnahmenMinusKosten) {
+  public PersoenlichesBudgetresultatDtoSpec einnahmenMinusKosten(@jakarta.annotation.Nonnull Integer einnahmenMinusKosten) {
     
     this.einnahmenMinusKosten = einnahmenMinusKosten;
     return this;
   }
 
-   /**
+  /**
    * Get einnahmenMinusKosten
    * @return einnahmenMinusKosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINNAHMEN_MINUS_KOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_EINNAHMEN_MINUS_KOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEinnahmenMinusKosten() {
@@ -347,25 +357,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINNAHMEN_MINUS_KOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_EINNAHMEN_MINUS_KOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinnahmenMinusKosten(Integer einnahmenMinusKosten) {
+  public void setEinnahmenMinusKosten(@jakarta.annotation.Nonnull Integer einnahmenMinusKosten) {
     this.einnahmenMinusKosten = einnahmenMinusKosten;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec fehlbetrag(Integer fehlbetrag) {
+  public PersoenlichesBudgetresultatDtoSpec fehlbetrag(@jakarta.annotation.Nonnull Integer fehlbetrag) {
     
     this.fehlbetrag = fehlbetrag;
     return this;
   }
 
-   /**
+  /**
    * Get fehlbetrag
    * @return fehlbetrag
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FEHLBETRAG)
+  @JsonProperty(value = JSON_PROPERTY_FEHLBETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFehlbetrag() {
@@ -373,25 +382,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FEHLBETRAG)
+  @JsonProperty(value = JSON_PROPERTY_FEHLBETRAG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFehlbetrag(Integer fehlbetrag) {
+  public void setFehlbetrag(@jakarta.annotation.Nonnull Integer fehlbetrag) {
     this.fehlbetrag = fehlbetrag;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec proKopfTeilung(Integer proKopfTeilung) {
+  public PersoenlichesBudgetresultatDtoSpec proKopfTeilung(@jakarta.annotation.Nullable Integer proKopfTeilung) {
     
     this.proKopfTeilung = proKopfTeilung;
     return this;
   }
 
-   /**
+  /**
    * Get proKopfTeilung
    * @return proKopfTeilung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PRO_KOPF_TEILUNG)
+  @JsonProperty(value = JSON_PROPERTY_PRO_KOPF_TEILUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getProKopfTeilung() {
@@ -399,25 +407,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PRO_KOPF_TEILUNG)
+  @JsonProperty(value = JSON_PROPERTY_PRO_KOPF_TEILUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setProKopfTeilung(Integer proKopfTeilung) {
+  public void setProKopfTeilung(@jakarta.annotation.Nullable Integer proKopfTeilung) {
     this.proKopfTeilung = proKopfTeilung;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec totalNachProKopfTeilung(Integer totalNachProKopfTeilung) {
+  public PersoenlichesBudgetresultatDtoSpec totalNachProKopfTeilung(@jakarta.annotation.Nullable Integer totalNachProKopfTeilung) {
     
     this.totalNachProKopfTeilung = totalNachProKopfTeilung;
     return this;
   }
 
-   /**
+  /**
    * Get totalNachProKopfTeilung
    * @return totalNachProKopfTeilung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getTotalNachProKopfTeilung() {
@@ -425,25 +432,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTotalNachProKopfTeilung(Integer totalNachProKopfTeilung) {
+  public void setTotalNachProKopfTeilung(@jakarta.annotation.Nullable Integer totalNachProKopfTeilung) {
     this.totalNachProKopfTeilung = totalNachProKopfTeilung;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec eigenerHaushalt(Boolean eigenerHaushalt) {
+  public PersoenlichesBudgetresultatDtoSpec eigenerHaushalt(@jakarta.annotation.Nonnull Boolean eigenerHaushalt) {
     
     this.eigenerHaushalt = eigenerHaushalt;
     return this;
   }
 
-   /**
+  /**
    * Get eigenerHaushalt
    * @return eigenerHaushalt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EIGENER_HAUSHALT)
+  @JsonProperty(value = JSON_PROPERTY_EIGENER_HAUSHALT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getEigenerHaushalt() {
@@ -451,25 +457,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EIGENER_HAUSHALT)
+  @JsonProperty(value = JSON_PROPERTY_EIGENER_HAUSHALT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEigenerHaushalt(Boolean eigenerHaushalt) {
+  public void setEigenerHaushalt(@jakarta.annotation.Nonnull Boolean eigenerHaushalt) {
     this.eigenerHaushalt = eigenerHaushalt;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec budgetTranche(Integer budgetTranche) {
+  public PersoenlichesBudgetresultatDtoSpec budgetTranche(@jakarta.annotation.Nonnull Integer budgetTranche) {
     
     this.budgetTranche = budgetTranche;
     return this;
   }
 
-   /**
+  /**
    * Get budgetTranche
    * @return budgetTranche
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BUDGET_TRANCHE)
+  @JsonProperty(value = JSON_PROPERTY_BUDGET_TRANCHE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getBudgetTranche() {
@@ -477,25 +482,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BUDGET_TRANCHE)
+  @JsonProperty(value = JSON_PROPERTY_BUDGET_TRANCHE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBudgetTranche(Integer budgetTranche) {
+  public void setBudgetTranche(@jakarta.annotation.Nonnull Integer budgetTranche) {
     this.budgetTranche = budgetTranche;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec anzahlMonate(Integer anzahlMonate) {
+  public PersoenlichesBudgetresultatDtoSpec anzahlMonate(@jakarta.annotation.Nonnull Integer anzahlMonate) {
     
     this.anzahlMonate = anzahlMonate;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlMonate
    * @return anzahlMonate
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlMonate() {
@@ -503,25 +507,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlMonate(Integer anzahlMonate) {
+  public void setAnzahlMonate(@jakarta.annotation.Nonnull Integer anzahlMonate) {
     this.anzahlMonate = anzahlMonate;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec anzahlPersonenImHaushalt(Integer anzahlPersonenImHaushalt) {
+  public PersoenlichesBudgetresultatDtoSpec anzahlPersonenImHaushalt(@jakarta.annotation.Nonnull Integer anzahlPersonenImHaushalt) {
     
     this.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlPersonenImHaushalt
    * @return anzahlPersonenImHaushalt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlPersonenImHaushalt() {
@@ -529,25 +532,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlPersonenImHaushalt(Integer anzahlPersonenImHaushalt) {
+  public void setAnzahlPersonenImHaushalt(@jakarta.annotation.Nonnull Integer anzahlPersonenImHaushalt) {
     this.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec einnahmen(PersoenlichesBudgetresultatEinnahmenDtoSpec einnahmen) {
+  public PersoenlichesBudgetresultatDtoSpec einnahmen(@jakarta.annotation.Nonnull PersoenlichesBudgetresultatEinnahmenDtoSpec einnahmen) {
     
     this.einnahmen = einnahmen;
     return this;
   }
 
-   /**
+  /**
    * Get einnahmen
    * @return einnahmen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EINNAHMEN)
+  @JsonProperty(value = JSON_PROPERTY_EINNAHMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public PersoenlichesBudgetresultatEinnahmenDtoSpec getEinnahmen() {
@@ -555,25 +557,24 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EINNAHMEN)
+  @JsonProperty(value = JSON_PROPERTY_EINNAHMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEinnahmen(PersoenlichesBudgetresultatEinnahmenDtoSpec einnahmen) {
+  public void setEinnahmen(@jakarta.annotation.Nonnull PersoenlichesBudgetresultatEinnahmenDtoSpec einnahmen) {
     this.einnahmen = einnahmen;
   }
 
-
-  public PersoenlichesBudgetresultatDtoSpec kosten(PersoenlichesBudgetresultatKostenDtoSpec kosten) {
+  public PersoenlichesBudgetresultatDtoSpec kosten(@jakarta.annotation.Nonnull PersoenlichesBudgetresultatKostenDtoSpec kosten) {
     
     this.kosten = kosten;
     return this;
   }
 
-   /**
+  /**
    * Get kosten
    * @return kosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_KOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public PersoenlichesBudgetresultatKostenDtoSpec getKosten() {
@@ -581,11 +582,12 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_KOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKosten(PersoenlichesBudgetresultatKostenDtoSpec kosten) {
+  public void setKosten(@jakarta.annotation.Nonnull PersoenlichesBudgetresultatKostenDtoSpec kosten) {
     this.kosten = kosten;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -652,10 +654,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

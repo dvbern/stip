@@ -42,53 +42,63 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   LebenslaufItemUpdateDtoSpec.JSON_PROPERTY_INVALID
 })
 @JsonTypeName("LebenslaufItemUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class LebenslaufItemUpdateDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
   private UUID id;
 
   public static final String JSON_PROPERTY_ABSCHLUSS_ID = "abschlussId";
+  @jakarta.annotation.Nullable
   private UUID abschlussId;
 
   public static final String JSON_PROPERTY_VON = "von";
+  @jakarta.annotation.Nonnull
   private String von;
 
   public static final String JSON_PROPERTY_BIS = "bis";
+  @jakarta.annotation.Nonnull
   private String bis;
 
   public static final String JSON_PROPERTY_WOHNSITZ = "wohnsitz";
+  @jakarta.annotation.Nonnull
   private WohnsitzKantonDtoSpec wohnsitz;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN = "ausbildungAbgeschlossen";
+  @jakarta.annotation.Nullable
   private Boolean ausbildungAbgeschlossen;
 
   public static final String JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG = "fachrichtungBerufsbezeichnung";
+  @jakarta.annotation.Nullable
   private String fachrichtungBerufsbezeichnung;
 
   public static final String JSON_PROPERTY_TAETIGKEITSART = "taetigkeitsart";
+  @jakarta.annotation.Nullable
   private TaetigkeitsartDtoSpec taetigkeitsart;
 
   public static final String JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG = "taetigkeitsBeschreibung";
+  @jakarta.annotation.Nullable
   private String taetigkeitsBeschreibung;
 
   public static final String JSON_PROPERTY_INVALID = "invalid";
+  @jakarta.annotation.Nullable
   private Boolean invalid;
 
   public LebenslaufItemUpdateDtoSpec() {
   }
 
-  public LebenslaufItemUpdateDtoSpec id(UUID id) {
+  public LebenslaufItemUpdateDtoSpec id(@jakarta.annotation.Nullable UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getId() {
@@ -96,25 +106,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nullable UUID id) {
     this.id = id;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec abschlussId(UUID abschlussId) {
+  public LebenslaufItemUpdateDtoSpec abschlussId(@jakarta.annotation.Nullable UUID abschlussId) {
     
     this.abschlussId = abschlussId;
     return this;
   }
 
-   /**
+  /**
    * Get abschlussId
    * @return abschlussId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_ID)
+  @JsonProperty(value = JSON_PROPERTY_ABSCHLUSS_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getAbschlussId() {
@@ -122,25 +131,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ABSCHLUSS_ID)
+  @JsonProperty(value = JSON_PROPERTY_ABSCHLUSS_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAbschlussId(UUID abschlussId) {
+  public void setAbschlussId(@jakarta.annotation.Nullable UUID abschlussId) {
     this.abschlussId = abschlussId;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec von(String von) {
+  public LebenslaufItemUpdateDtoSpec von(@jakarta.annotation.Nonnull String von) {
     
     this.von = von;
     return this;
   }
 
-   /**
+  /**
    * Datum im Format mm.YYYY
    * @return von
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VON)
+  @JsonProperty(value = JSON_PROPERTY_VON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVon() {
@@ -148,25 +156,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VON)
+  @JsonProperty(value = JSON_PROPERTY_VON, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVon(String von) {
+  public void setVon(@jakarta.annotation.Nonnull String von) {
     this.von = von;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec bis(String bis) {
+  public LebenslaufItemUpdateDtoSpec bis(@jakarta.annotation.Nonnull String bis) {
     
     this.bis = bis;
     return this;
   }
 
-   /**
+  /**
    * Datum im Format mm.YYYY
    * @return bis
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BIS)
+  @JsonProperty(value = JSON_PROPERTY_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBis() {
@@ -174,25 +181,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BIS)
+  @JsonProperty(value = JSON_PROPERTY_BIS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBis(String bis) {
+  public void setBis(@jakarta.annotation.Nonnull String bis) {
     this.bis = bis;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec wohnsitz(WohnsitzKantonDtoSpec wohnsitz) {
+  public LebenslaufItemUpdateDtoSpec wohnsitz(@jakarta.annotation.Nonnull WohnsitzKantonDtoSpec wohnsitz) {
     
     this.wohnsitz = wohnsitz;
     return this;
   }
 
-   /**
+  /**
    * Get wohnsitz
    * @return wohnsitz
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public WohnsitzKantonDtoSpec getWohnsitz() {
@@ -200,25 +206,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ)
+  @JsonProperty(value = JSON_PROPERTY_WOHNSITZ, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitz(WohnsitzKantonDtoSpec wohnsitz) {
+  public void setWohnsitz(@jakarta.annotation.Nonnull WohnsitzKantonDtoSpec wohnsitz) {
     this.wohnsitz = wohnsitz;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec ausbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
+  public LebenslaufItemUpdateDtoSpec ausbildungAbgeschlossen(@jakarta.annotation.Nullable Boolean ausbildungAbgeschlossen) {
     
     this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
     return this;
   }
 
-   /**
+  /**
    * Get ausbildungAbgeschlossen
    * @return ausbildungAbgeschlossen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getAusbildungAbgeschlossen() {
@@ -226,25 +231,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN)
+  @JsonProperty(value = JSON_PROPERTY_AUSBILDUNG_ABGESCHLOSSEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
+  public void setAusbildungAbgeschlossen(@jakarta.annotation.Nullable Boolean ausbildungAbgeschlossen) {
     this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+  public LebenslaufItemUpdateDtoSpec fachrichtungBerufsbezeichnung(@jakarta.annotation.Nullable String fachrichtungBerufsbezeichnung) {
     
     this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
     return this;
   }
 
-   /**
+  /**
    * Entweder fachrichtung oder berufsbezeichnung kommt auf die Zusatzfrage an
    * @return fachrichtungBerufsbezeichnung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
+  @JsonProperty(value = JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getFachrichtungBerufsbezeichnung() {
@@ -252,25 +256,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
+  @JsonProperty(value = JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+  public void setFachrichtungBerufsbezeichnung(@jakarta.annotation.Nullable String fachrichtungBerufsbezeichnung) {
     this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec taetigkeitsart(TaetigkeitsartDtoSpec taetigkeitsart) {
+  public LebenslaufItemUpdateDtoSpec taetigkeitsart(@jakarta.annotation.Nullable TaetigkeitsartDtoSpec taetigkeitsart) {
     
     this.taetigkeitsart = taetigkeitsart;
     return this;
   }
 
-   /**
+  /**
    * Get taetigkeitsart
    * @return taetigkeitsart
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITSART)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITSART, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public TaetigkeitsartDtoSpec getTaetigkeitsart() {
@@ -278,25 +281,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITSART)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITSART, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTaetigkeitsart(TaetigkeitsartDtoSpec taetigkeitsart) {
+  public void setTaetigkeitsart(@jakarta.annotation.Nullable TaetigkeitsartDtoSpec taetigkeitsart) {
     this.taetigkeitsart = taetigkeitsart;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec taetigkeitsBeschreibung(String taetigkeitsBeschreibung) {
+  public LebenslaufItemUpdateDtoSpec taetigkeitsBeschreibung(@jakarta.annotation.Nullable String taetigkeitsBeschreibung) {
     
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
     return this;
   }
 
-   /**
+  /**
    * Required wenn taetigkeitsart !&#x3D; null
    * @return taetigkeitsBeschreibung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getTaetigkeitsBeschreibung() {
@@ -304,25 +306,24 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG)
+  @JsonProperty(value = JSON_PROPERTY_TAETIGKEITS_BESCHREIBUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTaetigkeitsBeschreibung(String taetigkeitsBeschreibung) {
+  public void setTaetigkeitsBeschreibung(@jakarta.annotation.Nullable String taetigkeitsBeschreibung) {
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
   }
 
-
-  public LebenslaufItemUpdateDtoSpec invalid(Boolean invalid) {
+  public LebenslaufItemUpdateDtoSpec invalid(@jakarta.annotation.Nullable Boolean invalid) {
     
     this.invalid = invalid;
     return this;
   }
 
-   /**
+  /**
    * Falls es Überschneidungen gibt mit dem Ausbildung Beginn
    * @return invalid
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_INVALID)
+  @JsonProperty(value = JSON_PROPERTY_INVALID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getInvalid() {
@@ -330,11 +331,12 @@ public class LebenslaufItemUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_INVALID)
+  @JsonProperty(value = JSON_PROPERTY_INVALID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInvalid(Boolean invalid) {
+  public void setInvalid(@jakarta.annotation.Nullable Boolean invalid) {
     this.invalid = invalid;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -385,10 +387,7 @@ public class LebenslaufItemUpdateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

@@ -40,47 +40,55 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamiliensituationUpdateDtoSpec.JSON_PROPERTY_WER_ZAHLT_ALIMENTE
 })
 @JsonTypeName("FamiliensituationUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FamiliensituationUpdateDtoSpec {
   public static final String JSON_PROPERTY_ELTERN_VERHEIRATET_ZUSAMMEN = "elternVerheiratetZusammen";
+  @jakarta.annotation.Nonnull
   private Boolean elternVerheiratetZusammen;
 
   public static final String JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN = "elternteilUnbekanntVerstorben";
+  @jakarta.annotation.Nullable
   private Boolean elternteilUnbekanntVerstorben;
 
   public static final String JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG = "gerichtlicheAlimentenregelung";
+  @jakarta.annotation.Nullable
   private Boolean gerichtlicheAlimentenregelung;
 
   public static final String JSON_PROPERTY_MUTTER_UNBEKANNT_VERSTORBEN = "mutterUnbekanntVerstorben";
+  @jakarta.annotation.Nullable
   private ElternAbwesenheitsGrundDtoSpec mutterUnbekanntVerstorben;
 
   public static final String JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND = "mutterUnbekanntGrund";
+  @jakarta.annotation.Nullable
   private ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund;
 
   public static final String JSON_PROPERTY_VATER_UNBEKANNT_VERSTORBEN = "vaterUnbekanntVerstorben";
+  @jakarta.annotation.Nullable
   private ElternAbwesenheitsGrundDtoSpec vaterUnbekanntVerstorben;
 
   public static final String JSON_PROPERTY_VATER_UNBEKANNT_GRUND = "vaterUnbekanntGrund";
+  @jakarta.annotation.Nullable
   private ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund;
 
   public static final String JSON_PROPERTY_WER_ZAHLT_ALIMENTE = "werZahltAlimente";
+  @jakarta.annotation.Nullable
   private ElternschaftsteilungDtoSpec werZahltAlimente;
 
   public FamiliensituationUpdateDtoSpec() {
   }
 
-  public FamiliensituationUpdateDtoSpec elternVerheiratetZusammen(Boolean elternVerheiratetZusammen) {
+  public FamiliensituationUpdateDtoSpec elternVerheiratetZusammen(@jakarta.annotation.Nonnull Boolean elternVerheiratetZusammen) {
     
     this.elternVerheiratetZusammen = elternVerheiratetZusammen;
     return this;
   }
 
-   /**
+  /**
    * Get elternVerheiratetZusammen
    * @return elternVerheiratetZusammen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ELTERN_VERHEIRATET_ZUSAMMEN)
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_VERHEIRATET_ZUSAMMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getElternVerheiratetZusammen() {
@@ -88,25 +96,24 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ELTERN_VERHEIRATET_ZUSAMMEN)
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_VERHEIRATET_ZUSAMMEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setElternVerheiratetZusammen(Boolean elternVerheiratetZusammen) {
+  public void setElternVerheiratetZusammen(@jakarta.annotation.Nonnull Boolean elternVerheiratetZusammen) {
     this.elternVerheiratetZusammen = elternVerheiratetZusammen;
   }
 
-
-  public FamiliensituationUpdateDtoSpec elternteilUnbekanntVerstorben(Boolean elternteilUnbekanntVerstorben) {
+  public FamiliensituationUpdateDtoSpec elternteilUnbekanntVerstorben(@jakarta.annotation.Nullable Boolean elternteilUnbekanntVerstorben) {
     
     this.elternteilUnbekanntVerstorben = elternteilUnbekanntVerstorben;
     return this;
   }
 
-   /**
+  /**
    * Get elternteilUnbekanntVerstorben
    * @return elternteilUnbekanntVerstorben
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN)
+  @JsonProperty(value = JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getElternteilUnbekanntVerstorben() {
@@ -114,25 +121,24 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN)
+  @JsonProperty(value = JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setElternteilUnbekanntVerstorben(Boolean elternteilUnbekanntVerstorben) {
+  public void setElternteilUnbekanntVerstorben(@jakarta.annotation.Nullable Boolean elternteilUnbekanntVerstorben) {
     this.elternteilUnbekanntVerstorben = elternteilUnbekanntVerstorben;
   }
 
-
-  public FamiliensituationUpdateDtoSpec gerichtlicheAlimentenregelung(Boolean gerichtlicheAlimentenregelung) {
+  public FamiliensituationUpdateDtoSpec gerichtlicheAlimentenregelung(@jakarta.annotation.Nullable Boolean gerichtlicheAlimentenregelung) {
     
     this.gerichtlicheAlimentenregelung = gerichtlicheAlimentenregelung;
     return this;
   }
 
-   /**
+  /**
    * Get gerichtlicheAlimentenregelung
    * @return gerichtlicheAlimentenregelung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG)
+  @JsonProperty(value = JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getGerichtlicheAlimentenregelung() {
@@ -140,25 +146,24 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG)
+  @JsonProperty(value = JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGerichtlicheAlimentenregelung(Boolean gerichtlicheAlimentenregelung) {
+  public void setGerichtlicheAlimentenregelung(@jakarta.annotation.Nullable Boolean gerichtlicheAlimentenregelung) {
     this.gerichtlicheAlimentenregelung = gerichtlicheAlimentenregelung;
   }
 
-
-  public FamiliensituationUpdateDtoSpec mutterUnbekanntVerstorben(ElternAbwesenheitsGrundDtoSpec mutterUnbekanntVerstorben) {
+  public FamiliensituationUpdateDtoSpec mutterUnbekanntVerstorben(@jakarta.annotation.Nullable ElternAbwesenheitsGrundDtoSpec mutterUnbekanntVerstorben) {
     
     this.mutterUnbekanntVerstorben = mutterUnbekanntVerstorben;
     return this;
   }
 
-   /**
+  /**
    * Get mutterUnbekanntVerstorben
    * @return mutterUnbekanntVerstorben
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MUTTER_UNBEKANNT_VERSTORBEN)
+  @JsonProperty(value = JSON_PROPERTY_MUTTER_UNBEKANNT_VERSTORBEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ElternAbwesenheitsGrundDtoSpec getMutterUnbekanntVerstorben() {
@@ -166,25 +171,24 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MUTTER_UNBEKANNT_VERSTORBEN)
+  @JsonProperty(value = JSON_PROPERTY_MUTTER_UNBEKANNT_VERSTORBEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterUnbekanntVerstorben(ElternAbwesenheitsGrundDtoSpec mutterUnbekanntVerstorben) {
+  public void setMutterUnbekanntVerstorben(@jakarta.annotation.Nullable ElternAbwesenheitsGrundDtoSpec mutterUnbekanntVerstorben) {
     this.mutterUnbekanntVerstorben = mutterUnbekanntVerstorben;
   }
 
-
-  public FamiliensituationUpdateDtoSpec mutterUnbekanntGrund(ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund) {
+  public FamiliensituationUpdateDtoSpec mutterUnbekanntGrund(@jakarta.annotation.Nullable ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund) {
     
     this.mutterUnbekanntGrund = mutterUnbekanntGrund;
     return this;
   }
 
-   /**
+  /**
    * Get mutterUnbekanntGrund
    * @return mutterUnbekanntGrund
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND)
+  @JsonProperty(value = JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ElternUnbekanntheitsGrundDtoSpec getMutterUnbekanntGrund() {
@@ -192,25 +196,24 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND)
+  @JsonProperty(value = JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterUnbekanntGrund(ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund) {
+  public void setMutterUnbekanntGrund(@jakarta.annotation.Nullable ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund) {
     this.mutterUnbekanntGrund = mutterUnbekanntGrund;
   }
 
-
-  public FamiliensituationUpdateDtoSpec vaterUnbekanntVerstorben(ElternAbwesenheitsGrundDtoSpec vaterUnbekanntVerstorben) {
+  public FamiliensituationUpdateDtoSpec vaterUnbekanntVerstorben(@jakarta.annotation.Nullable ElternAbwesenheitsGrundDtoSpec vaterUnbekanntVerstorben) {
     
     this.vaterUnbekanntVerstorben = vaterUnbekanntVerstorben;
     return this;
   }
 
-   /**
+  /**
    * Get vaterUnbekanntVerstorben
    * @return vaterUnbekanntVerstorben
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VATER_UNBEKANNT_VERSTORBEN)
+  @JsonProperty(value = JSON_PROPERTY_VATER_UNBEKANNT_VERSTORBEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ElternAbwesenheitsGrundDtoSpec getVaterUnbekanntVerstorben() {
@@ -218,25 +221,24 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VATER_UNBEKANNT_VERSTORBEN)
+  @JsonProperty(value = JSON_PROPERTY_VATER_UNBEKANNT_VERSTORBEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterUnbekanntVerstorben(ElternAbwesenheitsGrundDtoSpec vaterUnbekanntVerstorben) {
+  public void setVaterUnbekanntVerstorben(@jakarta.annotation.Nullable ElternAbwesenheitsGrundDtoSpec vaterUnbekanntVerstorben) {
     this.vaterUnbekanntVerstorben = vaterUnbekanntVerstorben;
   }
 
-
-  public FamiliensituationUpdateDtoSpec vaterUnbekanntGrund(ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund) {
+  public FamiliensituationUpdateDtoSpec vaterUnbekanntGrund(@jakarta.annotation.Nullable ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund) {
     
     this.vaterUnbekanntGrund = vaterUnbekanntGrund;
     return this;
   }
 
-   /**
+  /**
    * Get vaterUnbekanntGrund
    * @return vaterUnbekanntGrund
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VATER_UNBEKANNT_GRUND)
+  @JsonProperty(value = JSON_PROPERTY_VATER_UNBEKANNT_GRUND, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ElternUnbekanntheitsGrundDtoSpec getVaterUnbekanntGrund() {
@@ -244,25 +246,24 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VATER_UNBEKANNT_GRUND)
+  @JsonProperty(value = JSON_PROPERTY_VATER_UNBEKANNT_GRUND, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterUnbekanntGrund(ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund) {
+  public void setVaterUnbekanntGrund(@jakarta.annotation.Nullable ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund) {
     this.vaterUnbekanntGrund = vaterUnbekanntGrund;
   }
 
-
-  public FamiliensituationUpdateDtoSpec werZahltAlimente(ElternschaftsteilungDtoSpec werZahltAlimente) {
+  public FamiliensituationUpdateDtoSpec werZahltAlimente(@jakarta.annotation.Nullable ElternschaftsteilungDtoSpec werZahltAlimente) {
     
     this.werZahltAlimente = werZahltAlimente;
     return this;
   }
 
-   /**
+  /**
    * Get werZahltAlimente
    * @return werZahltAlimente
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WER_ZAHLT_ALIMENTE)
+  @JsonProperty(value = JSON_PROPERTY_WER_ZAHLT_ALIMENTE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ElternschaftsteilungDtoSpec getWerZahltAlimente() {
@@ -270,11 +271,12 @@ public class FamiliensituationUpdateDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WER_ZAHLT_ALIMENTE)
+  @JsonProperty(value = JSON_PROPERTY_WER_ZAHLT_ALIMENTE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWerZahltAlimente(ElternschaftsteilungDtoSpec werZahltAlimente) {
+  public void setWerZahltAlimente(@jakarta.annotation.Nullable ElternschaftsteilungDtoSpec werZahltAlimente) {
     this.werZahltAlimente = werZahltAlimente;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -321,10 +323,7 @@ public class FamiliensituationUpdateDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

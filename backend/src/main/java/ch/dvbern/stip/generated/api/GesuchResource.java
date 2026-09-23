@@ -26,7 +26,7 @@ import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
-
+import org.jboss.resteasy.reactive.ResponseStatus;
 
 
 
@@ -37,247 +37,248 @@ import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
 
 
-@Path("/gesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
+@Path("")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")
 public interface GesuchResource {
 
     @PATCH
-    @Path("/{gesuchTrancheId}/bearbeitungAbschliessen")
+    @Path("/gesuch/{gesuchTrancheId}/bearbeitungAbschliessen")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto bearbeitungAbschliessen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/{gesuchId}/einreichedatum")
+    @Path("/gesuch/{gesuchId}/einreichedatum")
     @Produces({ "application/json", "text/plain" })
     EinreichedatumStatusDto canEinreichedatumAendern(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
-    @Path("/status/bearbeitung-as-aenderung/{gesuchTrancheId}")
+    @Path("/gesuch/status/bearbeitung-as-aenderung/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto changeGesuchStatusToBearbeitungAsAenderung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull KommentarDto kommentarDto);
 
     @POST
-    @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
+    @Path("/gesuch/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/datenschutzbrief-druckbereit/{gesuchTrancheId}")
+    @Path("/gesuch/status/datenschutzbrief-druckbereit/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull KommentarDto kommentarDto);
 
     @POST
-    @Path("/status/in-bearbeitung/{gesuchTrancheId}")
+    @Path("/gesuch/status/in-bearbeitung/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/negative-verfuegung/{gesuchTrancheId}")
+    @Path("/gesuch/status/negative-verfuegung/{gesuchTrancheId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchDto changeGesuchStatusToNegativeVerfuegung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull AusgewaehlterGrundDto ausgewaehlterGrundDto);
 
     @POST
-    @Path("/status/verfuegt/{gesuchTrancheId}")
+    @Path("/gesuch/status/verfuegt/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto changeGesuchStatusToVerfuegt(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/unterschriftenblatt-erhalten/{gesuchTrancheId}")
+    @Path("/gesuch/status/unterschriftenblatt-erhalten/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto changeGesuchStatusToVerfuegungDruckbereit(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/status/versendet/{gesuchTrancheId}")
+    @Path("/gesuch/status/versendet/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto changeGesuchStatusToVersendet(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
-    @Path("/{gesuchId}/beschwerde-entscheid")
+    @Path("/gesuch/{gesuchId}/beschwerde-entscheid")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createBeschwerdeEntscheid(@PathParam("gesuchId") UUID gesuchId,@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "beschwerdeErfolgreich")  Boolean beschwerdeErfolgreich,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @POST
-    @Path("/{gesuchId}/beschwerde")
+    @Path("/gesuch/{gesuchId}/beschwerde")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(@PathParam("gesuchId") UUID gesuchId,@Valid BeschwerdeVerlaufEntryCreateDto beschwerdeVerlaufEntryCreateDto);
 
     @POST
+    @Path("/gesuch")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchCreateResponseDto createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
     @POST
-    @Path("/{gesuchTrancheId}/manuelle-verfuegung")
+    @Path("/gesuch/{gesuchTrancheId}/manuelle-verfuegung")
     @Consumes({ "multipart/form-data" })
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto createManuelleVerfuegung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@FormParam(value = "kommentar")  String kommentar);
 
     @DELETE
-    @Path("/{gesuchId}")
+    @Path("/gesuch/{gesuchId}")
     @Produces({ "text/plain" })
     void deleteGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
-    @Path("/{gesuchId}/einreichedatum")
+    @Path("/gesuch/{gesuchId}/einreichedatum")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchDto einreichedatumManuellAendern(@PathParam("gesuchId") UUID gesuchId,@Valid EinreichedatumAendernRequestDto einreichedatumAendernRequestDto);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/einreichen/gs")
+    @Path("/gesuch/{gesuchTrancheId}/einreichen/gs")
     @Produces({ "application/json", "text/plain" })
     GesuchDto gesuchEinreichenGs(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/fehlendeDokumente")
+    @Path("/gesuch/{gesuchTrancheId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/pruefen/jur")
+    @Path("/gesuch/{gesuchTrancheId}/pruefen/jur")
     @Produces({ "application/json", "text/plain" })
     GesuchDto gesuchManuellPruefenJur(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/pruefen/sb")
+    @Path("/gesuch/{gesuchTrancheId}/pruefen/sb")
     @Produces({ "application/json", "text/plain" })
     GesuchDto gesuchManuellPruefenSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
+    @Path("/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen")
     @Produces({ "application/json", "text/plain" })
     GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo")
+    @Path("/gesuch/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     GesuchZurueckweisenResponseDto gesuchZurueckweisenAenderungUndo(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
-    @Path("/{aenderungId}/aenderung/gs/changes")
+    @Path("/gesuch/{aenderungId}/aenderung/gs/changes")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto getAenderungChangesGs(@PathParam("aenderungId") UUID aenderungId,@QueryParam("revision")   Integer revision);
 
     @GET
-    @Path("/{aenderungId}/aenderung/sb/changes")
+    @Path("/gesuch/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto getAenderungChangesSb(@PathParam("aenderungId") UUID aenderungId,@QueryParam("revision")   Integer revision);
 
     @GET
-    @Path("/{gesuchId}/beschwerde")
+    @Path("/gesuch/{gesuchId}/beschwerde")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/berechnung/sb")
+    @Path("/gesuch/{gesuchId}/berechnung/sb")
     @Produces({ "application/json", "text/plain" })
     BerechnungsresultatDto getBerechnungForGesuchSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/berechnung/{verfuegungId}/gs")
+    @Path("/gesuch/berechnung/{verfuegungId}/gs")
     @Produces({ "application/json", "text/plain" })
     BerechnungsresultatDto getBerechnungForVerfuegungGs(@PathParam("verfuegungId") UUID verfuegungId);
 
     @GET
-    @Path("/berechnung/{verfuegungId}/sb")
+    @Path("/gesuch/berechnung/{verfuegungId}/sb")
     @Produces({ "application/json", "text/plain" })
     BerechnungsresultatDto getBerechnungForVerfuegungSb(@PathParam("verfuegungId") UUID verfuegungId);
 
     @GET
-    @Path("/{gesuchId}/berechnungsblatt/token")
+    @Path("/gesuch/{gesuchId}/berechnungsblatt/token")
     @Produces({ "application/json", "text/plain" })
     FileDownloadTokenDto getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/eingereicht/{gesuchTrancheId}")
+    @Path("/gesuch/eingereicht/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto getEingereichtTranche(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/gs/{gesuchTrancheId}")
+    @Path("/gesuch/gs/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto getGesuchGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/gs/header/{gesuchId}")
+    @Path("/gesuch/gs/header/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     GesuchHeaderDto getGesuchHeaderGs(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/sb/header/{gesuchId}")
+    @Path("/gesuch/sb/header/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     GesuchHeaderDto getGesuchHeaderSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/info/gs")
+    @Path("/gesuch/{gesuchId}/info/gs")
     @Produces({ "application/json", "text/plain" })
     GesuchInfoDto getGesuchInfoGs(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/info/sb")
+    @Path("/gesuch/{gesuchId}/info/sb")
     @Produces({ "application/json", "text/plain" })
     GesuchInfoDto getGesuchInfoSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/sb/{gesuchTrancheId}")
+    @Path("/gesuch/sb/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto getGesuchSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/benutzer/me/gs")
+    @Path("/gesuch/benutzer/me/gs")
     @Produces({ "application/json", "text/plain" })
     List<GesuchDto> getGesucheGs();
 
     @GET
-    @Path("/benutzer/me/sb/{getGesucheSBQueryType}")
+    @Path("/gesuch/benutzer/me/sb/{getGesucheSBQueryType}")
     @Produces({ "application/json", "text/plain" })
     PaginatedSbGesucheDashboardDto getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("typ") @NotNull   ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("bearbeitbar")   Boolean bearbeitbar,@QueryParam("zugewiesen")   Boolean zugewiesen,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
-    @Path("/benutzer/me/gs-dashboard")
+    @Path("/gesuch/benutzer/me/gs-dashboard")
     @Produces({ "application/json", "text/plain" })
     FallDashboardItemDto getGsDashboard();
 
     @GET
-    @Path("/changes/{gesuchTrancheId}")
+    @Path("/gesuch/changes/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto getInitialTrancheChanges(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}")
+    @Path("/gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}")
     @Produces({ "application/json", "text/plain" })
     FallDashboardItemDto getSozialdienstMitarbeiterDashboard(@PathParam("fallId") UUID fallId);
 
     @GET
-    @Path("/{gesuchId}/statusprotokoll")
+    @Path("/gesuch/{gesuchId}/statusprotokoll")
     @Produces({ "application/json", "text/plain" })
     List<StatusprotokollEntryDto> getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/set-gesuchsperiode")
+    @Path("/gesuch/{gesuchTrancheId}/set-gesuchsperiode")
     @Produces({ "application/json", "text/plain" })
     GesuchDto setGesuchsperiodeForGesuch(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@QueryParam("gesuchsperiodeId") @NotNull   UUID gesuchsperiodeId);
 
     @PATCH
-    @Path("/{gesuchId}/gs")
+    @Path("/gesuch/{gesuchId}/gs")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     void updateGesuchGS(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
 
     @PATCH
-    @Path("/{gesuchId}/sb")
+    @Path("/gesuch/{gesuchId}/sb")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     void updateGesuchSB(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
 
     @PATCH
-    @Path("/{gesuchId}/nachfristDokumente")
+    @Path("/gesuch/{gesuchId}/nachfristDokumente")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     void updateNachfristDokumente(@PathParam("gesuchId") UUID gesuchId,@Valid NachfristAendernRequestDto nachfristAendernRequestDto);

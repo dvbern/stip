@@ -17,18 +17,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchTranche")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchTrancheDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid LocalDate gueltigAb;
-  private @Valid LocalDate gueltigBis;
-  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status;
-  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
-  private @Valid String comment;
-  private @Valid GesuchFormularDto gesuchFormular;
+  private UUID id;
+  private LocalDate gueltigAb;
+  private LocalDate gueltigBis;
+  private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status;
+  private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
+  private String comment;
+  private GesuchFormularDto gesuchFormular;
 
   protected GesuchTrancheDto(GesuchTrancheDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -51,13 +51,12 @@ public class GesuchTrancheDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -70,13 +69,12 @@ public class GesuchTrancheDto  implements Serializable {
   }
 
   
-  @JsonProperty("gueltigAb")
-  @NotNull
-  public LocalDate getGueltigAb() {
+  @JsonProperty(required = true, value = "gueltigAb")
+  @NotNull public LocalDate getGueltigAb() {
     return gueltigAb;
   }
 
-  @JsonProperty("gueltigAb")
+  @JsonProperty(required = true, value = "gueltigAb")
   public void setGueltigAb(LocalDate gueltigAb) {
     this.gueltigAb = gueltigAb;
   }
@@ -89,13 +87,12 @@ public class GesuchTrancheDto  implements Serializable {
   }
 
   
-  @JsonProperty("gueltigBis")
-  @NotNull
-  public LocalDate getGueltigBis() {
+  @JsonProperty(required = true, value = "gueltigBis")
+  @NotNull public LocalDate getGueltigBis() {
     return gueltigBis;
   }
 
-  @JsonProperty("gueltigBis")
+  @JsonProperty(required = true, value = "gueltigBis")
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
   }
@@ -108,13 +105,12 @@ public class GesuchTrancheDto  implements Serializable {
   }
 
   
-  @JsonProperty("status")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getStatus() {
+  @JsonProperty(required = true, value = "status")
+  @NotNull public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getStatus() {
     return status;
   }
 
-  @JsonProperty("status")
+  @JsonProperty(required = true, value = "status")
   public void setStatus(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status) {
     this.status = status;
   }
@@ -127,13 +123,12 @@ public class GesuchTrancheDto  implements Serializable {
   }
 
   
-  @JsonProperty("typ")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
+  @JsonProperty(required = true, value = "typ")
+  @NotNull public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
     return typ;
   }
 
-  @JsonProperty("typ")
+  @JsonProperty(required = true, value = "typ")
   public void setTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
     this.typ = typ;
   }
@@ -165,7 +160,7 @@ public class GesuchTrancheDto  implements Serializable {
 
   
   @JsonProperty("gesuchFormular")
-  public GesuchFormularDto getGesuchFormular() {
+  @Valid public GesuchFormularDto getGesuchFormular() {
     return gesuchFormular;
   }
 
@@ -219,10 +214,7 @@ public class GesuchTrancheDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -285,4 +277,3 @@ public class GesuchTrancheDto  implements Serializable {
     }
   }
 }
-

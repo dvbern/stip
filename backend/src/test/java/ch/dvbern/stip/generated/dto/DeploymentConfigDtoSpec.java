@@ -35,32 +35,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DeploymentConfigDtoSpec.JSON_PROPERTY_ALLOWED_MIME_TYPES
 })
 @JsonTypeName("DeploymentConfig")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DeploymentConfigDtoSpec {
   public static final String JSON_PROPERTY_ENVIRONMENT = "environment";
+  @jakarta.annotation.Nullable
   private String environment;
 
   public static final String JSON_PROPERTY_VERSION = "version";
+  @jakarta.annotation.Nullable
   private String version;
 
   public static final String JSON_PROPERTY_ALLOWED_MIME_TYPES = "allowedMimeTypes";
+  @jakarta.annotation.Nullable
   private List<String> allowedMimeTypes;
 
   public DeploymentConfigDtoSpec() {
   }
 
-  public DeploymentConfigDtoSpec environment(String environment) {
+  public DeploymentConfigDtoSpec environment(@jakarta.annotation.Nullable String environment) {
     
     this.environment = environment;
     return this;
   }
 
-   /**
+  /**
    * Get environment
    * @return environment
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ENVIRONMENT)
+  @JsonProperty(value = JSON_PROPERTY_ENVIRONMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getEnvironment() {
@@ -68,25 +71,24 @@ public class DeploymentConfigDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ENVIRONMENT)
+  @JsonProperty(value = JSON_PROPERTY_ENVIRONMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEnvironment(String environment) {
+  public void setEnvironment(@jakarta.annotation.Nullable String environment) {
     this.environment = environment;
   }
 
-
-  public DeploymentConfigDtoSpec version(String version) {
+  public DeploymentConfigDtoSpec version(@jakarta.annotation.Nullable String version) {
     
     this.version = version;
     return this;
   }
 
-   /**
+  /**
    * Get version
    * @return version
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERSION)
+  @JsonProperty(value = JSON_PROPERTY_VERSION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getVersion() {
@@ -94,14 +96,13 @@ public class DeploymentConfigDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERSION)
+  @JsonProperty(value = JSON_PROPERTY_VERSION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVersion(String version) {
+  public void setVersion(@jakarta.annotation.Nullable String version) {
     this.version = version;
   }
 
-
-  public DeploymentConfigDtoSpec allowedMimeTypes(List<String> allowedMimeTypes) {
+  public DeploymentConfigDtoSpec allowedMimeTypes(@jakarta.annotation.Nullable List<String> allowedMimeTypes) {
     
     this.allowedMimeTypes = allowedMimeTypes;
     return this;
@@ -115,12 +116,12 @@ public class DeploymentConfigDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get allowedMimeTypes
    * @return allowedMimeTypes
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ALLOWED_MIME_TYPES)
+  @JsonProperty(value = JSON_PROPERTY_ALLOWED_MIME_TYPES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<String> getAllowedMimeTypes() {
@@ -128,11 +129,12 @@ public class DeploymentConfigDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ALLOWED_MIME_TYPES)
+  @JsonProperty(value = JSON_PROPERTY_ALLOWED_MIME_TYPES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAllowedMimeTypes(List<String> allowedMimeTypes) {
+  public void setAllowedMimeTypes(@jakarta.annotation.Nullable List<String> allowedMimeTypes) {
     this.allowedMimeTypes = allowedMimeTypes;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -169,10 +171,7 @@ public class DeploymentConfigDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

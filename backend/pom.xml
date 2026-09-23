@@ -4,50 +4,70 @@
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
   <version>${revision}</version>
+  <packaging>quarkus</packaging>
   <properties>
-    <archunit.version>1.4.0</archunit.version>
-    <assertj.version>3.27.3</assertj.version>
-    <checkerframework.version>3.49.2</checkerframework.version>
-    <compiler-plugin.version>3.14.0</compiler-plugin.version>
-    <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
-    <contract.version>1.24.0</contract.version>
-    <itext.version>9.4.0</itext.version>
-    <kie.version>10.1.0</kie.version>
-    <liquibase-maven-plugin.version>5.0.3</liquibase-maven-plugin.version>
-    <lombok.version>1.18.42</lombok.version>
-    <mapstruct.version>1.6.3</mapstruct.version>
-    <maven.compiler.release>21</maven.compiler.release>
+    <revision>local</revision>
+    <maven.compiler.release>25</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <package>ch.dvbern.stip</package>
     <package.generated>${package}.generated</package.generated>
     <package.generated.test>${package.generated}</package.generated.test>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkiverse.sentry.version>2.3.0</quarkiverse.sentry.version>
-    <quarkus-amazon-services.version>3.9.1</quarkus-amazon-services.version>
-    <quarkus-antivirus.version>1.3.0</quarkus-antivirus.version>
-    <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+    <!-- Quarkus Platform -->
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.27.2</quarkus.platform.version>
-    <querydsl.version>6.12</querydsl.version>
-    <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
+    <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+    <quarkus.platform.version>3.33.3.2</quarkus.platform.version>
+    <!-- Quarkiverse Extensions -->
+    <quarkiverse-amazon-services.version>3.22.1</quarkiverse-amazon-services.version>
+    <quarkiverse-antivirus.version>1.5.0</quarkiverse-antivirus.version>
+    <quarkiverse.sentry.version>2.3.4</quarkiverse.sentry.version>
+    <!-- Code Generation -->
+    <lombok.version>1.18.48</lombok.version>
+    <mapstruct.version>1.6.3</mapstruct.version>
+    <querydsl.version>7.6</querydsl.version>
+    <jilt.version>1.9.2</jilt.version>
+    <!-- Testing -->
+    <jackson-nullable.version>0.2.11</jackson-nullable.version>
+    <archunit.version>1.5.0</archunit.version>
+    <assertj.version>3.27.7</assertj.version>
     <rest-assured.version>5.5.1</rest-assured.version>
-    <revision>local</revision>
     <savoirtech.json-comparator.version>1.1.1</savoirtech.json-comparator.version>
+    <testcontainers.version>2.0.5</testcontainers.version>
+    <!-- Libraries -->
+    <apache.commons-validator.version>1.11.0</apache.commons-validator.version>
+    <itext.version>9.7.1</itext.version>
+    <stateless4j.version>2.6.0</stateless4j.version>
+    <fastexcel-reader.version>0.20.2</fastexcel-reader.version>
+    <dvb-commons-i18n-l10n.version>2.0.8</dvb-commons-i18n-l10n.version>
+    <tika.version>4.0.0</tika.version>
+    <!-- Code Quality -->
+    <checkerframework.version>4.2.3</checkerframework.version>
+    <spotless.eclipse.version>4.29</spotless.eclipse.version>
+    <spotless.version>3.10.2</spotless.version>
+    <!-- Build Plugins -->
+    <compiler-plugin.version>3.16.0</compiler-plugin.version>
+    <liquibase-maven-plugin.version>5.0.4</liquibase-maven-plugin.version>
+    <surefire-plugin.version>3.6.0</surefire-plugin.version>
+    <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
+    <jacoco.version>0.8.15</jacoco.version>
+    <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
+    <!-- bump to version that includes this pr once merged https://github.com/OpenAPITools/openapi-generator/pull/24176 -->
+    <!-- this will resolve the warnings about @Valid being depricated when used on containers (List,Set,Map) -->
+    <openapi-generator.version>7.25.0</openapi-generator.version>
+    <!-- Paths -->
+    <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
+    <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
+    <!-- CI/CD -->
+    <ci.disableConsole>false</ci.disableConsole>
+    <ci.logLevel>INFO</ci.logLevel>
     <skipITs>true</skipITs>
+    <!-- Code Quality -->
     <sonar.exclusions>file:**/generated/**,
       file:**/.mvn/**,
       file:**/.quarkus/**
     </sonar.exclusions>
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <sonar.customAssertionMethods>ch.dvbern.stip.api.util.TestUtil#executeAndAssert</sonar.customAssertionMethods>
-    <spotless.eclipse.version>4.29</spotless.eclipse.version>
-    <spotless.version>3.4.0</spotless.version>
-    <surefire-plugin.version>3.5.3</surefire-plugin.version>
-    <testcontainers.version>2.0.3</testcontainers.version>
-    <apache.commons-lang.version>3.20.0</apache.commons-lang.version>
-    <apache.commons-validator.version>1.9.0</apache.commons-validator.version>
-    <ci.disableConsole>false</ci.disableConsole>
-    <ci.logLevel>INFO</ci.logLevel>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -68,7 +88,7 @@
       <dependency>
         <groupId>io.quarkiverse.amazonservices</groupId>
         <artifactId>quarkus-amazon-services-bom</artifactId>
-        <version>${quarkus-amazon-services.version}</version>
+        <version>${quarkiverse-amazon-services.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -82,25 +102,10 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <!-- Quarkus Core -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-rest-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-orm</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-liquibase</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-validator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -112,11 +117,23 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-logging-gelf</artifactId>
+      <artifactId>quarkus-hibernate-orm</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-health</artifactId>
+      <artifactId>quarkus-hibernate-orm-panache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-validator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-envers</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-liquibase</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -128,11 +145,20 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-envers</artifactId>
+      <artifactId>quarkus-vertx</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx</artifactId>
+      <artifactId>quarkus-config-yaml</artifactId>
+    </dependency>
+    <!-- Quarkus Security -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-oidc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -140,118 +166,20 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-jwt</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkiverse.loggingsentry</groupId>
-      <artifactId>quarkus-logging-sentry</artifactId>
-      <version>${quarkiverse.sentry.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${mapstruct.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>findbugs-annotations</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>checker-qual</artifactId>
-      <version>${checkerframework.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.github.openfeign.querydsl</groupId>
-      <artifactId>querydsl-jpa</artifactId>
-      <version>${querydsl.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-orm-panache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkiverse.amazonservices</groupId>
-      <artifactId>quarkus-amazon-s3</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>url-connection-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>netty-nio-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>info.picocli</groupId>
-      <artifactId>picocli</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.tika</groupId>
-      <artifactId>tika-core</artifactId>
-      <version>3.2.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.dhatim</groupId>
-      <artifactId>fastexcel-reader</artifactId>
-      <version>0.20.0</version>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-mailer</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-oidc</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.stateless4j</groupId>
-      <artifactId>stateless4j</artifactId>
-      <version>2.6.0</version>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-config-yaml</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-client-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-quartz</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkiverse.antivirus</groupId>
-      <artifactId>quarkus-antivirus</artifactId>
-      <version>${quarkus-antivirus.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-keycloak-admin-resteasy-client</artifactId>
     </dependency>
+    <!-- Quarkus Observability -->
     <dependency>
-      <groupId>io.quarkiverse.cxf</groupId>
-      <artifactId>quarkus-cxf</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-logging-gelf</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jaxb</artifactId>
+      <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-observability-devservices-lgtm</artifactId>
-      <scope>provided</scope>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -263,119 +191,102 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
-      <scope>test</scope>
+      <artifactId>quarkus-observability-devservices-lgtm</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Quarkus Integrations -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-client-jackson</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5-component</artifactId>
-      <scope>test</scope>
+      <artifactId>quarkus-mailer</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5-mockito</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <version>${rest-assured.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>testcontainers</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>postgresql</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>localstack</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.tngtech.archunit</groupId>
-      <artifactId>archunit</artifactId>
-      <version>${archunit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.openapitools</groupId>
-      <artifactId>jackson-databind-nullable</artifactId>
-      <version>0.2.5</version>
-      <scope>test</scope>
+      <artifactId>quarkus-quartz</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jacoco</artifactId>
-      <scope>test</scope>
+      <artifactId>quarkus-jaxb</artifactId>
+    </dependency>
+    <!-- Quarkiverse Extensions -->
+    <dependency>
+      <groupId>io.quarkiverse.loggingsentry</groupId>
+      <artifactId>quarkus-logging-sentry</artifactId>
+      <version>${quarkiverse.sentry.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-test-oidc-server</artifactId>
-      <scope>test</scope>
+      <groupId>io.quarkiverse.amazonservices</groupId>
+      <artifactId>quarkus-amazon-s3</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
-      <scope>test</scope>
+      <groupId>io.quarkiverse.antivirus</groupId>
+      <artifactId>quarkus-antivirus</artifactId>
+      <version>${quarkiverse-antivirus.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-test-security-oidc</artifactId>
-      <scope>test</scope>
+      <groupId>io.quarkiverse.cxf</groupId>
+      <artifactId>quarkus-cxf</artifactId>
+    </dependency>
+    <!-- AWS SDK -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>url-connection-client</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.savoirtech.json</groupId>
-      <artifactId>json-comparator</artifactId>
-      <version>${savoirtech.json-comparator.version}</version>
-      <scope>test</scope>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>netty-nio-client</artifactId>
+    </dependency>
+    <!-- Code Generation -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${mapstruct.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.openfeign.querydsl</groupId>
+      <artifactId>querydsl-jpa</artifactId>
+      <version>${querydsl.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>cc.jilt</groupId>
+      <artifactId>jilt</artifactId>
+      <version>${jilt.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Code Quality Annotations -->
+    <dependency>
+      <groupId>org.checkerframework</groupId>
+      <artifactId>checker-qual</artifactId>
+    </dependency>
+    <!-- Apache Commons -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
       <version>${apache.commons-validator.version}</version>
     </dependency>
+    <!-- Business Rules & Workflow -->
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${apache.commons-lang.version}</version>
+      <groupId>com.github.stateless4j</groupId>
+      <artifactId>stateless4j</artifactId>
+      <version>${stateless4j.version}</version>
     </dependency>
-    <dependency>
-      <groupId>ch.dvbern.oss.commons-i18n-l10n</groupId>
-      <artifactId>dvb-commons-i18n-l10n-api</artifactId>
-      <version>0.0.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-api</artifactId>
-      <version>${kie.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-dmn-api</artifactId>
-      <version>${kie.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-dmn-core</artifactId>
-      <version>${kie.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.xml.soap</groupId>
-      <artifactId>jakarta.xml.soap-api</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.messaging.saaj</groupId>
-      <artifactId>saaj-impl</artifactId>
-      <version>3.0.4</version>
-    </dependency>
+    <!-- Document Generation -->
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>itext-core</artifactId>
@@ -390,13 +301,111 @@
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>svg</artifactId>
-      <version>${itext.version}</version> <!-- Jilt is not needed at runtime -->
+      <version>${itext.version}</version>
     </dependency>
     <dependency>
-      <groupId>cc.jilt</groupId>
-      <artifactId>jilt</artifactId>
-      <version>1.9.1</version>
-      <scope>provided</scope>
+      <groupId>org.dhatim</groupId>
+      <artifactId>fastexcel-reader</artifactId>
+      <version>${fastexcel-reader.version}</version>
+    </dependency>
+    <!-- XML / SOAP -->
+    <dependency>
+      <groupId>jakarta.xml.soap</groupId>
+      <artifactId>jakarta.xml.soap-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.messaging.saaj</groupId>
+      <artifactId>saaj-impl</artifactId>
+    </dependency>
+    <!-- Misc Utilities -->
+    <dependency>
+      <groupId>ch.dvbern.oss.commons-i18n-l10n</groupId>
+      <artifactId>dvb-commons-i18n-l10n-api</artifactId>
+      <version>${dvb-commons-i18n-l10n.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit-component</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit-mockito</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jacoco</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-test-oidc-server</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-test-security-oidc</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers-postgresql</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers-localstack</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.tngtech.archunit</groupId>
+      <artifactId>archunit</artifactId>
+      <version>${archunit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>${jackson-nullable.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.savoirtech.json</groupId>
+      <artifactId>json-comparator</artifactId>
+      <version>${savoirtech.json-comparator.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -405,7 +414,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.5.0</version>
+          <version>${maven-resources-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -415,15 +424,6 @@
         <artifactId>quarkus-maven-plugin</artifactId>
         <version>${quarkus.platform.version}</version>
         <extensions>true</extensions>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-              <goal>generate-code</goal>
-              <goal>generate-code-tests</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -458,7 +458,7 @@
             <path>
               <groupId>cc.jilt</groupId>
               <artifactId>jilt</artifactId>
-              <version>1.8.4</version>
+              <version>${jilt.version}</version>
             </path>
           </annotationProcessorPaths>
           <annotationProcessors>
@@ -523,6 +523,9 @@
             </configuration>
           </execution>
         </executions>
+        <configuration>
+          <argLine>@{argLine}</argLine>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
@@ -633,7 +636,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.7</version>
+            <version>${jacoco.version}</version>
             <executions>
               <execution>
                 <id>default-prepare-agent</id>
@@ -663,7 +666,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-clean-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>${maven-clean-plugin.version}</version>
             <configuration>
               <filesets>
                 <fileset>
@@ -720,7 +723,7 @@
           <plugin>
             <groupId>org.openapitools</groupId>
             <artifactId>openapi-generator-maven-plugin</artifactId>
-            <version>7.1.0</version>
+            <version>${openapi-generator.version}</version>
             <executions>
               <execution>
                 <id>generate-stubs</id>
@@ -827,7 +830,6 @@
                     <interfaceOnly>true</interfaceOnly>
                     <returnResponse>false</returnResponse>
                     <additionalModelTypeAnnotations>
-<!--                      @lombok.NoArgsConstructor-->
                       @lombok.AllArgsConstructor
                       @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
                       @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
@@ -835,6 +837,8 @@
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                     <useTags>true</useTags>
                     <generateBuilders>true</generateBuilders>
+                    <generateJsonCreator>false</generateJsonCreator>
+                    <openApiNullable>false</openApiNullable>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>

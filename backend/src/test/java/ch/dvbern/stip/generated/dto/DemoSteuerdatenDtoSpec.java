@@ -45,68 +45,83 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoSteuerdatenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_STATUS
 })
 @JsonTypeName("DemoSteuerdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DemoSteuerdatenDtoSpec {
   public static final String JSON_PROPERTY_TYPE = "type";
+  @jakarta.annotation.Nonnull
   private SteuerdatenTypDtoSpec type;
 
   public static final String JSON_PROPERTY_TOTAL_EINKUENFTE = "totalEinkuenfte";
+  @jakarta.annotation.Nonnull
   private Integer totalEinkuenfte;
 
   public static final String JSON_PROPERTY_EIGENMIETWERT = "eigenmietwert";
+  @jakarta.annotation.Nonnull
   private Integer eigenmietwert;
 
   public static final String JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG = "isArbeitsverhaeltnisSelbstaendig";
+  @jakarta.annotation.Nonnull
   private Boolean isArbeitsverhaeltnisSelbstaendig;
 
   public static final String JSON_PROPERTY_SAEULE3A = "saeule3a";
+  @jakarta.annotation.Nonnull
   private Integer saeule3a;
 
   public static final String JSON_PROPERTY_SAEULE2 = "saeule2";
+  @jakarta.annotation.Nonnull
   private Integer saeule2;
 
   public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
+  @jakarta.annotation.Nonnull
   private Integer vermoegen;
 
   public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
+  @jakarta.annotation.Nonnull
   private Integer steuernKantonGemeinde;
 
   public static final String JSON_PROPERTY_STEUERN_BUND = "steuernBund";
+  @jakarta.annotation.Nonnull
   private Integer steuernBund;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
+  @jakarta.annotation.Nonnull
   private Integer fahrkosten;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN_PARTNER = "fahrkostenPartner";
+  @jakarta.annotation.Nonnull
   private Integer fahrkostenPartner;
 
   public static final String JSON_PROPERTY_VERPFLEGUNG = "verpflegung";
+  @jakarta.annotation.Nonnull
   private Integer verpflegung;
 
   public static final String JSON_PROPERTY_VERPFLEGUNG_PARTNER = "verpflegungPartner";
+  @jakarta.annotation.Nonnull
   private Integer verpflegungPartner;
 
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
+  @jakarta.annotation.Nonnull
   private Integer steuerjahr;
 
   public static final String JSON_PROPERTY_VERANLAGUNGS_STATUS = "veranlagungsStatus";
+  @jakarta.annotation.Nonnull
   private String veranlagungsStatus;
 
   public DemoSteuerdatenDtoSpec() {
   }
 
-  public DemoSteuerdatenDtoSpec type(SteuerdatenTypDtoSpec type) {
+  public DemoSteuerdatenDtoSpec type(@jakarta.annotation.Nonnull SteuerdatenTypDtoSpec type) {
     
     this.type = type;
     return this;
   }
 
-   /**
+  /**
    * Get type
    * @return type
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SteuerdatenTypDtoSpec getType() {
@@ -114,25 +129,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonProperty(value = JSON_PROPERTY_TYPE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setType(SteuerdatenTypDtoSpec type) {
+  public void setType(@jakarta.annotation.Nonnull SteuerdatenTypDtoSpec type) {
     this.type = type;
   }
 
-
-  public DemoSteuerdatenDtoSpec totalEinkuenfte(Integer totalEinkuenfte) {
+  public DemoSteuerdatenDtoSpec totalEinkuenfte(@jakarta.annotation.Nonnull Integer totalEinkuenfte) {
     
     this.totalEinkuenfte = totalEinkuenfte;
     return this;
   }
 
-   /**
+  /**
    * Get totalEinkuenfte
    * @return totalEinkuenfte
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOTAL_EINKUENFTE)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_EINKUENFTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotalEinkuenfte() {
@@ -140,25 +154,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOTAL_EINKUENFTE)
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_EINKUENFTE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTotalEinkuenfte(Integer totalEinkuenfte) {
+  public void setTotalEinkuenfte(@jakarta.annotation.Nonnull Integer totalEinkuenfte) {
     this.totalEinkuenfte = totalEinkuenfte;
   }
 
-
-  public DemoSteuerdatenDtoSpec eigenmietwert(Integer eigenmietwert) {
+  public DemoSteuerdatenDtoSpec eigenmietwert(@jakarta.annotation.Nonnull Integer eigenmietwert) {
     
     this.eigenmietwert = eigenmietwert;
     return this;
   }
 
-   /**
+  /**
    * Get eigenmietwert
    * @return eigenmietwert
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
+  @JsonProperty(value = JSON_PROPERTY_EIGENMIETWERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEigenmietwert() {
@@ -166,25 +179,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_EIGENMIETWERT)
+  @JsonProperty(value = JSON_PROPERTY_EIGENMIETWERT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEigenmietwert(Integer eigenmietwert) {
+  public void setEigenmietwert(@jakarta.annotation.Nonnull Integer eigenmietwert) {
     this.eigenmietwert = eigenmietwert;
   }
 
-
-  public DemoSteuerdatenDtoSpec isArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
+  public DemoSteuerdatenDtoSpec isArbeitsverhaeltnisSelbstaendig(@jakarta.annotation.Nonnull Boolean isArbeitsverhaeltnisSelbstaendig) {
     
     this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
     return this;
   }
 
-   /**
+  /**
    * Get isArbeitsverhaeltnisSelbstaendig
    * @return isArbeitsverhaeltnisSelbstaendig
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG)
+  @JsonProperty(value = JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
@@ -192,25 +204,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG)
+  @JsonProperty(value = JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIsArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
+  public void setIsArbeitsverhaeltnisSelbstaendig(@jakarta.annotation.Nonnull Boolean isArbeitsverhaeltnisSelbstaendig) {
     this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
   }
 
-
-  public DemoSteuerdatenDtoSpec saeule3a(Integer saeule3a) {
+  public DemoSteuerdatenDtoSpec saeule3a(@jakarta.annotation.Nonnull Integer saeule3a) {
     
     this.saeule3a = saeule3a;
     return this;
   }
 
-   /**
+  /**
    * Get saeule3a
    * @return saeule3a
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SAEULE3A)
+  @JsonProperty(value = JSON_PROPERTY_SAEULE3A, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSaeule3a() {
@@ -218,25 +229,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SAEULE3A)
+  @JsonProperty(value = JSON_PROPERTY_SAEULE3A, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSaeule3a(Integer saeule3a) {
+  public void setSaeule3a(@jakarta.annotation.Nonnull Integer saeule3a) {
     this.saeule3a = saeule3a;
   }
 
-
-  public DemoSteuerdatenDtoSpec saeule2(Integer saeule2) {
+  public DemoSteuerdatenDtoSpec saeule2(@jakarta.annotation.Nonnull Integer saeule2) {
     
     this.saeule2 = saeule2;
     return this;
   }
 
-   /**
+  /**
    * Get saeule2
    * @return saeule2
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SAEULE2)
+  @JsonProperty(value = JSON_PROPERTY_SAEULE2, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSaeule2() {
@@ -244,25 +254,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SAEULE2)
+  @JsonProperty(value = JSON_PROPERTY_SAEULE2, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSaeule2(Integer saeule2) {
+  public void setSaeule2(@jakarta.annotation.Nonnull Integer saeule2) {
     this.saeule2 = saeule2;
   }
 
-
-  public DemoSteuerdatenDtoSpec vermoegen(Integer vermoegen) {
+  public DemoSteuerdatenDtoSpec vermoegen(@jakarta.annotation.Nonnull Integer vermoegen) {
     
     this.vermoegen = vermoegen;
     return this;
   }
 
-   /**
+  /**
    * Get vermoegen
    * @return vermoegen
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERMOEGEN)
+  @JsonProperty(value = JSON_PROPERTY_VERMOEGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVermoegen() {
@@ -270,25 +279,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERMOEGEN)
+  @JsonProperty(value = JSON_PROPERTY_VERMOEGEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVermoegen(Integer vermoegen) {
+  public void setVermoegen(@jakarta.annotation.Nonnull Integer vermoegen) {
     this.vermoegen = vermoegen;
   }
 
-
-  public DemoSteuerdatenDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+  public DemoSteuerdatenDtoSpec steuernKantonGemeinde(@jakarta.annotation.Nonnull Integer steuernKantonGemeinde) {
     
     this.steuernKantonGemeinde = steuernKantonGemeinde;
     return this;
   }
 
-   /**
+  /**
    * Get steuernKantonGemeinde
    * @return steuernKantonGemeinde
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonProperty(value = JSON_PROPERTY_STEUERN_KANTON_GEMEINDE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuernKantonGemeinde() {
@@ -296,25 +304,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonProperty(value = JSON_PROPERTY_STEUERN_KANTON_GEMEINDE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
+  public void setSteuernKantonGemeinde(@jakarta.annotation.Nonnull Integer steuernKantonGemeinde) {
     this.steuernKantonGemeinde = steuernKantonGemeinde;
   }
 
-
-  public DemoSteuerdatenDtoSpec steuernBund(Integer steuernBund) {
+  public DemoSteuerdatenDtoSpec steuernBund(@jakarta.annotation.Nonnull Integer steuernBund) {
     
     this.steuernBund = steuernBund;
     return this;
   }
 
-   /**
+  /**
    * Get steuernBund
    * @return steuernBund
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_BUND)
+  @JsonProperty(value = JSON_PROPERTY_STEUERN_BUND, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuernBund() {
@@ -322,25 +329,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_BUND)
+  @JsonProperty(value = JSON_PROPERTY_STEUERN_BUND, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernBund(Integer steuernBund) {
+  public void setSteuernBund(@jakarta.annotation.Nonnull Integer steuernBund) {
     this.steuernBund = steuernBund;
   }
 
-
-  public DemoSteuerdatenDtoSpec fahrkosten(Integer fahrkosten) {
+  public DemoSteuerdatenDtoSpec fahrkosten(@jakarta.annotation.Nonnull Integer fahrkosten) {
     
     this.fahrkosten = fahrkosten;
     return this;
   }
 
-   /**
+  /**
    * Get fahrkosten
    * @return fahrkosten
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFahrkosten() {
@@ -348,25 +354,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFahrkosten(Integer fahrkosten) {
+  public void setFahrkosten(@jakarta.annotation.Nonnull Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
 
-
-  public DemoSteuerdatenDtoSpec fahrkostenPartner(Integer fahrkostenPartner) {
+  public DemoSteuerdatenDtoSpec fahrkostenPartner(@jakarta.annotation.Nonnull Integer fahrkostenPartner) {
     
     this.fahrkostenPartner = fahrkostenPartner;
     return this;
   }
 
-   /**
+  /**
    * Get fahrkostenPartner
    * @return fahrkostenPartner
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN_PARTNER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getFahrkostenPartner() {
@@ -374,25 +379,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_FAHRKOSTEN_PARTNER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFahrkostenPartner(Integer fahrkostenPartner) {
+  public void setFahrkostenPartner(@jakarta.annotation.Nonnull Integer fahrkostenPartner) {
     this.fahrkostenPartner = fahrkostenPartner;
   }
 
-
-  public DemoSteuerdatenDtoSpec verpflegung(Integer verpflegung) {
+  public DemoSteuerdatenDtoSpec verpflegung(@jakarta.annotation.Nonnull Integer verpflegung) {
     
     this.verpflegung = verpflegung;
     return this;
   }
 
-   /**
+  /**
    * Get verpflegung
    * @return verpflegung
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNG)
+  @JsonProperty(value = JSON_PROPERTY_VERPFLEGUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVerpflegung() {
@@ -400,25 +404,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNG)
+  @JsonProperty(value = JSON_PROPERTY_VERPFLEGUNG, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVerpflegung(Integer verpflegung) {
+  public void setVerpflegung(@jakarta.annotation.Nonnull Integer verpflegung) {
     this.verpflegung = verpflegung;
   }
 
-
-  public DemoSteuerdatenDtoSpec verpflegungPartner(Integer verpflegungPartner) {
+  public DemoSteuerdatenDtoSpec verpflegungPartner(@jakarta.annotation.Nonnull Integer verpflegungPartner) {
     
     this.verpflegungPartner = verpflegungPartner;
     return this;
   }
 
-   /**
+  /**
    * Get verpflegungPartner
    * @return verpflegungPartner
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNG_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_VERPFLEGUNG_PARTNER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getVerpflegungPartner() {
@@ -426,25 +429,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNG_PARTNER)
+  @JsonProperty(value = JSON_PROPERTY_VERPFLEGUNG_PARTNER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVerpflegungPartner(Integer verpflegungPartner) {
+  public void setVerpflegungPartner(@jakarta.annotation.Nonnull Integer verpflegungPartner) {
     this.verpflegungPartner = verpflegungPartner;
   }
 
-
-  public DemoSteuerdatenDtoSpec steuerjahr(Integer steuerjahr) {
+  public DemoSteuerdatenDtoSpec steuerjahr(@jakarta.annotation.Nonnull Integer steuerjahr) {
     
     this.steuerjahr = steuerjahr;
     return this;
   }
 
-   /**
+  /**
    * Get steuerjahr
    * @return steuerjahr
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERJAHR)
+  @JsonProperty(value = JSON_PROPERTY_STEUERJAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSteuerjahr() {
@@ -452,25 +454,24 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERJAHR)
+  @JsonProperty(value = JSON_PROPERTY_STEUERJAHR, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuerjahr(Integer steuerjahr) {
+  public void setSteuerjahr(@jakarta.annotation.Nonnull Integer steuerjahr) {
     this.steuerjahr = steuerjahr;
   }
 
-
-  public DemoSteuerdatenDtoSpec veranlagungsStatus(String veranlagungsStatus) {
+  public DemoSteuerdatenDtoSpec veranlagungsStatus(@jakarta.annotation.Nonnull String veranlagungsStatus) {
     
     this.veranlagungsStatus = veranlagungsStatus;
     return this;
   }
 
-   /**
+  /**
    * Get veranlagungsStatus
    * @return veranlagungsStatus
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_VERANLAGUNGS_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVeranlagungsStatus() {
@@ -478,11 +479,12 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
+  @JsonProperty(value = JSON_PROPERTY_VERANLAGUNGS_STATUS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVeranlagungsStatus(String veranlagungsStatus) {
+  public void setVeranlagungsStatus(@jakarta.annotation.Nonnull String veranlagungsStatus) {
     this.veranlagungsStatus = veranlagungsStatus;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -543,10 +545,7 @@ public class DemoSteuerdatenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

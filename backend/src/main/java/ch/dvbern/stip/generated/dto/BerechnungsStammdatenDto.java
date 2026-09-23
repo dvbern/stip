@@ -16,23 +16,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("BerechnungsStammdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BerechnungsStammdatenDto  implements Serializable {
-  private @Valid Integer maxSaeule3a;
-  private @Valid Integer einkommensfreibetrag;
-  private @Valid Integer abzugslimite;
-  private @Valid Integer freibetragErwerbseinkommen;
-  private @Valid Integer freibetragVermoegen;
-  private @Valid Integer vermoegensanteilInProzent;
-  private @Valid Integer anzahlWochenLehre;
-  private @Valid Integer anzahlWochenSchule;
-  private @Valid Integer preisProMahlzeit;
-  private @Valid Integer stipLimiteMinimalstipendium;
-  private @Valid Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
-  private @Valid Integer anzahlMonate;
+  private Integer maxSaeule3a;
+  private Integer einkommensfreibetrag;
+  private Integer abzugslimite;
+  private Integer freibetragErwerbseinkommen;
+  private Integer freibetragVermoegen;
+  private Integer vermoegensanteilInProzent;
+  private Integer anzahlWochenLehre;
+  private Integer anzahlWochenSchule;
+  private Integer preisProMahlzeit;
+  private Integer stipLimiteMinimalstipendium;
+  private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
+  private Integer anzahlMonate;
 
   protected BerechnungsStammdatenDto(BerechnungsStammdatenDtoBuilder<?, ?> b) {
     this.maxSaeule3a = b.maxSaeule3a;
@@ -60,13 +60,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("maxSaeule3a")
-  @NotNull
-  public Integer getMaxSaeule3a() {
+  @JsonProperty(required = true, value = "maxSaeule3a")
+  @NotNull public Integer getMaxSaeule3a() {
     return maxSaeule3a;
   }
 
-  @JsonProperty("maxSaeule3a")
+  @JsonProperty(required = true, value = "maxSaeule3a")
   public void setMaxSaeule3a(Integer maxSaeule3a) {
     this.maxSaeule3a = maxSaeule3a;
   }
@@ -79,13 +78,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("einkommensfreibetrag")
-  @NotNull
-  public Integer getEinkommensfreibetrag() {
+  @JsonProperty(required = true, value = "einkommensfreibetrag")
+  @NotNull public Integer getEinkommensfreibetrag() {
     return einkommensfreibetrag;
   }
 
-  @JsonProperty("einkommensfreibetrag")
+  @JsonProperty(required = true, value = "einkommensfreibetrag")
   public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
   }
@@ -98,13 +96,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("abzugslimite")
-  @NotNull
-  public Integer getAbzugslimite() {
+  @JsonProperty(required = true, value = "abzugslimite")
+  @NotNull public Integer getAbzugslimite() {
     return abzugslimite;
   }
 
-  @JsonProperty("abzugslimite")
+  @JsonProperty(required = true, value = "abzugslimite")
   public void setAbzugslimite(Integer abzugslimite) {
     this.abzugslimite = abzugslimite;
   }
@@ -117,13 +114,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("freibetragErwerbseinkommen")
-  @NotNull
-  public Integer getFreibetragErwerbseinkommen() {
+  @JsonProperty(required = true, value = "freibetragErwerbseinkommen")
+  @NotNull public Integer getFreibetragErwerbseinkommen() {
     return freibetragErwerbseinkommen;
   }
 
-  @JsonProperty("freibetragErwerbseinkommen")
+  @JsonProperty(required = true, value = "freibetragErwerbseinkommen")
   public void setFreibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
     this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
   }
@@ -136,13 +132,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("freibetragVermoegen")
-  @NotNull
-  public Integer getFreibetragVermoegen() {
+  @JsonProperty(required = true, value = "freibetragVermoegen")
+  @NotNull public Integer getFreibetragVermoegen() {
     return freibetragVermoegen;
   }
 
-  @JsonProperty("freibetragVermoegen")
+  @JsonProperty(required = true, value = "freibetragVermoegen")
   public void setFreibetragVermoegen(Integer freibetragVermoegen) {
     this.freibetragVermoegen = freibetragVermoegen;
   }
@@ -155,13 +150,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("vermoegensanteilInProzent")
-  @NotNull
-  public Integer getVermoegensanteilInProzent() {
+  @JsonProperty(required = true, value = "vermoegensanteilInProzent")
+  @NotNull public Integer getVermoegensanteilInProzent() {
     return vermoegensanteilInProzent;
   }
 
-  @JsonProperty("vermoegensanteilInProzent")
+  @JsonProperty(required = true, value = "vermoegensanteilInProzent")
   public void setVermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
     this.vermoegensanteilInProzent = vermoegensanteilInProzent;
   }
@@ -174,13 +168,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("anzahlWochenLehre")
-  @NotNull
-  public Integer getAnzahlWochenLehre() {
+  @JsonProperty(required = true, value = "anzahlWochenLehre")
+  @NotNull public Integer getAnzahlWochenLehre() {
     return anzahlWochenLehre;
   }
 
-  @JsonProperty("anzahlWochenLehre")
+  @JsonProperty(required = true, value = "anzahlWochenLehre")
   public void setAnzahlWochenLehre(Integer anzahlWochenLehre) {
     this.anzahlWochenLehre = anzahlWochenLehre;
   }
@@ -193,13 +186,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("anzahlWochenSchule")
-  @NotNull
-  public Integer getAnzahlWochenSchule() {
+  @JsonProperty(required = true, value = "anzahlWochenSchule")
+  @NotNull public Integer getAnzahlWochenSchule() {
     return anzahlWochenSchule;
   }
 
-  @JsonProperty("anzahlWochenSchule")
+  @JsonProperty(required = true, value = "anzahlWochenSchule")
   public void setAnzahlWochenSchule(Integer anzahlWochenSchule) {
     this.anzahlWochenSchule = anzahlWochenSchule;
   }
@@ -212,13 +204,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("preisProMahlzeit")
-  @NotNull
-  public Integer getPreisProMahlzeit() {
+  @JsonProperty(required = true, value = "preisProMahlzeit")
+  @NotNull public Integer getPreisProMahlzeit() {
     return preisProMahlzeit;
   }
 
-  @JsonProperty("preisProMahlzeit")
+  @JsonProperty(required = true, value = "preisProMahlzeit")
   public void setPreisProMahlzeit(Integer preisProMahlzeit) {
     this.preisProMahlzeit = preisProMahlzeit;
   }
@@ -231,13 +222,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("stipLimiteMinimalstipendium")
-  @NotNull
-  public Integer getStipLimiteMinimalstipendium() {
+  @JsonProperty(required = true, value = "stipLimiteMinimalstipendium")
+  @NotNull public Integer getStipLimiteMinimalstipendium() {
     return stipLimiteMinimalstipendium;
   }
 
-  @JsonProperty("stipLimiteMinimalstipendium")
+  @JsonProperty(required = true, value = "stipLimiteMinimalstipendium")
   public void setStipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
     this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
   }
@@ -250,13 +240,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("limiteAlterAntragsstellerHalbierungElternbeitrag")
-  @NotNull
-  public Integer getLimiteAlterAntragsstellerHalbierungElternbeitrag() {
+  @JsonProperty(required = true, value = "limiteAlterAntragsstellerHalbierungElternbeitrag")
+  @NotNull public Integer getLimiteAlterAntragsstellerHalbierungElternbeitrag() {
     return limiteAlterAntragsstellerHalbierungElternbeitrag;
   }
 
-  @JsonProperty("limiteAlterAntragsstellerHalbierungElternbeitrag")
+  @JsonProperty(required = true, value = "limiteAlterAntragsstellerHalbierungElternbeitrag")
   public void setLimiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
     this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
   }
@@ -269,13 +258,12 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
   
-  @JsonProperty("anzahlMonate")
-  @NotNull
-  public Integer getAnzahlMonate() {
+  @JsonProperty(required = true, value = "anzahlMonate")
+  @NotNull public Integer getAnzahlMonate() {
     return anzahlMonate;
   }
 
-  @JsonProperty("anzahlMonate")
+  @JsonProperty(required = true, value = "anzahlMonate")
   public void setAnzahlMonate(Integer anzahlMonate) {
     this.anzahlMonate = anzahlMonate;
   }
@@ -335,10 +323,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -426,4 +411,3 @@ public class BerechnungsStammdatenDto  implements Serializable {
     }
   }
 }
-

@@ -28,71 +28,50 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * ZahlungsverbindungDtoSpec
  */
 @JsonPropertyOrder({
-  ZahlungsverbindungDtoSpec.JSON_PROPERTY_IBAN,
   ZahlungsverbindungDtoSpec.JSON_PROPERTY_VORNAME,
   ZahlungsverbindungDtoSpec.JSON_PROPERTY_NACHNAME,
   ZahlungsverbindungDtoSpec.JSON_PROPERTY_INSTITUTION,
-  ZahlungsverbindungDtoSpec.JSON_PROPERTY_ADRESSE
+  ZahlungsverbindungDtoSpec.JSON_PROPERTY_ADRESSE,
+  ZahlungsverbindungDtoSpec.JSON_PROPERTY_IBAN
 })
 @JsonTypeName("Zahlungsverbindung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class ZahlungsverbindungDtoSpec {
-  public static final String JSON_PROPERTY_IBAN = "iban";
-  private String iban;
-
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nullable
   private String vorname;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nullable
   private String nachname;
 
   public static final String JSON_PROPERTY_INSTITUTION = "institution";
+  @jakarta.annotation.Nullable
   private String institution;
 
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
+  @jakarta.annotation.Nonnull
   private AdresseDtoSpec adresse;
+
+  public static final String JSON_PROPERTY_IBAN = "iban";
+  @jakarta.annotation.Nonnull
+  private String iban;
 
   public ZahlungsverbindungDtoSpec() {
   }
 
-  public ZahlungsverbindungDtoSpec iban(String iban) {
-    
-    this.iban = iban;
-    return this;
-  }
-
-   /**
-   * Get iban
-   * @return iban
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IBAN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getIban() {
-    return iban;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_IBAN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-
-  public ZahlungsverbindungDtoSpec vorname(String vorname) {
+  public ZahlungsverbindungDtoSpec vorname(@jakarta.annotation.Nullable String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getVorname() {
@@ -100,25 +79,24 @@ public class ZahlungsverbindungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nullable String vorname) {
     this.vorname = vorname;
   }
 
-
-  public ZahlungsverbindungDtoSpec nachname(String nachname) {
+  public ZahlungsverbindungDtoSpec nachname(@jakarta.annotation.Nullable String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getNachname() {
@@ -126,25 +104,24 @@ public class ZahlungsverbindungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nullable String nachname) {
     this.nachname = nachname;
   }
 
-
-  public ZahlungsverbindungDtoSpec institution(String institution) {
+  public ZahlungsverbindungDtoSpec institution(@jakarta.annotation.Nullable String institution) {
     
     this.institution = institution;
     return this;
   }
 
-   /**
+  /**
    * Get institution
    * @return institution
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_INSTITUTION)
+  @JsonProperty(value = JSON_PROPERTY_INSTITUTION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getInstitution() {
@@ -152,25 +129,24 @@ public class ZahlungsverbindungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_INSTITUTION)
+  @JsonProperty(value = JSON_PROPERTY_INSTITUTION, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInstitution(String institution) {
+  public void setInstitution(@jakarta.annotation.Nullable String institution) {
     this.institution = institution;
   }
 
-
-  public ZahlungsverbindungDtoSpec adresse(AdresseDtoSpec adresse) {
+  public ZahlungsverbindungDtoSpec adresse(@jakarta.annotation.Nonnull AdresseDtoSpec adresse) {
     
     this.adresse = adresse;
     return this;
   }
 
-   /**
+  /**
    * Get adresse
    * @return adresse
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_ADRESSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public AdresseDtoSpec getAdresse() {
@@ -178,11 +154,37 @@ public class ZahlungsverbindungDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonProperty(value = JSON_PROPERTY_ADRESSE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdresse(AdresseDtoSpec adresse) {
+  public void setAdresse(@jakarta.annotation.Nonnull AdresseDtoSpec adresse) {
     this.adresse = adresse;
   }
+
+  public ZahlungsverbindungDtoSpec iban(@jakarta.annotation.Nonnull String iban) {
+    
+    this.iban = iban;
+    return this;
+  }
+
+  /**
+   * Get iban
+   * @return iban
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_IBAN, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getIban() {
+    return iban;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_IBAN, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setIban(@jakarta.annotation.Nonnull String iban) {
+    this.iban = iban;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -193,27 +195,27 @@ public class ZahlungsverbindungDtoSpec {
       return false;
     }
     ZahlungsverbindungDtoSpec zahlungsverbindung = (ZahlungsverbindungDtoSpec) o;
-    return Objects.equals(this.iban, zahlungsverbindung.iban) &&
-        Objects.equals(this.vorname, zahlungsverbindung.vorname) &&
+    return Objects.equals(this.vorname, zahlungsverbindung.vorname) &&
         Objects.equals(this.nachname, zahlungsverbindung.nachname) &&
         Objects.equals(this.institution, zahlungsverbindung.institution) &&
-        Objects.equals(this.adresse, zahlungsverbindung.adresse);
+        Objects.equals(this.adresse, zahlungsverbindung.adresse) &&
+        Objects.equals(this.iban, zahlungsverbindung.iban);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(iban, vorname, nachname, institution, adresse);
+    return Objects.hash(vorname, nachname, institution, adresse, iban);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ZahlungsverbindungDtoSpec {\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    institution: ").append(toIndentedString(institution)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
+    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -223,10 +225,7 @@ public class ZahlungsverbindungDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

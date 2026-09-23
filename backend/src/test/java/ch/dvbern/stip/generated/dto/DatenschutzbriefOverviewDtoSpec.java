@@ -42,50 +42,59 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DatenschutzbriefOverviewDtoSpec.JSON_PROPERTY_MASSENDRUCK_JOB_ID
 })
 @JsonTypeName("DatenschutzbriefOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DatenschutzbriefOverviewDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nullable
   private LocalDate timestampErstellt;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  @jakarta.annotation.Nonnull
   private String userErstellt;
 
   public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
+  @jakarta.annotation.Nonnull
   private String sozialversicherungsnummer;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_ELTERN_TYP = "elternTyp";
+  @jakarta.annotation.Nonnull
   private ElternTypDtoSpec elternTyp;
 
   public static final String JSON_PROPERTY_DOKUMENT = "dokument";
+  @jakarta.annotation.Nullable
   private DokumentDtoSpec dokument;
 
   public static final String JSON_PROPERTY_MASSENDRUCK_JOB_ID = "massendruckJobId";
+  @jakarta.annotation.Nullable
   private UUID massendruckJobId;
 
   public DatenschutzbriefOverviewDtoSpec() {
   }
 
-  public DatenschutzbriefOverviewDtoSpec id(UUID id) {
+  public DatenschutzbriefOverviewDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -93,25 +102,24 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public DatenschutzbriefOverviewDtoSpec timestampErstellt(LocalDate timestampErstellt) {
+  public DatenschutzbriefOverviewDtoSpec timestampErstellt(@jakarta.annotation.Nullable LocalDate timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public LocalDate getTimestampErstellt() {
@@ -119,25 +127,24 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nullable LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public DatenschutzbriefOverviewDtoSpec userErstellt(String userErstellt) {
+  public DatenschutzbriefOverviewDtoSpec userErstellt(@jakarta.annotation.Nonnull String userErstellt) {
     
     this.userErstellt = userErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get userErstellt
    * @return userErstellt
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getUserErstellt() {
@@ -145,25 +152,24 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_USER_ERSTELLT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserErstellt(String userErstellt) {
+  public void setUserErstellt(@jakarta.annotation.Nonnull String userErstellt) {
     this.userErstellt = userErstellt;
   }
 
-
-  public DatenschutzbriefOverviewDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
+  public DatenschutzbriefOverviewDtoSpec sozialversicherungsnummer(@jakarta.annotation.Nonnull String sozialversicherungsnummer) {
     
     this.sozialversicherungsnummer = sozialversicherungsnummer;
     return this;
   }
 
-   /**
+  /**
    * Get sozialversicherungsnummer
    * @return sozialversicherungsnummer
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getSozialversicherungsnummer() {
@@ -171,25 +177,24 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
+  @JsonProperty(value = JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+  public void setSozialversicherungsnummer(@jakarta.annotation.Nonnull String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
 
-
-  public DatenschutzbriefOverviewDtoSpec nachname(String nachname) {
+  public DatenschutzbriefOverviewDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -197,25 +202,24 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public DatenschutzbriefOverviewDtoSpec vorname(String vorname) {
+  public DatenschutzbriefOverviewDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -223,25 +227,24 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public DatenschutzbriefOverviewDtoSpec elternTyp(ElternTypDtoSpec elternTyp) {
+  public DatenschutzbriefOverviewDtoSpec elternTyp(@jakarta.annotation.Nonnull ElternTypDtoSpec elternTyp) {
     
     this.elternTyp = elternTyp;
     return this;
   }
 
-   /**
+  /**
    * Get elternTyp
    * @return elternTyp
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ELTERN_TYP)
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public ElternTypDtoSpec getElternTyp() {
@@ -249,25 +252,24 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ELTERN_TYP)
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_TYP, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setElternTyp(ElternTypDtoSpec elternTyp) {
+  public void setElternTyp(@jakarta.annotation.Nonnull ElternTypDtoSpec elternTyp) {
     this.elternTyp = elternTyp;
   }
 
-
-  public DatenschutzbriefOverviewDtoSpec dokument(DokumentDtoSpec dokument) {
+  public DatenschutzbriefOverviewDtoSpec dokument(@jakarta.annotation.Nullable DokumentDtoSpec dokument) {
     
     this.dokument = dokument;
     return this;
   }
 
-   /**
+  /**
    * Get dokument
    * @return dokument
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DOKUMENT)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DokumentDtoSpec getDokument() {
@@ -275,25 +277,24 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENT)
+  @JsonProperty(value = JSON_PROPERTY_DOKUMENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDokument(DokumentDtoSpec dokument) {
+  public void setDokument(@jakarta.annotation.Nullable DokumentDtoSpec dokument) {
     this.dokument = dokument;
   }
 
-
-  public DatenschutzbriefOverviewDtoSpec massendruckJobId(UUID massendruckJobId) {
+  public DatenschutzbriefOverviewDtoSpec massendruckJobId(@jakarta.annotation.Nullable UUID massendruckJobId) {
     
     this.massendruckJobId = massendruckJobId;
     return this;
   }
 
-   /**
+  /**
    * Get massendruckJobId
    * @return massendruckJobId
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_ID)
+  @JsonProperty(value = JSON_PROPERTY_MASSENDRUCK_JOB_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getMassendruckJobId() {
@@ -301,11 +302,12 @@ public class DatenschutzbriefOverviewDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_ID)
+  @JsonProperty(value = JSON_PROPERTY_MASSENDRUCK_JOB_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMassendruckJobId(UUID massendruckJobId) {
+  public void setMassendruckJobId(@jakarta.annotation.Nullable UUID massendruckJobId) {
     this.massendruckJobId = massendruckJobId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -354,10 +356,7 @@ public class DatenschutzbriefOverviewDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

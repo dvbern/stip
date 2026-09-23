@@ -34,32 +34,35 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FallHeaderDtoSpec.JSON_PROPERTY_CURRENT_DELEGIERUNG
 })
 @JsonTypeName("FallHeader")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FallHeaderDtoSpec {
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  @jakarta.annotation.Nonnull
   private UUID fallId;
 
   public static final String JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT = "unreadNotificationsCount";
+  @jakarta.annotation.Nonnull
   private Integer unreadNotificationsCount;
 
   public static final String JSON_PROPERTY_CURRENT_DELEGIERUNG = "currentDelegierung";
+  @jakarta.annotation.Nullable
   private DelegierungSlimDtoSpec currentDelegierung;
 
   public FallHeaderDtoSpec() {
   }
 
-  public FallHeaderDtoSpec fallId(UUID fallId) {
+  public FallHeaderDtoSpec fallId(@jakarta.annotation.Nonnull UUID fallId) {
     
     this.fallId = fallId;
     return this;
   }
 
-   /**
+  /**
    * Get fallId
    * @return fallId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getFallId() {
@@ -67,25 +70,24 @@ public class FallHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonProperty(value = JSON_PROPERTY_FALL_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFallId(UUID fallId) {
+  public void setFallId(@jakarta.annotation.Nonnull UUID fallId) {
     this.fallId = fallId;
   }
 
-
-  public FallHeaderDtoSpec unreadNotificationsCount(Integer unreadNotificationsCount) {
+  public FallHeaderDtoSpec unreadNotificationsCount(@jakarta.annotation.Nonnull Integer unreadNotificationsCount) {
     
     this.unreadNotificationsCount = unreadNotificationsCount;
     return this;
   }
 
-   /**
+  /**
    * Get unreadNotificationsCount
    * @return unreadNotificationsCount
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT)
+  @JsonProperty(value = JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getUnreadNotificationsCount() {
@@ -93,25 +95,24 @@ public class FallHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT)
+  @JsonProperty(value = JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUnreadNotificationsCount(Integer unreadNotificationsCount) {
+  public void setUnreadNotificationsCount(@jakarta.annotation.Nonnull Integer unreadNotificationsCount) {
     this.unreadNotificationsCount = unreadNotificationsCount;
   }
 
-
-  public FallHeaderDtoSpec currentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
+  public FallHeaderDtoSpec currentDelegierung(@jakarta.annotation.Nullable DelegierungSlimDtoSpec currentDelegierung) {
     
     this.currentDelegierung = currentDelegierung;
     return this;
   }
 
-   /**
+  /**
    * Get currentDelegierung
    * @return currentDelegierung
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CURRENT_DELEGIERUNG)
+  @JsonProperty(value = JSON_PROPERTY_CURRENT_DELEGIERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DelegierungSlimDtoSpec getCurrentDelegierung() {
@@ -119,11 +120,12 @@ public class FallHeaderDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CURRENT_DELEGIERUNG)
+  @JsonProperty(value = JSON_PROPERTY_CURRENT_DELEGIERUNG, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCurrentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
+  public void setCurrentDelegierung(@jakarta.annotation.Nullable DelegierungSlimDtoSpec currentDelegierung) {
     this.currentDelegierung = currentDelegierung;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -160,10 +162,7 @@ public class FallHeaderDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

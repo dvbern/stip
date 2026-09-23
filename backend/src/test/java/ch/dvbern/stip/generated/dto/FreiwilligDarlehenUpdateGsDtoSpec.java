@@ -37,36 +37,40 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FreiwilligDarlehenUpdateGsDtoSpec.JSON_PROPERTY_GRUENDE
 })
 @JsonTypeName("FreiwilligDarlehenUpdateGs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FreiwilligDarlehenUpdateGsDtoSpec {
   public static final String JSON_PROPERTY_BETRAG_GEWUENSCHT = "betragGewuenscht";
+  @jakarta.annotation.Nullable
   private Integer betragGewuenscht;
 
   public static final String JSON_PROPERTY_SCHULDEN = "schulden";
+  @jakarta.annotation.Nullable
   private Integer schulden;
 
   public static final String JSON_PROPERTY_ANZAHL_BETREIBUNGEN = "anzahlBetreibungen";
+  @jakarta.annotation.Nullable
   private Integer anzahlBetreibungen;
 
   public static final String JSON_PROPERTY_GRUENDE = "gruende";
+  @jakarta.annotation.Nullable
   private List<DarlehenGrundDtoSpec> gruende;
 
   public FreiwilligDarlehenUpdateGsDtoSpec() {
   }
 
-  public FreiwilligDarlehenUpdateGsDtoSpec betragGewuenscht(Integer betragGewuenscht) {
+  public FreiwilligDarlehenUpdateGsDtoSpec betragGewuenscht(@jakarta.annotation.Nullable Integer betragGewuenscht) {
     
     this.betragGewuenscht = betragGewuenscht;
     return this;
   }
 
-   /**
+  /**
    * Get betragGewuenscht
    * minimum: 0
    * @return betragGewuenscht
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
+  @JsonProperty(value = JSON_PROPERTY_BETRAG_GEWUENSCHT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getBetragGewuenscht() {
@@ -74,26 +78,25 @@ public class FreiwilligDarlehenUpdateGsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
+  @JsonProperty(value = JSON_PROPERTY_BETRAG_GEWUENSCHT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetragGewuenscht(Integer betragGewuenscht) {
+  public void setBetragGewuenscht(@jakarta.annotation.Nullable Integer betragGewuenscht) {
     this.betragGewuenscht = betragGewuenscht;
   }
 
-
-  public FreiwilligDarlehenUpdateGsDtoSpec schulden(Integer schulden) {
+  public FreiwilligDarlehenUpdateGsDtoSpec schulden(@jakarta.annotation.Nullable Integer schulden) {
     
     this.schulden = schulden;
     return this;
   }
 
-   /**
+  /**
    * Get schulden
    * minimum: 0
    * @return schulden
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SCHULDEN)
+  @JsonProperty(value = JSON_PROPERTY_SCHULDEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getSchulden() {
@@ -101,26 +104,25 @@ public class FreiwilligDarlehenUpdateGsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SCHULDEN)
+  @JsonProperty(value = JSON_PROPERTY_SCHULDEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSchulden(Integer schulden) {
+  public void setSchulden(@jakarta.annotation.Nullable Integer schulden) {
     this.schulden = schulden;
   }
 
-
-  public FreiwilligDarlehenUpdateGsDtoSpec anzahlBetreibungen(Integer anzahlBetreibungen) {
+  public FreiwilligDarlehenUpdateGsDtoSpec anzahlBetreibungen(@jakarta.annotation.Nullable Integer anzahlBetreibungen) {
     
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
   }
 
-   /**
+  /**
    * Get anzahlBetreibungen
    * minimum: 0
    * @return anzahlBetreibungen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_BETREIBUNGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getAnzahlBetreibungen() {
@@ -128,14 +130,13 @@ public class FreiwilligDarlehenUpdateGsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_BETREIBUNGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAnzahlBetreibungen(Integer anzahlBetreibungen) {
+  public void setAnzahlBetreibungen(@jakarta.annotation.Nullable Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
   }
 
-
-  public FreiwilligDarlehenUpdateGsDtoSpec gruende(List<DarlehenGrundDtoSpec> gruende) {
+  public FreiwilligDarlehenUpdateGsDtoSpec gruende(@jakarta.annotation.Nullable List<DarlehenGrundDtoSpec> gruende) {
     
     this.gruende = gruende;
     return this;
@@ -149,12 +150,12 @@ public class FreiwilligDarlehenUpdateGsDtoSpec {
     return this;
   }
 
-   /**
+  /**
    * Get gruende
    * @return gruende
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUENDE)
+  @JsonProperty(value = JSON_PROPERTY_GRUENDE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public List<DarlehenGrundDtoSpec> getGruende() {
@@ -162,11 +163,12 @@ public class FreiwilligDarlehenUpdateGsDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUENDE)
+  @JsonProperty(value = JSON_PROPERTY_GRUENDE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGruende(List<DarlehenGrundDtoSpec> gruende) {
+  public void setGruende(@jakarta.annotation.Nullable List<DarlehenGrundDtoSpec> gruende) {
     this.gruende = gruende;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -205,10 +207,7 @@ public class FreiwilligDarlehenUpdateGsDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

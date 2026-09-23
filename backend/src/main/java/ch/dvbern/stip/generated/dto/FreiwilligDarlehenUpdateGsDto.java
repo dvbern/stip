@@ -17,15 +17,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehenUpdateGs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
-  private @Valid Integer betragGewuenscht;
-  private @Valid Integer schulden;
-  private @Valid Integer anzahlBetreibungen;
-  private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+  private Integer betragGewuenscht;
+  private Integer schulden;
+  private Integer anzahlBetreibungen;
+  private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende = new ArrayList<>();
 
   protected FreiwilligDarlehenUpdateGsDto(FreiwilligDarlehenUpdateGsDtoBuilder<?, ?> b) {
     this.betragGewuenscht = b.betragGewuenscht;
@@ -47,7 +47,7 @@ public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
 
   
   @JsonProperty("betragGewuenscht")
- @Min(0)  public Integer getBetragGewuenscht() {
+   @Min(0)public Integer getBetragGewuenscht() {
     return betragGewuenscht;
   }
 
@@ -66,7 +66,7 @@ public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
 
   
   @JsonProperty("schulden")
- @Min(0)  public Integer getSchulden() {
+   @Min(0)public Integer getSchulden() {
     return schulden;
   }
 
@@ -85,7 +85,7 @@ public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
 
   
   @JsonProperty("anzahlBetreibungen")
- @Min(0)  public Integer getAnzahlBetreibungen() {
+   @Min(0)public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
   }
 
@@ -167,10 +167,7 @@ public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -195,7 +192,7 @@ public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
     private Integer betragGewuenscht;
     private Integer schulden;
     private Integer anzahlBetreibungen;
-    private List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+    private List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -218,4 +215,3 @@ public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
     }
   }
 }
-

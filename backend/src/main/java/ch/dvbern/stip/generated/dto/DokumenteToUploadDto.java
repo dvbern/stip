@@ -19,18 +19,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DokumenteToUpload")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DokumenteToUploadDto  implements Serializable {
-  private @Valid List<CustomDokumentTypDto> customDokumentTyps;
-  private @Valid List<ch.dvbern.stip.api.dokument.type.DokumentTyp> required;
-  private @Valid List<GesuchDokumentRefDto> requiredRefs;
-  private @Valid List<ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp> unterschriftenblaetter;
-  private @Valid Boolean sbCanFehlendeDokumenteUebermitteln;
-  private @Valid Boolean gsCanDokumenteUebermitteln;
-  private @Valid Boolean sbCanUploadUnterschriftenblatt;
+  private @Valid List<@Valid CustomDokumentTypDto> customDokumentTyps = new ArrayList<>();
+  private @Valid List<ch.dvbern.stip.api.dokument.type.DokumentTyp> required = new ArrayList<>();
+  private @Valid List<@Valid GesuchDokumentRefDto> requiredRefs = new ArrayList<>();
+  private @Valid List<ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp> unterschriftenblaetter = new ArrayList<>();
+  private Boolean sbCanFehlendeDokumenteUebermitteln;
+  private Boolean gsCanDokumenteUebermitteln;
+  private Boolean sbCanUploadUnterschriftenblatt;
 
   protected DokumenteToUploadDto(DokumenteToUploadDtoBuilder<?, ?> b) {
     this.customDokumentTyps = b.customDokumentTyps;
@@ -47,19 +47,19 @@ public class DokumenteToUploadDto  implements Serializable {
 
   /**
    **/
-  public DokumenteToUploadDto customDokumentTyps(List<CustomDokumentTypDto> customDokumentTyps) {
+  public DokumenteToUploadDto customDokumentTyps(List<@Valid CustomDokumentTypDto> customDokumentTyps) {
     this.customDokumentTyps = customDokumentTyps;
     return this;
   }
 
   
   @JsonProperty("customDokumentTyps")
-  public List<CustomDokumentTypDto> getCustomDokumentTyps() {
+  @Valid public List<@Valid CustomDokumentTypDto> getCustomDokumentTyps() {
     return customDokumentTyps;
   }
 
   @JsonProperty("customDokumentTyps")
-  public void setCustomDokumentTyps(List<CustomDokumentTypDto> customDokumentTyps) {
+  public void setCustomDokumentTyps(List<@Valid CustomDokumentTypDto> customDokumentTyps) {
     this.customDokumentTyps = customDokumentTyps;
   }
 
@@ -115,19 +115,19 @@ public class DokumenteToUploadDto  implements Serializable {
   }
   /**
    **/
-  public DokumenteToUploadDto requiredRefs(List<GesuchDokumentRefDto> requiredRefs) {
+  public DokumenteToUploadDto requiredRefs(List<@Valid GesuchDokumentRefDto> requiredRefs) {
     this.requiredRefs = requiredRefs;
     return this;
   }
 
   
   @JsonProperty("requiredRefs")
-  public List<GesuchDokumentRefDto> getRequiredRefs() {
+  @Valid public List<@Valid GesuchDokumentRefDto> getRequiredRefs() {
     return requiredRefs;
   }
 
   @JsonProperty("requiredRefs")
-  public void setRequiredRefs(List<GesuchDokumentRefDto> requiredRefs) {
+  public void setRequiredRefs(List<@Valid GesuchDokumentRefDto> requiredRefs) {
     this.requiredRefs = requiredRefs;
   }
 
@@ -280,10 +280,7 @@ public class DokumenteToUploadDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -305,10 +302,10 @@ public class DokumenteToUploadDto  implements Serializable {
   }
 
   public static abstract class DokumenteToUploadDtoBuilder<C extends DokumenteToUploadDto, B extends DokumenteToUploadDtoBuilder<C, B>>  {
-    private List<CustomDokumentTypDto> customDokumentTyps;
-    private List<ch.dvbern.stip.api.dokument.type.DokumentTyp> required;
-    private List<GesuchDokumentRefDto> requiredRefs;
-    private List<ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp> unterschriftenblaetter;
+    private List<CustomDokumentTypDto> customDokumentTyps = new ArrayList<>();
+    private List<ch.dvbern.stip.api.dokument.type.DokumentTyp> required = new ArrayList<>();
+    private List<GesuchDokumentRefDto> requiredRefs = new ArrayList<>();
+    private List<ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp> unterschriftenblaetter = new ArrayList<>();
     private Boolean sbCanFehlendeDokumenteUebermitteln;
     private Boolean gsCanDokumenteUebermitteln;
     private Boolean sbCanUploadUnterschriftenblatt;
@@ -346,4 +343,3 @@ public class DokumenteToUploadDto  implements Serializable {
     }
   }
 }
-

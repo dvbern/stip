@@ -38,41 +38,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BenutzerDtoSpec.JSON_PROPERTY_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN
 })
 @JsonTypeName("Benutzer")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class BenutzerDtoSpec {
   public static final String JSON_PROPERTY_VORNAME = "vorname";
+  @jakarta.annotation.Nonnull
   private String vorname;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
+  @jakarta.annotation.Nonnull
   private String nachname;
 
   public static final String JSON_PROPERTY_BENUTZEREINSTELLUNGEN = "benutzereinstellungen";
+  @jakarta.annotation.Nullable
   private BenutzereinstellungenUpdateDtoSpec benutzereinstellungen;
 
   public static final String JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT = "nutzungsbedingungenAkzeptiert";
+  @jakarta.annotation.Nullable
   private Boolean nutzungsbedingungenAkzeptiert;
 
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN = "sachbearbeiterZuordnungStammdaten";
+  @jakarta.annotation.Nullable
   private SachbearbeiterZuordnungStammdatenDtoSpec sachbearbeiterZuordnungStammdaten;
 
   public BenutzerDtoSpec() {
   }
 
-  public BenutzerDtoSpec vorname(String vorname) {
+  public BenutzerDtoSpec vorname(@jakarta.annotation.Nonnull String vorname) {
     
     this.vorname = vorname;
     return this;
   }
 
-   /**
+  /**
    * Get vorname
    * @return vorname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getVorname() {
@@ -80,25 +86,24 @@ public class BenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonProperty(value = JSON_PROPERTY_VORNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVorname(String vorname) {
+  public void setVorname(@jakarta.annotation.Nonnull String vorname) {
     this.vorname = vorname;
   }
 
-
-  public BenutzerDtoSpec nachname(String nachname) {
+  public BenutzerDtoSpec nachname(@jakarta.annotation.Nonnull String nachname) {
     
     this.nachname = nachname;
     return this;
   }
 
-   /**
+  /**
    * Get nachname
    * @return nachname
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getNachname() {
@@ -106,25 +111,24 @@ public class BenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NACHNAME)
+  @JsonProperty(value = JSON_PROPERTY_NACHNAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachname(String nachname) {
+  public void setNachname(@jakarta.annotation.Nonnull String nachname) {
     this.nachname = nachname;
   }
 
-
-  public BenutzerDtoSpec benutzereinstellungen(BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
+  public BenutzerDtoSpec benutzereinstellungen(@jakarta.annotation.Nullable BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
     
     this.benutzereinstellungen = benutzereinstellungen;
     return this;
   }
 
-   /**
+  /**
    * Get benutzereinstellungen
    * @return benutzereinstellungen
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BENUTZEREINSTELLUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_BENUTZEREINSTELLUNGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BenutzereinstellungenUpdateDtoSpec getBenutzereinstellungen() {
@@ -132,25 +136,24 @@ public class BenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BENUTZEREINSTELLUNGEN)
+  @JsonProperty(value = JSON_PROPERTY_BENUTZEREINSTELLUNGEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBenutzereinstellungen(BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
+  public void setBenutzereinstellungen(@jakarta.annotation.Nullable BenutzereinstellungenUpdateDtoSpec benutzereinstellungen) {
     this.benutzereinstellungen = benutzereinstellungen;
   }
 
-
-  public BenutzerDtoSpec nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+  public BenutzerDtoSpec nutzungsbedingungenAkzeptiert(@jakarta.annotation.Nullable Boolean nutzungsbedingungenAkzeptiert) {
     
     this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
     return this;
   }
 
-   /**
+  /**
    * Get nutzungsbedingungenAkzeptiert
    * @return nutzungsbedingungenAkzeptiert
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonProperty(value = JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getNutzungsbedingungenAkzeptiert() {
@@ -158,25 +161,24 @@ public class BenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonProperty(value = JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+  public void setNutzungsbedingungenAkzeptiert(@jakarta.annotation.Nullable Boolean nutzungsbedingungenAkzeptiert) {
     this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
   }
 
-
-  public BenutzerDtoSpec id(UUID id) {
+  public BenutzerDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -184,25 +186,24 @@ public class BenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public BenutzerDtoSpec sachbearbeiterZuordnungStammdaten(SachbearbeiterZuordnungStammdatenDtoSpec sachbearbeiterZuordnungStammdaten) {
+  public BenutzerDtoSpec sachbearbeiterZuordnungStammdaten(@jakarta.annotation.Nullable SachbearbeiterZuordnungStammdatenDtoSpec sachbearbeiterZuordnungStammdaten) {
     
     this.sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdaten;
     return this;
   }
 
-   /**
+  /**
    * Get sachbearbeiterZuordnungStammdaten
    * @return sachbearbeiterZuordnungStammdaten
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN)
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public SachbearbeiterZuordnungStammdatenDtoSpec getSachbearbeiterZuordnungStammdaten() {
@@ -210,11 +211,12 @@ public class BenutzerDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN)
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSachbearbeiterZuordnungStammdaten(SachbearbeiterZuordnungStammdatenDtoSpec sachbearbeiterZuordnungStammdaten) {
+  public void setSachbearbeiterZuordnungStammdaten(@jakarta.annotation.Nullable SachbearbeiterZuordnungStammdatenDtoSpec sachbearbeiterZuordnungStammdaten) {
     this.sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdaten;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -257,10 +259,7 @@ public class BenutzerDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

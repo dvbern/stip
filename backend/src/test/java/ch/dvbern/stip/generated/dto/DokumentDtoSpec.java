@@ -36,41 +36,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DokumentDtoSpec.JSON_PROPERTY_OBJECT_ID
 })
 @JsonTypeName("Dokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class DokumentDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nonnull
   private UUID id;
 
   public static final String JSON_PROPERTY_FILENAME = "filename";
+  @jakarta.annotation.Nonnull
   private String filename;
 
   public static final String JSON_PROPERTY_FILEPATH = "filepath";
+  @jakarta.annotation.Nonnull
   private String filepath;
 
   public static final String JSON_PROPERTY_FILESIZE = "filesize";
+  @jakarta.annotation.Nonnull
   private String filesize;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  @jakarta.annotation.Nullable
   private String timestampErstellt;
 
   public static final String JSON_PROPERTY_OBJECT_ID = "objectId";
+  @jakarta.annotation.Nonnull
   private String objectId;
 
   public DokumentDtoSpec() {
   }
 
-  public DokumentDtoSpec id(UUID id) {
+  public DokumentDtoSpec id(@jakarta.annotation.Nonnull UUID id) {
     
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
@@ -78,25 +84,24 @@ public class DokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(value = JSON_PROPERTY_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(UUID id) {
+  public void setId(@jakarta.annotation.Nonnull UUID id) {
     this.id = id;
   }
 
-
-  public DokumentDtoSpec filename(String filename) {
+  public DokumentDtoSpec filename(@jakarta.annotation.Nonnull String filename) {
     
     this.filename = filename;
     return this;
   }
 
-   /**
+  /**
    * Get filename
    * @return filename
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILENAME)
+  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilename() {
@@ -104,25 +109,24 @@ public class DokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILENAME)
+  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilename(String filename) {
+  public void setFilename(@jakarta.annotation.Nonnull String filename) {
     this.filename = filename;
   }
 
-
-  public DokumentDtoSpec filepath(String filepath) {
+  public DokumentDtoSpec filepath(@jakarta.annotation.Nonnull String filepath) {
     
     this.filepath = filepath;
     return this;
   }
 
-   /**
+  /**
    * Get filepath
    * @return filepath
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILEPATH)
+  @JsonProperty(value = JSON_PROPERTY_FILEPATH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilepath() {
@@ -130,25 +134,24 @@ public class DokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILEPATH)
+  @JsonProperty(value = JSON_PROPERTY_FILEPATH, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilepath(String filepath) {
+  public void setFilepath(@jakarta.annotation.Nonnull String filepath) {
     this.filepath = filepath;
   }
 
-
-  public DokumentDtoSpec filesize(String filesize) {
+  public DokumentDtoSpec filesize(@jakarta.annotation.Nonnull String filesize) {
     
     this.filesize = filesize;
     return this;
   }
 
-   /**
+  /**
    * Get filesize
    * @return filesize
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILESIZE)
+  @JsonProperty(value = JSON_PROPERTY_FILESIZE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilesize() {
@@ -156,25 +159,24 @@ public class DokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILESIZE)
+  @JsonProperty(value = JSON_PROPERTY_FILESIZE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilesize(String filesize) {
+  public void setFilesize(@jakarta.annotation.Nonnull String filesize) {
     this.filesize = filesize;
   }
 
-
-  public DokumentDtoSpec timestampErstellt(String timestampErstellt) {
+  public DokumentDtoSpec timestampErstellt(@jakarta.annotation.Nullable String timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
   }
 
-   /**
+  /**
    * Get timestampErstellt
    * @return timestampErstellt
-  **/
+   */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getTimestampErstellt() {
@@ -182,25 +184,24 @@ public class DokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonProperty(value = JSON_PROPERTY_TIMESTAMP_ERSTELLT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTimestampErstellt(String timestampErstellt) {
+  public void setTimestampErstellt(@jakarta.annotation.Nullable String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
 
-
-  public DokumentDtoSpec objectId(String objectId) {
+  public DokumentDtoSpec objectId(@jakarta.annotation.Nonnull String objectId) {
     
     this.objectId = objectId;
     return this;
   }
 
-   /**
+  /**
    * Get objectId
    * @return objectId
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_OBJECT_ID)
+  @JsonProperty(value = JSON_PROPERTY_OBJECT_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getObjectId() {
@@ -208,11 +209,12 @@ public class DokumentDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_OBJECT_ID)
+  @JsonProperty(value = JSON_PROPERTY_OBJECT_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setObjectId(String objectId) {
+  public void setObjectId(@jakarta.annotation.Nonnull String objectId) {
     this.objectId = objectId;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -255,10 +257,7 @@ public class DokumentDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

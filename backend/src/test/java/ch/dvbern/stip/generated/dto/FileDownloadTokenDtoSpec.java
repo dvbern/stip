@@ -30,26 +30,27 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FileDownloadTokenDtoSpec.JSON_PROPERTY_TOKEN
 })
 @JsonTypeName("FileDownloadToken")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
 public class FileDownloadTokenDtoSpec {
   public static final String JSON_PROPERTY_TOKEN = "token";
+  @jakarta.annotation.Nonnull
   private String token;
 
   public FileDownloadTokenDtoSpec() {
   }
 
-  public FileDownloadTokenDtoSpec token(String token) {
+  public FileDownloadTokenDtoSpec token(@jakarta.annotation.Nonnull String token) {
     
     this.token = token;
     return this;
   }
 
-   /**
+  /**
    * Get token
    * @return token
-  **/
+   */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOKEN)
+  @JsonProperty(value = JSON_PROPERTY_TOKEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getToken() {
@@ -57,11 +58,12 @@ public class FileDownloadTokenDtoSpec {
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TOKEN)
+  @JsonProperty(value = JSON_PROPERTY_TOKEN, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setToken(String token) {
+  public void setToken(@jakarta.annotation.Nonnull String token) {
     this.token = token;
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -94,10 +96,7 @@ public class FileDownloadTokenDtoSpec {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

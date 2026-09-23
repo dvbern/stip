@@ -18,13 +18,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungUnterbruchDashboardSB")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungUnterbruchDashboardSBDto  implements Serializable {
-  private @Valid Boolean canCreateAusbildungUnterbruch;
-  private @Valid List<AusbildungUnterbruchAntragSBDto> ausbildungUnterbruchs = new ArrayList<>();
+  private Boolean canCreateAusbildungUnterbruch;
+  private @Valid List<@Valid AusbildungUnterbruchAntragSBDto> ausbildungUnterbruchs = new ArrayList<>();
 
   protected AusbildungUnterbruchDashboardSBDto(AusbildungUnterbruchDashboardSBDtoBuilder<?, ?> b) {
     this.canCreateAusbildungUnterbruch = b.canCreateAusbildungUnterbruch;
@@ -42,33 +42,31 @@ public class AusbildungUnterbruchDashboardSBDto  implements Serializable {
   }
 
   
-  @JsonProperty("canCreateAusbildungUnterbruch")
-  @NotNull
-  public Boolean getCanCreateAusbildungUnterbruch() {
+  @JsonProperty(required = true, value = "canCreateAusbildungUnterbruch")
+  @NotNull public Boolean getCanCreateAusbildungUnterbruch() {
     return canCreateAusbildungUnterbruch;
   }
 
-  @JsonProperty("canCreateAusbildungUnterbruch")
+  @JsonProperty(required = true, value = "canCreateAusbildungUnterbruch")
   public void setCanCreateAusbildungUnterbruch(Boolean canCreateAusbildungUnterbruch) {
     this.canCreateAusbildungUnterbruch = canCreateAusbildungUnterbruch;
   }
 
   /**
    **/
-  public AusbildungUnterbruchDashboardSBDto ausbildungUnterbruchs(List<AusbildungUnterbruchAntragSBDto> ausbildungUnterbruchs) {
+  public AusbildungUnterbruchDashboardSBDto ausbildungUnterbruchs(List<@Valid AusbildungUnterbruchAntragSBDto> ausbildungUnterbruchs) {
     this.ausbildungUnterbruchs = ausbildungUnterbruchs;
     return this;
   }
 
   
-  @JsonProperty("ausbildungUnterbruchs")
-  @NotNull
-  public List<AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchs() {
+  @JsonProperty(required = true, value = "ausbildungUnterbruchs")
+  @NotNull @Valid public List<@Valid AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchs() {
     return ausbildungUnterbruchs;
   }
 
-  @JsonProperty("ausbildungUnterbruchs")
-  public void setAusbildungUnterbruchs(List<AusbildungUnterbruchAntragSBDto> ausbildungUnterbruchs) {
+  @JsonProperty(required = true, value = "ausbildungUnterbruchs")
+  public void setAusbildungUnterbruchs(List<@Valid AusbildungUnterbruchAntragSBDto> ausbildungUnterbruchs) {
     this.ausbildungUnterbruchs = ausbildungUnterbruchs;
   }
 
@@ -123,10 +121,7 @@ public class AusbildungUnterbruchDashboardSBDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -164,4 +159,3 @@ public class AusbildungUnterbruchDashboardSBDto  implements Serializable {
     }
   }
 }
-

@@ -15,14 +15,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Fall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid String fallNummer;
-  private @Valid String tenant;
+  private UUID id;
+  private String fallNummer;
+  private String tenant;
 
   protected FallDto(FallDtoBuilder<?, ?> b) {
     this.id = b.id;
@@ -41,13 +41,12 @@ public class FallDto  implements Serializable {
   }
 
   
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
+  @JsonProperty(required = true, value = "id")
+  @NotNull public UUID getId() {
     return id;
   }
 
-  @JsonProperty("id")
+  @JsonProperty(required = true, value = "id")
   public void setId(UUID id) {
     this.id = id;
   }
@@ -60,13 +59,12 @@ public class FallDto  implements Serializable {
   }
 
   
-  @JsonProperty("fallNummer")
-  @NotNull
-  public String getFallNummer() {
+  @JsonProperty(required = true, value = "fallNummer")
+  @NotNull public String getFallNummer() {
     return fallNummer;
   }
 
-  @JsonProperty("fallNummer")
+  @JsonProperty(required = true, value = "fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -79,13 +77,12 @@ public class FallDto  implements Serializable {
   }
 
   
-  @JsonProperty("tenant")
-  @NotNull
-  public String getTenant() {
+  @JsonProperty(required = true, value = "tenant")
+  @NotNull public String getTenant() {
     return tenant;
   }
 
-  @JsonProperty("tenant")
+  @JsonProperty(required = true, value = "tenant")
   public void setTenant(String tenant) {
     this.tenant = tenant;
   }
@@ -127,10 +124,7 @@ public class FallDto  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -173,4 +167,3 @@ public class FallDto  implements Serializable {
     }
   }
 }
-
