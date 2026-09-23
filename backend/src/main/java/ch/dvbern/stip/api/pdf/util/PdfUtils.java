@@ -719,7 +719,12 @@ public class PdfUtils {
         if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
             kopieAn.add(sozialdienstAdresse.getCoAdresse());
         }
-        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
+        final var hausnummer = sozialdienstAdresse.getHausnummer();
+        kopieAn.add(
+            Objects.isNull(hausnummer) || hausnummer.isBlank()
+                ? sozialdienstAdresse.getStrasse()
+                : "%s %s".formatted(sozialdienstAdresse.getStrasse(), hausnummer)
+        );
         kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
         return String.join(", ", kopieAn);
     }
