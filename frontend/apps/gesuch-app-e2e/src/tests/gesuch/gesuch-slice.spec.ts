@@ -206,6 +206,19 @@ test.describe('Neues gesuch erstellen', () => {
 
     await headerNavPO.elems.aktionMenu.click();
     await headerNavPO.elems
+      .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
+      .click();
+
+    await expect(headerNavPO.elems.actionLoading).toBeHidden();
+
+    // fill form-kommentar-dialog-kommentar, workaround for dv mandant
+    await sbPage
+      .getByTestId('form-kommentar-dialog-kommentar')
+      .fill('Test Kommentar');
+    await sbPage.getByTestId('dialog-confirm').click();
+
+    await headerNavPO.elems.aktionMenu.click();
+    await headerNavPO.elems
       .getAktionStatusUebergangItem('BEREIT_FUER_BEARBEITUNG')
       .click();
 

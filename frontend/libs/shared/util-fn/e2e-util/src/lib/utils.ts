@@ -281,7 +281,7 @@ const ssnFormatter = (ssn: number[]) => {
 
 export const thisYear = format(new Date(), 'yyyy');
 export const fruehlingOrHerbst = () => {
-  if (getMonth(new Date()) < 6) {
+  if (getMonth(new Date()) <= 6) {
     return 1;
   }
   return 9;
