@@ -70,6 +70,7 @@ public class VerfuegungPdfComposerService {
         storeVerfuegungsDokument(verfuegung, VerfuegungDokumentTyp.VERFUEGUNGSBRIEF, verfuegungsBrief);
 
         if (verfuegung.getVerfuegungStatus().isNegativ() || stipendienBerechnungOpt.isEmpty()) {
+            storeVerfuegungsDokument(verfuegung, VerfuegungDokumentTyp.VERFUEGUNG_GS, verfuegungsBrief);
             final var finalVerfuegungsBrief = mergeWithSozialdienstDeckblattIfDelegiert(gesuch, verfuegungsBrief);
             storeVerfuegungsDokument(verfuegung, VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG, finalVerfuegungsBrief);
             return;

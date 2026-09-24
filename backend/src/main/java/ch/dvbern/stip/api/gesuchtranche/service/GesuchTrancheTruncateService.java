@@ -82,7 +82,6 @@ public class GesuchTrancheTruncateService {
 
         gesuch.getGesuchTranchen().addAll(added);
 
-        final var toRemove = new ArrayList<GesuchTranche>();
         final var tranchenToCheck = new ArrayList<GesuchTranche>();
         tranchenToCheck.addAll(
             gesuch.getGesuchTranchen()
@@ -93,9 +92,6 @@ public class GesuchTrancheTruncateService {
 
         for (final var tranche : tranchenToCheck) {
             if (tranche.getGueltigkeit().months() <= 0) {
-                toRemove.add(tranche);
-                gesuchDokumentKommentarService.deleteForGesuchTrancheId(tranche.getId());
-
                 var gesuchDokuments = new ArrayList<GesuchDokument>();
                 gesuchDokuments.addAll(tranche.getGesuchDokuments());
                 for (var dokument : gesuchDokuments) {
@@ -103,6 +99,7 @@ public class GesuchTrancheTruncateService {
                     tranche.getGesuchDokuments().remove(dokument);
                 }
 
+                // This would suffice to delete everything
                 gesuch.getGesuchTranchen().remove(tranche);
                 gesuchTrancheRepository.delete(tranche);
             }
