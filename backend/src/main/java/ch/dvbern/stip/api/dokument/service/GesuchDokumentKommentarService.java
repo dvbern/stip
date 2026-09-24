@@ -56,10 +56,6 @@ public class GesuchDokumentKommentarService {
         gesuchDokumentKommentarRepository.deleteAllByGesuchTrancheId(gesuchTrancheId);
     }
 
-    public void deleteForGesuchTrancheIds(final List<UUID> gesuchTrancheIds) {
-        gesuchDokumentKommentarRepository.deleteAllByGesuchTrancheIds(gesuchTrancheIds);
-    }
-
     @Transactional
     public void copyKommentareToTranche(
         final List<GesuchDokumentKommentar> gesuchDokumentKommentars,
