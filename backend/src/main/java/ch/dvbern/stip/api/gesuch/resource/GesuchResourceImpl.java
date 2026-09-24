@@ -40,7 +40,6 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
-import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
@@ -97,7 +96,6 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
-    private final GesuchMapperUtil gesuchMapperUtil;
     private final StipConfig config;
     private final BenutzerService benutzerService;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
