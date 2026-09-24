@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv';
 import {
   CustomTestOptions,
   baseConfig,
-  createE2eReporter,
+  createCiE2eReporter,
   getE2eUrls,
 } from '@dv/shared/util-fn/e2e-util';
 
@@ -25,7 +25,7 @@ export default defineConfig<CustomTestOptions>({
     baseURL: urls.sb,
     testUser: 'SACHBEARBEITER',
   },
-  reporter: createE2eReporter(APP_TYPE),
+  reporter: createCiE2eReporter(APP_TYPE, __dirname),
   projects: [
     {
       name: 'setup',

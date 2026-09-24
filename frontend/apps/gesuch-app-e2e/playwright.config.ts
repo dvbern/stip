@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 
 import {
   baseConfig,
-  createE2eReporter,
+  createCiE2eReporter,
   getE2eUrls,
 } from '@dv/shared/util-fn/e2e-util';
 
@@ -23,7 +23,7 @@ export default defineConfig({
     baseURL: urls.gs,
   },
   workers: !process.env['CI'] ? 3 : 1,
-  reporter: createE2eReporter(APP_TYPE),
+  reporter: createCiE2eReporter(APP_TYPE, __dirname),
   projects: [
     {
       name: 'setup',

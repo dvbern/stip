@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { defineConfig, test } from '@playwright/test';
 import { zstdCompress, zstdDecompress } from 'http-encoding';
 
@@ -93,6 +95,25 @@ export const createE2eReporter = (appType: string): ReporterConfig => {
   return [
     ['junit', { outputFile: `test-results/junit/${appType}.xml` }],
     ['html', { open: 'never', outputFolder: `test-results/html/${appType}` }],
+  ];
+};
+
+export const createCiE2eReporter = (
+  appType: string,
+  appConfigDir: string,
+): ReporterConfig => {
+  if (!process.env['CI']) {
+    return [['list']];
+  }
+
+  const testResultsDir = join(appConfigDir, '../../test-results');
+
+  return [
+    ['junit', { outputFile: join(testResultsDir, 'junit', `${appType}.xml`) }],
+    [
+      'html',
+      { open: 'never', outputFolder: join(testResultsDir, 'html', appType) },
+    ],
   ];
 };
 
