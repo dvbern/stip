@@ -286,7 +286,7 @@ test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
   // todo-e2e-next: more specific test to verify tranche was created correctly?
   await expect(sbGesuchHeader.elems.trancheMenuItems).toHaveCount(2);
 
-  sbVerfuegtPage.close();
-  sbPage.close();
-  gsPage.close();
+  await sbVerfuegtPage.close();
+  await sbPage.close();
+  await gsPage.close();
 });

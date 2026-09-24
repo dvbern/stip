@@ -101,7 +101,7 @@ test.describe('Tranche erstellen', () => {
     // todo-e2e-next: more specific assertion for tranche created
     await expect(sbGesuchHeader.elems.trancheMenuItems).toHaveCount(2);
 
-    sbPage.close();
-    gsPage.close();
+    await sbPage.close();
+    await gsPage.close();
   });
 });

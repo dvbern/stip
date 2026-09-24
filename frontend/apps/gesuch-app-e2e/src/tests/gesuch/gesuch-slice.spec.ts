@@ -287,7 +287,7 @@ test.describe('Neues gesuch erstellen', () => {
       'IN_BEARBEITUNG_SB',
     ]);
 
-    sbPage.close();
-    gsPage.close();
+    await sbPage.close();
+    await gsPage.close();
   });
 });
