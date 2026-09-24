@@ -7,12 +7,14 @@ import * as dotenv from 'dotenv';
 import {
   CustomTestOptions,
   baseConfig,
+  createE2eReporter,
   getE2eUrls,
 } from '@dv/shared/util-fn/e2e-util';
 
 dotenv.config({ path: join(__dirname, '../../.env') });
 
 const urls = getE2eUrls();
+const APP_TYPE = 'sozialdienst-app-e2e';
 
 export default defineConfig<CustomTestOptions>({
   ...nxE2EPreset(__filename, { testDir: './src' }),
@@ -23,6 +25,7 @@ export default defineConfig<CustomTestOptions>({
     baseURL: urls.soz,
     testUser: 'SOZIALDIENST_ADMIN',
   },
+  reporter: createE2eReporter(APP_TYPE),
   projects: [
     {
       name: 'setup',

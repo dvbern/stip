@@ -197,9 +197,9 @@ nx-e2e-test:
   artifacts:
     when: always
     paths:
-      - playwright-report/
+      - frontend/test-results/html/
     reports:
-      junit: results.xml
+      junit: frontend/test-results/junit/*.xml
   variables:
     E2E_BASEURL_GS: 'https://dv-e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SB: 'https://dv-e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'

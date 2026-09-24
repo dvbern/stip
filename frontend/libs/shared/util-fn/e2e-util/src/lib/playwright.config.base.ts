@@ -1,4 +1,4 @@
-import test, { defineConfig } from '@playwright/test';
+import { defineConfig, test } from '@playwright/test';
 import { zstdCompress, zstdDecompress } from 'http-encoding';
 
 export const BEARER_COOKIE = 'access_cookie';
@@ -79,13 +79,22 @@ export const baseConfig = defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 1,
-  reporter: process.env.CI
-    ? [
-        ['junit', { outputFile: 'results.xml' }],
-        ['html', { open: 'never' }],
-      ]
-    : [['list']],
 });
+
+type ReporterConfig = NonNullable<
+  Parameters<typeof defineConfig>[0]['reporter']
+>;
+
+export const createE2eReporter = (appType: string): ReporterConfig => {
+  if (!process.env['CI']) {
+    return [['list']];
+  }
+
+  return [
+    ['junit', { outputFile: `test-results/junit/${appType}.xml` }],
+    ['html', { open: 'never', outputFolder: `test-results/html/${appType}` }],
+  ];
+};
 
 export const compress = async (value: string) => {
   const compressed = await zstdCompress(new TextEncoder().encode(value));
