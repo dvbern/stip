@@ -101,8 +101,6 @@ kstip:
           adapter-type: typst
         gemeinde-lookup:
           adapter-type: dummy
-        plz-fetch:
-          adapter-type: dummy
         payment-processing:
           adapter-type: dummy
       adapter:

@@ -33,8 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Singleton
 public class PlzFetchScheduledTask extends RunForTenantsScheduledTask {
-    private static final TenantIdentifier TENANT_IDENTIFIER = TenantIdentifier.BERN;
-
     @Inject
     PlzFetchPortFactory plzFetchPortFactory;
 
@@ -45,7 +43,7 @@ public class PlzFetchScheduledTask extends RunForTenantsScheduledTask {
     PlzFetchDataMapper plzFetchDataMapper;
 
     public PlzFetchScheduledTask() {
-        super(ScheduledTaskCronKey.PLZ_DATA, TENANT_IDENTIFIER);
+        super(ScheduledTaskCronKey.PLZ_DATA, TenantIdentifier.values());
     }
 
     @Override
@@ -67,9 +65,6 @@ public class PlzFetchScheduledTask extends RunForTenantsScheduledTask {
     }
 
     void onStart(@Observes StartupEvent startupEvent) {
-        QuarkusTransactionUtil.runForTenantInNewTransaction(
-            TENANT_IDENTIFIER,
-            this::run
-        );
+        QuarkusTransactionUtil.runForTenantsInNewTransaction(TenantIdentifier.values(), this::run);
     }
 }
