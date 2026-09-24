@@ -80,6 +80,18 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .stream();
     }
 
+    public List<String> getAllObjectIdsForGesuchDokuments(List<GesuchDokument> gesuchDokuments) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+
+        return queryFactory
+            .select(gesuchDokument.dokumente.any().objectId)
+            .from(gesuchDokument)
+            .where(gesuchDokument.id.in(gesuchDokuments.stream().map(AbstractEntity::getId).toList()))
+            .stream()
+            .toList();
+    }
+
     public void dropGesuchDokumentIfNoDokumente(final UUID gesuchDokumentId) {
         final var gesuchDokument = requireById(gesuchDokumentId);
         final var hasNoDokuments = gesuchDokument.getDokumente().isEmpty();

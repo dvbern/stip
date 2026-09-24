@@ -386,33 +386,14 @@ public class GesuchTrancheService {
     }
 
     public void removeSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
-        List<String> dokumentObjectIds = new ArrayList<>();
-
         final var superfluousGesuchDokuments = requiredDokumentService.getSuperfluousDokumentsForGesuch(formular);
+        formular.getTranche().getGesuchDokuments().removeAll(superfluousGesuchDokuments);
 
-        superfluousGesuchDokuments.forEach(
-            gesuchDokument -> {
-                // Make a copy to avoid ConcurrentModificationException
-                final var dokumente = new ArrayList<>(gesuchDokument.getDokumente());
-                dokumente.forEach(
-                    dokument -> {
-                        final var dokumentObjectId =
-                            gesuchDokumentService.deleteDokument(dokument.getId());
-                        if (
-                            gesuchDokumentService.canDeleteDokumentFromS3(dokument, formular.getTranche())
-                        ) {
-                            dokumentObjectIds.add(dokumentObjectId);
-                        }
-                    }
-                );
-            }
-        );
-
-        for (final var gesuchDokument : superfluousGesuchDokuments) {
-            gesuchDokument.getGesuchDokumentKommentare().clear();
-            gesuchDokumentKommentarService.deleteForGesuchDokument(gesuchDokument.getId());
-            formular.getTranche().getGesuchDokuments().remove(gesuchDokument);
+        if (!gesuchDokumentService.canDeleteDokumentFromS3(formular.getTranche())) {
+            return;
         }
+        final var dokumentObjectIds =
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(superfluousGesuchDokuments);
 
         if (!dokumentObjectIds.isEmpty()) {
             gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);

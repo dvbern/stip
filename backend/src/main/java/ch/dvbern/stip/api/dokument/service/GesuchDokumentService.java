@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -398,7 +397,7 @@ public class GesuchDokumentService {
         gesuch.setNachfristDokumente(null);
     }
 
-    public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
+    public boolean canDeleteDokumentFromS3(final GesuchTranche trancheToBeDeletedFrom) {
         return switch (trancheToBeDeletedFrom.getTyp()) {
             case TRANCHE -> trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
             case AENDERUNG -> trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
@@ -473,7 +472,7 @@ public class GesuchDokumentService {
 
         if (
             force ||
-            canDeleteDokumentFromS3(dokument, dokument.getGesuchDokument().getGesuchTranche())
+            canDeleteDokumentFromS3(dokument.getGesuchDokument().getGesuchTranche())
         ) {
             dokumentObjectIds.add(dokument.getObjectId());
         }
@@ -482,7 +481,9 @@ public class GesuchDokumentService {
 
         dokument.getGesuchDokument().getDokumente().remove(dokument);
         dropGesuchDokumentIfNotRequredAnymore(dokument.getGesuchDokument());
-        executeDeleteDokumentsFromS3(dokumentObjectIds);
+        if (!dokumentObjectIds.isEmpty()) {
+            executeDeleteDokumentsFromS3(dokumentObjectIds);
+        }
     }
 
     @Transactional
@@ -493,26 +494,21 @@ public class GesuchDokumentService {
 
     @Transactional
     public void removeGesuchDokument(final GesuchDokument gesuchDokument) {
-        final var dokuments = gesuchDokument.getDokumente();
+        final var dokumentObjectIds =
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(List.of(gesuchDokument));
 
-        List<String> dokumentObjectIds = new ArrayList<>();
+        gesuchDokumentRepository.delete(gesuchDokument);
+        if (canDeleteDokumentFromS3(gesuchDokument.getGesuchTranche()) && !dokumentObjectIds.isEmpty()) {
+            executeDeleteDokumentsFromS3(dokumentObjectIds);
+        }
+    }
 
-        // Using Iterator to be able to remove while looping
-        for (Iterator<Dokument> iterator = dokuments.iterator(); iterator.hasNext();) {
-            final var dokument = iterator.next();
-            iterator.remove();
-            dokumentRepository.delete(dokument);
-            if (
-                canDeleteDokumentFromS3(dokument, gesuchDokument.getGesuchTranche())
-            ) {
-                dokumentObjectIds.add(dokument.getObjectId());
-            }
-        }
-        if (gesuchDokument.getDokumente().isEmpty()) {
-            gesuchDokumentRepository.deleteById(gesuchDokument.getId());
-            gesuchDokument.getGesuchTranche().getGesuchDokuments().remove(gesuchDokument);
-        }
-        if (!dokumentObjectIds.isEmpty()) {
+    @Transactional
+    public void removeGesuchDokuments(final GesuchTranche tranche, final List<GesuchDokument> gesuchDokuments) {
+        final var dokumentObjectIds = gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(gesuchDokuments);
+
+        gesuchDokuments.forEach(gesuchDokumentRepository::delete);
+        if (canDeleteDokumentFromS3(tranche) && !dokumentObjectIds.isEmpty()) {
             executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
     }
@@ -545,24 +541,14 @@ public class GesuchDokumentService {
         }
     }
 
-    public void deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(List<GesuchDokument> abgelehnteGesuchDokumente) {
-        // Query for these instead of iterating "in memory" because filteredGesuchDokumente are lazy loaded
-        // and this results in only loading the ones we need instead of all
-        final var dokumenteToDeleteFromS3 = new ArrayList<String>();
-        for (var gesuchdokument : abgelehnteGesuchDokumente) {
-            final var dokumentList = gesuchdokument.getDokumente().stream().toList();
-            for (var dokument : dokumentList) {
-                gesuchdokument.getDokumente().remove(dokument);
+    public void removeDokumentsFromGesuchDokument(final GesuchDokument gesuchDokument) {
+        final var dokumentObjectIds =
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(List.of(gesuchDokument));
 
-                // If no other references to this physical document exist, delete it as well
-                dokumentRepository.delete(dokument);
-                if (canDeleteDokumentFromS3(dokument, gesuchdokument.getGesuchTranche())) {
-                    dokumenteToDeleteFromS3.add(dokument.getObjectId());
-                }
-            }
+        gesuchDokument.getDokumente().clear();
+        if (canDeleteDokumentFromS3(gesuchDokument.getGesuchTranche()) && !dokumentObjectIds.isEmpty()) {
+            executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
-
-        executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
     }
 
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {

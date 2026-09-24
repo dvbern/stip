@@ -20,7 +20,6 @@ package ch.dvbern.stip.api;
 import java.util.List;
 
 import ch.dvbern.stip.api.config.type.StipConfig;
-import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -112,7 +111,7 @@ public class GesuchDokumentServiceMock extends GesuchDokumentService {
     }
 
     @Override
-    public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
+    public boolean canDeleteDokumentFromS3(final GesuchTranche trancheToBeDeletedFrom) {
         return false;
     }
 
