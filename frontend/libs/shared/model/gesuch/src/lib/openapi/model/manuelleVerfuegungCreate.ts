@@ -11,7 +11,7 @@
  */
 
 export interface ManuelleVerfuegungCreate { 
-    kommentar?: string;
     fileUpload: Blob;
+    kommentar: string;
 }
 

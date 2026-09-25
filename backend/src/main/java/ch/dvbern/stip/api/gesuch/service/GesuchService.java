@@ -1036,16 +1036,16 @@ public class GesuchService {
         final FileUpload fileUpload,
         final String kommentar
     ) {
+        if (kommentar.isBlank()) {
+            throw new ValidationsException("Manuelle Verfuegung kommentar must not be blank", null);
+        }
+
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final Locale locale = LocaleUtil.getLocale(gesuch);
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
 
-        KommentarDto kommentarDto;
-        if (kommentar.isBlank()) {
-            kommentarDto = new KommentarDto(translator.translate("stip.verfuegung.manuell"));
-        } else {
-            kommentarDto = new KommentarDto(translator.translate("stip.verfuegung.manuell") + ", " + kommentar);
-        }
+        final KommentarDto kommentarDto =
+            new KommentarDto(translator.translate("stip.verfuegung.manuell") + ", " + kommentar);
 
         verfuegungService.createNegativeVerfuegungManuell(gesuchId, fileUpload);
 
