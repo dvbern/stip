@@ -194,8 +194,6 @@ nx-e2e-test:
   stage: e2e
   resource_group: 'e2e'
   allow_failure: true
-  before_script:
-    - env -u PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD npx playwright install chromium
   artifacts:
     when: always
     paths:
@@ -203,7 +201,6 @@ nx-e2e-test:
     reports:
       junit: frontend/test-results/junit/*.xml
   variables:
-    PLAYWRIGHT_BROWSERS_PATH: '/ms-playwright'
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
     E2E_BASEURL_GS: 'https://dv-e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SB: 'https://dv-e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
