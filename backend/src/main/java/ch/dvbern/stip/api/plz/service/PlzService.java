@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.plz.service;
 import java.util.List;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.plz.entity.Plz;
 import ch.dvbern.stip.api.plz.repo.PlzRepository;
 import ch.dvbern.stip.generated.dto.PlzDto;
@@ -38,20 +39,20 @@ public class PlzService {
         return plzRepository.findAll().stream().map(plzMapper::toDto).toList();
     }
 
-    public boolean isInBern(final String postleitzahl) {
+    public boolean isInKanton(final String postleitzahl, final Kanton kanton) {
         if (postleitzahl == null) {
             return false;
         }
-        return plzRepository.isPlzInKanton(postleitzahl, "be");
+        return plzRepository.isPlzInKanton(postleitzahl, kanton.toString());
     }
 
-    public boolean isInBern(final Adresse adresse) {
+    public boolean isInKanton(final Adresse adresse, final Kanton kanton) {
         if (adresse == null) {
             return false;
         }
 
         final var plz = adresse.getPlz();
-        return isInBern(plz);
+        return isInKanton(plz, kanton);
     }
 
     public Plz findByPostleitzahl(final String postleitzahl) {

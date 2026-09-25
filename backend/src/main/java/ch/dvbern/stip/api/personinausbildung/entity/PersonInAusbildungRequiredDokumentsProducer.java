@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.plz.service.PlzService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -42,6 +43,8 @@ import static ch.dvbern.stip.api.common.util.BusinessDateConstants.MIN_AGE_EIGEN
 @RequiredArgsConstructor
 public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDokumentsProducer {
     private final PlzService plzService;
+    private final TenantService tenantService;
+
     private static final Map<Niederlassungsstatus, DokumentTyp> niederlassungsstatusMap = new HashMap<>();
     static {
         niederlassungsstatusMap
@@ -139,7 +142,10 @@ public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDoku
             requiredDocs.add(DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG);
         }
 
-        if (plzService.isInBern(pia.getHeimatortPLZ()) && parentsLiveAbroad(formular)) {
+        if (
+            plzService.isInKanton(pia.getHeimatortPLZ(), tenantService.getConfigForCurrentTenant().associatedKanton())
+            && parentsLiveAbroad(formular)
+        ) {
             requiredDocs.add(DokumentTyp.PERSON_AUSWEIS);
         }
 

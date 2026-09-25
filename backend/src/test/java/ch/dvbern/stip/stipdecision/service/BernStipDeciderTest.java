@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
+import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -53,7 +54,7 @@ class BernStipDeciderTest {
     @BeforeEach
     void setUp() {
         plzService = Mockito.mock(PlzService.class);
-        Mockito.when(plzService.isInBern(ArgumentMatchers.any(Adresse.class))).thenReturn(true);
+        Mockito.when(plzService.isInKanton(ArgumentMatchers.any(Adresse.class), Kanton.BE)).thenReturn(true);
         decider = new BernStipDecider(plzService);
     }
 
@@ -211,7 +212,7 @@ class BernStipDeciderTest {
     @Test
     void testStipendienrechtlicherWohnsitzKantonSchweizerElternlos() {
         plzService = Mockito.mock(PlzService.class);
-        Mockito.when(plzService.isInBern(ArgumentMatchers.any(String.class))).thenReturn(true);
+        Mockito.when(plzService.isInKanton(ArgumentMatchers.any(String.class), Kanton.BE)).thenReturn(true);
         decider = new BernStipDecider(plzService);
 
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
@@ -236,8 +237,8 @@ class BernStipDeciderTest {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         final Adresse adresseBern = new Adresse().setLand(LandGenerator.initSwitzerland());
         final Adresse adresseNotBern = new Adresse().setLand(LandGenerator.initGermany());
-        Mockito.when(plzService.isInBern(adresseBern)).thenReturn(true);
-        Mockito.when(plzService.isInBern(adresseNotBern)).thenReturn(false);
+        Mockito.when(plzService.isInKanton(adresseBern), Kanton.BE).thenReturn(true);
+        Mockito.when(plzService.isInKanton(adresseNotBern), Kanton.BE).thenReturn(false);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
         pia.setNationalitaet(LandGenerator.initSwitzerland());
         pia.setAdresse(new Adresse().setLand(LandGenerator.initSwitzerland()));
@@ -272,8 +273,8 @@ class BernStipDeciderTest {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         final Adresse adresseNotBern1 = new Adresse().setLand(LandGenerator.initSwitzerland());
         final Adresse adresseNotBern2 = new Adresse().setLand(LandGenerator.initGermany());
-        Mockito.when(plzService.isInBern(adresseNotBern1)).thenReturn(false);
-        Mockito.when(plzService.isInBern(adresseNotBern2)).thenReturn(false);
+        Mockito.when(plzService.isInKanton(adresseNotBern1), Kanton.BE).thenReturn(false);
+        Mockito.when(plzService.isInKanton(adresseNotBern2), Kanton.BE).thenReturn(false);
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
         pia.setNationalitaet(LandGenerator.initSwitzerland());
         gesuch.getNewestGesuchTranche()
@@ -415,7 +416,7 @@ class BernStipDeciderTest {
     @Test
     void testDecisionNEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN() {
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
-        Mockito.when(plzService.isInBern(ArgumentMatchers.any(Adresse.class))).thenReturn(false);
+        Mockito.when(plzService.isInKanton(ArgumentMatchers.any(Adresse.class), Kanton.BE)).thenReturn(false);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
         pia.setNationalitaet(LandGenerator.initIran())

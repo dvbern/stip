@@ -21,9 +21,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import ch.dvbern.stip.api.common.type.Kanton;
 import io.smallrye.config.WithDefault;
 
 public interface TenantConfig {
+    Kanton associatedKanton();
+
     Set<String> subdomains();
 
     Frontends frontend();
