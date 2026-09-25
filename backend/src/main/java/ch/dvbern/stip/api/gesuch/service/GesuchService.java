@@ -775,7 +775,7 @@ public class GesuchService {
             gesuch
         );
 
-        if (stipendien.getBerechnungVorKuerzungUndTeilung() <= 0) {
+        if (stipendien.getBerechnungVorTeilungDarlehen() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
             gesuchStatusToVerfuegt(gesuchId);
         } else {
