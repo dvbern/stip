@@ -129,7 +129,6 @@ export const initializeMultiUserTest = (
         );
         return sbPage;
       });
-      await Promise.all([...sbPages.values()].map((page) => page.close()));
     },
   });
 

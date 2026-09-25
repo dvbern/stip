@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 import {
@@ -32,261 +33,311 @@ const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
   setupGesuchWithApi(gesuchFormularUpdateFn, createZahlungsverbindungUpdateFn),
 );
 
-test('Aenderung erstellen', async ({ gsPage, createSbPage }) => {
-  test.slow();
-  const urls = getE2eUrls();
+test.describe.configure({ mode: 'serial' });
+test.slow();
+const urls = getE2eUrls();
 
-  const requiredDokumenteResponse = gsPage.waitForResponse(
-    '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
-  );
+test.describe('Aenderung', () => {
+  let gsPage1: Page;
+  let sbPage1: Page;
+  let sbPage2: Page;
+  let originalNachname: string;
+  let newNachname: string;
 
-  // Upload all GS-Dokumente =================================================
-  await gsPage.bringToFront();
-  await gsPage.goto(
-    `${urls.gs}/gesuch/dokumente/${getGesuchId()}/tranche/${getTrancheId()}`,
-  );
-  await expectStepTitleToContainText('Dokumente', gsPage);
-  await requiredDokumenteResponse;
-  await uploadFiles(gsPage);
-  await gsPage.getByTestId('step-nav-abschluss').first().click();
+  test.beforeAll(async ({ gsPage, createSbPage }) => {
+    gsPage1 = gsPage;
+    sbPage1 = await createSbPage();
+    sbPage2 = await createSbPage(1);
+  });
 
-  // Freigabe ===========================================================
-  await expectStepTitleToContainText('Freigabe', gsPage);
-  await gsPage.getByTestId('button-abschluss').click();
-  const freigabeResponse = gsPage.waitForResponse(
-    '**/api/v1/gesuch/*/einreichen/gs',
-  );
-  await gsPage.getByTestId('dialog-confirm').click();
-  await freigabeResponse;
+  test('GS: Gesuch einreichen', async () => {
+    await gsPage1.bringToFront();
 
-  // Go to Info (SB-App) ===============================================
-  const sbPage = await createSbPage();
-  await sbPage.bringToFront();
-  await sbPage.goto(
-    `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
-  );
+    await test.step('Upload all GS-Dokumente', async () => {
+      const requiredDokumenteResponse = gsPage1.waitForResponse(
+        '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
+      );
+      await gsPage1.goto(
+        `${urls.gs}/gesuch/dokumente/${getGesuchId()}/tranche/${getTrancheId()}`,
+      );
+      await expectStepTitleToContainText('Dokumente', gsPage1);
+      await requiredDokumenteResponse;
+      await uploadFiles(gsPage1);
+      await gsPage1.getByTestId('step-nav-abschluss').first().click();
+    });
 
-  // set tranche to bearbeitung ===============================================
-  const sbGesuchHeader = new SachbearbeiterGesuchHeaderPO(sbPage);
-  await sbGesuchHeader.elems.aktionMenu.click();
-  await sbGesuchHeader.elems
-    .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
-    .click();
+    await test.step('Freigabe', async () => {
+      await expectStepTitleToContainText('Freigabe', gsPage1);
+      await gsPage1.getByTestId('button-abschluss').click();
+      const freigabeResponse = gsPage1.waitForResponse(
+        '**/api/v1/gesuch/*/einreichen/gs',
+      );
+      await gsPage1.getByTestId('dialog-confirm').click();
+      await freigabeResponse;
+    });
+  });
 
-  const kommentarField = sbPage.getByTestId('form-kommentar-dialog-kommentar');
-  await kommentarField.fill('E2E Antrag genemigen kommentar');
-  await sbPage.getByTestId('dialog-confirm').click();
+  test('SB: Dokumente Akzeptieren', async () => {
+    const sbGesuchHeader = new SachbearbeiterGesuchHeaderPO(sbPage1);
+    const sbStepsNavPO = new StepsNavPO(sbPage1);
 
-  await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
+    await sbPage1.bringToFront();
+    await test.step('Go to Info (SB-App)', async () => {
+      await sbPage1.goto(
+        `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
+      );
+    });
 
-  await sbGesuchHeader.elems.aktionMenu.click();
-  await sbGesuchHeader.elems
-    .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
-    .click();
+    await test.step('Set tranche to bearbeitung', async () => {
+      await sbGesuchHeader.elems.aktionMenu.click();
+      await sbGesuchHeader.elems
+        .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
+        .click();
 
-  // accept all documents =================================================
-  const sbStepsNavPO = new StepsNavPO(sbPage);
-  const requiredDokumenteResp = sbPage.waitForResponse(
-    '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
-  );
-  await sbStepsNavPO.elems.dokumente.first().click();
-  await expectStepTitleToContainText('Dokumente', sbPage);
-  await requiredDokumenteResp;
+      const kommentarField = sbPage1.getByTestId(
+        'form-kommentar-dialog-kommentar',
+      );
+      await kommentarField.fill('E2E Antrag genemigen kommentar');
+      await sbPage1.getByTestId('dialog-confirm').click();
 
-  await acceptDocuments(sbPage);
+      await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
 
-  // bearbeitung abschliessen ===============================================
-  const abschliesenPromise = sbPage.waitForResponse(
-    '**/api/v1/gesuch/*/bearbeitungAbschliessen',
-  );
-  await sbGesuchHeader.elems.aktionMenu.click();
-  await sbGesuchHeader.elems
-    .getAktionStatusUebergangItem('BEARBEITUNG_ABSCHLIESSEN')
-    .click();
-  await abschliesenPromise;
+      await sbGesuchHeader.elems.aktionMenu.click();
+      await sbGesuchHeader.elems
+        .getAktionStatusUebergangItem('SET_TO_BEARBEITUNG')
+        .click();
+    });
 
-  // Verfuegen und Versenden durch Sb 2 =============================================================
-  const sbVerfuegtPage = await createSbPage(1);
-  await sbVerfuegtPage.bringToFront();
-  await sbVerfuegtPage.goto(
-    `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
-  );
-  const verfuegtGesuchHeader = new SachbearbeiterGesuchHeaderPO(sbVerfuegtPage);
-  const verfuegtPromise = sbVerfuegtPage.waitForResponse(
-    '**/api/v1/gesuch/status/verfuegt/*',
-  );
-  await verfuegtGesuchHeader.elems.aktionMenu.click();
-  await verfuegtGesuchHeader.elems
-    .getAktionStatusUebergangItem('VERFUEGT')
-    .click();
-  const verfuegtResponse = await verfuegtPromise;
+    await test.step('Accept all documents', async () => {
+      const requiredDokumenteResp = sbPage1.waitForResponse(
+        '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
+      );
+      await sbStepsNavPO.elems.dokumente.first().click();
+      await expectStepTitleToContainText('Dokumente', sbPage1);
+      await requiredDokumenteResp;
 
-  if (!verfuegtResponse.ok()) {
-    const text = await verfuegtResponse.text();
-    throw new Error(`Verfuegt response failed with status ${text}`);
-  }
+      await acceptDocuments(sbPage1);
+    });
 
-  await verfuegtGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
+    await test.step('Bearbeitung abschliessen', async () => {
+      const abschliesenPromise = sbPage1.waitForResponse(
+        '**/api/v1/gesuch/*/bearbeitungAbschliessen',
+      );
+      await sbGesuchHeader.elems.aktionMenu.click();
+      await sbGesuchHeader.elems
+        .getAktionStatusUebergangItem('BEARBEITUNG_ABSCHLIESSEN')
+        .click();
+      await abschliesenPromise;
+    });
+  });
 
-  const versendetPromise = sbVerfuegtPage.waitForResponse(
-    '**/api/v1/gesuch/status/versendet/*',
-  );
-  await verfuegtGesuchHeader.elems.aktionMenu.click();
-  await verfuegtGesuchHeader.elems
-    .getAktionStatusUebergangItem('VERSENDET')
-    .click();
-  const versendetResponse = await versendetPromise;
+  test('SB2: Verfuegen und Versenden', async () => {
+    const verfuegtGesuchHeader = new SachbearbeiterGesuchHeaderPO(sbPage2);
 
-  if (!versendetResponse.ok()) {
-    const text = await versendetResponse.text();
-    throw new Error(`Versendet response failed with status ${text}`);
-  }
+    await test.step('Open gesuch in SB2', async () => {
+      await sbPage2.bringToFront();
+      await sbPage2.goto(
+        `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
+      );
+    });
 
-  // // Go to GS App ===============================================================
-  await gsPage.bringToFront();
-  await gsPage.goto(`${urls.gs}/dashboard`);
-  await gsPage.getByTestId('cockpit-gesuch-aenderung-create').click();
+    await test.step('Set status to VERFUEGT', async () => {
+      const verfuegtPromise = sbPage2.waitForResponse(
+        '**/api/v1/gesuch/status/verfuegt/*',
+      );
+      await verfuegtGesuchHeader.elems.aktionMenu.click();
+      await verfuegtGesuchHeader.elems
+        .getAktionStatusUebergangItem('VERFUEGT')
+        .click();
+      const verfuegtResponse = await verfuegtPromise;
 
-  await gsPage
-    .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
-    .fill(secondTrancheStart());
-  await gsPage
-    .getByTestId('form-aenderung-melden-dialog-kommentar')
-    .fill('E2E Testkommentar');
+      if (!verfuegtResponse.ok()) {
+        const text = await verfuegtResponse.text();
+        throw new Error(`Verfuegt response failed with status ${text}`);
+      }
 
-  await gsPage.getByTestId('dialog-confirm').click();
+      await verfuegtGesuchHeader.elems.actionLoading.waitFor({
+        state: 'hidden',
+      });
+    });
 
-  await expectStepTitleToContainText('Person in Ausbildung', gsPage);
+    await test.step('Set status to VERSENDET', async () => {
+      const versendetPromise = sbPage2.waitForResponse(
+        '**/api/v1/gesuch/status/versendet/*',
+      );
+      await verfuegtGesuchHeader.elems.aktionMenu.click();
+      await verfuegtGesuchHeader.elems
+        .getAktionStatusUebergangItem('VERSENDET')
+        .click();
+      const versendetResponse = await versendetPromise;
 
-  // make a change in the form
-  const gsPersonPO = new PersonPO(gsPage);
-  const originalNachname = await gsPersonPO.elems.nachname.inputValue();
-  const newNachname = generateRandomName();
-  await gsPersonPO.elems.nachname.fill(newNachname);
-  await expectFormToBeValid(gsPersonPO.elems.form);
-  const personGsSaveResponse = gsPage.waitForResponse(
-    (r) =>
-      r.url().includes('/api/v1/gesuch') && r.request().method() === 'PATCH',
-  );
-  await gsPersonPO.elems.buttonSaveContinue.click();
-  await gsPersonPO.elems.loading.waitFor({ state: 'hidden' });
-  await personGsSaveResponse;
+      if (!versendetResponse.ok()) {
+        const text = await versendetResponse.text();
+        throw new Error(`Versendet response failed with status ${text}`);
+      }
+    });
 
-  const lebenslaufPO = new LebenslaufPO(gsPage);
-  await lebenslaufPO.elems.loading.waitFor({ state: 'hidden' });
+    await sbPage2.close();
+  });
 
-  // verify the change
-  // navigate back, because of save and continue
-  const gsStepsNavPO = new StepsNavPO(gsPage);
-  const personStepNav = gsStepsNavPO.elems.person.first();
-  await personStepNav.scrollIntoViewIfNeeded();
-  await personStepNav.click();
-  await gsPersonPO.elems.loading.waitFor({ state: 'hidden' });
-  await expectStepTitleToContainText('Person in Ausbildung', gsPage);
-  await expect(gsPersonPO.elems.nachname).toHaveValue(newNachname);
-  await expect(
-    gsPage.getByTestId('form-person-nachname-zuvor-hint'),
-  ).toHaveText(originalNachname);
+  test('GS: Aenderung melden und freigeben', async () => {
+    const gsStepsNavPO = new StepsNavPO(gsPage1);
+    const gsPersonPO = new PersonPO(gsPage1);
 
-  // check changes on stepNav
-  await expect(
-    personStepNav.locator('dv-shared-ui-change-indicator'),
-  ).toBeVisible();
+    await test.step('Melde Aenderung im GS Dashboard', async () => {
+      await gsPage1.bringToFront();
+      await gsPage1.goto(`${urls.gs}/dashboard`);
+      await gsPage1.getByTestId('cockpit-gesuch-aenderung-create').click();
 
-  // submit the change
-  await gsStepsNavPO.elems.abschluss.first().click();
-  await expectStepTitleToContainText('Freigabe', gsPage);
-  const freigapePO = new FreigabePO(gsPage);
+      await gsPage1
+        .getByTestId('form-aenderung-melden-dialog-gueltig-ab')
+        .fill(secondTrancheStart());
+      await gsPage1
+        .getByTestId('form-aenderung-melden-dialog-kommentar')
+        .fill('E2E Testkommentar');
 
-  await freigapePO.elems.buttonAbschluss.click();
-  const freigabeAenderungResponse = gsPage.waitForResponse(
-    '**/api/v1/gesuchtranche/*/aenderung/einreichen',
-  );
-  await gsPage.getByTestId('dialog-confirm').click();
-  const response = await freigabeAenderungResponse;
-  expect(response.status()).toBe(204);
+      await gsPage1.getByTestId('dialog-confirm').click();
+      await expectStepTitleToContainText('Person in Ausbildung', gsPage1);
+    });
 
-  // Go to Aenderung on SB App ==========================================================
-  await sbPage.bringToFront();
+    await test.step('Aendere Nachname in Person in Ausbildung', async () => {
+      originalNachname = await gsPersonPO.elems.nachname.inputValue();
+      newNachname = generateRandomName();
+      await gsPersonPO.elems.nachname.fill(newNachname);
+      await expectFormToBeValid(gsPersonPO.elems.form);
 
-  const gesuchHeaderResponse = sbPage.waitForResponse(
-    '**/api/v1/gesuch/sb/header/*',
-  );
+      const personGsSaveResponse = gsPage1.waitForResponse(
+        (r) =>
+          r.url().includes('/api/v1/gesuch') &&
+          r.request().method() === 'PATCH',
+      );
+      await gsPersonPO.elems.buttonSaveContinue.click();
+      await gsPersonPO.elems.loading.waitFor({ state: 'hidden' });
+      await personGsSaveResponse;
 
-  await sbPage.goto(
-    `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
-  );
+      const lebenslaufPO = new LebenslaufPO(gsPage1);
+      await lebenslaufPO.elems.loading.waitFor({ state: 'hidden' });
+    });
 
-  await gesuchHeaderResponse;
+    await test.step('Verifiziere Aenderung und Indicator im StepNav', async () => {
+      const personStepNav = gsStepsNavPO.elems.person.first();
+      await personStepNav.scrollIntoViewIfNeeded();
+      await personStepNav.click();
+      await gsPersonPO.elems.loading.waitFor({ state: 'hidden' });
+      await expectStepTitleToContainText('Person in Ausbildung', gsPage1);
+      await expect(gsPersonPO.elems.nachname).toHaveValue(newNachname);
+      await expect(
+        gsPage1.getByTestId('form-person-nachname-zuvor-hint'),
+      ).toHaveText(originalNachname);
 
-  const sbTrancheInfoPO = new TrancheInfoPO(sbPage);
+      await expect(
+        personStepNav.locator('dv-shared-ui-change-indicator'),
+      ).toBeVisible();
+    });
 
-  await sbTrancheInfoPO.elems.loading.waitFor({ state: 'hidden' });
+    await test.step('Reiche Aenderung ein', async () => {
+      await gsStepsNavPO.elems.abschluss.first().click();
+      await expectStepTitleToContainText('Freigabe', gsPage1);
+      const freigapePO = new FreigabePO(gsPage1);
 
-  await sbGesuchHeader.elems.aenderungenLink.click();
+      await freigapePO.elems.buttonAbschluss.click();
+      const freigabeAenderungResponse = gsPage1.waitForResponse(
+        '**/api/v1/gesuchtranche/*/aenderung/einreichen',
+      );
+      await gsPage1.getByTestId('dialog-confirm').click();
+      const response = await freigabeAenderungResponse;
+      expect(response.status()).toBe(204);
+    });
 
-  await sbTrancheInfoPO.elems.loading.waitFor({ state: 'hidden' });
+    await gsPage1.close();
+  });
 
-  await sbGesuchHeader.elems.aenderungenMenu.click();
-  // todo-e2e-next: make more specific by aenderung status reject / accept / manually change?
-  await expect(sbGesuchHeader.elems.aenderungenMenuItems).toHaveCount(1);
-  await sbPage.locator('.cdk-overlay-backdrop').click();
-  await expectInfoTitleToContainText('Änderung vom', sbPage);
+  test('SB: Aenderung akzeptieren', async () => {
+    const sbTrancheInfoPO = new TrancheInfoPO(sbPage1);
+    const sbGesuchHeader = new SachbearbeiterGesuchHeaderPO(sbPage1);
+    const sbStepsNavPO = new StepsNavPO(sbPage1);
 
-  // verify the change
-  await sbStepsNavPO.elems.expanderPersoenlichGroup.first().click();
-  await sbStepsNavPO.elems.person.first().click();
-  const sbPersonPO = new PersonPO(sbPage);
-  await sbPersonPO.elems.loading.waitFor({ state: 'hidden' });
-  await expectStepTitleToContainText('Person in Ausbildung', sbPage);
-  await expect(sbPersonPO.elems.nachname).toHaveValue(newNachname);
-  await expect(
-    sbPage.getByTestId('form-person-nachname-zuvor-hint'),
-  ).toHaveText(originalNachname);
+    await test.step('Open Aenderung in SB App', async () => {
+      await sbPage1.bringToFront();
 
-  await sbStepsNavPO.elems.expanderFamilienGroup.first().click();
-  await sbStepsNavPO.elems.geschwister.first().click();
-  const geschwisterPO = new GeschwisterPO(sbPage);
-  await geschwisterPO.elems.loading.waitFor({ state: 'hidden' });
-  await expectStepTitleToContainText('Geschwister', sbPage);
+      const gesuchHeaderResponse = sbPage1.waitForResponse(
+        '**/api/v1/gesuch/sb/header/*',
+      );
 
-  await geschwisterPO.addGeschwister(bruder);
-  await geschwisterPO.elems.loading.waitFor({ state: 'hidden' });
-  await expect(geschwisterPO.elems.geschwisterRow).toHaveCount(1);
-  await geschwisterPO.elems.buttonContinue.click();
+      await sbPage1.goto(
+        `${urls.sb}/gesuch/info/${getGesuchId()}/tranche/${getTrancheId()}`,
+      );
 
-  // todo-e2e-next: more generic approach for spinners hidden (form and action menu)
-  const sbLoading = await sbPage.getByRole('status', { name: 'Loading' }).all();
-  for (const loading of sbLoading) {
-    await loading.waitFor({ state: 'hidden' });
-  }
+      await gesuchHeaderResponse;
+      await sbTrancheInfoPO.elems.loading.waitFor({ state: 'hidden' });
 
-  // verify step nav indicators
-  await expect(
-    sbStepsNavPO.elems.geschwister
-      .first()
-      .locator('dv-shared-ui-change-indicator'),
-  ).toBeVisible();
+      await sbGesuchHeader.elems.aenderungenLink.click();
+      await sbTrancheInfoPO.elems.loading.waitFor({ state: 'hidden' });
 
-  // Accept the Aenderung ==========================================================
-  await sbStepsNavPO.elems.info.first().click();
-  await expectInfoTitleToContainText('Änderung vom', sbPage);
+      await sbGesuchHeader.elems.aenderungenMenu.click();
+      // todo-e2e-next: make more specific by aenderung status reject / accept / manually change?
+      await expect(sbGesuchHeader.elems.aenderungenMenuItems).toHaveCount(1);
+      await sbPage1.locator('.cdk-overlay-backdrop').click();
+      await expectInfoTitleToContainText('Änderung vom', sbPage1);
+    });
 
-  const aenderungAcceptResponse = sbPage.waitForResponse(
-    '**/api/v1/gesuchtranche/*/aenderung/akzeptieren',
-  );
-  await sbGesuchHeader.elems.aktionMenu.click();
-  await sbGesuchHeader.elems.aenderungAccept.click();
-  const acceptResponse = await aenderungAcceptResponse;
-  expect(acceptResponse.status()).toBe(200);
+    await test.step('Verify changed person data', async () => {
+      await sbStepsNavPO.elems.expanderPersoenlichGroup.first().click();
+      await sbStepsNavPO.elems.person.first().click();
+      const sbPersonPO = new PersonPO(sbPage1);
+      await sbPersonPO.elems.loading.waitFor({ state: 'hidden' });
+      await expectStepTitleToContainText('Person in Ausbildung', sbPage1);
+      await expect(sbPersonPO.elems.nachname).toHaveValue(newNachname);
+      await expect(
+        sbPage1.getByTestId('form-person-nachname-zuvor-hint'),
+      ).toHaveText(originalNachname);
+    });
 
-  // assert that a second tranche was created
-  await sbGesuchHeader.elems.trancheMenu.click();
+    await test.step('Add Geschwister and verify step indicator', async () => {
+      await sbStepsNavPO.elems.expanderFamilienGroup.first().click();
+      await sbStepsNavPO.elems.geschwister.first().click();
+      const geschwisterPO = new GeschwisterPO(sbPage1);
+      await geschwisterPO.elems.loading.waitFor({ state: 'hidden' });
+      await expectStepTitleToContainText('Geschwister', sbPage1);
 
-  // todo-e2e-next: more specific test to verify tranche was created correctly?
-  await expect(sbGesuchHeader.elems.trancheMenuItems).toHaveCount(2);
+      await geschwisterPO.addGeschwister(bruder);
+      await geschwisterPO.elems.loading.waitFor({ state: 'hidden' });
+      await expect(geschwisterPO.elems.geschwisterRow).toHaveCount(1);
+      await geschwisterPO.elems.buttonContinue.click();
 
-  await sbVerfuegtPage.close();
-  await sbPage.close();
-  await gsPage.close();
+      // todo-e2e-next: more generic approach for spinners hidden (form and action menu)
+      const sbLoading = await sbPage1
+        .getByRole('status', { name: 'Loading' })
+        .all();
+      for (const loading of sbLoading) {
+        await loading.waitFor({ state: 'hidden' });
+      }
+
+      await expect(
+        sbStepsNavPO.elems.geschwister
+          .first()
+          .locator('dv-shared-ui-change-indicator'),
+      ).toBeVisible();
+    });
+
+    await test.step('Accept Aenderung and verify second tranche', async () => {
+      await sbStepsNavPO.elems.info.first().click();
+      await expectInfoTitleToContainText('Änderung vom', sbPage1);
+
+      const aenderungAcceptResponse = sbPage1.waitForResponse(
+        '**/api/v1/gesuchtranche/*/aenderung/akzeptieren',
+      );
+      await sbGesuchHeader.elems.aktionMenu.click();
+      await sbGesuchHeader.elems.aenderungAccept.click();
+      const acceptResponse = await aenderungAcceptResponse;
+      expect(acceptResponse.status()).toBe(200);
+
+      await sbGesuchHeader.elems.trancheMenu.click();
+
+      // todo-e2e-next: more specific test to verify tranche was created correctly?
+      await expect(sbGesuchHeader.elems.trancheMenuItems).toHaveCount(2);
+    });
+
+    await sbPage1.close();
+  });
 });
