@@ -53,8 +53,8 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
             // moved validation logic into @parseGesuchId unless we upgrade to java 23+
             parseGesuchId(map),
             TenantIdentifier.of((String) map.get(TENANT_IDENTIFIER_KEY)),
-            (String) map.get(HAUSNUMMER_KEY),
             (String) map.get(STRASSE_KEY),
+            (String) map.get(HAUSNUMMER_KEY),
             (String) map.get(PLZ_KEY),
             (String) map.get(ORT_KEY)
         );
@@ -65,7 +65,6 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
             Objects.isNull(gesuchId)
             || Objects.isNull(tenantIdentifier)
             || Objects.isNull(strasse)
-            || Objects.isNull(hausnummer)
             || Objects.isNull(plz)
             || Objects.isNull(ort)
         ) {
@@ -75,7 +74,9 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
         final Map<String, Object> ret = new HashMap<>();
         ret.put(GESUCH_ID_KEY, this.gesuchId.toString());
         ret.put(STRASSE_KEY, this.strasse);
-        ret.put(HAUSNUMMER_KEY, this.hausnummer);
+        if (this.hausnummer != null) {
+            ret.put(HAUSNUMMER_KEY, this.hausnummer);
+        }
         ret.put(PLZ_KEY, this.plz);
         ret.put(ORT_KEY, this.ort);
         ret.put(TENANT_IDENTIFIER_KEY, this.tenantIdentifier.getIdentifier());
@@ -88,12 +89,11 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
 
     private static UUID parseGesuchId(final JobDataMap map) {
         if (
-            !(map.containsKey(GESUCH_ID_KEY)
-            && map.containsKey(TENANT_IDENTIFIER_KEY))
-            && map.containsKey(STRASSE_KEY)
-            && map.containsKey(HAUSNUMMER_KEY)
-            && map.containsKey(PLZ_KEY)
-            && map.containsKey(ORT_KEY)
+            !map.containsKey(GESUCH_ID_KEY)
+            || !map.containsKey(TENANT_IDENTIFIER_KEY)
+            || !map.containsKey(STRASSE_KEY)
+            || !map.containsKey(PLZ_KEY)
+            || !map.containsKey(ORT_KEY)
         ) {
             throw new BadRequestException("GemeindeLookupRequest: missing some required keys in the map");
         }
