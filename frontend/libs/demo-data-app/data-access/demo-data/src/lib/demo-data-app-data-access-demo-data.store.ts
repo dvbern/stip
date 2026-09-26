@@ -12,6 +12,7 @@ import {
   DemoDataService,
   DemoDataSlim,
   DemoDataTestBerechnungResultat,
+  DemoDataTestBerechnungValid,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import {
@@ -55,6 +56,13 @@ type DemoDataError = SharedModelError & {
   }[];
 };
 
+const PROPS_TO_CHECK_VALID: string[] = [
+  'ungekuerztStipendien',
+  'ungekuerztDarlehen',
+  'stipendien',
+  'darlehen',
+] satisfies (keyof DemoDataTestBerechnungValid)[];
+
 @Injectable()
 export class DemoDataStore extends signalStore(
   { protectedState: false },
@@ -92,14 +100,21 @@ export class DemoDataStore extends signalStore(
       return null;
     }
 
-    const { valid, ist, soll } = lastDemoDataRun.berechnungResultat;
+    const { valid, istValues, sollValues, istDetails, sollDetails } =
+      lastDemoDataRun.berechnungResultat;
 
     return {
       gesuchStatus: lastDemoDataRun.gesuchStatus,
-      allValid: Object.values(valid ?? {}).every(Boolean),
+      allValid: isResultValid(valid),
       valid,
-      soll,
-      ist,
+      values: {
+        ist: istValues,
+        soll: sollValues,
+      },
+      details: {
+        ist: istDetails,
+        soll: sollDetails,
+      },
     };
   });
 
@@ -358,4 +373,13 @@ const saveBlob = (blob: Blob, fileName: string) => {
   a.click();
   window.URL.revokeObjectURL(url);
   a.remove();
+};
+
+export const isResultValid = (
+  valid: DemoDataTestBerechnungValid | undefined,
+) => {
+  return Object.entries(valid ?? {})
+    .filter(([prop]) => PROPS_TO_CHECK_VALID.includes(prop))
+    .map(([, value]) => value)
+    .every(Boolean);
 };

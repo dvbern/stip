@@ -16,5 +16,13 @@ export interface DemoDataTestBerechnungValid {
     ungekuerztDarlehen?: boolean;
     stipendien?: boolean;
     darlehen?: boolean;
+    budgetArt?: boolean;
+    elternBudget1?: boolean;
+    elternBudget2?: boolean;
+    persoenlichesBudget?: boolean;
+    fehlbetrag?: boolean;
+    proKopfteilung?: boolean;
+    anzahlMonateEinreichefrist?: boolean;
+    totalNachKuerzungNachEinreichefrist?: boolean;
 }
 

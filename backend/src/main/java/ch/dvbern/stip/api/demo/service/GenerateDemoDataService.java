@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.demo.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,10 +25,12 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -86,6 +86,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchNummerService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.repo.GesuchFormularRepository;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -104,6 +105,7 @@ import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenBuilder;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.entity.SteuererklaerungBuilder;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
@@ -114,11 +116,20 @@ import ch.dvbern.stip.berechnung.domain.util.BerechnungUtil;
 import ch.dvbern.stip.berechnung.domain.util.InputUtils;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
+import ch.dvbern.stip.generated.dto.DemoBudgettypDto;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungDetailsDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungDetailsDtoBuilder;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
-import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValidDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDtoBuilder;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValidDtoBuilder;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDtoBuilder;
+import ch.dvbern.stip.generated.dto.DemoDataTestBudgetDtoBuilder;
+import ch.dvbern.stip.generated.dto.DemoDataTestElternBudgetDtoBuilder;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -199,7 +210,11 @@ public class GenerateDemoDataService {
     }
 
     @WithSpan
-    public Gesuch createEinreichableGesuch(DemoData demoData, Fall fall) {
+    public Gesuch createEinreichableGesuch(
+        final DemoData demoData,
+        final Fall fall,
+        final Optional<Gesuchsperiode> gesuchsperiodeOpt
+    ) {
         // <editor-fold desc="Prepare..." defaultstate="collapsed">
         final var demoDataDto = demoData.parseDemoDataDto();
         final var piaDto = demoDataDto.getPersonInAusbildung();
@@ -626,9 +641,11 @@ public class GenerateDemoDataService {
         final Gesuch gesuch = new Gesuch();
         gesuch.setAusbildung(ausbildung);
 
-        final var gesuchsperiode = gesuchsperiodenService.getGesuchsperiodeForAusbildung(
-            ausbildung
-        ).getLeft();
+        final var gesuchsperiode = gesuchsperiodeOpt.orElseGet(
+            () -> gesuchsperiodenService.getGesuchsperiodeForAusbildung(
+                ausbildung
+            ).getLeft()
+        );
 
         var ausbildungsstart = gesuch
             .getAusbildung()
@@ -673,7 +690,7 @@ public class GenerateDemoDataService {
         final var gesuchstellerId = benutzerService.getCurrentBenutzer().getId();
         final var fall = fallRepository.findFallForGsOptional(gesuchstellerId).orElseThrow();
 
-        final var gesuch = createEinreichableGesuch(demoData, fall);
+        final var gesuch = createEinreichableGesuch(demoData, fall, Optional.empty());
 
         fallRepository.persist(fall);
         ausbildungRepository.persist(gesuch.getAusbildung());
@@ -711,12 +728,14 @@ public class GenerateDemoDataService {
             gesuch.setEinreichedatum(LocalDate.parse(demoData.getGesuchseingang(), ParseDemoDataUtil.dmyFormatter));
         }
 
-        final var berechnungResultatSoll = demoData.parseDemoDataDto().getBerechnungValues();
+        final var berechnungResultatValuesSoll = demoData.parseDemoDataDto().getBerechnungValues();
+        final var berechnungsResultatDetailsSoll = demoData.parseDemoDataDto().getBerechnungDetails();
         var berechnungsResultat = new BerechnungsresultatDto();
-        var berechnungsResultatIst = new DemoDataTestBerechnungValuesDto();
+        var berechnungsResultatValuesIst = new DemoDataTestBerechnungValuesDto();
+        var berechnungsResultatDetailsIst = new DemoDataTestBerechnungDetailsDto();
 
         String message = null;
-        VerfuegungStatus statusIst;
+        VerfuegungStatus statusIst = null;
         try {
             berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(
                 gesuch
@@ -727,26 +746,56 @@ public class GenerateDemoDataService {
             ) > 0 ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH;
             var stipendien = berechnungsResultat.getBerechnungStipendium();
             var darlehen = berechnungsResultat.getBerechnungDarlehen();
-            if (demoData.getAnzahlMonate() != 12) {
-                if (Objects.nonNull(stipendien)) {
-                    stipendien = BigDecimal.valueOf(stipendien)
-                        .divide(BigDecimal.valueOf(12), 2, RoundingMode.UP)
-                        .multiply(BigDecimal.valueOf(demoData.getAnzahlMonate()))
-                        .intValue();
-                }
-                if (Objects.nonNull(darlehen)) {
-                    darlehen = BigDecimal.valueOf(darlehen)
-                        .divide(BigDecimal.valueOf(12), 2, RoundingMode.UP)
-                        .multiply(BigDecimal.valueOf(demoData.getAnzahlMonate()))
-                        .intValue();
-                }
-            }
-            berechnungsResultatIst = new DemoDataTestBerechnungValuesDto()
+            berechnungsResultatValuesIst = DemoDataTestBerechnungValuesDtoBuilder.demoDataTestBerechnungValuesDto()
                 .status(statusIst)
                 .ungekuerztStipendien(berechnungsResultat.getUngekuerztStipendien())
                 .ungekuerztDarlehen(berechnungsResultat.getUngekuerztDarlehen())
                 .stipendien(stipendien)
-                .darlehen(darlehen);
+                .darlehen(darlehen)
+                .build();
+
+            final Predicate<FamilienBudgetresultatDto> isMutterBudget =
+                (budget) -> budget.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER;
+            final var trancheResultat = berechnungsResultat.getTranchenBerechnungsresultate().getFirst();
+            final var familienBudgetresultat1 =
+                trancheResultat.getFamilienBudgetresultate().stream().filter(isMutterBudget.negate()).findFirst();
+            final var familienBudgetresultat2 =
+                trancheResultat.getFamilienBudgetresultate().stream().filter(isMutterBudget).findFirst();
+            final var persoenlichesBudgetresultat = trancheResultat.getPersoenlichesBudgetresultat();
+            berechnungsResultatDetailsIst = DemoDataTestBerechnungDetailsDtoBuilder.demoDataTestBerechnungDetailsDto()
+                .budgetArt(getBudgeArt(trancheResultat))
+                .elternBudget1(
+                    DemoDataTestElternBudgetDtoBuilder.demoDataTestElternBudgetDto()
+                        .totalEinnahmen(familienBudgetresultat1.map(r -> r.getEinnahmen().getTotal()).orElse(0))
+                        .totalKosten(familienBudgetresultat1.map(r -> r.getKosten().getTotal()).orElse(0))
+                        .einnahmeUeberschuss(familienBudgetresultat1.map(r -> r.getEinnahmeUeberschuss()).orElse(0))
+                        .fehlbetrag(familienBudgetresultat1.map(r -> r.getFehlbetrag()).orElse(0))
+                        .build()
+                )
+                .elternBudget2(
+                    DemoDataTestElternBudgetDtoBuilder.demoDataTestElternBudgetDto()
+                        .totalEinnahmen(familienBudgetresultat2.map(r -> r.getEinnahmen().getTotal()).orElse(0))
+                        .totalKosten(familienBudgetresultat2.map(r -> r.getKosten().getTotal()).orElse(0))
+                        .einnahmeUeberschuss(familienBudgetresultat2.map(r -> r.getEinnahmeUeberschuss()).orElse(0))
+                        .fehlbetrag(familienBudgetresultat2.map(r -> r.getFehlbetrag()).orElse(0))
+                        .build()
+                )
+                .persoenlichesBudget(
+                    DemoDataTestBudgetDtoBuilder.demoDataTestBudgetDto()
+                        .totalEinnahmen(persoenlichesBudgetresultat.getEinnahmen().getTotal())
+                        .totalKosten(persoenlichesBudgetresultat.getKosten().getTotal())
+                        .build()
+                )
+                .fehlbetrag(-persoenlichesBudgetresultat.getFehlbetrag())
+                .proKopfteilung(Objects.requireNonNullElse(persoenlichesBudgetresultat.getProKopfTeilung(), 1))
+                .anzahlMonateEinreichefrist(12 - berechnungsResultat.getAnzahlMonateEinreichefrist())
+                .totalNachKuerzungNachEinreichefrist(
+                    Objects.requireNonNullElse(
+                        berechnungsResultat.getTotalNachKuerzungNachEinreichefrist(),
+                        berechnungsResultat.getBerechnungStipendium()
+                    )
+                )
+                .build();
         } catch (Exception e) {
             message = e.getMessage();
         } finally {
@@ -755,45 +804,107 @@ public class GenerateDemoDataService {
             }
         }
 
-        return new DemoDataTestBerechnungResultatDto()
+        return DemoDataTestBerechnungResultatDtoBuilder.demoDataTestBerechnungResultatDto()
             .demoDataId(demoData.getId())
             .testFall(demoData.getTestFall())
             .valid(
-                new DemoDataTestBerechnungValidDto()
-                    // Status is not possible to compare at the moment because of manual negative Verfügung, etc.
-                    .status(true)
+                DemoDataTestBerechnungValidDtoBuilder.demoDataTestBerechnungValidDto()
+                    .status(BerechnungUtil.nullableCompare(berechnungResultatValuesSoll.getStatus(), statusIst, false))
                     .ungekuerztStipendien(
                         BerechnungUtil.nullableCompare(
-                            berechnungResultatSoll.getUngekuerztStipendien(),
-                            berechnungsResultatIst.getUngekuerztStipendien(),
+                            berechnungResultatValuesSoll.getUngekuerztStipendien(),
+                            berechnungsResultatValuesIst.getUngekuerztStipendien(),
                             0
                         )
                     )
                     .ungekuerztDarlehen(
                         BerechnungUtil.nullableCompare(
-                            berechnungResultatSoll.getUngekuerztDarlehen(),
-                            berechnungsResultatIst.getUngekuerztDarlehen(),
+                            berechnungResultatValuesSoll.getUngekuerztDarlehen(),
+                            berechnungsResultatValuesIst.getUngekuerztDarlehen(),
                             0
                         )
                     )
                     .stipendien(
                         BerechnungUtil.nullableCompare(
-                            berechnungResultatSoll.getStipendien(),
-                            berechnungsResultatIst.getStipendien(),
+                            berechnungResultatValuesSoll.getStipendien(),
+                            berechnungsResultatValuesIst.getStipendien(),
                             0
                         )
                     )
                     .darlehen(
                         BerechnungUtil.nullableCompare(
-                            berechnungResultatSoll.getDarlehen(),
-                            berechnungsResultatIst.getDarlehen(),
+                            berechnungResultatValuesSoll.getDarlehen(),
+                            berechnungsResultatValuesIst.getDarlehen(),
                             0
                         )
                     )
+                    .budgetArt(
+                        berechnungsResultatDetailsSoll.getBudgetArt() == berechnungsResultatDetailsIst.getBudgetArt()
+                    )
+                    .elternBudget1(
+                        berechnungsResultatDetailsSoll.getElternBudget1()
+                            .equals(berechnungsResultatDetailsIst.getElternBudget1())
+                    )
+                    .elternBudget2(
+                        berechnungsResultatDetailsSoll.getElternBudget2()
+                            .equals(berechnungsResultatDetailsIst.getElternBudget2())
+                    )
+                    .persoenlichesBudget(
+                        berechnungsResultatDetailsSoll.getPersoenlichesBudget()
+                            .equals(berechnungsResultatDetailsIst.getPersoenlichesBudget())
+                    )
+                    .fehlbetrag(
+                        BerechnungUtil.nullableCompare(
+                            berechnungsResultatDetailsSoll.getFehlbetrag(),
+                            berechnungsResultatDetailsIst.getFehlbetrag(),
+                            0
+                        )
+                    )
+                    .proKopfteilung(
+                        BerechnungUtil.nullableCompare(
+                            berechnungsResultatDetailsSoll.getProKopfteilung(),
+                            berechnungsResultatDetailsIst.getProKopfteilung(),
+                            0
+                        )
+                    )
+                    .anzahlMonateEinreichefrist(
+                        BerechnungUtil.nullableCompare(
+                            berechnungsResultatDetailsSoll.getAnzahlMonateEinreichefrist(),
+                            berechnungsResultatDetailsIst.getAnzahlMonateEinreichefrist(),
+                            0
+                        )
+                    )
+                    .totalNachKuerzungNachEinreichefrist(
+                        BerechnungUtil.nullableCompare(
+                            berechnungsResultatDetailsSoll.getTotalNachKuerzungNachEinreichefrist(),
+                            berechnungsResultatDetailsIst.getTotalNachKuerzungNachEinreichefrist(),
+                            0
+                        )
+                    )
+                    .build()
             )
-            .soll(berechnungResultatSoll)
-            .ist(berechnungsResultatIst)
-            .message(message);
+            .message(message)
+            .sollValues(berechnungResultatValuesSoll)
+            .istValues(berechnungsResultatValuesIst)
+            .sollDetails(berechnungsResultatDetailsSoll)
+            .istDetails(berechnungsResultatDetailsIst)
+            .build();
+    }
+
+    private DemoBudgettypDto getBudgeArt(TranchenBerechnungsresultatDto trancheResultat) {
+        final var familienBudgets = trancheResultat.getFamilienBudgetresultate();
+        if (familienBudgets.isEmpty()) {
+            return DemoBudgettypDto.NONE;
+        }
+        if (familienBudgets.size() > 1) {
+            return DemoBudgettypDto.DOPPEL;
+        }
+
+        return switch (familienBudgets.getFirst().getSteuerdatenTyp()) {
+            case FAMILIE -> DemoBudgettypDto.FAMILIE;
+            case MUTTER -> DemoBudgettypDto.MUTTER;
+            case VATER -> DemoBudgettypDto.VATER;
+        };
     }
 
     private ElternAbwesenheitsGrund getAbwesenheitsGrund(DemoFamiliensituationDto dto, ElternTyp elternTyp) {

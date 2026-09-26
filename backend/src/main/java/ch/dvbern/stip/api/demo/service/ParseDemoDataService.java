@@ -39,7 +39,10 @@ import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
 import ch.dvbern.stip.generated.dto.DemoDarlehenDto;
 import ch.dvbern.stip.generated.dto.DemoDarlehenGruendeDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungDetailsDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBudgetDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestElternBudgetDto;
 import ch.dvbern.stip.generated.dto.DemoEinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.DemoElternteilDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
@@ -66,27 +69,49 @@ public class ParseDemoDataService {
         private final List<List<DemoSteuerdatenDto>> steuerdatens;
     }
 
-    private static final int UNUSED_START_LINES = 2;
-    private static final int FIRST_VALUE_COLOUMN = 5;
-    private static final int ANZAHL_LEBENSLAUF_ITEMS_AUSBILDUNG = 4;
-    private static final int ANZAHL_LEBENSLAUF_ITEMS_TAETIGKEITEN = 5;
-    private static final int ANZAHL_KINDS = 5;
-    private static final int ANZAHL_GESCHWISTERS = 6;
-    private final Iterator<Row> rowIterator;
-    private final int amountOfCells;
-
-    public ParseDemoDataService(Iterator<Row> rowIterator, int amountOfCells) {
-        this.rowIterator = rowIterator;
-        this.amountOfCells = amountOfCells;
+    // spotless:off
+    static abstract class SheetData {
+        abstract int index();
+        abstract int unusedStartLines();
+        abstract int firstValueColoumn();
     }
 
-    public static List<DemoData> parseList(final Path file, final Boolean ignoreBerechnungErrors) {
-        try (var workbook = new ReadableWorkbook(file.toFile())) {
-            final var sheet = workbook.getSheet(0).get();
-            final var rowIterator = sheet.openStream().iterator();
+    static class SheetTestcases extends SheetData {
+        final int index() { return 0; };
+        final int unusedStartLines() { return 2; };
+        final int firstValueColoumn() { return 5; };
+        final int anzahlLebenslaufItemsAusbildung() { return 4; };
+        final int anzahlLebenslaufItemsTaetigkeiten() { return 5; };
+        final int anzahlKinds() { return 5; };
+        final int anzahlGeschwisters() { return 6; };
+        final int anzahlMonate() { return 12; };
+    }
+
+    static class SheetBerechnung extends SheetData {
+        int index() { return 2; }
+        int unusedStartLines() { return 4; }
+        int firstValueColoumn() { return 5; }
+    }
+    // spotless:on
+
+    private static SheetTestcases sheetTestcases = new SheetTestcases();
+    private static SheetBerechnung sheetBerechnung = new SheetBerechnung();
+    private final ReadableWorkbook workbook;
+    private final int amountOfCells;
+    private Iterator<Row> rowIterator;
+    private SheetData sheetData;
+
+    public ParseDemoDataService(final int amountOfCells, final ReadableWorkbook workbook) {
+        this.amountOfCells = amountOfCells;
+        this.workbook = workbook;
+    }
+
+    public static List<DemoData> parseList(final Path path, final Boolean ignoreBerechnungErrors) {
+        try (var workbook = new ReadableWorkbook(path.toFile())) {
+            final var sheet = workbook.getSheet(sheetTestcases.index()).get();
             final var amountOfCells =
-                sheet.openStream().skip(UNUSED_START_LINES).findFirst().get().getPhysicalCellCount();
-            return new ParseDemoDataService(rowIterator, amountOfCells)
+                sheet.openStream().skip(sheetTestcases.unusedStartLines()).findFirst().get().getPhysicalCellCount();
+            return new ParseDemoDataService(amountOfCells, workbook)
                 .parseAll(ignoreBerechnungErrors);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -94,7 +119,9 @@ public class ParseDemoDataService {
     }
 
     public List<DemoData> parseAll(final Boolean ignoreBerechnungErrors) {
-        skipRows(UNUSED_START_LINES);
+        selectActiveSheet(sheetTestcases);
+        skipRows(sheetData.unusedStartLines());
+
         final var demoDataList = prepareInfo();
         final var ausbildungen = prepareAusbildung();
         final var pias = preparePersonInAusbildung();
@@ -110,6 +137,11 @@ public class ParseDemoDataService {
         final var auszahlungs = prepareAuszahlungs();
         final var darlehens = prepareDarlehens();
         final var berechnungValues = prepareBerechnungValues(ignoreBerechnungErrors);
+
+        selectActiveSheet(sheetBerechnung);
+        skipRows(sheetData.unusedStartLines());
+
+        final var berechnungDetailValues = prepareBerechnungDetailValues(ignoreBerechnungErrors);
 
         for (int i = 0; i < demoDataList.size(); i++) {
             final var demoData = demoDataList.get(i);
@@ -129,6 +161,7 @@ public class ParseDemoDataService {
             auszahlungs.get(i).ifPresent(dto::setAuszahlung);
             darlehens.get(i).ifPresent(dto::setDarlehen);
             dto.setBerechnungValues(berechnungValues.get(i));
+            dto.setBerechnungDetails(berechnungDetailValues.get(i));
 
             demoData.serializeDemoData();
         }
@@ -136,11 +169,20 @@ public class ParseDemoDataService {
         return demoDataList;
     }
 
+    private void selectActiveSheet(final SheetData sheetData) {
+        try {
+            this.sheetData = sheetData;
+            this.rowIterator = workbook.getSheet(sheetData.index()).get().openStream().iterator();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private <T> void initList(List<T> list, String pattern, int column, Function<DemoDataParseContext, T> createValue) {
         ParseDemoDataUtil.initListEntries(
             rowIterator.next(),
             list,
-            FIRST_VALUE_COLOUMN,
+            sheetData.firstValueColoumn(),
             column,
             amountOfCells,
             pattern,
@@ -157,7 +199,7 @@ public class ParseDemoDataService {
         ParseDemoDataUtil.updateListEntries(
             rowIterator.next(),
             list,
-            FIRST_VALUE_COLOUMN,
+            sheetData.firstValueColoumn(),
             column,
             amountOfCells,
             pattern,
@@ -180,7 +222,7 @@ public class ParseDemoDataService {
             d.setDescription(description.getRight());
         });
         // spotless:off
-        updateList(list, "Anzahl Monate", 0, (c, d) -> d.setAnzahlMonate(ParseDemoDataUtil.parseInteger(c.getCell())));
+        updateList(list, "Anzahl Monate", 0, (c, d) -> d.setAnzahlMonate(sheetTestcases.anzahlMonate()));
         updateList(list, "Erfasser des Testfalls", 0, (c, d) -> d.setErfasser(ParseDemoDataUtil.parseStringNullable(c.getCell())));
         updateList(list, "Gesuchsjahr", 0, (c, d) -> d.setGesuchsjahr(ParseDemoDataUtil.parseInteger(c.getCell())));
         updateList(list, "Gesuchseingang", 0, (c, d) -> d.setGesuchseingang(ParseDemoDataUtil.parseDateString(c.getCell())));
@@ -266,7 +308,7 @@ public class ParseDemoDataService {
         final List<List<Optional<DemoLebenslaufAusbildungDto>>> ausbildungen = new ArrayList<>(new ArrayList<>());
         skipRows(2);
 
-        for (var i = 0; i < ANZAHL_LEBENSLAUF_ITEMS_AUSBILDUNG; i++) {
+        for (var i = 0; i < sheetTestcases.anzahlLebenslaufItemsAusbildung(); i++) {
             if (i == 0) {
                 // Init a list for all Testfälle with max 4 Ausbildungen
                 initList(ausbildungen, "Abschluss", 1, (c) -> {
@@ -304,7 +346,7 @@ public class ParseDemoDataService {
         final List<List<Optional<DemoLebenslaufTaetigkeitDto>>> taetigkeiten = new ArrayList<>(new ArrayList<>());
         skipRows(1);
 
-        for (var i = 0; i < ANZAHL_LEBENSLAUF_ITEMS_TAETIGKEITEN; i++) {
+        for (var i = 0; i < sheetTestcases.anzahlLebenslaufItemsTaetigkeiten(); i++) {
             if (i == 0) {
                 // Init a list for all Testfälle with max 4 Tätigkeiten
                 initList(taetigkeiten, "Tätigkeitstyp", 1, (c) -> {
@@ -391,7 +433,7 @@ public class ParseDemoDataService {
         ParseDemoDataUtil.checkCellContains(rowIterator.next(), "Eigene Kinder.*", 0);
         final List<List<Optional<DemoKindDto>>> kinds = new ArrayList<>(new ArrayList<>());
         // spotless:off
-        for (var i = 0; i < ANZAHL_KINDS; i++) {
+        for (var i = 0; i < sheetTestcases.anzahlKinds(); i++) {
             if (i == 0) {
                 // Init a list for all Testfälle with max 5 Kinder
                 initList(kinds, "Nachname", 1, (c) -> {
@@ -709,7 +751,7 @@ public class ParseDemoDataService {
         ParseDemoDataUtil.checkCellContains(rowIterator.next(), "Geschwister", 0);
         final List<List<Optional<DemoGeschwisterDto>>> geschwisters = new ArrayList<>(new ArrayList<>());
         // spotless:off
-        for (var i = 0; i < ANZAHL_GESCHWISTERS; i++) {
+        for (var i = 0; i < sheetTestcases.anzahlGeschwisters(); i++) {
             if (i == 0) {
                 // Init a list for all Testfälle with max 5 Kinder
                 initList(geschwisters, "Nachname", 1, (c) -> {
@@ -805,6 +847,65 @@ public class ParseDemoDataService {
             skipRows(1);
             updateList(list, "Stipendienanspruch.*", 0, (c, d) -> d.stipendien(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
             updateList(list, "Darlehensanspruch.*", 0, (c, d) -> d.darlehen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            // spotless:on
+        } catch (Exception e) {
+            if (Boolean.TRUE.equals(ignoreBerechnungErrors)) {
+                return list;
+            }
+            throw e;
+        }
+
+        return list;
+    }
+
+    private List<DemoDataTestBerechnungDetailsDto> prepareBerechnungDetailValues(final Boolean ignoreBerechnungErrors) {
+        final List<DemoDataTestBerechnungDetailsDto> list = new ArrayList<>();
+        initList(
+            list,
+            "Budgetart",
+            0,
+            (c) -> new DemoDataTestBerechnungDetailsDto().budgetArt(ParseDemoEnumUtil.parseElternbudgetTyp(c.getCell()))
+        );
+        try {
+            skipRows(1);
+            // spotless:off
+            // Eltern Budget 1
+            updateList(list, "Elternbudget 1", 0, (c, d) -> d.elternBudget1(new DemoDataTestElternBudgetDto()));
+            skipRows(14);
+            updateList(list, "Total .* Einnahmen", 0, (c, d) -> d.getElternBudget1().setTotalEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(10);
+            updateList(list, "Total .* Kosten", 0, (c, d) -> d.getElternBudget1().setTotalKosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(1);
+            updateList(list, "Einnahmeüberschuss.*", 0, (c, d) -> d.getElternBudget1().setEinnahmeUeberschuss(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(4);
+            updateList(list, "Fehlbetrag.*", 0, (c, d) -> d.getElternBudget1().setFehlbetrag(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+
+            // Eltern Budget 2
+            skipRows(7);
+            updateList(list, "Elternbudget 2", 0, (c, d) -> d.elternBudget2(new DemoDataTestElternBudgetDto()));
+            skipRows(14);
+            updateList(list, "Total .* Einnahmen", 0, (c, d) -> d.getElternBudget2().setTotalEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(10);
+            updateList(list, "Total .* Kosten", 0, (c, d) -> d.getElternBudget2().setTotalKosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(1);
+            updateList(list, "Einnahmeüberschuss.*", 0, (c, d) -> d.getElternBudget2().setEinnahmeUeberschuss(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(4);
+            updateList(list, "Fehlbetrag.*", 0, (c, d) -> d.getElternBudget2().setFehlbetrag(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+
+            // Persoenliches Budget
+            skipRows(9);
+            updateList(list, "Persönliches Budget.*", 0, (c, d) -> d.persoenlichesBudget(new DemoDataTestBudgetDto()));
+            skipRows(15);
+            updateList(list, "Total .* Einnahmen", 0, (c, d) -> d.getPersoenlichesBudget().setTotalEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(14);
+            updateList(list, "Total .* Kosten", 0, (c, d) -> d.getPersoenlichesBudget().setTotalKosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(1);
+            updateList(list, "Fehlbetrag.*", 0, (c, d) -> d.setFehlbetrag(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(list, "Pro Kopf Teilung.*", 0, (c, d) -> d.setProKopfteilung(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(6);
+            updateList(list, "Anzahl Monate.*", 0, (c, d) -> d.setAnzahlMonateEinreichefrist(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            skipRows(9);
+            updateList(list, "Total Anspruch .* Kürzung.*", 0, (c, d) -> d.setTotalNachKuerzungNachEinreichefrist(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
             // spotless:on
         } catch (Exception e) {
             if (Boolean.TRUE.equals(ignoreBerechnungErrors)) {
