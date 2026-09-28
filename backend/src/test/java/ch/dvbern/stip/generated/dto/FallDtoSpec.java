@@ -29,8 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   FallDtoSpec.JSON_PROPERTY_ID,
-  FallDtoSpec.JSON_PROPERTY_FALL_NUMMER,
-  FallDtoSpec.JSON_PROPERTY_TENANT
+  FallDtoSpec.JSON_PROPERTY_FALL_NUMMER
 })
 @JsonTypeName("Fall")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
@@ -42,10 +41,6 @@ public class FallDtoSpec {
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   @jakarta.annotation.Nonnull
   private String fallNummer;
-
-  public static final String JSON_PROPERTY_TENANT = "tenant";
-  @jakarta.annotation.Nonnull
-  private String tenant;
 
   public FallDtoSpec() {
   }
@@ -100,31 +95,6 @@ public class FallDtoSpec {
     this.fallNummer = fallNummer;
   }
 
-  public FallDtoSpec tenant(@jakarta.annotation.Nonnull String tenant) {
-    
-    this.tenant = tenant;
-    return this;
-  }
-
-  /**
-   * Get tenant
-   * @return tenant
-   */
-  @jakarta.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_TENANT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getTenant() {
-    return tenant;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_TENANT, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setTenant(@jakarta.annotation.Nonnull String tenant) {
-    this.tenant = tenant;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -136,13 +106,12 @@ public class FallDtoSpec {
     }
     FallDtoSpec fall = (FallDtoSpec) o;
     return Objects.equals(this.id, fall.id) &&
-        Objects.equals(this.fallNummer, fall.fallNummer) &&
-        Objects.equals(this.tenant, fall.tenant);
+        Objects.equals(this.fallNummer, fall.fallNummer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, tenant);
+    return Objects.hash(id, fallNummer);
   }
 
   @Override
@@ -151,7 +120,6 @@ public class FallDtoSpec {
     sb.append("class FallDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
-    sb.append("    tenant: ").append(toIndentedString(tenant)).append("\n");
     sb.append("}");
     return sb.toString();
   }

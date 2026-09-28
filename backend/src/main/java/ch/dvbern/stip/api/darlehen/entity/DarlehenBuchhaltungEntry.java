@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -45,13 +45,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 @Audited
 @Table(
     name = "darlehen_buchhaltung_entry",
-    indexes = {
-        @Index(name = "IX_darlehen_buchhaltung_entry_tenant", columnList = "tenant")
-    }
+    indexes = @Index(
+        name = "IX_darlehen_buchhaltung_entry_darlehen_buchhaltung_entry_verfuegung_id",
+        columnList = "darlehen_buchhaltung_entry_verfuegung_id"
+    )
 )
 @Getter
 @Setter
-public class DarlehenBuchhaltungEntry extends AbstractTenantEntity {
+public class DarlehenBuchhaltungEntry extends AbstractEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "gesuch_id", nullable = false)

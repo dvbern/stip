@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -58,7 +58,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
     name = "benutzer",
     indexes = {
         @Index(name = "IX_benutzer_keycloak_id", columnList = "keycloak_id", unique = true),
-        @Index(name = "IX_benuter_tenant", columnList = "tenant"),
         @Index(name = "IX_benutzer_benutzereinstellungen_id", columnList = "benutzereinstellungen_id"),
     }
 )
@@ -69,7 +68,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Benutzer extends AbstractTenantEntity {
+public class Benutzer extends AbstractEntity {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "keycloak_id", unique = true, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)

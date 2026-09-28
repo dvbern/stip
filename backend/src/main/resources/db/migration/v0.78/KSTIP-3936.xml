@@ -1,15 +1,262 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-  <changeSet author="jafa (generated)" id="1790256109085-1">
-    <addColumn tableName="plz">
-      <column name="tenant" type="VARCHAR(255)">
-        <constraints nullable="false"/>
-      </column>
-    </addColumn>
+  <changeSet id="KSTIP-3936-drop-tenant-columns" author="fabrice.jakob">
+    <dropUniqueConstraint tableName="rolle" constraintName="IX_keycloak_identifier"/>
+    <addUniqueConstraint tableName="rolle" columnNames="keycloak_identifier" constraintName="IX_keycloak_identifier"/>
+    <dropUniqueConstraint tableName="abschluss" constraintName="UC_abschluss_tenant_bezeichnung_ausbildungskategorie_bildungsrichtung"/>
+    <addUniqueConstraint tableName="abschluss" columnNames="bezeichnung_de, bezeichnung_fr, ausbildungskategorie, bildungsrichtung" constraintName="UC_abschluss_bezeichnung_ausbildungskategorie_bildungsrichtung"/>
+    <dropColumn tableName="adresse" columnName="tenant"/>
+    <dropColumn tableName="adresse_aud" columnName="tenant"/>
+    <dropColumn tableName="abschluss" columnName="tenant"/>
+    <dropColumn tableName="abschluss_aud" columnName="tenant"/>
+    <dropColumn tableName="ausbildung" columnName="tenant"/>
+    <dropColumn tableName="ausbildung_aud" columnName="tenant"/>
+    <dropColumn tableName="ausbildung_unterbruch_antrag" columnName="tenant"/>
+    <dropColumn tableName="ausbildung_unterbruch_antrag_aud" columnName="tenant"/>
+    <dropColumn tableName="ausbildungsgang" columnName="tenant"/>
+    <dropColumn tableName="ausbildungsgang_aud" columnName="tenant"/>
+    <dropColumn tableName="ausbildungsstaette" columnName="tenant"/>
+    <dropColumn tableName="ausbildungsstaette_aud" columnName="tenant"/>
+    <dropColumn tableName="auszahlung" columnName="tenant"/>
+    <dropColumn tableName="auszahlung_aud" columnName="tenant"/>
+    <dropColumn tableName="benutzer" columnName="tenant"/>
+    <dropColumn tableName="benutzer_aud" columnName="tenant"/>
+    <dropColumn tableName="sachbearbeiter" columnName="tenant"/>
+    <dropColumn tableName="sachbearbeiter_aud" columnName="tenant"/>
+    <dropColumn tableName="sozialdienstbenutzer" columnName="tenant"/>
+    <dropColumn tableName="sozialdienstbenutzer_aud" columnName="tenant"/>
+    <dropColumn tableName="rolle" columnName="tenant"/>
+    <dropColumn tableName="rolle_aud" columnName="tenant"/>
+    <dropColumn tableName="sachbearbeiter_zuordnung_stammdaten" columnName="tenant"/>
+    <dropColumn tableName="sachbearbeiter_zuordnung_stammdaten_aud" columnName="tenant"/>
+    <dropColumn tableName="benutzereinstellungen" columnName="tenant"/>
+    <dropColumn tableName="benutzereinstellungen_aud" columnName="tenant"/>
+    <dropColumn tableName="beschwerde_entscheid" columnName="tenant"/>
+    <dropColumn tableName="beschwerde_entscheid_aud" columnName="tenant"/>
+    <dropColumn tableName="beschwerde_verlauf_entry" columnName="tenant"/>
+    <dropColumn tableName="beschwerde_verlauf_entry_aud" columnName="tenant"/>
+    <dropColumn tableName="buchhaltung" columnName="tenant"/>
+    <dropColumn tableName="buchhaltung_aud" columnName="tenant"/>
+    <dropColumn tableName="darlehen_buchhaltung_entry" columnName="tenant"/>
+    <dropColumn tableName="darlehen_buchhaltung_entry_aud" columnName="tenant"/>
+    <dropColumn tableName="freiwillig_darlehen" columnName="tenant"/>
+    <dropColumn tableName="freiwillig_darlehen_aud" columnName="tenant"/>
+    <dropColumn tableName="freiwillig_darlehen_dokument" columnName="tenant"/>
+    <dropColumn tableName="freiwillig_darlehen_dokument_aud" columnName="tenant"/>
+    <dropColumn tableName="gesetzlich_darlehen" columnName="tenant"/>
+    <dropColumn tableName="gesetzlich_darlehen_aud" columnName="tenant"/>
+    <dropColumn tableName="datenschutzbrief" columnName="tenant"/>
+    <dropColumn tableName="datenschutzbrief_aud" columnName="tenant"/>
+    <dropColumn tableName="delegierung" columnName="tenant"/>
+    <dropColumn tableName="delegierung_aud" columnName="tenant"/>
+    <dropColumn tableName="demo_data" columnName="tenant"/>
+    <dropColumn tableName="demo_data_aud" columnName="tenant"/>
+    <dropColumn tableName="demo_data_import" columnName="tenant"/>
+    <dropColumn tableName="demo_data_import_aud" columnName="tenant"/>
+    <dropColumn tableName="custom_dokument_typ" columnName="tenant"/>
+    <dropColumn tableName="custom_dokument_typ_aud" columnName="tenant"/>
+    <dropColumn tableName="dokument" columnName="tenant"/>
+    <dropColumn tableName="dokument_aud" columnName="tenant"/>
+    <dropColumn tableName="gesuch_dokument" columnName="tenant"/>
+    <dropColumn tableName="gesuch_dokument_aud" columnName="tenant"/>
+    <dropColumn tableName="gesuch_dokument_kommentar" columnName="tenant"/>
+    <dropColumn tableName="gesuch_dokument_kommentar_aud" columnName="tenant"/>
+    <dropColumn tableName="sachbearbeiter_gesuch_dokument" columnName="tenant"/>
+    <dropColumn tableName="sachbearbeiter_gesuch_dokument_aud" columnName="tenant"/>
+    <dropColumn tableName="einnahmen_kosten" columnName="tenant"/>
+    <dropColumn tableName="einnahmen_kosten_aud" columnName="tenant"/>
+    <dropColumn tableName="fall" columnName="tenant"/>
+    <dropColumn tableName="fall_aud" columnName="tenant"/>
+    <dropColumn tableName="familiensituation" columnName="tenant"/>
+    <dropColumn tableName="familiensituation_aud" columnName="tenant"/>
+    <dropColumn tableName="gesuch" columnName="tenant"/>
+    <dropColumn tableName="gesuch_aud" columnName="tenant"/>
+    <dropColumn tableName="statisticsdata" columnName="tenant"/>
+    <dropColumn tableName="statisticsdata_aud" columnName="tenant"/>
+    <dropColumn tableName="gesuch_formular" columnName="tenant"/>
+    <dropColumn tableName="gesuch_formular_aud" columnName="tenant"/>
+    <dropColumn tableName="gesuchsjahr" columnName="tenant"/>
+    <dropColumn tableName="gesuchsjahr_aud" columnName="tenant"/>
+    <dropColumn tableName="gesuchsperiode" columnName="tenant"/>
+    <dropColumn tableName="gesuchsperiode_aud" columnName="tenant"/>
+    <dropColumn tableName="gesuch_tranche" columnName="tenant"/>
+    <dropColumn tableName="gesuch_tranche_aud" columnName="tenant"/>
+    <dropColumn tableName="land" columnName="tenant"/>
+    <dropColumn tableName="land_aud" columnName="tenant"/>
+    <dropColumn tableName="lebenslauf_item" columnName="tenant"/>
+    <dropColumn tableName="lebenslauf_item_aud" columnName="tenant"/>
+    <dropColumn tableName="datenschutzbrief_massendruck" columnName="tenant"/>
+    <dropColumn tableName="datenschutzbrief_massendruck_aud" columnName="tenant"/>
+    <dropColumn tableName="massendruck_job" columnName="tenant"/>
+    <dropColumn tableName="massendruck_job_aud" columnName="tenant"/>
+    <dropColumn tableName="verfuegung_massendruck" columnName="tenant"/>
+    <dropColumn tableName="verfuegung_massendruck_aud" columnName="tenant"/>
+    <dropColumn tableName="notification" columnName="tenant"/>
+    <dropColumn tableName="notification_aud" columnName="tenant"/>
+    <dropColumn tableName="gesuch_notizen" columnName="tenant"/>
+    <dropColumn tableName="gesuch_notizen_aud" columnName="tenant"/>
+    <dropColumn tableName="sapdelivery" columnName="tenant"/>
+    <dropColumn tableName="sapdelivery_aud" columnName="tenant"/>
+    <dropColumn tableName="scheduledtask" columnName="tenant"/>
+    <dropColumn tableName="scheduledtask_aud" columnName="tenant"/>
+    <dropColumn tableName="sozialdienst" columnName="tenant"/>
+    <dropColumn tableName="sozialdienst_aud" columnName="tenant"/>
+    <dropColumn tableName="statistik" columnName="tenant"/>
+    <dropColumn tableName="statistik_aud" columnName="tenant"/>
+    <dropColumn tableName="statusprotokoll" columnName="tenant"/>
+    <dropColumn tableName="statusprotokoll_aud" columnName="tenant"/>
+    <dropColumn tableName="steuerdaten" columnName="tenant"/>
+    <dropColumn tableName="steuerdaten_aud" columnName="tenant"/>
+    <dropColumn tableName="steuererklaerung" columnName="tenant"/>
+    <dropColumn tableName="steuererklaerung_aud" columnName="tenant"/>
+    <dropColumn tableName="unterschriftenblatt" columnName="tenant"/>
+    <dropColumn tableName="unterschriftenblatt_aud" columnName="tenant"/>
+    <dropColumn tableName="verfuegung" columnName="tenant"/>
+    <dropColumn tableName="verfuegung_aud" columnName="tenant"/>
+    <dropColumn tableName="verfuegung_dokument" columnName="tenant"/>
+    <dropColumn tableName="verfuegung_dokument_aud" columnName="tenant"/>
+    <dropColumn tableName="zahlungsverbindung" columnName="tenant"/>
+    <dropColumn tableName="zahlungsverbindung_aud" columnName="tenant"/>
+    <dropColumn tableName="zuordnung" columnName="tenant"/>
+    <dropColumn tableName="zuordnung_aud" columnName="tenant"/>
+    <dropColumn tableName="stip_decision_text" columnName="tenant"/>
+    <dropColumn tableName="stip_decision_text_aud" columnName="tenant"/>
+    <dropColumn tableName="eltern" columnName="tenant"/>
+    <dropColumn tableName="eltern_aud" columnName="tenant"/>
+    <dropColumn tableName="geschwister" columnName="tenant"/>
+    <dropColumn tableName="geschwister_aud" columnName="tenant"/>
+    <dropColumn tableName="kind" columnName="tenant"/>
+    <dropColumn tableName="kind_aud" columnName="tenant"/>
+    <dropColumn tableName="partner" columnName="tenant"/>
+    <dropColumn tableName="partner_aud" columnName="tenant"/>
+    <dropColumn tableName="person_in_ausbildung" columnName="tenant"/>
+    <dropColumn tableName="person_in_ausbildung_aud" columnName="tenant"/>
+    <dropColumn tableName="steuerdaten_access" columnName="tenant"/>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1790256109085-2">
-    <addColumn tableName="plz_aud">
-      <column name="tenant" type="VARCHAR(255)"/>
-    </addColumn>
+  <changeSet author="jafa (generated)" id="1790601565687-1">
+    <createIndex indexName="IX_adresse_land_id" tableName="adresse">
+      <column name="land_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-2">
+    <createIndex indexName="IX_ausbildung_land_id" tableName="ausbildung">
+      <column name="land_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-3">
+    <createIndex indexName="IX_ausbildung_unterbruch_antrag_ausbildung_id" tableName="ausbildung_unterbruch_antrag">
+      <column name="ausbildung_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-4">
+    <createIndex indexName="IX_ausbildung_unterbruch_antrag_gesuch_id" tableName="ausbildung_unterbruch_antrag">
+      <column name="gesuch_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-5">
+    <createIndex indexName="IX_auszahlung_buchhaltung_id" tableName="auszahlung">
+      <column name="buchhaltung_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-6">
+    <createIndex indexName="IX_beschwerde_entscheid_gesuch_id" tableName="beschwerde_entscheid">
+      <column name="gesuch_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-7">
+    <createIndex indexName="IX_beschwerde_verlauf_entry_gesuch_id" tableName="beschwerde_verlauf_entry">
+      <column name="gesuch_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-8">
+    <createIndex indexName="IX_buchhaltung_fall_id" tableName="buchhaltung">
+      <column name="fall_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-9">
+    <createIndex indexName="IX_datenschutzbrief_dokument_id" tableName="datenschutzbrief">
+      <column name="dokument_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-10">
+    <createIndex indexName="IX_datenschutzbrief_gesuch_id" tableName="datenschutzbrief">
+      <column name="gesuch_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-11">
+    <createIndex indexName="IX_datenschutzbrief_massendruck_massendruck_job_id" tableName="datenschutzbrief_massendruck">
+      <column name="massendruck_job_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-12">
+    <createIndex indexName="IX_delegierung_delegierter_mitarbeiter_id" tableName="delegierung">
+      <column name="delegierter_mitarbeiter_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-13">
+    <createIndex indexName="IX_delegierung_fall_id" tableName="delegierung">
+      <column name="fall_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-14">
+    <createIndex indexName="IX_delegierung_sozialdienst_id" tableName="delegierung">
+      <column name="sozialdienst_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-15">
+    <createIndex indexName="IX_demo_data_import_dokument_id" tableName="demo_data_import">
+      <column name="dokument_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-16">
+    <createIndex indexName="IX_dokument_gesuch_dokument_id" tableName="dokument">
+      <column name="gesuch_dokument_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-17">
+    <createIndex indexName="IX_gesuch_ausbildung_id" tableName="gesuch">
+      <column name="ausbildung_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-18">
+    <createIndex indexName="IX_gesuch_dokument_gesuch_tranche_id_custom_dokument_typ_id" tableName="gesuch_dokument">
+      <column name="gesuch_tranche_id"/>
+      <column name="custom_dokument_typ_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-19">
+    <createIndex indexName="IX_gesuch_dokument_kommentar_gesuch_dokument_id" tableName="gesuch_dokument_kommentar">
+      <column name="gesuch_dokument_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-20">
+    <createIndex indexName="IX_lebenslauf_item_abschluss_id" tableName="lebenslauf_item">
+      <column name="abschluss_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-21">
+    <createIndex indexName="IX_person_in_ausbildung_nationalitaet_id" tableName="person_in_ausbildung">
+      <column name="nationalitaet_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-22">
+    <createIndex indexName="IX_sapdelivery_buchhaltung_id" tableName="sapdelivery">
+      <column name="buchhaltung_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-23">
+    <createIndex indexName="IX_statusprotokoll_gesuch_id" tableName="statusprotokoll">
+      <column name="gesuch_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-24">
+    <createIndex indexName="IX_unterschriftenblatt_gesuch_id" tableName="unterschriftenblatt">
+      <column name="gesuch_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1790601565687-25">
+    <createIndex indexName="IX_verfuegung_massendruck_massendruck_job_id" tableName="verfuegung_massendruck">
+      <column name="massendruck_job_id"/>
+    </createIndex>
   </changeSet>
 </databaseChangeLog>

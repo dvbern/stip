@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.zuordnung.entity;
 
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.zuordnung.type.ZuordnungType;
 import jakarta.persistence.Column;
@@ -43,13 +43,12 @@ import org.hibernate.envers.Audited;
     name = "zuordnung",
     indexes = {
         @Index(name = "IX_zuordnung_fall_id", columnList = "fall_id"),
-        @Index(name = "IX_zuordnung_sachbearbeiter_id", columnList = "sachbearbeiter_id"),
-        @Index(name = "IX_zuordnung_tenant", columnList = "tenant")
+        @Index(name = "IX_zuordnung_sachbearbeiter_id", columnList = "sachbearbeiter_id")
     }
 )
 @Getter
 @Setter
-public class Zuordnung extends AbstractTenantEntity {
+public class Zuordnung extends AbstractEntity {
     @NotNull
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_zuordnung_fall_id"), nullable = false)

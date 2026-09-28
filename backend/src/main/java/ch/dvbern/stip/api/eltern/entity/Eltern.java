@@ -58,8 +58,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Table(
     name = "eltern",
     indexes = {
-        @Index(name = "IX_eltern_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_eltern_tenant", columnList = "tenant")
+        @Index(name = "IX_eltern_adresse_id", columnList = "adresse_id")
     }
 )
 @Getter

@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.plz.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -43,7 +43,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Audited
 @Getter
 @Setter
-public class Plz extends AbstractTenantEntity {
+public class Plz extends AbstractEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "plz", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)

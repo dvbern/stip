@@ -50,8 +50,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "partner",
     indexes = {
-        @Index(name = "IX_partner_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_partner_tenant", columnList = "tenant")
+        @Index(name = "IX_partner_adresse_id", columnList = "adresse_id")
     }
 )
 @AusbildungsPensumRequiredConstraint

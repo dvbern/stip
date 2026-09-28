@@ -25,14 +25,13 @@ import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -54,17 +53,16 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "abschluss",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_abschluss_tenant_bezeichnung_ausbildungskategorie_bildungsrichtung",
-        columnNames = { "tenant", "bezeichnung_de", "bezeichnung_fr", "ausbildungskategorie", "bildungsrichtung" }
-    ),
-    indexes = @Index(name = "IX_abschluss_tenant", columnList = "tenant")
+        name = "UC_abschluss_bezeichnung_ausbildungskategorie_bildungsrichtung",
+        columnNames = { "bezeichnung_de", "bezeichnung_fr", "ausbildungskategorie", "bildungsrichtung" }
+    )
 )
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Abschluss extends AbstractTenantEntity {
+public class Abschluss extends AbstractEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "bezeichnung_de", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)

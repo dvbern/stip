@@ -9619,14 +9619,11 @@ components:
       required:
         - id
         - fallNummer
-        - tenant
       type: object
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
-          type: string
-        tenant:
           type: string
     DelegierungSlim:
       required:

@@ -26,7 +26,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -42,8 +41,7 @@ import org.jilt.BuilderStyle;
 @Audited
 @Entity
 @Table(
-    name = "kind",
-    indexes = @Index(name = "IX_kind_tenant", columnList = "tenant")
+    name = "kind"
 )
 @Getter
 @Setter

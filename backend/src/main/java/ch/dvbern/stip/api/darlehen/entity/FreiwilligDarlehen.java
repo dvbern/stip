@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.darlehen.type.DarlehenGrund;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -61,13 +61,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 )
 @Table(
     name = "freiwillig_darlehen",
-    indexes = {
-        @Index(name = "IX_freiwillig_darlehen_tenant", columnList = "tenant")
-    }
+    indexes = @Index(
+        name = "IX_freiwillig_darlehen_darlehen_buchhaltung_entry_id", columnList = "darlehen_buchhaltung_entry_id"
+    )
+
 )
 @Getter
 @Setter
-public class FreiwilligDarlehen extends AbstractTenantEntity {
+public class FreiwilligDarlehen extends AbstractEntity {
     @Nullable
     @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
