@@ -200,6 +200,8 @@ nx-e2e-test:
     - custom:e2e
   resource_group: 'e2e'
   allow_failure: true
+  before_script:
+    - 'mkdir frontend/node_modules'
   artifacts:
     when: always
     paths:
@@ -207,6 +209,8 @@ nx-e2e-test:
     reports:
       junit: frontend/test-results/junit/*.xml
   variables:
+    KUBERNETES_CPU_REQUEST: '2'
+    KUBERNETES_CPU_LIMIT: '4'
     KUBERNETES_MEMORY_REQUEST: '4Gi'
     KUBERNETES_MEMORY_LIMIT: '8Gi'
     E2E_BASEURL_GS: 'https://dv-e2e-stip.$DVB_OCP_MERCURY_ROUTER'
