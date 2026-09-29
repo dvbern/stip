@@ -33,7 +33,7 @@ import {
   steuererklaerung,
   taetigkeit,
   zahlungsverbindungFn,
-} from '../../test-data/slice-test-data';
+} from './slice-test-data';
 
 const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(ausbildung);
 const urls = getE2eUrls();
