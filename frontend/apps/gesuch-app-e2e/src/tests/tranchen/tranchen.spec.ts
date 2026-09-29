@@ -14,7 +14,7 @@ import {
   ausbildungValues,
   createZahlungsverbindungUpdateFn,
   gesuchFormularUpdateFn,
-} from './tranchen-test-data';
+} from './tranchen.data';
 
 // initialize the test with the user type and the gesuch-data to be used
 const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(

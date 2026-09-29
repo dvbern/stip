@@ -21,12 +21,12 @@ import {
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { bruder } from './aenderung-test-data';
+import { bruder } from './aenderung.data';
 import {
   ausbildungValues,
   createZahlungsverbindungUpdateFn,
   gesuchFormularUpdateFn,
-} from '../tranchen/tranchen-test-data';
+} from '../tranchen/tranchen.data';
 
 const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
   ausbildungValues,
