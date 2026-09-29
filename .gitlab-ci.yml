@@ -192,6 +192,12 @@ start-e2e:
 
 nx-e2e-test:
   stage: e2e
+  tags:
+    - type:k8s
+    - zone:tz
+    - ou:dev
+    - customer:stip
+    - custom:e2e
   resource_group: 'e2e'
   allow_failure: true
   artifacts:
