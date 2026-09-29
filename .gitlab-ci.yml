@@ -207,6 +207,8 @@ nx-e2e-test:
     reports:
       junit: frontend/test-results/junit/*.xml
   variables:
+    KUBERNETES_MEMORY_REQUEST: '4Gi'
+    KUBERNETES_MEMORY_LIMIT: '8Gi'
     E2E_BASEURL_GS: 'https://dv-e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SB: 'https://dv-e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SOZ: 'https://dv-e2e-sozialdienst-stip.$DVB_OCP_MERCURY_ROUTER'
