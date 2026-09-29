@@ -56,12 +56,12 @@ public class ManuelleVerfuegungCreateDto  implements Serializable {
   }
 
   
-  @JsonProperty("kommentar")
-  public String getKommentar() {
+  @JsonProperty(required = true, value = "kommentar")
+  @NotNull public String getKommentar() {
     return kommentar;
   }
 
-  @JsonProperty("kommentar")
+  @JsonProperty(required = true, value = "kommentar")
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }

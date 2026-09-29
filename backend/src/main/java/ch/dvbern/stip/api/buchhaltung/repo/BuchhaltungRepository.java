@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.buchhaltung.repo;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -110,33 +108,24 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
     }
 
     public Stream<Buchhaltung> findPendingBusinesspartnerActionBuchhaltung() {
-        return new JPAQueryFactory(entityManager)
+        final var query = new JPAQueryFactory(entityManager)
             .selectFrom(Q_BUCHHALTUNG)
             .where(
                 Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.BUSINESSPARTNER_CREATE)
                     .or(Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.BUSINESSPARTNER_CHANGE))
             )
-            .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.SUCCESS).not())
             .where(
-                Q_BUCHHALTUNG.sapDeliverys.size().lt(SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG)
-            )
-            .stream();
-    }
-
-    public List<Buchhaltung> findByYear(int year) {
-        LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0, 0);
-        LocalDateTime endOfYear = LocalDateTime.of(year, 12, 31, 23, 59, 59);
-
-        return new JPAQueryFactory(entityManager)
-            .select(Q_BUCHHALTUNG)
-            .from(Q_BUCHHALTUNG)
-            .where(
-                Q_BUCHHALTUNG.timestampMutiert.between(startOfYear, endOfYear)
-                    .and(
-                        Q_BUCHHALTUNG.buchhaltungType.in(BuchhaltungType.AUSZAHLUNGS)
-                            .and(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.SUCCESS))
+                Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.IN_PROGRESS)
+                    .or(
+                        Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.SUCCESS)
+                            .not()
+                            .and(
+                                Q_BUCHHALTUNG.sapDeliverys.size()
+                                    .lt(SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_BUSINESSPARTNER_ACTION)
+                            )
                     )
-            )
-            .fetch();
+            );
+        return query
+            .stream();
     }
 }

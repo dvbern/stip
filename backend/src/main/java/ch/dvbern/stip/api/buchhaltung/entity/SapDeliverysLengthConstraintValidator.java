@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class SapDeliverysLengthConstraintValidator
     implements ConstraintValidator<SapDeliverysLengthConstraint, Buchhaltung> {
-    public static final Integer MAX_SAP_DELIVERYS_CREATE_BUSINESSPARTNER = 3;
+    public static final Integer MAX_SAP_DELIVERYS_BUSINESSPARTNER_ACTION = 3;
     public static final Integer MAX_SAP_DELIVERYS_AUSZAHLUNG = 3;
 
     @Override
@@ -32,7 +32,7 @@ public class SapDeliverysLengthConstraintValidator
             case AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER -> value.getSapDeliverys()
                 .size() <= MAX_SAP_DELIVERYS_AUSZAHLUNG;
             case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> value.getSapDeliverys()
-                .size() <= MAX_SAP_DELIVERYS_CREATE_BUSINESSPARTNER;
+                .size() <= MAX_SAP_DELIVERYS_BUSINESSPARTNER_ACTION;
         };
     }
 }

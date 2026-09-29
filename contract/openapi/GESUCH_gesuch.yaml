@@ -1675,12 +1675,13 @@ components:
     ManuelleVerfuegungCreate:
       required:
         - fileUpload
+        - kommentar
       type: object
       properties:
-        kommentar:
-          type: string
         fileUpload:
           $ref: './components/common.yaml#/FileUpload'
+        kommentar:
+          type: string
     StatusprotokollEntryTyp:
       enum:
         - GESUCH

@@ -161,7 +161,7 @@ export class SharedPatternDarlehenFormComponent {
 
   formSb = this.formBuilder.group({
     gewaehren: [<boolean | null>null, [Validators.required]],
-    negativeVerfuegung: [<File | undefined>undefined],
+    negativeVerfuegung: <File[] | undefined>undefined,
     betrag: [<string | undefined>undefined, [Validators.required]],
     kommentar: [<string | null>null, [Validators.required]],
   });
@@ -381,9 +381,10 @@ export class SharedPatternDarlehenFormComponent {
       'kommentar',
       'gewaehren',
     ]);
+
     return {
       betrag: fromFormatedNumber(realValues.betrag) ?? undefined,
-      negativeVerfuegung: realValues.negativeVerfuegung ?? undefined,
+      negativeVerfuegung: realValues.negativeVerfuegung?.[0] ?? undefined,
       kommentar: realValues.kommentar,
       gewaehren: realValues.gewaehren,
     };

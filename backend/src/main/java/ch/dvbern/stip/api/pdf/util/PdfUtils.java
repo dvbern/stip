@@ -504,6 +504,8 @@ public class PdfUtils {
             .add(emailParagraph);
         headerTable.addCell(sachbearbeiter);
 
+        final var piaAddress = gesuchFormular.getPersonInAusbildung().getAdresse();
+        final var hausnummer = piaAddress.getHausnummer();
         if (!isDeckblatt && elternteilOptional.isEmpty()) {
             final Cell receiver = PdfUtils.createCell(
                 pdfFont,
@@ -511,11 +513,9 @@ public class PdfUtils {
                 1,
                 1,
                 gesuchFormular.getPersonInAusbildung().getFullName(),
-                String.format(
-                    "%s %s",
-                    gesuchFormular.getPersonInAusbildung().getAdresse().getStrasse(),
-                    gesuchFormular.getPersonInAusbildung().getAdresse().getHausnummer()
-                ),
+                Objects.isNull(hausnummer) || hausnummer.isBlank()
+                    ? piaAddress.getStrasse()
+                    : "%s %s".formatted(piaAddress.getStrasse(), hausnummer),
                 String.format(
                     "%s %s",
                     gesuchFormular.getPersonInAusbildung().getAdresse().getPlz(),
@@ -719,7 +719,12 @@ public class PdfUtils {
         if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
             kopieAn.add(sozialdienstAdresse.getCoAdresse());
         }
-        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
+        final var hausnummer = sozialdienstAdresse.getHausnummer();
+        kopieAn.add(
+            Objects.isNull(hausnummer) || hausnummer.isBlank()
+                ? sozialdienstAdresse.getStrasse()
+                : "%s %s".formatted(sozialdienstAdresse.getStrasse(), hausnummer)
+        );
         kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
         return String.join(", ", kopieAn);
     }

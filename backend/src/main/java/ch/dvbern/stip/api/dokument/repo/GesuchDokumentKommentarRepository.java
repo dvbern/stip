@@ -50,6 +50,20 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
     }
 
     @Transactional
+    public void deleteAllByGesuchTrancheId(UUID gesuchTrancheId) {
+        new JPAQueryFactory(getEntityManager())
+            .delete(gesuchDokumentKommentar)
+            .where(gesuchDokumentKommentar.gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId));
+    }
+
+    @Transactional
+    public void deleteAllByGesuchTrancheIds(List<UUID> gesuchTrancheIds) {
+        new JPAQueryFactory(getEntityManager())
+            .delete(gesuchDokumentKommentar)
+            .where(gesuchDokumentKommentar.gesuchDokument.gesuchTranche.id.in(gesuchTrancheIds));
+    }
+
+    @Transactional
     public List<GesuchDokumentKommentarSlim> getAllNewestAbgelehntKommentarOfGesuch(final UUID gesuchId) {
         return getEntityManager()
             .createQuery(

@@ -30,11 +30,14 @@ import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -96,6 +99,40 @@ public class SwisstopoGemeindeLookupAdapterTest {
         assertThat(result.isPresent(), is(true));
         assertThat(result.get().bfsNummer(), is(DEFAULT_BFS_NUMMER));
         assertThat(result.get().name(), is(DEFAULT_GEMEINDE_NAME));
+        verify(swisstopoApiRestService, never()).findAllMatchingBuildingsByZipLabel(anyString());
+    }
+
+    @Test
+    void findGemeindeData_withoutHausnummer_returnsFirstMatchingStreetResult() {
+        when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
+            .thenReturn(
+                response(
+                    attributes("8000 Zürich", 261, "Zürich"),
+                    attributes(DEFAULT_ORT_PLZ, DEFAULT_BFS_NUMMER, DEFAULT_GEMEINDE_NAME),
+                    attributes(DEFAULT_ORT_PLZ, 355, "Andere Gemeinde")
+                )
+            );
+        for (final var hausnummer : new String[] { null, "", " " }) {
+            final var request = GemeindeLookupRequest.builder()
+                .gesuchId(DEFAULT_GESUCH_ID)
+                .tenantIdentifier(DEFAULT_TENANT_IDENTIFIER)
+                .strasse(DEFAULT_STRASSE)
+                .hausnummer(hausnummer)
+                .plz(DEFAULT_PLZ)
+                .ort(DEFAULT_ORT)
+                .build();
+
+            final var result = swisstopoGemeindeLookupAdapter.findGemeindeData(request);
+
+            assertThat(result.isPresent(), is(true));
+            assertThat(result.get().bfsNummer(), is(DEFAULT_BFS_NUMMER));
+            assertThat(result.get().name(), is(DEFAULT_GEMEINDE_NAME));
+        }
+        final var layerDefsCaptor = ArgumentCaptor.forClass(String.class);
+        verify(swisstopoApiRestService, times(3))
+            .findAllMatchingBuildings(anyString(), layerDefsCaptor.capture());
+        layerDefsCaptor.getAllValues()
+            .forEach(layerDefs -> assertThat(layerDefs, containsString("adr_number ilike '%'")));
         verify(swisstopoApiRestService, never()).findAllMatchingBuildingsByZipLabel(anyString());
     }
 
