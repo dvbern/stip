@@ -10,8 +10,7 @@
       "executor": "@nx/playwright:playwright",
       "outputs": ["{workspaceRoot}/dist/.playwright/apps/gesuch-app-e2e"],
       "options": {
-        "config": "apps/gesuch-app-e2e/playwright.config.ts",
-        "skipInstall": true
+        "config": "apps/gesuch-app-e2e/playwright.config.ts"
       }
     }
   }
