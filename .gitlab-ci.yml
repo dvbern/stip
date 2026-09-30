@@ -147,6 +147,9 @@ build-api:
     GIT_DEPTH: 0
   needs: []
 
+package:e2e-image:
+  needs: []
+
 package:frontend-app:
   extends: .package:frontend-app
   needs:
@@ -210,6 +213,10 @@ nx-e2e-test:
     - custom:e2e
   resource_group: 'e2e'
   allow_failure: true
+  # Expose the node_modules baked into the image at the git-checkout path so the
+  # component's `npm ci` guard is satisfied and nx resolves locally
+  before_script:
+    - ln -s /app/frontend/node_modules "$CI_PROJECT_DIR/frontend/node_modules"
   artifacts:
     when: always
     paths:
