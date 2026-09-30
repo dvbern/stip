@@ -9615,6 +9615,8 @@ components:
           format: date-time
         sapStatus:
           $ref: '#/components/schemas/SapStatus'
+        message:
+          type: string
     Fall:
       required:
         - id

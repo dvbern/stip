@@ -44,6 +44,8 @@ import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchResponse.BUSINESSPARTNER;
+import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse.DELIVERY.POSITION;
+import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse.DELIVERY.POSITION.LOGS;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.sap.util.SapMapperUtil;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
@@ -163,6 +165,9 @@ public class SapService {
                         Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
                     );
             } else {
+                sapDelivery.setMessage(Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' ' + readImportResponse.getDELIVERY()
+                    .getFirst().getPOSITION().stream().map(POSITION::getLOGS).flatMap(logs -> logs.stream().map(LOGS::getMESSAGE)));
+//                sapDelivery.setMessage(Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' ' + readImportResponse.getRETURNCODE().getFirst().getMESSAGE());
                 status = SapStatus.FAILURE;
             }
 
@@ -255,11 +260,18 @@ public class SapService {
 
                 try {
                     switch (businessPartnerActionBuchhaltungType) {
+
                         case BUSINESSPARTNER_CREATE -> {
                             final var response = sapEndpointService.createBusinessPartner(fall, deliveryid);
+                            if (!SapReturnCodeType.isSuccess(response.getRETURNCODE().get(0).getTYPE())) {
+                                sapDelivery.setMessage(response.getRETURNCODE().get(0).getMESSAGE());
+                            }
                         }
                         case BUSINESSPARTNER_CHANGE -> {
                             final var response = sapEndpointService.changeBusinessPartner(fall, deliveryid);
+                            if (!SapReturnCodeType.isSuccess(response.getRETURNCODE().get(0).getTYPE())) {
+                                sapDelivery.setMessage(response.getRETURNCODE().get(0).getMESSAGE());
+                            }
                         }
                         case null, default -> throw new IllegalStateException();
                     }
@@ -321,6 +333,12 @@ public class SapService {
         var status = SapStatus.FAILURE;
         if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE())) {
             status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        } else {
+            if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().getFirst().getTYPE())) {
+                sapDelivery.setMessage(
+                    Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' ' +
+                    readImportResponse.getRETURNCODE().getFirst().getMESSAGE());
+            }
         }
 
         sapDelivery.setSapStatus(status);
@@ -380,6 +398,9 @@ public class SapService {
                             getQrIbanAddlInfoString(gesuch),
                             String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
                         );
+                    if (SapReturnCodeType.isSuccess(vendorPostingCreateResponse.getRETURNCODE().getFirst().getTYPE())) {
+                        newSapDelivery.setMessage(vendorPostingCreateResponse.getRETURNCODE().getFirst().getMESSAGE());
+                    }
                 } catch (Exception e) {
                     LOG.error("Failed to send createVendorPosting action", e);
                 }

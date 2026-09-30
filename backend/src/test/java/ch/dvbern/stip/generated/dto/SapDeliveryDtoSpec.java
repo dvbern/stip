@@ -30,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SapDeliveryDtoSpec.JSON_PROPERTY_SAP_ID,
   SapDeliveryDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
-  SapDeliveryDtoSpec.JSON_PROPERTY_SAP_STATUS
+  SapDeliveryDtoSpec.JSON_PROPERTY_SAP_STATUS,
+  SapDeliveryDtoSpec.JSON_PROPERTY_MESSAGE
 })
 @JsonTypeName("SapDelivery")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
@@ -46,6 +47,10 @@ public class SapDeliveryDtoSpec {
   public static final String JSON_PROPERTY_SAP_STATUS = "sapStatus";
   @jakarta.annotation.Nonnull
   private SapStatusDtoSpec sapStatus;
+
+  public static final String JSON_PROPERTY_MESSAGE = "message";
+  @jakarta.annotation.Nullable
+  private String message;
 
   public SapDeliveryDtoSpec() {
   }
@@ -125,6 +130,31 @@ public class SapDeliveryDtoSpec {
     this.sapStatus = sapStatus;
   }
 
+  public SapDeliveryDtoSpec message(@jakarta.annotation.Nullable String message) {
+    
+    this.message = message;
+    return this;
+  }
+
+  /**
+   * Get message
+   * @return message
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_MESSAGE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getMessage() {
+    return message;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_MESSAGE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMessage(@jakarta.annotation.Nullable String message) {
+    this.message = message;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -137,12 +167,13 @@ public class SapDeliveryDtoSpec {
     SapDeliveryDtoSpec sapDelivery = (SapDeliveryDtoSpec) o;
     return Objects.equals(this.sapId, sapDelivery.sapId) &&
         Objects.equals(this.timestampErstellt, sapDelivery.timestampErstellt) &&
-        Objects.equals(this.sapStatus, sapDelivery.sapStatus);
+        Objects.equals(this.sapStatus, sapDelivery.sapStatus) &&
+        Objects.equals(this.message, sapDelivery.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sapId, timestampErstellt, sapStatus);
+    return Objects.hash(sapId, timestampErstellt, sapStatus, message);
   }
 
   @Override
@@ -152,6 +183,7 @@ public class SapDeliveryDtoSpec {
     sb.append("    sapId: ").append(toIndentedString(sapId)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }

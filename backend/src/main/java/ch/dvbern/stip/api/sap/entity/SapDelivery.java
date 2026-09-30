@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import com.ctc.wstx.evt.WstxEventReader;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,9 +34,13 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
 @Audited
 @Entity
@@ -65,4 +70,9 @@ public class SapDelivery extends AbstractTenantEntity {
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "buchhaltung_id", foreignKey = @ForeignKey(name = "FK_sap_delivery_buchhaltung_id"))
     private Buchhaltung buchhaltung;
+
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Column(name = "message", length = DB_DEFAULT_STRING_MAX_LENGTH)
+    private String message;
 }
