@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.darlehen.entity.QFreiwilligDarlehen;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -36,10 +35,8 @@ import lombok.RequiredArgsConstructor;
 public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDarlehen> {
     private static final QFreiwilligDarlehen freiwilligDarlehen = QFreiwilligDarlehen.freiwilligDarlehen;
 
-    private final EntityManager entityManager;
-
     public List<FreiwilligDarlehen> findByFallId(final UUID fallId) {
-        var queryFactory = new JPAQueryFactory(entityManager);
+        var queryFactory = new JPAQueryFactory(getEntityManager());
         var query = queryFactory
             .selectFrom(freiwilligDarlehen)
             .where(
@@ -49,7 +46,7 @@ public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDa
     }
 
     public List<FreiwilligDarlehen> findByGesuchId(final UUID gesuchId) {
-        var queryFactory = new JPAQueryFactory(entityManager);
+        var queryFactory = new JPAQueryFactory(getEntityManager());
         var query = queryFactory
             .selectFrom(freiwilligDarlehen)
             .where(
@@ -59,7 +56,7 @@ public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDa
     }
 
     public JPAQuery<FreiwilligDarlehen> getAlleQuery() {
-        return new JPAQueryFactory(entityManager)
+        return new JPAQueryFactory(getEntityManager())
             .selectFrom(freiwilligDarlehen);
     }
 
@@ -80,6 +77,12 @@ public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDa
             )
             .stream()
             .findFirst();
+    }
+
+    public void deleteByGesuchId(final UUID gesuchId) {
+        new JPAQueryFactory(getEntityManager())
+            .delete(freiwilligDarlehen)
+            .where(freiwilligDarlehen.relatedGesuch.id.eq(gesuchId));
     }
 
 }
