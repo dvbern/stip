@@ -201,7 +201,7 @@ start-e2e:
 
 nx-e2e-test:
   stage: e2e
-  image: docker-registry.public.dvbern.ch/kibon/stip/e2e-runner:$VERSION
+  image: docker-registry.dvbern.ch/stip/e2e-runner:$VERSION
   tags:
     - type:k8s
     - zone:tz
