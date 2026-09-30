@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.util.StringUtil;
 import ch.dvbern.stip.api.config.type.StipConfig;
@@ -42,6 +43,7 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -53,8 +55,11 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 @Slf4j
 @ApplicationScoped
 @UnlessBuildProfile("test")
+@RequiredArgsConstructor
 public class DokumentUploadService {
     protected static final String DOCUMENT_CONTENT_TYPE = "application/pdf";
+
+    private final DocumentMetrics documentMetrics;
 
     public Uni<Response> validateScanUploadDokument(
         final FileUpload fileUpload,
@@ -197,6 +202,21 @@ public class DokumentUploadService {
     }
 
     public String executeUploadDocument(
+        final byte[] byteArray,
+        final String fileName,
+        final DocumentMetrics.DocumentType documentType,
+        final S3AsyncClient s3,
+        final StipConfig config,
+        final String documentPathPrefix
+    ) {
+        return documentMetrics.recordDocumentStorage(
+            documentType,
+            byteArray.length,
+            () -> executeUploadDocumentInternal(byteArray, fileName, s3, config, documentPathPrefix)
+        );
+    }
+
+    private String executeUploadDocumentInternal(
         final byte[] byteArray,
         final String fileName,
         final S3AsyncClient s3,

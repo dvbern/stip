@@ -27,6 +27,7 @@ import java.util.Objects;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
@@ -64,6 +65,7 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 @RequiredArgsConstructor
 public class DarlehenVerfuegungPdfService {
     private static final float[] TABLE_WIDTH_PERCENTAGES = { 30, 60 };
+    private final DocumentMetrics documentMetrics;
 
     private enum DarlehenArt {
         GESETZLICH,
@@ -91,22 +93,30 @@ public class DarlehenVerfuegungPdfService {
     }
 
     public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final FreiwilligDarlehen darlehen) {
-        return generatePositiveDarlehensVerfuegungPdf(
-            darlehen.getRelatedGesuch(),
-            darlehen.getDarlehenNr(),
-            darlehen.getBetrag(),
-            darlehen.getEingabedatum(),
-            DarlehenArt.FREIWILLIG
+        return documentMetrics.recordDocumentGeneration(
+            DocumentMetrics.DocumentType.DARLEHEN_VERFUEGUNG,
+            DocumentMetrics.DocumentEngine.ITEXT,
+            () -> generatePositiveDarlehensVerfuegungPdf(
+                darlehen.getRelatedGesuch(),
+                darlehen.getDarlehenNr(),
+                darlehen.getBetrag(),
+                darlehen.getEingabedatum(),
+                DarlehenArt.FREIWILLIG
+            )
         );
     }
 
     public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final GesetzlichDarlehen darlehen) {
-        return generatePositiveDarlehensVerfuegungPdf(
-            darlehen.getGesuch(),
-            darlehen.getDarlehenNr(),
-            darlehen.getBetrag(),
-            darlehen.getGesuch().getEinreichedatum(),
-            DarlehenArt.GESETZLICH
+        return documentMetrics.recordDocumentGeneration(
+            DocumentMetrics.DocumentType.DARLEHEN_VERFUEGUNG,
+            DocumentMetrics.DocumentEngine.ITEXT,
+            () -> generatePositiveDarlehensVerfuegungPdf(
+                darlehen.getGesuch(),
+                darlehen.getDarlehenNr(),
+                darlehen.getBetrag(),
+                darlehen.getGesuch().getEinreichedatum(),
+                DarlehenArt.GESETZLICH
+            )
         );
     }
 

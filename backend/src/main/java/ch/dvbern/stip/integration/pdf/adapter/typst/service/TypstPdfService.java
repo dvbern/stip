@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfCompilationException;
@@ -66,13 +67,18 @@ public class TypstPdfService implements PdfPort {
     private final TenantService tenantService;
     private final ExecutorService ioExecutor;
     private final ObjectMapper objectMapper;
+    private final DocumentMetrics documentMetrics;
 
     public TypstPdfService(
-    final StipConfig config, final TenantService tenantService, final ObjectMapper objectMapper
+    final StipConfig config,
+    final TenantService tenantService,
+    final ObjectMapper objectMapper,
+    final DocumentMetrics documentMetrics
     ) {
         this.config = config;
         this.tenantService = tenantService;
         this.objectMapper = objectMapper;
+        this.documentMetrics = documentMetrics;
 
         this.ioExecutor = Executors.newThreadPerTaskExecutor(
             Thread.ofVirtual()
@@ -83,6 +89,10 @@ public class TypstPdfService implements PdfPort {
 
     @Override
     public ByteArrayOutputStream renderPdf(final PdfPayload<?> pdfPayload) {
+        return documentMetrics.recordTypstRender(pdfPayload.getTemplate(), () -> renderPdfInternal(pdfPayload));
+    }
+
+    private ByteArrayOutputStream renderPdfInternal(final PdfPayload<?> pdfPayload) {
         final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
 
         Process process = null;

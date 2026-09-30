@@ -38,6 +38,7 @@ import javax.xml.validation.Validator;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.KantonUtil;
@@ -123,6 +124,7 @@ public class StatistikXMLService {
             final var objectId = dokumentUploadService.executeUploadDocument(
                 outputStream.toByteArray(),
                 fileName,
+                DocumentMetrics.DocumentType.STATISTIK,
                 s3AsyncClient,
                 config,
                 StatistikConstants.STATISTIK_FILE_PATH

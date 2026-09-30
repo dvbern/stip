@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -60,8 +61,20 @@ public class VerfuegungPdfComposerService {
     private final PdfPortFactory pdfPortFactory;
     private final BerechnungCopyMapper berechnungCopyMapper;
     private final VerfuegungBriefPdfService verfuegungBriefPdfService;
+    private final DocumentMetrics documentMetrics;
 
     public void createVerfuegungsDocuments(
+        final Gesuch gesuch,
+        final Optional<BerechnungsresultatDto> stipendienBerechnungOpt
+    ) {
+        documentMetrics.recordDocumentGeneration(
+            DocumentMetrics.DocumentType.VERFUEGUNG,
+            DocumentMetrics.DocumentEngine.COMPOSITE,
+            () -> createVerfuegungsDocumentsInternal(gesuch, stipendienBerechnungOpt)
+        );
+    }
+
+    private void createVerfuegungsDocumentsInternal(
         final Gesuch gesuch,
         final Optional<BerechnungsresultatDto> stipendienBerechnungOpt
     ) {

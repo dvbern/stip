@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -186,6 +187,7 @@ public class VerfuegungService {
         final String objectId = dokumentUploadService.executeUploadDocument(
             pdfContent.toByteArray(),
             filename,
+            DocumentMetrics.DocumentType.VERFUEGUNG,
             s3,
             config,
             VERFUEGUNG_DOKUMENT_PATH

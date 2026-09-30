@@ -20,6 +20,7 @@ package ch.dvbern.stip.api;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
@@ -37,6 +38,16 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Slf4j
 @ApplicationScoped
 public class DokumentUploadServiceMock extends DokumentUploadService {
+
+    public DokumentUploadServiceMock() {
+        super(null);
+    }
+
+    public DokumentUploadServiceMock(
+    DocumentMetrics documentMetrics
+    ) {
+        super(documentMetrics);
+    }
 
     @Override
     public Uni<Response> uploadDokument(
@@ -67,6 +78,7 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
     public String executeUploadDocument(
         final byte[] byteArray,
         final String fileName,
+        final DocumentMetrics.DocumentType documentType,
         final S3AsyncClient s3,
         final StipConfig config,
         final String documentPathPrefix

@@ -29,6 +29,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.pdf.DarlehenVerfuegungPdfService;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
@@ -170,6 +171,7 @@ public class DarlehenService {
         final var objectId = dokumentUploadService.executeUploadDocument(
             byteArrayOutputStream.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            DocumentMetrics.DocumentType.DARLEHEN_VERFUEGUNG,
             s3,
             config,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
@@ -208,6 +210,7 @@ public class DarlehenService {
         final String objectId = dokumentUploadService.executeUploadDocument(
             out.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            DocumentMetrics.DocumentType.DARLEHEN_VERFUEGUNG,
             s3,
             config,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH

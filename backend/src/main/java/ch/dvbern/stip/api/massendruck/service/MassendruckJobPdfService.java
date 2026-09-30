@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -64,6 +65,7 @@ public class MassendruckJobPdfService {
     private final StipConfig config;
     private final GesuchStatusService gesuchStatusService;
     private final DokumentDownloadService dokumentDownloadService;
+    private final DocumentMetrics documentMetrics;
 
     // TODO KSTIP-2294: Replace this with an impl on the service once 2709 is merged
     private final DatenschutzbriefPdfService datenschutzbriefPdfService;
@@ -76,6 +78,11 @@ public class MassendruckJobPdfService {
 
     @Transactional
     public void downloadCombineAndSaveForJob(final UUID massendruckJobId) {
+        final var type = massendruckJobRepository.requireById(massendruckJobId).getMassendruckTyp();
+        documentMetrics.recordMassPrintJob(type, () -> downloadCombineAndSaveForJobInternal(massendruckJobId));
+    }
+
+    private void downloadCombineAndSaveForJobInternal(final UUID massendruckJobId) {
         final var massendruckJob = massendruckJobRepository.requireById(massendruckJobId);
 
         // Download all PDFs from S3 if Verfuegung, otherwise generate the Datenschutzbriefe PDFs
@@ -141,6 +148,7 @@ public class MassendruckJobPdfService {
             .invoke(response -> LOG.info("S3 upload completed, uploaded size: {}", response.size()))
             .await()
             .indefinitely();
+        documentMetrics.recordMassPrintOutputSize(massendruckJob.getMassendruckTyp(), out.size());
 
         // Once this is done, bulk trigger state change
         final var gesuche = massendruckJob.getAttachedGesuche();
