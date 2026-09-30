@@ -56,6 +56,15 @@ include:
       build-args: |
         APP=$APP_NAME
 
+  - component: 'gitlab.dvbern.ch/components/package/buildah@2.3.0'
+    inputs:
+      name: package:e2e-image
+      context-dir: frontend
+      image-name: 'e2e-runner'
+      dockerfile-path: ./Dockerfile.e2e
+      version: '$VERSION'
+      build-latest: false
+
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:
       name: 'deploy:dev'
@@ -192,6 +201,7 @@ start-e2e:
 
 nx-e2e-test:
   stage: e2e
+  image: docker-registry.public.dvbern.ch/kibon/stip/e2e-runner:$VERSION
   tags:
     - type:k8s
     - zone:tz
@@ -200,8 +210,6 @@ nx-e2e-test:
     - custom:e2e
   resource_group: 'e2e'
   allow_failure: true
-  before_script:
-    - 'mkdir frontend/node_modules'
   artifacts:
     when: always
     paths:
@@ -216,8 +224,13 @@ nx-e2e-test:
     E2E_BASEURL_GS: 'https://dv-e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SB: 'https://dv-e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SOZ: 'https://dv-e2e-sozialdienst-stip.$DVB_OCP_MERCURY_ROUTER'
+    NX_NO_CLOUD: 'true'
+    NX_DAEMON: 'false'
+    npm_config_offline: 'true'
   needs:
     - start-e2e
+    - job: package:e2e-image
+      artifacts: false
 
 wait-for-review:
   tags: ['zone:tz', 'os:linux', 'type:docker']
