@@ -919,6 +919,7 @@ public class DarlehenService {
             freiwilligDarlehenRepository.delete(darlehen);
         }
 
+        freiwilligDarlehenRepository.clearDarlehenBuchhaltungEntryByGesuchId(gesuchId);
         darlehenBuchhaltungEntryRepository.deleteByGesuchId(gesuchId);
     }
 
