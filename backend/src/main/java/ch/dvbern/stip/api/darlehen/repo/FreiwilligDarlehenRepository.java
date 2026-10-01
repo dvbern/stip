@@ -82,7 +82,8 @@ public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDa
     public void deleteByGesuchId(final UUID gesuchId) {
         new JPAQueryFactory(getEntityManager())
             .delete(freiwilligDarlehen)
-            .where(freiwilligDarlehen.relatedGesuch.id.eq(gesuchId));
+            .where(freiwilligDarlehen.relatedGesuch.id.eq(gesuchId))
+            .execute();
     }
 
 }

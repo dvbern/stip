@@ -903,11 +903,23 @@ public class DarlehenService {
 
     @Transactional
     public void deleteForGesuch(final UUID gesuchId) {
-        final var darlehenBuchhaltungEntries = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuchId);
-        for (var entry : darlehenBuchhaltungEntries) {
-            darlehenBuchhaltungEntryRepository.delete(entry);
+        final var darlehenList = freiwilligDarlehenRepository.findByGesuchId(gesuchId);
+        for (final var darlehen : darlehenList) {
+            deleteFreiwilligDarlehenManuelleVerfuegungIfPresent(darlehen);
+
+            final var darlehenDokumente = darlehen.getDokumente().stream().toList();
+            for (final var darlehenDokument : darlehenDokumente) {
+                final var dokumente = darlehenDokument.getDokumente().stream().toList();
+                dokumente.forEach(this::removeDokumentAndFromS3);
+                darlehenDokumentRepository.delete(darlehenDokument);
+            }
+
+            // Ensure bookkeeping entries are deleted in a separate step for all categories.
+            darlehen.setDarlehenBuchhaltungEntry(null);
+            freiwilligDarlehenRepository.delete(darlehen);
         }
-        freiwilligDarlehenRepository.deleteByGesuchId(gesuchId);
+
+        darlehenBuchhaltungEntryRepository.deleteByGesuchId(gesuchId);
     }
 
 }
