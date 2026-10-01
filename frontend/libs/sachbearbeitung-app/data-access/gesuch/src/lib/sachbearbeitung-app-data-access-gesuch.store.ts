@@ -279,7 +279,7 @@ export class GesuchStore extends signalStore(
   createManuelleVerfuegung$ = rxMethod<{
     gesuchTrancheId: string;
     fileUpload: File;
-    kommentar?: string;
+    kommentar: string;
   }>(
     pipe(
       tap(() => {

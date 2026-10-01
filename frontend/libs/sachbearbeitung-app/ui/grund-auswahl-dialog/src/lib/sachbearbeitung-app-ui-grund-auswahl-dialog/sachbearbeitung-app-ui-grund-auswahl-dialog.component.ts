@@ -57,7 +57,7 @@ export type GrundAuswahlDialogResult =
     }
   | {
       type: 'manuell';
-      kommentar?: string;
+      kommentar: string;
       verfuegungUpload: File;
     };
 
@@ -134,6 +134,10 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
         this.form.controls.fileUpload,
         showVerfuegungUpload,
       );
+      this.formUtils.setRequired(
+        this.form.controls.kommentar,
+        showVerfuegungUpload,
+      );
       [this.form.controls.fileUpload, this.form.controls.kommentar].forEach(
         (control) => {
           this.formUtils.setDisabledState(control, !showVerfuegungUpload, true);
@@ -177,10 +181,7 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
       }
     }
 
-    const { grund, kanton, kommentar } = convertTempFormToRealValues(
-      this.form,
-      ['grund'],
-    );
+    const { grund, kanton } = convertTempFormToRealValues(this.form, ['grund']);
     if (grund.id) {
       return this.dialogRef.close({
         type: 'grund',
@@ -188,9 +189,12 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
         kanton,
       });
     } else if (verfuegungUpload) {
+      const { kommentar } = convertTempFormToRealValues(this.form, [
+        'kommentar',
+      ]);
       return this.dialogRef.close({
         type: 'manuell',
-        kommentar: kommentar || undefined,
+        kommentar,
         verfuegungUpload,
       });
     }

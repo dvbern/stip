@@ -143,7 +143,6 @@
             [statusSig]="t(`shared.darlehen.status.${darlehen.status}`)"
             [ngClass]="{
               'tw:bg-dv-orange': darlehen.status === 'IN_BEARBEITUNG_GS',
-              'tw:bg-dv-gray-light': darlehen.status === 'AKZEPTIERT' || darlehen.status === 'ABGELEHNT',
             }"
           >
             <div dvItemInfo>
