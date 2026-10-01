@@ -44,8 +44,6 @@ import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchResponse.BUSINESSPARTNER;
-import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse.DELIVERY.POSITION;
-import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse.DELIVERY.POSITION.LOGS;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.sap.util.SapMapperUtil;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
@@ -165,12 +163,14 @@ public class SapService {
                         Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
                     );
             } else {
-                sapDelivery.setMessage(Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' ' + readImportResponse.getDELIVERY()
-                    .getFirst().getPOSITION().stream().map(POSITION::getLOGS).flatMap(logs -> logs.stream().map(LOGS::getMESSAGE)));
-//                sapDelivery.setMessage(Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' ' + readImportResponse.getRETURNCODE().getFirst().getMESSAGE());
                 status = SapStatus.FAILURE;
             }
-
+        }
+        if (status == SapStatus.FAILURE) {
+            sapDelivery.setMessage(
+                Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' '
+                + readImportResponse.getDELIVERY().getFirst().getPOSITION().getFirst().getLOGS().getFirst().getMESSAGE()
+            );
         }
         sapDelivery.setSapStatus(status);
     }
@@ -337,7 +337,8 @@ public class SapService {
             if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().getFirst().getTYPE())) {
                 sapDelivery.setMessage(
                     Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' ' +
-                    readImportResponse.getRETURNCODE().getFirst().getMESSAGE());
+                    readImportResponse.getRETURNCODE().getFirst().getMESSAGE()
+                );
             }
         }
 
