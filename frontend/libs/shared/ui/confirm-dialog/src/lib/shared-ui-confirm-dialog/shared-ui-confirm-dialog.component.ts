@@ -16,6 +16,7 @@ export interface ConfirmDialogData<T extends string> {
 
 @Component({
   selector: 'dv-shared-ui-confirm-dialog',
+  host: { 'data-testid': 'confirm-dialog' },
   imports: [TranslocoPipe],
   templateUrl: './shared-ui-confirm-dialog.component.html',
   styleUrl: './shared-ui-confirm-dialog.component.scss',
