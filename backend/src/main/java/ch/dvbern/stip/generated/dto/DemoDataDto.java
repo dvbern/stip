@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
 import ch.dvbern.stip.generated.dto.DemoDarlehenDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungDetailsDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDto;
 import ch.dvbern.stip.generated.dto.DemoEinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.DemoElternteilDto;
@@ -51,6 +52,7 @@ public class DemoDataDto  implements Serializable {
   private DemoPartnerDto partner;
   private DemoEinnahmenKostenDto einnahmenKostenPartner;
   private DemoDataTestBerechnungValuesDto berechnungValues;
+  private DemoDataTestBerechnungDetailsDto berechnungDetails;
 
   protected DemoDataDto(DemoDataDtoBuilder<?, ?> b) {
     this.ausbildung = b.ausbildung;
@@ -68,6 +70,7 @@ public class DemoDataDto  implements Serializable {
     this.partner = b.partner;
     this.einnahmenKostenPartner = b.einnahmenKostenPartner;
     this.berechnungValues = b.berechnungValues;
+    this.berechnungDetails = b.berechnungDetails;
   }
 
   public DemoDataDto() {
@@ -423,6 +426,24 @@ public class DemoDataDto  implements Serializable {
     this.berechnungValues = berechnungValues;
   }
 
+  /**
+   **/
+  public DemoDataDto berechnungDetails(DemoDataTestBerechnungDetailsDto berechnungDetails) {
+    this.berechnungDetails = berechnungDetails;
+    return this;
+  }
+
+  
+  @JsonProperty("berechnungDetails")
+  @Valid public DemoDataTestBerechnungDetailsDto getBerechnungDetails() {
+    return berechnungDetails;
+  }
+
+  @JsonProperty("berechnungDetails")
+  public void setBerechnungDetails(DemoDataTestBerechnungDetailsDto berechnungDetails) {
+    this.berechnungDetails = berechnungDetails;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -447,12 +468,13 @@ public class DemoDataDto  implements Serializable {
         Objects.equals(this.darlehen, demoData.darlehen) &&
         Objects.equals(this.partner, demoData.partner) &&
         Objects.equals(this.einnahmenKostenPartner, demoData.einnahmenKostenPartner) &&
-        Objects.equals(this.berechnungValues, demoData.berechnungValues);
+        Objects.equals(this.berechnungValues, demoData.berechnungValues) &&
+        Objects.equals(this.berechnungDetails, demoData.berechnungDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, kinder, einnahmenKosten, familiensituation, elterns, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, partner, einnahmenKostenPartner, berechnungValues);
+    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, kinder, einnahmenKosten, familiensituation, elterns, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, partner, einnahmenKostenPartner, berechnungValues, berechnungDetails);
   }
 
   @Override
@@ -475,6 +497,7 @@ public class DemoDataDto  implements Serializable {
     sb.append("    partner: ").append(toIndentedString(partner)).append("\n");
     sb.append("    einnahmenKostenPartner: ").append(toIndentedString(einnahmenKostenPartner)).append("\n");
     sb.append("    berechnungValues: ").append(toIndentedString(berechnungValues)).append("\n");
+    sb.append("    berechnungDetails: ").append(toIndentedString(berechnungDetails)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -521,6 +544,7 @@ public class DemoDataDto  implements Serializable {
     private DemoPartnerDto partner;
     private DemoEinnahmenKostenDto einnahmenKostenPartner;
     private DemoDataTestBerechnungValuesDto berechnungValues;
+    private DemoDataTestBerechnungDetailsDto berechnungDetails;
     protected abstract B self();
 
     public abstract C build();
@@ -583,6 +607,10 @@ public class DemoDataDto  implements Serializable {
     }
     public B berechnungValues(DemoDataTestBerechnungValuesDto berechnungValues) {
       this.berechnungValues = berechnungValues;
+      return self();
+    }
+    public B berechnungDetails(DemoDataTestBerechnungDetailsDto berechnungDetails) {
+      this.berechnungDetails = berechnungDetails;
       return self();
     }
   }

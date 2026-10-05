@@ -17,13 +17,18 @@
 
 package ch.dvbern.stip.api.demo.service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
 import ch.dvbern.stip.api.common.exception.DemoDataImportException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.service.seeding.GesuchsperiodeSeeding;
+import ch.dvbern.stip.api.common.service.seeding.GesuchsperiodeSeeding.Season;
+import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoDataImport;
@@ -37,6 +42,9 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
+import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
@@ -44,9 +52,11 @@ import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.TransactionManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -67,10 +77,14 @@ public class DemoDataService {
     private final DokumentDownloadService dokumentDownloadService;
     private final GesuchRepository gesuchRepository;
     private final DokumentRepository dokumentRepository;
+    private final GesuchsperiodeRepository gesuchsperiodeRepository;
+    private final GesuchsjahrRepository gesuchsjahrRepository;
     private final GenerateDemoDataService generateDemoDataService;
     private final GesuchFormularService gesuchFormularService;
     private final ZuordnungService zuordnungService;
+    private final TransactionManager transactionManager;
     public static final String DEMODATA_DOKUMENT_PATH = "demo_data/";
+    public static final int DEMODATA_TEST_ALL_YEAR = 2026;
 
     @Transactional
     public DemoDataListDto createNewDemoDataImport(
@@ -112,13 +126,16 @@ public class DemoDataService {
         }
     }
 
-    @Transactional
+    @SneakyThrows
     public List<DemoDataTestBerechnungResultatDto> testAllDemoDataBerechnung() {
+        transactionManager.begin();
         final var demoDataList =
             demoDataRepository.findAll().stream().sorted(Comparator.comparing(DemoData::getTestFall));
-        return demoDataList.map(demoData -> {
+        final var gesuchsperiode = createTestGesuchsperiode();
+        final var resultatList = demoDataList.map(demoData -> {
             try {
-                final var gesuch = generateDemoDataService.createEinreichableGesuch(demoData, new Fall());
+                final var gesuch =
+                    generateDemoDataService.createEinreichableGesuch(demoData, new Fall(), Optional.of(gesuchsperiode));
                 return generateDemoDataService.getBerechnungResultatDto(gesuch, demoData);
             } catch (Exception e) {
                 return new DemoDataTestBerechnungResultatDto()
@@ -128,6 +145,8 @@ public class DemoDataService {
             }
         }
         ).toList();
+        transactionManager.rollback();
+        return resultatList;
     }
 
     @Transactional
@@ -209,5 +228,28 @@ public class DemoDataService {
         }
 
         return demoDataMapper.toDto(gesuch, stipendienanspruchDto);
+    }
+
+    private Gesuchsperiode createTestGesuchsperiode() {
+        final GesuchsperiodeSeeding gesuchsperiodeSeeding = new GesuchsperiodeSeeding(
+            null, null, null
+        );
+        final var gesuchsjahr = gesuchsperiodeSeeding.getJahrForSeeding(DEMODATA_TEST_ALL_YEAR);
+        final var gesuchsperiode = gesuchsperiodeSeeding.getPeriodeForSeeding(
+            "Frühling",
+            "Printemps",
+            gesuchsjahr,
+            Season.FALL,
+            GueltigkeitStatus.PUBLIZIERT,
+            LocalDate.of(DEMODATA_TEST_ALL_YEAR, 7, 1),
+            LocalDate.of(DEMODATA_TEST_ALL_YEAR + 1, 6, 30),
+            LocalDate.of(DEMODATA_TEST_ALL_YEAR, 7, 15),
+            LocalDate.of(DEMODATA_TEST_ALL_YEAR, 12, 31),
+            LocalDate.of(DEMODATA_TEST_ALL_YEAR + 1, 3, 31),
+            LocalDate.of(DEMODATA_TEST_ALL_YEAR, 12, 31)
+        );
+        gesuchsjahrRepository.persist(gesuchsjahr);
+        gesuchsperiodeRepository.persist(gesuchsperiode);
+        return gesuchsperiode;
     }
 }

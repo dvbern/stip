@@ -894,6 +894,8 @@ components:
           $ref: '#/components/schemas/DemoDarlehen'
         berechnungValues:
           $ref: '#/components/schemas/DemoDataTestBerechnungValues'
+        berechnungDetails:
+          $ref: '#/components/schemas/DemoDataTestBerechnungDetails'
 
     DemoDataTestBerechnungValid:
       type: object
@@ -908,6 +910,22 @@ components:
           type: boolean
         darlehen:
           type: boolean
+        budgetArt:
+          type: boolean
+        elternBudget1:
+          type: boolean
+        elternBudget2:
+          type: boolean
+        persoenlichesBudget:
+          type: boolean
+        fehlbetrag:
+          type: boolean
+        proKopfteilung:
+          type: boolean
+        anzahlMonateEinreichefrist:
+          type: boolean
+        totalNachKuerzungNachEinreichefrist:
+          type: boolean
     DemoDataTestBerechnungValues:
       type: object
       properties:
@@ -920,6 +938,48 @@ components:
         stipendien:
           type: integer
         darlehen:
+          type: integer
+    DemoDataTestBudget:
+      type: object
+      properties:
+        totalEinnahmen:
+          type: integer
+        totalKosten:
+          type: integer
+    DemoDataTestElternBudget:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/DemoDataTestBudget'
+      properties:
+        einnahmeUeberschuss:
+          type: integer
+        fehlbetrag:
+          type: integer
+    DemoBudgettyp:
+      enum:
+        - FAMILIE
+        - MUTTER
+        - VATER
+        - DOPPEL
+        - NONE
+    DemoDataTestBerechnungDetails:
+      type: object
+      properties:
+        budgetArt:
+          $ref: '#/components/schemas/DemoBudgettyp'
+        elternBudget1:
+          $ref: '#/components/schemas/DemoDataTestElternBudget'
+        elternBudget2:
+          $ref: '#/components/schemas/DemoDataTestElternBudget'
+        persoenlichesBudget:
+          $ref: '#/components/schemas/DemoDataTestBudget'
+        fehlbetrag:
+          type: integer
+        proKopfteilung:
+          type: integer
+        anzahlMonateEinreichefrist:
+          type: integer
+        totalNachKuerzungNachEinreichefrist:
           type: integer
     DemoDataTestBerechnungResultat:
       required:
@@ -935,10 +995,14 @@ components:
           $ref: '#/components/schemas/DemoDataTestBerechnungValid'
         message:
           type: string
-        soll:
+        sollValues:
           $ref: '#/components/schemas/DemoDataTestBerechnungValues'
-        ist:
+        istValues:
           $ref: '#/components/schemas/DemoDataTestBerechnungValues'
+        sollDetails:
+          $ref: '#/components/schemas/DemoDataTestBerechnungDetails'
+        istDetails:
+          $ref: '#/components/schemas/DemoDataTestBerechnungDetails'
     ApplyDemoDataResponse:
       required:
         - gesuchId

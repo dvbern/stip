@@ -31,7 +31,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_UNGEKUERZT_STIPENDIEN,
   DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_UNGEKUERZT_DARLEHEN,
   DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_STIPENDIEN,
-  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_DARLEHEN
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_DARLEHEN,
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_BUDGET_ART,
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_ELTERN_BUDGET1,
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_ELTERN_BUDGET2,
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_PERSOENLICHES_BUDGET,
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_FEHLBETRAG,
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_PRO_KOPFTEILUNG,
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST,
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST
 })
 @JsonTypeName("DemoDataTestBerechnungValid")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
@@ -55,6 +63,38 @@ public class DemoDataTestBerechnungValidDtoSpec {
   public static final String JSON_PROPERTY_DARLEHEN = "darlehen";
   @jakarta.annotation.Nullable
   private Boolean darlehen;
+
+  public static final String JSON_PROPERTY_BUDGET_ART = "budgetArt";
+  @jakarta.annotation.Nullable
+  private Boolean budgetArt;
+
+  public static final String JSON_PROPERTY_ELTERN_BUDGET1 = "elternBudget1";
+  @jakarta.annotation.Nullable
+  private Boolean elternBudget1;
+
+  public static final String JSON_PROPERTY_ELTERN_BUDGET2 = "elternBudget2";
+  @jakarta.annotation.Nullable
+  private Boolean elternBudget2;
+
+  public static final String JSON_PROPERTY_PERSOENLICHES_BUDGET = "persoenlichesBudget";
+  @jakarta.annotation.Nullable
+  private Boolean persoenlichesBudget;
+
+  public static final String JSON_PROPERTY_FEHLBETRAG = "fehlbetrag";
+  @jakarta.annotation.Nullable
+  private Boolean fehlbetrag;
+
+  public static final String JSON_PROPERTY_PRO_KOPFTEILUNG = "proKopfteilung";
+  @jakarta.annotation.Nullable
+  private Boolean proKopfteilung;
+
+  public static final String JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST = "anzahlMonateEinreichefrist";
+  @jakarta.annotation.Nullable
+  private Boolean anzahlMonateEinreichefrist;
+
+  public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST = "totalNachKuerzungNachEinreichefrist";
+  @jakarta.annotation.Nullable
+  private Boolean totalNachKuerzungNachEinreichefrist;
 
   public DemoDataTestBerechnungValidDtoSpec() {
   }
@@ -184,6 +224,206 @@ public class DemoDataTestBerechnungValidDtoSpec {
     this.darlehen = darlehen;
   }
 
+  public DemoDataTestBerechnungValidDtoSpec budgetArt(@jakarta.annotation.Nullable Boolean budgetArt) {
+    
+    this.budgetArt = budgetArt;
+    return this;
+  }
+
+  /**
+   * Get budgetArt
+   * @return budgetArt
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_BUDGET_ART, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getBudgetArt() {
+    return budgetArt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_BUDGET_ART, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBudgetArt(@jakarta.annotation.Nullable Boolean budgetArt) {
+    this.budgetArt = budgetArt;
+  }
+
+  public DemoDataTestBerechnungValidDtoSpec elternBudget1(@jakarta.annotation.Nullable Boolean elternBudget1) {
+    
+    this.elternBudget1 = elternBudget1;
+    return this;
+  }
+
+  /**
+   * Get elternBudget1
+   * @return elternBudget1
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_BUDGET1, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getElternBudget1() {
+    return elternBudget1;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_BUDGET1, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setElternBudget1(@jakarta.annotation.Nullable Boolean elternBudget1) {
+    this.elternBudget1 = elternBudget1;
+  }
+
+  public DemoDataTestBerechnungValidDtoSpec elternBudget2(@jakarta.annotation.Nullable Boolean elternBudget2) {
+    
+    this.elternBudget2 = elternBudget2;
+    return this;
+  }
+
+  /**
+   * Get elternBudget2
+   * @return elternBudget2
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_BUDGET2, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getElternBudget2() {
+    return elternBudget2;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ELTERN_BUDGET2, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setElternBudget2(@jakarta.annotation.Nullable Boolean elternBudget2) {
+    this.elternBudget2 = elternBudget2;
+  }
+
+  public DemoDataTestBerechnungValidDtoSpec persoenlichesBudget(@jakarta.annotation.Nullable Boolean persoenlichesBudget) {
+    
+    this.persoenlichesBudget = persoenlichesBudget;
+    return this;
+  }
+
+  /**
+   * Get persoenlichesBudget
+   * @return persoenlichesBudget
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PERSOENLICHES_BUDGET, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getPersoenlichesBudget() {
+    return persoenlichesBudget;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PERSOENLICHES_BUDGET, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPersoenlichesBudget(@jakarta.annotation.Nullable Boolean persoenlichesBudget) {
+    this.persoenlichesBudget = persoenlichesBudget;
+  }
+
+  public DemoDataTestBerechnungValidDtoSpec fehlbetrag(@jakarta.annotation.Nullable Boolean fehlbetrag) {
+    
+    this.fehlbetrag = fehlbetrag;
+    return this;
+  }
+
+  /**
+   * Get fehlbetrag
+   * @return fehlbetrag
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_FEHLBETRAG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getFehlbetrag() {
+    return fehlbetrag;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_FEHLBETRAG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFehlbetrag(@jakarta.annotation.Nullable Boolean fehlbetrag) {
+    this.fehlbetrag = fehlbetrag;
+  }
+
+  public DemoDataTestBerechnungValidDtoSpec proKopfteilung(@jakarta.annotation.Nullable Boolean proKopfteilung) {
+    
+    this.proKopfteilung = proKopfteilung;
+    return this;
+  }
+
+  /**
+   * Get proKopfteilung
+   * @return proKopfteilung
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PRO_KOPFTEILUNG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getProKopfteilung() {
+    return proKopfteilung;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PRO_KOPFTEILUNG, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setProKopfteilung(@jakarta.annotation.Nullable Boolean proKopfteilung) {
+    this.proKopfteilung = proKopfteilung;
+  }
+
+  public DemoDataTestBerechnungValidDtoSpec anzahlMonateEinreichefrist(@jakarta.annotation.Nullable Boolean anzahlMonateEinreichefrist) {
+    
+    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
+    return this;
+  }
+
+  /**
+   * Get anzahlMonateEinreichefrist
+   * @return anzahlMonateEinreichefrist
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getAnzahlMonateEinreichefrist() {
+    return anzahlMonateEinreichefrist;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAnzahlMonateEinreichefrist(@jakarta.annotation.Nullable Boolean anzahlMonateEinreichefrist) {
+    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
+  }
+
+  public DemoDataTestBerechnungValidDtoSpec totalNachKuerzungNachEinreichefrist(@jakarta.annotation.Nullable Boolean totalNachKuerzungNachEinreichefrist) {
+    
+    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+    return this;
+  }
+
+  /**
+   * Get totalNachKuerzungNachEinreichefrist
+   * @return totalNachKuerzungNachEinreichefrist
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getTotalNachKuerzungNachEinreichefrist() {
+    return totalNachKuerzungNachEinreichefrist;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalNachKuerzungNachEinreichefrist(@jakarta.annotation.Nullable Boolean totalNachKuerzungNachEinreichefrist) {
+    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -198,12 +438,20 @@ public class DemoDataTestBerechnungValidDtoSpec {
         Objects.equals(this.ungekuerztStipendien, demoDataTestBerechnungValid.ungekuerztStipendien) &&
         Objects.equals(this.ungekuerztDarlehen, demoDataTestBerechnungValid.ungekuerztDarlehen) &&
         Objects.equals(this.stipendien, demoDataTestBerechnungValid.stipendien) &&
-        Objects.equals(this.darlehen, demoDataTestBerechnungValid.darlehen);
+        Objects.equals(this.darlehen, demoDataTestBerechnungValid.darlehen) &&
+        Objects.equals(this.budgetArt, demoDataTestBerechnungValid.budgetArt) &&
+        Objects.equals(this.elternBudget1, demoDataTestBerechnungValid.elternBudget1) &&
+        Objects.equals(this.elternBudget2, demoDataTestBerechnungValid.elternBudget2) &&
+        Objects.equals(this.persoenlichesBudget, demoDataTestBerechnungValid.persoenlichesBudget) &&
+        Objects.equals(this.fehlbetrag, demoDataTestBerechnungValid.fehlbetrag) &&
+        Objects.equals(this.proKopfteilung, demoDataTestBerechnungValid.proKopfteilung) &&
+        Objects.equals(this.anzahlMonateEinreichefrist, demoDataTestBerechnungValid.anzahlMonateEinreichefrist) &&
+        Objects.equals(this.totalNachKuerzungNachEinreichefrist, demoDataTestBerechnungValid.totalNachKuerzungNachEinreichefrist);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, ungekuerztStipendien, ungekuerztDarlehen, stipendien, darlehen);
+    return Objects.hash(status, ungekuerztStipendien, ungekuerztDarlehen, stipendien, darlehen, budgetArt, elternBudget1, elternBudget2, persoenlichesBudget, fehlbetrag, proKopfteilung, anzahlMonateEinreichefrist, totalNachKuerzungNachEinreichefrist);
   }
 
   @Override
@@ -215,6 +463,14 @@ public class DemoDataTestBerechnungValidDtoSpec {
     sb.append("    ungekuerztDarlehen: ").append(toIndentedString(ungekuerztDarlehen)).append("\n");
     sb.append("    stipendien: ").append(toIndentedString(stipendien)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
+    sb.append("    budgetArt: ").append(toIndentedString(budgetArt)).append("\n");
+    sb.append("    elternBudget1: ").append(toIndentedString(elternBudget1)).append("\n");
+    sb.append("    elternBudget2: ").append(toIndentedString(elternBudget2)).append("\n");
+    sb.append("    persoenlichesBudget: ").append(toIndentedString(persoenlichesBudget)).append("\n");
+    sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
+    sb.append("    proKopfteilung: ").append(toIndentedString(proKopfteilung)).append("\n");
+    sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
+    sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
     sb.append("}");
     return sb.toString();
   }

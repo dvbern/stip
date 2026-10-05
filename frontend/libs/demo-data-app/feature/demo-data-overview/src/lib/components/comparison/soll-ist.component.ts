@@ -8,6 +8,7 @@ import {
 
 import { DemoDataAppUiAdvTranslocoDirective } from '@dv/demo-data-app/ui/adv-transloco-directive';
 import {
+  DemoDataTestBerechnungDetails,
   DemoDataTestBerechnungValid,
   DemoDataTestBerechnungValues,
 } from '@dv/shared/model/gesuch';
@@ -21,11 +22,11 @@ import { SharedUiFormatChfNullablePipe } from '@dv/shared/ui/format-chf-pipe';
 })
 export class SollIstComponent {
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef<HTMLElement>);
-  valuesSig = input.required<
-    Partial<Record<'soll' | 'ist', DemoDataTestBerechnungValues>> & {
-      valid?: DemoDataTestBerechnungValid;
-    }
-  >();
+  valuesSig = input.required<{
+    values: Partial<Record<'soll' | 'ist', DemoDataTestBerechnungValues>>;
+    details: Partial<Record<'soll' | 'ist', DemoDataTestBerechnungDetails>>;
+    valid?: DemoDataTestBerechnungValid;
+  }>();
   sollIstKeys = ['soll', 'ist'] as const;
 
   getText() {

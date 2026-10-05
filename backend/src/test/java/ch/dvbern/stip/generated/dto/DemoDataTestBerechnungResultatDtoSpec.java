@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungDetailsDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValidDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -34,8 +35,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_TEST_FALL,
   DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_VALID,
   DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_MESSAGE,
-  DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_SOLL,
-  DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_IST
+  DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_SOLL_VALUES,
+  DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_IST_VALUES,
+  DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_SOLL_DETAILS,
+  DemoDataTestBerechnungResultatDtoSpec.JSON_PROPERTY_IST_DETAILS
 })
 @JsonTypeName("DemoDataTestBerechnungResultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
@@ -56,13 +59,21 @@ public class DemoDataTestBerechnungResultatDtoSpec {
   @jakarta.annotation.Nullable
   private String message;
 
-  public static final String JSON_PROPERTY_SOLL = "soll";
+  public static final String JSON_PROPERTY_SOLL_VALUES = "sollValues";
   @jakarta.annotation.Nullable
-  private DemoDataTestBerechnungValuesDtoSpec soll;
+  private DemoDataTestBerechnungValuesDtoSpec sollValues;
 
-  public static final String JSON_PROPERTY_IST = "ist";
+  public static final String JSON_PROPERTY_IST_VALUES = "istValues";
   @jakarta.annotation.Nullable
-  private DemoDataTestBerechnungValuesDtoSpec ist;
+  private DemoDataTestBerechnungValuesDtoSpec istValues;
+
+  public static final String JSON_PROPERTY_SOLL_DETAILS = "sollDetails";
+  @jakarta.annotation.Nullable
+  private DemoDataTestBerechnungDetailsDtoSpec sollDetails;
+
+  public static final String JSON_PROPERTY_IST_DETAILS = "istDetails";
+  @jakarta.annotation.Nullable
+  private DemoDataTestBerechnungDetailsDtoSpec istDetails;
 
   public DemoDataTestBerechnungResultatDtoSpec() {
   }
@@ -167,54 +178,104 @@ public class DemoDataTestBerechnungResultatDtoSpec {
     this.message = message;
   }
 
-  public DemoDataTestBerechnungResultatDtoSpec soll(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec soll) {
+  public DemoDataTestBerechnungResultatDtoSpec sollValues(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec sollValues) {
     
-    this.soll = soll;
+    this.sollValues = sollValues;
     return this;
   }
 
   /**
-   * Get soll
-   * @return soll
+   * Get sollValues
+   * @return sollValues
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SOLL, required = false)
+  @JsonProperty(value = JSON_PROPERTY_SOLL_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public DemoDataTestBerechnungValuesDtoSpec getSoll() {
-    return soll;
+  public DemoDataTestBerechnungValuesDtoSpec getSollValues() {
+    return sollValues;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_SOLL, required = false)
+  @JsonProperty(value = JSON_PROPERTY_SOLL_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSoll(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec soll) {
-    this.soll = soll;
+  public void setSollValues(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec sollValues) {
+    this.sollValues = sollValues;
   }
 
-  public DemoDataTestBerechnungResultatDtoSpec ist(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec ist) {
+  public DemoDataTestBerechnungResultatDtoSpec istValues(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec istValues) {
     
-    this.ist = ist;
+    this.istValues = istValues;
     return this;
   }
 
   /**
-   * Get ist
-   * @return ist
+   * Get istValues
+   * @return istValues
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_IST, required = false)
+  @JsonProperty(value = JSON_PROPERTY_IST_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public DemoDataTestBerechnungValuesDtoSpec getIst() {
-    return ist;
+  public DemoDataTestBerechnungValuesDtoSpec getIstValues() {
+    return istValues;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_IST, required = false)
+  @JsonProperty(value = JSON_PROPERTY_IST_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIst(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec ist) {
-    this.ist = ist;
+  public void setIstValues(@jakarta.annotation.Nullable DemoDataTestBerechnungValuesDtoSpec istValues) {
+    this.istValues = istValues;
+  }
+
+  public DemoDataTestBerechnungResultatDtoSpec sollDetails(@jakarta.annotation.Nullable DemoDataTestBerechnungDetailsDtoSpec sollDetails) {
+    
+    this.sollDetails = sollDetails;
+    return this;
+  }
+
+  /**
+   * Get sollDetails
+   * @return sollDetails
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_SOLL_DETAILS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DemoDataTestBerechnungDetailsDtoSpec getSollDetails() {
+    return sollDetails;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_SOLL_DETAILS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSollDetails(@jakarta.annotation.Nullable DemoDataTestBerechnungDetailsDtoSpec sollDetails) {
+    this.sollDetails = sollDetails;
+  }
+
+  public DemoDataTestBerechnungResultatDtoSpec istDetails(@jakarta.annotation.Nullable DemoDataTestBerechnungDetailsDtoSpec istDetails) {
+    
+    this.istDetails = istDetails;
+    return this;
+  }
+
+  /**
+   * Get istDetails
+   * @return istDetails
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_IST_DETAILS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DemoDataTestBerechnungDetailsDtoSpec getIstDetails() {
+    return istDetails;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_IST_DETAILS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIstDetails(@jakarta.annotation.Nullable DemoDataTestBerechnungDetailsDtoSpec istDetails) {
+    this.istDetails = istDetails;
   }
 
 
@@ -231,13 +292,15 @@ public class DemoDataTestBerechnungResultatDtoSpec {
         Objects.equals(this.testFall, demoDataTestBerechnungResultat.testFall) &&
         Objects.equals(this.valid, demoDataTestBerechnungResultat.valid) &&
         Objects.equals(this.message, demoDataTestBerechnungResultat.message) &&
-        Objects.equals(this.soll, demoDataTestBerechnungResultat.soll) &&
-        Objects.equals(this.ist, demoDataTestBerechnungResultat.ist);
+        Objects.equals(this.sollValues, demoDataTestBerechnungResultat.sollValues) &&
+        Objects.equals(this.istValues, demoDataTestBerechnungResultat.istValues) &&
+        Objects.equals(this.sollDetails, demoDataTestBerechnungResultat.sollDetails) &&
+        Objects.equals(this.istDetails, demoDataTestBerechnungResultat.istDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(demoDataId, testFall, valid, message, soll, ist);
+    return Objects.hash(demoDataId, testFall, valid, message, sollValues, istValues, sollDetails, istDetails);
   }
 
   @Override
@@ -248,8 +311,10 @@ public class DemoDataTestBerechnungResultatDtoSpec {
     sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    soll: ").append(toIndentedString(soll)).append("\n");
-    sb.append("    ist: ").append(toIndentedString(ist)).append("\n");
+    sb.append("    sollValues: ").append(toIndentedString(sollValues)).append("\n");
+    sb.append("    istValues: ").append(toIndentedString(istValues)).append("\n");
+    sb.append("    sollDetails: ").append(toIndentedString(sollDetails)).append("\n");
+    sb.append("    istDetails: ").append(toIndentedString(istDetails)).append("\n");
     sb.append("}");
     return sb.toString();
   }

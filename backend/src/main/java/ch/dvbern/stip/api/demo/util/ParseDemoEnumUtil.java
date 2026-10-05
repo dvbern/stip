@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
+import ch.dvbern.stip.generated.dto.DemoBudgettypDto;
 import lombok.experimental.UtilityClass;
 import org.dhatim.fastexcel.reader.Cell;
 
@@ -211,6 +212,20 @@ public class ParseDemoEnumUtil {
             (elternTyp) -> switch (elternTyp) {
                 case VATER -> List.of("Vater");
                 case MUTTER -> List.of("Mutter");
+            }
+        ).orElseThrow(() -> invalidValue(cell));
+    }
+
+    public DemoBudgettypDto parseElternbudgetTyp(Cell cell) {
+        return FindEnum.findEnumValue(
+            cell.getValue().toString(),
+            DemoBudgettypDto.class,
+            (elternTyp) -> switch (elternTyp) {
+                case FAMILIE -> List.of("Familienbudget");
+                case DOPPEL -> List.of("Doppelbudget");
+                case VATER -> List.of("Vaterbudget");
+                case MUTTER -> List.of("Mutterbudget");
+                case NONE -> List.of("kein Elternbudget");
             }
         ).orElseThrow(() -> invalidValue(cell));
     }
