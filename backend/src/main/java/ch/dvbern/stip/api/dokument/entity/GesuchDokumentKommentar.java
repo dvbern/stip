@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -41,13 +41,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Entity
 @Table(
     name = "gesuch_dokument_kommentar",
-    indexes = {
-        @Index(name = "IX_gesuch_dokument_kommentar_tenant", columnList = "tenant")
-    }
+    indexes = @Index(name = "IX_gesuch_dokument_kommentar_gesuch_dokument_id", columnList = "gesuch_dokument_id")
 )
 @Getter
 @Setter
-public class GesuchDokumentKommentar extends AbstractTenantEntity {
+public class GesuchDokumentKommentar extends AbstractEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(

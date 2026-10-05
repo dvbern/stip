@@ -13,6 +13,5 @@
 export interface Fall { 
     id: string;
     fallNummer: string;
-    tenant: string;
 }
 

@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.benutzer.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -33,14 +33,13 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "rolle",
     indexes = {
-        @Index(name = "IX_rolle_tenant", columnList = "tenant"),
-        @Index(name = "IX_keycloak_identifier", columnList = "keycloak_identifier,tenant", unique = true)
+        @Index(name = "IX_keycloak_identifier", columnList = "keycloak_identifier", unique = true)
     }
 )
 @Audited
 @Getter
 @Setter
-public class Rolle extends AbstractTenantEntity {
+public class Rolle extends AbstractEntity {
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "keycloak_identifier", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String keycloakIdentifier;

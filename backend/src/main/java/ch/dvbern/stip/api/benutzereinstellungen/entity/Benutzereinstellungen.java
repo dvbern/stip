@@ -17,10 +17,9 @@
 
 package ch.dvbern.stip.api.benutzereinstellungen.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -33,8 +32,7 @@ import org.jilt.BuilderStyle;
 
 @Entity
 @Table(
-    name = "benutzereinstellungen",
-    indexes = @Index(name = "IX_benutzereinstellungen_tenant", columnList = "tenant")
+    name = "benutzereinstellungen"
 )
 @Audited
 @Getter
@@ -42,7 +40,7 @@ import org.jilt.BuilderStyle;
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Benutzereinstellungen extends AbstractTenantEntity {
+public class Benutzereinstellungen extends AbstractEntity {
     @NotNull
     @Column(name = "digitale_kommunikation", nullable = false)
     private boolean digitaleKommunikation = true;

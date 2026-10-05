@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.adresse.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.land.entity.Land;
 import jakarta.persistence.Column;
@@ -44,7 +44,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Entity
 @Table(
     name = "adresse",
-    indexes = @Index(name = "IX_adresse_tenant", columnList = "tenant")
+    indexes = @Index(name = "IX_adresse_land_id", columnList = "land_id")
 )
 @Audited
 @Getter
@@ -52,7 +52,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Adresse extends AbstractTenantEntity {
+public class Adresse extends AbstractEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(

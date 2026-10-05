@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
@@ -70,7 +70,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
     name = "fall",
     indexes = {
         @Index(name = "IX_fall_gesuchsteller_id", columnList = "gesuchsteller_id"),
-        @Index(name = "IX_fall_tenant", columnList = "tenant")
+        @Index(name = "IX_fall_auszahlung_id", columnList = "auszahlung_id"),
+        @Index(name = "IX_fall_current_delegierung_id", columnList = "current_delegierung_id"),
     }
 )
 @Getter
@@ -78,7 +79,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Fall extends AbstractTenantEntity {
+public class Fall extends AbstractEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "fall_nummer", nullable = false, updatable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
@@ -94,10 +95,6 @@ public class Fall extends AbstractTenantEntity {
     private Benutzer gesuchsteller;
 
     @Nullable
-    @JoinColumn(
-        name = "sachbearbeiter_zuordnung_id",
-        foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id")
-    )
     @OneToOne(mappedBy = "fall", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Zuordnung sachbearbeiterZuordnung;
 

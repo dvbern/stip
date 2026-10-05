@@ -17,13 +17,12 @@
 
 package ch.dvbern.stip.api.gesuchsjahr.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -39,15 +38,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Audited
 @Entity
 @Table(
-    name = "gesuchsjahr",
-    indexes = @Index(name = "IX_gesuchsjahr_tenant", columnList = "tenant")
+    name = "gesuchsjahr"
 )
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Gesuchsjahr extends AbstractTenantEntity {
+public class Gesuchsjahr extends AbstractEntity {
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "bezeichnung_de", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String bezeichnungDe;

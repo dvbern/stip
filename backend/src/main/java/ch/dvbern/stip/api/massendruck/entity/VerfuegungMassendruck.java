@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.massendruck.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -41,13 +41,15 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Audited
 @Entity
 @Table(
-    name = "verfuegung_massendruck", indexes = {
-        @Index(name = "IX_verfuegung_massendruck_tenant", columnList = "tenant")
+    name = "verfuegung_massendruck",
+    indexes = {
+        @Index(name = "IX_verfuegung_massendruck_verfuegung_id", columnList = "verfuegung_id"),
+        @Index(name = "IX_verfuegung_massendruck_massendruck_job_id", columnList = "massendruck_job_id")
     }
 )
 @Getter
 @Setter
-public class VerfuegungMassendruck extends AbstractTenantEntity {
+public class VerfuegungMassendruck extends AbstractEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "verfuegung_id", foreignKey = @ForeignKey(name = "FK_verfuegung_massendruck_verfuegung_id"))
     private Verfuegung verfuegung;

@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.verfuegung.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -25,7 +25,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -44,12 +43,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Audited
 @Entity
 @Table(
-    name = "verfuegung_dokument",
-    indexes = @Index(name = "IX_verfuegung_dokument_tenant", columnList = "tenant")
+    name = "verfuegung_dokument"
 )
 @Getter
 @Setter
-public class VerfuegungDokument extends AbstractTenantEntity {
+public class VerfuegungDokument extends AbstractEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

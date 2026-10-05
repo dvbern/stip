@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.auszahlung.entity;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.persistence.CascadeType;
@@ -44,7 +44,8 @@ import org.jilt.BuilderStyle;
 @Table(
     name = "auszahlung",
     indexes = {
-        @Index(name = "IX_auszahlung_tenant", columnList = "tenant")
+        @Index(name = "IX_auszahlung_buchhaltung_id", columnList = "buchhaltung_id"),
+        @Index(name = "IX_auszahlung_zahlungsverbindung_id", columnList = "zahlungsverbindung_id")
     }
 )
 @Getter
@@ -52,7 +53,7 @@ import org.jilt.BuilderStyle;
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Auszahlung extends AbstractTenantEntity {
+public class Auszahlung extends AbstractEntity {
     @NullableUnlessGenerated
     @OneToOne(optional = true, cascade = CascadeType.PERSIST)
     @JoinColumn(

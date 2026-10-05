@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.beschwerdeverlauf.entity;
 
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -41,13 +41,15 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Table(
     name = "beschwerde_verlauf_entry",
     indexes = {
-        @Index(name = "IX_beschwerde_verlauf_entry_tenant", columnList = "tenant")
+        @Index(name = "IX_beschwerde_verlauf_entry_beschwerde_entscheid_id", columnList = "beschwerde_entscheid_id"),
+        @Index(name = "IX_beschwerde_verlauf_entry_gesuch_id", columnList = "gesuch_id")
     }
+
 )
 @Audited
 @Getter
 @Setter
-public class BeschwerdeVerlaufEntry extends AbstractTenantEntity {
+public class BeschwerdeVerlaufEntry extends AbstractEntity {
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @NotNull
     @Column(name = "kommentar", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)

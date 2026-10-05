@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.gesuchtranche.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -61,8 +61,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
     name = "gesuch_tranche",
     indexes = {
         @Index(name = "IX_gesuch_tranche_gesuch_id", columnList = "gesuch_id"),
-        @Index(name = "IX_gesuch_tranche_gesuch_formular_id", columnList = "gesuch_formular_id"),
-        @Index(name = "IX_gesuch_tranche_tenant", columnList = "tenant")
+        @Index(name = "IX_gesuch_tranche_gesuch_formular_id", columnList = "gesuch_formular_id")
     }
 )
 @Getter
@@ -70,7 +69,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class GesuchTranche extends AbstractTenantEntity {
+public class GesuchTranche extends AbstractEntity {
     @Embedded
     private @Valid DateRange gueltigkeit = new DateRange();
 

@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.notiz.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.validation.GesuchNotizAbgeschlossenOnlySetForPendenzConstraint;
 import ch.dvbern.stip.api.common.validation.GesuchNotizAntwortConstraint;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -51,11 +51,10 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "gesuch_notizen",
     indexes = {
-        @Index(name = "IX_gesuch_notiz_tenant", columnList = "tenant"),
         @Index(name = "IX_gesuch_notiz_gesuch_id", columnList = "gesuch_id")
     }
 )
-public class GesuchNotiz extends AbstractTenantEntity {
+public class GesuchNotiz extends AbstractEntity {
     @ManyToOne
     @JoinColumn(
         name = "gesuch_id",
