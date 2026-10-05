@@ -40,22 +40,15 @@ public class DocumentMetrics extends AbstractTimedMetrics {
         super(meterRegistry, tenantService);
     }
 
-    public void recordDocumentGeneration(
+    public Object recordDocumentGeneration(
         final DocumentType documentType,
         final DocumentEngine engine,
-        final Runnable action
+        final Supplier<?> action
     ) {
-        recordTimed(DOCUMENT_GENERATION, generationTags(documentType, engine), action);
-    }
-
-    public ByteArrayOutputStream recordDocumentGeneration(
-        final DocumentType documentType,
-        final DocumentEngine engine,
-        final Supplier<ByteArrayOutputStream> action
-    ) {
-        final var tags = generationTags(documentType, engine);
-        final var result = recordTimed(DOCUMENT_GENERATION, tags, action);
-        recordSize(DOCUMENT_OUTPUT_SIZE, Tags.of("document_type", tag(documentType)), result.size());
+        final var result = recordTimed(DOCUMENT_GENERATION, generationTags(documentType, engine), action);
+        if (result instanceof ByteArrayOutputStream output) {
+            recordSize(DOCUMENT_OUTPUT_SIZE, Tags.of("document_type", tag(documentType)), output.size());
+        }
         return result;
     }
 

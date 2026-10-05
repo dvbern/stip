@@ -20,7 +20,6 @@ package ch.dvbern.stip.api;
 import java.util.Optional;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.VerfuegungBriefPdfService;
@@ -38,7 +37,7 @@ import jakarta.enterprise.context.RequestScoped;
 @RequestScoped
 public class VerfuegungPdfComposerServiceMock extends VerfuegungPdfComposerService {
     public VerfuegungPdfComposerServiceMock() {
-        super(null, null, null, null, null, null);
+        super(null, null, null, null, null);
     }
 
     public VerfuegungPdfComposerServiceMock(
@@ -46,16 +45,14 @@ public class VerfuegungPdfComposerServiceMock extends VerfuegungPdfComposerServi
     DarlehenService darlehenService,
     PdfPortFactory pdfPortFactory,
     BerechnungCopyMapper berechnungCopyMapper,
-    VerfuegungBriefPdfService verfuegungBriefPdfService,
-    DocumentMetrics documentMetrics
+    VerfuegungBriefPdfService verfuegungBriefPdfService
     ) {
         super(
             verfuegungService,
             darlehenService,
             pdfPortFactory,
             berechnungCopyMapper,
-            verfuegungBriefPdfService,
-            documentMetrics
+            verfuegungBriefPdfService
         );
     }
 
