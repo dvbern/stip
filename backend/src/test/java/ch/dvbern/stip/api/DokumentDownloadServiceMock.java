@@ -25,11 +25,15 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.jboss.resteasy.reactive.RestMulti;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Mock
 @ApplicationScoped
 public class DokumentDownloadServiceMock extends DokumentDownloadService {
+
+    public DokumentDownloadServiceMock() {
+        super(null, null, null, null);
+    }
+
     @Override
     public RestMulti<Buffer> getWrapedDokument(
         final String fileName,
@@ -40,8 +44,6 @@ public class DokumentDownloadServiceMock extends DokumentDownloadService {
 
     @Override
     public RestMulti<Buffer> getDokument(
-        final S3AsyncClient s3,
-        final String bucketName,
         final String objectId,
         final String dokumentPathPrefix,
         final String fileName

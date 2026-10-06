@@ -21,30 +21,32 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import ch.dvbern.stip.api.config.type.StipConfig;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 
-@ApplicationScoped
 @Slf4j
+@ApplicationScoped
+@RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class DokumentDeleteService {
+    private final S3AsyncClient s3;
+    private final StipConfig config;
+
     public void executeDeleteDokumentFromS3(
-        final S3AsyncClient s3,
-        final String bucketName,
         final String objectId
     ) {
-        executeDeleteDokumentsFromS3(s3, bucketName, List.of(objectId));
+        executeDeleteDokumentsFromS3(List.of(objectId));
     }
 
     public void executeDeleteDokumentsFromS3(
-        final S3AsyncClient s3,
-        final String bucketName,
         final List<String> objectIds
     ) {
 
@@ -54,7 +56,7 @@ public class DokumentDeleteService {
 
         try {
             Uni.createFrom()
-                .item(deleteDokumentsFromS3Blocking(s3, bucketName, objectIds))
+                .item(deleteDokumentsFromS3Blocking(objectIds))
                 .onFailure()
                 .invoke(
                     throwable -> LOG
@@ -69,19 +71,16 @@ public class DokumentDeleteService {
     }
 
     private CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(
-        final S3AsyncClient s3,
-        final String bucketName,
         final List<String> objectIds
     ) {
         return s3.deleteObjects(
             buildDeleteObjectsRequest(
-                bucketName,
                 objectIds
             )
         );
     }
 
-    private DeleteObjectsRequest buildDeleteObjectsRequest(final String bucketName, final List<String> objectIds) {
+    private DeleteObjectsRequest buildDeleteObjectsRequest(final List<String> objectIds) {
         final var objectIdentifiers = objectIds.stream()
             .map(
                 objectKey -> ObjectIdentifier.builder().key(objectKey).build()
@@ -89,7 +88,7 @@ public class DokumentDeleteService {
             .toList();
 
         return DeleteObjectsRequest.builder()
-            .bucket(bucketName)
+            .bucket(config.s3().bucketName())
             .delete(deleteObjectContainer -> deleteObjectContainer.objects(objectIdentifiers))
             .build();
     }

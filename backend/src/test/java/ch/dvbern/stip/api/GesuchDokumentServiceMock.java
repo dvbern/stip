@@ -19,7 +19,6 @@ package ch.dvbern.stip.api;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -36,12 +35,10 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @Mock
@@ -49,9 +46,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class GesuchDokumentServiceMock extends GesuchDokumentService {
     GesuchDokumentServiceMock() {
         super(
-            null,
-            null,
-            null,
             null,
             null,
             null,
@@ -77,11 +71,8 @@ public class GesuchDokumentServiceMock extends GesuchDokumentService {
     CustomDokumentTypRepository customDocumentTypRepository,
     GesuchRepository gesuchRepository,
     GesuchTrancheRepository gesuchTrancheRepository,
-    S3AsyncClient s3,
-    StipConfig config,
     GesuchDokumentstatusService gesuchDokumentstatusService,
     RequiredDokumentService requiredDokumentService,
-    Antivirus antivirus,
     GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
     DokumentHistoryRepository dokumentHistoryRepository,
     GesuchTrancheHistoryService gesuchTrancheHistoryService,
@@ -96,11 +87,8 @@ public class GesuchDokumentServiceMock extends GesuchDokumentService {
             customDocumentTypRepository,
             gesuchRepository,
             gesuchTrancheRepository,
-            s3,
-            config,
             gesuchDokumentstatusService,
             requiredDokumentService,
-            antivirus,
             gesuchDokumentKommentarRepository,
             dokumentHistoryRepository,
             gesuchTrancheHistoryService,

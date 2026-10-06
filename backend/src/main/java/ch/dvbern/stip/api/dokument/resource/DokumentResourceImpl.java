@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.dokument.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
@@ -32,10 +31,8 @@ import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.resource.NonSingleServiceEntrypointEndpoint;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.SachbearbeiterGesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentArt;
@@ -52,7 +49,6 @@ import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentCreateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
 import io.smallrye.common.annotation.Blocking;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
@@ -84,14 +80,9 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT
 @Validated
 @PopulateCurrentBenutzerContext
 public class DokumentResourceImpl implements DokumentResource {
-    private final JWTParser jwtParser;
-    private final StipConfig config;
-    private final BenutzerService benutzerService;
-
     private final GesuchDokumentService gesuchDokumentService;
     private final UnterschriftenblattService unterschriftenblattService;
     private final CustomDokumentTypService customDokumentTypService;
-    private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final DokumentDownloadService dokumentDownloadService;
     private final SachbearbeiterGesuchDokumentService sachbearbeiterGesuchDokumentService;
@@ -243,9 +234,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
         final var dokumentId = dokumentDownloadService.getClaimId(
-            jwtParser,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
         return switch (dokumentArt) {
@@ -264,9 +253,7 @@ public class DokumentResourceImpl implements DokumentResource {
 
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
-            DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
     }
 
@@ -346,9 +333,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> getSachbearbeiterGesuchDokumentDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
-            jwtParser,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_ID_CLAIM
         );
         return sachbearbeiterGesuchDokumentService.getSachbearbeiterGesuchDokumentDokument(dokumentId);

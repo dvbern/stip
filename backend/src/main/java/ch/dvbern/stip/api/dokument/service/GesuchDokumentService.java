@@ -23,7 +23,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -47,7 +46,6 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -59,7 +57,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import static ch.dvbern.stip.api.common.util.DokumentDownloadConstants.GESUCH_DOKUMENT_PATH;
 
@@ -74,11 +71,8 @@ public class GesuchDokumentService {
     private final CustomDokumentTypRepository customDocumentTypRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
-    private final S3AsyncClient s3;
-    private final StipConfig config;
     private final GesuchDokumentstatusService gesuchDokumentstatusService;
     private final RequiredDokumentService requiredDokumentService;
-    private final Antivirus antivirus;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final DokumentHistoryRepository dokumentHistoryRepository;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
@@ -127,9 +121,6 @@ public class GesuchDokumentService {
         customDokumentTyp.getGesuchDokument().getGesuchTranche();
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             GESUCH_DOKUMENT_PATH,
             objectId -> uploadCustomDokument(
                 customDokumentTypId,
@@ -149,9 +140,6 @@ public class GesuchDokumentService {
     ) {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             GESUCH_DOKUMENT_PATH,
             objectId -> {
                 uploadDokument(
@@ -406,8 +394,6 @@ public class GesuchDokumentService {
 
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
         dokumentDeleteService.executeDeleteDokumentsFromS3(
-            s3,
-            config.s3().bucketName(),
             objectIds.stream()
                 .map(objectId -> GESUCH_DOKUMENT_PATH + objectId)
                 .toList()
@@ -555,8 +541,6 @@ public class GesuchDokumentService {
         final var dokument = dokumentHistoryRepository.findInHistoryById(dokumentId);
 
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             GESUCH_DOKUMENT_PATH,
             dokument.getFilename()

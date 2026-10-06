@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
@@ -63,10 +64,8 @@ public class MassendruckJobPdfService {
     private final S3AsyncClient s3async;
     private final StipConfig config;
     private final GesuchStatusService gesuchStatusService;
+    private final DokumentUploadService dokumentUploadService;
     private final DokumentDownloadService dokumentDownloadService;
-
-    // TODO KSTIP-2294: Replace this with an impl on the service once 2709 is merged
-    private final DatenschutzbriefPdfService datenschutzbriefPdfService;
 
     @Transactional
     public void setFailedStatusOnJob(final UUID massendruckJobId) {
@@ -159,8 +158,6 @@ public class MassendruckJobPdfService {
         final var dokument = massendruckJob.getMergedPdf();
 
         return dokumentDownloadService.getDokument(
-            s3async,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             MASSENDRUCK_DOKUMENT_PATH,
             dokument.getFilename()

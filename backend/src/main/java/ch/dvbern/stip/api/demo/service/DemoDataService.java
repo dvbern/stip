@@ -49,7 +49,6 @@ import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.TransactionManager;
@@ -60,15 +59,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 public class DemoDataService {
-    private final S3AsyncClient s3;
     private final StipConfig config;
-    private final Antivirus antivirus;
     private final Validator validator;
     private final DemoDataRepository demoDataRepository;
     private final DemoDataImportRepository demoDataImportRepository;
@@ -98,9 +94,6 @@ public class DemoDataService {
         try {
             dokumentUploadService.validateScanUploadDokument(
                 fileUpload,
-                s3,
-                config,
-                antivirus,
                 config.upload().allowedTestcaseMimetypes(),
                 DEMODATA_DOKUMENT_PATH,
                 objectId -> demoDataImport.setDokument(
@@ -163,8 +156,6 @@ public class DemoDataService {
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             DEMODATA_DOKUMENT_PATH,
             dokument.getFilename()

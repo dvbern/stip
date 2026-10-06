@@ -39,6 +39,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
+import lombok.RequiredArgsConstructor;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
@@ -49,8 +50,15 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class DokumentDownloadService {
+
+    private final S3AsyncClient s3;
+    private final JWTParser jwtParser;
+    private final StipConfig config;
+    private final BenutzerService benutzerService;
+
     public Multi<Buffer> getWrapedDokument(
         final String fileName,
         final ByteArrayOutputStream byteStream
@@ -61,8 +69,6 @@ public class DokumentDownloadService {
     }
 
     public RestMulti<Buffer> getDokument(
-        final S3AsyncClient s3,
-        final String bucketName,
         final String objectId,
         final String dokumentPathPrefix,
         final String fileName
@@ -70,8 +76,6 @@ public class DokumentDownloadService {
 
         final Supplier<CompletionStage<ResponsePublisher<GetObjectResponse>>> stageSupplier =
             () -> getDownloadDokumentFuture(
-                s3,
-                bucketName,
                 dokumentPathPrefix + objectId
             );
 
@@ -100,9 +104,7 @@ public class DokumentDownloadService {
 
     public FileDownloadTokenDto getFileDownloadToken(
         final UUID id,
-        final String idClaim,
-        final BenutzerService benutzerService,
-        final StipConfig config
+        final String idClaim
     ) {
         return new FileDownloadTokenDto()
             .token(
@@ -117,14 +119,12 @@ public class DokumentDownloadService {
     }
 
     public UUID getClaimId(
-        final JWTParser jwtParser,
         final String jwtString,
-        final String secret,
         final String idClaim
     ) {
         JsonWebToken jwt;
         try {
-            jwt = jwtParser.verify(jwtString, secret);
+            jwt = jwtParser.verify(jwtString, config.preSignedRequest().secret());
         } catch (ParseException e) {
             throw new UnauthorizedException();
         }
@@ -135,15 +135,13 @@ public class DokumentDownloadService {
     }
 
     private CompletableFuture<ResponsePublisher<GetObjectResponse>> getDownloadDokumentFuture(
-        final S3AsyncClient s3,
-        final String bucketName,
         final String objectId
     ) {
         // TODO objectKey needs to prefixed with "PATH/..."
-        return s3.getObject(buildGetRequest(bucketName, objectId), AsyncResponseTransformer.toPublisher());
+        return s3.getObject(buildGetRequest(objectId), AsyncResponseTransformer.toPublisher());
     }
 
-    private GetObjectRequest buildGetRequest(final String bucketName, final String objectId) {
-        return GetObjectRequest.builder().bucket(bucketName).key(objectId).build();
+    private GetObjectRequest buildGetRequest(final String objectId) {
+        return GetObjectRequest.builder().bucket(config.s3().bucketName()).key(objectId).build();
     }
 }

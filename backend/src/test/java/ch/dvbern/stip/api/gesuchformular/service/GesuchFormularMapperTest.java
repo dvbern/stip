@@ -529,13 +529,10 @@ class GesuchFormularMapperTest {
         final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
         Mockito.doReturn(true).when(ausbildungAuthorizerMock).canUpdateCheck(any());
 
-        final var s3 = Mockito.mock(S3AsyncClient.class);
         final var unterschriftenblattService = new UnterschriftenblattService(
             null,
             unterschriftenblattRepositoryMock,
             null,
-            null,
-            Mockito.mock(StipConfig.class, Mockito.RETURNS_DEEP_STUBS), s3,
             null,
             null,
             null,
