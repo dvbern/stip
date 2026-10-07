@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.datenschutzbrief.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -53,13 +53,19 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Audited
 @Entity
-@Table(name = "datenschutzbrief", indexes = { @Index(name = "IX_datenschutzbrief_tenant", columnList = "tenant") })
+@Table(
+    name = "datenschutzbrief",
+    indexes = {
+        @Index(name = "IX_datenschutzbrief_gesuch_id", columnList = "gesuch_id"),
+        @Index(name = "IX_datenschutzbrief_dokument_id", columnList = "dokument_id")
+    }
+)
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Datenschutzbrief extends AbstractTenantEntity {
+public class Datenschutzbrief extends AbstractEntity {
 
     @Nullable
     @OneToOne(mappedBy = "datenschutzbrief")

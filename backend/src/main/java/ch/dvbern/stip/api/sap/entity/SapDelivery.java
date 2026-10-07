@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,13 +44,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 @Entity
 @Table(
     name = "sapdelivery",
-    indexes = {
-        @Index(name = "IX_sapdelivery_tenant", columnList = "tenant")
-    }
+    indexes = @Index(name = "IX_sapdelivery_buchhaltung_id", columnList = "buchhaltung_id")
 )
 @Getter
 @Setter
-public class SapDelivery extends AbstractTenantEntity {
+public class SapDelivery extends AbstractEntity {
     @Nullable
     @Column(name = "sap_delivery_id")
     private BigDecimal sapDeliveryId;

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
@@ -48,13 +48,12 @@ import org.hibernate.envers.Audited;
 @Entity
 @Table(
     name = "massendruck_job",
-    indexes = { @Index(name = "IX_massendruck_tenant", columnList = "tenant")
-    }
+    indexes = @Index(name = "IX_massendruck_job_merged_pdf_id", columnList = "merged_pdf_id")
 )
 @Getter
 @Setter
 @DatenschutzbriefOrVerfuegungSetConstraint
-public class MassendruckJob extends AbstractTenantEntity {
+public class MassendruckJob extends AbstractEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "massendruckJob")
     private List<DatenschutzbriefMassendruck> datenschutzbriefMassendrucks = new ArrayList<>();
 

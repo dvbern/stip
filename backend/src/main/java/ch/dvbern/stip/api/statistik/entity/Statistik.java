@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.statistik.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,14 +41,13 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "statistik",
     indexes = {
-        @Index(name = "IX_statistik_tenant", columnList = "tenant"),
         @Index(name = "IX_statistik_year", columnList = "year")
     }
 )
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Statistik extends AbstractTenantEntity {
+public class Statistik extends AbstractEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "user_triggered_creation", nullable = false)

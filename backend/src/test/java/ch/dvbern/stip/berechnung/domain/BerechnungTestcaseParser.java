@@ -43,7 +43,6 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchNummerService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
-import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.repo.LandRepository;
@@ -55,7 +54,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.commons.lang3.tuple.Pair;
 import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -70,8 +68,6 @@ public class BerechnungTestcaseParser {
 
     DemoDataAbschlussRepository demoDataAbschlussRepository =
         Mockito.mock(DemoDataAbschlussRepository.class);
-
-    GesuchsperiodenService gesuchsperiodenService = Mockito.mock(GesuchsperiodenService.class);
 
     GesuchNummerService gesuchNummerService = Mockito.mock(GesuchNummerService.class);
 
@@ -93,7 +89,7 @@ public class BerechnungTestcaseParser {
         null,
         null,
         null,
-        gesuchsperiodenService,
+        null,
         gesuchNummerService,
         null,
         null
@@ -168,15 +164,13 @@ public class BerechnungTestcaseParser {
             LocalDate.of(LocalDate.now().getYear(), 12, 31)
         );
 
-        Mockito.when(gesuchsperiodenService.getGesuchsperiodeForAusbildung(ArgumentMatchers.any()))
-            .thenReturn(Pair.of(gesuchsperiode, null));
-
         Mockito.when(gesuchNummerService.createGesuchNummer(ArgumentMatchers.any())).thenReturn("");
 
         final Path outputDir = Path.of(OUTPUT_DIR);
         final Path outputFile = outputDir.resolve("testcase-%s.json".formatted(demoData.getTestFall()));
 
-        final Gesuch gesuch = generateDemoDataService.createEinreichableGesuch(demoData, new Fall());
+        final Gesuch gesuch =
+            generateDemoDataService.createEinreichableGesuch(demoData, new Fall(), Optional.of(gesuchsperiode));
 
         try {
             Files.createDirectories(outputDir);

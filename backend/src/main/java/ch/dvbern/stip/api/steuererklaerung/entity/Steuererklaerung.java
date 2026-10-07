@@ -17,14 +17,13 @@
 
 package ch.dvbern.stip.api.steuererklaerung.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -39,17 +38,14 @@ import org.jilt.BuilderStyle;
 @Audited
 @Entity
 @Table(
-    name = "steuererklaerung",
-    indexes = {
-        @Index(name = "IX_steuererklaerung_tenant", columnList = "tenant")
-    }
+    name = "steuererklaerung"
 )
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Steuererklaerung extends AbstractTenantEntity {
+public class Steuererklaerung extends AbstractEntity {
     @NotNull
     @Column(name = "steuerdaten_typ", nullable = false)
     @Enumerated(EnumType.STRING)

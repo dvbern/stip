@@ -18,6 +18,7 @@ import { DemoLebenslauf } from './demoLebenslauf';
 import { DemoPartner } from './demoPartner';
 import { DemoSteuererklaerung } from './demoSteuererklaerung';
 import { DemoKind } from './demoKind';
+import { DemoDataTestBerechnungDetails } from './demoDataTestBerechnungDetails';
 import { DemoDarlehen } from './demoDarlehen';
 import { DemoElternteil } from './demoElternteil';
 import { DemoPersonInAusbildung } from './demoPersonInAusbildung';
@@ -40,5 +41,6 @@ export interface DemoData {
     auszahlung: DemoAuszahlung;
     darlehen: DemoDarlehen;
     berechnungValues?: DemoDataTestBerechnungValues;
+    berechnungDetails?: DemoDataTestBerechnungDetails;
 }
 

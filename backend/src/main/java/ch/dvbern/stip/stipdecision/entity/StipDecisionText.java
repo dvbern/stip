@@ -17,14 +17,13 @@
 
 package ch.dvbern.stip.stipdecision.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,14 +34,11 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 @Table(
-    name = "stip_decision_text",
-    indexes = {
-        @Index(name = "IX_stip_decision_text_stip_decision", columnList = "stip_decision,tenant", unique = true),
-    }
+    name = "stip_decision_text"
 )
 @Audited
 @Entity
-public class StipDecisionText extends AbstractTenantEntity {
+public class StipDecisionText extends AbstractEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "stip_decision", nullable = false)

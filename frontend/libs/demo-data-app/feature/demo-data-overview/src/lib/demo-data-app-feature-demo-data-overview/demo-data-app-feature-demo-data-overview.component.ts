@@ -1,3 +1,4 @@
+import { OverlayModule } from '@angular/cdk/overlay';
 import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -17,7 +18,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { diff } from 'json-diff-ts';
 
 import { DemoDataAppTranslationKey } from '@dv/demo-data-app/assets/i18n';
-import { DemoDataStore } from '@dv/demo-data-app/data-access/demo-data';
+import {
+  DemoDataStore,
+  isResultValid,
+} from '@dv/demo-data-app/data-access/demo-data';
 import { DemoDataAppUiAdvTranslocoDirective } from '@dv/demo-data-app/ui/adv-transloco-directive';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -51,6 +55,7 @@ import { SollIstComponent } from '../components/comparison/soll-ist.component';
     MatInputModule,
     MatTooltipModule,
     MatMenuModule,
+    OverlayModule,
     SharedUiFileUploadComponent,
     SharedUiDownloadButtonDirective,
     SharedPatternBasicLayoutComponent,
@@ -77,6 +82,7 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   filterText = new FormControl<string | null>(null);
   selectedFileSig = signal<File[] | undefined>(undefined);
   tooltipDelay = TOOLTIP_DELAY;
+  isOpen: string | null = null;
 
   validateBerechnungSig = input<boolean>(false, {
     // eslint-disable-next-line @angular-eslint/no-input-rename
@@ -96,7 +102,15 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
           ...demoData,
           testResult: result
             ? {
-                allValid: Object.values(result.valid ?? {}).every(Boolean),
+                allValid: isResultValid(result.valid),
+                values: {
+                  soll: result.sollValues,
+                  ist: result.istValues,
+                },
+                details: {
+                  soll: result.sollDetails,
+                  ist: result.istDetails,
+                },
                 ...result,
               }
             : null,

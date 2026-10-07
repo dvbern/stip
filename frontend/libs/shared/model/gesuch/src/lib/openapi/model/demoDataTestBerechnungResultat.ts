@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DemoDataTestBerechnungDetails } from './demoDataTestBerechnungDetails';
 import { DemoDataTestBerechnungValid } from './demoDataTestBerechnungValid';
 import { DemoDataTestBerechnungValues } from './demoDataTestBerechnungValues';
 
@@ -17,7 +18,9 @@ export interface DemoDataTestBerechnungResultat {
     testFall: string;
     valid?: DemoDataTestBerechnungValid;
     message?: string;
-    soll?: DemoDataTestBerechnungValues;
-    ist?: DemoDataTestBerechnungValues;
+    sollValues?: DemoDataTestBerechnungValues;
+    istValues?: DemoDataTestBerechnungValues;
+    sollDetails?: DemoDataTestBerechnungDetails;
+    istDetails?: DemoDataTestBerechnungDetails;
 }
 

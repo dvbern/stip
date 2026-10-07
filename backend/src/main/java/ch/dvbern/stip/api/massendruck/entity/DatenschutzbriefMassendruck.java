@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.massendruck.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -34,13 +34,15 @@ import org.hibernate.envers.Audited;
 @Audited
 @Entity
 @Table(
-    name = "datenschutzbrief_massendruck", indexes = {
-        @Index(name = "IX_datenschutzbrief_massendruck_tenant", columnList = "tenant")
+    name = "datenschutzbrief_massendruck",
+    indexes = {
+        @Index(name = "IX_datenschutzbrief_massendruck_datenschutzbrief_id", columnList = "datenschutzbrief_id"),
+        @Index(name = "IX_datenschutzbrief_massendruck_massendruck_job_id", columnList = "massendruck_job_id")
     }
 )
 @Getter
 @Setter
-public class DatenschutzbriefMassendruck extends AbstractTenantEntity {
+public class DatenschutzbriefMassendruck extends AbstractEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(
         name = "datenschutzbrief_id",
