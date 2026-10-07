@@ -62,7 +62,7 @@ include:
       context-dir: frontend
       image-name: 'e2e-runner'
       dockerfile-path: ./Dockerfile.e2e
-      version: '$VERSION'
+      version: 'latest'
       build-latest: false
 
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
@@ -149,6 +149,18 @@ build-api:
 
 package:e2e-image:
   needs: []
+  # Only (re)build when the dependency set or the image recipe changes; otherwise
+  # reuse the existing :latest image. Can also be triggered manually (e.g. to seed
+  # :latest or force a rebuild).
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /\[skip e2e\]/'
+      when: never
+    - changes:
+        - frontend/package-lock.json
+        - frontend/Dockerfile.e2e
+        - frontend/.npmrc
+    - when: manual
+      allow_failure: true
 
 package:frontend-app:
   extends: .package:frontend-app
@@ -204,7 +216,7 @@ start-e2e:
 
 nx-e2e-test:
   stage: e2e
-  image: docker-registry.dvbern.ch/stip/e2e-runner:$VERSION
+  image: docker-registry.dvbern.ch/stip/e2e-runner:latest
   tags:
     - type:k8s
     - zone:tz
@@ -239,6 +251,7 @@ nx-e2e-test:
     - start-e2e
     - job: package:e2e-image
       artifacts: false
+      optional: true
 
 wait-for-review:
   tags: ['zone:tz', 'os:linux', 'type:docker']
@@ -265,6 +278,9 @@ nx-e2e-test:review:
   stage: review-e2e
   needs:
     - wait-for-review
+    - job: package:e2e-image
+      artifacts: false
+      optional: true
   variables:
     E2E_BASEURL_GS: 'https://dv-$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SB: 'https://dv-$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER'
