@@ -38,6 +38,7 @@ import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
@@ -52,7 +53,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 @Slf4j
-@ApplicationScoped
+@RequestScoped
 @RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class DokumentUploadService {
@@ -204,7 +205,7 @@ public class DokumentUploadService {
         return objectId;
     }
 
-    protected boolean checkFileUpload(final FileUpload fileUpload, final Set<String> allowedMimeTypes) {
+    private boolean checkFileUpload(final FileUpload fileUpload, final Set<String> allowedMimeTypes) {
         if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
             return false;
         }
@@ -212,7 +213,7 @@ public class DokumentUploadService {
         return FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), allowedMimeTypes);
     }
 
-    protected void scanDokument(final FileUpload fileUpload) {
+    private void scanDokument(final FileUpload fileUpload) {
         try (
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(
                 IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile()))

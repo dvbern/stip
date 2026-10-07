@@ -38,6 +38,7 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
@@ -49,7 +50,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
-@ApplicationScoped
+@RequestScoped
 @RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class DokumentDownloadService {

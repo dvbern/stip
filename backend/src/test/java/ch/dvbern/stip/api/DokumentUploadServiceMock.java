@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api;
 
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -44,6 +45,24 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
 
     public DokumentUploadServiceMock(S3AsyncClient s3, StipConfig config, Antivirus antivirus) {
         super(s3, config, antivirus);
+    }
+
+    @Override
+    public Uni<Response> validateScanUploadDokument(FileUpload fileUpload, Set<String> allowedMimetypes, String dokumentPathPrefix, Consumer<String> serviceCallback, @org.jspecify.annotations.Nullable Consumer<Throwable> onFailure) {
+        serviceCallback.accept(UUID.randomUUID().toString());
+        return Uni.createFrom().item(Response.created(null).build());
+    }
+
+    @Override
+    public Uni<Response> validateScanUploadDokument(FileUpload fileUpload, String dokumentPathPrefix, Consumer<String> serviceCallback, @org.jspecify.annotations.Nullable Consumer<Throwable> onFailure) {
+        serviceCallback.accept(UUID.randomUUID().toString());
+        return Uni.createFrom().item(Response.created(null).build());
+    }
+
+    @Override
+    public Uni<Response> validateScanUploadDokument(FileUpload fileUpload, String dokumentPathPrefix, Consumer<String> serviceCallback) {
+        serviceCallback.accept(UUID.randomUUID().toString());
+        return Uni.createFrom().item(Response.created(null).build());
     }
 
     @Override
@@ -84,10 +103,5 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
         final String objectId
     ) {
         return objectId;
-    }
-
-    @Override
-    public void scanDokument(final FileUpload fileUpload) {
-        LOG.debug("Would scan file: {}", fileUpload.fileName());
     }
 }

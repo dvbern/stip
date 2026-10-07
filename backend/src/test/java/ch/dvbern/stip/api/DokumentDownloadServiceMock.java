@@ -18,15 +18,21 @@
 package ch.dvbern.stip.api;
 
 import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import io.quarkus.test.Mock;
+import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.jboss.resteasy.reactive.RestMulti;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Mock
 @ApplicationScoped
@@ -34,6 +40,20 @@ public class DokumentDownloadServiceMock extends DokumentDownloadService {
 
     public DokumentDownloadServiceMock() {
         super(null, null, null, null);
+    }
+
+    public DokumentDownloadServiceMock(S3AsyncClient s3, JWTParser jwtParser, StipConfig config, BenutzerService benutzerService) {
+        super(s3, jwtParser, config, benutzerService);
+    }
+
+    @Override
+    public FileDownloadTokenDto getFileDownloadToken(UUID id, String idClaim) {
+        return new FileDownloadTokenDto().token("test-token-" + id);
+    }
+
+    @Override
+    public UUID getClaimId(String jwtString, String idClaim) {
+        return UUID.randomUUID();
     }
 
     @Override

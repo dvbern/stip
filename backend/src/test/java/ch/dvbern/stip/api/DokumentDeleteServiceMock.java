@@ -19,9 +19,11 @@ package ch.dvbern.stip.api;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Mock
 @ApplicationScoped
@@ -29,6 +31,10 @@ public class DokumentDeleteServiceMock extends DokumentDeleteService {
 
     public DokumentDeleteServiceMock() {
         super(null, null);
+    }
+
+    public DokumentDeleteServiceMock(S3AsyncClient s3, StipConfig config) {
+        super(s3, config);
     }
 
     @Override

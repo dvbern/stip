@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.config.type.StipConfig;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -33,7 +34,7 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 
 @Slf4j
-@ApplicationScoped
+@RequestScoped
 @RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class DokumentDeleteService {
