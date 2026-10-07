@@ -184,6 +184,16 @@ public class DokumentUploadService {
         final String documentPathPrefix
     ) {
         final var objectId = FileUtil.generateUUIDWithFileExtension(fileName);
+
+        return executeUploadDocument(byteArray, fileName, objectId, documentPathPrefix);
+    }
+
+    public String executeUploadDocument(
+        final byte[] byteArray,
+        final String fileName,
+        final String objectId,
+        final String documentPathPrefix
+    ) {
         final var key = documentPathPrefix + objectId;
 
         Uni.createFrom()

@@ -20,6 +20,8 @@ package ch.dvbern.stip.api;
 import java.io.ByteArrayOutputStream;
 
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import io.quarkus.test.Mock;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -49,5 +51,14 @@ public class DokumentDownloadServiceMock extends DokumentDownloadService {
         final String fileName
     ) {
         return RestMulti.fromMultiData(Uni.createFrom().item(Buffer.buffer().appendInt(0)).toMulti()).build();
+    }
+
+    @Override
+    public byte[] executeDownloadDocument(final String objectId, final String dokumentPathPrefix) {
+        final var output = new ByteArrayOutputStream();
+        try (final var pdf = new PdfDocument(new PdfWriter(output))) {
+            pdf.addNewPage();
+        }
+        return output.toByteArray();
     }
 }

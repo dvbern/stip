@@ -93,6 +93,19 @@ public class DokumentDownloadService {
         );
     }
 
+    public byte[] executeDownloadDocument(final String objectId, final String dokumentPathPrefix) {
+        return Uni.createFrom()
+            .completionStage(
+                s3.getObject(
+                    buildGetRequest(dokumentPathPrefix + objectId),
+                    AsyncResponseTransformer.toBytes()
+                )
+            )
+            .await()
+            .indefinitely()
+            .asByteArray();
+    }
+
     private Map<String, List<String>> getRequiredHeaders(final String fileName) {
         return Map.of(
             "Content-Disposition",

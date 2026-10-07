@@ -77,6 +77,16 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
     }
 
     @Override
+    public String executeUploadDocument(
+        final byte[] byteArray,
+        final String fileName,
+        final String documentPathPrefix,
+        final String objectId
+    ) {
+        return objectId;
+    }
+
+    @Override
     public void scanDokument(final FileUpload fileUpload) {
         LOG.debug("Would scan file: {}", fileUpload.fileName());
     }

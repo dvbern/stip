@@ -17,15 +17,14 @@
 
 package ch.dvbern.stip.api.massendruck.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
@@ -35,24 +34,17 @@ import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
 import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
-import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.utils.PdfMerger;
-import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
-import software.amazon.awssdk.core.async.AsyncRequestBody;
-import software.amazon.awssdk.core.async.AsyncResponseTransformer;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Slf4j
 @ApplicationScoped
@@ -61,8 +53,6 @@ public class MassendruckJobPdfService {
     public static final String MASSENDRUCK_DOKUMENT_PATH = "massendruck/";
 
     private final MassendruckJobRepository massendruckJobRepository;
-    private final S3AsyncClient s3async;
-    private final StipConfig config;
     private final GesuchStatusService gesuchStatusService;
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDownloadService dokumentDownloadService;
@@ -108,38 +98,25 @@ public class MassendruckJobPdfService {
             }
         }
 
-        LOG.info("Finished merging PDFs, creating Dokument and uploading to S3");
+        LOG.info("Finished merging PDFs, creating and uploading Dokument");
 
-        // Set the Document for MassendruckJob
-        // Set the objectId to MassendruckJob ID for easy document downloading
+        // Keep a stable object ID so retrying a job overwrites the previous upload.
         final var objectId = String.format("%s.pdf", massendruckJob.getId());
         final var fileName = String.format("massendruck_%s.pdf", massendruckJob.getMassendruckTyp());
+        dokumentUploadService.executeUploadDocument(
+            out.toByteArray(),
+            fileName,
+            objectId,
+            MASSENDRUCK_DOKUMENT_PATH
+        );
 
         final var dokument = new Dokument()
             .setFilename(fileName)
-            .setFilepath(fileName)
+            .setFilepath(MASSENDRUCK_DOKUMENT_PATH)
             .setFilesize(Integer.toString(out.size()))
             .setObjectId(objectId);
 
         massendruckJob.setMergedPdf(dokument);
-
-        // Upload the merged PDF to S3
-        final var future = s3async.putObject(
-            PutObjectRequest.builder()
-                .bucket(config.s3().bucketName())
-                .key(MASSENDRUCK_DOKUMENT_PATH + objectId)
-                .contentType("application/pdf")
-                .build(),
-            AsyncRequestBody.fromBytes(out.toByteArray())
-        );
-
-        LOG.info("Uploading document to S3");
-        Uni.createFrom()
-            .completionStage(future)
-            .onItem()
-            .invoke(response -> LOG.info("S3 upload completed, uploaded size: {}", response.size()))
-            .await()
-            .indefinitely();
 
         // Once this is done, bulk trigger state change
         final var gesuche = massendruckJob.getAttachedGesuche();
@@ -148,7 +125,7 @@ public class MassendruckJobPdfService {
             case DATENSCHUTZBRIEF -> GesuchStatusChangeEvent.DATENSCHUTZBRIEF_VERSANDBEREIT;
         };
 
-        LOG.info("Finished uploading document to S3, bulk triggering state change");
+        LOG.info("Finished uploading document, bulk triggering state change");
         gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, changeEvent);
         massendruckJob.setStatus(MassendruckJobStatus.SUCCESS);
     }
@@ -170,7 +147,7 @@ public class MassendruckJobPdfService {
         return datenschutzbriefMassendrucks.stream()
             .map(datenschutzbriefMassendruck -> {
                 final var dokument = datenschutzbriefMassendruck.getDatenschutzbrief().getDokument();
-                return getPdf(dokument.getFilepath() + dokument.getObjectId());
+                return getPdf(dokument.getObjectId(), dokument.getFilepath());
             });
     }
 
@@ -186,23 +163,16 @@ public class MassendruckJobPdfService {
                     )
                     .findFirst()
                     .orElseThrow(IllegalStateException::new);
-                return getPdf(dokument.getFilepath() + dokument.getObjectId());
+                return getPdf(dokument.getObjectId(), dokument.getFilepath());
             });
     }
 
-    private PdfDocument getPdf(final String s3Key) {
-        final var bytes = s3async.getObject(
-            GetObjectRequest.builder()
-                .bucket(config.s3().bucketName())
-                .key(s3Key)
-                .build(),
-            AsyncResponseTransformer.toBytes()
-        );
-
+    private PdfDocument getPdf(final String objectId, final String dokumentPathPrefix) {
         try {
-            final var input = bytes.get().asInputStream();
+            final var bytes = dokumentDownloadService.executeDownloadDocument(objectId, dokumentPathPrefix);
+            final var input = new ByteArrayInputStream(bytes);
             return new PdfDocument(new PdfReader(input));
-        } catch (InterruptedException | ExecutionException | IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
