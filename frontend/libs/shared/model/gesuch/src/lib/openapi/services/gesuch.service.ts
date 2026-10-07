@@ -115,8 +115,8 @@ export interface GesuchServiceCreateGesuchRequestParams {
 export interface GesuchServiceCreateManuelleVerfuegungRequestParams {
     /** Die ID von der GesuchTranche */
     gesuchTrancheId: string;
-    kommentar?: string;
     fileUpload: Blob;
+    kommentar: string;
 }
 
 export interface GesuchServiceDeleteGesuchRequestParams {
@@ -1625,10 +1625,13 @@ export class GesuchService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createManuelleVerfuegung$.');
         }
-        const kommentar = requestParameters.kommentar;
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
             throw new Error('Required parameter fileUpload was null or undefined when calling createManuelleVerfuegung$.');
+        }
+        const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling createManuelleVerfuegung$.');
         }
         let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/manuelle-verfuegung`;
 
@@ -1654,10 +1657,13 @@ export class GesuchService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createManuelleVerfuegung$.');
         }
-        const kommentar = requestParameters.kommentar;
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
             throw new Error('Required parameter fileUpload was null or undefined when calling createManuelleVerfuegung$.');
+        }
+        const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling createManuelleVerfuegung$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1712,11 +1718,11 @@ export class GesuchService {
             localVarFormParams = new HttpParams({encoder: this.encoder});
         }
 
-        if (kommentar !== undefined) {
-            localVarFormParams = localVarFormParams.append('kommentar', <any>kommentar) as any || localVarFormParams;
-        }
         if (fileUpload !== undefined) {
             localVarFormParams = localVarFormParams.append('fileUpload', <any>fileUpload) as any || localVarFormParams;
+        }
+        if (kommentar !== undefined) {
+            localVarFormParams = localVarFormParams.append('kommentar', <any>kommentar) as any || localVarFormParams;
         }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';

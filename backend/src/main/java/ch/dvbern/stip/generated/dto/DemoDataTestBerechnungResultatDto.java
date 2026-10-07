@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungDetailsDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValidDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -26,16 +27,20 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
   private String testFall;
   private DemoDataTestBerechnungValidDto valid;
   private String message;
-  private DemoDataTestBerechnungValuesDto soll;
-  private DemoDataTestBerechnungValuesDto ist;
+  private DemoDataTestBerechnungValuesDto sollValues;
+  private DemoDataTestBerechnungValuesDto istValues;
+  private DemoDataTestBerechnungDetailsDto sollDetails;
+  private DemoDataTestBerechnungDetailsDto istDetails;
 
   protected DemoDataTestBerechnungResultatDto(DemoDataTestBerechnungResultatDtoBuilder<?, ?> b) {
     this.demoDataId = b.demoDataId;
     this.testFall = b.testFall;
     this.valid = b.valid;
     this.message = b.message;
-    this.soll = b.soll;
-    this.ist = b.ist;
+    this.sollValues = b.sollValues;
+    this.istValues = b.istValues;
+    this.sollDetails = b.sollDetails;
+    this.istDetails = b.istDetails;
   }
 
   public DemoDataTestBerechnungResultatDto() {
@@ -115,38 +120,74 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
 
   /**
    **/
-  public DemoDataTestBerechnungResultatDto soll(DemoDataTestBerechnungValuesDto soll) {
-    this.soll = soll;
+  public DemoDataTestBerechnungResultatDto sollValues(DemoDataTestBerechnungValuesDto sollValues) {
+    this.sollValues = sollValues;
     return this;
   }
 
   
-  @JsonProperty("soll")
-  @Valid public DemoDataTestBerechnungValuesDto getSoll() {
-    return soll;
+  @JsonProperty("sollValues")
+  @Valid public DemoDataTestBerechnungValuesDto getSollValues() {
+    return sollValues;
   }
 
-  @JsonProperty("soll")
-  public void setSoll(DemoDataTestBerechnungValuesDto soll) {
-    this.soll = soll;
+  @JsonProperty("sollValues")
+  public void setSollValues(DemoDataTestBerechnungValuesDto sollValues) {
+    this.sollValues = sollValues;
   }
 
   /**
    **/
-  public DemoDataTestBerechnungResultatDto ist(DemoDataTestBerechnungValuesDto ist) {
-    this.ist = ist;
+  public DemoDataTestBerechnungResultatDto istValues(DemoDataTestBerechnungValuesDto istValues) {
+    this.istValues = istValues;
     return this;
   }
 
   
-  @JsonProperty("ist")
-  @Valid public DemoDataTestBerechnungValuesDto getIst() {
-    return ist;
+  @JsonProperty("istValues")
+  @Valid public DemoDataTestBerechnungValuesDto getIstValues() {
+    return istValues;
   }
 
-  @JsonProperty("ist")
-  public void setIst(DemoDataTestBerechnungValuesDto ist) {
-    this.ist = ist;
+  @JsonProperty("istValues")
+  public void setIstValues(DemoDataTestBerechnungValuesDto istValues) {
+    this.istValues = istValues;
+  }
+
+  /**
+   **/
+  public DemoDataTestBerechnungResultatDto sollDetails(DemoDataTestBerechnungDetailsDto sollDetails) {
+    this.sollDetails = sollDetails;
+    return this;
+  }
+
+  
+  @JsonProperty("sollDetails")
+  @Valid public DemoDataTestBerechnungDetailsDto getSollDetails() {
+    return sollDetails;
+  }
+
+  @JsonProperty("sollDetails")
+  public void setSollDetails(DemoDataTestBerechnungDetailsDto sollDetails) {
+    this.sollDetails = sollDetails;
+  }
+
+  /**
+   **/
+  public DemoDataTestBerechnungResultatDto istDetails(DemoDataTestBerechnungDetailsDto istDetails) {
+    this.istDetails = istDetails;
+    return this;
+  }
+
+  
+  @JsonProperty("istDetails")
+  @Valid public DemoDataTestBerechnungDetailsDto getIstDetails() {
+    return istDetails;
+  }
+
+  @JsonProperty("istDetails")
+  public void setIstDetails(DemoDataTestBerechnungDetailsDto istDetails) {
+    this.istDetails = istDetails;
   }
 
 
@@ -163,13 +204,15 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
         Objects.equals(this.testFall, demoDataTestBerechnungResultat.testFall) &&
         Objects.equals(this.valid, demoDataTestBerechnungResultat.valid) &&
         Objects.equals(this.message, demoDataTestBerechnungResultat.message) &&
-        Objects.equals(this.soll, demoDataTestBerechnungResultat.soll) &&
-        Objects.equals(this.ist, demoDataTestBerechnungResultat.ist);
+        Objects.equals(this.sollValues, demoDataTestBerechnungResultat.sollValues) &&
+        Objects.equals(this.istValues, demoDataTestBerechnungResultat.istValues) &&
+        Objects.equals(this.sollDetails, demoDataTestBerechnungResultat.sollDetails) &&
+        Objects.equals(this.istDetails, demoDataTestBerechnungResultat.istDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(demoDataId, testFall, valid, message, soll, ist);
+    return Objects.hash(demoDataId, testFall, valid, message, sollValues, istValues, sollDetails, istDetails);
   }
 
   @Override
@@ -181,8 +224,10 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
     sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    soll: ").append(toIndentedString(soll)).append("\n");
-    sb.append("    ist: ").append(toIndentedString(ist)).append("\n");
+    sb.append("    sollValues: ").append(toIndentedString(sollValues)).append("\n");
+    sb.append("    istValues: ").append(toIndentedString(istValues)).append("\n");
+    sb.append("    sollDetails: ").append(toIndentedString(sollDetails)).append("\n");
+    sb.append("    istDetails: ").append(toIndentedString(istDetails)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -218,8 +263,10 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
     private String testFall;
     private DemoDataTestBerechnungValidDto valid;
     private String message;
-    private DemoDataTestBerechnungValuesDto soll;
-    private DemoDataTestBerechnungValuesDto ist;
+    private DemoDataTestBerechnungValuesDto sollValues;
+    private DemoDataTestBerechnungValuesDto istValues;
+    private DemoDataTestBerechnungDetailsDto sollDetails;
+    private DemoDataTestBerechnungDetailsDto istDetails;
     protected abstract B self();
 
     public abstract C build();
@@ -240,12 +287,20 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
       this.message = message;
       return self();
     }
-    public B soll(DemoDataTestBerechnungValuesDto soll) {
-      this.soll = soll;
+    public B sollValues(DemoDataTestBerechnungValuesDto sollValues) {
+      this.sollValues = sollValues;
       return self();
     }
-    public B ist(DemoDataTestBerechnungValuesDto ist) {
-      this.ist = ist;
+    public B istValues(DemoDataTestBerechnungValuesDto istValues) {
+      this.istValues = istValues;
+      return self();
+    }
+    public B sollDetails(DemoDataTestBerechnungDetailsDto sollDetails) {
+      this.sollDetails = sollDetails;
+      return self();
+    }
+    public B istDetails(DemoDataTestBerechnungDetailsDto istDetails) {
+      this.istDetails = istDetails;
       return self();
     }
   }

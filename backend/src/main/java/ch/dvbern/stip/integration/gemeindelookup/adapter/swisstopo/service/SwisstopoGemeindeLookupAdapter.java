@@ -65,15 +65,18 @@ public class SwisstopoGemeindeLookupAdapter implements GemeindeLookupPort {
     }
 
     private Optional<GemeindeData> findGemeindeDataByAddress(final GemeindeLookupRequest request) {
-        final var buildingNoSearchPartJson = new JSONObject();
-        buildingNoSearchPartJson.put(
+        final var hausnummer = request.hausnummer() == null || request.hausnummer().isBlank()
+            ? "%"
+            : request.hausnummer();
+
+        final var buildingNoSearchPart = JSONObject.toString(
             ADDR_NO_SEARCH_LAYER_DEF_KEY,
-            String.format(ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR, request.hausnummer())
+            String.format(ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR, hausnummer)
         );
 
         final var result = swisstopoApiRestService.findAllMatchingBuildings(
             request.strasse(),
-            buildingNoSearchPartJson.toString()
+            buildingNoSearchPart
         );
 
         return result.results()

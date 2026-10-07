@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.statusprotokoll.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import jakarta.annotation.Nullable;
@@ -43,11 +43,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Entity
 @Table(
     name = "statusprotokoll",
-    indexes = @Index(name = "IX_statusprotokoll_tenant", columnList = "tenant")
+    indexes = @Index(name = "IX_statusprotokoll_gesuch_id", columnList = "gesuch_id")
 )
 @Getter
 @Setter
-public class Statusprotokoll extends AbstractTenantEntity {
+public class Statusprotokoll extends AbstractEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "status_to", nullable = false)

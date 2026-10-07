@@ -54,6 +54,7 @@ kstip:
   #   ...
   tenant:
     bern:
+      associated-kanton: be
       subdomains:
         - '^dev-.*'
         - '^feature-kstip.*'
@@ -87,6 +88,7 @@ kstip:
         client-id: stip-api
         client-secret: ${STIP_BERN_KEYCLOAK_ADMIN_CLIENT_CLIENT_SECRET}
     dv:
+      associated-kanton: be
       subdomains:
         - '^dv-.*'
       port:
@@ -100,8 +102,6 @@ kstip:
         pdf:
           adapter-type: typst
         gemeinde-lookup:
-          adapter-type: dummy
-        plz-fetch:
           adapter-type: dummy
         payment-processing:
           adapter-type: dummy

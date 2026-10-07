@@ -58,12 +58,18 @@ public class VerfuegungPdfComposerServiceMock extends VerfuegungPdfComposerServi
 
     @Override
     public void createVerfuegungsDocuments(Gesuch gesuch, Optional<BerechnungsresultatDto> stipendien) {
+        var verfuegungGs = new VerfuegungDokument();
+        verfuegungGs.setTyp(VerfuegungDokumentTyp.VERFUEGUNG_GS);
+        verfuegungGs.setObjectId(UUID.randomUUID().toString());
+
         var versendeteVerfuegung = new VerfuegungDokument();
         versendeteVerfuegung.setTyp(VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG);
         versendeteVerfuegung.setObjectId(UUID.randomUUID().toString());
 
         var currentVerfuegung = gesuch.getVerfuegungs().getFirst();
+        verfuegungGs.setVerfuegung(currentVerfuegung);
         versendeteVerfuegung.setVerfuegung(currentVerfuegung);
+        currentVerfuegung.getDokumente().add(verfuegungGs);
         currentVerfuegung.getDokumente().add(versendeteVerfuegung);
     }
 }

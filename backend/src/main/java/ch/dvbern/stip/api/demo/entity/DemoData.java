@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.demo.entity;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,7 +31,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Max;
@@ -51,14 +50,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_TESTCAS
 @Audited
 @Entity
 @Table(
-    name = "demo_data",
-    indexes = {
-        @Index(name = "IX_demo_data_tenant", columnList = "tenant")
-    }
+    name = "demo_data"
 )
 @Getter
 @Setter
-public class DemoData extends AbstractTenantEntity {
+public class DemoData extends AbstractEntity {
     @NotNull
     @Column(name = "typ", nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)

@@ -1351,7 +1351,7 @@ public class GesuchApiSpec {
      *
      * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
      * @see #fileUploadMultiPart  (required)
-     * @see #kommentarForm  (optional)
+     * @see #kommentarForm  (required)
      * return GesuchWithChangesDtoSpec
      */
     public static class CreateManuelleVerfuegungOper implements Oper {
@@ -1404,7 +1404,7 @@ public class GesuchApiSpec {
          public static final String KOMMENTAR_FORM = "kommentar";
 
          /**
-         * @param kommentar (String)  (optional)
+         * @param kommentar (String)  (required)
          * @return operation
          */
          public CreateManuelleVerfuegungOper kommentarForm(Object... kommentar) {

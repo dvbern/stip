@@ -31,7 +31,7 @@ public enum VerfuegungDokumentTyp {
     VERFUEGUNGSBRIEF,
     MANUELLE_NEGATIVE_VERFUEGUNG;
 
-    public static final Set<VerfuegungDokumentTyp> VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG =
+    public static final Set<VerfuegungDokumentTyp> VERFUEGUNG_DOKUMENT_TYPS_GS_VISIBLE =
         Collections.unmodifiableSet(
             EnumSet.of(
                 VERFUEGUNG_GS,

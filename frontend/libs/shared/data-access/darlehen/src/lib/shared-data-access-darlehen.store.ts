@@ -21,6 +21,7 @@ import {
 import { byAppConfig } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
+  cachedFailure,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
@@ -335,14 +336,14 @@ export class DarlehenStore extends signalStore(
                 ),
               ),
           ),
-          catchError(() => {
+          catchError((error: unknown) => {
             this.globalNotificationStore.createNotification({
               type: 'ERROR',
               messageKey: 'shared.form.darlehen.freigeben.failure',
             });
 
             patchState(this, (state) => ({
-              cachedDarlehen: state.cachedDarlehen,
+              cachedDarlehen: cachedFailure(state.cachedDarlehen, error),
             }));
 
             return EMPTY;
@@ -430,14 +431,14 @@ export class DarlehenStore extends signalStore(
               ),
             );
           }),
-          catchError(() => {
+          catchError((error: unknown) => {
             this.globalNotificationStore.createNotification({
               type: 'ERROR',
               messageKey: 'shared.form.darlehen.abschliessen.failure',
             });
 
             patchState(this, (state) => ({
-              cachedDarlehen: state.cachedDarlehen,
+              cachedDarlehen: cachedFailure(state.cachedDarlehen, error),
             }));
 
             return EMPTY;

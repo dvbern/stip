@@ -17,13 +17,12 @@
 
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenAlternativeWohnformValidConstraint;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenAnzahlPersonenWGValidConstraint;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -42,8 +41,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Audited
 @Entity
 @Table(
-    name = "einnahmen_kosten",
-    indexes = @Index(name = "IX_einnahme_kosten_tenant", columnList = "tenant")
+    name = "einnahmen_kosten"
 )
 
 @Getter
@@ -54,7 +52,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class EinnahmenKosten extends AbstractTenantEntity {
+public class EinnahmenKosten extends AbstractEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
     @Min(0)

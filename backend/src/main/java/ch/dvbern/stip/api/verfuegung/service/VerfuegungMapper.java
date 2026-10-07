@@ -31,7 +31,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import static ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp.VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG;
+import static ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp.VERFUEGUNG_DOKUMENT_TYPS_GS_VISIBLE;
 
 @Mapper(config = MappingConfig.class, uses = { VerfuegungDokumentMapper.class })
 public abstract class VerfuegungMapper {
@@ -39,7 +39,7 @@ public abstract class VerfuegungMapper {
 
     @Mapping(source = ".", target = "yearRange", qualifiedByName = "mapYearRangeOfAttachedGesuchsperiode")
     @Mapping(source = ".", target = "totalbetragStipendium", qualifiedByName = "mapTotalBetragStipendium")
-    @Mapping(source = ".", target = "dokument", qualifiedByName = "mapVerfuegungsDokumentWithoutBerechnung")
+    @Mapping(source = ".", target = "dokument", qualifiedByName = "mapVerfuegungsDokumentGsVisible")
     public abstract VerfuegungFallDto toFallDto(final Verfuegung verfuegung);
 
     @Named("mapYearRangeOfAttachedGesuchsperiode")
@@ -57,12 +57,12 @@ public abstract class VerfuegungMapper {
         return berechnung.getBerechnungStipendium() == null ? 0 : berechnung.getBerechnungStipendium();
     }
 
-    @Named("mapVerfuegungsDokumentWithoutBerechnung")
-    VerfuegungDokumentDto mapVerfuegungsDokumentWithoutBerechnung(final Verfuegung verfuegung) {
+    @Named("mapVerfuegungsDokumentGsVisible")
+    VerfuegungDokumentDto mapVerfuegungsDokumentGsVisible(final Verfuegung verfuegung) {
         final var relevantDokumentOpt = verfuegung.getDokumente()
             .stream()
             .filter(
-                dokument -> VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG.contains(dokument.getTyp())
+                dokument -> VERFUEGUNG_DOKUMENT_TYPS_GS_VISIBLE.contains(dokument.getTyp())
             )
             .max(Comparator.comparing(VerfuegungDokument::getTimestampErstellt));
 

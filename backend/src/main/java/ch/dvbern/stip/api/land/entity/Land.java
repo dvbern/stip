@@ -17,15 +17,13 @@
 
 package ch.dvbern.stip.api.land.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -42,11 +40,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 
 @Entity
 @Table(
-    name = "land",
-    uniqueConstraints = @UniqueConstraint(
-        name = "UC_land_laendercode_bfs_tenant", columnNames = { "laendercode_bfs", "tenant" }
-    ),
-    indexes = @Index(name = "IX_land_laendercode_bfs_tenant", columnList = "laendercode_bfs,tenant")
+    name = "land"
 )
 @Audited
 @Getter
@@ -54,7 +48,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Land extends AbstractTenantEntity {
+public class Land extends AbstractEntity {
     @NotNull
     @Column(name = "is_eu_efta", nullable = false)
     private Boolean isEuEfta;

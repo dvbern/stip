@@ -17,6 +17,7 @@ import {
 } from '@dv/shared/model/config';
 import {
   Ausbildungsgang,
+  DarlehenStatus,
   FallDashboardItem,
   FreiwilligDarlehen,
   GesuchDashboardItem,
@@ -264,5 +265,11 @@ const toGesuchDashboardItemView =
 const isDarlehenInitialized = (
   darlehen: FreiwilligDarlehen,
 ): darlehen is Required<FreiwilligDarlehen> => {
-  return !!darlehen.status;
+  return (
+    !!darlehen.status &&
+    !(
+      darlehen.status === DarlehenStatus.AKZEPTIERT ||
+      darlehen.status === DarlehenStatus.ABGELEHNT
+    )
+  );
 };

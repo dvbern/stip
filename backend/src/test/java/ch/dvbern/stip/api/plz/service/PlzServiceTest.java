@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.plz.service;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.common.type.Kanton;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -41,15 +42,15 @@ class PlzServiceTest {
 
         final String exInBern = "2830";// Vellerat(JU),since1996
 
-        assertThat(plzService.isInBern(new Adresse().setPlz(plzInBern1))).isTrue();
-        assertThat(plzService.isInBern(new Adresse().setPlz(plzInBern2))).isTrue();
-        assertThat(plzService.isInBern(new Adresse().setPlz(exInBern))).isFalse();
-        assertThat(plzService.isInBern(new Adresse().setPlz(plzNotInBern))).isFalse();
+        assertThat(plzService.isInKanton(new Adresse().setPlz(plzInBern1), Kanton.BE)).isTrue();
+        assertThat(plzService.isInKanton(new Adresse().setPlz(plzInBern2), Kanton.BE)).isTrue();
+        assertThat(plzService.isInKanton(new Adresse().setPlz(exInBern), Kanton.BE)).isFalse();
+        assertThat(plzService.isInKanton(new Adresse().setPlz(plzNotInBern), Kanton.BE)).isFalse();
 
-        assertThat(plzService.isInBern(new Adresse().setPlz(plzOutsideSwitzerland))).isFalse();
-        assertThat(plzService.isInBern(new Adresse().setPlz(invalidPlz))).isFalse();
-        assertThat(plzService.isInBern(new Adresse().setPlz(""))).isFalse();
-        assertThat(plzService.isInBern(new Adresse().setPlz(null))).isFalse();
+        assertThat(plzService.isInKanton(new Adresse().setPlz(plzOutsideSwitzerland), Kanton.BE)).isFalse();
+        assertThat(plzService.isInKanton(new Adresse().setPlz(invalidPlz), Kanton.BE)).isFalse();
+        assertThat(plzService.isInKanton(new Adresse().setPlz(""), Kanton.BE)).isFalse();
+        assertThat(plzService.isInKanton(new Adresse().setPlz(null), Kanton.BE)).isFalse();
 
     }
 }

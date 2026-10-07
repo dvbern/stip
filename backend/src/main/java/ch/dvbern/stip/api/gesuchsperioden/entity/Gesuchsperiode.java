@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.gesuchsperioden.entity;
 
 import java.time.LocalDate;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
@@ -54,7 +54,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
     name = "gesuchsperiode",
     indexes = {
         @Index(name = "IX_gesuchsperiode_aufschalttermin_start", columnList = "aufschalttermin_start"),
-        @Index(name = "IX_gesuchsperiode_tenant", columnList = "tenant"),
         @Index(name = "IX_gesuchsperiode_gesuchsjahr_id", columnList = "gesuchsjahr_id")
     }
 )
@@ -63,7 +62,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Gesuchsperiode extends AbstractTenantEntity {
+public class Gesuchsperiode extends AbstractEntity {
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(nullable = false, name = "bezeichnung_de", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String bezeichnungDe;
@@ -78,7 +77,9 @@ public class Gesuchsperiode extends AbstractTenantEntity {
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_gesuchsperiode_gesuchsjahr_id"), nullable = false)
+    @JoinColumn(
+        name = "gesuchsjahr_id", foreignKey = @ForeignKey(name = "FK_gesuchsperiode_gesuchsjahr_id"), nullable = false
+    )
     private @Valid Gesuchsjahr gesuchsjahr;
 
     @Column(nullable = false, name = "gesuchsperiode_start")
