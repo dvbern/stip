@@ -30,6 +30,7 @@ docker-compose.override.yml
 
 ## Maven
 target/
+target-jdtls/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
