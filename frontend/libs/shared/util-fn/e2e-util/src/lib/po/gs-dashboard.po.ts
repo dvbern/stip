@@ -12,6 +12,7 @@ export class gsDashboardPO {
     // dashboard
     createAusbildung: Locator;
     ausbildungItem: Locator;
+    dashboardLoading: Locator;
 
     // Ausbildung
     ausbildungTitle: Locator;
@@ -57,6 +58,7 @@ export class gsDashboardPO {
       page,
       dashboardWelcomeTitle: page.getByTestId('dashboard-welcome-title'),
       createAusbildung: page.getByTestId('dashboard-ausbildung-create'),
+      dashboardLoading: page.getByTestId('dashboard-loading'),
       createAenderung: page.getByTestId('dashboard-aenderung-create'),
       ausbildungItem: page.getByTestId('dashboard-ausbildung-item'),
 
