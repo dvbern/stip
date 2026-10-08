@@ -1,5 +1,3 @@
-// spec: .github/e2e-plans/gesuch-app_freiwilligdarlehen_plan.md
-
 import type { Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 

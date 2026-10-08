@@ -12,7 +12,7 @@ import {
   sozStorageStatePath,
 } from './authenticate';
 import { E2eUser, ExtendedTest, getE2eUrls } from './playwright.config.base';
-import { AusbildungValues, gsDashboardPO } from './po';
+import { AusbildungValues, GsDashboardPO } from './po';
 import {
   MultiUserTestContexts,
   SetupFn,
@@ -45,7 +45,7 @@ export const initializeMultiUserTest = (
         gsContext,
         new URL(getE2eUrls().gs).origin,
       );
-      const cockpit = new gsDashboardPO(gsPage);
+      const cockpit = new GsDashboardPO(gsPage);
 
       // Initialize gesuch as GS user
       const dashboardPromise = gsPage.waitForResponse(

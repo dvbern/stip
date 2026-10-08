@@ -62,6 +62,9 @@ export class DarlehenPO {
     buttonZurueckweisen: Locator;
     buttonAbschliessen: Locator;
 
+    // verfuegung
+    darlehenVerfuegungDownload: Locator;
+
     // Dialogs
     dialogConfirm: Locator;
     dialogCancel: Locator;
@@ -104,6 +107,10 @@ export class DarlehenPO {
       buttonFreigeben: page.getByTestId('button-darlehen-freigeben'),
       buttonZurueckweisen: page.getByTestId('button-darlehen-zurueckweisen'),
       buttonAbschliessen: page.getByTestId('button-darlehen-abschliessen'),
+
+      darlehenVerfuegungDownload: page.getByTestId(
+        'darlehen-verfuegung-download',
+      ),
 
       dialogConfirm: page.getByTestId('dialog-confirm'),
       dialogCancel: page.getByTestId('dialog-cancel'),
@@ -163,6 +170,7 @@ export class DarlehenPO {
     await this.grundCheckbox(grund).getByRole('checkbox').check();
   }
 
+  // todo: put generic impl into utils?
   /**
    * Upload a Darlehen document of the given type via the document-upload dialog.
    */
@@ -184,6 +192,16 @@ export class DarlehenPO {
     await uploadCall;
     await this.elems.page.keyboard.press('Escape');
     await expect(this.elems.page.getByTestId('file-input')).toHaveCount(0);
+  }
+
+  public async downloadDarlehenVerfuegung() {
+    const downloadPromise = this.elems.page.waitForEvent('download');
+    await this.elems.darlehenVerfuegungDownload.click();
+    const download = await downloadPromise;
+
+    expect(await download.failure()).toBeNull();
+
+    return download;
   }
 
   /**

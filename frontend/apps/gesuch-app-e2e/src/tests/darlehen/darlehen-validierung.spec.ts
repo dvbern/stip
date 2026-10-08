@@ -1,5 +1,3 @@
-// spec: .github/e2e-plans/gesuch-app_freiwilligdarlehen_plan.md
-
 import type { Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
@@ -26,7 +24,7 @@ const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
 test.describe.configure({ mode: 'serial' });
 test.slow();
 
-// Diese Tests sind besser als Component Testst auszuführen
+// Todo: Diese Tests sind besser als Component Testst auszuführen
 test.describe.skip('Freiwilligdarlehen GS-Formular Validierung', () => {
   let gsPage1: Page;
 

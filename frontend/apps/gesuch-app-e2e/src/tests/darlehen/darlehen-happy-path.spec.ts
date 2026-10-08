@@ -1,10 +1,9 @@
-// spec: .github/e2e-plans/gesuch-app_freiwilligdarlehen_plan.md
-
 import type { Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 import {
   DarlehenPO,
+  GsDashboardPO,
   getE2eUrls,
   initializeMultiUserTest,
   setupGesuchWithApi,
@@ -18,7 +17,7 @@ import {
   gesuchFormularUpdateFn,
   grundOhneDokument,
 } from './darlehen.data';
-import { bringGesuchToEingereicht, createDarlehenAsGs } from './darlehen.seed';
+import { bringGesuchToEingereicht } from './darlehen.seed';
 
 const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
   ausbildungValues,
@@ -29,8 +28,6 @@ const urls = getE2eUrls();
 test.describe.configure({ mode: 'serial' });
 test.slow();
 
-// todo: test if all documents are available and can be downloaded after Ablehnung
-// todo: also test for dashboard items
 test.describe('Freiwilligdarlehen Happy Path (Gewährung)', () => {
   let gsPage1: Page;
   let sbPage1: Page; // expected to be without Freigabestelle permissions
@@ -50,12 +47,15 @@ test.describe('Freiwilligdarlehen Happy Path (Gewährung)', () => {
 
   test('GS erfasst und gibt ein Freiwilligdarlehen ein', async () => {
     const darlehenPO = new DarlehenPO(gsPage1);
+    const dashboardPO = new GsDashboardPO(gsPage1);
 
-    // 1. Als GS im Cockpit die Schaltfläche „Darlehen erstellen“ klicken.
-    // 2. Warten, bis das Darlehen-Formular geladen ist.
-    const created = await createDarlehenAsGs(gsPage1);
-    darlehenId = created.darlehenId;
-    fallId = created.fallId;
+    await dashboardPO.goToDashBoard();
+    const created = await dashboardPO.createDarlehen();
+    darlehenId = created.id;
+    fallId = created.fallId!;
+
+    await expect(darlehenPO.elems.loading).toBeHidden();
+    await expect(darlehenPO.elems.gsForm).toBeVisible();
 
     // 3.-5. Gewünschter Betrag, Schulden und Anzahl Betreibungen ausfüllen.
     await darlehenPO.fillGsForm(darlehenGs);
@@ -73,6 +73,11 @@ test.describe('Freiwilligdarlehen Happy Path (Gewährung)', () => {
     // Expected: GS-Formular ist nach dem Eingeben schreibgeschützt (Status EINGEGEBEN).
     await expect(darlehenPO.elems.gsForm).toHaveClass(/readonly/);
     await expect(darlehenPO.elems.buttonEingeben).toBeHidden();
+
+    await dashboardPO.goToDashBoard();
+    await dashboardPO.expectCanCreateDarlehen(false);
+    const darlehenSubitem = dashboardPO.getDarlehen(darlehenId);
+    await dashboardPO.expectSubitemStatus(darlehenSubitem, 'Eingegeben');
   });
 
   test('SB gewährt und gibt das Darlehen frei', async () => {
@@ -100,6 +105,7 @@ test.describe('Freiwilligdarlehen Happy Path (Gewährung)', () => {
     // Expected: Darlehen ist in Freigabe, SB kann nicht mehr schreiben.
     await expect(darlehenPO.elems.sbForm).toHaveClass(/readonly/);
     await expect(darlehenPO.elems.buttonFreigeben).toBeHidden();
+    await sbPage1.close();
   });
 
   test('Freigabestelle schliesst das Darlehen ab (Akzeptiert)', async () => {
@@ -127,8 +133,24 @@ test.describe('Freiwilligdarlehen Happy Path (Gewährung)', () => {
     await expect(gsDarlehenPO.elems.gsForm).toHaveClass(/readonly/);
     await expect(gsDarlehenPO.elems.buttonAbschliessen).toBeHidden();
 
-    await gsPage1.close();
-    await sbPage1.close();
     await sbPage2.close();
+  });
+
+  test('GS kann die Verfügung herunterladen', async () => {
+    const darlehenPO = new DarlehenPO(gsPage1);
+    const dashboardPO = new GsDashboardPO(gsPage1);
+
+    await dashboardPO.goToDashBoard();
+
+    await expect(dashboardPO.getDarlehen(darlehenId)).not.toBeVisible();
+
+    await dashboardPO.expectCanCreateDarlehen(true);
+
+    await darlehenPO.goto(urls.gs, getGesuchId()!, darlehenId, fallId);
+
+    // Expected: Verfügung kann heruntergeladen werden.
+    await darlehenPO.downloadDarlehenVerfuegung();
+
+    await gsPage1.close();
   });
 });
