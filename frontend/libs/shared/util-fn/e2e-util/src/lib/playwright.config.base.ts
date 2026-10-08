@@ -72,8 +72,10 @@ export const baseConfig = defineConfig({
     contextOptions: {
       ignoreHTTPSErrors: true,
     },
+    // shorter action timeout for local testing
     actionTimeout: !process.env.CI ? 6_000 : undefined,
   },
+  // default is 30_000 - shorter for ci to not waste time, since all are tests.slow()
   timeout: process.env.CI ? 20_000 : undefined,
   expect: {
     timeout: process.env.CI ? 20_000 : undefined,

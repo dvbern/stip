@@ -177,7 +177,7 @@ export const createDarlehenAsGs = async (
       /\/api\/v1\/darlehen\/[^/]+$/.test(response.url()) &&
       response.request().method() === 'POST',
   );
-  await gsPage.getByTestId('cockpit-gesuch-darlehen-create').click();
+  await gsPage.getByTestId('dashboard-darlehen-create').click();
   const response = await createResponse;
   const darlehen: FreiwilligDarlehen = await response.json();
 

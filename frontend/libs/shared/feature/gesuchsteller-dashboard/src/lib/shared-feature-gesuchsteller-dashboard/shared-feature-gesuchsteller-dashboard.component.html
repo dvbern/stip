@@ -1,6 +1,6 @@
 <ng-container *dvTranslocoShared="let t">
   <div class="tw:relative tw:justify-between tw:dv-container">
-    <h1 class="tw:mb-6 tw:dv-page-title">
+    <h1 class="tw:mb-6 tw:dv-page-title" data-testid="dashboard-welcome-title">
       @if (config.app.type === 'sozialdienst-app') {
         {{ t('shared.dashboard.welcome.secondaryTitle', { name: piaNameSig() }) }}
       } @else {
@@ -20,6 +20,7 @@
         @if (dashboard.ausbildungen.length > 0) {
           @for (ausbildung of dashboard.ausbildungen; track ausbildung.id) {
             <dv-shared-ui-dashboard-ausbildung
+              data-testid="dashboard-ausbildung-item"
               class="tw:shadow-lg"
               [ausbildungSig]="ausbildung"
               (output)="handleOutput($event)"
@@ -28,7 +29,7 @@
         } @else if (dashboard.canCreateAusbildung) {
           <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-lg">
             <button
-              data-testid="cockpit-create-ausbildung"
+              data-testid="dashboard-ausbildung-create"
               type="button"
               (click)="createAusbildung(fall.id, dashboard.earliestActiveGesuchPeriodeStart)"
               class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"

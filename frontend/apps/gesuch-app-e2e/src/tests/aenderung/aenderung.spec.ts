@@ -187,7 +187,7 @@ test.describe('Aenderung', () => {
     await test.step('Melde Aenderung im GS Dashboard', async () => {
       await gsPage1.bringToFront();
       await gsPage1.goto(`${urls.gs}/dashboard`);
-      await gsPage1.getByTestId('cockpit-gesuch-aenderung-create').click();
+      await gsPage1.getByTestId('dashboard-aenderung-create').click();
 
       await gsPage1
         .getByTestId('form-aenderung-melden-dialog-gueltig-ab')

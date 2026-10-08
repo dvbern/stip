@@ -12,7 +12,7 @@ import {
   sozStorageStatePath,
 } from './authenticate';
 import { E2eUser, ExtendedTest, getE2eUrls } from './playwright.config.base';
-import { AusbildungValues, CockpitPO } from './po';
+import { AusbildungValues, gsDashboardPO } from './po';
 import {
   MultiUserTestContexts,
   SetupFn,
@@ -22,7 +22,6 @@ import {
   deleteGesuch,
 } from './utils';
 
-// todo: make users configurable as well? => reconsider, since the setup is quite individual
 // for gs-app and full livecyle of gesuche with delete functionality
 export const initializeMultiUserTest = (
   ausbildung: AusbildungValues,
@@ -46,7 +45,7 @@ export const initializeMultiUserTest = (
         gsContext,
         new URL(getE2eUrls().gs).origin,
       );
-      const cockpit = new CockpitPO(gsPage);
+      const cockpit = new gsDashboardPO(gsPage);
 
       // Initialize gesuch as GS user
       const dashboardPromise = gsPage.waitForResponse(

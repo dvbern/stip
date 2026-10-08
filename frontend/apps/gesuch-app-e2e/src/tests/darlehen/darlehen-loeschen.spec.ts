@@ -7,7 +7,6 @@ import {
   ConfirmDialogPO,
   DarlehenPO,
   GSMainNavigationPO,
-  getE2eUrls,
   initializeMultiUserTest,
   setupGesuchWithApi,
 } from '@dv/shared/util-fn/e2e-util';
@@ -23,12 +22,10 @@ const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
   ausbildungValues,
   setupGesuchWithApi(gesuchFormularUpdateFn, createZahlungsverbindungUpdateFn),
 );
-const urls = getE2eUrls();
 
 test.describe.configure({ mode: 'serial' });
 test.slow();
 
-// todo: delete can only happen from the dashboard! (issue ?)
 test.describe('Freiwilligdarlehen Löschen durch den GS', () => {
   let gsPage1: Page;
 
@@ -55,7 +52,7 @@ test.describe('Freiwilligdarlehen Löschen durch den GS', () => {
 
     // Expected: Der GS wird auf die Startseite/Cockpit zurückgeleitet und das
     // Darlehen-Formular ist nicht mehr sichtbar.
-    await gsPage1.waitForURL(`${urls.gs}/dashboard`);
+    await gsPage1.waitForURL(/dashboard/);
     await expect(darlehenPO.elems.gsForm).toBeHidden();
 
     await gsPage1.close();
@@ -85,7 +82,7 @@ test.describe('Freiwilligdarlehen Löschen durch den GS', () => {
 
     // Expected: Der GS wird auf die Startseite/Cockpit zurückgeleitet und das
     // Darlehen-Formular ist nicht mehr sichtbar.
-    await gsPage1.waitForURL(`${urls.gs}/dashboard`);
+    await gsPage1.waitForURL(/dashboard/);
     await expect(darlehenPO.elems.gsForm).toBeHidden();
 
     await gsPage1.close();
