@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.entity.QDokument;
 import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
@@ -42,6 +43,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
 
     private final EntityManager entityManager;
     private final QGesuchDokument Q_GESUCH_DOKUMENT = QGesuchDokument.gesuchDokument;
+    private final QDokument Q_DOKUMENT = QDokument.dokument;
 
     public List<GesuchDokument> findAllByCustomDokumentTypId(UUID customDokumentTypId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
@@ -84,13 +86,13 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         return query.stream();
     }
 
-    public List<String> getAllObjectIdsForGesuchDokuments(final List<GesuchDokument> gesuchDokuments) {
+    public List<String> getAllObjectIdsForGesuchDokuments(final List<UUID> gesuchDokumentIds) {
         final var queryFactory = new JPAQueryFactory(entityManager);
 
         final var query = queryFactory
-            .select(Q_GESUCH_DOKUMENT.dokumente.any().objectId)
-            .from(Q_GESUCH_DOKUMENT)
-            .where(Q_GESUCH_DOKUMENT.id.in(gesuchDokuments.stream().map(AbstractEntity::getId).toList()));
+            .select(Q_DOKUMENT.objectId)
+            .from(Q_DOKUMENT)
+            .where(Q_DOKUMENT.gesuchDokument.id.in(gesuchDokumentIds));
 
         return query.stream().toList();
     }

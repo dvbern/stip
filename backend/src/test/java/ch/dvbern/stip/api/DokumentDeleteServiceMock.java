@@ -33,10 +33,6 @@ public class DokumentDeleteServiceMock extends DokumentDeleteService {
         super(null, null);
     }
 
-    public DokumentDeleteServiceMock(S3AsyncClient s3, StipConfig config) {
-        super(s3, config);
-    }
-
     @Override
     public void executeDeleteDokumentFromS3(
         final String objectId

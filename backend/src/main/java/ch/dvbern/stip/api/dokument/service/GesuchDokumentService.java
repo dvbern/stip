@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -481,7 +482,7 @@ public class GesuchDokumentService {
     @Transactional
     public void removeGesuchDokument(final GesuchDokument gesuchDokument) {
         final var dokumentObjectIds =
-            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(List.of(gesuchDokument));
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(List.of(gesuchDokument.getId()));
 
         gesuchDokumentRepository.delete(gesuchDokument);
         if (canDeleteDokumentFromS3(gesuchDokument.getGesuchTranche()) && !dokumentObjectIds.isEmpty()) {
@@ -491,7 +492,7 @@ public class GesuchDokumentService {
 
     @Transactional
     public void removeGesuchDokuments(final GesuchTranche tranche, final List<GesuchDokument> gesuchDokuments) {
-        final var dokumentObjectIds = gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(gesuchDokuments);
+        final var dokumentObjectIds = gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(gesuchDokuments.stream().map(AbstractEntity::getId).toList());
 
         gesuchDokuments.forEach(gesuchDokumentRepository::delete);
         if (canDeleteDokumentFromS3(tranche) && !dokumentObjectIds.isEmpty()) {
@@ -529,7 +530,7 @@ public class GesuchDokumentService {
 
     public void removeDokumentsFromGesuchDokument(final GesuchDokument gesuchDokument) {
         final var dokumentObjectIds =
-            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(List.of(gesuchDokument));
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(List.of(gesuchDokument.getId()));
 
         gesuchDokument.getDokumente().clear();
         if (canDeleteDokumentFromS3(gesuchDokument.getGesuchTranche()) && !dokumentObjectIds.isEmpty()) {

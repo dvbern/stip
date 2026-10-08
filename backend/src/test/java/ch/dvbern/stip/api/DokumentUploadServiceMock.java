@@ -29,6 +29,7 @@ import io.quarkus.test.Mock;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -43,26 +44,9 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
         super(null, null, null);
     }
 
+    @Inject
     public DokumentUploadServiceMock(S3AsyncClient s3, StipConfig config, Antivirus antivirus) {
         super(s3, config, antivirus);
-    }
-
-    @Override
-    public Uni<Response> validateScanUploadDokument(FileUpload fileUpload, Set<String> allowedMimetypes, String dokumentPathPrefix, Consumer<String> serviceCallback, @org.jspecify.annotations.Nullable Consumer<Throwable> onFailure) {
-        serviceCallback.accept(UUID.randomUUID().toString());
-        return Uni.createFrom().item(Response.created(null).build());
-    }
-
-    @Override
-    public Uni<Response> validateScanUploadDokument(FileUpload fileUpload, String dokumentPathPrefix, Consumer<String> serviceCallback, @org.jspecify.annotations.Nullable Consumer<Throwable> onFailure) {
-        serviceCallback.accept(UUID.randomUUID().toString());
-        return Uni.createFrom().item(Response.created(null).build());
-    }
-
-    @Override
-    public Uni<Response> validateScanUploadDokument(FileUpload fileUpload, String dokumentPathPrefix, Consumer<String> serviceCallback) {
-        serviceCallback.accept(UUID.randomUUID().toString());
-        return Uni.createFrom().item(Response.created(null).build());
     }
 
     @Override
@@ -104,4 +88,10 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
     ) {
         return objectId;
     }
+
+    @Override
+    protected void scanDokument(final FileUpload fileUpload) {
+        LOG.debug("Would scan file: {}", fileUpload.fileName());
+    }
 }
+

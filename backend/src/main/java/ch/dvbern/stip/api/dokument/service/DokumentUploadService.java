@@ -213,7 +213,7 @@ public class DokumentUploadService {
         return FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), allowedMimeTypes);
     }
 
-    private void scanDokument(final FileUpload fileUpload) {
+    protected void scanDokument(final FileUpload fileUpload) {
         try (
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(
                 IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile()))

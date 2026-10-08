@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungValidatorService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
@@ -393,7 +394,7 @@ public class GesuchTrancheService {
             return;
         }
         final var dokumentObjectIds =
-            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(superfluousGesuchDokuments);
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(superfluousGesuchDokuments.stream().map(AbstractEntity::getId).toList());
 
         if (!dokumentObjectIds.isEmpty()) {
             gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);

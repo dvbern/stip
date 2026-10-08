@@ -31,6 +31,8 @@ import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.NotAuthorizedException;
 import org.jboss.resteasy.reactive.RestMulti;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -42,18 +44,9 @@ public class DokumentDownloadServiceMock extends DokumentDownloadService {
         super(null, null, null, null);
     }
 
+    @Inject
     public DokumentDownloadServiceMock(S3AsyncClient s3, JWTParser jwtParser, StipConfig config, BenutzerService benutzerService) {
         super(s3, jwtParser, config, benutzerService);
-    }
-
-    @Override
-    public FileDownloadTokenDto getFileDownloadToken(UUID id, String idClaim) {
-        return new FileDownloadTokenDto().token("test-token-" + id);
-    }
-
-    @Override
-    public UUID getClaimId(String jwtString, String idClaim) {
-        return UUID.randomUUID();
     }
 
     @Override
