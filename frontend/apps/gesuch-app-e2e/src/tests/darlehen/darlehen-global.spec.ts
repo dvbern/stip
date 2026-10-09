@@ -47,6 +47,12 @@ test.describe('Freiwilligdarlehen', () => {
     sbPage2 = await createSbPage(1);
   });
 
+  test.afterAll(async () => {
+    await gsPage1.close();
+    await sbPage1.close();
+    await sbPage2.close();
+  });
+
   test('seed: Gültiges Gesuch vorbereiten', async () => {
     await bringGesuchToEingereicht(gsPage1, getGesuchId()!, getTrancheId()!);
   });
