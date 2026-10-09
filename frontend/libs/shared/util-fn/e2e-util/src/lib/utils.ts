@@ -1,7 +1,6 @@
 import {
   APIRequestContext,
   Browser,
-  BrowserContext,
   BrowserContextOptions,
   Locator,
   Page,
@@ -13,14 +12,6 @@ import seedRandom from 'seedrandom';
 
 import { SmallImageFile } from './files';
 import { BEARER_COOKIE, decompress } from './playwright.config.base';
-
-// Air-gapped CI pods can't reach the external Google Fonts hosts referenced in
-// index.html; the blocking <link rel="stylesheet"> requests hang and the page
-// `load` event never fires. Abort them so navigation completes.
-export const blockExternalFonts = (target: Page | BrowserContext) =>
-  target.route(/https:\/\/fonts\.(googleapis|gstatic)\.com\//, (route) =>
-    route.abort(),
-  );
 
 /**
  * works for all steptitles exept for "info" route (tranche component)
@@ -208,7 +199,6 @@ export const createTestContexts = async (options: {
   const browserContext = await browser.newContext({
     storageState,
   });
-  await blockExternalFonts(browserContext);
 
   const cookies = await browserContext.cookies();
   const bearerCookie = cookies.find((c) => c.name === BEARER_COOKIE);
@@ -329,7 +319,7 @@ export const createMultiUserTestContexts = async (options: {
   const gsBrowserContext = await browser.newContext({
     storageState: gsStorageState,
   });
-  await blockExternalFonts(gsBrowserContext);
+
   const gsCookies = await gsBrowserContext.cookies();
   const gsBearerCookie = gsCookies.find((c) => c.name === BEARER_COOKIE);
   const gsBearer = gsBearerCookie?.value
@@ -347,7 +337,7 @@ export const createMultiUserTestContexts = async (options: {
   const sbBrowserContext = await browser.newContext({
     storageState: sbStorageState,
   });
-  await blockExternalFonts(sbBrowserContext);
+
   const sbCookies = await sbBrowserContext.cookies();
   const sbBearerCookie = sbCookies.find((c) => c.name === BEARER_COOKIE);
   const sbBearer = sbBearerCookie?.value

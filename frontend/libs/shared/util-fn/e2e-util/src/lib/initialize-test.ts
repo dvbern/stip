@@ -17,7 +17,6 @@ import {
   MultiUserTestContexts,
   SetupFn,
   TestContexts,
-  blockExternalFonts,
   createMultiUserTestContexts,
   deleteGesuch,
 } from './utils';
@@ -39,7 +38,7 @@ export const initializeMultiUserTest = (
       const gsContext = gsStorageStatePath(testInfo, testInfo.parallelIndex);
       // Create GS page with GS context
       const gsPage = await browser.newPage({ storageState: gsContext });
-      await blockExternalFonts(gsPage);
+
       await restoreSessionStorage(
         gsPage,
         gsContext,
@@ -121,7 +120,7 @@ export const initializeMultiUserTest = (
 
         const sbContext = sbStorageStatePath(testInfo, sbIndex);
         const sbPage = await browser.newPage({ storageState: sbContext });
-        await blockExternalFonts(sbPage);
+
         sbPages.set(sbIndex, sbPage);
 
         await restoreSessionStorage(
@@ -207,7 +206,7 @@ export const initializeSingleUserTest = (test: ExtendedTest) => {
         baseURL: testInfo.project.use.baseURL,
         ignoreHTTPSErrors: true,
       });
-      await blockExternalFonts(page);
+
       await restoreSessionStorage(page, storagePath, origin);
 
       await use(page);
