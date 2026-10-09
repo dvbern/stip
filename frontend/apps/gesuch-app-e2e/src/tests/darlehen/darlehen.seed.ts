@@ -162,7 +162,6 @@ export interface CreatedDarlehen {
   fallId: string;
 }
 
-// todo: should I leave it or use the dashboardPO.createDarlehen() method instead?
 /**
  * GS creates a new Freiwilligdarlehen from the dashboard and waits for the form to
  * be ready. Returns the created darlehen id and its fall id.

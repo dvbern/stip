@@ -2,7 +2,6 @@ import type { Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 import {
-  ConfirmDialogPO,
   DarlehenPO,
   GSMainNavigationPO,
   initializeMultiUserTest,
@@ -40,16 +39,10 @@ test.describe('Freiwilligdarlehen Löschen durch den GS', () => {
   test('GS löscht das Darlehen auf darlehen Form', async () => {
     const darlehenPO = new DarlehenPO(gsPage1);
 
-    // 1. Als GS das im Status IN_BEARBEITUNG_GS befindliche Darlehen öffnen
-    //    (aus Seed bereits offen).
     await expect(darlehenPO.elems.gsForm).toBeVisible();
 
-    // 2. Schaltfläche „Löschen“ klicken.
-    // 3. Im Bestätigungsdialog bestätigen.
     await darlehenPO.delete();
 
-    // Expected: Der GS wird auf die Startseite/Cockpit zurückgeleitet und das
-    // Darlehen-Formular ist nicht mehr sichtbar.
     await gsPage1.waitForURL(/dashboard/);
     await expect(darlehenPO.elems.gsForm).toBeHidden();
 
@@ -59,8 +52,6 @@ test.describe('Freiwilligdarlehen Löschen durch den GS', () => {
   test.skip('GS löscht das Darlehen auf der Dashboard-Seite', async () => {
     const darlehenPO = new DarlehenPO(gsPage1);
 
-    // 1. Als GS das im Status IN_BEARBEITUNG_GS befindliche Darlehen öffnen
-    //    (aus Seed bereits offen).
     await expect(darlehenPO.elems.gsForm).toBeVisible();
     await darlehenPO.selectGrund('ZWEITAUSBILDUNG');
 
@@ -68,18 +59,11 @@ test.describe('Freiwilligdarlehen Löschen durch den GS', () => {
     const gsMainNavigationPO = new GSMainNavigationPO(gsPage1);
     await gsMainNavigationPO.elems.dashboardLink.click();
 
-    const confirmDialogPO = new ConfirmDialogPO(gsPage1);
-    await expect(confirmDialogPO.elems.dialog).toBeVisible();
-    await confirmDialogPO.elems.confirmButton.click();
+    await expect(darlehenPO.elems.confirmDialog).toBeVisible();
+    await darlehenPO.elems.dialogConfirm.click();
 
-    // todo: finish with dashboard checks
-
-    // 2. Schaltfläche „Löschen“ klicken.
-    // 3. Im Bestätigungsdialog bestätigen.
     await darlehenPO.delete();
 
-    // Expected: Der GS wird auf die Startseite/Cockpit zurückgeleitet und das
-    // Darlehen-Formular ist nicht mehr sichtbar.
     await gsPage1.waitForURL(/dashboard/);
     await expect(darlehenPO.elems.gsForm).toBeHidden();
 

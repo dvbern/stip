@@ -52,30 +52,21 @@ test.describe('Freiwilligdarlehen Negativer Entscheid (Ablehnung)', () => {
   test('SB1: lehnt Gewährung ab und gibt frei', async () => {
     const darlehenPO = new DarlehenPO(sbPage1);
 
-    // 1. Als SB das eingegebene Darlehen öffnen.
     await darlehenPO.goto(urls.sb, getGesuchId()!, darlehenId, fallId);
     await expect(darlehenPO.elems.sbForm).toBeVisible();
 
-    // 2. In der Radiogruppe „Darlehen gewähren“ die Option „Nein“ wählen.
     await darlehenPO.selectGewaehren(false);
 
-    // 3. Prüfen, dass das Betragsfeld deaktiviert und der Upload „Negative
-    //    Verfügung“ eingeblendet wird.
     await expect(darlehenPO.elems.betragDarlehen).toBeHidden();
 
-    // 4. Eine Datei als negative Verfügung hochladen.
     await darlehenPO.uploadNegativeVerfuegung();
 
-    // 5. Kommentar ausfüllen.
     if (darlehenSbAblehnen.kommentar) {
       await darlehenPO.elems.kommentar.fill(darlehenSbAblehnen.kommentar);
     }
 
-    // 6. „Freigeben“ klicken und im Dialog bestätigen.
     await darlehenPO.freigeben();
 
-    // Expected: Nach der Freigabe ist das Darlehen in Freigabe (IN_FREIGABE).
-    // und ohne V0_Freigabestelle sollte die form readonly sein.
     await expect(darlehenPO.elems.sbForm).toHaveClass(/readonly/);
     await sbPage1.close();
   });
@@ -83,16 +74,13 @@ test.describe('Freiwilligdarlehen Negativer Entscheid (Ablehnung)', () => {
   test('SB2: Freigabestelle schliesst mit Ablehnung ab', async () => {
     const darlehenPO = new DarlehenPO(sbPage2);
 
-    // 1. Als Freigabestelle das Darlehen im Status IN_FREIGABE öffnen.
     await darlehenPO.goto(urls.sb, getGesuchId()!, darlehenId, fallId);
     await expect(darlehenPO.elems.sbForm).toBeVisible();
 
-    // 2. Die hochgeladene negative Verfügung ist als Download-Link sichtbar.
     await expect(
       darlehenPO.elems.sbForm.getByText('small.png').first(),
     ).toBeVisible();
 
-    // 3. „Abschliessen“ klicken und im Dialog bestätigen.
     await darlehenPO.abschliessen();
     await expect(darlehenPO.elems.sbForm).toHaveClass(/readonly/);
     await expect(darlehenPO.elems.buttonAbschliessen).toBeHidden();

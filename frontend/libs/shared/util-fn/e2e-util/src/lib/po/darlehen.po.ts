@@ -55,7 +55,7 @@ export class DarlehenPO {
 
     // Sachbearbeiter / Freigabestelle form
     sbForm: Locator;
-    gewaehrenGroup: Locator;
+    gewaehrenRadio: Locator;
     betragDarlehen: Locator;
     kommentar: Locator;
     buttonFreigeben: Locator;
@@ -66,8 +66,10 @@ export class DarlehenPO {
     darlehenVerfuegungDownload: Locator;
 
     // Dialogs
+    confirmDialog: Locator;
     dialogConfirm: Locator;
     dialogCancel: Locator;
+
     kommentarDialogInput: Locator;
   };
 
@@ -101,7 +103,7 @@ export class DarlehenPO {
       buttonDelete: page.getByTestId('button-delete-darlehen'),
 
       sbForm: page.getByTestId('form-darlehen-sb-form'),
-      gewaehrenGroup: page.getByTestId('form-darlehen-darlehenGewaehren'),
+      gewaehrenRadio: page.getByTestId('form-darlehen-darlehenGewaehren'),
       betragDarlehen: page.getByTestId('form-darlehen-betragDarlehen'),
       kommentar: page.getByTestId('form-darlehen-kommentar'),
       buttonFreigeben: page.getByTestId('button-darlehen-freigeben'),
@@ -112,6 +114,7 @@ export class DarlehenPO {
         'darlehen-verfuegung-download',
       ),
 
+      confirmDialog: page.getByTestId('dialog-confirm'),
       dialogConfirm: page.getByTestId('dialog-confirm'),
       dialogCancel: page.getByTestId('dialog-cancel'),
       kommentarDialogInput: page.getByTestId('form-kommentar-dialog-kommentar'),
@@ -236,7 +239,7 @@ export class DarlehenPO {
   // --- Sachbearbeiter / Freigabestelle actions ---
 
   public async selectGewaehren(gewaehren: boolean) {
-    await this.elems.gewaehrenGroup
+    await this.elems.gewaehrenRadio
       .getByRole('radio', { name: gewaehren ? 'Ja' : 'Nein' })
       .check();
   }
@@ -269,8 +272,7 @@ export class DarlehenPO {
     );
     await this.elems.dialogConfirm.click();
     await freigebenResponse;
-    // await expect(this.elems.loading).toBeHidden();
-    await this.elems.loading.waitFor({ state: 'hidden' });
+    await expect(this.elems.loading).toBeHidden();
   }
 
   public async zurueckweisen(kommentar: string) {

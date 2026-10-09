@@ -22,7 +22,6 @@ export default defineConfig({
     ...baseConfig.use,
     baseURL: urls.gs,
   },
-  // workers: !process.env['CI'] ? 3 : 1,
   workers: 3,
   reporter: createCiE2eReporter(APP_TYPE, __dirname),
   projects: [
