@@ -76,9 +76,9 @@ export const baseConfig = defineConfig({
     actionTimeout: !process.env.CI ? 6_000 : undefined,
   },
   // default is 30_000 - shorter for ci to not waste time, since all are tests.slow()
-  timeout: process.env.CI ? 20_000 : undefined,
+  // timeout: process.env.CI ? 20_000 : undefined,
   expect: {
-    timeout: process.env.CI ? 20_000 : undefined,
+    timeout: process.env.CI ? 10_000 : undefined,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
