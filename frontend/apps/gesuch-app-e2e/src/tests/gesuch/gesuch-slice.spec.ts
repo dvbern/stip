@@ -18,7 +18,7 @@ import {
   expectStepTitleToContainText,
   getE2eUrls,
   initializeMultiUserTest,
-  uploadFiles,
+  uploadFilesById,
 } from '@dv/shared/util-fn/e2e-util';
 
 import {
@@ -151,7 +151,7 @@ test.describe('Neues gesuch erstellen', () => {
           gsPage.getByTestId('loading-required-dokumente'),
         ).toBeHidden();
 
-        await uploadFiles(gsPage);
+        await uploadFilesById(gsPage);
         await gsPage.getByTestId('button-continue').click();
       });
     });

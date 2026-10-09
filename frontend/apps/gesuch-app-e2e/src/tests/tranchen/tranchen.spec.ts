@@ -7,7 +7,7 @@ import {
   initializeMultiUserTest,
   secondTrancheStart,
   setupGesuchWithApi,
-  uploadFiles,
+  uploadFilesById,
 } from '@dv/shared/util-fn/e2e-util';
 
 import {
@@ -39,7 +39,7 @@ test.describe('Tranche erstellen', () => {
       );
       await expectStepTitleToContainText('Dokumente', gsPage);
       await requiredDokumenteResponse;
-      await uploadFiles(gsPage);
+      await uploadFilesById(gsPage);
       await gsPage.getByTestId('step-nav-abschluss').first().click();
     });
 
