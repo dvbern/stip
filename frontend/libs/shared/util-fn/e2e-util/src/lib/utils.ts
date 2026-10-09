@@ -74,9 +74,10 @@ export const uploadFilesById = async (page: Page) => {
   for (const testId of testIds) {
     const upload = page.getByTestId(testId);
     const uploadCall = page.waitForResponse(
-      (response) =>
-        response.url().includes('/api/v1/gesuchDokument') &&
-        response.request().method() === 'POST',
+      async (response) =>
+        response.url().includes('/api/v1/gesuchtranche') &&
+        response.url().includes('/dokumenteToUpload/gs') &&
+        response.request().method() === 'GET',
     );
     await upload.scrollIntoViewIfNeeded();
     await upload.click();

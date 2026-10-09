@@ -67,6 +67,8 @@
           }
         ],
         "styles": [
+          "@fontsource-variable/open-sans/wght.css",
+          "@fontsource-variable/material-symbols-rounded/fill.css",
           "libs/shared/styles/theme/src/tailwind.css",
           "apps/gesuch-app/src/styles.scss"
         ],
