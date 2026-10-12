@@ -263,14 +263,14 @@ public class SapService {
 
                         case BUSINESSPARTNER_CREATE -> {
                             final var response = sapEndpointService.createBusinessPartner(fall, deliveryid);
-                            if (!SapReturnCodeType.isSuccess(response.getRETURNCODE().get(0).getTYPE())) {
-                                sapDelivery.setMessage(response.getRETURNCODE().get(0).getMESSAGE());
+                            if (!SapReturnCodeType.isSuccess(response.getRETURNCODE().getFirst().getTYPE())) {
+                                sapDelivery.setMessage(response.getRETURNCODE().getFirst().getMESSAGE());
                             }
                         }
                         case BUSINESSPARTNER_CHANGE -> {
                             final var response = sapEndpointService.changeBusinessPartner(fall, deliveryid);
-                            if (!SapReturnCodeType.isSuccess(response.getRETURNCODE().get(0).getTYPE())) {
-                                sapDelivery.setMessage(response.getRETURNCODE().get(0).getMESSAGE());
+                            if (!SapReturnCodeType.isSuccess(response.getRETURNCODE().getFirst().getTYPE())) {
+                                sapDelivery.setMessage(response.getRETURNCODE().getFirst().getMESSAGE());
                             }
                         }
                         case null, default -> throw new IllegalStateException();
@@ -331,13 +331,19 @@ public class SapService {
         final var readImportResponse = sapEndpointService.readImportStatus(buchhaltung.getFall(), deliveryid);
 
         var status = SapStatus.FAILURE;
-        if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE())) {
-            status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().getFirst().getTYPE())) {
+            status = SapStatus.parse(readImportResponse.getDELIVERY().getFirst().getSTATUS());
         } else {
-            if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().getFirst().getTYPE())) {
+            if (!SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().getFirst().getTYPE())) {
                 sapDelivery.setMessage(
-                    Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' ' +
-                    readImportResponse.getRETURNCODE().getFirst().getMESSAGE()
+                    Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' '
+                    + readImportResponse.getDELIVERY()
+                        .getFirst()
+                        .getPOSITION()
+                        .getFirst()
+                        .getLOGS()
+                        .getFirst()
+                        .getMESSAGE()
                 );
             }
         }
