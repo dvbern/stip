@@ -24,6 +24,7 @@ import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -111,12 +112,13 @@ public class SapMapperUtil {
         final LocalDate validFrom
     ) {
         try {
-            return DatatypeFactory.newInstance()
+            final var xmlGregorianDateTime = DatatypeFactory.newInstance()
                 .newXMLGregorianCalendar(
                     GregorianCalendar.from(
                         validFrom.atStartOfDay(ZoneId.systemDefault())
                     )
                 );
+            return unsetTimeFields(xmlGregorianDateTime);
         } catch (DatatypeConfigurationException e) {
             throw new RuntimeException(e);
         }
@@ -126,16 +128,26 @@ public class SapMapperUtil {
         final LocalDate validFrom
     ) {
         try {
-            return DatatypeFactory.newInstance()
+            final var xmlGregorianDateTime = DatatypeFactory.newInstance()
                 .newXMLGregorianCalendar(
                     GregorianCalendar.from(
                         validFrom.atStartOfDay(ZoneId.systemDefault())
                             .plusMonths(SapMapperUtil.SOZIALDIENST_PAYMENT_DETAIL_MONTHS_VALID)
                     )
                 );
+            return unsetTimeFields(xmlGregorianDateTime);
         } catch (DatatypeConfigurationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private XMLGregorianCalendar unsetTimeFields(final XMLGregorianCalendar calendar) {
+        calendar.setHour(DatatypeConstants.FIELD_UNDEFINED);
+        calendar.setMinute(DatatypeConstants.FIELD_UNDEFINED);
+        calendar.setSecond(DatatypeConstants.FIELD_UNDEFINED);
+        calendar.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+        calendar.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+        return calendar;
     }
 
     public String stripWhitespace(String input) {
