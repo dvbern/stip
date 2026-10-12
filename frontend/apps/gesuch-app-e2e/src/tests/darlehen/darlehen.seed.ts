@@ -8,7 +8,7 @@ import {
   acceptDocuments,
   expectStepTitleToContainText,
   getE2eUrls,
-  uploadFilesById,
+  uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { darlehenGs, grundOhneDokument } from './darlehen.data';
@@ -34,7 +34,7 @@ export const gsEinreichen = async (
   );
   await expectStepTitleToContainText('Dokumente', gsPage);
   await requiredDokumenteResponse;
-  await uploadFilesById(gsPage);
+  await uploadFiles(gsPage);
   await gsPage.getByTestId('step-nav-abschluss').first().click();
 
   await expectStepTitleToContainText('Freigabe', gsPage);

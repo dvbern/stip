@@ -18,7 +18,7 @@ import {
   initializeMultiUserTest,
   secondTrancheStart,
   setupGesuchWithApi,
-  uploadFilesById,
+  uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
 import { bruder } from './aenderung.data';
@@ -62,7 +62,7 @@ test.describe('Aenderung', () => {
       );
       await expectStepTitleToContainText('Dokumente', gsPage1);
       await requiredDokumenteResponse;
-      await uploadFilesById(gsPage1);
+      await uploadFiles(gsPage1);
       await gsPage1.getByTestId('step-nav-abschluss').first().click();
     });
 
