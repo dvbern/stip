@@ -888,5 +888,16 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>jdtls</id>
+      <activation>
+        <property>
+          <name>m2e.version</name>
+        </property>
+      </activation>
+      <build>
+        <directory>${project.basedir}/target-jdtls</directory>
+      </build>
+    </profile>
   </profiles>
 </project>
