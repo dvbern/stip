@@ -115,12 +115,11 @@ public class BerechnungUtil {
             .intValue();
     }
 
-    public boolean nullableCompare(final Integer value1, final Integer value2, final int defaultValue) {
+    public <T> boolean nullableCompare(final T value1, final T value2, final T defaultValue) {
         if ((Objects.isNull(value1) || value1 == defaultValue) && (Objects.isNull(value2) || value2 == defaultValue)) {
             return true;
         }
 
         return Objects.equals(value1, value2);
     }
-
 }

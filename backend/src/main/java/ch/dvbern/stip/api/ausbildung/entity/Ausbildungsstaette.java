@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -29,7 +29,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -46,13 +45,13 @@ import org.jilt.BuilderStyle;
 @OnlyNummerTypOfOhneNummerCanBeNullableConstraint
 @Audited
 @Entity
-@Table(name = "ausbildungsstaette", indexes = @Index(name = "IX_ausbildungsstaette_tenant", columnList = "tenant"))
+@Table(name = "ausbildungsstaette")
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ausbildungsstaette extends AbstractTenantEntity {
+public class Ausbildungsstaette extends AbstractEntity {
     @NotNull
     @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "name_de", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)

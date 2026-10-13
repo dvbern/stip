@@ -28,7 +28,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -42,8 +41,7 @@ import org.jilt.BuilderStyle;
 @Audited
 @Entity
 @Table(
-    name = "geschwister",
-    indexes = @Index(name = "IX_geschwister_tenant", columnList = "tenant")
+    name = "geschwister"
 )
 @Getter
 @Setter

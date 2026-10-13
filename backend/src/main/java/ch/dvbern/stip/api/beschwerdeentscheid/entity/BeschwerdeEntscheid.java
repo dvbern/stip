@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.beschwerdeentscheid.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.persistence.Column;
@@ -42,16 +42,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Entity
 @Table(
     name = "beschwerde_entscheid",
-    indexes = {
-        @Index(name = "IX_beschwerde_entscheid_tenant", columnList = "tenant")
-    }
+    indexes = @Index(name = "IX_beschwerde_entscheid_gesuch_id", columnList = "gesuch_id")
 )
 @Audited
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BeschwerdeEntscheid extends AbstractTenantEntity {
+public class BeschwerdeEntscheid extends AbstractEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

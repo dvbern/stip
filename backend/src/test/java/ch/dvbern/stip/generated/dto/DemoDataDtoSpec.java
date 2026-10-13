@@ -18,6 +18,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDarlehenDtoSpec;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungDetailsDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoEinnahmenKostenDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoElternteilDtoSpec;
@@ -58,7 +59,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataDtoSpec.JSON_PROPERTY_GESCHWISTER,
   DemoDataDtoSpec.JSON_PROPERTY_AUSZAHLUNG,
   DemoDataDtoSpec.JSON_PROPERTY_DARLEHEN,
-  DemoDataDtoSpec.JSON_PROPERTY_BERECHNUNG_VALUES
+  DemoDataDtoSpec.JSON_PROPERTY_BERECHNUNG_VALUES,
+  DemoDataDtoSpec.JSON_PROPERTY_BERECHNUNG_DETAILS
 })
 @JsonTypeName("DemoData")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
@@ -122,6 +124,10 @@ public class DemoDataDtoSpec {
   public static final String JSON_PROPERTY_BERECHNUNG_VALUES = "berechnungValues";
   @jakarta.annotation.Nullable
   private DemoDataTestBerechnungValuesDtoSpec berechnungValues;
+
+  public static final String JSON_PROPERTY_BERECHNUNG_DETAILS = "berechnungDetails";
+  @jakarta.annotation.Nullable
+  private DemoDataTestBerechnungDetailsDtoSpec berechnungDetails;
 
   public DemoDataDtoSpec() {
   }
@@ -541,6 +547,31 @@ public class DemoDataDtoSpec {
     this.berechnungValues = berechnungValues;
   }
 
+  public DemoDataDtoSpec berechnungDetails(@jakarta.annotation.Nullable DemoDataTestBerechnungDetailsDtoSpec berechnungDetails) {
+    
+    this.berechnungDetails = berechnungDetails;
+    return this;
+  }
+
+  /**
+   * Get berechnungDetails
+   * @return berechnungDetails
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_DETAILS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DemoDataTestBerechnungDetailsDtoSpec getBerechnungDetails() {
+    return berechnungDetails;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_BERECHNUNG_DETAILS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBerechnungDetails(@jakarta.annotation.Nullable DemoDataTestBerechnungDetailsDtoSpec berechnungDetails) {
+    this.berechnungDetails = berechnungDetails;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -565,12 +596,13 @@ public class DemoDataDtoSpec {
         Objects.equals(this.geschwister, demoData.geschwister) &&
         Objects.equals(this.auszahlung, demoData.auszahlung) &&
         Objects.equals(this.darlehen, demoData.darlehen) &&
-        Objects.equals(this.berechnungValues, demoData.berechnungValues);
+        Objects.equals(this.berechnungValues, demoData.berechnungValues) &&
+        Objects.equals(this.berechnungDetails, demoData.berechnungDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, partner, kinder, einnahmenKosten, einnahmenKostenPartner, familiensituation, elterns, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, berechnungValues);
+    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, partner, kinder, einnahmenKosten, einnahmenKostenPartner, familiensituation, elterns, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, berechnungValues, berechnungDetails);
   }
 
   @Override
@@ -592,6 +624,7 @@ public class DemoDataDtoSpec {
     sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
     sb.append("    berechnungValues: ").append(toIndentedString(berechnungValues)).append("\n");
+    sb.append("    berechnungDetails: ").append(toIndentedString(berechnungDetails)).append("\n");
     sb.append("}");
     return sb.toString();
   }

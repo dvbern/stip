@@ -20,14 +20,13 @@ package ch.dvbern.stip.api.darlehen.entity;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -39,14 +38,11 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Table(
-    name = "freiwillig_darlehen_dokument",
-    indexes = {
-        @Index(name = "IX_freiwillig_darlehen_dokument_tenant", columnList = "tenant")
-    }
+    name = "freiwillig_darlehen_dokument"
 )
 @Getter
 @Setter
-public class FreiwilligDarlehenDokument extends AbstractTenantEntity {
+public class FreiwilligDarlehenDokument extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "dokument_type")
     private DarlehenDokumentType dokumentType;

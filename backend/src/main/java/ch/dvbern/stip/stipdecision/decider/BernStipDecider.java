@@ -20,6 +20,7 @@ package ch.dvbern.stip.stipdecision.decider;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -240,7 +241,7 @@ public class BernStipDecider extends BaseStipDecider {
             final int noElternInBern = (int) gesuchTranche.getGesuchFormular()
                 .getElterns()
                 .stream()
-                .filter(eltern -> plzService.isInBern(eltern.getAdresse()))
+                .filter(eltern -> plzService.isInKanton(eltern.getAdresse(), Kanton.BE))
                 .count();
 
             if (noElternInBern == noEltern) {
@@ -333,7 +334,8 @@ public class BernStipDecider extends BaseStipDecider {
         }
 
         private static boolean heimatortImKantonBern(final GesuchTranche gesuchTranche, final PlzService plzService) {
-            return plzService.isInBern(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getHeimatortPLZ());
+            return plzService
+                .isInKanton(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getHeimatortPLZ(), Kanton.BE);
         }
 
         private static boolean zuestaendigeKESBImKantonBern(final GesuchTranche gesuchTranche) {
@@ -355,7 +357,8 @@ public class BernStipDecider extends BaseStipDecider {
         }
 
         private static boolean piaBernWohnhaft(final GesuchTranche gesuchTranche, final PlzService plzService) {
-            return plzService.isInBern(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getAdresse());
+            return plzService
+                .isInKanton(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getAdresse(), Kanton.BE);
         }
 
         private static boolean piaBevormundet(final GesuchTranche gesuchTranche) {

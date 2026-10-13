@@ -127,7 +127,7 @@ public class GesuchsperiodeSeeding extends Seeder {
         return config.seeding().seedOnProfile();
     }
 
-    Gesuchsjahr getJahrForSeeding(final int technischesJahr) {
+    public Gesuchsjahr getJahrForSeeding(final int technischesJahr) {
         // Technically this limits us to the 2nd millennium, but I hope this won't be used in the year 3000+
         String yearSuffix = String.valueOf(technischesJahr - 2000);
         return new Gesuchsjahr()

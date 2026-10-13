@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,16 +42,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Entity
 @Table(
     name = "dokument",
-    indexes = {
-        @Index(name = "IX_dokument_tenant", columnList = "tenant")
-    }
+    indexes = @Index(name = "IX_dokument_gesuch_dokument_id", columnList = "gesuch_dokument_id")
 )
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dokument extends AbstractTenantEntity {
+public class Dokument extends AbstractEntity {
     @Nullable
     @ManyToOne
     @JoinColumn(name = "gesuch_dokument_id", foreignKey = @ForeignKey(name = "FK_dokument_gesuch_dokument_id"))

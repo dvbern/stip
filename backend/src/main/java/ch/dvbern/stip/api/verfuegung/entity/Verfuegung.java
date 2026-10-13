@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.verfuegung.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -36,7 +36,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -50,13 +49,11 @@ import org.hibernate.envers.Audited;
 @Audited
 @Entity
 @Table(
-    name = "verfuegung", indexes = {
-        @Index(name = "IX_verfuegung_tenant", columnList = "tenant")
-    }
+    name = "verfuegung"
 )
 @Getter
 @Setter
-public class Verfuegung extends AbstractTenantEntity {
+public class Verfuegung extends AbstractEntity {
     @Nullable
     @Enumerated(EnumType.STRING)
     @Column(name = "stip_decision")
