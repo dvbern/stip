@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from '@playwright/test';
 
-import { DarlehenGrund } from '@dv/shared/model/gesuch';
+import { DarlehenDokumentType, DarlehenGrund } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 
 import { SmallImageFile } from '../files';
@@ -140,7 +140,7 @@ export class DarlehenPO {
 
   // --- Gesuchsteller actions ---
 
-  public async fillGsForm(darlehen: DarlehenGsValues) {
+  public async fillGsBaseFields(darlehen: DarlehenGsValues) {
     if (isDefined(darlehen.betragGewuenscht)) {
       await this.elems.betragGewuenscht.fill(`${darlehen.betragGewuenscht}`);
     }
@@ -173,11 +173,11 @@ export class DarlehenPO {
     await this.grundCheckbox(grund).getByRole('checkbox').check();
   }
 
-  // todo: put generic impl into utils?
+  // todo-e2e-next: put generic impl into utils?
   /**
    * Upload a Darlehen document of the given type via the document-upload dialog.
    */
-  public async uploadDokument(dokumentTyp: DarlehenGrundDokument) {
+  public async uploadDokument(dokumentTyp: DarlehenDokumentType) {
     const uploadButton = this.elems.page.getByTestId(
       `button-document-upload-${dokumentTyp}`,
     );
@@ -301,9 +301,3 @@ export class DarlehenPO {
     await expect(this.elems.loading).toBeHidden();
   }
 }
-
-type DarlehenGrundDokument =
-  | 'BETREIBUNGS_AUSZUG'
-  | 'AUFSTELLUNG_KOSTEN_ELTERN'
-  | 'KOPIE_SCHULGELDRECHNUNG'
-  | 'BELEGE_ANSCHAFFUNGEN';

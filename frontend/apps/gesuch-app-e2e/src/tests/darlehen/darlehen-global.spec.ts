@@ -70,7 +70,7 @@ test.describe('Freiwilligdarlehen', () => {
       await expect(darlehenPO.elems.loading).toBeHidden();
       await expect(darlehenPO.elems.gsForm).toBeVisible();
 
-      await darlehenPO.fillGsForm(darlehenGs);
+      await darlehenPO.fillGsBaseFields(darlehenGs);
 
       await darlehenPO.uploadDokument('BETREIBUNGS_AUSZUG');
 

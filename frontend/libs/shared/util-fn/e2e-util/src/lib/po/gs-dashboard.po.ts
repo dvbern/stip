@@ -144,6 +144,7 @@ export class GsDashboardPO {
     await expect(this.elems.dashboardLoading).toBeHidden();
   }
 
+  // todo-e2e-next: use to get gesuch or scrap
   public getGesuch(gesuchId: string): Locator {
     return this.elems.gesuchItem.filter({
       has: this.elems.page.locator(`a[href*="/gesuch/${gesuchId}/"]`),
@@ -156,7 +157,7 @@ export class GsDashboardPO {
     });
   }
 
-  // todo: there shall only be one shown on the dashboard at a time
+  // todo-e2e-next: there shall only be one shown on the dashboard at a time, use or scrap
   public getAenderung(aenderungId: string): Locator {
     return this.elems.gesuchSubitemAenderung.filter({
       has: this.elems.page.locator(`a[href$="/aenderung/${aenderungId}"]`),
@@ -178,13 +179,6 @@ export class GsDashboardPO {
   }
 
   // --- Actions ---
-
-  // there can be multiple Gesuche on the dash
-  public async openGesuch(gesuch: Locator = this.elems.gesuchItem) {
-    const link = gesuch.getByTestId('dashboard-gesuch-open');
-
-    await link.click();
-  }
 
   public async createNewStipendium(ausbildung: AusbildungValues) {
     await this.elems.createAusbildung.click();
@@ -235,7 +229,7 @@ export class GsDashboardPO {
    */
   public async createAenderung(values: {
     gueltigAb: string;
-    kommentar?: string;
+    kommentar: string;
   }) {
     await this.elems.createAenderung.click();
     await this.elems.aenderungGueltigAb.fill(values.gueltigAb);

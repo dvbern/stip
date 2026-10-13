@@ -17,8 +17,10 @@
   -webkit-font-smoothing: antialiased;
   font-feature-settings: 'liga';
   font-variation-settings:
+    'opsz' 48,
+    'wght' 600,
     'FILL' 1,
-    'wght' 600;
+    'GRAD' 0;
 }
 
 /*

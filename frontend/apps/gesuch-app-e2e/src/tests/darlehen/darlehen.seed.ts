@@ -202,7 +202,7 @@ export const eingebenDarlehenAsGs = async (
   const created = await createDarlehenAsGs(gsPage);
 
   const darlehenPO = new DarlehenPO(gsPage);
-  await darlehenPO.fillGsForm(darlehenGs);
+  await darlehenPO.fillGsBaseFields(darlehenGs);
   await darlehenPO.uploadDokument('BETREIBUNGS_AUSZUG');
   await darlehenPO.selectGrund(grundOhneDokument);
   await darlehenPO.eingeben();
