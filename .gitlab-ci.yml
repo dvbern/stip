@@ -131,6 +131,8 @@ include:
       e2e-on: 'default'
       node-image: '$DVB_DOCKER_REGISTRY/dockerhub/library/node'
       node-version: ':22'
+      nx-parallel: 4
+      build-additional-args: '--skip-nx-cache'
 
 
 ### Component Extensions
