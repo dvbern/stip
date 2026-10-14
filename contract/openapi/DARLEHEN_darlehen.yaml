@@ -674,7 +674,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FreiwilligDarlehenDashboard'
-
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: './components/common.yaml#/SachbearbeiterForFilter'
     FreiwilligDarlehenDashboard:
       type: object
       required:

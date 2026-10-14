@@ -1842,14 +1842,17 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /massendruck/{getGesucheSBQueryType}/create:
+  /massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}:
     parameters:
       - name: getGesucheSBQueryType
         schema:
           $ref: '#/components/schemas/GetGesucheSBQueryType'
         in: path
         required: true
-      - $ref: '#/components/parameters/zugewiesen'
+      - name: sachbearbeiterId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
     post:
       tags:
         - Massendruck
@@ -7333,6 +7336,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FreiwilligDarlehenDashboard'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SachbearbeiterForFilter'
     FreiwilligDarlehenDashboard:
       type: object
       required:
@@ -7516,6 +7523,19 @@ components:
         - IN_FREIGABE
         - AKZEPTIERT
         - ABGELEHNT
+    SachbearbeiterForFilter:
+      type: object
+      required:
+        - id
+        - vorname
+        - nachname
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        vorname:
+          type: string
+        nachname:
+          type: string
     Dokument:
       required:
         - id
@@ -9034,6 +9054,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MassendruckJob'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SachbearbeiterForFilter'
     MassendruckJobSortColumn:
       enum:
         - TIMESTAMP_ERSTELLT
@@ -10189,6 +10213,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SbDashboardGesuch'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SachbearbeiterForFilter'
     SbDashboardGesuch:
       type: object
       required:

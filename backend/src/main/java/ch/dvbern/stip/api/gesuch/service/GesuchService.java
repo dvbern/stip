@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
@@ -206,6 +207,7 @@ public class GesuchService {
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
     private final StatisticsdataService statisticsdataService;
     private final DarlehenService darlehenService;
+    private final SachbearbeiterService sachbearbeiterService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -574,7 +576,8 @@ public class GesuchService {
             page,
             entries.size(),
             totalEntries,
-            entries
+            entries,
+            sachbearbeiterService.getSachbearbeitersForFilter()
         );
     }
 
@@ -627,7 +630,8 @@ public class GesuchService {
             page,
             entries.size(),
             totalEntries,
-            entries
+            entries,
+            sachbearbeiterService.getSachbearbeitersForFilter()
         );
     }
 

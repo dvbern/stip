@@ -135,13 +135,13 @@ public class MassendruckApiSpec {
      * Create a Massendruck Job for the given query type
      *
      * @see #getGesucheSBQueryTypePath  (required)
-     * @see #zugewiesenQuery  (optional)
+     * @see #sachbearbeiterIdPath  (optional)
      * return MassendruckJobDtoSpec
      */
     public static class CreateMassendruckJobForQueryTypeOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/massendruck/{getGesucheSBQueryType}/create";
+        public static final String REQ_URI = "/massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -153,7 +153,7 @@ public class MassendruckApiSpec {
         }
 
         /**
-         * POST /massendruck/{getGesucheSBQueryType}/create
+         * POST /massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -164,7 +164,7 @@ public class MassendruckApiSpec {
         }
 
         /**
-         * POST /massendruck/{getGesucheSBQueryType}/create
+         * POST /massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}
          * @param handler handler
          * @return MassendruckJobDtoSpec
          */
@@ -184,14 +184,14 @@ public class MassendruckApiSpec {
             return this;
         }
 
-        public static final String ZUGEWIESEN_QUERY = "zugewiesen";
+        public static final String SACHBEARBEITER_ID_PATH = "sachbearbeiterId";
 
         /**
-         * @param zugewiesen (Boolean)  (optional)
+         * @param sachbearbeiterId (UUID)  (optional)
          * @return operation
          */
-        public CreateMassendruckJobForQueryTypeOper zugewiesenQuery(Object... zugewiesen) {
-            reqSpec.addQueryParam(ZUGEWIESEN_QUERY, zugewiesen);
+        public CreateMassendruckJobForQueryTypeOper sachbearbeiterIdPath(Object sachbearbeiterId) {
+            reqSpec.addPathParam(SACHBEARBEITER_ID_PATH, sachbearbeiterId);
             return this;
         }
 

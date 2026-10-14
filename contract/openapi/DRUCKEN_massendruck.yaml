@@ -52,14 +52,17 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getAllMassendruckJobs
       summary: Get all Massendruck Jobs
-  /massendruck/{getGesucheSBQueryType}/create:
+  /massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}:
     parameters:
       - name: getGesucheSBQueryType
         schema:
           $ref: './components/common.yaml#/GetGesucheSBQueryType'
         in: path
         required: true
-      - $ref: './components/parameters.yaml#/zugewiesen'
+      - name: sachbearbeiterId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
     post:
       tags:
         - Massendruck
@@ -372,6 +375,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MassendruckJob'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: './components/common.yaml#/SachbearbeiterForFilter'
     MassendruckJobSortColumn:
       enum:
         - TIMESTAMP_ERSTELLT

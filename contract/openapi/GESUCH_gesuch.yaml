@@ -1366,6 +1366,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SbDashboardGesuch'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: './components/common.yaml#/SachbearbeiterForFilter'
     SbDashboardGesuch:
       type: object
       required:

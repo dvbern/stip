@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.MassendruckJobDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterForFilterDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,12 +28,14 @@ public class PaginatedMassendruckJobDto  implements Serializable {
   private Integer pageSize;
   private Integer totalEntries;
   private @Valid List<@Valid MassendruckJobDto> entries = new ArrayList<>();
+  private @Valid List<@Valid SachbearbeiterForFilterDto> sachbearbeiters = new ArrayList<>();
 
   protected PaginatedMassendruckJobDto(PaginatedMassendruckJobDtoBuilder<?, ?> b) {
     this.page = b.page;
     this.pageSize = b.pageSize;
     this.totalEntries = b.totalEntries;
     this.entries = b.entries;
+    this.sachbearbeiters = b.sachbearbeiters;
   }
 
   public PaginatedMassendruckJobDto() {
@@ -126,6 +129,40 @@ public class PaginatedMassendruckJobDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public PaginatedMassendruckJobDto sachbearbeiters(List<@Valid SachbearbeiterForFilterDto> sachbearbeiters) {
+    this.sachbearbeiters = sachbearbeiters;
+    return this;
+  }
+
+  
+  @JsonProperty("sachbearbeiters")
+  @Valid public List<@Valid SachbearbeiterForFilterDto> getSachbearbeiters() {
+    return sachbearbeiters;
+  }
+
+  @JsonProperty("sachbearbeiters")
+  public void setSachbearbeiters(List<@Valid SachbearbeiterForFilterDto> sachbearbeiters) {
+    this.sachbearbeiters = sachbearbeiters;
+  }
+
+  public PaginatedMassendruckJobDto addSachbearbeitersItem(SachbearbeiterForFilterDto sachbearbeitersItem) {
+    if (this.sachbearbeiters == null) {
+      this.sachbearbeiters = new ArrayList<>();
+    }
+
+    this.sachbearbeiters.add(sachbearbeitersItem);
+    return this;
+  }
+
+  public PaginatedMassendruckJobDto removeSachbearbeitersItem(SachbearbeiterForFilterDto sachbearbeitersItem) {
+    if (sachbearbeitersItem != null && this.sachbearbeiters != null) {
+      this.sachbearbeiters.remove(sachbearbeitersItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -139,12 +176,13 @@ public class PaginatedMassendruckJobDto  implements Serializable {
     return Objects.equals(this.page, paginatedMassendruckJob.page) &&
         Objects.equals(this.pageSize, paginatedMassendruckJob.pageSize) &&
         Objects.equals(this.totalEntries, paginatedMassendruckJob.totalEntries) &&
-        Objects.equals(this.entries, paginatedMassendruckJob.entries);
+        Objects.equals(this.entries, paginatedMassendruckJob.entries) &&
+        Objects.equals(this.sachbearbeiters, paginatedMassendruckJob.sachbearbeiters);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, pageSize, totalEntries, entries);
+    return Objects.hash(page, pageSize, totalEntries, entries, sachbearbeiters);
   }
 
   @Override
@@ -156,6 +194,7 @@ public class PaginatedMassendruckJobDto  implements Serializable {
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    totalEntries: ").append(toIndentedString(totalEntries)).append("\n");
     sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
+    sb.append("    sachbearbeiters: ").append(toIndentedString(sachbearbeiters)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -191,6 +230,7 @@ public class PaginatedMassendruckJobDto  implements Serializable {
     private Integer pageSize;
     private Integer totalEntries;
     private List<MassendruckJobDto> entries = new ArrayList<>();
+    private List<SachbearbeiterForFilterDto> sachbearbeiters = new ArrayList<>();
     protected abstract B self();
 
     public abstract C build();
@@ -209,6 +249,10 @@ public class PaginatedMassendruckJobDto  implements Serializable {
     }
     public B entries(List<MassendruckJobDto> entries) {
       this.entries = entries;
+      return self();
+    }
+    public B sachbearbeiters(List<SachbearbeiterForFilterDto> sachbearbeiters) {
+      this.sachbearbeiters = sachbearbeiters;
       return self();
     }
   }

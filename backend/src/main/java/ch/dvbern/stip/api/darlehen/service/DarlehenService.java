@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.pdf.DarlehenVerfuegungPdfService;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
@@ -118,6 +119,7 @@ public class DarlehenService {
     private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
     private final MailService mailService;
     private final StatusprotokollService statusprotokollService;
+    private final SachbearbeiterService sachbearbeiterService;
 
     private DarlehenBuchhaltungEntry createDarlehenBuchhaltungEntry(
         final Gesuch gesuch,
@@ -482,7 +484,8 @@ public class DarlehenService {
             page,
             results.size(),
             Math.toIntExact(countQuery.fetchFirst()),
-            results
+            results,
+            sachbearbeiterService.getSachbearbeitersForFilter()
         );
     }
 

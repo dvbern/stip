@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.type.FrontendType;
 import ch.dvbern.stip.generated.dto.SachbearbeiterDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterForFilterDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterUpdateDto;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -110,6 +111,10 @@ public class SachbearbeiterService {
         Sachbearbeiter sachbearbeiter = sachbearbeiterRepository.requireById(sachbearbeiterId);
         sachbearbeiterRepository.deleteById(sachbearbeiterId);
         keycloakBenutzerService.deleteKeycloakBenutzer(sachbearbeiter.getKeycloakId());
+    }
+
+    public List<SachbearbeiterForFilterDto> getSachbearbeitersForFilter() {
+        return sachbearbeiterRepository.findAll().stream().map(sachbearbeiterMapper::toFilterDto).toList();
     }
 
 }
