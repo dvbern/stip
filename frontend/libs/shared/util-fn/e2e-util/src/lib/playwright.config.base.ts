@@ -72,13 +72,10 @@ export const baseConfig = defineConfig({
     contextOptions: {
       ignoreHTTPSErrors: true,
     },
-    // shorter action timeout for local testing
-    actionTimeout: !process.env.CI ? 6_000 : undefined,
   },
-  // default is 30_000 - shorter for ci to not waste time, since all are tests.slow()
-  // timeout: process.env.CI ? 20_000 : undefined,
+  timeout: 30_000,
   expect: {
-    timeout: process.env.CI ? 10_000 : undefined,
+    timeout: 10_000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -89,26 +86,20 @@ type ReporterConfig = NonNullable<
   Parameters<typeof defineConfig>[0]['reporter']
 >;
 
-export const createE2eReporter = (appType: string): ReporterConfig => {
-  if (!process.env['CI']) {
-    return [['list']];
-  }
-
-  return [
-    ['junit', { outputFile: `test-results/junit/${appType}.xml` }],
-    ['html', { open: 'never', outputFolder: `test-results/html/${appType}` }],
-  ];
-};
-
 export const createCiE2eReporter = (
   appType: string,
   appConfigDir: string,
 ): ReporterConfig => {
-  if (!process.env['CI']) {
-    return [['list']];
-  }
-
   const testResultsDir = join(appConfigDir, '../../test-results');
+  if (!process.env['CI']) {
+    return [
+      ['list'],
+      [
+        'html',
+        { open: 'never', outputFolder: join(testResultsDir, 'html', appType) },
+      ],
+    ];
+  }
 
   return [
     ['junit', { outputFile: join(testResultsDir, 'junit', `${appType}.xml`) }],
