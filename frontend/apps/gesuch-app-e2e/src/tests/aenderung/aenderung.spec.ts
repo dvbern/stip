@@ -21,12 +21,12 @@ import {
   uploadFiles,
 } from '@dv/shared/util-fn/e2e-util';
 
-import { bruder } from './aenderung.data';
 import {
   ausbildungValues,
+  bruder,
   createZahlungsverbindungUpdateFn,
   gesuchFormularUpdateFn,
-} from '../tranchen/tranchen.data';
+} from './aenderung.data';
 
 const { test, getGesuchId, getTrancheId } = initializeMultiUserTest(
   ausbildungValues,
@@ -89,6 +89,18 @@ test.describe('Aenderung', () => {
     });
 
     await test.step('Set tranche to bearbeitung', async () => {
+      await sbGesuchHeader.elems.aktionMenu.click();
+      // Da 2. ausbildung neccessary
+      await sbGesuchHeader.elems
+        .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
+        .click();
+
+      const kommentarField = sbPage1.getByTestId(
+        'form-kommentar-dialog-kommentar',
+      );
+      await kommentarField.fill('E2E Antrag genemigen kommentar');
+      await sbPage1.getByTestId('dialog-confirm').click();
+
       await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
 
       await sbGesuchHeader.elems.aktionMenu.click();
@@ -294,14 +306,7 @@ test.describe('Aenderung', () => {
       await expect(geschwisterPO.elems.geschwisterRow).toHaveCount(1);
       await geschwisterPO.elems.buttonContinue.click();
 
-      // todo: change
-      // todo-e2e-next: more generic approach for spinners hidden (form and action menu)
-      const sbLoading = await sbPage1
-        .getByRole('status', { name: 'Loading' })
-        .all();
-      for (const loading of sbLoading) {
-        await loading.waitFor({ state: 'hidden' });
-      }
+      await geschwisterPO.elems.loading.waitFor({ state: 'hidden' });
 
       await expect(
         sbStepsNavPO.elems.geschwister

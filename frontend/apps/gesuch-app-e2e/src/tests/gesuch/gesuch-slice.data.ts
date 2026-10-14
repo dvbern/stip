@@ -20,6 +20,8 @@ import {
   specificYearsAgo,
 } from '@dv/shared/util-fn/e2e-util';
 
+// todo-e2e-next: implement better pattern, with no code duplicaton for test data setup (maybe with demo-data-app)
+
 export const ausbildung: AusbildungValues = {
   fallId: '',
   status: 'AKTIV',
