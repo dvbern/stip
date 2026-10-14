@@ -443,7 +443,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     const hasEntries = !isLoading && (this.gesucheTotalEntriesSig() ?? 0) > 0;
     const hasFilters = Object.entries(this.filterForm.getRawValue())
-      .filter(([key]) => key !== 'typ')
+      .filter(([key]) => key !== 'bearbeiter' && key !== 'typ')
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .some(([_, value]) => value);
 
