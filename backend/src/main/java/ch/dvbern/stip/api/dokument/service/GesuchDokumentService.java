@@ -492,7 +492,8 @@ public class GesuchDokumentService {
 
     @Transactional
     public void removeGesuchDokuments(final GesuchTranche tranche, final List<GesuchDokument> gesuchDokuments) {
-        final var dokumentObjectIds = gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(gesuchDokuments.stream().map(AbstractEntity::getId).toList());
+        final var dokumentObjectIds = gesuchDokumentRepository
+            .getAllObjectIdsForGesuchDokuments(gesuchDokuments.stream().map(AbstractEntity::getId).toList());
 
         gesuchDokuments.forEach(gesuchDokumentRepository::delete);
         if (canDeleteDokumentFromS3(tranche) && !dokumentObjectIds.isEmpty()) {

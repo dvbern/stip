@@ -394,7 +394,9 @@ public class GesuchTrancheService {
             return;
         }
         final var dokumentObjectIds =
-            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(superfluousGesuchDokuments.stream().map(AbstractEntity::getId).toList());
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(
+                superfluousGesuchDokuments.stream().map(AbstractEntity::getId).toList()
+            );
 
         if (!dokumentObjectIds.isEmpty()) {
             gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);

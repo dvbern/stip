@@ -18,12 +18,10 @@
 package ch.dvbern.stip.api;
 
 import java.io.ByteArrayOutputStream;
-import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
-import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import io.quarkus.test.Mock;
@@ -32,7 +30,6 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.NotAuthorizedException;
 import org.jboss.resteasy.reactive.RestMulti;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -45,7 +42,9 @@ public class DokumentDownloadServiceMock extends DokumentDownloadService {
     }
 
     @Inject
-    public DokumentDownloadServiceMock(S3AsyncClient s3, JWTParser jwtParser, StipConfig config, BenutzerService benutzerService) {
+    public DokumentDownloadServiceMock(
+    S3AsyncClient s3, JWTParser jwtParser, StipConfig config, BenutzerService benutzerService
+    ) {
         super(s3, jwtParser, config, benutzerService);
     }
 

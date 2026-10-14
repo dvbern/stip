@@ -37,7 +37,6 @@ import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;

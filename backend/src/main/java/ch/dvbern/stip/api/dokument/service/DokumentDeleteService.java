@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutionException;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

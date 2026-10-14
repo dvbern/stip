@@ -225,7 +225,6 @@ class GesuchDokumentServiceTest {
         // Act
         var docs = new ArrayList<GesuchDokument>();
         docs.add(new GesuchDokument());
-        // gsDokService.deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(docs);
 
         // Assert
         assertThat(gesuchDokumente.size(), is(2));

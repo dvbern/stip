@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api;
 
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -94,4 +93,3 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
         LOG.debug("Would scan file: {}", fileUpload.fileName());
     }
 }
-

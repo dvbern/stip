@@ -34,19 +34,17 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> {
 
-    private final EntityManager entityManager;
     private final QGesuchDokument Q_GESUCH_DOKUMENT = QGesuchDokument.gesuchDokument;
     private final QDokument Q_DOKUMENT = QDokument.dokument;
 
     public List<GesuchDokument> findAllByCustomDokumentTypId(UUID customDokumentTypId) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -60,7 +58,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         final DokumentTyp dokumentTyp,
         final UUID entryId
     ) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -77,7 +75,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     }
 
     public Stream<GesuchDokument> findAllForGesuchTranche(final UUID gesuchTrancheId) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -87,7 +85,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     }
 
     public List<String> getAllObjectIdsForGesuchDokuments(final List<UUID> gesuchDokumentIds) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .select(Q_DOKUMENT.objectId)
@@ -112,7 +110,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         final Gesuch gesuch,
         final GesuchDokumentStatus gesuchDokumentStatus
     ) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -129,7 +127,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         final UUID gesuchTrancheId,
         final GesuchDokumentStatus gesuchDokumentStatus
     ) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -145,7 +143,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     public Optional<GesuchDokument> findByCustomDokumentTyp(
         UUID customDokumentTypId
     ) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -157,7 +155,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     }
 
     public List<GesuchDokument> findAllOfTypeCustomByGesuchTrancheId(UUID gesuchTrancheId) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -170,7 +168,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     }
 
     public List<GesuchDokument> getAllOfTypeForGesuch(final UUID gesuchId, final DokumentTyp dokumentTyp) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -182,7 +180,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
     }
 
     public boolean customDokumentHasGesuchDokuments(UUID customDokumentTypId) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var query = queryFactory
             .selectFrom(Q_GESUCH_DOKUMENT)
@@ -198,7 +196,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         final UUID trancheId,
         final List<GesuchDokumentRefDto> dokumentRefs
     ) {
-        final var queryFactory = new JPAQueryFactory(entityManager);
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
 
         final var dokumentTyps = dokumentRefs.stream()
             .filter(ref -> Objects.isNull(ref.getEntryId()))
