@@ -172,7 +172,7 @@ paths:
       - $ref: '#/components/parameters/piaVorname'
       - $ref: '#/components/parameters/piaGeburtsdatum'
       - $ref: '#/components/parameters/status'
-      - $ref: '#/components/parameters/bearbeiter'
+      - $ref: '#/components/parameters/bearbeiterId'
       - $ref: '#/components/parameters/letzteAktivitaetFrom'
       - $ref: '#/components/parameters/letzteAktivitaetTo'
       - $ref: '#/components/parameters/page'
@@ -1806,7 +1806,7 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: '#/components/parameters/userErstellt'
+        - $ref: '#/components/parameters/userErstelltId'
         - $ref: '#/components/parameters/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
         - $ref: '#/components/parameters/MassendruckJobTyp'
@@ -4582,7 +4582,7 @@ paths:
         - $ref: '#/components/parameters/piaVorname'
         - $ref: '#/components/parameters/piaGeburtsdatum'
         - $ref: '#/components/parameters/status'
-        - $ref: '#/components/parameters/bearbeiter'
+        - $ref: '#/components/parameters/bearbeiterId'
         - $ref: '#/components/parameters/letzteAktivitaetFrom'
         - $ref: '#/components/parameters/letzteAktivitaetTo'
         - $ref: '#/components/parameters/typ'
@@ -12535,11 +12535,11 @@ components:
       name: status
       schema:
         type: string
-    bearbeiter:
+    bearbeiterId:
       in: query
       name: bearbeiter
       schema:
-        type: string
+        $ref: '#/components/schemas/UUID'
     letzteAktivitaetFrom:
       in: query
       name: letzteAktivitaetFrom
@@ -12627,11 +12627,11 @@ components:
       name: massendruckJobStatus
       schema:
         $ref: '#/components/schemas/MassendruckJobStatus'
-    userErstellt:
+    userErstelltId:
       in: query
       name: userErstellt
       schema:
-        type: string
+        $ref: '#/components/schemas/UUID'
     timestampErstellt:
       in: query
       name: timestampErstellt
