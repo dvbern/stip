@@ -6,11 +6,15 @@
   "tags": ["type:model", "scope:shared"],
   "// targets": "to see all targets run: nx show project shared-model-version --web",
   "targets": {
-    "build": {
-      "executor": "nx:noop",
+    "prepare": {
+      "cache": false,
+      "executor": "nx:run-script",
       "options": {
-        "tsConfig": "libs/shared/model/version/tsconfig.lib.json"
-      }
+        "script": "set-version"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/shared/model/version/src/lib/version.ts"
+      ]
     }
   }
 }
