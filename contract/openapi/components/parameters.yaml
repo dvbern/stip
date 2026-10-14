@@ -59,7 +59,7 @@ piaGeburtsdatum:
     format: date
 bearbeiterId:
   in: query
-  name: bearbeiterId
+  name: bearbeiter
   schema:
     $ref: './common.yaml#/UUID'
 status:

@@ -12537,7 +12537,7 @@ components:
         type: string
     bearbeiterId:
       in: query
-      name: bearbeiterId
+      name: bearbeiter
       schema:
         $ref: '#/components/schemas/UUID'
     letzteAktivitaetFrom:
