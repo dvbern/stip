@@ -914,13 +914,8 @@ public class DarlehenService {
                 darlehenDokumentRepository.delete(darlehenDokument);
             }
 
-            // Ensure bookkeeping entries are deleted in a separate step for all categories.
-            darlehen.setDarlehenBuchhaltungEntry(null);
             freiwilligDarlehenRepository.delete(darlehen);
         }
-
-        freiwilligDarlehenRepository.clearDarlehenBuchhaltungEntryByGesuchId(gesuchId);
-        darlehenBuchhaltungEntryRepository.deleteByGesuchId(gesuchId);
     }
 
 }

@@ -58,12 +58,7 @@ export const initializeMultiUserTest = (
       gesuchId = dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
 
       if (gesuchId) {
-        const response = await deleteGesuch(multiContexts.gs.api, gesuchId);
-        if (response.status() >= 400) {
-          throw new Error(
-            `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
-          );
-        }
+        await deleteGesuch(multiContexts.gs.api, gesuchId);
         await gsPage.reload();
       }
 

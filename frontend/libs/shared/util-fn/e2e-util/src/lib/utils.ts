@@ -184,7 +184,13 @@ export const deleteGesuch = async (
   apiContext: APIRequestContext,
   gesuchId: string,
 ) => {
-  return await apiContext.delete(`/api/v1/gesuch/${gesuchId}`);
+  const response = await apiContext.delete(`/api/v1/gesuch/${gesuchId}`);
+  if (response.status() >= 400) {
+    throw new Error(
+      `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
+    );
+  }
+  return response;
 };
 
 /**

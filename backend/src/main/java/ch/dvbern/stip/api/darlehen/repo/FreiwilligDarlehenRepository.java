@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.entity.QFreiwilligDarlehen;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -81,20 +80,5 @@ public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDa
             )
             .stream()
             .findFirst();
-    }
-
-    public void deleteByGesuchId(final UUID gesuchId) {
-        new JPAQueryFactory(entityManager)
-            .delete(freiwilligDarlehen)
-            .where(freiwilligDarlehen.relatedGesuch.id.eq(gesuchId))
-            .execute();
-    }
-
-    public void clearDarlehenBuchhaltungEntryByGesuchId(final UUID gesuchId) {
-        new JPAQueryFactory(entityManager)
-            .update(freiwilligDarlehen)
-            .set(freiwilligDarlehen.darlehenBuchhaltungEntry, (DarlehenBuchhaltungEntry) null)
-            .where(freiwilligDarlehen.darlehenBuchhaltungEntry.gesuch.id.eq(gesuchId))
-            .execute();
     }
 }
