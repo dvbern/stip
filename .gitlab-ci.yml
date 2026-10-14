@@ -137,6 +137,7 @@ include:
 build-api:
   variables:
     GIT_DEPTH: 0
+    KSTIP_VERSION: '$VERSION'
   needs: [ ]
 
 package:frontend-app:
