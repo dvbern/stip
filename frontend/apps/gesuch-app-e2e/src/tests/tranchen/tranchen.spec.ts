@@ -68,17 +68,6 @@ test.describe('Tranche erstellen', () => {
     });
 
     await test.step('Set tranche to bearbeitung', async () => {
-      await sbGesuchHeader.elems.aktionMenu.click();
-      await sbGesuchHeader.elems
-        .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
-        .click();
-
-      const kommentarField = sbPage.getByTestId(
-        'form-kommentar-dialog-kommentar',
-      );
-      await kommentarField.fill('E2E Antrag genemigen kommentar');
-      await sbPage.getByTestId('dialog-confirm').click();
-
       await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
 
       await sbGesuchHeader.elems.aktionMenu.click();
@@ -87,6 +76,10 @@ test.describe('Tranche erstellen', () => {
         .click();
 
       await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
+      await sbGesuchHeader.expectSnackbarWithText(
+        sbPage,
+        'Der Gesuchstatus wurde erfolgreich geändert',
+      );
     });
 
     await test.step('Tranche erstellen', async () => {
@@ -100,7 +93,8 @@ test.describe('Tranche erstellen', () => {
         .getByTestId('form-aenderung-melden-dialog-kommentar')
         .fill('E2E Test ist Grund für Änderung');
       await sbPage.getByTestId('dialog-confirm').click();
-      await expect(sbPage.locator('.mdc-snackbar').first()).toContainText(
+      await sbGesuchHeader.expectSnackbarWithText(
+        sbPage,
         'Die Tranche wurde erfolgreich erstellt',
       );
       await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });

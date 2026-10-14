@@ -206,17 +206,7 @@ test.describe('Neues gesuch erstellen', () => {
 
       const headerNavPO = new SachbearbeiterGesuchHeaderPO(sbPage);
 
-      await headerNavPO.elems.aktionMenu.click();
-      await headerNavPO.elems
-        .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
-        .click();
-
       await expect(headerNavPO.elems.actionLoading).toBeHidden();
-
-      await sbPage
-        .getByTestId('form-kommentar-dialog-kommentar')
-        .fill('Test Kommentar');
-      await sbPage.getByTestId('dialog-confirm').click();
 
       await headerNavPO.elems.aktionMenu.click();
       await headerNavPO.elems

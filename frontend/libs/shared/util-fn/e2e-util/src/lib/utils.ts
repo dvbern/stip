@@ -89,14 +89,21 @@ export const uploadFiles = async (page: Page) => {
     .all();
   for (const upload of uploads) {
     await upload.click();
-    const uploadCall = page.waitForResponse(
-      async (response) =>
-        response.url().includes('/api/v1/gesuchtranche') &&
-        response.url().includes('/dokumenteToUpload/gs') &&
-        response.request().method() === 'GET',
+    // const uploadCall = page.waitForResponse(
+    //   async (response) =>
+    //     response.url().includes('/api/v1/gesuchtranche') &&
+    //     response.url().includes('/dokumenteToUpload/gs') &&
+    //     response.request().method() === 'GET',
+    // );
+
+    const documentsToUploadReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
+    );
+    const dokumenteReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumente/*',
     );
     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-    await uploadCall;
+    await Promise.all([documentsToUploadReq, dokumenteReq]);
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('file-input')).toHaveCount(0);
   }

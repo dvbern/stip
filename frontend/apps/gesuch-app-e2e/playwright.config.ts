@@ -22,7 +22,7 @@ export default defineConfig({
     ...baseConfig.use,
     baseURL: urls.gs,
   },
-  workers: 3,
+  workers: 4,
   reporter: createCiE2eReporter(APP_TYPE, __dirname),
   projects: [
     {

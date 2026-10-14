@@ -135,7 +135,7 @@ export class DarlehenPO {
     await this.elems.page.goto(
       `${baseUrl}/gesuch/${gesuchId}/darlehen/${darlehenId}/fall/${fallId}`,
     );
-    await expect(this.elems.loading).toBeHidden(); // use waitFor instead of expect for the whole suit?
+    await this.elems.loading.waitFor({ state: 'hidden' });
   }
 
   // --- Gesuchsteller actions ---

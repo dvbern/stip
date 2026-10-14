@@ -61,14 +61,6 @@ export const sbBearbeitenUndAbschliessen = async (
   await sbPage.bringToFront();
   await sbPage.goto(`${urls.sb}/gesuch/info/${gesuchId}/tranche/${trancheId}`);
 
-  await sbGesuchHeader.elems.aktionMenu.click();
-  await sbGesuchHeader.elems
-    .getAktionStatusUebergangItem('SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT')
-    .click();
-  await sbPage
-    .getByTestId('form-kommentar-dialog-kommentar')
-    .fill('E2E Darlehen Seed Kommentar');
-  await sbPage.getByTestId('dialog-confirm').click();
   await sbGesuchHeader.elems.actionLoading.waitFor({ state: 'hidden' });
 
   await sbGesuchHeader.elems.aktionMenu.click();
