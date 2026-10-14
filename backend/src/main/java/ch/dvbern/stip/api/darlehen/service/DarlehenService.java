@@ -416,7 +416,7 @@ public class DarlehenService {
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
         final String status,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final SbFreiwilligDarlehenDashboardColumn sortColumn,
@@ -456,8 +456,8 @@ public class DarlehenService {
             darlehenDashboardQueryBuilder.status(baseQuery, status);
         }
 
-        if (bearbeiter != null) {
-            darlehenDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiter);
+        if (bearbeiterId != null) {
+            darlehenDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiterId);
         }
 
         if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {

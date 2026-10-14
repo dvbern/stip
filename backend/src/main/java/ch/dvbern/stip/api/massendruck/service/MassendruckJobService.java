@@ -78,7 +78,7 @@ public class MassendruckJobService {
         final GetMassendruckJobQueryType queryTyp,
         final int page,
         final int pageSize,
-        final String userErstellt,
+        final UUID userErstelltId,
         final LocalDate timestampErstellt,
         final MassendruckJobStatus massendruckJobStatus,
         final MassendruckJobTyp massendruckJobTyp,
@@ -96,8 +96,8 @@ public class MassendruckJobService {
             case ALLE_FEHLERHAFTE_GENERIERUNG -> massendruckJobQueryBuilder.getAlleFehlerhaftGenerierung();
         };
 
-        if (userErstellt != null) {
-            massendruckJobQueryBuilder.userErstellt(baseQuery, userErstellt);
+        if (userErstelltId != null) {
+            massendruckJobQueryBuilder.userErstellt(baseQuery, userErstelltId);
         }
 
         if (timestampErstellt != null) {

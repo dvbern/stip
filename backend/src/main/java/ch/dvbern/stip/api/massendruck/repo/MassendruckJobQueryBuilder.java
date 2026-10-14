@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.massendruck.repo;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
@@ -62,8 +63,8 @@ public class MassendruckJobQueryBuilder {
         return query.where(massendruckJob.status.eq(status));
     }
 
-    public void userErstellt(final JPAQuery<MassendruckJob> query, final String userErstellt) {
-        query.where(massendruckJob.userErstellt.containsIgnoreCase(userErstellt));
+    public void userErstellt(final JPAQuery<MassendruckJob> query, final UUID userErstelltId) {
+        query.where(massendruckJob.userErstelltId.eq(userErstelltId));
     }
 
     public void timestampErstellt(final JPAQuery<MassendruckJob> query, final LocalDate timestampErstellt) {

@@ -418,7 +418,7 @@ public class GesuchService {
         final String piaNachname,
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final int page,
@@ -448,8 +448,8 @@ public class GesuchService {
             sbDashboardQueryBuilder.piaGeburtsdatum(baseQuery, piaGeburtsdatum);
         }
 
-        if (bearbeiter != null) {
-            sbDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiter);
+        if (bearbeiterId != null) {
+            sbDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiterId);
         }
 
         if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {
@@ -481,7 +481,7 @@ public class GesuchService {
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
         final String status,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final int page,
@@ -499,7 +499,7 @@ public class GesuchService {
                 piaVorname,
                 piaGeburtsdatum,
                 status,
-                bearbeiter,
+                bearbeiterId,
                 letzteAktivitaetFrom,
                 letzteAktivitaetTo,
                 page,
@@ -515,7 +515,7 @@ public class GesuchService {
                 piaVorname,
                 piaGeburtsdatum,
                 status,
-                bearbeiter,
+                bearbeiterId,
                 letzteAktivitaetFrom,
                 letzteAktivitaetTo,
                 page,
@@ -535,7 +535,7 @@ public class GesuchService {
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
         final String status,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final int page,
@@ -552,7 +552,7 @@ public class GesuchService {
             piaNachname,
             piaVorname,
             piaGeburtsdatum,
-            bearbeiter,
+            bearbeiterId,
             letzteAktivitaetFrom,
             letzteAktivitaetTo,
             page,
@@ -589,7 +589,7 @@ public class GesuchService {
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
         final String status,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final int page,
@@ -606,7 +606,7 @@ public class GesuchService {
             piaNachname,
             piaVorname,
             piaGeburtsdatum,
-            bearbeiter,
+            bearbeiterId,
             letzteAktivitaetFrom,
             letzteAktivitaetTo,
             page,

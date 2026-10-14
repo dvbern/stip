@@ -414,7 +414,7 @@ public class MassendruckApiSpec {
         public static final String USER_ERSTELLT_QUERY = "userErstellt";
 
         /**
-         * @param userErstellt (String)  (optional)
+         * @param userErstellt (UUID)  (optional)
          * @return operation
          */
         public GetAllMassendruckJobsOper userErstelltQuery(Object... userErstellt) {

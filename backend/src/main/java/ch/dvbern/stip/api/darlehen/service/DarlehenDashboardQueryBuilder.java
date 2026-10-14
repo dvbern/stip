@@ -108,12 +108,11 @@ public class DarlehenDashboardQueryBuilder {
         query.where(freiwilligDarlehen.status.eq(DarlehenStatus.valueOf(status)));
     }
 
-    public void bearbeiter(final JPAQuery<FreiwilligDarlehen> query, final String bearbeiter) {
+    public void bearbeiter(final JPAQuery<FreiwilligDarlehen> query, final UUID bearbeiterId) {
         query.join(QZuordnung.zuordnung)
             .on(freiwilligDarlehen.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
         query.where(
-            QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
-                .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter))
+            QZuordnung.zuordnung.sachbearbeiter.id.eq(bearbeiterId)
         );
     }
 
