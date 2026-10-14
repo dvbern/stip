@@ -50,12 +50,13 @@ export const generateRandomName = (postfix = 'e2e') => {
   return `${random}-${postfix}`;
 };
 
+// keep for potential future use (fallback for flaky uploadFiles function)
 export const uploadFilesById = async (page: Page) => {
   const uploadButtons = page.getByTestId(/^button-document-upload-/);
 
   await expect(uploadButtons.first()).toBeVisible({ timeout: 10000 });
 
-  // Resolve the stable, unique per-dokumentTyp testids up front.
+  // test ids are not unique, in case of geschwister with the same document
   const testIds = await uploadButtons.evaluateAll((els) =>
     els
       .map((el) => el.getAttribute('data-testid'))
@@ -64,16 +65,16 @@ export const uploadFilesById = async (page: Page) => {
 
   for (const testId of testIds) {
     const upload = page.getByTestId(testId);
-    const uploadCall = page.waitForResponse(
-      async (response) =>
-        response.url().includes('/api/v1/gesuchtranche') &&
-        response.url().includes('/dokumenteToUpload/gs') &&
-        response.request().method() === 'GET',
+    const documentsToUploadReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
+    );
+    const dokumenteReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumente/*',
     );
     await upload.scrollIntoViewIfNeeded();
     await upload.click();
     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-    await uploadCall;
+    await Promise.all([documentsToUploadReq, dokumenteReq]);
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('file-input')).toHaveCount(0);
   }
@@ -88,13 +89,8 @@ export const uploadFiles = async (page: Page) => {
     .locator('[data-testid^="button-document-upload"]')
     .all();
   for (const upload of uploads) {
+    await upload.scrollIntoViewIfNeeded();
     await upload.click();
-    // const uploadCall = page.waitForResponse(
-    //   async (response) =>
-    //     response.url().includes('/api/v1/gesuchtranche') &&
-    //     response.url().includes('/dokumenteToUpload/gs') &&
-    //     response.request().method() === 'GET',
-    // );
 
     const documentsToUploadReq = page.waitForResponse(
       '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
