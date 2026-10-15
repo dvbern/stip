@@ -70,13 +70,13 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: createFallForGs
-  '/fall/paymentprocessingsuspended':
+  '/fall/paymentprocessingsuspended/{fallId}':
     parameters:
       - $ref: './components/parameters.yaml#/fallId'
       - name: suspended
         schema:
           type: boolean
-        in: path
+        in: query
         required: true
     post:
       tags:

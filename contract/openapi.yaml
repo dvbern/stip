@@ -3143,13 +3143,13 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /fall/paymentprocessingsuspended:
+  /fall/paymentprocessingsuspended/{fallId}:
     parameters:
       - $ref: '#/components/parameters/fallId'
       - name: suspended
         schema:
           type: boolean
-        in: path
+        in: query
         required: true
     post:
       tags:
