@@ -35,6 +35,7 @@ import {
   cachedPending,
   handleApiResponse,
   initial,
+  isPendingWithoutCache,
 } from '@dv/shared/util/remote-data';
 import {
   dateFromMonthYearString,
@@ -57,6 +58,8 @@ export class DashboardStore extends signalStore(
   private gesuchService = inject(GesuchService);
   private config = inject(SharedModelCompileTimeConfig);
   private permissionStore = inject(PermissionStore);
+
+  loadingSig = computed(() => isPendingWithoutCache(this.dashboard()));
 
   dashboardViewSig = computed<SharedModelGsDashboardView | undefined>(() => {
     const fallDashboardItem = this.dashboard.data();

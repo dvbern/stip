@@ -1,11 +1,11 @@
-stages: [ build, validate, test, package, deploy, e2e, review-e2e, mirror ]
+stages: [build, validate, test, package, deploy, e2e, review-e2e, mirror]
 
 include:
-  - component: "gitlab.dvbern.ch/components/setup/workflow@1.5.0"
+  - component: 'gitlab.dvbern.ch/components/setup/workflow@1.5.0'
     inputs:
-      mr-version: "${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}"
+      mr-version: '${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}'
 
-  - component: "gitlab.dvbern.ch/components/build/maven@1.13.0"
+  - component: 'gitlab.dvbern.ch/components/build/maven@1.13.0'
     inputs:
       name: build-api
       context-dir: backend
@@ -57,6 +57,15 @@ include:
       build-args: |
         APP=$APP_NAME
 
+  - component: 'gitlab.dvbern.ch/components/package/buildah@2.3.0'
+    inputs:
+      name: package:e2e-image
+      context-dir: frontend
+      image-name: 'e2e-runner'
+      dockerfile-path: ./Dockerfile.e2e
+      version: 'latest'
+      build-latest: false
+
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:
       name: 'deploy:dev'
@@ -77,7 +86,7 @@ include:
       deployment-environment-values-path: 'charts/stip/environments/uat/values.yaml'
       deployment-on: 'tag'
       deployment-mode: 'manual'
-      deployment-config-tracking-mode: "release"  # Enable release mode
+      deployment-config-tracking-mode: 'release' # Enable release mode
       argocd-server: '$ARGOCD_SERVER'
       argocd-token: '$ARGOCD_TOKEN'
       argocd-app-name: '$ARGOCD_APP'
@@ -90,23 +99,23 @@ include:
       deployment-environment-values-path: 'charts/stip/environments/schulung/values.yaml'
       deployment-on: 'tag'
       deployment-mode: 'manual'
-      deployment-config-tracking-mode: "release"  # Enable release mode
+      deployment-config-tracking-mode: 'release' # Enable release mode
       argocd-server: '$ARGOCD_SERVER'
       argocd-token: '$ARGOCD_TOKEN'
       argocd-app-name: 'schulung'
 
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:
-      name: "deploy:prod"
-      deployment-environment: "prod"
-      deployment-environment-url: "https://myproject.$DVB_OCP_MERCURY_ROUTER"
-      deployment-environment-values-path: "charts/stip/environments/prod/values.yaml"
-      deployment-on: "tag"
-      deployment-mode: "manual"
-      deployment-config-tracking-mode: "release"  # Enable release mode
-      argocd-server: "$ARGOCD_SERVER"
-      argocd-token: "$ARGOCD_TOKEN"
-      argocd-app-name: "$ARGOCD_APP"
+      name: 'deploy:prod'
+      deployment-environment: 'prod'
+      deployment-environment-url: 'https://myproject.$DVB_OCP_MERCURY_ROUTER'
+      deployment-environment-values-path: 'charts/stip/environments/prod/values.yaml'
+      deployment-on: 'tag'
+      deployment-mode: 'manual'
+      deployment-config-tracking-mode: 'release' # Enable release mode
+      argocd-server: '$ARGOCD_SERVER'
+      argocd-token: '$ARGOCD_TOKEN'
+      argocd-app-name: '$ARGOCD_APP'
 
   - component: 'gitlab.dvbern.ch/devops/gitlab/components/argocd-review-app@v0.8.0'
     inputs:
@@ -133,13 +142,27 @@ include:
       node-image: '$DVB_DOCKER_REGISTRY/dockerhub/library/node'
       node-version: ':22'
 
-
 ### Component Extensions
 build-api:
   variables:
     GIT_DEPTH: 0
     KSTIP_VERSION: '$VERSION'
-  needs: [ ]
+  needs: []
+
+package:e2e-image:
+  needs: []
+  # Only (re)build when the dependency set or the image recipe changes; otherwise
+  # reuse the existing :latest image. Can also be triggered manually (e.g. to seed
+  # :latest or force a rebuild).
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /\[skip e2e\]/'
+      when: never
+    - changes:
+        - frontend/package-lock.json
+        - frontend/Dockerfile.e2e
+        - frontend/.npmrc
+    - when: manual
+      allow_failure: true
 
 package:frontend-app:
   extends: .package:frontend-app
@@ -148,7 +171,7 @@ package:frontend-app:
       artifacts: true
   parallel:
     matrix:
-      - APP_NAME: [ gesuch-app, sachbearbeitung-app, sozialdienst-app, demo-data-app ]
+      - APP_NAME: [gesuch-app, sachbearbeitung-app, sozialdienst-app, demo-data-app]
 
 package:api:
   needs:
@@ -157,10 +180,10 @@ package:api:
 
 ### E2E
 .install-argocd:
-  tags: [ 'zone:tz', 'os:linux', 'type:docker' ]
+  tags: ['zone:tz', 'os:linux', 'type:docker']
   image:
     name: docker-registry.dvbern.ch/devops/docker/tools/k8s/main
-    entrypoint: [ '' ]
+    entrypoint: ['']
   variables:
     ARGOCD_SERVER: '$ARGOCD_SERVER'
     ARGOCD_AUTH_TOKEN: '$ARGOCD_TOKEN'
@@ -195,20 +218,48 @@ start-e2e:
 
 nx-e2e-test:
   stage: e2e
+  image: docker-registry.dvbern.ch/stip/e2e-runner:latest
+  tags:
+    - type:k8s
+    - zone:tz
+    - ou:dev
+    - customer:stip
+    - custom:e2e
   resource_group: 'e2e'
   allow_failure: true
+  # Expose the node_modules baked into the image at the git-checkout path so the
+  # component's `npm ci` guard is satisfied and nx resolves locally
+  before_script:
+    - ln -s /app/frontend/node_modules "$CI_PROJECT_DIR/frontend/node_modules"
+    - curl -ksS -o /dev/null -w "%{http_code}\n" --max-time 20 "$E2E_BASEURL_GS" || echo "UNREACHABLE"
+  artifacts:
+    when: always
+    paths:
+      - frontend/test-results/html/
+    reports:
+      junit: frontend/test-results/junit/*.xml
   variables:
-    E2E_BASEURL_GS: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
-    E2E_BASEURL_SB: 'https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
-    E2E_BASEURL_SOZ: 'https://e2e-sozialdienst-stip.$DVB_OCP_MERCURY_ROUTER'
+    KUBERNETES_CPU_REQUEST: '2'
+    KUBERNETES_CPU_LIMIT: '4'
+    KUBERNETES_MEMORY_REQUEST: '4Gi'
+    KUBERNETES_MEMORY_LIMIT: '8Gi'
+    E2E_BASEURL_GS: 'https://dv-e2e-stip.$DVB_OCP_MERCURY_ROUTER'
+    E2E_BASEURL_SB: 'https://dv-e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
+    E2E_BASEURL_SOZ: 'https://dv-e2e-sozialdienst-stip.$DVB_OCP_MERCURY_ROUTER'
+    NX_NO_CLOUD: 'true'
+    NX_DAEMON: 'false'
+    npm_config_offline: 'true'
   needs:
     - start-e2e
+    - job: package:e2e-image
+      artifacts: false
+      optional: true
 
 wait-for-review:
-  tags: [ "zone:tz", "os:linux", "type:docker" ]
+  tags: ['zone:tz', 'os:linux', 'type:docker']
   image:
     name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
-    entrypoint: [ '' ]
+    entrypoint: ['']
   stage: review-e2e
   needs:
     - argocd:review-app:start
@@ -229,10 +280,13 @@ nx-e2e-test:review:
   stage: review-e2e
   needs:
     - wait-for-review
+    - job: package:e2e-image
+      artifacts: false
+      optional: true
   variables:
-    E2E_BASEURL_GS: 'https://$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER'
-    E2E_BASEURL_SB: 'https://$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER'
-    E2E_BASEURL_SOZ: 'https://$CI_COMMIT_REF_SLUG-sozialdienst-stip.$DVB_OCP_MERCURY_ROUTER'
+    E2E_BASEURL_GS: 'https://dv-$CI_COMMIT_REF_SLUG-stip.$DVB_OCP_MERCURY_ROUTER'
+    E2E_BASEURL_SB: 'https://dv-$CI_COMMIT_REF_SLUG-sb-stip.$DVB_OCP_MERCURY_ROUTER'
+    E2E_BASEURL_SOZ: 'https://dv-$CI_COMMIT_REF_SLUG-sozialdienst-stip.$DVB_OCP_MERCURY_ROUTER'
   rules:
     - if: $PIPELINE_TYPE == "mr"
 
@@ -260,7 +314,6 @@ stop-e2e:
     - if: $PIPELINE_TYPE == "default"
       when: always
   allow_failure: true
-
 
 github-mirror:
   needs: []

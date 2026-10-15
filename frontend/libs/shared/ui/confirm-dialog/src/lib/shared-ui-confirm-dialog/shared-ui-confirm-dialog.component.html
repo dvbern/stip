@@ -16,10 +16,10 @@
     "
   ></div>
   <div class="tw:dv-button-container tw:justify-end">
-    <button type="button" class="tw:dv-button-outline" (click)="cancel()" data-testid="dialog-cancel">
+    <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="cancel()">
       {{ dialogData?.cancelText ?? 'shared.ui.confirmDialog.cancel' | transloco }}
     </button>
-    <button type="button" class="tw:dv-button-main-primary" (click)="confirm()" data-testid="dialog-confirm">
+    <button type="button" data-testid="dialog-confirm" class="tw:dv-button-main-primary" (click)="confirm()">
       {{ dialogData?.confirmText ?? 'shared.ui.confirmDialog.confirm' | transloco }}
     </button>
   </div>
