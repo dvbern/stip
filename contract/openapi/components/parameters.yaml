@@ -57,7 +57,7 @@ piaGeburtsdatum:
   schema:
     type: string
     format: date
-bearbeiterId:
+bearbeiter:
   in: query
   name: bearbeiter
   schema:

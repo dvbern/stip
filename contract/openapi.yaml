@@ -172,7 +172,7 @@ paths:
       - $ref: '#/components/parameters/piaVorname'
       - $ref: '#/components/parameters/piaGeburtsdatum'
       - $ref: '#/components/parameters/status'
-      - $ref: '#/components/parameters/bearbeiterId'
+      - $ref: '#/components/parameters/bearbeiter'
       - $ref: '#/components/parameters/letzteAktivitaetFrom'
       - $ref: '#/components/parameters/letzteAktivitaetTo'
       - $ref: '#/components/parameters/page'
@@ -4582,7 +4582,7 @@ paths:
         - $ref: '#/components/parameters/piaVorname'
         - $ref: '#/components/parameters/piaGeburtsdatum'
         - $ref: '#/components/parameters/status'
-        - $ref: '#/components/parameters/bearbeiterId'
+        - $ref: '#/components/parameters/bearbeiter'
         - $ref: '#/components/parameters/letzteAktivitaetFrom'
         - $ref: '#/components/parameters/letzteAktivitaetTo'
         - $ref: '#/components/parameters/typ'
@@ -12535,7 +12535,7 @@ components:
       name: status
       schema:
         type: string
-    bearbeiterId:
+    bearbeiter:
       in: query
       name: bearbeiter
       schema:
