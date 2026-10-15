@@ -125,13 +125,13 @@ public class SapMapperUtil {
     }
 
     public XMLGregorianCalendar getPaymentdetailValidToGregorianCalendar(
-        final LocalDate validFrom
+        final LocalDate validTo
     ) {
         try {
             final var xmlGregorianDateTime = DatatypeFactory.newInstance()
                 .newXMLGregorianCalendar(
                     GregorianCalendar.from(
-                        validFrom.atStartOfDay(ZoneId.systemDefault())
+                        validTo.atStartOfDay(ZoneId.systemDefault())
                             .plusMonths(SapMapperUtil.SOZIALDIENST_PAYMENT_DETAIL_MONTHS_VALID)
                     )
                 );
