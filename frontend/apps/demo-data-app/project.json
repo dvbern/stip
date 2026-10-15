@@ -13,6 +13,9 @@
   ],
   "targets": {
     "build": {
+      "dependsOn": [
+        { "target": "prepare", "projects": "shared-model-version" }
+      ],
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
