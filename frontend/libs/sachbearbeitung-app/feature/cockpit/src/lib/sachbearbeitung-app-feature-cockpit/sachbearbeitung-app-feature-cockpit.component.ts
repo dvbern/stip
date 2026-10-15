@@ -37,6 +37,10 @@ import {
   differenceInDays,
   format,
 } from 'date-fns';
+import {
+  MatSelectSearchClearDirective,
+  MatSelectSearchComponent,
+} from 'ngx-mat-select-search';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
@@ -51,6 +55,7 @@ import {
   GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
+  SachbearbeiterForFilter,
   SbFreiwilligDarlehenDashboardColumn,
   SbGesucheDashboardColumn,
   SortOrder,
@@ -70,6 +75,7 @@ import {
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
@@ -139,6 +145,9 @@ import {
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
     TranslocoDirective,
+    SharedUiSelectSearchComponent,
+    MatSelectSearchComponent,
+    MatSelectSearchClearDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
   styleUrls: ['./sachbearbeitung-app-feature-cockpit.component.scss'],
@@ -363,6 +372,26 @@ export class SachbearbeitungAppFeatureCockpitComponent
       debounceTime(INPUT_DELAY),
     ),
   );
+
+  searchControl = this.formBuilder.control('');
+  searchControlStrSig = toSignal(
+    this.searchControl.valueChanges.pipe(distinctUntilChanged()),
+  );
+
+  bearbeiterOptionsSig = computed(() => {
+    const searchStr = this.searchControlStrSig();
+
+    if (this.isDarlehenModeSig()) {
+      const darlehenBearbeiters =
+        this.darlehenStore.dashboardViewSig()?.darlehen?.sachbearbeiters ?? [];
+      return filterMitarbeiter(darlehenBearbeiters, searchStr);
+    }
+
+    const gesuchBearbeiters =
+      this.gesuchStore.cockpitViewSig()?.gesuche?.sachbearbeiters ?? [];
+
+    return filterMitarbeiter(gesuchBearbeiters, searchStr);
+  });
 
   gesucheDataSourceSig = computed(() => {
     const gesuche = this.gesuchStore
@@ -617,6 +646,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
         bearbeitbar: bearbeitbarConfig.value,
         zugewiesen: zugewiesenConfig.value,
         ...filter,
+        bearbeiterId: filter.bearbeiter,
         ...getStatusFilterByFilterTab(filterTab),
         ...startEndFilter,
         ...getSortAndPageInputs(this),
@@ -645,6 +675,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
       this.darlehenStore.getDarlehenDashboardSb$({
         ...darlehenFilter,
+        bearbeiterId: filter.bearbeiter,
         bearbeitbar: bearbeitbarConfig.value,
         zugewiesen: zugewiesenConfig.value,
         status: parseDarlehenStatus(this.status()),
@@ -659,6 +690,19 @@ export class SachbearbeitungAppFeatureCockpitComponent
     this.filterForm.controls.status.reset();
   }
 }
+
+const filterMitarbeiter = (
+  bearbeiters: SachbearbeiterForFilter[],
+  searchStr: string | undefined,
+) => {
+  return searchStr
+    ? bearbeiters.filter(
+        (bearbeiter) =>
+          bearbeiter.vorname.toLowerCase().includes(searchStr.toLowerCase()) ||
+          bearbeiter.nachname.toLowerCase().includes(searchStr.toLowerCase()),
+      )
+    : bearbeiters;
+};
 
 const parseStatus = (
   status: string | undefined,
