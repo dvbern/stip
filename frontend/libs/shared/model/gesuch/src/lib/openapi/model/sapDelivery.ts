@@ -15,6 +15,7 @@ export interface SapDelivery {
     sapId: string;
     timestampErstellt: string;
     sapStatus: SapStatus;
+    message?: string;
 }
 
 
