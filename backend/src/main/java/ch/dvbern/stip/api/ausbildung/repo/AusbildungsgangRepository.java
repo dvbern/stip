@@ -26,21 +26,18 @@ import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsgang;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang> {
-    private final EntityManager em;
-
     private static final QAusbildungsgang Q_AUSBILDUNGSGANG = QAusbildungsgang.ausbildungsgang;
 
     public Optional<Ausbildungsgang> findByAusbildungsstaetteAndAbschluss(
         final UUID ausbildungsstaetteId,
         final UUID abschlussId
     ) {
-        return new JPAQueryFactory(em)
+        return new JPAQueryFactory(getEntityManager())
             .selectFrom(Q_AUSBILDUNGSGANG)
             .where(
                 Q_AUSBILDUNGSGANG.ausbildungsstaette.id.eq(ausbildungsstaetteId)
@@ -51,15 +48,25 @@ public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang
             .findFirst();
     }
 
-    public Stream<Ausbildungsgang> findAllAktiv() {
-        return new JPAQueryFactory(em)
-            .selectFrom(Q_AUSBILDUNGSGANG)
-            .where(Q_AUSBILDUNGSGANG.aktiv)
-            .stream();
+    /// Query all aktiv Ausbildungsgang joining ausbildungsstaettes and abschluss
+    ///
+    /// Using `left join `**`fetch`** to make hibernate use a single query to fetch everything
+    /// @return a stream of all aktiv Ausbildungsgang with their related data
+    public Stream<Ausbildungsgang> findAllAktivJoiningRelated() {
+        return getEntityManager().createQuery(
+            """
+                select ausbildungsgang
+                from Ausbildungsgang ausbildungsgang
+                left join fetch ausbildungsgang.ausbildungsstaette
+                left join fetch ausbildungsgang.abschluss
+                where ausbildungsgang.aktiv = true
+            """,
+            Ausbildungsgang.class
+        ).getResultStream();
     }
 
     public void setAllAusbildungsgaengeOfAusbildungsstaetteToInaktiv(final UUID ausbildungsstaetteId) {
-        new JPAQueryFactory(em)
+        new JPAQueryFactory(getEntityManager())
             .update(Q_AUSBILDUNGSGANG)
             .where(Q_AUSBILDUNGSGANG.ausbildungsstaette.id.eq(ausbildungsstaetteId))
             .set(Q_AUSBILDUNGSGANG.aktiv, false)
@@ -67,7 +74,7 @@ public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang
     }
 
     public void setAllAusbildungsgaengeOfAbschlussToInaktiv(final UUID abschlussId) {
-        new JPAQueryFactory(em)
+        new JPAQueryFactory(getEntityManager())
             .update(Q_AUSBILDUNGSGANG)
             .where(Q_AUSBILDUNGSGANG.abschluss.id.eq(abschlussId))
             .set(Q_AUSBILDUNGSGANG.aktiv, false)
