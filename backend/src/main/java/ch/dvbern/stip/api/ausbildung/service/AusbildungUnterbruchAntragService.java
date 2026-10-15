@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungUnterbruchAntragRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
@@ -47,7 +46,6 @@ import ch.dvbern.stip.generated.dto.AusbildungUnterbruchDashboardSBDtoBuilder;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchLimitsDto;
 import ch.dvbern.stip.generated.dto.CreateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
@@ -57,7 +55,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @RequestScoped
@@ -66,9 +63,6 @@ public class AusbildungUnterbruchAntragService {
     private final AusbildungUnterbruchAntragRepository ausbildungUnterbruchAntragRepository;
     private final AusbildungUnterbruchAntragMapper ausbildungUnterbruchAntragMapper;
     private final DokumentUploadService dokumentUploadService;
-    private final S3AsyncClient s3;
-    private final StipConfig config;
-    private final Antivirus antivirus;
     private final GesuchRepository gesuchRepository;
     private final DokumentRepository dokumentRepository;
     private final DokumentDeleteService dokumentDeleteService;
@@ -137,9 +131,6 @@ public class AusbildungUnterbruchAntragService {
     ) {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH,
             objectId -> uploadDokument(
                 ausbildungUnterbruchAntragId,
@@ -156,7 +147,7 @@ public class AusbildungUnterbruchAntragService {
             antrag.getDokuments().stream().map(dokument -> getFullPathObjectId(dokument.getObjectId())).toList();
 
         ausbildungUnterbruchAntragRepository.delete(antrag);
-        dokumentDeleteService.executeDeleteDokumentsFromS3(s3, config.s3().bucketName(), objectIds);
+        dokumentDeleteService.executeDeleteDokumentsFromS3(objectIds);
     }
 
     @Transactional
@@ -165,8 +156,6 @@ public class AusbildungUnterbruchAntragService {
         final var dokument = dokumentRepository.requireById(dokumentId);
         antrag.getDokuments().remove(dokument);
         dokumentDeleteService.executeDeleteDokumentFromS3(
-            s3,
-            config.s3().bucketName(),
             getFullPathObjectId(dokument.getObjectId())
         );
     }
@@ -175,8 +164,6 @@ public class AusbildungUnterbruchAntragService {
         final var dokument = dokumentRepository.requireById(dokumentId);
 
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH,
             dokument.getFilename()
@@ -213,9 +200,6 @@ public class AusbildungUnterbruchAntragService {
             .map(
                 fileUpload -> dokumentUploadService.validateScanUploadDokument(
                     fileUpload,
-                    s3,
-                    config,
-                    antivirus,
                     AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH,
                     objectId -> uploadDokument(
                         ausbildungUnterbruchAntrag.getId(),

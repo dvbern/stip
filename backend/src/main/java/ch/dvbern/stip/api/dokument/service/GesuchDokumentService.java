@@ -18,13 +18,12 @@
 package ch.dvbern.stip.api.dokument.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.config.type.StipConfig;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -48,7 +47,6 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -60,7 +58,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import static ch.dvbern.stip.api.common.util.DokumentDownloadConstants.GESUCH_DOKUMENT_PATH;
 
@@ -75,11 +72,8 @@ public class GesuchDokumentService {
     private final CustomDokumentTypRepository customDocumentTypRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
-    private final S3AsyncClient s3;
-    private final StipConfig config;
     private final GesuchDokumentstatusService gesuchDokumentstatusService;
     private final RequiredDokumentService requiredDokumentService;
-    private final Antivirus antivirus;
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final DokumentHistoryRepository dokumentHistoryRepository;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
@@ -128,9 +122,6 @@ public class GesuchDokumentService {
         customDokumentTyp.getGesuchDokument().getGesuchTranche();
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             GESUCH_DOKUMENT_PATH,
             objectId -> uploadCustomDokument(
                 customDokumentTypId,
@@ -150,9 +141,6 @@ public class GesuchDokumentService {
     ) {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             GESUCH_DOKUMENT_PATH,
             objectId -> {
                 uploadDokument(
@@ -398,7 +386,7 @@ public class GesuchDokumentService {
         gesuch.setNachfristDokumente(null);
     }
 
-    public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
+    public boolean canDeleteDokumentFromS3(final GesuchTranche trancheToBeDeletedFrom) {
         return switch (trancheToBeDeletedFrom.getTyp()) {
             case TRANCHE -> trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
             case AENDERUNG -> trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
@@ -407,8 +395,6 @@ public class GesuchDokumentService {
 
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
         dokumentDeleteService.executeDeleteDokumentsFromS3(
-            s3,
-            config.s3().bucketName(),
             objectIds.stream()
                 .map(objectId -> GESUCH_DOKUMENT_PATH + objectId)
                 .toList()
@@ -473,7 +459,7 @@ public class GesuchDokumentService {
 
         if (
             force ||
-            canDeleteDokumentFromS3(dokument, dokument.getGesuchDokument().getGesuchTranche())
+            canDeleteDokumentFromS3(dokument.getGesuchDokument().getGesuchTranche())
         ) {
             dokumentObjectIds.add(dokument.getObjectId());
         }
@@ -482,7 +468,9 @@ public class GesuchDokumentService {
 
         dokument.getGesuchDokument().getDokumente().remove(dokument);
         dropGesuchDokumentIfNotRequredAnymore(dokument.getGesuchDokument());
-        executeDeleteDokumentsFromS3(dokumentObjectIds);
+        if (!dokumentObjectIds.isEmpty()) {
+            executeDeleteDokumentsFromS3(dokumentObjectIds);
+        }
     }
 
     @Transactional
@@ -493,26 +481,22 @@ public class GesuchDokumentService {
 
     @Transactional
     public void removeGesuchDokument(final GesuchDokument gesuchDokument) {
-        final var dokuments = gesuchDokument.getDokumente();
+        final var dokumentObjectIds =
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(List.of(gesuchDokument.getId()));
 
-        List<String> dokumentObjectIds = new ArrayList<>();
+        gesuchDokumentRepository.delete(gesuchDokument);
+        if (canDeleteDokumentFromS3(gesuchDokument.getGesuchTranche()) && !dokumentObjectIds.isEmpty()) {
+            executeDeleteDokumentsFromS3(dokumentObjectIds);
+        }
+    }
 
-        // Using Iterator to be able to remove while looping
-        for (Iterator<Dokument> iterator = dokuments.iterator(); iterator.hasNext();) {
-            final var dokument = iterator.next();
-            iterator.remove();
-            dokumentRepository.delete(dokument);
-            if (
-                canDeleteDokumentFromS3(dokument, gesuchDokument.getGesuchTranche())
-            ) {
-                dokumentObjectIds.add(dokument.getObjectId());
-            }
-        }
-        if (gesuchDokument.getDokumente().isEmpty()) {
-            gesuchDokumentRepository.deleteById(gesuchDokument.getId());
-            gesuchDokument.getGesuchTranche().getGesuchDokuments().remove(gesuchDokument);
-        }
-        if (!dokumentObjectIds.isEmpty()) {
+    @Transactional
+    public void removeGesuchDokuments(final GesuchTranche tranche, final List<GesuchDokument> gesuchDokuments) {
+        final var dokumentObjectIds = gesuchDokumentRepository
+            .getAllObjectIdsForGesuchDokuments(gesuchDokuments.stream().map(AbstractEntity::getId).toList());
+
+        gesuchDokuments.forEach(gesuchDokumentRepository::delete);
+        if (canDeleteDokumentFromS3(tranche) && !dokumentObjectIds.isEmpty()) {
             executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
     }
@@ -545,32 +529,20 @@ public class GesuchDokumentService {
         }
     }
 
-    public void deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(List<GesuchDokument> abgelehnteGesuchDokumente) {
-        // Query for these instead of iterating "in memory" because filteredGesuchDokumente are lazy loaded
-        // and this results in only loading the ones we need instead of all
-        final var dokumenteToDeleteFromS3 = new ArrayList<String>();
-        for (var gesuchdokument : abgelehnteGesuchDokumente) {
-            final var dokumentList = gesuchdokument.getDokumente().stream().toList();
-            for (var dokument : dokumentList) {
-                gesuchdokument.getDokumente().remove(dokument);
+    public void removeDokumentsFromGesuchDokument(final GesuchDokument gesuchDokument) {
+        final var dokumentObjectIds =
+            gesuchDokumentRepository.getAllObjectIdsForGesuchDokuments(List.of(gesuchDokument.getId()));
 
-                // If no other references to this physical document exist, delete it as well
-                dokumentRepository.delete(dokument);
-                if (canDeleteDokumentFromS3(dokument, gesuchdokument.getGesuchTranche())) {
-                    dokumenteToDeleteFromS3.add(dokument.getObjectId());
-                }
-            }
+        gesuchDokument.getDokumente().clear();
+        if (canDeleteDokumentFromS3(gesuchDokument.getGesuchTranche()) && !dokumentObjectIds.isEmpty()) {
+            executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
-
-        executeDeleteDokumentsFromS3(dokumenteToDeleteFromS3);
     }
 
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentHistoryRepository.findInHistoryById(dokumentId);
 
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             GESUCH_DOKUMENT_PATH,
             dokument.getFilename()

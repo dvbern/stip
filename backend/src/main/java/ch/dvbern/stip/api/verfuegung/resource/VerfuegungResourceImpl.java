@@ -20,13 +20,11 @@ package ch.dvbern.stip.api.verfuegung.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.VerfuegungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.VerfuegungResource;
@@ -34,7 +32,6 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.generated.dto.VerfuegungFallDto;
 import io.smallrye.common.annotation.Blocking;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -54,9 +51,6 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 @PopulateCurrentBenutzerContext
 public class VerfuegungResourceImpl implements VerfuegungResource {
 
-    private final BenutzerService benutzerService;
-    private final StipConfig config;
-    private final JWTParser jwtParser;
     private final VerfuegungService verfuegungService;
     private final VerfuegungAuthorizer verfuegungAuthorizer;
 
@@ -68,9 +62,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> getVerfuegungDokument(String token) {
         final var verfuegungDokumentId = dokumentDownloadService.getClaimId(
-            jwtParser,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM
         );
         return verfuegungService.getVerfuegungDokument(verfuegungDokumentId);
@@ -83,9 +75,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
 
         return dokumentDownloadService.getFileDownloadToken(
             verfuegungDokumentId,
-            DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM
         );
     }
 
@@ -96,9 +86,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
 
         return dokumentDownloadService.getFileDownloadToken(
             verfuegungDokumentId,
-            DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM
         );
     }
 
