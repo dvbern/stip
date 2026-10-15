@@ -31,7 +31,8 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.dokument.entity.SachbearbeiterGesuchDokument;
 import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
@@ -89,7 +90,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
     name = "gesuch",
     indexes = {
         @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
-        @Index(name = "IX_gesuch_tenant", columnList = "tenant")
+        @Index(name = "IX_gesuch_ausbildung_id", columnList = "ausbildung_id")
     }
 )
 @Getter
@@ -97,7 +98,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Gesuch extends AbstractTenantEntity {
+public class Gesuch extends AbstractEntity {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_id"))
@@ -143,6 +144,10 @@ public class Gesuch extends AbstractTenantEntity {
     @Nullable
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<@Valid GesuchNotiz> notizen = new ArrayList<>();
+
+    @Nullable
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "gesuch", orphanRemoval = true)
+    private List<@Valid DarlehenBuchhaltungEntry> darlehenBuchhaltungEntries = new ArrayList<>();
 
     public GesuchTranche getLatestGesuchTranche() {
         // There must always be at least 1 GesuchTranche

@@ -319,14 +319,11 @@ Fall:
   required:
     - id
     - fallNummer
-    - tenant
   type: object
   properties:
     id:
       $ref: '#/UUID'
     fallNummer:
-      type: string
-    tenant:
       type: string
 FallHeader:
   required:

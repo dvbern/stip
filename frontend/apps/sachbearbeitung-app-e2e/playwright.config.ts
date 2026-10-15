@@ -7,12 +7,14 @@ import * as dotenv from 'dotenv';
 import {
   CustomTestOptions,
   baseConfig,
+  createCiE2eReporter,
   getE2eUrls,
 } from '@dv/shared/util-fn/e2e-util';
 
 dotenv.config({ path: join(__dirname, '../../.env') });
 
 const urls = getE2eUrls();
+const APP_TYPE = 'sachbearbeitung-app-e2e';
 
 export default defineConfig<CustomTestOptions>({
   ...nxE2EPreset(__filename, { testDir: './src' }),
@@ -23,6 +25,7 @@ export default defineConfig<CustomTestOptions>({
     baseURL: urls.sb,
     testUser: 'SACHBEARBEITER',
   },
+  reporter: createCiE2eReporter(APP_TYPE, __dirname),
   projects: [
     {
       name: 'setup',

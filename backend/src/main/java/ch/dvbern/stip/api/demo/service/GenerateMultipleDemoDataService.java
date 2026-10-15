@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.demo.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -117,7 +118,7 @@ public class GenerateMultipleDemoDataService {
 
     private Gesuch createGesuch(final DemoData demoData, final Sachbearbeiter admin, final String fallPrefix) {
         final var fall = createFakeFall(UUID.randomUUID().toString().substring(0, 8), fallPrefix);
-        final var gesuch = generateDemoDataService.createEinreichableGesuch(demoData, fall);
+        final var gesuch = generateDemoDataService.createEinreichableGesuch(demoData, fall, Optional.empty());
         DemoDataAnonymizerUtil.anonymizeGesuch(demoData, gesuch);
         final var zuordnung = new Zuordnung()
             .setZuordnungType(ZuordnungType.AUTOMATIC)

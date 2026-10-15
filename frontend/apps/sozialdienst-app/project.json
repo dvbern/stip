@@ -13,17 +13,10 @@
     "libs/shared/styles/components"
   ],
   "targets": {
-    "prepare": {
-      "cache": false,
-      "executor": "nx:run-script",
-      "options": {
-        "script": "set-version"
-      },
-      "outputs": [
-        "{workspaceRoot}/libs/shared/model/version/src/lib/version.ts"
-      ]
-    },
     "build": {
+      "dependsOn": [
+        { "target": "prepare", "projects": "shared-model-version" }
+      ],
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -67,6 +60,8 @@
           }
         ],
         "styles": [
+          "@fontsource-variable/open-sans/wght.css",
+          "@fontsource-variable/material-symbols-rounded/fill.css",
           "libs/shared/styles/theme/src/tailwind.css",
           "apps/sozialdienst-app/src/styles.scss"
         ],

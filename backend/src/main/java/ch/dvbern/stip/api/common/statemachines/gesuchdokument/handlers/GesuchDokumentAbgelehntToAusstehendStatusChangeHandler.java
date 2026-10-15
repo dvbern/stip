@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchdokument.handlers;
 
-import java.util.List;
-
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,8 +31,8 @@ public class GesuchDokumentAbgelehntToAusstehendStatusChangeHandler implements G
 
     @Override
     public void handle(
-        GesuchDokument gesuchdokument
+        final GesuchDokument gesuchdokument
     ) {
-        gesuchDokumentService.deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(List.of(gesuchdokument));
+        gesuchDokumentService.removeDokumentsFromGesuchDokument(gesuchdokument);
     }
 }

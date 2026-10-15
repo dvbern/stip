@@ -27,7 +27,6 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.type.Kanton;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -41,7 +40,6 @@ import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.generated.dto.VerfuegungFallDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -49,7 +47,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -70,9 +67,6 @@ public class VerfuegungService {
     private final GesuchRepository gesuchRepository;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final VerfuegungMapper verfuegungMapper;
-    private final Antivirus antivirus;
-    private final StipConfig config;
-    private final S3AsyncClient s3;
     private final VerfuegungDokumentRepository verfuegungDokumentRepository;
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDownloadService dokumentDownloadService;
@@ -110,9 +104,6 @@ public class VerfuegungService {
     public void createNegativeVerfuegungManuell(final UUID gesuchId, final FileUpload fileUpload) {
         final var response = dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             VERFUEGUNG_DOKUMENT_PATH,
             objectId -> {
                 final var verfuegung = new Verfuegung();
@@ -168,8 +159,6 @@ public class VerfuegungService {
         final var verfuegungDokument = verfuegungDokumentRepository.requireById(verfuegungDokumentId);
 
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             verfuegungDokument.getObjectId(),
             verfuegungDokument.getFilepath(),
             verfuegungDokument.getFilename()
@@ -188,8 +177,6 @@ public class VerfuegungService {
             pdfContent.toByteArray(),
             filename,
             DocumentMetrics.DocumentType.VERFUEGUNG,
-            s3,
-            config,
             VERFUEGUNG_DOKUMENT_PATH
         );
 

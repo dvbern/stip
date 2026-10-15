@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.plz.service.PlzService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -48,12 +49,16 @@ class PersonInAusbildungRequiredDokumentsProducerTest {
 
     private final LocalDate date = LocalDate.now().withDayOfMonth(1);
     private GesuchFormular formular;
+
     @Inject
     PlzService plzService;
 
+    @Inject
+    TenantService tenantService;
+
     @BeforeEach
     void setup() {
-        producer = new PersonInAusbildungRequiredDokumentsProducer(plzService);
+        producer = new PersonInAusbildungRequiredDokumentsProducer(plzService, tenantService);
         formular = new GesuchFormular();
 
         final var ausbildung = new Ausbildung();

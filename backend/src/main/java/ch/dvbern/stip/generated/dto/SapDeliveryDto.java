@@ -22,11 +22,13 @@ public class SapDeliveryDto  implements Serializable {
   private String sapId;
   private java.time.LocalDateTime timestampErstellt;
   private ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+  private String message;
 
   protected SapDeliveryDto(SapDeliveryDtoBuilder<?, ?> b) {
     this.sapId = b.sapId;
     this.timestampErstellt = b.timestampErstellt;
     this.sapStatus = b.sapStatus;
+    this.message = b.message;
   }
 
   public SapDeliveryDto() {
@@ -86,6 +88,24 @@ public class SapDeliveryDto  implements Serializable {
     this.sapStatus = sapStatus;
   }
 
+  /**
+   **/
+  public SapDeliveryDto message(String message) {
+    this.message = message;
+    return this;
+  }
+
+  
+  @JsonProperty("message")
+  public String getMessage() {
+    return message;
+  }
+
+  @JsonProperty("message")
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -98,12 +118,13 @@ public class SapDeliveryDto  implements Serializable {
     SapDeliveryDto sapDelivery = (SapDeliveryDto) o;
     return Objects.equals(this.sapId, sapDelivery.sapId) &&
         Objects.equals(this.timestampErstellt, sapDelivery.timestampErstellt) &&
-        Objects.equals(this.sapStatus, sapDelivery.sapStatus);
+        Objects.equals(this.sapStatus, sapDelivery.sapStatus) &&
+        Objects.equals(this.message, sapDelivery.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sapId, timestampErstellt, sapStatus);
+    return Objects.hash(sapId, timestampErstellt, sapStatus, message);
   }
 
   @Override
@@ -114,6 +135,7 @@ public class SapDeliveryDto  implements Serializable {
     sb.append("    sapId: ").append(toIndentedString(sapId)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -148,6 +170,7 @@ public class SapDeliveryDto  implements Serializable {
     private String sapId;
     private java.time.LocalDateTime timestampErstellt;
     private ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+    private String message;
     protected abstract B self();
 
     public abstract C build();
@@ -162,6 +185,10 @@ public class SapDeliveryDto  implements Serializable {
     }
     public B sapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
       this.sapStatus = sapStatus;
+      return self();
+    }
+    public B message(String message) {
+      this.message = message;
       return self();
     }
   }

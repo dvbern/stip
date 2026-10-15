@@ -19,17 +19,35 @@ package ch.dvbern.stip.api;
 
 import java.io.ByteArrayOutputStream;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import io.quarkus.test.Mock;
+import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.jboss.resteasy.reactive.RestMulti;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Mock
 @ApplicationScoped
 public class DokumentDownloadServiceMock extends DokumentDownloadService {
+
+    public DokumentDownloadServiceMock() {
+        super(null, null, null, null);
+    }
+
+    @Inject
+    public DokumentDownloadServiceMock(
+    S3AsyncClient s3, JWTParser jwtParser, StipConfig config, BenutzerService benutzerService
+    ) {
+        super(s3, jwtParser, config, benutzerService);
+    }
+
     @Override
     public RestMulti<Buffer> getWrapedDokument(
         final String fileName,
@@ -40,12 +58,19 @@ public class DokumentDownloadServiceMock extends DokumentDownloadService {
 
     @Override
     public RestMulti<Buffer> getDokument(
-        final S3AsyncClient s3,
-        final String bucketName,
         final String objectId,
         final String dokumentPathPrefix,
         final String fileName
     ) {
         return RestMulti.fromMultiData(Uni.createFrom().item(Buffer.buffer().appendInt(0)).toMulti()).build();
+    }
+
+    @Override
+    public byte[] executeDownloadDocument(final String objectId, final String dokumentPathPrefix) {
+        final var output = new ByteArrayOutputStream();
+        try (final var pdf = new PdfDocument(new PdfWriter(output))) {
+            pdf.addNewPage();
+        }
+        return output.toByteArray();
     }
 }

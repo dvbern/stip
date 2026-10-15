@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
@@ -56,14 +56,16 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Entity
 @Table(
     name = "lebenslauf_item",
-    indexes = @Index(name = "IX_lebenslauf_item_tenant", columnList = "tenant")
+    indexes = {
+        @Index(name = "IX_lebenslauf_item_abschluss_id", columnList = "abschluss_id")
+    }
 )
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class LebenslaufItem extends AbstractTenantEntity {
+public class LebenslaufItem extends AbstractEntity {
     @NullableUnlessGenerated
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(

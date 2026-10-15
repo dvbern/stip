@@ -13,6 +13,9 @@
   ],
   "targets": {
     "build": {
+      "dependsOn": [
+        { "target": "prepare", "projects": "shared-model-version" }
+      ],
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
@@ -48,6 +51,8 @@
           }
         ],
         "styles": [
+          "@fontsource-variable/open-sans/wght.css",
+          "@fontsource-variable/material-symbols-rounded/fill.css",
           "apps/demo-data-app/src/styles.scss",
           "libs/shared/styles/theme/src/tailwind.css"
         ],

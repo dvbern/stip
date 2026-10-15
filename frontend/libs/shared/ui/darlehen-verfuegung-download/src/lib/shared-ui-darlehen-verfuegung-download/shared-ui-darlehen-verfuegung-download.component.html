@@ -2,6 +2,7 @@
   @if (darlehenSig()?.verfuegung; as verfuegung) {
     <button
       type="button"
+      data-testid="darlehen-verfuegung-download"
       class="tw:dv-button tw:flex tw:max-w-full tw:p-0 tw:underline tw:text-base tw:font-normal"
       [dvDownloadButton]="{
         type: 'darlehen',

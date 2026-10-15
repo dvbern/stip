@@ -19,9 +19,6 @@ package ch.dvbern.stip.arch;
 
 import java.util.Arrays;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
-import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
-import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -29,13 +26,13 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static ch.dvbern.stip.arch.util.ArchTestUtil.API_CLASSES;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 @Execution(ExecutionMode.CONCURRENT)
@@ -63,12 +60,19 @@ class JpaTest {
                         javaField.getAnnotationOfType(JoinColumn.class)
                             .foreignKey()
                             .value() != ConstraintMode.CONSTRAINT
+                        || javaField.tryGetAnnotationOfType(OneToMany.class).isPresent()
                     ) {
                         return;
                     }
 
                     if (tableAnnotation != null) {
-                        final var hasIndex = tableAnnotation.indexes().length != 0;
+                        final var indexes = Arrays.stream(tableAnnotation.indexes()).toList();
+                        final var hasIndex = indexes.stream()
+                            .anyMatch(
+                                index -> index.columnList()
+                                    .contains(javaField.getAnnotationOfType(JoinColumn.class).name())
+                            );
+
                         if (hasIndex) {
                             return;
                         }
@@ -80,37 +84,6 @@ class JpaTest {
                         fieldOwner.getSimpleName()
                     );
                     conditionEvents.add(SimpleConditionEvent.violated(javaField, message));
-                }
-            }));
-
-        rule.check(API_CLASSES);
-    }
-
-    @Test
-    void test_index_on_tenant_field() {
-        var rule = classes().that()
-            .areAssignableTo(AbstractTenantEntity.class)
-            .and()
-            .areNotAssignableTo(SozialdienstBenutzer.class)
-            .and()
-            .areAnnotatedWith(Entity.class)
-            .and()
-            .areAnnotatedWith(Table.class)
-            .should((new ArchCondition<>("have an index") {
-                @Override
-                public void check(JavaClass javaClass, ConditionEvents conditionEvents) {
-                    var tableAnnotation = javaClass.getAnnotationOfType(Table.class);
-                    if (tableAnnotation != null) {
-                        final var hasIndex = Arrays.stream(tableAnnotation.indexes())
-                            .anyMatch(index -> index.columnList().contains("tenant"));
-
-                        if (hasIndex) {
-                            return;
-                        }
-                    }
-
-                    String message = String.format("Tenant column on entity %s has no index", javaClass.getName());
-                    conditionEvents.add(SimpleConditionEvent.violated(javaClass, message));
                 }
             }));
 

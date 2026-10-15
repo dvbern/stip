@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.familiensituation.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
@@ -26,7 +26,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -41,15 +40,14 @@ import org.jilt.BuilderStyle;
 @WerZahltAlimenteRequiredFieldConstraint
 @Entity
 @Table(
-    name = "familiensituation",
-    indexes = @Index(name = "IX_familiensituation_tenant", columnList = "tenant")
+    name = "familiensituation"
 )
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Familiensituation extends AbstractTenantEntity {
+public class Familiensituation extends AbstractEntity {
     @NotNull
     @Column(name = "eltern_verheiratet_zusammen", nullable = false)
     private Boolean elternVerheiratetZusammen;

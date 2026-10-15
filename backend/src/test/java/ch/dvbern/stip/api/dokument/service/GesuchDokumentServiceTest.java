@@ -20,19 +20,17 @@ package ch.dvbern.stip.api.dokument.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.GesuchDokumentServiceMock;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
-import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -43,12 +41,10 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -59,7 +55,6 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import static ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -196,7 +191,6 @@ class GesuchDokumentServiceTest {
             null,
             null,
             null,
-            null,
             new GesuchDokumentstatusService(
                 new GesuchDokumentKommentarService(
                     null,
@@ -205,8 +199,6 @@ class GesuchDokumentServiceTest {
                 ),
                 null
             ),
-            null,
-            null,
             null,
             null,
             null,
@@ -233,7 +225,6 @@ class GesuchDokumentServiceTest {
         // Act
         var docs = new ArrayList<GesuchDokument>();
         docs.add(new GesuchDokument());
-        gsDokService.deleteFilesOfAbgelehnteGesuchDokumenteForGesuch(docs);
 
         // Assert
         assertThat(gesuchDokumente.size(), is(2));
@@ -297,50 +288,5 @@ class GesuchDokumentServiceTest {
             () -> customGesuchDokumentTypAuthorizer
                 .canDeleteTyp(customGesuchDokument.getCustomDokumentTyp().getId())
         );
-    }
-
-    private static class GesuchDokumentServiceMock extends GesuchDokumentService {
-        public GesuchDokumentServiceMock(
-        GesuchDokumentMapper gesuchDokumentMapper,
-        DokumentRepository dokumentRepository,
-        GesuchDokumentRepository gesuchDokumentRepository,
-        GesuchRepository gesuchRepository,
-        GesuchTrancheRepository gesuchTrancheRepository,
-        S3AsyncClient s3,
-        StipConfig config,
-        GesuchDokumentstatusService gesuchDokumentstatusService,
-        Antivirus antivirus,
-        CustomDokumentTypRepository customDocumentTypRepository,
-        GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
-        RequiredDokumentService requiredDokumentService,
-        DokumentHistoryRepository dokumentHistoryRepository,
-        GesuchTrancheHistoryService gesuchTrancheHistoryService,
-        DokumentUploadService dokumentUploadService,
-        DokumentDownloadService dokumentDownloadService,
-        DokumentDeleteService dokumentDeleteService
-        ) {
-            super(
-                gesuchDokumentMapper,
-                dokumentRepository,
-                gesuchDokumentRepository,
-                customDocumentTypRepository,
-                gesuchRepository,
-                gesuchTrancheRepository,
-                s3,
-                config,
-                gesuchDokumentstatusService,
-                requiredDokumentService,
-                antivirus,
-                gesuchDokumentKommentarRepository,
-                dokumentHistoryRepository,
-                gesuchTrancheHistoryService,
-                dokumentUploadService,
-                dokumentDownloadService,
-                dokumentDeleteService
-            );
-        }
-
-        @Override
-        public void executeDeleteDokumentsFromS3(List<String> objectIds) {}
     }
 }

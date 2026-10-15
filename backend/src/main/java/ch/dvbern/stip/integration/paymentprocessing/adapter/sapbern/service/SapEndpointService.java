@@ -218,6 +218,7 @@ public class SapEndpointService {
         importStatusReadRequest.setSENDER(SapMapperUtil.getImportStatusReadSenderParms(getSystemid()));
         importStatusReadRequest.setFILTERPARMS(new ImportStatusReadRequest.FILTERPARMS());
         importStatusReadRequest.getFILTERPARMS().setDELIVERYID(deliveryid.setScale(0));
+        importStatusReadRequest.getFILTERPARMS().setSHOWDETAILS(true);
 
         return sapMetrics.recordSoapRequest(
             SapMetrics.SoapOperation.IMPORT_STATUS_READ,

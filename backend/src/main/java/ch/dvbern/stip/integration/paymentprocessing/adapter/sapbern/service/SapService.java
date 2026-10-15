@@ -168,7 +168,12 @@ public class SapService {
             } else {
                 status = SapStatus.FAILURE;
             }
-
+        }
+        if (status == SapStatus.FAILURE) {
+            sapDelivery.setMessage(
+                Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' '
+                + readImportResponse.getDELIVERY().getFirst().getPOSITION().getFirst().getLOGS().getFirst().getMESSAGE()
+            );
         }
         setSapDeliveryStatus(sapDelivery, status, buchhaltung.getBuchhaltungType());
     }
@@ -268,11 +273,18 @@ public class SapService {
 
                 try {
                     switch (businessPartnerActionBuchhaltungType) {
+
                         case BUSINESSPARTNER_CREATE -> {
                             final var response = sapEndpointService.createBusinessPartner(fall, deliveryid);
+                            if (!SapReturnCodeType.isSuccess(response.getRETURNCODE().getFirst().getTYPE())) {
+                                sapDelivery.setMessage(response.getRETURNCODE().getFirst().getMESSAGE());
+                            }
                         }
                         case BUSINESSPARTNER_CHANGE -> {
                             final var response = sapEndpointService.changeBusinessPartner(fall, deliveryid);
+                            if (!SapReturnCodeType.isSuccess(response.getRETURNCODE().getFirst().getTYPE())) {
+                                sapDelivery.setMessage(response.getRETURNCODE().getFirst().getMESSAGE());
+                            }
                         }
                         case null, default -> throw new IllegalStateException();
                     }
@@ -332,8 +344,21 @@ public class SapService {
         final var readImportResponse = sapEndpointService.readImportStatus(buchhaltung.getFall(), deliveryid);
 
         var status = SapStatus.FAILURE;
-        if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE())) {
-            status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().getFirst().getTYPE())) {
+            status = SapStatus.parse(readImportResponse.getDELIVERY().getFirst().getSTATUS());
+        } else {
+            if (!SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().getFirst().getTYPE())) {
+                sapDelivery.setMessage(
+                    Objects.requireNonNullElse(sapDelivery.getMessage(), "") + ' '
+                    + readImportResponse.getDELIVERY()
+                        .getFirst()
+                        .getPOSITION()
+                        .getFirst()
+                        .getLOGS()
+                        .getFirst()
+                        .getMESSAGE()
+                );
+            }
         }
 
         setSapDeliveryStatus(sapDelivery, status, buchhaltung.getBuchhaltungType());
@@ -400,6 +425,9 @@ public class SapService {
                             getQrIbanAddlInfoString(gesuch),
                             String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
                         );
+                    if (SapReturnCodeType.isSuccess(vendorPostingCreateResponse.getRETURNCODE().getFirst().getTYPE())) {
+                        newSapDelivery.setMessage(vendorPostingCreateResponse.getRETURNCODE().getFirst().getMESSAGE());
+                    }
                 } catch (Exception e) {
                     LOG.error("Failed to send createVendorPosting action", e);
                 }

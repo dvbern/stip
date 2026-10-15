@@ -37,16 +37,12 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
-import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.KantonUtil;
-import ch.dvbern.stip.api.config.type.StipConfig;
-import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
-import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.statistik.dto.FormDto;
 import ch.dvbern.stip.api.statistik.dto.FormDtoBuilder;
 import ch.dvbern.stip.api.statistik.dto.FormationDtoBuilder;
@@ -78,7 +74,6 @@ import jakarta.xml.bind.Marshaller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.SAXException;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @Singleton
@@ -89,12 +84,6 @@ public class StatistikXMLService {
     private final TenantService tenantService;
     private final GemeindeLookupPortFactory gemeindeLookupPortFactory;
     private final DokumentUploadService dokumentUploadService;
-    private final S3AsyncClient s3AsyncClient;
-    private final StipConfig config;
-
-    private final BuchhaltungRepository buchhaltungRepository;
-    private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
-    private final PlzService plzService;
 
     @Transactional
     @WithSpan
@@ -125,8 +114,6 @@ public class StatistikXMLService {
                 outputStream.toByteArray(),
                 fileName,
                 DocumentMetrics.DocumentType.STATISTIK,
-                s3AsyncClient,
-                config,
                 StatistikConstants.STATISTIK_FILE_PATH
             );
 

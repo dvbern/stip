@@ -25,10 +25,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefBuilder;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
@@ -56,7 +54,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.CaseUtils;
 import org.jboss.resteasy.reactive.RestMulti;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @RequestScoped
@@ -71,18 +68,13 @@ public class DatenschutzbriefService {
     private final DokumentRepository dokumentRepository;
     private final DokumentDownloadService dokumentDownloadService;
     private final DokumentUploadService dokumentUploadService;
-    private final S3AsyncClient s3;
-    private final StipConfig config;
     private final ElternRepository elternRepository;
     private final GesuchRepository gesuchRepository;
     private final DatenschutzbriefMapper datenschutzbriefMapper;
-    private final BenutzerService benutzerService;
 
     public RestMulti<Buffer> getDatenschutzbriefDokument(final UUID datenschutzbriefId) {
         final var dokument = datenschutzbriefRepository.requireById(datenschutzbriefId).getDokument();
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             DATENSCHUTZBRIEF_DOKUMENT_PATH,
             dokument.getFilename()
@@ -101,9 +93,7 @@ public class DatenschutzbriefService {
 
         return dokumentDownloadService.getFileDownloadToken(
             datenschutzbriefId,
-            DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
     }
 
@@ -144,8 +134,6 @@ public class DatenschutzbriefService {
             pdfContent.toByteArray(),
             filename,
             DocumentMetrics.DocumentType.DATENSCHUTZBRIEF,
-            s3,
-            config,
             DATENSCHUTZBRIEF_DOKUMENT_PATH
         );
 

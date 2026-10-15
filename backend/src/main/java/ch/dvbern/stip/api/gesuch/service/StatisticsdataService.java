@@ -64,6 +64,7 @@ public class StatisticsdataService {
         }
         final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
         statisticsdataRepository.delete(statisticsdata);
+        statisticsdataRepository.flush();
         gesuch.setStatisticsdata(null);
     }
 

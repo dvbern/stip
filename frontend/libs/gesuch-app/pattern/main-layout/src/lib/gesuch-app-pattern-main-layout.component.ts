@@ -38,8 +38,8 @@ import {
   NavMenuItem,
   createAllRouteParamsSig,
   createParamsIdSig,
-  gesuchBaseMenuItems,
-  gesuchBaseNavItems,
+  gsBaseMenuItems,
+  gsBaseNavItems,
 } from '@dv/shared/util/navigation';
 
 /**
@@ -104,8 +104,8 @@ export class GesuchAppPatternMainLayoutComponent {
   private globalNotificationStore = inject(GlobalNotificationStore);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
-  baseNavItems = gesuchBaseNavItems;
-  baseMenuItems = gesuchBaseMenuItems;
+  baseNavItems = gsBaseNavItems;
+  baseMenuItems = gsBaseMenuItems;
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -151,7 +151,7 @@ export class GesuchAppPatternMainLayoutComponent {
       const delegierung = fallHeader?.currentDelegierung;
 
       if (!fallId) {
-        this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
+        this.navigationStore.setNavigationItems(gsBaseMenuItems);
         return;
       }
 
@@ -161,6 +161,7 @@ export class GesuchAppPatternMainLayoutComponent {
         id: 'auszahlungen',
         label: { key: 'shared.menu.auszahlung' },
         route: ['/auszahlung', fallId],
+        testId: 'auszahlungen-nav-item',
       };
 
       const fallDokumente: NavItem = {
@@ -169,6 +170,7 @@ export class GesuchAppPatternMainLayoutComponent {
         icon: 'description',
         label: { key: 'shared.menu.fallDokumente' },
         route: ['/fall-dokumente', fallId],
+        testId: 'fall-dokumente-nav-item',
       };
 
       const nachrichten: NavItem = {
@@ -177,6 +179,7 @@ export class GesuchAppPatternMainLayoutComponent {
         icon: 'mail',
         label: { key: 'shared.menu.nachrichten' },
         route: ['/nachrichten', fallId],
+        testId: 'nachrichten-nav-item',
         badge: fallHeader?.unreadNotificationsCount
           ? {
               count: fallHeader.unreadNotificationsCount,
@@ -189,13 +192,14 @@ export class GesuchAppPatternMainLayoutComponent {
           ? {
               type: 'action',
               id: 'sozialdienst-delegieren',
+              testId: 'sozialdienst-delegieren-nav-item',
               label: { key: 'shared.menu.delegieren' },
               action: () => this.delegiereSozialdienst(fallId),
             }
           : undefined;
 
       const navItems: NavItem[] = [
-        ...gesuchBaseNavItems,
+        ...gsBaseNavItems,
         fallDokumente,
         auszahlung,
         nachrichten,
@@ -218,6 +222,7 @@ export class GesuchAppPatternMainLayoutComponent {
         type: 'action',
         id: 'allgemeine-informationen',
         label: { key: 'shared.menu.allgemeine-informationen' },
+        testId: 'allgemeine-informationen-menu-item',
         action: () => {
           SharedUiInfoDialogComponent.open(this.dialog, {
             data: {
@@ -233,6 +238,7 @@ export class GesuchAppPatternMainLayoutComponent {
         type: 'action',
         id: 'nutzungsbedingungen',
         label: { key: 'shared.menu.nutzungsbedingungen' },
+        testId: 'nutzungsbedingungen-menu-item',
         action: () => {
           const benutzer = this.benutzerSig();
           const nutzungsbedingungenAkzeptiert =
@@ -261,7 +267,7 @@ export class GesuchAppPatternMainLayoutComponent {
       };
 
       const menuItems: NavMenuItem[] = [
-        ...gesuchBaseMenuItems,
+        ...gsBaseMenuItems,
         allgemeineInformationen,
         nutzungsbedingungen,
       ].filter(filterByAppRole(rolesMap));

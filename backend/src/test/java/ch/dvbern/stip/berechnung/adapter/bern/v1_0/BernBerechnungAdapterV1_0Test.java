@@ -52,6 +52,7 @@ public class BernBerechnungAdapterV1_0Test {
     void getBerechnungsresultatTestAllKuerzung() {
         final Gesuch gesuch = TestUtil.getGesuchForBerechnung(UUID.randomUUID());
         gesuch.getGesuchsperiode().setEinreichefristNormal(gesuch.getGesuchGueltigkeitBis().minusYears(1));
+
         gesuch.getAusbildung()
             .getAusbildungsgang()
             .getAbschluss()

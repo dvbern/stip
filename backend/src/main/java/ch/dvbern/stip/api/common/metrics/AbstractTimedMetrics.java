@@ -27,15 +27,12 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nullable;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public abstract class AbstractTimedMetrics {
     private final MeterRegistry meterRegistry;
     private final TenantService tenantService;
-
-    protected AbstractTimedMetrics(final MeterRegistry meterRegistry, final TenantService tenantService) {
-        this.meterRegistry = meterRegistry;
-        this.tenantService = tenantService;
-    }
 
     protected String outcomeFor(final Throwable throwable) {
         return tag(classifyTimeout(throwable) ? Outcome.TIMEOUT : Outcome.ERROR);

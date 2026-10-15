@@ -1,12 +1,14 @@
-@let values = valuesSig();
-@if (values) {
+@let valid = valuesSig().valid;
+@let values = valuesSig().values;
+@let details = valuesSig().details;
+@if (values || details) {
   <div class="tw:w-full tw:grid tw:grid-cols-[auto_auto_auto] tw:gap-2" *dvTranslocoDemo="let t">
     <span></span>
     @for (sollIstKey of sollIstKeys; track sollIstKey) {
       <span class="tw:font-bold">{{ t(`demo-data-app.overview.apply-demo-data.info.${sollIstKey}`) }}</span>
     }
 
-    <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="values.valid?.status === false">
+    <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="valid?.status === false">
       <span class="tw:font-bold">
         {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.status') }}:
       </span>
@@ -18,60 +20,279 @@
       }
     </div>
 
-    <div class="tw:col-span-3 tw:font-bold tw:mt-2 tw:text-gray-500">
-      {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.ungekuerzt') }}
-    </div>
-    <div
-      class="tw:grid tw:grid-cols-subgrid tw:col-span-3"
-      [class.tw:bg-red-100]="values.valid?.ungekuerztStipendien === false"
-    >
-      <span class="tw:font-bold">
-        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.stipendien') }}:
-      </span>
-      @for (sollIstKey of sollIstKeys; track sollIstKey) {
-        <span>
-          {{ (values[sollIstKey]?.ungekuerztStipendien | formatChfNullable) ?? 'N/A' }}
+    @if (values) {
+      <div class="tw:col-span-3 tw:font-bold tw:mt-2 tw:text-gray-500">
+        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.ungekuerzt') }}
+      </div>
+      <div
+        class="tw:grid tw:grid-cols-subgrid tw:col-span-3"
+        [class.tw:bg-red-100]="valid?.ungekuerztStipendien === false"
+      >
+        <span class="tw:font-bold">
+          {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.stipendien') }}:
         </span>
-      }
-    </div>
+        @for (sollIstKey of sollIstKeys; track sollIstKey) {
+          <span>
+            {{ (values[sollIstKey]?.ungekuerztStipendien | formatChfNullable) ?? 'N/A' }}
+          </span>
+        }
+      </div>
 
-    <div
-      class="tw:grid tw:grid-cols-subgrid tw:col-span-3"
-      [class.tw:bg-red-100]="values.valid?.ungekuerztDarlehen === false"
-    >
-      <span class="tw:font-bold">
-        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
-      </span>
-      @for (sollIstKey of sollIstKeys; track sollIstKey) {
-        <span>
-          {{ (values[sollIstKey]?.ungekuerztDarlehen | formatChfNullable) ?? 'N/A' }}
+      <div
+        class="tw:grid tw:grid-cols-subgrid tw:col-span-3"
+        [class.tw:bg-red-100]="valid?.ungekuerztDarlehen === false"
+      >
+        <span class="tw:font-bold">
+          {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
         </span>
-      }
-    </div>
+        @for (sollIstKey of sollIstKeys; track sollIstKey) {
+          <span>
+            {{ (values[sollIstKey]?.ungekuerztDarlehen | formatChfNullable) ?? 'N/A' }}
+          </span>
+        }
+      </div>
 
-    <div class="tw:col-span-3 tw:font-bold tw:mt-2 tw:text-gray-500">
-      {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.gekuerzt') }}
-    </div>
-    <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="values.valid?.stipendien === false">
-      <span class="tw:font-bold">
-        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.stipendien') }}:
-      </span>
-      @for (sollIstKey of sollIstKeys; track sollIstKey) {
-        <span>
-          {{ (values[sollIstKey]?.stipendien | formatChfNullable) ?? 'N/A' }}
+      <div class="tw:col-span-3 tw:font-bold tw:mt-2 tw:text-gray-500">
+        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.gekuerzt') }}
+      </div>
+      <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="valid?.stipendien === false">
+        <span class="tw:font-bold">
+          {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.stipendien') }}:
         </span>
-      }
-    </div>
+        @for (sollIstKey of sollIstKeys; track sollIstKey) {
+          <span>
+            {{ (values[sollIstKey]?.stipendien | formatChfNullable) ?? 'N/A' }}
+          </span>
+        }
+      </div>
 
-    <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="values.valid?.darlehen === false">
-      <span class="tw:font-bold">
-        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
-      </span>
-      @for (sollIstKey of sollIstKeys; track sollIstKey) {
-        <span>
-          {{ (values[sollIstKey]?.darlehen | formatChfNullable) ?? 'N/A' }}
+      <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="valid?.darlehen === false">
+        <span class="tw:font-bold">
+          {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
         </span>
-      }
-    </div>
+        @for (sollIstKey of sollIstKeys; track sollIstKey) {
+          <span>
+            {{ (values[sollIstKey]?.darlehen | formatChfNullable) ?? 'N/A' }}
+          </span>
+        }
+      </div>
+    }
+
+    @if (details) {
+      <div class="tw:col-span-3 tw:font-bold tw:mt-2 tw:text-gray-500">
+        {{ t('demo-data-app.overview.apply-demo-data.info.details.title') }}
+      </div>
+
+      <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="valid?.budgetArt === false">
+        <span class="tw:font-bold"> {{ t('demo-data-app.overview.apply-demo-data.info.details.budgetArt') }}: </span>
+        @for (sollIstKey of sollIstKeys; track sollIstKey) {
+          <span>
+            {{
+              t(
+                `demo-data-app.overview.apply-demo-data.info.details.budgetArt.${details[sollIstKey]?.budgetArt ?? 'NONE'}`
+              )
+            }}
+          </span>
+        }
+      </div>
+
+      <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+        <span class="tw:font-bold">
+          {{ t('demo-data-app.overview.apply-demo-data.info.details.elternbudget1') }}:
+        </span>
+        @for (sollIstKey of sollIstKeys; track sollIstKey) {
+          <span>
+            @if (valid?.elternBudget1 === true) {
+              <i class="material-symbols-rounded tw:cursor-default tw:text-xl/none! tw:text-dv-green">check_circle</i>
+            } @else {
+              <i class="material-symbols-rounded tw:cursor-default tw:text-xl/none! tw:text-dv-red">cancel</i>
+            }
+          </span>
+        }
+      </div>
+      <div class="tw:contents tw:text-sm/none">
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.totalEinnahmen') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.elternBudget1?.totalEinnahmen | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.totalKosten') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.elternBudget1?.totalKosten | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.einnahmeUeberschuss') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.elternBudget1?.einnahmeUeberschuss | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.fehlbetrag') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.elternBudget1?.fehlbetrag | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+        <span class="tw:font-bold">
+          {{ t('demo-data-app.overview.apply-demo-data.info.details.elternbudget2') }}:
+        </span>
+        @for (sollIstKey of sollIstKeys; track sollIstKey) {
+          <span>
+            @if (valid?.elternBudget2 === true) {
+              <i class="material-symbols-rounded tw:cursor-default tw:text-xl/none! tw:text-dv-green">check_circle</i>
+            } @else {
+              <i class="material-symbols-rounded tw:cursor-default tw:text-xl/none! tw:text-dv-red">cancel</i>
+            }
+          </span>
+        }
+      </div>
+      <div class="tw:contents tw:text-sm/none">
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.totalEinnahmen') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.elternBudget2?.totalEinnahmen | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.totalKosten') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.elternBudget2?.totalKosten | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.einnahmeUeberschuss') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.elternBudget2?.einnahmeUeberschuss | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.fehlbetrag') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.elternBudget2?.fehlbetrag | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+        <span class="tw:font-bold">
+          {{ t('demo-data-app.overview.apply-demo-data.info.details.persoenlichesBudget') }}:
+        </span>
+        @for (sollIstKey of sollIstKeys; track sollIstKey) {
+          <span>
+            @if (valid?.persoenlichesBudget === true) {
+              <i class="material-symbols-rounded tw:cursor-default tw:text-xl/none! tw:text-dv-green">check_circle</i>
+            } @else {
+              <i class="material-symbols-rounded tw:cursor-default tw:text-xl/none! tw:text-dv-red">cancel</i>
+            }
+          </span>
+        }
+      </div>
+      <div class="tw:contents tw:text-sm/none">
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.totalEinnahmen') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.persoenlichesBudget?.totalEinnahmen | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.totalKosten') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.persoenlichesBudget?.totalKosten | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="tw:font-bold">{{ t('demo-data-app.overview.apply-demo-data.info.details.total') }}</div>
+      <div class="tw:contents tw:text-sm/none">
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2" [class.tw:bg-red-100]="valid?.fehlbetrag === false">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.fehlbetrag') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.fehlbetrag | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2" [class.tw:bg-red-100]="valid?.proKopfteilung === false">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.proKopfteilung') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.proKopfteilung | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span class="tw:font-semibold tw:pl-2" [class.tw:bg-red-100]="valid?.anzahlMonateEinreichefrist === false">
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.anzahlMonateEinreichefrist') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.anzahlMonateEinreichefrist | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
+          <span
+            class="tw:font-semibold tw:pl-2"
+            [class.tw:bg-red-100]="valid?.totalNachKuerzungNachEinreichefrist === false"
+          >
+            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.totalNachKuerzungNachEinreichefrist') }}:
+          </span>
+          @for (sollIstKey of sollIstKeys; track sollIstKey) {
+            <span>
+              {{ (details[sollIstKey]?.totalNachKuerzungNachEinreichefrist | formatChfNullable) ?? 'N/A' }}
+            </span>
+          }
+        </div>
+      </div>
+    }
   </div>
 }

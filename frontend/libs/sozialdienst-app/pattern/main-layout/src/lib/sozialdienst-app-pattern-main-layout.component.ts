@@ -31,9 +31,9 @@ import {
   NavMenuItem,
   createAllRouteParamsSig,
   createParamsIdSig,
-  sozialdienstAdminNavItems,
-  sozialdienstBaseMenuItems,
-  sozialdienstBaseNavItems,
+  sozAdminNavItems,
+  sozBaseMenuItems,
+  sozBaseNavItems,
 } from '@dv/shared/util/navigation';
 
 /**
@@ -82,8 +82,8 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private fallHeaderStore = inject(FallHeaderStore);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
-  baseNavItems = sozialdienstBaseNavItems;
-  baseMenuItems = sozialdienstBaseMenuItems;
+  baseNavItems = sozBaseNavItems;
+  baseMenuItems = sozBaseMenuItems;
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -132,7 +132,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(
-          [...sozialdienstBaseNavItems, ...sozialdienstAdminNavItems].filter(
+          [...sozBaseNavItems, ...sozAdminNavItems].filter(
             filterByAppRole(rolesMap),
           ),
         );
@@ -188,8 +188,8 @@ export class SozialdienstAppPatternMainLayoutComponent {
         fallDokumente,
         auszahlung,
         ...nachrichten,
-        ...sozialdienstBaseNavItems,
-        ...sozialdienstAdminNavItems,
+        ...sozBaseNavItems,
+        ...sozAdminNavItems,
       ].filter(filterByAppRole(rolesMap));
 
       this.navigationStore.setNavigationItems(navItems);
@@ -251,7 +251,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       };
 
       const menuItems: NavMenuItem[] = [
-        ...sozialdienstBaseMenuItems,
+        ...sozBaseMenuItems,
         allgemeineInformationen,
         nutzungsbedingungen,
       ].filter(filterByAppRole(rolesMap));

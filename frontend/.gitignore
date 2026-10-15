@@ -8,6 +8,7 @@ junit.xml
 tmp
 /out-tsc
 /dv-example/
+/test-results
 
 # dependencies
 node_modules

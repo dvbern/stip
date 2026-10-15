@@ -53,4 +53,9 @@ public enum Kanton {
     private final String tlKey;
     private final int bfsCode;
     private final String bfsDelivery;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

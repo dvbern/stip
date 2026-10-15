@@ -129,6 +129,12 @@ const addUsersCommand = program
       .choices(known.realms)
       .default(known.realms[0]),
   )
+  .addOption(
+    program.createOption(
+      '-p, --password <password>',
+      `password for newly created users. Overrides ${c.bold(ADD_USER_PASSWORD_ENV)} when provided`,
+    ),
+  )
   .addHelpText(
     'before',
     `1. ${c.bold('Adds')} users to Keycloak with the specified roles.
@@ -138,7 +144,7 @@ This script will create users if they do not exist and assign the specified role
 
 3. Or ${c.bold('bulk Updates')} the roles of existing users by given wildcard.
 
-- The password will be taken from the environment variable ${c.bold(ADD_USER_PASSWORD_ENV)}.
+- The password is taken from ${c.bold('--password')} if provided, otherwise from ${c.bold(ADD_USER_PASSWORD_ENV)}.
 `,
   )
   .addHelpText(
@@ -458,12 +464,14 @@ addUsersCommand.action(async () => {
     userWildcard,
     roles: rawRoles,
     realm,
+    password: passwordOverride,
   } = addUsersCommand.opts() as {
     env: KnownEnv;
     user?: string;
     userWildcard?: string;
     roles: CurrentRole[];
     realm: KnownRealm;
+    password?: string;
   };
 
   if (!userInfo && !userWildcard) {
@@ -496,12 +504,12 @@ addUsersCommand.action(async () => {
   }
 
   const kcAdminClient = await initKc(targetEnv);
-  const ADD_USER_PASSWORD = env[ADD_USER_PASSWORD_ENV];
+  const ADD_USER_PASSWORD = passwordOverride ?? env[ADD_USER_PASSWORD_ENV];
   if (!ADD_USER_PASSWORD) {
     addUsersCommand.addHelpText(
       'after',
       showError(
-        `Please set the environment variable ${ADD_USER_PASSWORD_ENV} to the password for the new user`,
+        `Please provide ${c.bold('--password')} or set the environment variable ${ADD_USER_PASSWORD_ENV} to the password for the new user`,
       ),
     );
     addUsersCommand.help({ error: true });
