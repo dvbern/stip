@@ -152,7 +152,7 @@ export class SachbearbeitungAppFeatureDashboardComponent {
   constructor() {
     // Load Fehlgeschlagene Zahlungen to check if there are any
     this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
-      page: 1,
+      page: 0,
       pageSize: 1,
     });
   }
