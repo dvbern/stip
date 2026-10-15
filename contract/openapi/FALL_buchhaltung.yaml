@@ -60,7 +60,6 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: createBuchhaltungSaldokorrektur
       summary: Create a buchhaltungsentry from a saldokorrektur
-
   /buchhaltung/retry/{gesuchId}:
     parameters:
       - name: gesuchId

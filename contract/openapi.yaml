@@ -3143,6 +3143,30 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /fall/paymentprocessingsuspended:
+    parameters:
+      - $ref: '#/components/parameters/fallId'
+      - name: suspended
+        schema:
+          type: boolean
+        in: path
+        required: true
+    post:
+      tags:
+        - Fall
+      responses:
+        '204':
+          description: Return des neu erstellten Falls für den GS
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: setPaymentProcessingSuspended
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /fall/header/{fallId}:
     get:
       tags:
