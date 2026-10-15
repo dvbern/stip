@@ -75,13 +75,6 @@ public class DatenschutzbriefPdfService {
         final Eltern elternteil,
         final UUID gesuchId
     ) {
-        return createDatenschutzbriefForElternteilInternal(elternteil, gesuchId);
-    }
-
-    private ByteArrayOutputStream createDatenschutzbriefForElternteilInternal(
-        final Eltern elternteil,
-        final UUID gesuchId
-    ) {
         final var out = new ByteArrayOutputStream();
 
         final PdfFont pdfFont = PdfUtils.createFont();

@@ -71,13 +71,6 @@ public class VerfuegungPdfComposerService {
         final Gesuch gesuch,
         final Optional<BerechnungsresultatDto> stipendienBerechnungOpt
     ) {
-        createVerfuegungsDocumentsInternal(gesuch, stipendienBerechnungOpt);
-    }
-
-    private void createVerfuegungsDocumentsInternal(
-        final Gesuch gesuch,
-        final Optional<BerechnungsresultatDto> stipendienBerechnungOpt
-    ) {
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
         final var verfuegungsBrief = getVerfuegungsBrief(verfuegung, stipendienBerechnungOpt, gesuch);
         storeVerfuegungsDokument(verfuegung, VerfuegungDokumentTyp.VERFUEGUNGSBRIEF, verfuegungsBrief);

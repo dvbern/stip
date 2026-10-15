@@ -25,9 +25,7 @@ import jakarta.interceptor.InvocationContext;
 
 @Interceptor
 @Priority(Interceptor.Priority.APPLICATION)
-@RecordedDocumentGeneration(
-    value = DocumentMetrics.DocumentType.VERFUEGUNG, engine = DocumentMetrics.DocumentEngine.ITEXT
-)
+@RecordedDocumentGeneration
 public class DocumentGenerationInterceptor {
 
     @Inject

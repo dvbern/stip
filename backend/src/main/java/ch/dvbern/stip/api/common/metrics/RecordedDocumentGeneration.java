@@ -22,13 +22,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics.DocumentEngine;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics.DocumentType;
+import jakarta.enterprise.util.Nonbinding;
 import jakarta.interceptor.InterceptorBinding;
 
 @InterceptorBinding
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RecordedDocumentGeneration {
-    DocumentMetrics.DocumentType value();
+    @Nonbinding
+    DocumentMetrics.DocumentType value() default DocumentType.DARLEHEN_VERFUEGUNG;
 
-    DocumentMetrics.DocumentEngine engine();
+    @Nonbinding
+    DocumentMetrics.DocumentEngine engine() default DocumentEngine.ITEXT;
 }
