@@ -129,13 +129,13 @@ public class MassendruckJobService {
         final var entities = baseQuery.stream().toList();
         final var results = entities.stream().map(massendruckJobMapper::toDto).toList();
 
-        return new PaginatedMassendruckJobDto(
-            page,
-            results.size(),
-            Math.toIntExact(countQuery.fetchOne()),
-            results,
-            sachbearbeiterService.getSachbearbeitersForFilter()
-        );
+        return PaginatedMassendruckJobDto.builder()
+            .page(page)
+            .pageSize(results.size())
+            .totalEntries(Math.toIntExact(countQuery.fetchOne()))
+            .entries(results)
+            .sachbearbeiters(sachbearbeiterService.getSachbearbeitersForFilter())
+            .build();
     }
 
     public MassendruckJobDto createAndCombineMassendruckJobForQueryType(

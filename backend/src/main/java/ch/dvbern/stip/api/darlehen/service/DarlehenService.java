@@ -480,13 +480,13 @@ public class DarlehenService {
             .map(freiwilligDarlehenMapper::toDashboardDto)
             .toList();
 
-        return new PaginatedSbFreiwilligDarlehenDashboardDto(
-            page,
-            results.size(),
-            Math.toIntExact(countQuery.fetchFirst()),
-            results,
-            sachbearbeiterService.getSachbearbeitersForFilter()
-        );
+        return PaginatedSbFreiwilligDarlehenDashboardDto.builder()
+            .page(page)
+            .pageSize(results.size())
+            .totalEntries(Math.toIntExact(countQuery.fetchFirst()))
+            .entries(results)
+            .sachbearbeiters(sachbearbeiterService.getSachbearbeitersForFilter())
+            .build();
     }
 
     @Transactional

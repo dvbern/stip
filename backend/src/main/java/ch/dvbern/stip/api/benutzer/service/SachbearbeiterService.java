@@ -55,6 +55,10 @@ public class SachbearbeiterService {
         return sachbearbeiterRepository.findAll().stream().map(sachbearbeiterMapper::toDto).toList();
     }
 
+    public List<SachbearbeiterForFilterDto> getSachbearbeitersForFilter() {
+        return sachbearbeiterRepository.findAll().stream().map(sachbearbeiterMapper::toFilterDto).toList();
+    }
+
     @Transactional
     public SachbearbeiterDto createSachbearbeiter(final SachbearbeiterUpdateDto sachbearbeiterUpdateDto) {
         final var sachbearbeiter = sachbearbeiterMapper.toEntity(sachbearbeiterUpdateDto);
@@ -112,9 +116,4 @@ public class SachbearbeiterService {
         sachbearbeiterRepository.deleteById(sachbearbeiterId);
         keycloakBenutzerService.deleteKeycloakBenutzer(sachbearbeiter.getKeycloakId());
     }
-
-    public List<SachbearbeiterForFilterDto> getSachbearbeitersForFilter() {
-        return sachbearbeiterRepository.findAll().stream().map(sachbearbeiterMapper::toFilterDto).toList();
-    }
-
 }

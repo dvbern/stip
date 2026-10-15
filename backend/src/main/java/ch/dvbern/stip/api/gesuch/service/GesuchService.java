@@ -572,13 +572,13 @@ public class GesuchService {
             .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, gesuch.getLatestGesuchTranche()))
             .toList();
 
-        return new PaginatedSbGesucheDashboardDto(
-            page,
-            entries.size(),
-            totalEntries,
-            entries,
-            sachbearbeiterService.getSachbearbeitersForFilter()
-        );
+        return PaginatedSbGesucheDashboardDto.builder()
+            .page(page)
+            .pageSize(entries.size())
+            .totalEntries(totalEntries)
+            .entries(entries)
+            .sachbearbeiters(sachbearbeiterService.getSachbearbeitersForFilter())
+            .build();
     }
 
     private PaginatedSbGesucheDashboardDto findAendeurngsSB(
@@ -626,13 +626,13 @@ public class GesuchService {
             .map(aenderung -> sbDashboardGesuchMapper.toDto(aenderung.getGesuch(), aenderung))
             .toList();
 
-        return new PaginatedSbGesucheDashboardDto(
-            page,
-            entries.size(),
-            totalEntries,
-            entries,
-            sachbearbeiterService.getSachbearbeitersForFilter()
-        );
+        return PaginatedSbGesucheDashboardDto.builder()
+            .page(page)
+            .pageSize(entries.size())
+            .totalEntries(totalEntries)
+            .entries(entries)
+            .sachbearbeiters(sachbearbeiterService.getSachbearbeitersForFilter())
+            .build();
     }
 
     @Transactional
