@@ -1,42 +1,33 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<databaseChangeLog
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
->
-  <include file="db/migration/baseline.xml" />
-
-
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+  <include file="db/migration/baseline.xml"/>
   <!-- <editor-fold desc="v0.72" defaultstate="collapsed"> -->
-  <include file="/db/migration/v0.72/KSTIP-3513.xml" />
-  <include file="/db/migration/v0.72/KSTIP-3458.xml" />
-  <include file="/db/migration/v0.72/KSTIP-3664.xml" />
+  <include file="/db/migration/v0.72/KSTIP-3513.xml"/>
+  <include file="/db/migration/v0.72/KSTIP-3458.xml"/>
+  <include file="/db/migration/v0.72/KSTIP-3664.xml"/>
   <include file="/db/migration/v0.72/KSTIP-3562.xml"/>
   <!-- </editor-fold> -->
-
   <!-- <editor-fold desc="v0.73" defaultstate="collapsed"> -->
   <include file="/db/migration/v0.73/KSTIP-3612.xml"/>
   <!-- </editor-fold> -->
-
   <!-- <editor-fold desc="v0.74" defaultstate="collapsed"> -->
   <include file="/db/migration/v0.74/KSTIP-3750.xml"/>
   <!-- </editor-fold> -->
-  
   <!-- <editor-fold desc="v0.75" defaultstate="collapsed"> -->
   <include file="/db/migration/v0.75/KSTIP-3834.xml"/>
   <!-- </editor-fold> -->
-
   <!-- <editor-fold desc="v0.75" defaultstate="collapsed"> -->
   <include file="/db/migration/v0.75/KSTIP-3603.xml"/>
   <include file="/db/migration/v0.75/KSTIP-3811.xml"/>
   <!-- </editor-fold> -->
-
   <!-- <editor-fold desc="v0.76" defaultstate="collapsed"> -->
   <include file="/db/migration/v0.76/KSTIP-3895.xml"/>
   <!-- </editor-fold> -->
-
   <!-- <editor-fold desc="v0.78" defaultstate="collapsed"> -->
   <include file="/db/migration/v0.78/KSTIP-3936.xml"/>
   <include file="/db/migration/v0.78/KSTIP-3978.xml"/>
+  <!-- </editor-fold> -->
+  <!-- <editor-fold desc="v0.79" defaultstate="collapsed"> -->
+  <include file="/db/migration/v0.79/KSTIP-3935.xml"/>
   <!-- </editor-fold> -->
 </databaseChangeLog>

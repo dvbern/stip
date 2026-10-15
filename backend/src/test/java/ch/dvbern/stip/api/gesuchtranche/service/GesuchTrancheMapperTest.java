@@ -21,9 +21,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
+import ch.dvbern.stip.api.ausbildung.service.AbschlussService;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.generated.dto.GeschwisterDto;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
@@ -31,21 +34,28 @@ import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
+import ch.dvbern.stip.generated.dto.LebenslaufItemDto;
+import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 public class GesuchTrancheMapperTest {
     GesuchTrancheMapper gesuchTrancheMapper;
+    AbschlussService abschlussService;
 
     @BeforeEach
     void setup() {
-        gesuchTrancheMapper = new GesuchTrancheMapperImpl(null);
+        gesuchTrancheMapper = new GesuchTrancheMapperImpl(Mockito.mock(GesuchFormularMapper.class));
         gesuchTrancheMapper.geschwisterMapper = new GeschwisterMapperImpl();
+        abschlussService = Mockito.mock(AbschlussService.class);
+        gesuchTrancheMapper.abschlussService = abschlussService;
     }
 
     @Test
@@ -107,6 +117,76 @@ public class GesuchTrancheMapperTest {
             formularDto.getGeschwisters().stream().map(GeschwisterUpdateDto::getId).toList(),
             containsInAnyOrder(publicGeschwisterDto.getId(), hiddenGeschwisterDto.getId())
         );
+    }
+
+    @Test
+    void testPartialUpdateRejectsBerufsbefaehigendAbschluss() {
+        final var abschlussId = UUID.randomUUID();
+        final var update = createUpdateWithBerufsbefaehigend(false);
+        update.getGesuchFormular().getLebenslaufItems().getFirst().setAbschlussId(abschlussId);
+        final var abschluss = new Abschluss();
+        abschluss.setBerufsbefaehigenderAbschluss(true);
+        Mockito.when(abschlussService.requireById(abschlussId)).thenReturn(abschluss);
+        final var target = new GesuchTranche();
+        target.setGesuchFormular(new GesuchFormular());
+
+        gesuchTrancheMapper.partialUpdate(update, target, true);
+
+        assertThat(
+            update.getGesuchFormular().getLebenslaufItems().getFirst().getBerufsbefaehigend(),
+            is(true)
+        );
+    }
+
+    @Test
+    void testPartialUpdateClearsBerufsbefaehigendWithoutAbschluss() {
+        final var update = createUpdateWithBerufsbefaehigend(true);
+
+        gesuchTrancheMapper.beforeMappingRejectBerufsbefaehigendAbschluss(update);
+
+        assertThat(
+            update.getGesuchFormular().getLebenslaufItems().getFirst().getBerufsbefaehigend(),
+            nullValue()
+        );
+        Mockito.verifyNoInteractions(abschlussService);
+    }
+
+    @Test
+    void testPartialUpdateAcceptsBerufsbefaehigendAbschluss() {
+        final var update = createUpdateWithBerufsbefaehigend(true);
+        final var target = new GesuchTranche();
+        target.setGesuchFormular(new GesuchFormular());
+
+        gesuchTrancheMapper.partialUpdate(update, target, false);
+
+        assertThat(
+            update.getGesuchFormular().getLebenslaufItems().getFirst().getBerufsbefaehigend(),
+            is(true)
+        );
+    }
+
+    @Test
+    void testRemoveBerufsbefaehigendAbschlussClearsMappedValue() {
+        final var lebenslaufItem = new LebenslaufItemDto();
+        lebenslaufItem.setBerufsbefaehigend(true);
+        final var formular = new GesuchFormularDto();
+        formular.setLebenslaufItems(List.of(lebenslaufItem));
+        final var tranche = new GesuchTrancheDto();
+        tranche.setGesuchFormular(formular);
+
+        gesuchTrancheMapper.removeBerufsbefaehigendAbschluss(tranche);
+
+        assertThat(lebenslaufItem.getBerufsbefaehigend(), nullValue());
+    }
+
+    private GesuchTrancheUpdateDto createUpdateWithBerufsbefaehigend(final boolean berufsbefaehigend) {
+        final var lebenslaufItem = new LebenslaufItemUpdateDto();
+        lebenslaufItem.setBerufsbefaehigend(berufsbefaehigend);
+        final var formular = new GesuchFormularUpdateDto();
+        formular.setLebenslaufItems(List.of(lebenslaufItem));
+        final var tranche = new GesuchTrancheUpdateDto();
+        tranche.setGesuchFormular(formular);
+        return tranche;
     }
 
     private Geschwister createGeschwister(

@@ -3,11 +3,13 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   AbschlussSlim,
   AusbildungsstaetteService,
   AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -35,6 +37,7 @@ export class AusbildungsstaetteStore extends signalStore(
   withState(initialState),
 ) {
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
+  private config = inject(SharedModelCompileTimeConfig);
 
   ausbildungsstaetteViewSig = computed(() =>
     mapCachedData(
@@ -98,13 +101,14 @@ export class AusbildungsstaetteStore extends signalStore(
         }));
       }),
       switchMap(() =>
-        this.ausbildungsstaetteService
-          .getAllAbschluessForAuswahl$()
-          .pipe(
-            handleApiResponse((abschluesse) =>
-              patchState(this, { abschluesse }),
-            ),
-          ),
+        byAppConfig(this.config.app, {
+          gesuchsteller: () =>
+            this.ausbildungsstaetteService.getAllAbschluessForAuswahlGs$(),
+          sachbearbeiter: () =>
+            this.ausbildungsstaetteService.getAllAbschluessForAuswahlSb$(),
+        }).pipe(
+          handleApiResponse((abschluesse) => patchState(this, { abschluesse })),
+        ),
       ),
     ),
   );

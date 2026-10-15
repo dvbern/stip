@@ -47,16 +47,19 @@ public abstract class LebenslaufItemMapper {
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
     @Mapping(target = "abschluss", source = "abschlussId", qualifiedByName = "mapAbschluss")
+    @Mapping(target = "berufsbefaehigendAbschluss", source = "berufsbefaehigend")
     public abstract LebenslaufItem toEntity(LebenslaufItemDto lebenslaufItemDto);
 
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     @Mapping(target = "abschlussId", source = "abschluss.id")
+    @Mapping(target = "berufsbefaehigend", source = "berufsbefaehigendAbschluss")
     public abstract LebenslaufItemDto toDto(LebenslaufItem lebenslaufItem);
 
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
     @Mapping(target = "abschluss", source = "abschlussId", qualifiedByName = "mapAbschluss")
+    @Mapping(target = "berufsbefaehigendAbschluss", source = "berufsbefaehigend")
     public abstract LebenslaufItem partialUpdate(
         LebenslaufItemUpdateDto lebenslaufItemUpdateDto,
         @MappingTarget LebenslaufItem lebenslaufItem
@@ -65,6 +68,7 @@ public abstract class LebenslaufItemMapper {
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, MonthYearToBeginOfMonth.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class })
     @Mapping(target = "abschluss", source = "abschlussId", qualifiedByName = "mapAbschluss")
+    @Mapping(target = "berufsbefaehigendAbschluss", source = "berufsbefaehigend")
     public abstract LebenslaufItem toEntity(
         LebenslaufItemUpdateDto lebenslaufItemUpdateDto
     );
@@ -116,5 +120,6 @@ public abstract class LebenslaufItemMapper {
     @Mapping(source = "von", target = "von", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     @Mapping(source = "bis", target = "bis", qualifiedBy = { DateMapper.class, DateToMonthYear.class })
     @Mapping(target = "abschlussId", source = "abschluss.id")
+    @Mapping(target = "berufsbefaehigend", source = "berufsbefaehigendAbschluss")
     public abstract LebenslaufItemUpdateDto toUpdateDto(LebenslaufItem lebenslaufItem);
 }

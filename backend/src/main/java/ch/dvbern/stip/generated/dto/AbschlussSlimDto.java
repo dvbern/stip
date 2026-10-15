@@ -25,6 +25,7 @@ public class AbschlussSlimDto  implements Serializable {
   private String bezeichnungFr;
   private ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
   private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+  private Boolean berufsbefaehigend;
   private Boolean aktiv;
   private ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
 
@@ -34,6 +35,7 @@ public class AbschlussSlimDto  implements Serializable {
     this.bezeichnungFr = b.bezeichnungFr;
     this.ausbildungskategorie = b.ausbildungskategorie;
     this.bildungsrichtung = b.bildungsrichtung;
+    this.berufsbefaehigend = b.berufsbefaehigend;
     this.aktiv = b.aktiv;
     this.zusatzfrage = b.zusatzfrage;
   }
@@ -133,6 +135,24 @@ public class AbschlussSlimDto  implements Serializable {
 
   /**
    **/
+  public AbschlussSlimDto berufsbefaehigend(Boolean berufsbefaehigend) {
+    this.berufsbefaehigend = berufsbefaehigend;
+    return this;
+  }
+
+  
+  @JsonProperty(required = true, value = "berufsbefaehigend")
+  @NotNull public Boolean getBerufsbefaehigend() {
+    return berufsbefaehigend;
+  }
+
+  @JsonProperty(required = true, value = "berufsbefaehigend")
+  public void setBerufsbefaehigend(Boolean berufsbefaehigend) {
+    this.berufsbefaehigend = berufsbefaehigend;
+  }
+
+  /**
+   **/
   public AbschlussSlimDto aktiv(Boolean aktiv) {
     this.aktiv = aktiv;
     return this;
@@ -182,13 +202,14 @@ public class AbschlussSlimDto  implements Serializable {
         Objects.equals(this.bezeichnungFr, abschlussSlim.bezeichnungFr) &&
         Objects.equals(this.ausbildungskategorie, abschlussSlim.ausbildungskategorie) &&
         Objects.equals(this.bildungsrichtung, abschlussSlim.bildungsrichtung) &&
+        Objects.equals(this.berufsbefaehigend, abschlussSlim.berufsbefaehigend) &&
         Objects.equals(this.aktiv, abschlussSlim.aktiv) &&
         Objects.equals(this.zusatzfrage, abschlussSlim.zusatzfrage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, bildungsrichtung, aktiv, zusatzfrage);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, bildungsrichtung, berufsbefaehigend, aktiv, zusatzfrage);
   }
 
   @Override
@@ -201,6 +222,7 @@ public class AbschlussSlimDto  implements Serializable {
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
     sb.append("    bildungsrichtung: ").append(toIndentedString(bildungsrichtung)).append("\n");
+    sb.append("    berufsbefaehigend: ").append(toIndentedString(berufsbefaehigend)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("}");
@@ -239,6 +261,7 @@ public class AbschlussSlimDto  implements Serializable {
     private String bezeichnungFr;
     private ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
     private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+    private Boolean berufsbefaehigend;
     private Boolean aktiv;
     private ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
     protected abstract B self();
@@ -263,6 +286,10 @@ public class AbschlussSlimDto  implements Serializable {
     }
     public B bildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
       this.bildungsrichtung = bildungsrichtung;
+      return self();
+    }
+    public B berufsbefaehigend(Boolean berufsbefaehigend) {
+      this.berufsbefaehigend = berufsbefaehigend;
       return self();
     }
     public B aktiv(Boolean aktiv) {

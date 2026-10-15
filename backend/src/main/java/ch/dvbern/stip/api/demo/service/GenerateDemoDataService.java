@@ -326,6 +326,7 @@ public class GenerateDemoDataService {
         for (var lebenslaufItemDto : demoDataDto.getLebenslauf().getAusbildung()) {
             final var lebenslauf = LebenslaufItemBuilder.lebenslaufItem()
                 .abschluss(demoDataAbschlussRepository.requireByAbschlussName(lebenslaufItemDto.getAbschluss()))
+                .berufsbefaehigendAbschluss(false)
                 .von(lebenslaufItemDto.getVon())
                 .bis(lebenslaufItemDto.getBis())
                 .taetigkeitsart(null)
@@ -344,6 +345,7 @@ public class GenerateDemoDataService {
         for (var lebenslaufItemDto : demoDataDto.getLebenslauf().getTaetigkeiten()) {
             final var lebenslauf = LebenslaufItemBuilder.lebenslaufItem()
                 .abschluss(null)
+                .berufsbefaehigendAbschluss(false)
                 .von(lebenslaufItemDto.getVon())
                 .bis(lebenslaufItemDto.getBis())
                 .taetigkeitsart(lebenslaufItemDto.getTaetigkeitsart())

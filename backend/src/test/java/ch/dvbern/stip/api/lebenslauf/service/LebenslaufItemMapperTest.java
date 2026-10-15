@@ -90,6 +90,27 @@ class LebenslaufItemMapperTest {
         Assertions.assertEquals(ABSCHLUSS_BEZEICHNUNG_DE, lebenslaufItem.getAbschluss().getBezeichnungDe());
     }
 
+    @Test
+    void testLebenslaufMapperMapsBerufsbefaehigendAbschluss() {
+        final var lebenslaufItemUpdateDto = prepareData();
+        lebenslaufItemUpdateDto.setBerufsbefaehigend(true);
+
+        final var lebenslaufItem = lebenslaufItemMapper.toEntity(lebenslaufItemUpdateDto);
+
+        Assertions.assertTrue(lebenslaufItem.isBerufsbefaehigendAbschluss());
+    }
+
+    @Test
+    void testLebenslaufMapperDoesNotMapNullBerufsbefaehigendAbschluss() {
+        final var lebenslaufItemUpdateDto = prepareData();
+        final var lebenslaufItem = new LebenslaufItem();
+        lebenslaufItem.setBerufsbefaehigendAbschluss(true);
+
+        lebenslaufItemMapper.partialUpdate(lebenslaufItemUpdateDto, lebenslaufItem);
+
+        Assertions.assertTrue(lebenslaufItem.isBerufsbefaehigendAbschluss());
+    }
+
     private LebenslaufItemUpdateDto prepareData() {
         var lebenslaufItem = new LebenslaufItemUpdateDto();
         lebenslaufItem.setBis("02.2022");

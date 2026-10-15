@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.service.AbschlussService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -68,6 +69,9 @@ public abstract class GesuchTrancheMapper {
 
     @Inject
     GeschwisterMapper geschwisterMapper;
+
+    @Inject
+    AbschlussService abschlussService;
 
     @ToDtoDefaultMapping
     public abstract GesuchTrancheDto toDtoWithConfidentialFields(GesuchTranche gesuch, @Context GesuchTranche context);
@@ -135,6 +139,16 @@ public abstract class GesuchTrancheMapper {
         markInvalidLebenslaufItems(gesuchTranche, gesuchTrancheDto);
         removeHiddenElternsData(gesuchTrancheDto, gesuchTranche);
         removeHiddenGeschwistersData(gesuchTrancheDto, gesuchTranche);
+        removeBerufsbefaehigendAbschluss(gesuchTrancheDto);
+    }
+
+    protected void removeBerufsbefaehigendAbschluss(final GesuchTrancheDto gesuchTrancheDto) {
+        final var lebenslaufItems = gesuchTrancheDto.getGesuchFormular().getLebenslaufItems();
+        if (lebenslaufItems == null) {
+            return;
+        }
+
+        lebenslaufItems.forEach(lebenslaufItem -> lebenslaufItem.setBerufsbefaehigend(null));
     }
 
     protected void removeHiddenElternsData(
@@ -196,6 +210,27 @@ public abstract class GesuchTrancheMapper {
         beforeMappingOverrideSteuern(newTranche, gesuchTranche);
         beforeMappingOverrideIncomingVersteckteEltern(newTranche, gesuchTranche);
         beforeMappingAddHiddenGeschwisters(newTranche, gesuchTranche);
+        beforeMappingRejectBerufsbefaehigendAbschluss(newTranche);
+    }
+
+    protected void beforeMappingRejectBerufsbefaehigendAbschluss(
+        final GesuchTrancheUpdateDto newTranche
+    ) {
+        final var lebenslaufItemDtos = newTranche.getGesuchFormular().getLebenslaufItems();
+        if (lebenslaufItemDtos == null) {
+            return;
+        }
+
+        lebenslaufItemDtos.forEach(lebenslaufItem -> {
+            if (lebenslaufItem.getAbschlussId() == null) {
+                lebenslaufItem.setBerufsbefaehigend(null);
+                return;
+            }
+
+            lebenslaufItem.setBerufsbefaehigend(
+                abschlussService.requireById(lebenslaufItem.getAbschlussId()).isBerufsbefaehigenderAbschluss()
+            );
+        });
     }
 
     protected void beforeMappingOverrideSteuern(

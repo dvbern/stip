@@ -22,7 +22,6 @@ import {
   GesuchTranche,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 
 export type DeepPartial<T> = T extends object

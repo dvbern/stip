@@ -8,6 +8,7 @@ import {
   AusbildungsstaetteService,
   SteuerdatenService,
 } from '@dv/shared/model/gesuch';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
 import { getUebersicht } from './structure/01-uebersicht';
@@ -57,7 +58,12 @@ export class SharedExportTrancheService {
       const [abschluesse, steuerdaten, { default: pdfmake }] =
         await Promise.all([
           lastValueFrom(
-            this.ausbildungsstaetteService.getAllAbschluessForAuswahl$(),
+            byAppConfig(this.config.app, {
+              gesuchsteller: () =>
+                this.ausbildungsstaetteService.getAllAbschluessForAuswahlGs$(),
+              sachbearbeiter: () =>
+                this.ausbildungsstaetteService.getAllAbschluessForAuswahlSb$(),
+            }),
           ),
           lastValueFrom(
             this.steuerdatenService.getSteuerdaten$({

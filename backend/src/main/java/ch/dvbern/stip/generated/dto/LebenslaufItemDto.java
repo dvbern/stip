@@ -30,6 +30,7 @@ public class LebenslaufItemDto  implements Serializable {
   private ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
   private String taetigkeitsBeschreibung;
   private Boolean invalid;
+  private Boolean berufsbefaehigend;
 
   protected LebenslaufItemDto(LebenslaufItemDtoBuilder<?, ?> b) {
     this.von = b.von;
@@ -42,6 +43,7 @@ public class LebenslaufItemDto  implements Serializable {
     this.taetigkeitsart = b.taetigkeitsart;
     this.taetigkeitsBeschreibung = b.taetigkeitsBeschreibung;
     this.invalid = b.invalid;
+    this.berufsbefaehigend = b.berufsbefaehigend;
   }
 
   public LebenslaufItemDto() {
@@ -232,6 +234,24 @@ public class LebenslaufItemDto  implements Serializable {
     this.invalid = invalid;
   }
 
+  /**
+   **/
+  public LebenslaufItemDto berufsbefaehigend(Boolean berufsbefaehigend) {
+    this.berufsbefaehigend = berufsbefaehigend;
+    return this;
+  }
+
+  
+  @JsonProperty("berufsbefaehigend")
+  public Boolean getBerufsbefaehigend() {
+    return berufsbefaehigend;
+  }
+
+  @JsonProperty("berufsbefaehigend")
+  public void setBerufsbefaehigend(Boolean berufsbefaehigend) {
+    this.berufsbefaehigend = berufsbefaehigend;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -251,12 +271,13 @@ public class LebenslaufItemDto  implements Serializable {
         Objects.equals(this.fachrichtungBerufsbezeichnung, lebenslaufItem.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.taetigkeitsart, lebenslaufItem.taetigkeitsart) &&
         Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItem.taetigkeitsBeschreibung) &&
-        Objects.equals(this.invalid, lebenslaufItem.invalid);
+        Objects.equals(this.invalid, lebenslaufItem.invalid) &&
+        Objects.equals(this.berufsbefaehigend, lebenslaufItem.berufsbefaehigend);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung, invalid);
+    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung, invalid, berufsbefaehigend);
   }
 
   @Override
@@ -274,6 +295,7 @@ public class LebenslaufItemDto  implements Serializable {
     sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
     sb.append("    invalid: ").append(toIndentedString(invalid)).append("\n");
+    sb.append("    berufsbefaehigend: ").append(toIndentedString(berufsbefaehigend)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -315,6 +337,7 @@ public class LebenslaufItemDto  implements Serializable {
     private ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
     private String taetigkeitsBeschreibung;
     private Boolean invalid;
+    private Boolean berufsbefaehigend;
     protected abstract B self();
 
     public abstract C build();
@@ -357,6 +380,10 @@ public class LebenslaufItemDto  implements Serializable {
     }
     public B invalid(Boolean invalid) {
       this.invalid = invalid;
+      return self();
+    }
+    public B berufsbefaehigend(Boolean berufsbefaehigend) {
+      this.berufsbefaehigend = berufsbefaehigend;
       return self();
     }
   }

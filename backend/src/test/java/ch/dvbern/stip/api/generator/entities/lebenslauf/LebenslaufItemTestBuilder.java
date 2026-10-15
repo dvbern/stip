@@ -33,6 +33,7 @@ public final class LebenslaufItemTestBuilder extends AbstractTestBuilder<Lebensl
     public static LebenslaufItemTestBuilder empty(LocalDate referenceDate) {
         LebenslaufItem lebenslaufItem = LebenslaufItemBuilder.lebenslaufItem()
             .abschluss(null)
+            .berufsbefaehigendAbschluss(false)
             .von(referenceDate.minusYears(2))
             .bis(referenceDate)
             .taetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)

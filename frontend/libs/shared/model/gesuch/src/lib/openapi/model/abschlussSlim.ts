@@ -19,6 +19,7 @@ export interface AbschlussSlim {
     bezeichnungFr: string;
     ausbildungskategorie: Ausbildungskategorie;
     bildungsrichtung: Bildungsrichtung;
+    berufsbefaehigend: boolean;
     zusatzfrage?: AbschlussZusatzfrage;
     aktiv: boolean;
 }
