@@ -41,7 +41,7 @@ import {
   MatSelectSearchClearDirective,
   MatSelectSearchComponent,
 } from 'ngx-mat-select-search';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
@@ -55,7 +55,6 @@ import {
   GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
-  SachbearbeiterForFilter,
   SbFreiwilligDarlehenDashboardColumn,
   SbGesucheDashboardColumn,
   SortOrder,
@@ -75,7 +74,6 @@ import {
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
@@ -90,6 +88,7 @@ import {
   DashboardQuery,
   DashboardTableEntryFields,
   FilterTabParam,
+  filterMitarbeiter,
   gesucheStatusByTyp,
   getControlVisibility,
   getDefaultQueryForRole,
@@ -145,7 +144,6 @@ import {
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
     TranslocoDirective,
-    SharedUiSelectSearchComponent,
     MatSelectSearchComponent,
     MatSelectSearchClearDirective,
   ],
@@ -359,6 +357,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
     'status',
+    'bearbeiter',
   ]);
   filterStartEndFormChangedSig = toSignal(
     this.filterStartEndForm.valueChanges.pipe(
@@ -552,9 +551,20 @@ export class SachbearbeitungAppFeatureCockpitComponent
           : undefined,
       });
 
+      // 'zugewiesen' and 'bearbeiter' are mutually exclusive
+      const bearbeiterSelected = !!formValue.bearbeiter;
+      if (bearbeiterSelected) {
+        this.togglesGroup.controls.zugewiesen.setValue(false, {
+          emitEvent: false,
+        });
+      }
+
       this.router.navigate(['.'], {
         relativeTo: this.route,
-        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParams: {
+          ...makeEmptyStringPropertiesNull(query),
+          ...(bearbeiterSelected ? { zugewiesen: 'FALSE' } : {}),
+        },
         queryParamsHandling: 'merge',
         replaceUrl: true,
       });
@@ -584,7 +594,12 @@ export class SachbearbeitungAppFeatureCockpitComponent
     });
 
     const zugewiesenChangedSig = toSignal(
-      this.togglesGroup.controls.zugewiesen.valueChanges,
+      this.togglesGroup.controls.zugewiesen.valueChanges.pipe(
+        // => signal emits again after silently reset with ({ emitEvent: false })
+        map((value) => ({
+          isZugewiesen: value,
+        })),
+      ),
     );
     const bearbeitbarChangedSig = toSignal(
       this.togglesGroup.controls.bearbeitbar.valueChanges,
@@ -594,16 +609,22 @@ export class SachbearbeitungAppFeatureCockpitComponent
     effect(() => {
       const zugewiesenChanged = zugewiesenChangedSig();
 
-      if (!isDefined(zugewiesenChanged)) {
+      if (!isDefined(zugewiesenChanged?.isZugewiesen)) {
         return;
       }
 
-      const zugewiesen = zugewiesenChanged === true ? 'TRUE' : 'FALSE';
+      const zugewiesen =
+        zugewiesenChanged.isZugewiesen === true ? 'TRUE' : 'FALSE';
+
+      this.filterForm.controls.bearbeiter.reset(undefined, {
+        emitEvent: false,
+      });
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: {
           zugewiesen,
+          bearbeiter: null,
         },
         queryParamsHandling: 'merge',
       });
@@ -690,19 +711,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
     this.filterForm.controls.status.reset();
   }
 }
-
-const filterMitarbeiter = (
-  bearbeiters: SachbearbeiterForFilter[],
-  searchStr: string | undefined,
-) => {
-  return searchStr
-    ? bearbeiters.filter(
-        (bearbeiter) =>
-          bearbeiter.vorname.toLowerCase().includes(searchStr.toLowerCase()) ||
-          bearbeiter.nachname.toLowerCase().includes(searchStr.toLowerCase()),
-      )
-    : bearbeiters;
-};
 
 const parseStatus = (
   status: string | undefined,
