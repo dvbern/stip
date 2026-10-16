@@ -67,7 +67,7 @@ public class DarlehenDashboardQueryBuilder {
         );
     }
 
-    public JPAQuery<FreiwilligDarlehen> onlyCurrentBenutzer(
+    public JPAQuery<FreiwilligDarlehen> sachbearbeiter(
         final JPAQuery<FreiwilligDarlehen> query,
         final UUID benutzerId
     ) {
@@ -106,14 +106,6 @@ public class DarlehenDashboardQueryBuilder {
 
     public void status(final JPAQuery<FreiwilligDarlehen> query, final String status) {
         query.where(freiwilligDarlehen.status.eq(DarlehenStatus.valueOf(status)));
-    }
-
-    public void bearbeiter(final JPAQuery<FreiwilligDarlehen> query, final UUID bearbeiterId) {
-        query.join(QZuordnung.zuordnung)
-            .on(freiwilligDarlehen.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
-        query.where(
-            QZuordnung.zuordnung.sachbearbeiter.id.eq(bearbeiterId)
-        );
     }
 
     public void letzteAktivitaet(

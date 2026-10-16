@@ -38,6 +38,7 @@ import { Configuration }                                     from '../configurat
 
 export interface MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams {
     getGesucheSBQueryType: GetGesucheSBQueryType;
+    zugewiesen?: boolean;
     sachbearbeiterId?: string;
 }
 
@@ -150,11 +151,16 @@ export class MassendruckService {
         if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
             throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling createMassendruckJobForQueryType$.');
         }
+        const zugewiesen = requestParameters.zugewiesen;
         const sachbearbeiterId = requestParameters.sachbearbeiterId;
         let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}/create/${this.configuration.encodeParam({name: "sachbearbeiterId", value: sachbearbeiterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
 
         // Query Params
         let queryParams = new URLSearchParams();
+
+        if (zugewiesen !== undefined && zugewiesen !== null) {
+          queryParams.append('zugewiesen', zugewiesen.toString());
+        }
         const queryParamsString = queryParams.toString();
         if (queryParamsString) {
             return `${path}?${queryParamsString}`;
@@ -176,7 +182,14 @@ export class MassendruckService {
         if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
             throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling createMassendruckJobForQueryType$.');
         }
+        const zugewiesen = requestParameters.zugewiesen;
         const sachbearbeiterId = requestParameters.sachbearbeiterId;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (zugewiesen !== undefined && zugewiesen !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>zugewiesen, 'zugewiesen');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -227,6 +240,7 @@ export class MassendruckService {
         return this.httpClient.request<MassendruckJob>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

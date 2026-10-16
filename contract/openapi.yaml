@@ -1849,6 +1849,7 @@ paths:
           $ref: '#/components/schemas/GetGesucheSBQueryType'
         in: path
         required: true
+      - $ref: '#/components/parameters/zugewiesen'
       - name: sachbearbeiterId
         schema:
           $ref: '#/components/schemas/UUID'

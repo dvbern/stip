@@ -432,8 +432,14 @@ public class DarlehenService {
             darlehenDashboardQueryBuilder.onlyBearbeitbar(baseQuery);
         }
 
+        if (Objects.nonNull(bearbeiterId) && Boolean.TRUE.equals(zugewiesen)) {
+            throw new BadRequestException("Request with both parameters is invalid: bearbeiterId and zugewiesen");
+        }
         if (Boolean.TRUE.equals(zugewiesen)) {
-            darlehenDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, benutzerService.getCurrentBenutzer().getId());
+            darlehenDashboardQueryBuilder.sachbearbeiter(baseQuery, benutzerService.getCurrentBenutzer().getId());
+        }
+        if (Objects.nonNull(bearbeiterId)) {
+            darlehenDashboardQueryBuilder.sachbearbeiter(baseQuery, bearbeiterId);
         }
 
         if (fallNummer != null) {
@@ -454,10 +460,6 @@ public class DarlehenService {
 
         if (status != null) {
             darlehenDashboardQueryBuilder.status(baseQuery, status);
-        }
-
-        if (bearbeiterId != null) {
-            darlehenDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiterId);
         }
 
         if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {

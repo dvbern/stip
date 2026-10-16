@@ -137,7 +137,7 @@ public class SbDashboardQueryBuilder {
         );
     }
 
-    public void onlyCurrentBenutzer(final JPAQuery<? extends AbstractEntity> query, final UUID benutzerId) {
+    public void sachbearbeiter(final JPAQuery<? extends AbstractEntity> query, final UUID benutzerId) {
         final var ausbildung = QAusbildung.ausbildung;
         final var zuordnung = QZuordnung.zuordnung;
 

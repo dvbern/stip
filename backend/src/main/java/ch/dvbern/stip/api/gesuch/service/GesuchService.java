@@ -426,10 +426,14 @@ public class GesuchService {
         final SbGesucheDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        final var currentBenutzerId = benutzerService.getCurrentBenutzer().getId();
-
+        if (Objects.nonNull(bearbeiterId) && Boolean.TRUE.equals(zugewiesen)) {
+            throw new BadRequestException("Request with both parameters is invalid: bearbeiterId and zugewiesen");
+        }
         if (Boolean.TRUE.equals(zugewiesen)) {
-            sbDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, currentBenutzerId);
+            sbDashboardQueryBuilder.sachbearbeiter(baseQuery, benutzerService.getCurrentBenutzer().getId());
+        }
+        if (Objects.nonNull(bearbeiterId)) {
+            sbDashboardQueryBuilder.sachbearbeiter(baseQuery, bearbeiterId);
         }
 
         if (fallNummer != null) {
@@ -446,10 +450,6 @@ public class GesuchService {
 
         if (piaGeburtsdatum != null) {
             sbDashboardQueryBuilder.piaGeburtsdatum(baseQuery, piaGeburtsdatum);
-        }
-
-        if (bearbeiterId != null) {
-            sbDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiterId);
         }
 
         if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {

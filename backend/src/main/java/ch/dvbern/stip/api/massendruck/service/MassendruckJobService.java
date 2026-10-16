@@ -140,9 +140,11 @@ public class MassendruckJobService {
 
     public MassendruckJobDto createAndCombineMassendruckJobForQueryType(
         final GetGesucheSBQueryType getGesucheSBQueryType,
+        final Boolean zugewiesen,
         final UUID sachbearbeiterId
     ) {
-        final var massendruckJob = createMassendruckJobForQueryType(getGesucheSBQueryType, sachbearbeiterId);
+        final var massendruckJob =
+            createMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen, sachbearbeiterId);
         combineDocument(massendruckJob.getId());
         return massendruckJob;
     }
@@ -150,12 +152,19 @@ public class MassendruckJobService {
     @Transactional
     public MassendruckJobDto createMassendruckJobForQueryType(
         final GetGesucheSBQueryType getGesucheSBQueryType,
+        final Boolean zugewiesen,
         final UUID sachbearbeiterId
     ) {
         final var gesucheQuery = sbDashboardQueryBuilder.baseGesuchQuery(getGesucheSBQueryType);
 
+        if (Objects.nonNull(sachbearbeiterId) && Boolean.TRUE.equals(zugewiesen)) {
+            throw new BadRequestException("Request with both parameters is invalid: sachbearbeiterId and zugewiesen");
+        }
+        if (Boolean.TRUE.equals(zugewiesen)) {
+            sbDashboardQueryBuilder.sachbearbeiter(gesucheQuery, benutzerService.getCurrentBenutzer().getId());
+        }
         if (Objects.nonNull(sachbearbeiterId)) {
-            sbDashboardQueryBuilder.onlyCurrentBenutzer(gesucheQuery, sachbearbeiterId);
+            sbDashboardQueryBuilder.sachbearbeiter(gesucheQuery, sachbearbeiterId);
         }
 
         final var gesuche = gesucheQuery.stream().toList();
