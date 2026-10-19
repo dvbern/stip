@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
@@ -77,12 +78,16 @@ public class SapMapperUtil {
     }
 
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
-        // TODO KSTIP-2927: Change this here
-        final var accountHolder = String.format(
-            "%s %s",
-            zahlungsverbindung.getVorname(),
-            zahlungsverbindung.getNachname()
-        );
+        String accountHolder;
+        if (Objects.nonNull(zahlungsverbindung.getInstitution())) {
+            accountHolder = zahlungsverbindung.getInstitution();
+        } else {
+            accountHolder = String.format(
+                "%s %s",
+                zahlungsverbindung.getVorname(),
+                zahlungsverbindung.getNachname()
+            );
+        }
 
         // Truncate to a max length of 60, as the ACCOUNTHOLDER property in SAP is limited to that
         final var end = Math.min(accountHolder.length(), 60);
