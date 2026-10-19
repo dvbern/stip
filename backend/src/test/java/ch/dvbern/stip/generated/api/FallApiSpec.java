@@ -14,6 +14,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
+import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +60,8 @@ public class FallApiSpec {
         return Arrays.asList(
                 createFallForGs(),
                 getFaelleForSb(),
-                getFallForGs()
+                getFallForGs(),
+                setPaymentProcessingSuspended()
         );
     }
 
@@ -73,6 +75,10 @@ public class FallApiSpec {
 
     public GetFallForGsOper getFallForGs() {
         return new GetFallForGsOper(createReqSpec());
+    }
+
+    public SetPaymentProcessingSuspendedOper setPaymentProcessingSuspended() {
+        return new SetPaymentProcessingSuspendedOper(createReqSpec());
     }
 
     /**
@@ -264,6 +270,80 @@ public class FallApiSpec {
          * @return operation
          */
         public GetFallForGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #fallIdPath Die ID vom Fall (required)
+     * @see #suspendedQuery  (required)
+     */
+    public static class SetPaymentProcessingSuspendedOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/fall/paymentprocessingsuspended/{fallId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public SetPaymentProcessingSuspendedOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /fall/paymentprocessingsuspended/{fallId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String FALL_ID_PATH = "fallId";
+
+        /**
+         * @param fallId (UUID) Die ID vom Fall (required)
+         * @return operation
+         */
+        public SetPaymentProcessingSuspendedOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+            return this;
+        }
+
+        public static final String SUSPENDED_QUERY = "suspended";
+
+        /**
+         * @param suspended (Boolean)  (required)
+         * @return operation
+         */
+        public SetPaymentProcessingSuspendedOper suspendedQuery(Object... suspended) {
+            reqSpec.addQueryParam(SUSPENDED_QUERY, suspended);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public SetPaymentProcessingSuspendedOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public SetPaymentProcessingSuspendedOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.FallDto;
+import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -33,4 +34,9 @@ public interface FallResource {
     @Path("/fall/gs")
     @Produces({ "application/json", "text/plain" })
     FallDto getFallForGs();
+
+    @POST
+    @Path("/fall/paymentprocessingsuspended/{fallId}")
+    @Produces({ "text/plain" })
+    void setPaymentProcessingSuspended(@PathParam("fallId") UUID fallId,@QueryParam("suspended") @NotNull   Boolean suspended);
 }

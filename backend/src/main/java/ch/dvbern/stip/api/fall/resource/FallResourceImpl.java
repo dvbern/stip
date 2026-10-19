@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.fall.resource;
 
 import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.FallAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
@@ -30,6 +31,7 @@ import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHHALTUNG_ENTRY_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_READ;
 
@@ -61,5 +63,12 @@ public class FallResourceImpl implements FallResource {
     public FallDto getFallForGs() {
         fallAuthorizer.gsCanGet();
         return fallService.findFallForGs();
+    }
+
+    @Override
+    @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
+    public void setPaymentProcessingSuspended(UUID fallId, Boolean suspended) {
+        fallAuthorizer.sbCanGet();
+        return;
     }
 }
