@@ -90,15 +90,13 @@ export const authenticateAndSaveStorageState = async (
     ignoreHTTPSErrors: true,
   });
 
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-
-  // await page.waitForLoadState('networkidle');
+  await page.goto('/');
 
   await page.getByLabel('Username or email').fill(username);
   await page.getByLabel('Password', { exact: true }).fill(password);
 
   const responsePromise = page.waitForResponse(
-    '**/realms/bern/protocol/openid-connect/token',
+    '**/realms/*/protocol/openid-connect/token',
   );
 
   await page.getByRole('button', { name: 'Sign In' }).click();
@@ -106,6 +104,10 @@ export const authenticateAndSaveStorageState = async (
   const response = await responsePromise;
   const url = new URL(response.url());
   const body: KeycloakResponse = await response.json();
+  const protocolMarker = '/protocol/';
+  const protocolIndex = url.pathname.indexOf(protocolMarker);
+  const realmCookiePath =
+    protocolIndex >= 0 ? `${url.pathname.slice(0, protocolIndex)}/` : '/';
 
   const accessToken = await compress(body.access_token);
   const refreshToken = await compress(body.refresh_token);
@@ -117,7 +119,7 @@ export const authenticateAndSaveStorageState = async (
       name: BEARER_COOKIE,
       value: accessToken,
       domain: url.host,
-      path: '/realms/bern/',
+      path: realmCookiePath,
       expires: unixTime,
       httpOnly: false,
       secure: true,
@@ -127,7 +129,7 @@ export const authenticateAndSaveStorageState = async (
       name: REFRESH_COOKIE,
       value: refreshToken,
       domain: url.host,
-      path: '/realms/bern/',
+      path: realmCookiePath,
       expires: -1,
       httpOnly: false,
       secure: true,

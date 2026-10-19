@@ -81,5 +81,4 @@ public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDa
             .stream()
             .findFirst();
     }
-
 }

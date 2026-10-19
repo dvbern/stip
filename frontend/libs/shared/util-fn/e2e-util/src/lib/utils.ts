@@ -50,12 +50,13 @@ export const generateRandomName = (postfix = 'e2e') => {
   return `${random}-${postfix}`;
 };
 
+// keep for potential future use (fallback for flaky uploadFiles function)
 export const uploadFilesById = async (page: Page) => {
   const uploadButtons = page.getByTestId(/^button-document-upload-/);
 
   await expect(uploadButtons.first()).toBeVisible({ timeout: 10000 });
 
-  // Resolve the stable, unique per-dokumentTyp testids up front.
+  // test ids are not unique, in case of geschwister with the same document
   const testIds = await uploadButtons.evaluateAll((els) =>
     els
       .map((el) => el.getAttribute('data-testid'))
@@ -64,15 +65,16 @@ export const uploadFilesById = async (page: Page) => {
 
   for (const testId of testIds) {
     const upload = page.getByTestId(testId);
-    const uploadCall = page.waitForResponse(
-      (response) =>
-        response.url().includes('/api/v1/gesuchDokument') &&
-        response.request().method() === 'POST',
+    const documentsToUploadReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
+    );
+    const dokumenteReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumente/*',
     );
     await upload.scrollIntoViewIfNeeded();
     await upload.click();
     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-    await uploadCall;
+    await Promise.all([documentsToUploadReq, dokumenteReq]);
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('file-input')).toHaveCount(0);
   }
@@ -87,15 +89,17 @@ export const uploadFiles = async (page: Page) => {
     .locator('[data-testid^="button-document-upload"]')
     .all();
   for (const upload of uploads) {
+    await upload.scrollIntoViewIfNeeded();
     await upload.click();
-    const uploadCall = page.waitForResponse(
-      async (response) =>
-        response.url().includes('/api/v1/gesuchtranche') &&
-        response.url().includes('/dokumenteToUpload/gs') &&
-        response.request().method() === 'GET',
+
+    const documentsToUploadReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumenteToUpload/*',
+    );
+    const dokumenteReq = page.waitForResponse(
+      '**/api/v1/gesuchtranche/*/dokumente/*',
     );
     await page.getByTestId('file-input').setInputFiles(SmallImageFile);
-    await uploadCall;
+    await Promise.all([documentsToUploadReq, dokumenteReq]);
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('file-input')).toHaveCount(0);
   }
@@ -180,7 +184,13 @@ export const deleteGesuch = async (
   apiContext: APIRequestContext,
   gesuchId: string,
 ) => {
-  return await apiContext.delete(`/api/v1/gesuch/${gesuchId}`);
+  const response = await apiContext.delete(`/api/v1/gesuch/${gesuchId}`);
+  if (response.status() >= 400) {
+    throw new Error(
+      `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
+    );
+  }
+  return response;
 };
 
 /**
@@ -281,7 +291,7 @@ const ssnFormatter = (ssn: number[]) => {
 
 export const thisYear = format(new Date(), 'yyyy');
 export const fruehlingOrHerbst = () => {
-  if (getMonth(new Date()) < 6) {
+  if (getMonth(new Date()) <= 6) {
     return 1;
   }
   return 9;
@@ -318,6 +328,7 @@ export const createMultiUserTestContexts = async (options: {
   const gsBrowserContext = await browser.newContext({
     storageState: gsStorageState,
   });
+
   const gsCookies = await gsBrowserContext.cookies();
   const gsBearerCookie = gsCookies.find((c) => c.name === BEARER_COOKIE);
   const gsBearer = gsBearerCookie?.value
@@ -335,6 +346,7 @@ export const createMultiUserTestContexts = async (options: {
   const sbBrowserContext = await browser.newContext({
     storageState: sbStorageState,
   });
+
   const sbCookies = await sbBrowserContext.cookies();
   const sbBearerCookie = sbCookies.find((c) => c.name === BEARER_COOKIE);
   const sbBearer = sbBearerCookie?.value

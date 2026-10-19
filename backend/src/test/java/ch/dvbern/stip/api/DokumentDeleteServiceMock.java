@@ -22,22 +22,22 @@ import java.util.List;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Mock
 @ApplicationScoped
 public class DokumentDeleteServiceMock extends DokumentDeleteService {
+
+    public DokumentDeleteServiceMock() {
+        super(null, null);
+    }
+
     @Override
     public void executeDeleteDokumentFromS3(
-        final S3AsyncClient s3,
-        final String bucketName,
         final String objectId
     ) {}
 
     @Override
     public void executeDeleteDokumentsFromS3(
-        final S3AsyncClient s3,
-        final String bucketName,
         final List<String> objectIds
     ) {}
 }

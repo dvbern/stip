@@ -20,13 +20,11 @@ package ch.dvbern.stip.api.massendruck.resource;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.MassendruckJobAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -44,7 +42,6 @@ import ch.dvbern.stip.generated.dto.MassendruckJobDto;
 import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
 import io.smallrye.common.annotation.Blocking;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -63,9 +60,6 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     private final MassendruckJobAuthorizer authorizer;
     private final MassendruckJobService massendruckJobService;
     private final MassendruckJobPdfService massendruckJobPdfService;
-    private final JWTParser jwtParser;
-    private final BenutzerService benutzerService;
-    private final StipConfig config;
     private final DokumentDownloadService dokumentDownloadService;
 
     @Override
@@ -113,9 +107,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
         authorizer.permitAll();
         return dokumentDownloadService.getFileDownloadToken(
             massendruckId,
-            DokumentDownloadConstants.MASSENDRUCK_JOB_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.MASSENDRUCK_JOB_ID_CLAIM
         );
     }
 
@@ -125,9 +117,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> downloadMassendruckDocument(String token) {
         final var massendruckJobId = dokumentDownloadService.getClaimId(
-            jwtParser,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.MASSENDRUCK_JOB_ID_CLAIM
         );
 

@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
 import ch.dvbern.stip.api.common.authorization.BeschwerdeEntscheidAuthorizer;
@@ -34,7 +33,6 @@ import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -96,8 +94,6 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
-    private final StipConfig config;
-    private final BenutzerService benutzerService;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
@@ -406,9 +402,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
         return dokumentDownloadService.getFileDownloadToken(
             gesuchId,
-            DokumentDownloadConstants.GESUCH_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.GESUCH_ID_CLAIM
         );
     }
 

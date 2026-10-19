@@ -21,13 +21,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
@@ -45,7 +43,6 @@ import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbFreiwilligDarlehenDashboardDto;
 import io.smallrye.common.annotation.Blocking;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
@@ -71,9 +68,6 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
     private final DarlehenService darlehenService;
     private final DokumentDownloadService dokumentDownloadService;
-    private final BenutzerService benutzerService;
-    private final StipConfig config;
-    private final JWTParser jwtPar;
     private final DarlehenAuthorizer darlehenAuthorizer;
 
     @Override
@@ -235,9 +229,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> downloadDarlehenDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
-            jwtPar,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DARLEHEN_ID_CLAIM
         );
         return darlehenService.getDokument(dokumentId);
@@ -271,9 +263,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
-            DokumentDownloadConstants.DARLEHEN_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.DARLEHEN_ID_CLAIM
         );
     }
 
@@ -283,9 +273,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> downloadDarlehenNegativVerfuegung(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
-            jwtPar,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM
         );
         return darlehenService.getDarlehenNegativVerfuegung(dokumentId);
@@ -297,9 +285,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         darlehenAuthorizer.canGetDarlehenSb();
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
-            DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM
         );
     }
 

@@ -20,12 +20,10 @@ package ch.dvbern.stip.api.datenschutzbrief.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.datenschutzbrief.auth.DatenschutzbriefAuthorizer;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -34,7 +32,6 @@ import ch.dvbern.stip.generated.dto.DatenschutzbriefCreateDto;
 import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -51,9 +48,6 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 @PopulateCurrentBenutzerContext
 public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     private final DatenschutzbriefService datenschutzbriefService;
-    private final BenutzerService benutzerService;
-    private final StipConfig config;
-    private final JWTParser jwtParser;
     private final DatenschutzbriefAuthorizer authorizer;
     private final DokumentDownloadService dokumentDownloadService;
 
@@ -70,9 +64,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> getDatenschutzbrief(final String token) {
         final var datenschutzbriefId = dokumentDownloadService.getClaimId(
-            jwtParser,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
 
@@ -85,9 +77,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
         authorizer.canGetDokumentDownloadToken();
         return dokumentDownloadService.getFileDownloadToken(
             datenschutzbriefId,
-            DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
     }
 

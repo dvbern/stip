@@ -26,7 +26,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
@@ -41,7 +40,6 @@ import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -52,7 +50,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @ApplicationScoped
@@ -63,9 +60,6 @@ public class UnterschriftenblattService {
     private final GesuchRepository gesuchRepository;
     private final UnterschriftenblattRepository unterschriftenblattRepository;
     private final DokumentRepository dokumentRepository;
-    private final Antivirus antivirus;
-    private final StipConfig config;
-    private final S3AsyncClient s3;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final UnterschriftenblattMapper unterschriftenblattMapper;
     private final GesuchStatusService gesuchStatusService;
@@ -81,9 +75,6 @@ public class UnterschriftenblattService {
     ) {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             UNTERSCHRIFTENBLATT_DOKUMENT_PATH,
             objectId -> uploadDokument(
                 gesuchId,
@@ -200,8 +191,6 @@ public class UnterschriftenblattService {
         unterschriftenblatt.getDokumente().remove(dokument);
 
         dokumentDeleteService.executeDeleteDokumentFromS3(
-            s3,
-            config.s3().bucketName(),
             UNTERSCHRIFTENBLATT_DOKUMENT_PATH + dokument.getObjectId()
         );
 
@@ -214,8 +203,6 @@ public class UnterschriftenblattService {
         final var dokument = dokumentRepository.requireById(dokumentId);
 
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             UNTERSCHRIFTENBLATT_DOKUMENT_PATH,
             dokument.getFilename()
@@ -239,8 +226,6 @@ public class UnterschriftenblattService {
         }
 
         dokumentDeleteService.executeDeleteDokumentsFromS3(
-            s3,
-            config.s3().bucketName(),
             toRemoveFromS3
         );
     }

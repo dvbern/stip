@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 
 import { StatusUebergang } from '@dv/shared/model/gesuch';
 
@@ -44,5 +44,11 @@ export class SachbearbeiterGesuchHeaderPO {
       aenderungReject: page.getByTestId('aenderung-reject'),
       aenderungManuallyChange: page.getByTestId('aenderung-manually-change'),
     };
+  }
+
+  public async expectSnackbarWithText(page: Page, text: string) {
+    const snackbars = page.locator('.mdc-snackbar');
+    const withText = snackbars.filter({ hasText: text }).first();
+    await expect(withText).toBeVisible();
   }
 }

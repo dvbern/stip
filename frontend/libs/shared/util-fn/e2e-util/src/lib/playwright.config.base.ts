@@ -1,4 +1,6 @@
-import test, { defineConfig } from '@playwright/test';
+import { join } from 'node:path';
+
+import { defineConfig, test } from '@playwright/test';
 import { zstdCompress, zstdDecompress } from 'http-encoding';
 
 export const BEARER_COOKIE = 'access_cookie';
@@ -70,16 +72,43 @@ export const baseConfig = defineConfig({
     contextOptions: {
       ignoreHTTPSErrors: true,
     },
-    actionTimeout: !process.env.CI ? 6_000 : undefined,
   },
-  timeout: process.env.CI ? 80_000 : undefined,
+  timeout: 30_000,
   expect: {
-    timeout: process.env.CI ? 20_000 : undefined,
+    timeout: 10_000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 1,
 });
+
+type ReporterConfig = NonNullable<
+  Parameters<typeof defineConfig>[0]['reporter']
+>;
+
+export const createCiE2eReporter = (
+  appType: string,
+  appConfigDir: string,
+): ReporterConfig => {
+  const testResultsDir = join(appConfigDir, '../../test-results');
+  if (!process.env['CI']) {
+    return [
+      ['list'],
+      [
+        'html',
+        { open: 'never', outputFolder: join(testResultsDir, 'html', appType) },
+      ],
+    ];
+  }
+
+  return [
+    ['junit', { outputFile: join(testResultsDir, 'junit', `${appType}.xml`) }],
+    [
+      'html',
+      { open: 'never', outputFolder: join(testResultsDir, 'html', appType) },
+    ],
+  ];
+};
 
 export const compress = async (value: string) => {
   const compressed = await zstdCompress(new TextEncoder().encode(value));

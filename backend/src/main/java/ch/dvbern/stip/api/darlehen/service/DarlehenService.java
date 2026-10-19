@@ -72,7 +72,6 @@ import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbFreiwilligDarlehenDashboardDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
@@ -84,7 +83,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @RequestScoped
@@ -100,10 +98,8 @@ public class DarlehenService {
     private final FreiwilligDarlehenDokumentMapper freiwilligDarlehenDokumentMapper;
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDeleteService dokumentDeleteService;
-    private final S3AsyncClient s3;
     private final StipConfig config;
     private final TenantService tenantService;
-    private final Antivirus antivirus;
     private final DarlehenDokumentRepository darlehenDokumentRepository;
     private final DokumentRepository dokumentRepository;
     private final DokumentDownloadService dokumentDownloadService;
@@ -172,8 +168,6 @@ public class DarlehenService {
         final var objectId = dokumentUploadService.executeUploadDocument(
             byteArrayOutputStream.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
-            s3,
-            config,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -210,8 +204,6 @@ public class DarlehenService {
         final String objectId = dokumentUploadService.executeUploadDocument(
             out.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
-            s3,
-            config,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -523,8 +515,6 @@ public class DarlehenService {
             freiwilligDarlehen.setManuelleVerfuegung(null);
             dokumentRepository.delete(dokument);
             dokumentDeleteService.executeDeleteDokumentFromS3(
-                s3,
-                config.s3().bucketName(),
                 DARLEHEN_VERFUEGUNG_DOKUMENT_PATH + dokument.getObjectId()
             );
         }
@@ -643,9 +633,6 @@ public class DarlehenService {
         if (Objects.nonNull(negativeVerfuegung)) {
             dokumentUploadService.validateScanUploadDokument(
                 negativeVerfuegung,
-                s3,
-                config,
-                antivirus,
                 DARLEHEN_VERFUEGUNG_DOKUMENT_PATH,
                 objectId -> uploadNegativVerfuegungDokument(darlehen, negativeVerfuegung, objectId),
                 throwable -> LOG.error(throwable.getMessage())
@@ -665,8 +652,6 @@ public class DarlehenService {
         final var dokument = dokumentRepository.requireById(dokumentId);
 
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH,
             dokument.getFilename()
@@ -687,9 +672,6 @@ public class DarlehenService {
 
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             DARLEHEN_DOKUMENT_PATH,
             objectId -> uploadDarlehenDokument(
                 darlehenId,
@@ -778,8 +760,6 @@ public class DarlehenService {
         final var dokument = dokumentRepository.requireById(dokumentId);
 
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             dokument.getFilepath(),
             dokument.getFilename()
@@ -804,8 +784,6 @@ public class DarlehenService {
     private void removeDokumentAndFromS3(final Dokument dokument) {
         dokumentRepository.delete(dokument);
         dokumentDeleteService.executeDeleteDokumentFromS3(
-            s3,
-            config.s3().bucketName(),
             DARLEHEN_DOKUMENT_PATH + dokument.getObjectId()
         );
     }
@@ -908,9 +886,18 @@ public class DarlehenService {
 
     @Transactional
     public void deleteForGesuch(final UUID gesuchId) {
-        final var darlehenBuchhaltungEntries = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuchId);
-        for (var entry : darlehenBuchhaltungEntries) {
-            darlehenBuchhaltungEntryRepository.delete(entry);
+        final var darlehenList = freiwilligDarlehenRepository.findByGesuchId(gesuchId);
+        for (final var darlehen : darlehenList) {
+            deleteFreiwilligDarlehenManuelleVerfuegungIfPresent(darlehen);
+
+            final var darlehenDokumente = darlehen.getDokumente().stream().toList();
+            for (final var darlehenDokument : darlehenDokumente) {
+                final var dokumente = darlehenDokument.getDokumente().stream().toList();
+                dokumente.forEach(this::removeDokumentAndFromS3);
+                darlehenDokumentRepository.delete(darlehenDokument);
+            }
+
+            freiwilligDarlehenRepository.delete(darlehen);
         }
     }
 

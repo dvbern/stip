@@ -40,6 +40,7 @@ import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-direc
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiDashboardAusbildungComponent } from '@dv/shared/ui/dashboard';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { isPending } from '@dv/shared/util/remote-data';
 
@@ -53,6 +54,7 @@ import { selectSharedFeatureGesuchstellerDashboardView } from './shared-feature-
     SharedUiVersionTextComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiAdvTranslocoDirective,
+    SharedUiLoadingComponent,
     MatMenuModule,
   ],
   templateUrl: './shared-feature-gesuchsteller-dashboard.component.html',

@@ -12,7 +12,7 @@ import {
   sozStorageStatePath,
 } from './authenticate';
 import { E2eUser, ExtendedTest, getE2eUrls } from './playwright.config.base';
-import { AusbildungValues, CockpitPO } from './po';
+import { AusbildungValues, GsDashboardPO } from './po';
 import {
   MultiUserTestContexts,
   SetupFn,
@@ -21,7 +21,6 @@ import {
   deleteGesuch,
 } from './utils';
 
-// todo: make users configurable as well? => reconsider, since the setup is quite individual
 // for gs-app and full livecyle of gesuche with delete functionality
 export const initializeMultiUserTest = (
   ausbildung: AusbildungValues,
@@ -39,12 +38,13 @@ export const initializeMultiUserTest = (
       const gsContext = gsStorageStatePath(testInfo, testInfo.parallelIndex);
       // Create GS page with GS context
       const gsPage = await browser.newPage({ storageState: gsContext });
+
       await restoreSessionStorage(
         gsPage,
         gsContext,
         new URL(getE2eUrls().gs).origin,
       );
-      const cockpit = new CockpitPO(gsPage);
+      const cockpit = new GsDashboardPO(gsPage);
 
       // Initialize gesuch as GS user
       const dashboardPromise = gsPage.waitForResponse(
@@ -58,12 +58,7 @@ export const initializeMultiUserTest = (
       gesuchId = dashboardBody?.ausbildungDashboardItems?.[0]?.gesuchs?.[0].id;
 
       if (gesuchId) {
-        const response = await deleteGesuch(multiContexts.gs.api, gesuchId);
-        if (response.status() >= 400) {
-          throw new Error(
-            `Failed to delete gesuch ${gesuchId}, see backend logs for more information.`,
-          );
-        }
+        await deleteGesuch(multiContexts.gs.api, gesuchId);
         await gsPage.reload();
       }
 
@@ -120,6 +115,7 @@ export const initializeMultiUserTest = (
 
         const sbContext = sbStorageStatePath(testInfo, sbIndex);
         const sbPage = await browser.newPage({ storageState: sbContext });
+
         sbPages.set(sbIndex, sbPage);
 
         await restoreSessionStorage(
@@ -129,7 +125,6 @@ export const initializeMultiUserTest = (
         );
         return sbPage;
       });
-      await Promise.all([...sbPages.values()].map((page) => page.close()));
     },
   });
 
@@ -206,6 +201,7 @@ export const initializeSingleUserTest = (test: ExtendedTest) => {
         baseURL: testInfo.project.use.baseURL,
         ignoreHTTPSErrors: true,
       });
+
       await restoreSessionStorage(page, storagePath, origin);
 
       await use(page);

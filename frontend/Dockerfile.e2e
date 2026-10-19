@@ -1,0 +1,4 @@
+FROM docker-registry.dvbern.ch/microsoft/playwright:v1.63.0-jammy
+WORKDIR /app/frontend
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci

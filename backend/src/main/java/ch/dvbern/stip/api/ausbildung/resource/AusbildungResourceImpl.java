@@ -23,14 +23,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungService;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.authorization.AusbildungUnterbruchAntragAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.generated.api.AusbildungResource;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDto;
@@ -43,7 +41,6 @@ import ch.dvbern.stip.generated.dto.CreateAusbildungUnterbruchAntragGSDtoBuilder
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
 import io.smallrye.common.annotation.Blocking;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
@@ -71,9 +68,6 @@ public class AusbildungResourceImpl implements AusbildungResource {
     private final AusbildungUnterbruchAntragAuthorizer ausbildungUnterbruchAntragAuthorizer;
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
     private final DokumentDownloadService dokumentDownloadService;
-    private final JWTParser jwtParser;
-    private final StipConfig config;
-    private final BenutzerService benutzerService;
 
     @Override
     @RolesAllowed(AUSBILDUNG_CREATE)
@@ -102,9 +96,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> downloadAusbildungUnterbruchAntragDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
-            jwtParser,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_ID_CLAIM
         );
         return ausbildungUnterbruchAntragService.getDokument(dokumentId);
@@ -116,9 +108,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
         ausbildungUnterbruchAntragAuthorizer.canReadDokument(dokumentId);
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
-            DokumentDownloadConstants.AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_ID_CLAIM
         );
     }
 
