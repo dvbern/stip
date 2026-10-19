@@ -69,6 +69,6 @@ public class FallResourceImpl implements FallResource {
     @RolesAllowed(BUCHHALTUNG_ENTRY_CREATE)
     public void setPaymentProcessingSuspended(UUID fallId, Boolean suspended) {
         fallAuthorizer.sbCanGet();
-        return;
+        fallService.setPaymentProcessingSuspended(fallId, suspended);
     }
 }

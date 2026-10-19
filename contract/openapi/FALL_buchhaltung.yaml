@@ -152,9 +152,12 @@ components:
       type: object
       required:
         - canRetryAuszahlung
+        - paymentProcessingSuspended
         - buchhaltungEntrys
       properties:
         canRetryAuszahlung:
+          type: boolean
+        paymentProcessingSuspended:
           type: boolean
         buchhaltungEntrys:
           type: array

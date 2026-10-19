@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   BuchhaltungOverviewDtoSpec.JSON_PROPERTY_CAN_RETRY_AUSZAHLUNG,
+  BuchhaltungOverviewDtoSpec.JSON_PROPERTY_PAYMENT_PROCESSING_SUSPENDED,
   BuchhaltungOverviewDtoSpec.JSON_PROPERTY_BUCHHALTUNG_ENTRYS
 })
 @JsonTypeName("BuchhaltungOverview")
@@ -40,6 +41,10 @@ public class BuchhaltungOverviewDtoSpec {
   public static final String JSON_PROPERTY_CAN_RETRY_AUSZAHLUNG = "canRetryAuszahlung";
   @jakarta.annotation.Nonnull
   private Boolean canRetryAuszahlung;
+
+  public static final String JSON_PROPERTY_PAYMENT_PROCESSING_SUSPENDED = "paymentProcessingSuspended";
+  @jakarta.annotation.Nonnull
+  private Boolean paymentProcessingSuspended;
 
   public static final String JSON_PROPERTY_BUCHHALTUNG_ENTRYS = "buchhaltungEntrys";
   @jakarta.annotation.Nonnull
@@ -71,6 +76,31 @@ public class BuchhaltungOverviewDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setCanRetryAuszahlung(@jakarta.annotation.Nonnull Boolean canRetryAuszahlung) {
     this.canRetryAuszahlung = canRetryAuszahlung;
+  }
+
+  public BuchhaltungOverviewDtoSpec paymentProcessingSuspended(@jakarta.annotation.Nonnull Boolean paymentProcessingSuspended) {
+    
+    this.paymentProcessingSuspended = paymentProcessingSuspended;
+    return this;
+  }
+
+  /**
+   * Get paymentProcessingSuspended
+   * @return paymentProcessingSuspended
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_PAYMENT_PROCESSING_SUSPENDED, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getPaymentProcessingSuspended() {
+    return paymentProcessingSuspended;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PAYMENT_PROCESSING_SUSPENDED, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPaymentProcessingSuspended(@jakarta.annotation.Nonnull Boolean paymentProcessingSuspended) {
+    this.paymentProcessingSuspended = paymentProcessingSuspended;
   }
 
   public BuchhaltungOverviewDtoSpec buchhaltungEntrys(@jakarta.annotation.Nonnull List<BuchhaltungEntryDtoSpec> buchhaltungEntrys) {
@@ -117,12 +147,13 @@ public class BuchhaltungOverviewDtoSpec {
     }
     BuchhaltungOverviewDtoSpec buchhaltungOverview = (BuchhaltungOverviewDtoSpec) o;
     return Objects.equals(this.canRetryAuszahlung, buchhaltungOverview.canRetryAuszahlung) &&
+        Objects.equals(this.paymentProcessingSuspended, buchhaltungOverview.paymentProcessingSuspended) &&
         Objects.equals(this.buchhaltungEntrys, buchhaltungOverview.buchhaltungEntrys);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(canRetryAuszahlung, buchhaltungEntrys);
+    return Objects.hash(canRetryAuszahlung, paymentProcessingSuspended, buchhaltungEntrys);
   }
 
   @Override
@@ -130,6 +161,7 @@ public class BuchhaltungOverviewDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class BuchhaltungOverviewDtoSpec {\n");
     sb.append("    canRetryAuszahlung: ").append(toIndentedString(canRetryAuszahlung)).append("\n");
+    sb.append("    paymentProcessingSuspended: ").append(toIndentedString(paymentProcessingSuspended)).append("\n");
     sb.append("    buchhaltungEntrys: ").append(toIndentedString(buchhaltungEntrys)).append("\n");
     sb.append("}");
     return sb.toString();

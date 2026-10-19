@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
+import ch.dvbern.stip.api.auszahlung.service.AuszahlungService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.service.IdEncryptionService;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -41,6 +42,7 @@ public class FallService {
     private final IdEncryptionService idEncryptionService;
     private final FallNummerSeqRepository fallNummerSeqRepository;
     private final TenantService tenantService;
+    private final AuszahlungService auszahlungService;
 
     public Fall getById(final UUID fallId) {
         return fallRepository.requireById(fallId);
@@ -79,5 +81,13 @@ public class FallService {
         final var encoded = idEncryptionService.encryptLengthSix(nextValue);
 
         return String.format("%s.F.%s", tenant, encoded);
+    }
+
+    public void setPaymentProcessingSuspended(UUID fallId, Boolean suspended) {
+        final var fall = fallRepository.requireById(fallId);
+        fall.paymentProcessingSuspended(suspended);
+        if (!suspended) {
+            auszahlungService.retryFailedAuszahlungBuchhaltung(fall);
+        }
     }
 }

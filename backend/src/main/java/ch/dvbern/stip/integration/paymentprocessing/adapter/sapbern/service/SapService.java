@@ -224,6 +224,10 @@ public class SapService {
         ) {
             throw new IllegalStateException();
         }
+        if (gesuch.getAusbildung().getFall().paymentProcessingSuspended()) {
+            return;
+        }
+
         Buchhaltung businessPartnerActionBuchhaltung =
             getBusinessPartnerActionBuchhaltung(gesuch, businessPartnerActionBuchhaltungType);
 
@@ -305,6 +309,10 @@ public class SapService {
     }
 
     private void getVendorPostingCreateStatus(final Buchhaltung buchhaltung) {
+        if (buchhaltung.getGesuch().getAusbildung().getFall().paymentProcessingSuspended()) {
+            return;
+        }
+
         final var sapDeliveryOpt = buchhaltung.getSapDeliverys()
             .stream()
             .filter(
@@ -339,6 +347,10 @@ public class SapService {
             throw new IllegalStateException(
                 String.format("buchhaltung status is not IN_PROGRESS but %s", buchhaltung.getSapStatus())
             );
+        }
+
+        if (gesuch.getAusbildung().getFall().paymentProcessingSuspended()) {
+            return;
         }
 
         final var sapDeliverys = buchhaltung.getSapDeliverys();
@@ -439,6 +451,10 @@ public class SapService {
     }
 
     private void getUpdateOrCreateBusinessPartner(final Gesuch gesuch) {
+        if (gesuch.getAusbildung().getFall().paymentProcessingSuspended()) {
+            return;
+        }
+
         final PersonInAusbildung pia = SapMapperUtil.getPia(gesuch.getAusbildung().getFall());
         BUSINESSPARTNER businesspartner = null;
         try {
@@ -467,6 +483,11 @@ public class SapService {
     public void createInitialAuszahlungOrGetStatus(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
+
+        if (fall.paymentProcessingSuspended()) {
+            return;
+        }
+
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
@@ -536,6 +557,11 @@ public class SapService {
     public void createRemainderAuszahlungOrGetStatus(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
+
+        if (fall.paymentProcessingSuspended()) {
+            return;
+        }
+
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
@@ -594,6 +620,10 @@ public class SapService {
     void processPendingSapAction(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
+
+        if (fall.paymentProcessingSuspended()) {
+            return;
+        }
 
         if (
             Objects.nonNull(fall.getAuszahlung().getBuchhaltung()) &&
