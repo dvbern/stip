@@ -22,13 +22,13 @@ KEYCLOAK_ADMIN_PASSWORD_UAT
 
 ## Add users
 
-1. Ensure you _add_ the following _ENV_ variable to [`.env`](../../.env): _`NEW_USER_PASSWORD=` (this will be the password for your new user)_
-2. Use the following command structure: `npm run add-users -- -e {DEV|UAT} -u "{username},{firstname},{lastname}" -r {role 1} {role 2} {...}`
+1. Ensure you _add_ the following _ENV_ variable to [`.env`](../../.env): _`NEW_USER_PASSWORD=` (this will be the password for your new user)_. Or you provide the password directly using the `-p {password}` option in the command.
+2. Use the following command structure: `npm run add-users -- -e {DEV|UAT} -u "{username},{firstname},{lastname}"  --realm {dv|bern} -p {password} -r {role 1} {role 2} {...}`
 
 Here are some _examples_:
 
 ```
-npm run add-users -- -e DEV -u "stip-scph-gs-1,Philipp,GS 1" -r V0_Gesuchsteller
+npm run add-users -- -e DEV -u "stip-scph-gs-1,Philipp,GS 1" -r  V0_Gesuchsteller
 npm run add-users -- -e DEV -u "stip-scph-gs-2,Philipp,GS 2,philipp.schaerer+gs-2@dvbern.ch" -r V0_Gesuchsteller
 ...
 npm run add-users -- -e DEV -u "stip-scph-sb-1,Philipp,SB 1"         -r V0_Sachbearbeiter

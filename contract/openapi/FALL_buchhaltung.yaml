@@ -240,5 +240,7 @@ components:
           format: date-time
         sapStatus:
           $ref: '#/components/schemas/SapStatus'
+        message:
+          type: string
 security:
   $ref: './components/security.yaml#/security'

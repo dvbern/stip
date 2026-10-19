@@ -5,7 +5,7 @@
     <dl class="tw:flex tw:flex-col">
       <div class="tw:flex tw:flex-wrap tw:justify-between">
         <div class="tw:flex tw:flex-col">
-          <dt class="tw:font-bold">
+          <dt data-testid="dashboard-gesuch-order-type" class="tw:font-bold">
             {{
               t(
                 gesuch.isErstgesuch
@@ -19,6 +19,7 @@
           </dd>
         </div>
         <div
+          [attr.data-testid]="`dashboard-gesuch-status-${gesuch.gesuchStatus}`"
           class="tw:self-start tw:font-bold tw:bg-white tw:rounded-lg tw:px-2 tw:py-1 tw:leading-[normal] tw:border tw:border-dv-gray-subtle"
         >
           {{ t(`gesuch-app.gesuch.status.contract.${gesuch.gesuchStatus}`) }}
@@ -29,7 +30,7 @@
       @if (gesuch.isActive) {
         @if (gesuch.state === 'in-bearbeitung') {
           @if (gesuch.reduzierterBeitrag) {
-            <dt class="tw:mt-6 tw:font-bold">
+            <dt data-testid="dashboard-gesuch-einreichefrist-reduziert-title" class="tw:mt-6 tw:font-bold">
               {{
                 t('shared.dashboard.periode.einreichefrist.text', {
                   date: periode.einreichefristReduziert | date: 'dd.MM.yyyy',
@@ -37,6 +38,7 @@
               }}
             </dt>
             <dd
+              data-testid="dashboard-gesuch-einreichefrist-reduziert-remaining"
               class="tw:text-sm tw:mt-1"
               [innerHTML]="
                 t('shared.dashboard.periode.einreichefrist.remaining.reduziert', {
@@ -45,7 +47,7 @@
               "
             ></dd>
           } @else {
-            <dt class="tw:mt-6 tw:font-bold">
+            <dt data-testid="dashboard-gesuch-einreichefrist-normal-title" class="tw:mt-6 tw:font-bold">
               {{
                 t('shared.dashboard.periode.einreichefrist.text', {
                   date: periode.einreichefristNormal | date: 'dd.MM.yyyy',
@@ -53,6 +55,7 @@
               }}
             </dt>
             <dd
+              data-testid="dashboard-gesuch-einreichefrist-normal-remaining"
               class="tw:text-sm tw:mt-1"
               [innerHTML]="
                 t('shared.dashboard.periode.einreichefrist.remaining', {
@@ -62,15 +65,15 @@
             ></dd>
           }
         } @else if (gesuch.state === 'expired') {
-          <div class="tw:mt-6 tw:font-bold">
+          <div class="tw:mt-6 tw:font-bold" data-testid="dashboard-gesuch-einreichefrist-abgelaufen-warning">
             {{ t('shared.dashboard.periode.einreichefrist.abgelaufen.warning') }}
           </div>
         }
         @if (gesuch.state === 'fehlende-dokumente') {
-          <dt class="tw:mt-6 tw:font-bold">
+          <dt class="tw:mt-6 tw:font-bold" data-testid="dashboard-gesuch-nachfrist-fehlende-dokumente-title">
             {{ t('shared.dashboard.periode.nachfrist.text') }}
           </dt>
-          <dd class="tw:text-sm tw:mt-1">
+          <dd class="tw:text-sm tw:mt-1" data-testid="dashboard-gesuch-nachfrist-fehlende-dokumente-remaining">
             {{ gesuch.nachfristDokumente | date: 'dd.MM.yyyy' }}
           </dd>
         }
@@ -82,7 +85,7 @@
           @if (gesuch.canEdit) {
             <a
               class="tw:dv-button-main-primary"
-              data-testid="cockpit-gesuch-edit"
+              data-testid="dashboard-gesuch-edit"
               [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
             >
               {{ t('shared.dashboard.gesuch.edit') }}
@@ -92,7 +95,7 @@
               <button
                 type="button"
                 class="tw:dv-button-outline"
-                data-testid="shared.dashboard.gesuch.delete"
+                data-testid="dashboard-gesuch-delete"
                 (click)="output.emit({ typ: 'delete gesuch', id: gesuch.id })"
               >
                 <span>{{ t('shared.dashboard.gesuch.delete') }}</span>
@@ -101,7 +104,7 @@
           } @else if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
             <a
               class="tw:dv-button-main-primary"
-              data-testid="cockpit-gesuch-edit"
+              data-testid="dashboard-gesuch-open"
               [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
             >
               {{ t('shared.dashboard.gesuch.open') }}
@@ -109,7 +112,7 @@
           } @else if (gesuch.state === 'fehlende-dokumente') {
             <a
               class="tw:dv-button-main-primary"
-              data-testid="cockpit-gesuch-upload-missing-documents"
+              data-testid="dashboard-gesuch-upload-missing-documents"
               [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', missingDocTrancheId]"
             >
               {{ t('shared.dashboard.gesuch.uploadMissingDocuments') }}
@@ -119,7 +122,7 @@
         @if (!gesuch.isActive || gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
           <a
             class="tw:dv-button-main-primary"
-            data-testid="cockpit-gesuch-edit"
+            data-testid="dashboard-gesuch-open"
             [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
           >
             {{ t('shared.dashboard.gesuch.open') }}
@@ -129,7 +132,7 @@
             <button
               type="button"
               class="tw:dv-button-outline"
-              data-testid="cockpit-gesuch-aenderung-create"
+              data-testid="dashboard-aenderung-create"
               (click)="output.emit({ typ: 'create aenderung', melden: { gesuch } })"
             >
               {{ t('shared.dashboard.aenderung.create') }}
@@ -141,7 +144,7 @@
           <button
             type="button"
             class="tw:dv-button-outline"
-            data-testid="cockpit-gesuch-darlehen-create"
+            data-testid="dashboard-darlehen-create"
             (click)="output.emit({ typ: 'create darlehen', gesuchId: gesuch.id, fallId: gesuch.fallId })"
           >
             {{ t('shared.dashboard.darlehen.create') }}

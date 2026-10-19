@@ -353,16 +353,19 @@ public class BuchhaltungService {
     }
 
     @Transactional
-    public PaginatedFailedAuszahlungBuchhaltungDto getPaginatedFailedAuszahlungBuchhaltung(
+    public PaginatedFailedAuszahlungBuchhaltungDto getPaginatedFailedPaymentProcessingActionBuchhaltung(
         final Integer page,
         final Integer pageSize
     ) {
-        final var dto = new PaginatedFailedAuszahlungBuchhaltungDto();
-        dto.setEntries(
-            fallRepository.findAllFallsWithFailedAuszahlungBuchhaltung(page, pageSize)
-                .map(fallMapper::toFailedAuszahlungBuchhaltungDto)
-                .toList()
-        );
-        return dto;
+        return PaginatedFailedAuszahlungBuchhaltungDto.builder()
+            .page(page)
+            .pageSize(pageSize)
+            .totalEntries(fallRepository.getFallsWithFailedPaymentProcessingActionBuchhaltungCount())
+            .entries(
+                fallRepository.findAllFallsWithFailedPaymentProcessingActionBuchhaltung(page, pageSize)
+                    .map(fallMapper::toFailedAuszahlungBuchhaltungDto)
+                    .toList()
+            )
+            .build();
     }
 }

@@ -51,7 +51,7 @@
   --color-dv-main-primary: var(--tw-color-dv-gray-dark);
   --color-dv-main-primary-subtle: var(--tw-color-dv-gray-dark-subtle);
 
-  --font-dv-icon: 'Material Symbols Rounded', sans-serif;
+  --font-dv-icon: 'Material Symbols Rounded Variable', sans-serif;
 }
 
 @layer base {

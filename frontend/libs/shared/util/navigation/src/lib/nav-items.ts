@@ -1,16 +1,17 @@
 import { NavItem, NavMenuItem } from './navigation-types';
 
-export const sozialdienstBaseNavItems: NavItem[] = [
+export const sozBaseNavItems: NavItem[] = [
   {
     type: 'link',
     id: 'antraege',
     label: { key: 'shared.header.dashboard' },
     icon: 'list',
     route: ['/dashboard'],
+    testId: 'antraege-nav-item',
   },
 ];
 
-export const sozialdienstAdminNavItems: NavItem[] = [
+export const sozAdminNavItems: NavItem[] = [
   {
     type: 'link',
     id: 'administration',
@@ -22,30 +23,33 @@ export const sozialdienstAdminNavItems: NavItem[] = [
   },
 ];
 
-export const sozialdienstBaseMenuItems: NavMenuItem[] = [
+export const sozBaseMenuItems: NavMenuItem[] = [
   {
     type: 'link',
     id: 'profile',
     route: ['/profile'],
     label: { key: 'shared.menu.profile' },
+    testId: 'profile-menu-item',
   },
 ];
 
-export const gesuchBaseNavItems: NavItem[] = [
+export const gsBaseNavItems: NavItem[] = [
   {
     type: 'link',
     id: 'dashboard',
     icon: 'dashboard',
     label: { key: 'shared.dashboard.title' },
     route: ['/dashboard'],
+    testId: 'dashboard-nav-item',
   },
 ];
 
-export const gesuchBaseMenuItems: NavMenuItem[] = [
+export const gsBaseMenuItems: NavMenuItem[] = [
   {
     type: 'link',
     id: 'profile',
     route: ['/profile'],
     label: { key: 'shared.menu.profile' },
+    testId: 'profile-menu-item',
   },
 ];

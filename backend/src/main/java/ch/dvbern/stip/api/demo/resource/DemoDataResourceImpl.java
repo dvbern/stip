@@ -20,14 +20,12 @@ package ch.dvbern.stip.api.demo.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DemoDataAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.resource.ReadOnlyEndpoint;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.demo.service.DemoDataService;
 import ch.dvbern.stip.api.demo.service.GenerateMultipleDemoDataService;
 import ch.dvbern.stip.api.demo.type.DemoDataDefaults;
@@ -38,7 +36,6 @@ import ch.dvbern.stip.generated.dto.DemoDataListDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Multi;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
@@ -56,9 +53,6 @@ public class DemoDataResourceImpl implements DemoDataResource {
     private final DemoDataAuthorizer demoDataAuthorizer;
     private final DemoDataService demoDataService;
     private final GenerateMultipleDemoDataService generateMultipleDemoDataService;
-    private final BenutzerService benutzerService;
-    private final StipConfig config;
-    private final JWTParser jwtParser;
     private final DokumentDownloadService dokumentDownloadService;
 
     @Override
@@ -111,9 +105,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
     @ReadOnlyEndpoint
     public RestMulti<Buffer> getDemoDataDokument(String token) {
         final var dokumentId = dokumentDownloadService.getClaimId(
-            jwtParser,
             token,
-            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DEMO_DATA_IMPORT_ID_CLAIM
         );
         return demoDataService.getDokument(dokumentId);
@@ -125,9 +117,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
         demoDataAuthorizer.canRead();
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
-            DokumentDownloadConstants.DEMO_DATA_IMPORT_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.DEMO_DATA_IMPORT_ID_CLAIM
         );
     }
 

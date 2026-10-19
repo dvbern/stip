@@ -23,14 +23,12 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.statistik.repo.StatistikRepository;
 import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.StatistikDto;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +41,6 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @RequestScoped
@@ -54,9 +51,6 @@ public class StatistikService {
     private final StatistikMapper statistikMapper;
     private final DokumentDownloadService dokumentDownloadService;
     private final BenutzerService benutzerService;
-    private final StipConfig config;
-    private final JWTParser jwtParser;
-    private final S3AsyncClient s3AsyncClient;
     private final TenantService tenantService;
 
     public void createStatistikJob(final int year) {
@@ -102,17 +96,13 @@ public class StatistikService {
 
     public RestMulti<Buffer> getStatistikDownload(String token) {
         final var statistikId = dokumentDownloadService.getClaimId(
-            jwtParser,
             token,
-            config.preSignedRequest().secret(),
             StatistikConstants.STATISTIK_FILE_DOWNLOAD_TOKEN_CLAIM_ID
         );
 
         final var statistik = statistikRepository.requireById(statistikId);
 
         return dokumentDownloadService.getDokument(
-            s3AsyncClient,
-            config.s3().bucketName(),
             statistik.getObjectId(),
             statistik.getFilepath(),
             statistik.getFilename()
@@ -122,9 +112,7 @@ public class StatistikService {
     public FileDownloadTokenDto getStatistikDownloadToken(UUID statistikId) {
         return dokumentDownloadService.getFileDownloadToken(
             statistikId,
-            StatistikConstants.STATISTIK_FILE_DOWNLOAD_TOKEN_CLAIM_ID,
-            benutzerService,
-            config
+            StatistikConstants.STATISTIK_FILE_DOWNLOAD_TOKEN_CLAIM_ID
         );
     }
 }

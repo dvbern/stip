@@ -20,16 +20,13 @@ package ch.dvbern.stip.api.dokument.service;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.SachbearbeiterGesuchDokumentRepository;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentCreateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,7 +36,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @ApplicationScoped
@@ -47,19 +43,12 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class SachbearbeiterGesuchDokumentService {
     public static final String SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_PATH = "sachbearbeiterGesuchDokument/";
 
-    private final Antivirus antivirus;
-    private final S3AsyncClient s3;
-
-    private final StipConfig config;
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDownloadService dokumentDownloadService;
     private final DokumentDeleteService dokumentDeleteService;
-
     private final SachbearbeiterGesuchDokumentMapper sachbearbeiterGesuchDokumentMapper;
-
     private final SachbearbeiterGesuchDokumentRepository sachbearbeiterGesuchDokumentRepository;
     private final DokumentRepository dokumentRepository;
-    private final BenutzerService benutzerService;
 
     @Transactional
     public SachbearbeiterGesuchDokumentDto createSachbearbeiterGesuchDokument(
@@ -80,9 +69,6 @@ public class SachbearbeiterGesuchDokumentService {
     ) {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_PATH,
             objectId -> uploadDokument(
                 sachbearbeiterGesuchDokumentId,
@@ -135,8 +121,6 @@ public class SachbearbeiterGesuchDokumentService {
         sachbearbeiterGesuchDokument.getDokumente().remove(dokument);
 
         dokumentDeleteService.executeDeleteDokumentFromS3(
-            s3,
-            config.s3().bucketName(),
             SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_PATH + dokument.getObjectId()
         );
     }
@@ -153,9 +137,7 @@ public class SachbearbeiterGesuchDokumentService {
     ) {
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
-            DokumentDownloadConstants.SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_ID_CLAIM,
-            benutzerService,
-            config
+            DokumentDownloadConstants.SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_ID_CLAIM
         );
     }
 
@@ -163,8 +145,6 @@ public class SachbearbeiterGesuchDokumentService {
         final var dokument = dokumentRepository.requireById(dokumentId);
 
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_PATH,
             dokument.getFilename()

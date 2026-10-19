@@ -23,7 +23,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -76,12 +78,16 @@ public class SapMapperUtil {
     }
 
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
-        // TODO KSTIP-2927: Change this here
-        final var accountHolder = String.format(
-            "%s %s",
-            zahlungsverbindung.getVorname(),
-            zahlungsverbindung.getNachname()
-        );
+        String accountHolder;
+        if (Objects.nonNull(zahlungsverbindung.getInstitution())) {
+            accountHolder = zahlungsverbindung.getInstitution();
+        } else {
+            accountHolder = String.format(
+                "%s %s",
+                zahlungsverbindung.getVorname(),
+                zahlungsverbindung.getNachname()
+            );
+        }
 
         // Truncate to a max length of 60, as the ACCOUNTHOLDER property in SAP is limited to that
         final var end = Math.min(accountHolder.length(), 60);
@@ -111,31 +117,42 @@ public class SapMapperUtil {
         final LocalDate validFrom
     ) {
         try {
-            return DatatypeFactory.newInstance()
+            final var xmlGregorianDateTime = DatatypeFactory.newInstance()
                 .newXMLGregorianCalendar(
                     GregorianCalendar.from(
                         validFrom.atStartOfDay(ZoneId.systemDefault())
                     )
                 );
+            return unsetTimeFields(xmlGregorianDateTime);
         } catch (DatatypeConfigurationException e) {
             throw new RuntimeException(e);
         }
     }
 
     public XMLGregorianCalendar getPaymentdetailValidToGregorianCalendar(
-        final LocalDate validFrom
+        final LocalDate validTo
     ) {
         try {
-            return DatatypeFactory.newInstance()
+            final var xmlGregorianDateTime = DatatypeFactory.newInstance()
                 .newXMLGregorianCalendar(
                     GregorianCalendar.from(
-                        validFrom.atStartOfDay(ZoneId.systemDefault())
+                        validTo.atStartOfDay(ZoneId.systemDefault())
                             .plusMonths(SapMapperUtil.SOZIALDIENST_PAYMENT_DETAIL_MONTHS_VALID)
                     )
                 );
+            return unsetTimeFields(xmlGregorianDateTime);
         } catch (DatatypeConfigurationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private XMLGregorianCalendar unsetTimeFields(final XMLGregorianCalendar calendar) {
+        calendar.setHour(DatatypeConstants.FIELD_UNDEFINED);
+        calendar.setMinute(DatatypeConstants.FIELD_UNDEFINED);
+        calendar.setSecond(DatatypeConstants.FIELD_UNDEFINED);
+        calendar.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+        calendar.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+        return calendar;
     }
 
     public String stripWhitespace(String input) {

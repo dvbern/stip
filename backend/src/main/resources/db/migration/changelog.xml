@@ -37,6 +37,7 @@
 
   <!-- <editor-fold desc="v0.78" defaultstate="collapsed"> -->
   <include file="/db/migration/v0.78/KSTIP-3936.xml"/>
+  <include file="/db/migration/v0.78/KSTIP-3978.xml"/>
   <!-- </editor-fold> -->
 
   <!-- <editor-fold desc="v0.79" defaultstate="collapsed"> -->

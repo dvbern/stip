@@ -42,7 +42,6 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpec
 import ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.depricated.entities.service.GesuchUpdateDtoMapper;
-import ch.dvbern.stip.api.generator.depricated.entities.service.GesuchUpdateDtoMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -64,6 +63,7 @@ import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDtoSpec;
+import org.mapstruct.factory.Mappers;
 
 @Deprecated
 public final class GesuchGenerator {
@@ -71,7 +71,7 @@ public final class GesuchGenerator {
 
     public static GesuchUpdateDto createFullGesuch() {
         GesuchUpdateDtoSpec gesuchFormular = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
-        return new GesuchUpdateDtoMapperImpl().toEntity(gesuchFormular);
+        return Mappers.getMapper(GesuchUpdateDtoMapper.class).toEntity(gesuchFormular);
     }
 
     public static GesuchUpdateDto createGesuch() {
@@ -92,7 +92,7 @@ public final class GesuchGenerator {
 
         GesuchUpdateDtoSpec gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
         gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec);
-        GesuchUpdateDtoMapper gesuchUpdateDtoMapper = new GesuchUpdateDtoMapperImpl();
+        GesuchUpdateDtoMapper gesuchUpdateDtoMapper = Mappers.getMapper(GesuchUpdateDtoMapper.class);
         return gesuchUpdateDtoMapper.toEntity(gesuchUpdateDtoSpec);
     }
 

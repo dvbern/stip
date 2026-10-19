@@ -30,7 +30,7 @@
             *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
             class="tw:w-32 tw:whitespace-nowrap"
           >
-            <a [routerLink]="['/infos/buchhaltung', fz.gesuchId]">
+            <a [routerLink]="['/gesuch/infos/buchhaltung', fz.gesuchId]">
               {{ fz.fallNummer }}
             </a>
           </td>
@@ -99,7 +99,7 @@
           tabindex="-1"
           *dvMatRowDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig(); columns: displayedColumns"
           class="highlightable"
-          [routerLink]="['/infos/buchhaltung', fz.gesuchId]"
+          [routerLink]="['/gesuch/infos/buchhaltung', fz.gesuchId]"
         ></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
           <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">

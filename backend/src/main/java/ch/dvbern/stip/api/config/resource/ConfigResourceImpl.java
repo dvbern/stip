@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.generated.api.ConfigurationResource;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
+import ch.dvbern.stip.generated.dto.DeploymentConfigDtoBuilder;
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +37,12 @@ public class ConfigResourceImpl implements ConfigurationResource {
     @Override
     @PermitAll
     public DeploymentConfigDto getDeploymentConfig() {
-        return new DeploymentConfigDto(
-            config.version(),
-            config.environment(),
-            config.upload().allowedMimetypes().stream().toList()
-        );
+        return DeploymentConfigDtoBuilder.deploymentConfigDto()
+            .environment(config.environment())
+            .version(config.version())
+            .allowedMimeTypes(
+                config.upload().allowedMimetypes().stream().toList()
+            )
+            .build();
     }
 }

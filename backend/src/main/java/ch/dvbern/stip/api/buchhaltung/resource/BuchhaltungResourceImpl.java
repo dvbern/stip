@@ -69,7 +69,7 @@ public class BuchhaltungResourceImpl implements BuchhaltungResource {
         Integer pageSize
     ) {
         buchhaltungAuthorizer.canGetFailedAuszahlungBuchhaltungEntrys();
-        return buchhaltungService.getPaginatedFailedAuszahlungBuchhaltung(page, pageSize);
+        return buchhaltungService.getPaginatedFailedPaymentProcessingActionBuchhaltung(page, pageSize);
     }
 
     @Override

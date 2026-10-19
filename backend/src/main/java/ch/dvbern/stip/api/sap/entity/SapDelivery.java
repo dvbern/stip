@@ -33,9 +33,12 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
 @Audited
 @Entity
@@ -63,4 +66,9 @@ public class SapDelivery extends AbstractEntity {
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "buchhaltung_id", foreignKey = @ForeignKey(name = "FK_sap_delivery_buchhaltung_id"))
     private Buchhaltung buchhaltung;
+
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Column(name = "message", length = DB_DEFAULT_STRING_MAX_LENGTH)
+    private String message;
 }

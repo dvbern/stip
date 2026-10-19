@@ -63,6 +63,7 @@ public class SozialdienstService {
         sozialdienst.getSozialdienstBenutzers().add(admin);
 
         final var zahlungsverbindung = zahlungsverbindungService.createZahlungsverbindung(dto.getZahlungsverbindung());
+        zahlungsverbindung.setInstitution(sozialdienst.getName());
         sozialdienst.setZahlungsverbindung(zahlungsverbindung);
         sozialdienstRepository.persistAndFlush(sozialdienst);
         return sozialdienstMapper.toDto(sozialdienst);

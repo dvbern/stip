@@ -18,24 +18,38 @@
 package ch.dvbern.stip.api.ausbildung.repo;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsstaette;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class AusbildungsstaetteRepository implements BaseRepository<Ausbildungsstaette> {
-    private final EntityManager entityManager;
-
     private static final QAusbildungsstaette Q_AUSBILDUNGSSTAETTE = QAusbildungsstaette.ausbildungsstaette;
 
+    /// Query all Ausbildungsstaette joining ausbildungsgaenge and abschluss
+    ///
+    /// Using `left join `**`fetch`** to make hibernate use a single query to fetch everything
+    /// @return a stream of all ausbildungsstaette with their related data
+    public Stream<Ausbildungsstaette> findAllJoiningRelated() {
+        return getEntityManager().createQuery(
+            """
+                select ausbildungsstaette
+                from Ausbildungsstaette ausbildungsstaette
+                left join fetch ausbildungsstaette.ausbildungsgaenge ausbildungsgang
+                left join fetch ausbildungsgang.abschluss
+            """,
+            Ausbildungsstaette.class
+        ).getResultStream();
+    }
+
     public Optional<Ausbildungsstaette> findByNameDe(final String nameDe) {
-        return new JPAQueryFactory(entityManager)
+        return new JPAQueryFactory(getEntityManager())
             .selectFrom(Q_AUSBILDUNGSSTAETTE)
             .where(Q_AUSBILDUNGSSTAETTE.nameDe.eq(nameDe))
             .where(Q_AUSBILDUNGSSTAETTE.aktiv)
@@ -44,7 +58,7 @@ public class AusbildungsstaetteRepository implements BaseRepository<Ausbildungss
     }
 
     public Optional<Ausbildungsstaette> findByNameFr(final String nameFr) {
-        return new JPAQueryFactory(entityManager)
+        return new JPAQueryFactory(getEntityManager())
             .selectFrom(Q_AUSBILDUNGSSTAETTE)
             .where(Q_AUSBILDUNGSSTAETTE.nameFr.eq(nameFr))
             .where(Q_AUSBILDUNGSSTAETTE.aktiv)
