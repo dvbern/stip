@@ -37,11 +37,12 @@ import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -51,16 +52,18 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 @Slf4j
-@ApplicationScoped
+@RequestScoped
+@RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class DokumentUploadService {
     protected static final String DOCUMENT_CONTENT_TYPE = "application/pdf";
 
+    private final S3AsyncClient s3;
+    private final StipConfig config;
+    private final Antivirus antivirus;
+
     public Uni<Response> validateScanUploadDokument(
         final FileUpload fileUpload,
-        final S3AsyncClient s3,
-        final StipConfig config,
-        final Antivirus antivirus,
         final Set<String> allowedMimetypes,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback,
@@ -77,12 +80,10 @@ public class DokumentUploadService {
             );
         }
 
-        scanDokument(antivirus, fileUpload);
+        scanDokument(fileUpload);
 
         return uploadDokument(
             fileUpload,
-            s3,
-            config,
             dokumentPathPrefix,
             serviceCallback,
             onFailure
@@ -91,18 +92,12 @@ public class DokumentUploadService {
 
     public Uni<Response> validateScanUploadDokument(
         final FileUpload fileUpload,
-        final S3AsyncClient s3,
-        final StipConfig config,
-        final Antivirus antivirus,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback,
         final @Nullable Consumer<Throwable> onFailure
     ) {
         return validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             config.upload().allowedMimetypes(),
             dokumentPathPrefix,
             serviceCallback,
@@ -112,9 +107,6 @@ public class DokumentUploadService {
 
     public Uni<Response> validateScanUploadDokument(
         final FileUpload fileUpload,
-        final S3AsyncClient s3,
-        final StipConfig config,
-        final Antivirus antivirus,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback
     ) {
@@ -122,12 +114,10 @@ public class DokumentUploadService {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
 
-        scanDokument(antivirus, fileUpload);
+        scanDokument(fileUpload);
 
         return uploadDokument(
             fileUpload,
-            s3,
-            config,
             dokumentPathPrefix,
             serviceCallback
         );
@@ -135,8 +125,6 @@ public class DokumentUploadService {
 
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
-        final S3AsyncClient s3,
-        final StipConfig config,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback,
         final @Nullable Consumer<Throwable> onFailure
@@ -145,9 +133,7 @@ public class DokumentUploadService {
         final var key = dokumentPathPrefix + objectId;
 
         final Supplier<CompletionStage<PutObjectResponse>> stageSupplier = () -> getUploadDokumentFuture(
-            s3,
             fileUpload,
-            config.s3().bucketName(),
             key
         );
 
@@ -170,8 +156,6 @@ public class DokumentUploadService {
 
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
-        final S3AsyncClient s3,
-        final StipConfig config,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback
     ) {
@@ -179,9 +163,7 @@ public class DokumentUploadService {
         final var key = dokumentPathPrefix + objectId;
 
         final Supplier<CompletionStage<PutObjectResponse>> stageSupplier = () -> getUploadDokumentFuture(
-            s3,
             fileUpload,
-            config.s3().bucketName(),
             key
         );
 
@@ -199,22 +181,30 @@ public class DokumentUploadService {
     public String executeUploadDocument(
         final byte[] byteArray,
         final String fileName,
-        final S3AsyncClient s3,
-        final StipConfig config,
         final String documentPathPrefix
     ) {
         final var objectId = FileUtil.generateUUIDWithFileExtension(fileName);
+
+        return executeUploadDocument(byteArray, fileName, objectId, documentPathPrefix);
+    }
+
+    public String executeUploadDocument(
+        final byte[] byteArray,
+        final String fileName,
+        final String objectId,
+        final String documentPathPrefix
+    ) {
         final var key = documentPathPrefix + objectId;
 
         Uni.createFrom()
-            .completionStage(getUploadDokumentFuture(s3, byteArray, config.s3().bucketName(), key))
+            .completionStage(getUploadDokumentFuture(byteArray, key))
             .await()
             .indefinitely();
 
         return objectId;
     }
 
-    protected boolean checkFileUpload(final FileUpload fileUpload, final Set<String> allowedMimeTypes) {
+    private boolean checkFileUpload(final FileUpload fileUpload, final Set<String> allowedMimeTypes) {
         if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
             return false;
         }
@@ -222,7 +212,7 @@ public class DokumentUploadService {
         return FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), allowedMimeTypes);
     }
 
-    protected void scanDokument(final Antivirus antivirus, final FileUpload fileUpload) {
+    protected void scanDokument(final FileUpload fileUpload) {
         try (
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(
                 IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile()))
@@ -250,30 +240,30 @@ public class DokumentUploadService {
     }
 
     private CompletableFuture<PutObjectResponse> getUploadDokumentFuture(
-        final S3AsyncClient s3,
         final byte[] byteArray,
-        final String bucketName,
         final String objectId
     ) {
         return s3.putObject(
-            buildPutRequest(DOCUMENT_CONTENT_TYPE, bucketName, objectId),
+            buildPutRequest(DOCUMENT_CONTENT_TYPE, objectId),
             AsyncRequestBody.fromBytes(byteArray)
         );
     }
 
     private CompletableFuture<PutObjectResponse> getUploadDokumentFuture(
-        final S3AsyncClient s3,
         final FileUpload fileUpload,
-        final String bucketName,
         final String objectId
     ) {
         return s3.putObject(
-            buildPutRequest(fileUpload.contentType(), bucketName, objectId),
+            buildPutRequest(fileUpload.contentType(), objectId),
             AsyncRequestBody.fromFile(fileUpload.uploadedFile())
         );
     }
 
-    private PutObjectRequest buildPutRequest(final String contentType, final String bucketName, final String objectId) {
-        return PutObjectRequest.builder().bucket(bucketName).key(objectId).contentType(contentType).build();
+    private PutObjectRequest buildPutRequest(final String contentType, final String objectId) {
+        return PutObjectRequest.builder()
+            .bucket(config.s3().bucketName())
+            .key(objectId)
+            .contentType(contentType)
+            .build();
     }
 }

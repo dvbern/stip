@@ -23,7 +23,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -34,7 +33,6 @@ import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.generated.dto.BeschwerdeEntscheidDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
-import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -44,7 +42,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @ApplicationScoped
@@ -57,9 +54,6 @@ public class BeschwerdeEntscheidService {
 
     private final GesuchRepository gesuchRepository;
     private final DokumentRepository dokumentRepository;
-    private final Antivirus antivirus;
-    private final StipConfig config;
-    private final S3AsyncClient s3;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final GesuchStatusService gesuchStatusService;
     private final DokumentUploadService dokumentUploadService;
@@ -86,9 +80,6 @@ public class BeschwerdeEntscheidService {
 
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
-            s3,
-            config,
-            antivirus,
             BESCHWERDEENTSCHEID_DOKUMENT_PATH,
             objectId -> uploadDokument(
                 beschwerdeEntscheid,
@@ -126,8 +117,6 @@ public class BeschwerdeEntscheidService {
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
         return dokumentDownloadService.getDokument(
-            s3,
-            config.s3().bucketName(),
             dokument.getObjectId(),
             BESCHWERDEENTSCHEID_DOKUMENT_PATH,
             dokument.getFilename()

@@ -172,7 +172,7 @@ paths:
       - $ref: '#/components/parameters/piaVorname'
       - $ref: '#/components/parameters/piaGeburtsdatum'
       - $ref: '#/components/parameters/status'
-      - $ref: '#/components/parameters/bearbeiterId'
+      - $ref: '#/components/parameters/bearbeiter'
       - $ref: '#/components/parameters/letzteAktivitaetFrom'
       - $ref: '#/components/parameters/letzteAktivitaetTo'
       - $ref: '#/components/parameters/page'
@@ -1806,7 +1806,7 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: '#/components/parameters/userErstelltId'
+        - $ref: '#/components/parameters/userErstellt'
         - $ref: '#/components/parameters/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
         - $ref: '#/components/parameters/MassendruckJobTyp'
@@ -4582,7 +4582,7 @@ paths:
         - $ref: '#/components/parameters/piaVorname'
         - $ref: '#/components/parameters/piaGeburtsdatum'
         - $ref: '#/components/parameters/status'
-        - $ref: '#/components/parameters/bearbeiterId'
+        - $ref: '#/components/parameters/bearbeiter'
         - $ref: '#/components/parameters/letzteAktivitaetFrom'
         - $ref: '#/components/parameters/letzteAktivitaetTo'
         - $ref: '#/components/parameters/typ'
@@ -9679,6 +9679,8 @@ components:
           format: date-time
         sapStatus:
           $ref: '#/components/schemas/SapStatus'
+        message:
+          type: string
     Fall:
       required:
         - id
@@ -12535,11 +12537,11 @@ components:
       name: status
       schema:
         type: string
-    bearbeiterId:
+    bearbeiter:
       in: query
       name: bearbeiter
       schema:
-        $ref: '#/components/schemas/UUID'
+        type: string
     letzteAktivitaetFrom:
       in: query
       name: letzteAktivitaetFrom
@@ -12627,11 +12629,11 @@ components:
       name: massendruckJobStatus
       schema:
         $ref: '#/components/schemas/MassendruckJobStatus'
-    userErstelltId:
+    userErstellt:
       in: query
       name: userErstellt
       schema:
-        $ref: '#/components/schemas/UUID'
+        type: string
     timestampErstellt:
       in: query
       name: timestampErstellt

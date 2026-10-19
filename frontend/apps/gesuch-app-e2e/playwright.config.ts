@@ -4,11 +4,16 @@ import { nxE2EPreset } from '@nx/playwright/preset';
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
 
-import { baseConfig, getE2eUrls } from '@dv/shared/util-fn/e2e-util';
+import {
+  baseConfig,
+  createCiE2eReporter,
+  getE2eUrls,
+} from '@dv/shared/util-fn/e2e-util';
 
 dotenv.config({ path: join(__dirname, '../../.env') });
 
 const urls = getE2eUrls();
+const APP_TYPE = 'gesuch-app-e2e';
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
@@ -17,7 +22,8 @@ export default defineConfig({
     ...baseConfig.use,
     baseURL: urls.gs,
   },
-  workers: !process.env['CI'] ? 3 : 1,
+  workers: 4,
+  reporter: createCiE2eReporter(APP_TYPE, __dirname),
   projects: [
     {
       name: 'setup',

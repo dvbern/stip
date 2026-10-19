@@ -1,6 +1,7 @@
 import {
   AbschlussSlim,
   AuszahlungUpdate,
+  Geschwister,
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import {
@@ -12,6 +13,22 @@ import {
   specificMonthPlusYears,
   specificYearsAgo,
 } from '@dv/shared/util-fn/e2e-util';
+
+// todo-e2e-next: implement better pattern, with no code duplicaton for test data setup (maybe with demo-data-app)
+
+/**
+ * Bruder in eingenem Haushalt
+ */
+export const bruder: Geschwister = {
+  nachname: 'e2e',
+  vorname: 'Geschwister1',
+  geburtsdatum: `01.01.${specificYearsAgo(19)}`,
+  wohnsitz: 'EIGENER_HAUSHALT',
+  ausbildungssituation: 'KEINE',
+  id: '',
+  entryId: '',
+  geschwisterTyp: 'LEIBLICH',
+};
 
 export const ausbildungValues: AusbildungValues = {
   fallId: '',
@@ -45,6 +62,7 @@ export const createZahlungsverbindungUpdateFn = (
   },
 });
 
+// todo-e2e-next: implement better pattern
 export const gesuchFormularUpdateFn = (
   seed: string,
   abschluesse: AbschlussSlim[],

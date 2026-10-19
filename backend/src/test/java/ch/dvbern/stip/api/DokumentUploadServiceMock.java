@@ -28,6 +28,7 @@ import io.quarkus.test.Mock;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -38,11 +39,18 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ApplicationScoped
 public class DokumentUploadServiceMock extends DokumentUploadService {
 
+    public DokumentUploadServiceMock() {
+        super(null, null, null);
+    }
+
+    @Inject
+    public DokumentUploadServiceMock(S3AsyncClient s3, StipConfig config, Antivirus antivirus) {
+        super(s3, config, antivirus);
+    }
+
     @Override
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
-        final S3AsyncClient s3,
-        final StipConfig config,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback,
         final @Nullable Consumer<Throwable> onFailure
@@ -54,8 +62,6 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
     @Override
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
-        final S3AsyncClient s3,
-        final StipConfig config,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback
     ) {
@@ -67,15 +73,23 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
     public String executeUploadDocument(
         final byte[] byteArray,
         final String fileName,
-        final S3AsyncClient s3,
-        final StipConfig config,
         final String documentPathPrefix
     ) {
         return FileUtil.generateUUIDWithFileExtension(fileName);
     }
 
     @Override
-    public void scanDokument(final Antivirus antivirus, final FileUpload fileUpload) {
+    public String executeUploadDocument(
+        final byte[] byteArray,
+        final String fileName,
+        final String documentPathPrefix,
+        final String objectId
+    ) {
+        return objectId;
+    }
+
+    @Override
+    protected void scanDokument(final FileUpload fileUpload) {
         LOG.debug("Would scan file: {}", fileUpload.fileName());
     }
 }

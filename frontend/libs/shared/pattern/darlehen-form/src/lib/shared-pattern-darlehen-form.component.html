@@ -318,7 +318,7 @@
 
       <!-- Missing Document Error -->
       @if (!isAllDocumentsUploadedSig() && formGs.touched && gsShowMissingDocsErrorSig()) {
-        <mat-error class="tw:block!">
+        <mat-error data-testid="form-darlehen-missing-documents-error" class="tw:block!">
           {{ t('shared.form.darlehen.error.missingDocuments') }}
         </mat-error>
       }

@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.dokument.entity.SachbearbeiterGesuchDokument;
 import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
@@ -143,6 +144,10 @@ public class Gesuch extends AbstractEntity {
     @Nullable
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<@Valid GesuchNotiz> notizen = new ArrayList<>();
+
+    @Nullable
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "gesuch", orphanRemoval = true)
+    private List<@Valid DarlehenBuchhaltungEntry> darlehenBuchhaltungEntries = new ArrayList<>();
 
     public GesuchTranche getLatestGesuchTranche() {
         // There must always be at least 1 GesuchTranche

@@ -70,7 +70,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 @Setter
 public class FreiwilligDarlehen extends AbstractEntity {
     @Nullable
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(
         name = "darlehen_buchhaltung_entry_id",
         foreignKey = @ForeignKey(name = "FK_freiwillig_darlehen_darlehen_buchhaltung_entry_id"),
