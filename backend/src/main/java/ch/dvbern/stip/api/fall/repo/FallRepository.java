@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -74,10 +75,23 @@ public class FallRepository implements BaseRepository<Fall> {
             .fetchFirst();
     }
 
-    public Stream<Fall> findAllFallsWithFailedAuszahlungBuchhaltung(final Integer page, final Integer pageSize) {
+    private JPAQuery<Fall> getFindAllFallsWithFailedPaymentProcessingActionBuchhaltungBaseQuery() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_FALL)
-            .where(Q_FALL.failedBuchhaltungAuszahlungType.isNotNull())
+            .where(Q_FALL.failedBuchhaltungAuszahlungType.isNotNull());
+    }
+
+    public Integer getFallsWithFailedPaymentProcessingActionBuchhaltungCount() {
+        return Math.toIntExact(
+            getFindAllFallsWithFailedPaymentProcessingActionBuchhaltungBaseQuery().select(Q_FALL.count()).fetchOne()
+        );
+    }
+
+    public Stream<Fall> findAllFallsWithFailedPaymentProcessingActionBuchhaltung(
+        final Integer page,
+        final Integer pageSize
+    ) {
+        return getFindAllFallsWithFailedPaymentProcessingActionBuchhaltungBaseQuery()
             .offset((long) page * pageSize)
             .limit(pageSize)
             .orderBy(Q_FALL.timestampErstellt.desc())
