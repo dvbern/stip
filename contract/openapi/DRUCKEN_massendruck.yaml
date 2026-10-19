@@ -21,7 +21,7 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: './components/parameters.yaml#/userErstellt'
+        - $ref: './components/parameters.yaml#/userErstelltId'
         - $ref: './components/parameters.yaml#/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
         - $ref: '#/components/parameters/MassendruckJobTyp'
@@ -52,7 +52,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getAllMassendruckJobs
       summary: Get all Massendruck Jobs
-  /massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}:
+  /massendruck/{getGesucheSBQueryType}/create:
     parameters:
       - name: getGesucheSBQueryType
         schema:
@@ -63,7 +63,7 @@ paths:
       - name: sachbearbeiterId
         schema:
           $ref: './components/common.yaml#/UUID'
-        in: path
+        in: query
     post:
       tags:
         - Massendruck

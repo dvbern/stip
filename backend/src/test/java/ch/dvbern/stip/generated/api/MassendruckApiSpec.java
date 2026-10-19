@@ -136,13 +136,13 @@ public class MassendruckApiSpec {
      *
      * @see #getGesucheSBQueryTypePath  (required)
      * @see #zugewiesenQuery  (optional)
-     * @see #sachbearbeiterIdPath  (optional)
+     * @see #sachbearbeiterIdQuery  (optional)
      * return MassendruckJobDtoSpec
      */
     public static class CreateMassendruckJobForQueryTypeOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}";
+        public static final String REQ_URI = "/massendruck/{getGesucheSBQueryType}/create";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -154,7 +154,7 @@ public class MassendruckApiSpec {
         }
 
         /**
-         * POST /massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}
+         * POST /massendruck/{getGesucheSBQueryType}/create
          * @param handler handler
          * @param <T> type
          * @return type
@@ -165,7 +165,7 @@ public class MassendruckApiSpec {
         }
 
         /**
-         * POST /massendruck/{getGesucheSBQueryType}/create/{sachbearbeiterId}
+         * POST /massendruck/{getGesucheSBQueryType}/create
          * @param handler handler
          * @return MassendruckJobDtoSpec
          */
@@ -185,17 +185,6 @@ public class MassendruckApiSpec {
             return this;
         }
 
-        public static final String SACHBEARBEITER_ID_PATH = "sachbearbeiterId";
-
-        /**
-         * @param sachbearbeiterId (UUID)  (optional)
-         * @return operation
-         */
-        public CreateMassendruckJobForQueryTypeOper sachbearbeiterIdPath(Object sachbearbeiterId) {
-            reqSpec.addPathParam(SACHBEARBEITER_ID_PATH, sachbearbeiterId);
-            return this;
-        }
-
         public static final String ZUGEWIESEN_QUERY = "zugewiesen";
 
         /**
@@ -204,6 +193,17 @@ public class MassendruckApiSpec {
          */
         public CreateMassendruckJobForQueryTypeOper zugewiesenQuery(Object... zugewiesen) {
             reqSpec.addQueryParam(ZUGEWIESEN_QUERY, zugewiesen);
+            return this;
+        }
+
+        public static final String SACHBEARBEITER_ID_QUERY = "sachbearbeiterId";
+
+        /**
+         * @param sachbearbeiterId (UUID)  (optional)
+         * @return operation
+         */
+        public CreateMassendruckJobForQueryTypeOper sachbearbeiterIdQuery(Object... sachbearbeiterId) {
+            reqSpec.addQueryParam(SACHBEARBEITER_ID_QUERY, sachbearbeiterId);
             return this;
         }
 

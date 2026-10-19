@@ -29,9 +29,9 @@ import jakarta.validation.Valid;
 public interface MassendruckResource {
 
     @POST
-    @Path("/{getGesucheSBQueryType}/create/{sachbearbeiterId}")
+    @Path("/{getGesucheSBQueryType}/create")
     @Produces({ "application/json", "text/plain" })
-    MassendruckJobDto createMassendruckJobForQueryType(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("zugewiesen")   Boolean zugewiesen,@PathParam("sachbearbeiterId") UUID sachbearbeiterId);
+    MassendruckJobDto createMassendruckJobForQueryType(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("zugewiesen")   Boolean zugewiesen,@QueryParam("sachbearbeiterId")   UUID sachbearbeiterId);
 
     @POST
     @Path("/{massendruckId}/delete")

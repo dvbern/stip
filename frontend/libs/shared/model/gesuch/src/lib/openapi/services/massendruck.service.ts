@@ -153,13 +153,17 @@ export class MassendruckService {
         }
         const zugewiesen = requestParameters.zugewiesen;
         const sachbearbeiterId = requestParameters.sachbearbeiterId;
-        let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}/create/${this.configuration.encodeParam({name: "sachbearbeiterId", value: sachbearbeiterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}/create`;
 
         // Query Params
         let queryParams = new URLSearchParams();
 
         if (zugewiesen !== undefined && zugewiesen !== null) {
           queryParams.append('zugewiesen', zugewiesen.toString());
+        }
+
+        if (sachbearbeiterId !== undefined && sachbearbeiterId !== null) {
+          queryParams.append('sachbearbeiterId', sachbearbeiterId.toString());
         }
         const queryParamsString = queryParams.toString();
         if (queryParamsString) {
@@ -189,6 +193,10 @@ export class MassendruckService {
         if (zugewiesen !== undefined && zugewiesen !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>zugewiesen, 'zugewiesen');
+        }
+        if (sachbearbeiterId !== undefined && sachbearbeiterId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sachbearbeiterId, 'sachbearbeiterId');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -236,7 +244,7 @@ export class MassendruckService {
             }
         }
 
-        const localVarPath = `/massendruck/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}/create/${this.configuration.encodeParam({name: "sachbearbeiterId", value: sachbearbeiterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/massendruck/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}/create`;
         return this.httpClient.request<MassendruckJob>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
