@@ -533,12 +533,17 @@ public class PdfUtils {
                 1,
                 1,
                 sozialdienst.getName(),
-                sozialdienst.getZahlungsverbindung().getVorname() + " "
-                + sozialdienst.getZahlungsverbindung().getNachname(),
-                sozialdienst.getZahlungsverbindung().getAdresse().getStrasse(),
-                sozialdienst.getZahlungsverbindung().getAdresse().getPlz() +
-                " " +
-                sozialdienst.getZahlungsverbindung().getAdresse().getOrt()
+                "%s %s".formatted(
+                    sozialdienst.getZahlungsverbindung().getVorname(),
+                    sozialdienst.getZahlungsverbindung().getNachname()
+                ),
+                Objects.isNull(hausnummer) || hausnummer.isBlank()
+                    ? piaAddress.getStrasse()
+                    : "%s %s".formatted(piaAddress.getStrasse(), hausnummer),
+                "%s %s".formatted(
+                    sozialdienst.getZahlungsverbindung().getAdresse().getPlz(),
+                    sozialdienst.getZahlungsverbindung().getAdresse().getOrt()
+                )
             ).setPaddingTop(SPACING_MEDIUM);
             headerTable.addCell(receiver);
         }
