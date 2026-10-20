@@ -57,7 +57,9 @@
           class="tw:whitespace-nowrap"
           [dvTruncateTooltip]="datenschutzbrief.userErstellt"
         >
-          {{ datenschutzbrief.userErstellt }}
+          @if (datenschutzbrief.typ === 'MANUELL') {
+            {{ datenschutzbrief.userErstellt }}
+          }
         </td>
       </ng-container>
 
