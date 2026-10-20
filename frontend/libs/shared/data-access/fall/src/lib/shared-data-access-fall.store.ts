@@ -7,18 +7,22 @@ import { Fall, FallService } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  pending,
 } from '@dv/shared/util/remote-data';
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 
 type FallState = {
+  paymentSuspensionResponse: RemoteData<unknown>;
   cachedCurrentFall: CachedRemoteData<Fall>;
 };
 
 const initialState: FallState = {
+  paymentSuspensionResponse: initial(),
   cachedCurrentFall: initial(),
 };
 
@@ -43,6 +47,37 @@ export class FallStore extends signalStore(
         }));
       }),
       switchMap(() => this.loadOrCreateFall$()),
+    ),
+  );
+
+  suspendPayment$ = rxMethod<{
+    gesuchId: string;
+    suspended: boolean;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          paymentSuspensionResponse: pending(),
+        });
+      }),
+      switchMap(({ gesuchId, suspended, onSuccess }) =>
+        this.fallService
+          .setPaymentProcessingSuspended$({
+            gesuchId,
+            suspended,
+          })
+          .pipe(
+            handleApiResponse(
+              (paymentSuspensionResponse) => {
+                patchState(this, {
+                  paymentSuspensionResponse,
+                });
+              },
+              { onSuccess },
+            ),
+          ),
+      ),
     ),
   );
 

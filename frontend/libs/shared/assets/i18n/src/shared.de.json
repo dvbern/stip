@@ -72,6 +72,7 @@
   "shared.header.verfuegung": "Verfügung",
   "shared.header.infos": "Infos",
   "shared.header.info.isHistorized": "Dies ist eine ältere Version des Gesuchs.",
+  "shared.header.info.pausedPayment": "Die Zahlungen für diesen Businesspartner sind momentan gestoppt.",
   "shared.header.info.cannotFreigeben": "Dieses Gesuch muss von einer anderen Person freigegeben werden.",
   "shared.header.administration": "Administration",
   "shared.header.fehlgeschlageneZahlungen": "Fehlgeschlagene Zahlungen",

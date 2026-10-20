@@ -20,6 +20,7 @@ export interface GesuchHeader {
     versions: Array<VerfuegtGesuch>;
     aenderungs: GesuchAenderungs;
     currentTranches: Array<GesuchTrancheSlim>;
+    paymentProcessingSuspended: boolean;
     latestVerfuegungId?: string;
     latestVerfuegtAt?: string;
     gesuchInfo: GesuchInfo;

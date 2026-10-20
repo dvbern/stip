@@ -1,206 +1,250 @@
-@if (buchhaltungStore.buchhaltung() | rdIsPendingWithoutCache) {
-  <dv-shared-ui-loading></dv-shared-ui-loading>
-} @else {
-  @if (buchhaltungDataSourceSig(); as buchhaltungDataSource) {
-    <div *dvHasRoles="['V0_Sachbearbeiter']" class="tw:flex tw:w-full tw:justify-between">
-      <!-- retry button -->
-      @if (buchhaltungStore.buchhaltung().data?.canRetryAuszahlung) {
-        <button
-          type="button"
-          class="tw:dv-button-outline tw:flex tw:items-center tw:gap-2"
-          [disabled]="buchhaltungStore.retriedAuszahlung() | rdIsPending: { ignoreInitial: true }"
-          (click)="retryAuszahlung()"
-          data-testid="sachbearbeitung-app.buchhaltung-info.retry"
-        >
-          <i class="material-symbols-rounded">refresh</i>
-          <span>{{ 'sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung' | transloco }}</span>
-        </button>
-      }
-
-      <button
-        type="button"
-        [disabled]="isReadonlySig()"
-        (click)="createBuchhaltungsKorrektur()"
-        class="tw:dv-button-outline"
-      >
-        {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | transloco }}
-      </button>
-    </div>
-    <div class="tw:dv-table" [class.tw:opacity-50]="buchhaltungStore.buchhaltung() | rdIsPending">
-      <table mat-table [dataSource]="buchhaltungDataSource" matSort class="tw:w-full tw:table-fixed">
-        <caption class="cdk-visually-hidden">
-          {{
-            'sachbearbeitung-app.infos.buchhaltung.title' | transloco
-          }}
-        </caption>
-
-        <ng-container matColumnDef="datum">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28 tw:whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.datum' | transloco }}
-          </th>
-          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw:whitespace-nowrap">
-            {{ buchhaltung.entry.timestampErstellt | date: 'dd.MM.yyyy' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="stipendienbetrag">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:text-right!">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag' | transloco }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:text-right!"
+<ng-container *dvTranslocoSb="let t">
+  @if (gesuchIdSig(); as gesuchId) {
+    <div class="tw:absolute tw:top-0 tw:right-0 tw:m-6">
+      <div class="tw:relative">
+        @if (isTogglingPaymentSuspensionSig()) {
+          <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+        }
+        @if (buchhaltungStore.buchhaltung().data?.paymentProcessingSuspended) {
+          <button
+            type="button"
+            class="tw:dv-button-main-danger tw:flex tw:items-center tw:gap-2"
+            (click)="setPaymentSuspended(gesuchId, false)"
+            data-testid="sachbearbeitung-app.buchhaltung-info.startPayment"
           >
-            {{ buchhaltung.entry.stipendienBetrag | formatChf }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="auszahlung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28 tw:text-right!">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.auszahlung' | transloco }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:text-right!"
+            <i class="material-symbols-rounded">play_arrow</i>
+            <span>{{ t('sachbearbeitung-app.infos.buchhaltung.start.payment') }}</span>
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="tw:dv-button-main-danger tw:flex tw:items-center tw:gap-2"
+            (click)="setPaymentSuspended(gesuchId, true)"
+            data-testid="sachbearbeitung-app.buchhaltung-info.stopPayment"
           >
-            {{ buchhaltung.entry.auszahlung | formatChf }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="rueckforderung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:text-right!">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.rueckforderung' | transloco }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:text-right!"
-          >
-            {{ buchhaltung.entry.rueckforderung | formatChf }}
-          </td>
-        </ng-container>
-
-        <!-- saldoAenderung -->
-        <ng-container matColumnDef="saldoAenderung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:text-right!">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldoAenderung' | transloco }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:text-right! tw:font-bold"
-          >
-            {{ buchhaltung.entry.saldoAenderung | formatChf }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="saldo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:text-right!">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldo' | transloco }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:text-right! tw:font-bold"
-          >
-            {{ buchhaltung.entry.saldo | formatChf }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="comment">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-80">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | transloco }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:max-w-32 tw:whitespace-nowrap"
-            [dvTruncateTooltip]="buchhaltung.entry.comment"
-          >
-            {{ buchhaltung.entry.comment }}
-          </td>
-        </ng-container>
-
-        <!-- sapStatus -->
-        <ng-container matColumnDef="sapStatus">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.sapStatus' | transloco }}
-          </th>
-          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw:whitespace-nowrap">
-            @if (buchhaltung.entry.sapStatus) {
-              {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + buchhaltung.entry.sapStatus | transloco }}
-            }
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="info">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.info' | transloco }}
-          </th>
-          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw:whitespace-nowrap">
-            <div class="tw:flex tw:gap-1">
-              <button
-                type="button"
-                (click)="showDetails(buchhaltung.entry)"
-                class="tw:dv-button-icon tw:text-dv-blue"
-                [matTooltip]="'sachbearbeitung-app.infos.buchhaltung.table.moreInfo' | transloco"
-              >
-                <span class="material-symbols-rounded">info</span>
-              </button>
-              @if (buchhaltung.entry.verfuegungId) {
-                <button
-                  type="button"
-                  class="tw:dv-button-outline tw:p-4 tw:text-sm"
-                  [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
-                  [matTooltip]="'shared.dokumente.table.download' | transloco"
-                >
-                  <span class="material-symbols-rounded tw:align-middle">download</span>
-                </button>
-              }
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="separator">
-          <td mat-cell *matCellDef [colSpan]="displayedColumns.length"></td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="tw:font-semibold"></tr>
-        <tr
-          mat-row
-          *dvMatRowDef="let buchhaltung; columns: displayedColumns; dataSource: buchhaltungDataSource"
-          [ngClass]="{
-            'tw:bg-(--dv-blue-subtle)!': buchhaltung.entry.buchhaltungType === 'SALDOAENDERUNG',
-            'tw:bg-(--dv-green-subtle)!': buchhaltung.entry.buchhaltungType === 'AUSZAHLUNG',
-            'tw:bg-(--dv-yellow-subtle)!': buchhaltung.entry.buchhaltungType === 'STIPENDIUM',
-          }"
-        ></tr>
-        <tr
-          mat-row
-          *matRowDef="let separator; columns: ['separator']; when: isStartOfNewGesuch"
-          class="tw:h-4! tw:bg-(--dv-red-subtle)!"
-        ></tr>
-        <tr class="mat-mdc-row" *matNoDataRow>
-          <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
-            {{ 'shared.table.noData' | transloco }}
-          </td>
-        </tr>
-      </table>
-      <mat-paginator
-        [pageSizeOptions]="pageSizes"
-        [pageSize]="defaultPageSize"
-        [length]="buchhaltungDataSource.data.length"
-        showFirstLastButtons
-      >
-      </mat-paginator>
-      @if (buchhaltungStore.buchhaltung() | rdIsPending) {
-        <dv-shared-ui-loading
-          class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
-          [type]="'compact'"
-        ></dv-shared-ui-loading>
-      }
+            <i class="material-symbols-rounded">stop</i>
+            <span>{{ t('sachbearbeitung-app.infos.buchhaltung.stop.payment') }}</span>
+          </button>
+        }
+      </div>
     </div>
   }
-}
+  @if (buchhaltungStore.buchhaltung() | rdIsPendingWithoutCache) {
+    <dv-shared-ui-loading></dv-shared-ui-loading>
+  } @else {
+    @if (buchhaltungDataSourceSig(); as buchhaltungDataSource) {
+      <div *dvHasRoles="['V0_Sachbearbeiter']" class="tw:flex tw:w-full tw:justify-between">
+        <!-- retry button -->
+        @if (buchhaltungStore.buchhaltung().data?.canRetryAuszahlung) {
+          <button
+            type="button"
+            class="tw:dv-button-outline tw:flex tw:items-center tw:gap-2"
+            [disabled]="buchhaltungStore.retriedAuszahlung() | rdIsPending: { ignoreInitial: true }"
+            (click)="retryAuszahlung()"
+            data-testid="sachbearbeitung-app.buchhaltung-info.retry"
+          >
+            <i class="material-symbols-rounded">refresh</i>
+            <span>{{ t('sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung') }}</span>
+          </button>
+        }
+
+        <button
+          type="button"
+          [disabled]="isReadonlySig()"
+          (click)="createBuchhaltungsKorrektur()"
+          class="tw:dv-button-outline"
+        >
+          {{ t('sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title') }}
+        </button>
+      </div>
+      <div class="tw:dv-table" [class.tw:opacity-50]="buchhaltungStore.buchhaltung() | rdIsPending">
+        <table mat-table [dataSource]="buchhaltungDataSource" matSort class="tw:w-full tw:table-fixed">
+          <caption class="cdk-visually-hidden">
+            {{
+              t('sachbearbeitung-app.infos.buchhaltung.title')
+            }}
+          </caption>
+
+          <ng-container matColumnDef="datum">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28 tw:whitespace-nowrap">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.datum') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:whitespace-nowrap"
+            >
+              {{ buchhaltung.entry.timestampErstellt | date: 'dd.MM.yyyy' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="stipendienbetrag">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:text-right!">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:whitespace-nowrap tw:text-right!"
+            >
+              {{ buchhaltung.entry.stipendienBetrag | formatChf }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="auszahlung">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28 tw:text-right!">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.auszahlung') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:whitespace-nowrap tw:text-right!"
+            >
+              {{ buchhaltung.entry.auszahlung | formatChf }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="rueckforderung">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:text-right!">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.rueckforderung') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:whitespace-nowrap tw:text-right!"
+            >
+              {{ buchhaltung.entry.rueckforderung | formatChf }}
+            </td>
+          </ng-container>
+
+          <!-- saldoAenderung -->
+          <ng-container matColumnDef="saldoAenderung">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:text-right!">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.saldoAenderung') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:whitespace-nowrap tw:text-right! tw:font-bold"
+            >
+              {{ buchhaltung.entry.saldoAenderung | formatChf }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="saldo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:text-right!">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.saldo') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:whitespace-nowrap tw:text-right! tw:font-bold"
+            >
+              {{ buchhaltung.entry.saldo | formatChf }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="comment">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-80">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.comment') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:max-w-32 tw:whitespace-nowrap"
+              [dvTruncateTooltip]="buchhaltung.entry.comment"
+            >
+              {{ buchhaltung.entry.comment }}
+            </td>
+          </ng-container>
+
+          <!-- sapStatus -->
+          <ng-container matColumnDef="sapStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:whitespace-nowrap">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.sapStatus') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:whitespace-nowrap"
+            >
+              @if (buchhaltung.entry.sapStatus) {
+                {{ t(`sachbearbeitung-app.infos.buchhaltung.sapStatus.${buchhaltung.entry.sapStatus}`) }}
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="info">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:whitespace-nowrap">
+              {{ t('sachbearbeitung-app.infos.buchhaltung.table.info') }}
+            </th>
+            <td
+              mat-cell
+              *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+              class="tw:whitespace-nowrap"
+            >
+              <div class="tw:flex tw:gap-1">
+                <button
+                  type="button"
+                  (click)="showDetails(buchhaltung.entry)"
+                  class="tw:dv-button-icon tw:text-dv-blue"
+                  [matTooltip]="t('sachbearbeitung-app.infos.buchhaltung.table.moreInfo')"
+                >
+                  <span class="material-symbols-rounded">info</span>
+                </button>
+                @if (buchhaltung.entry.verfuegungId) {
+                  <button
+                    type="button"
+                    class="tw:dv-button-outline tw:p-4 tw:text-sm"
+                    [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
+                    [matTooltip]="t('shared.dokumente.table.download')"
+                  >
+                    <span class="material-symbols-rounded tw:align-middle">download</span>
+                  </button>
+                }
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="separator">
+            <td mat-cell *matCellDef [colSpan]="displayedColumns.length"></td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="tw:font-semibold"></tr>
+          <tr
+            mat-row
+            *dvMatRowDef="let buchhaltung; columns: displayedColumns; dataSource: buchhaltungDataSource"
+            [ngClass]="{
+              'tw:bg-(--dv-blue-subtle)!': buchhaltung.entry.buchhaltungType === 'SALDOAENDERUNG',
+              'tw:bg-(--dv-green-subtle)!': buchhaltung.entry.buchhaltungType === 'AUSZAHLUNG',
+              'tw:bg-(--dv-yellow-subtle)!': buchhaltung.entry.buchhaltungType === 'STIPENDIUM',
+            }"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let separator; columns: ['separator']; when: isStartOfNewGesuch"
+            class="tw:h-4! tw:bg-(--dv-red-subtle)!"
+          ></tr>
+          <tr class="mat-mdc-row" *matNoDataRow>
+            <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
+              {{ t('shared.table.noData') }}
+            </td>
+          </tr>
+        </table>
+        <mat-paginator
+          [pageSizeOptions]="pageSizes"
+          [pageSize]="defaultPageSize"
+          [length]="buchhaltungDataSource.data.length"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+        @if (buchhaltungStore.buchhaltung() | rdIsPending) {
+          <dv-shared-ui-loading
+            class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
+            [type]="'compact'"
+          ></dv-shared-ui-loading>
+        }
+      </div>
+    }
+  }
+</ng-container>

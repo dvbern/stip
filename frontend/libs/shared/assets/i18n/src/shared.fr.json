@@ -72,6 +72,7 @@
   "shared.header.verfuegung": "Décision",
   "shared.header.infos": "Infos",
   "shared.header.info.isHistorized": "Il s'agit d'une version plus ancienne de la demande.",
+  "shared.header.info.pausedPayment": "Les paiements destinés à ce partenaire commercial sont actuellement suspendus.",
   "shared.header.info.cannotFreigeben": "Cette demande doit être validée par une autre personne.",
   "shared.header.administration": "Administration",
   "shared.header.fehlgeschlageneZahlungen": "Paiements échoués",
