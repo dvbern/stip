@@ -273,7 +273,7 @@
                 <label class="tw:pointer-events-none" for="bearbeiter">{{
                   t('sachbearbeitung-app.cockpit.table.bearbeiter')
                 }}</label>
-                <div class="tw:relative tw:flex">
+                <div class="tw:relative tw:flex tw:w-full">
                   <mat-form-field (click)="$event.stopPropagation()">
                     <mat-select
                       [formControl]="filterForm.controls.bearbeiter"
@@ -302,7 +302,6 @@
                     [valueSig]="filterForm.controls.bearbeiter.value"
                   ></dv-shared-ui-clear-button>
                 </div>
-                <div class="test">{{ filterForm.controls.bearbeiter.value }}</div>
               </th>
               <td
                 mat-cell

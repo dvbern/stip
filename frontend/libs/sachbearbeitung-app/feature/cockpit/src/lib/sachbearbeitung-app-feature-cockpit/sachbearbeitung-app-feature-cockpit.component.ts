@@ -479,15 +479,24 @@ export class SachbearbeitungAppFeatureCockpitComponent
   });
 
   createMassendruckJobForQueryType$() {
-    const query = this.queryFromInputsSig().query;
+    const { query, zugewiesenConfig } = this.queryFromInputsSig();
+    const formValue = this.filterForm.getRawValue();
+    const sachbearbeiterId = formValue.bearbeiter;
     if (this.isDarlehenModeSig() || !isGesuchQuery(query)) {
       const message =
         'Invalid query type for Massendruck. Massendruck is only available for Gesuche with DRUCKBAR filter tab.';
       console.error(message);
       throw new Error(message);
     }
+
+    const queryType = getGesucheSBQueryType(query);
+
     this.massendruckStore.createMassendruckJobForQueryType$({
-      req: { getGesucheSBQueryType: getGesucheSBQueryType(query) },
+      req: {
+        getGesucheSBQueryType: queryType,
+        zugewiesen: zugewiesenConfig.value,
+        sachbearbeiterId: sachbearbeiterId,
+      },
       onSuccess: () => {
         this.router.navigate(['/massendruck']);
       },
