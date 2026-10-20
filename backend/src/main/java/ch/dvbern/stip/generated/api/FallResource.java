@@ -36,7 +36,7 @@ public interface FallResource {
     FallDto getFallForGs();
 
     @POST
-    @Path("/fall/paymentprocessingsuspended/{fallId}")
+    @Path("/fall/paymentprocessingsuspended/{gesuchId}")
     @Produces({ "text/plain" })
-    void setPaymentProcessingSuspended(@PathParam("fallId") UUID fallId,@QueryParam("suspended") @NotNull   Boolean suspended);
+    void setPaymentProcessingSuspended(@PathParam("gesuchId") UUID gesuchId,@QueryParam("suspended") @NotNull   Boolean suspended);
 }

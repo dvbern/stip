@@ -83,8 +83,9 @@ public class FallService {
         return String.format("%s.F.%s", tenant, encoded);
     }
 
-    public void setPaymentProcessingSuspended(UUID fallId, Boolean suspended) {
-        final var fall = fallRepository.requireById(fallId);
+    @Transactional
+    public void setPaymentProcessingSuspended(UUID gesuchId, Boolean suspended) {
+        final var fall = fallRepository.findFallForGesuch(gesuchId);
         fall.paymentProcessingSuspended(suspended);
         if (!suspended) {
             auszahlungService.retryFailedAuszahlungBuchhaltung(fall);

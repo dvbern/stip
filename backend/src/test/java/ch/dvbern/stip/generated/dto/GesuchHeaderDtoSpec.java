@@ -40,6 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchHeaderDtoSpec.JSON_PROPERTY_VERSIONS,
   GesuchHeaderDtoSpec.JSON_PROPERTY_AENDERUNGS,
   GesuchHeaderDtoSpec.JSON_PROPERTY_CURRENT_TRANCHES,
+  GesuchHeaderDtoSpec.JSON_PROPERTY_PAYMENT_PROCESSING_SUSPENDED,
   GesuchHeaderDtoSpec.JSON_PROPERTY_LATEST_VERFUEGUNG_ID,
   GesuchHeaderDtoSpec.JSON_PROPERTY_LATEST_VERFUEGT_AT,
   GesuchHeaderDtoSpec.JSON_PROPERTY_GESUCH_INFO
@@ -62,6 +63,10 @@ public class GesuchHeaderDtoSpec {
   public static final String JSON_PROPERTY_CURRENT_TRANCHES = "currentTranches";
   @jakarta.annotation.Nonnull
   private List<GesuchTrancheSlimDtoSpec> currentTranches;
+
+  public static final String JSON_PROPERTY_PAYMENT_PROCESSING_SUSPENDED = "paymentProcessingSuspended";
+  @jakarta.annotation.Nonnull
+  private Boolean paymentProcessingSuspended;
 
   public static final String JSON_PROPERTY_LATEST_VERFUEGUNG_ID = "latestVerfuegungId";
   @jakarta.annotation.Nullable
@@ -194,6 +199,31 @@ public class GesuchHeaderDtoSpec {
     this.currentTranches = currentTranches;
   }
 
+  public GesuchHeaderDtoSpec paymentProcessingSuspended(@jakarta.annotation.Nonnull Boolean paymentProcessingSuspended) {
+    
+    this.paymentProcessingSuspended = paymentProcessingSuspended;
+    return this;
+  }
+
+  /**
+   * Get paymentProcessingSuspended
+   * @return paymentProcessingSuspended
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_PAYMENT_PROCESSING_SUSPENDED, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getPaymentProcessingSuspended() {
+    return paymentProcessingSuspended;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PAYMENT_PROCESSING_SUSPENDED, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPaymentProcessingSuspended(@jakarta.annotation.Nonnull Boolean paymentProcessingSuspended) {
+    this.paymentProcessingSuspended = paymentProcessingSuspended;
+  }
+
   public GesuchHeaderDtoSpec latestVerfuegungId(@jakarta.annotation.Nullable UUID latestVerfuegungId) {
     
     this.latestVerfuegungId = latestVerfuegungId;
@@ -283,6 +313,7 @@ public class GesuchHeaderDtoSpec {
         Objects.equals(this.versions, gesuchHeader.versions) &&
         Objects.equals(this.aenderungs, gesuchHeader.aenderungs) &&
         Objects.equals(this.currentTranches, gesuchHeader.currentTranches) &&
+        Objects.equals(this.paymentProcessingSuspended, gesuchHeader.paymentProcessingSuspended) &&
         Objects.equals(this.latestVerfuegungId, gesuchHeader.latestVerfuegungId) &&
         Objects.equals(this.latestVerfuegtAt, gesuchHeader.latestVerfuegtAt) &&
         Objects.equals(this.gesuchInfo, gesuchHeader.gesuchInfo);
@@ -290,7 +321,7 @@ public class GesuchHeaderDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(initial, versions, aenderungs, currentTranches, latestVerfuegungId, latestVerfuegtAt, gesuchInfo);
+    return Objects.hash(initial, versions, aenderungs, currentTranches, paymentProcessingSuspended, latestVerfuegungId, latestVerfuegtAt, gesuchInfo);
   }
 
   @Override
@@ -301,6 +332,7 @@ public class GesuchHeaderDtoSpec {
     sb.append("    versions: ").append(toIndentedString(versions)).append("\n");
     sb.append("    aenderungs: ").append(toIndentedString(aenderungs)).append("\n");
     sb.append("    currentTranches: ").append(toIndentedString(currentTranches)).append("\n");
+    sb.append("    paymentProcessingSuspended: ").append(toIndentedString(paymentProcessingSuspended)).append("\n");
     sb.append("    latestVerfuegungId: ").append(toIndentedString(latestVerfuegungId)).append("\n");
     sb.append("    latestVerfuegtAt: ").append(toIndentedString(latestVerfuegtAt)).append("\n");
     sb.append("    gesuchInfo: ").append(toIndentedString(gesuchInfo)).append("\n");

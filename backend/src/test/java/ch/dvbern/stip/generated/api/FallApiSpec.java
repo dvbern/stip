@@ -278,13 +278,13 @@ public class FallApiSpec {
      * 
      * 
      *
-     * @see #fallIdPath Die ID vom Fall (required)
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
      * @see #suspendedQuery  (required)
      */
     public static class SetPaymentProcessingSuspendedOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/fall/paymentprocessingsuspended/{fallId}";
+        public static final String REQ_URI = "/fall/paymentprocessingsuspended/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -296,7 +296,7 @@ public class FallApiSpec {
         }
 
         /**
-         * POST /fall/paymentprocessingsuspended/{fallId}
+         * POST /fall/paymentprocessingsuspended/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -306,14 +306,14 @@ public class FallApiSpec {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
         }
 
-        public static final String FALL_ID_PATH = "fallId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param fallId (UUID) Die ID vom Fall (required)
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
          * @return operation
          */
-        public SetPaymentProcessingSuspendedOper fallIdPath(Object fallId) {
-            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+        public SetPaymentProcessingSuspendedOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 
