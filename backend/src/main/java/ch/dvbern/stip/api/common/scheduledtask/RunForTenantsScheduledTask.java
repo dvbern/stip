@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.scheduledtask;
 
 import java.util.TimeZone;
 
+import ch.dvbern.stip.api.common.metrics.ScheduledJobMetrics;
 import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
@@ -49,6 +50,9 @@ public abstract class RunForTenantsScheduledTask implements Job {
 
     @Inject
     StipConfig config;
+
+    @Inject
+    ScheduledJobMetrics scheduledJobMetrics;
 
     protected RunForTenantsScheduledTask(
     final ScheduledTaskCronKey schedulerConfigKey,
@@ -90,7 +94,10 @@ public abstract class RunForTenantsScheduledTask implements Job {
 
     @Override
     public void execute(JobExecutionContext context) {
-        QuarkusTransactionUtil.runForTenantsInNewTransaction(tenantIdentifiers, this::run);
+        QuarkusTransactionUtil.runForTenantsInNewTransaction(
+            tenantIdentifiers,
+            () -> scheduledJobMetrics.recordScheduledJob(getClass(), this::run)
+        );
     }
 
     protected abstract void run();

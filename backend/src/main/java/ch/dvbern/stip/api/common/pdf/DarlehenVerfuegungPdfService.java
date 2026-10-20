@@ -27,6 +27,8 @@ import java.util.Objects;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
+import ch.dvbern.stip.api.common.metrics.RecordedDocumentGeneration;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
@@ -90,6 +92,10 @@ public class DarlehenVerfuegungPdfService {
         );
     }
 
+    @RecordedDocumentGeneration(
+        value = DocumentMetrics.DocumentType.DARLEHEN_VERFUEGUNG,
+        engine = DocumentMetrics.DocumentEngine.ITEXT
+    )
     public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final FreiwilligDarlehen darlehen) {
         return generatePositiveDarlehensVerfuegungPdf(
             darlehen.getRelatedGesuch(),
@@ -100,6 +106,10 @@ public class DarlehenVerfuegungPdfService {
         );
     }
 
+    @RecordedDocumentGeneration(
+        value = DocumentMetrics.DocumentType.DARLEHEN_VERFUEGUNG,
+        engine = DocumentMetrics.DocumentEngine.ITEXT
+    )
     public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final GesetzlichDarlehen darlehen) {
         return generatePositiveDarlehensVerfuegungPdf(
             darlehen.getGesuch(),

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
+import ch.dvbern.stip.api.common.metrics.SapMetrics;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateResponse;
@@ -66,6 +67,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
             null,
             null,
             null,
+            null,
             null
         );
         setBusinessPartnerSearchResponse(SUCCESS_STRING);
@@ -81,14 +83,16 @@ public class SapEndpointServiceMock extends SapEndpointService {
     BusinessPartnerChangeMapper businessPartnerChangeMapper,
     BusinessPartnerReadMapper businessPartnerReadMapper,
     BusinessPartnerSearchMapper businessPartnerSearchMapper,
-    VendorPostingCreateMapper vendorPostingCreateMapper
+    VendorPostingCreateMapper vendorPostingCreateMapper,
+    SapMetrics sapMetrics
     ) {
         super(
             businessPartnerCreateMapper,
             businessPartnerChangeMapper,
             businessPartnerReadMapper,
             businessPartnerSearchMapper,
-            vendorPostingCreateMapper
+            vendorPostingCreateMapper,
+            sapMetrics
         );
         setBusinessPartnerSearchResponse(SUCCESS_STRING);
         setBusinessPartnerCreateResponse(SUCCESS_STRING);

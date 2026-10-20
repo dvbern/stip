@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefBuilder;
@@ -132,6 +133,7 @@ public class DatenschutzbriefService {
         final String objectId = dokumentUploadService.executeUploadDocument(
             pdfContent.toByteArray(),
             filename,
+            DocumentMetrics.DocumentType.DATENSCHUTZBRIEF,
             DATENSCHUTZBRIEF_DOKUMENT_PATH
         );
 
