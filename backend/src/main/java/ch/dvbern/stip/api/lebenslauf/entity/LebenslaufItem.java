@@ -73,9 +73,8 @@ public class LebenslaufItem extends AbstractEntity {
     )
     private Abschluss abschluss;
 
-    @NotNull
-    @Column(name = "berufsbefaehigend_abschluss", nullable = false)
-    private boolean berufsbefaehigendAbschluss;
+    @Column(name = "berufsbefaehigend_abschluss")
+    private Boolean berufsbefaehigendAbschluss;
 
     @NotNull
     @Column(name = "von", nullable = false)

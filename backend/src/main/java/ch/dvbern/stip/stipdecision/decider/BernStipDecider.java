@@ -309,7 +309,7 @@ public class BernStipDecider extends BaseStipDecider {
                 .stream()
                 .anyMatch(
                     item -> item.isAusbildung()
-                    && item.getAbschluss().isBerufsbefaehigenderAbschluss()
+                    && item.getBerufsbefaehigendAbschluss()
                     && item.isAusbildungAbgeschlossen()
                 );
         }
