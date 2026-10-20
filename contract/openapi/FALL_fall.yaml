@@ -70,9 +70,9 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: createFallForGs
-  '/fall/paymentprocessingsuspended/{fallId}':
+  '/fall/paymentprocessingsuspended/{gesuchId}':
     parameters:
-      - $ref: './components/parameters.yaml#/fallId'
+      - $ref: './components/parameters.yaml#/gesuchId'
       - name: suspended
         schema:
           type: boolean
@@ -81,7 +81,7 @@ paths:
     post:
       tags:
         - Fall
-      responses:  
+      responses:
         '204':
           description: Return des neu erstellten Falls für den GS
         '401':
