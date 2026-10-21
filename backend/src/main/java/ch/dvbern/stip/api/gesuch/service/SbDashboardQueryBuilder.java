@@ -233,7 +233,7 @@ public class SbDashboardQueryBuilder {
             case BEARBEITER -> {
                 final var fall = QFall.fall;
                 query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
-                query.join(fall).on(ausbildung.id.eq(fall.id));
+                query.join(fall).on(ausbildung.fall.eq(fall));
                 yield fall.sachbearbeiterZuordnung.sachbearbeiter.nachname;
             }
             case LETZTE_AKTIVITAET -> gesuch.timestampMutiert;
