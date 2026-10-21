@@ -76,6 +76,15 @@ public class BerechnungServiceTestArgumentProvider implements ArgumentsProvider 
             for (final GesuchTranche tranche : gesuch.getGesuchTranchen()) {
                 tranche.setGesuch(gesuch);
                 tranche.getGesuchFormular().setTranche(tranche);
+                tranche.getGesuchFormular()
+                    .getLebenslaufItems()
+                    .stream()
+                    .filter(item -> item.isAusbildung() && item.getBerufsbefaehigendAbschluss() == null)
+                    .forEach(
+                        item -> item.setBerufsbefaehigendAbschluss(
+                            item.getAbschluss().isBerufsbefaehigenderAbschluss()
+                        )
+                    );
             }
 
             return new GesuchWithResultat(gesuch, stipendien, darlehen, path.getFileName().toString());

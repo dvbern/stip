@@ -117,7 +117,7 @@ public class BernCalculatorUtil {
             .filter(
                 lebenslaufItem -> lebenslaufItem.isAusbildung()
                 && Objects.nonNull(lebenslaufItem.getAbschluss())
-                && lebenslaufItem.getBerufsbefaehigendAbschluss()
+                && Boolean.TRUE.equals(lebenslaufItem.getBerufsbefaehigendAbschluss())
                 && lebenslaufItem.isAusbildungAbgeschlossen()
             )
             .findFirst();

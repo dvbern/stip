@@ -105,7 +105,9 @@ class BernStipDeciderTest {
             .getGesuchFormular()
             .getLebenslaufItems()
             .add(
-                new LebenslaufItem().setAbschluss(abschluss)
+                new LebenslaufItem()
+                    .setAbschluss(abschluss)
+                    .setBerufsbefaehigendAbschluss(true)
             );
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG);
@@ -299,7 +301,12 @@ class BernStipDeciderTest {
             .get()
             .getGesuchFormular()
             .getLebenslaufItems()
-            .add(new LebenslaufItem().setAbschluss(abschluss).setAusbildungAbgeschlossen(true));
+            .add(
+                new LebenslaufItem()
+                    .setAbschluss(abschluss)
+                    .setBerufsbefaehigendAbschluss(true)
+                    .setAusbildungAbgeschlossen(true)
+            );
 
         // pia < 18 years at Ausbildungsbegin
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
@@ -339,7 +346,12 @@ class BernStipDeciderTest {
             .get()
             .getGesuchFormular()
             .getLebenslaufItems()
-            .add(new LebenslaufItem().setAbschluss(abschluss).setAusbildungAbgeschlossen(true));
+            .add(
+                new LebenslaufItem()
+                    .setAbschluss(abschluss)
+                    .setBerufsbefaehigendAbschluss(true)
+                    .setAusbildungAbgeschlossen(true)
+            );
 
         // pia < 18 years at Ausbildungsbegin
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
