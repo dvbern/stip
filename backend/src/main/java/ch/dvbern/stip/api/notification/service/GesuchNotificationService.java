@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.notification.service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
@@ -48,11 +47,9 @@ public class GesuchNotificationService {
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
             .getPersonInAusbildung();
-        final var validTypes =
-            List.of(VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG, VerfuegungDokumentTyp.MANUELLE_NEGATIVE_VERFUEGUNG);
         final var mostRecentVerfuegungsDokument = verfuegung.getDokumente()
             .stream()
-            .filter(d -> validTypes.contains(d.getTyp()))
+            .filter(d -> VerfuegungDokumentTyp.VERFUEGUNG_DOKUMENT_TYPS_GS_VISIBLE.contains(d.getTyp()))
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
 
         final var msg =
