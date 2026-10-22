@@ -27,7 +27,7 @@
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
-        @let hasKuerzungenNachEinreichefrist = !!zusammenfassung.totalNachKuerzungNachEinreichefrist;
+        @let hasKuerzungenNachEinreichefrist = zusammenfassung.totalNachKuerzungNachEinreichefrist !== undefined;
         @let hasKuerzungenUnterbruch = !!zusammenfassung.totalNachKuerzungUnterbruch;
         @let hasDarlehen = !!zusammenfassung.berechnungDarlehen;
 

@@ -83,8 +83,11 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
         final int ungekuerztStipendien =
             BerechnungUtil.subtractGesezlichesDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
 
-        final int monateUebrigNachEinreichefrist = DateUtil.wasEingereichtAfterDueDate(gesuch)
-            ? DateUtil.getStipendiumDurationRoundDown(gesuch)
+        final int monateUebrigNachEinreichefrist = gesuch.getEinreichedatum()
+            .isAfter(gesuchsperiode.getEinreichefristReduziert())
+            ? 0
+            : DateUtil.wasEingereichtAfterDueDate(gesuch)
+                ? DateUtil.getStipendiumDurationRoundDown(gesuch)
             : 12;
 
         final Integer totalNachKuerzungNachEinreichefrist =

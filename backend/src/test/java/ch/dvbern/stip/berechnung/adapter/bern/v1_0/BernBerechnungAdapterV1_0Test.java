@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 
@@ -46,6 +47,32 @@ public class BernBerechnungAdapterV1_0Test {
 
         assertThat(berechnungsresultatDto.getBerechnungVorKuerzungUndTeilung(), is(10458));
         assertThat(berechnungsresultatDto.getBerechnungStipendium(), is(10458));
+    }
+
+    @Test
+    void getBerechnungsresultatTestAmLetztenTagDerReduziertenEinreichefrist() {
+        final Gesuch gesuch = TestUtil.getGesuchForBerechnung(UUID.randomUUID());
+        gesuch.getGesuchsperiode().setEinreichefristNormal(gesuch.getEinreichedatum().minusMonths(2));
+        gesuch.getGesuchsperiode().setEinreichefristReduziert(gesuch.getEinreichedatum());
+
+        var berechnungsresultatDto = adapterV1.getBerechnungsresultat(gesuch);
+
+        assertThat(berechnungsresultatDto.getTotalNachKuerzungNachEinreichefrist(), greaterThan(0));
+        assertThat(berechnungsresultatDto.getBerechnungStipendium(), greaterThan(0));
+    }
+
+    @Test
+    void getBerechnungsresultatTestNachReduzierterEinreichefrist() {
+        final Gesuch gesuch = TestUtil.getGesuchForBerechnung(UUID.randomUUID());
+        gesuch.getGesuchsperiode().setEinreichefristNormal(gesuch.getEinreichedatum().minusMonths(2));
+        gesuch.getGesuchsperiode().setEinreichefristReduziert(gesuch.getEinreichedatum().minusDays(1));
+
+        var berechnungsresultatDto = adapterV1.getBerechnungsresultat(gesuch);
+
+        assertThat(berechnungsresultatDto.getAnzahlMonateEinreichefrist(), is(12));
+        assertThat(berechnungsresultatDto.getTotalNachKuerzungNachEinreichefrist(), is(0));
+        assertThat(berechnungsresultatDto.getBerechnungVorTeilungDarlehen(), is(0));
+        assertThat(berechnungsresultatDto.getBerechnungStipendium(), is(0));
     }
 
     @Test
