@@ -224,7 +224,6 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
     });
   }
 
-  // loading = computed(() => false);
   totalEntriesSig = computed(() => {
     return (
       this.massendruckStore.paginatedMassendruckListViewSig()
