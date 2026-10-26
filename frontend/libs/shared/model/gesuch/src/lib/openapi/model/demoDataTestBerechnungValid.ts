@@ -20,9 +20,6 @@ export interface DemoDataTestBerechnungValid {
     elternBudget1?: boolean;
     elternBudget2?: boolean;
     persoenlichesBudget?: boolean;
-    fehlbetrag?: boolean;
-    proKopfteilung?: boolean;
-    anzahlMonateEinreichefrist?: boolean;
-    totalNachKuerzungNachEinreichefrist?: boolean;
+    budgetTranche?: boolean;
 }
 

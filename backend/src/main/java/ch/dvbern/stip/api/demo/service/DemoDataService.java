@@ -80,7 +80,7 @@ public class DemoDataService {
     private final ZuordnungService zuordnungService;
     private final TransactionManager transactionManager;
     public static final String DEMODATA_DOKUMENT_PATH = "demo_data/";
-    public static final int DEMODATA_TEST_ALL_YEAR = 2026;
+    public static final int DEMODATA_TEST_ALL_YEAR = 2025;
 
     @Transactional
     public DemoDataListDto createNewDemoDataImport(

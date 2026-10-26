@@ -36,10 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_ELTERN_BUDGET1,
   DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_ELTERN_BUDGET2,
   DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_PERSOENLICHES_BUDGET,
-  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_FEHLBETRAG,
-  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_PRO_KOPFTEILUNG,
-  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST,
-  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST
+  DemoDataTestBerechnungValidDtoSpec.JSON_PROPERTY_BUDGET_TRANCHE
 })
 @JsonTypeName("DemoDataTestBerechnungValid")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
@@ -80,21 +77,9 @@ public class DemoDataTestBerechnungValidDtoSpec {
   @jakarta.annotation.Nullable
   private Boolean persoenlichesBudget;
 
-  public static final String JSON_PROPERTY_FEHLBETRAG = "fehlbetrag";
+  public static final String JSON_PROPERTY_BUDGET_TRANCHE = "budgetTranche";
   @jakarta.annotation.Nullable
-  private Boolean fehlbetrag;
-
-  public static final String JSON_PROPERTY_PRO_KOPFTEILUNG = "proKopfteilung";
-  @jakarta.annotation.Nullable
-  private Boolean proKopfteilung;
-
-  public static final String JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST = "anzahlMonateEinreichefrist";
-  @jakarta.annotation.Nullable
-  private Boolean anzahlMonateEinreichefrist;
-
-  public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST = "totalNachKuerzungNachEinreichefrist";
-  @jakarta.annotation.Nullable
-  private Boolean totalNachKuerzungNachEinreichefrist;
+  private Boolean budgetTranche;
 
   public DemoDataTestBerechnungValidDtoSpec() {
   }
@@ -324,104 +309,29 @@ public class DemoDataTestBerechnungValidDtoSpec {
     this.persoenlichesBudget = persoenlichesBudget;
   }
 
-  public DemoDataTestBerechnungValidDtoSpec fehlbetrag(@jakarta.annotation.Nullable Boolean fehlbetrag) {
+  public DemoDataTestBerechnungValidDtoSpec budgetTranche(@jakarta.annotation.Nullable Boolean budgetTranche) {
     
-    this.fehlbetrag = fehlbetrag;
+    this.budgetTranche = budgetTranche;
     return this;
   }
 
   /**
-   * Get fehlbetrag
-   * @return fehlbetrag
+   * Get budgetTranche
+   * @return budgetTranche
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_FEHLBETRAG, required = false)
+  @JsonProperty(value = JSON_PROPERTY_BUDGET_TRANCHE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Boolean getFehlbetrag() {
-    return fehlbetrag;
+  public Boolean getBudgetTranche() {
+    return budgetTranche;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_FEHLBETRAG, required = false)
+  @JsonProperty(value = JSON_PROPERTY_BUDGET_TRANCHE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFehlbetrag(@jakarta.annotation.Nullable Boolean fehlbetrag) {
-    this.fehlbetrag = fehlbetrag;
-  }
-
-  public DemoDataTestBerechnungValidDtoSpec proKopfteilung(@jakarta.annotation.Nullable Boolean proKopfteilung) {
-    
-    this.proKopfteilung = proKopfteilung;
-    return this;
-  }
-
-  /**
-   * Get proKopfteilung
-   * @return proKopfteilung
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PRO_KOPFTEILUNG, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getProKopfteilung() {
-    return proKopfteilung;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_PRO_KOPFTEILUNG, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setProKopfteilung(@jakarta.annotation.Nullable Boolean proKopfteilung) {
-    this.proKopfteilung = proKopfteilung;
-  }
-
-  public DemoDataTestBerechnungValidDtoSpec anzahlMonateEinreichefrist(@jakarta.annotation.Nullable Boolean anzahlMonateEinreichefrist) {
-    
-    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
-    return this;
-  }
-
-  /**
-   * Get anzahlMonateEinreichefrist
-   * @return anzahlMonateEinreichefrist
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getAnzahlMonateEinreichefrist() {
-    return anzahlMonateEinreichefrist;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAnzahlMonateEinreichefrist(@jakarta.annotation.Nullable Boolean anzahlMonateEinreichefrist) {
-    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
-  }
-
-  public DemoDataTestBerechnungValidDtoSpec totalNachKuerzungNachEinreichefrist(@jakarta.annotation.Nullable Boolean totalNachKuerzungNachEinreichefrist) {
-    
-    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
-    return this;
-  }
-
-  /**
-   * Get totalNachKuerzungNachEinreichefrist
-   * @return totalNachKuerzungNachEinreichefrist
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getTotalNachKuerzungNachEinreichefrist() {
-    return totalNachKuerzungNachEinreichefrist;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTotalNachKuerzungNachEinreichefrist(@jakarta.annotation.Nullable Boolean totalNachKuerzungNachEinreichefrist) {
-    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+  public void setBudgetTranche(@jakarta.annotation.Nullable Boolean budgetTranche) {
+    this.budgetTranche = budgetTranche;
   }
 
 
@@ -443,15 +353,12 @@ public class DemoDataTestBerechnungValidDtoSpec {
         Objects.equals(this.elternBudget1, demoDataTestBerechnungValid.elternBudget1) &&
         Objects.equals(this.elternBudget2, demoDataTestBerechnungValid.elternBudget2) &&
         Objects.equals(this.persoenlichesBudget, demoDataTestBerechnungValid.persoenlichesBudget) &&
-        Objects.equals(this.fehlbetrag, demoDataTestBerechnungValid.fehlbetrag) &&
-        Objects.equals(this.proKopfteilung, demoDataTestBerechnungValid.proKopfteilung) &&
-        Objects.equals(this.anzahlMonateEinreichefrist, demoDataTestBerechnungValid.anzahlMonateEinreichefrist) &&
-        Objects.equals(this.totalNachKuerzungNachEinreichefrist, demoDataTestBerechnungValid.totalNachKuerzungNachEinreichefrist);
+        Objects.equals(this.budgetTranche, demoDataTestBerechnungValid.budgetTranche);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, ungekuerztStipendien, ungekuerztDarlehen, stipendien, darlehen, budgetArt, elternBudget1, elternBudget2, persoenlichesBudget, fehlbetrag, proKopfteilung, anzahlMonateEinreichefrist, totalNachKuerzungNachEinreichefrist);
+    return Objects.hash(status, ungekuerztStipendien, ungekuerztDarlehen, stipendien, darlehen, budgetArt, elternBudget1, elternBudget2, persoenlichesBudget, budgetTranche);
   }
 
   @Override
@@ -467,10 +374,7 @@ public class DemoDataTestBerechnungValidDtoSpec {
     sb.append("    elternBudget1: ").append(toIndentedString(elternBudget1)).append("\n");
     sb.append("    elternBudget2: ").append(toIndentedString(elternBudget2)).append("\n");
     sb.append("    persoenlichesBudget: ").append(toIndentedString(persoenlichesBudget)).append("\n");
-    sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
-    sb.append("    proKopfteilung: ").append(toIndentedString(proKopfteilung)).append("\n");
-    sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
-    sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
+    sb.append("    budgetTranche: ").append(toIndentedString(budgetTranche)).append("\n");
     sb.append("}");
     return sb.toString();
   }

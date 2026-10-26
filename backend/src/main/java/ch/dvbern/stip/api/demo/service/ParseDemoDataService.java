@@ -900,12 +900,7 @@ public class ParseDemoDataService {
             skipRows(14);
             updateList(list, "Total .* Kosten", 0, (c, d) -> d.getPersoenlichesBudget().setTotalKosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
             skipRows(1);
-            updateList(list, "Fehlbetrag.*", 0, (c, d) -> d.setFehlbetrag(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
-            updateList(list, "Pro Kopf Teilung.*", 0, (c, d) -> d.setProKopfteilung(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
-            skipRows(6);
-            updateList(list, "Anzahl Monate.*", 0, (c, d) -> d.setAnzahlMonateEinreichefrist(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
-            skipRows(9);
-            updateList(list, "Total Anspruch .* Kürzung.*", 0, (c, d) -> d.setTotalNachKuerzungNachEinreichefrist(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(list, "Fehlbetrag.*", 0, (c, d) -> d.setBudgetTranche(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
             // spotless:on
         } catch (Exception e) {
             if (Boolean.TRUE.equals(ignoreBerechnungErrors)) {

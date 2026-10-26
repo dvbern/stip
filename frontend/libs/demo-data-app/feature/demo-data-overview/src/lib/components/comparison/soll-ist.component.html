@@ -250,45 +250,12 @@
       <div class="tw:font-bold">{{ t('demo-data-app.overview.apply-demo-data.info.details.total') }}</div>
       <div class="tw:contents tw:text-sm/none">
         <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
-          <span class="tw:font-semibold tw:pl-2" [class.tw:bg-red-100]="valid?.fehlbetrag === false">
+          <span class="tw:font-semibold tw:pl-2" [class.tw:bg-red-100]="valid?.budgetTranche === false">
             {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.fehlbetrag') }}:
           </span>
           @for (sollIstKey of sollIstKeys; track sollIstKey) {
             <span>
-              {{ (details[sollIstKey]?.fehlbetrag | formatChfNullable) ?? 'N/A' }}
-            </span>
-          }
-        </div>
-        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
-          <span class="tw:font-semibold tw:pl-2" [class.tw:bg-red-100]="valid?.proKopfteilung === false">
-            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.proKopfteilung') }}:
-          </span>
-          @for (sollIstKey of sollIstKeys; track sollIstKey) {
-            <span>
-              {{ (details[sollIstKey]?.proKopfteilung | formatChfNullable) ?? 'N/A' }}
-            </span>
-          }
-        </div>
-        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
-          <span class="tw:font-semibold tw:pl-2" [class.tw:bg-red-100]="valid?.anzahlMonateEinreichefrist === false">
-            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.anzahlMonateEinreichefrist') }}:
-          </span>
-          @for (sollIstKey of sollIstKeys; track sollIstKey) {
-            <span>
-              {{ (details[sollIstKey]?.anzahlMonateEinreichefrist | formatChfNullable) ?? 'N/A' }}
-            </span>
-          }
-        </div>
-        <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3">
-          <span
-            class="tw:font-semibold tw:pl-2"
-            [class.tw:bg-red-100]="valid?.totalNachKuerzungNachEinreichefrist === false"
-          >
-            {{ t('demo-data-app.overview.apply-demo-data.info.details.budget.totalNachKuerzungNachEinreichefrist') }}:
-          </span>
-          @for (sollIstKey of sollIstKeys; track sollIstKey) {
-            <span>
-              {{ (details[sollIstKey]?.totalNachKuerzungNachEinreichefrist | formatChfNullable) ?? 'N/A' }}
+              {{ (details[sollIstKey]?.budgetTranche | formatChfNullable) ?? 'N/A' }}
             </span>
           }
         </div>
