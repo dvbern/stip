@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SachbearbeiterForFilter } from './sachbearbeiterForFilter';
 import { SbDashboardGesuch } from './sbDashboardGesuch';
 
 export interface PaginatedSbGesucheDashboard { 
@@ -16,5 +17,6 @@ export interface PaginatedSbGesucheDashboard {
     pageSize?: number;
     totalEntries?: number;
     entries?: Array<SbDashboardGesuch>;
+    sachbearbeiters?: Array<SachbearbeiterForFilter>;
 }
 

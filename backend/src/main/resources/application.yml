@@ -209,6 +209,9 @@ quarkus:
     jdbc:
       timezone: 'Europe/Zurich'
     mapping:
+      id:
+        optimizer:
+          default: none
       format:
         global: 'ignore'
   default-locale: 'de'

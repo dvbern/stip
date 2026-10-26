@@ -18,6 +18,7 @@
 package ch.dvbern.stip.integration.paymentprocessing.adapter.sapbern.service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -36,6 +37,7 @@ import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.metrics.SapMetrics;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -77,6 +79,7 @@ public class SapService {
     private final GesuchNotificationService gesuchNotificationService;
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
     private final BuchhaltungMapper buchhaltungMapper;
+    private final SapMetrics sapMetrics;
 
     private boolean businessPartnerNeedsUpdate(
         final Gesuch gesuch,
@@ -172,7 +175,7 @@ public class SapService {
                 + readImportResponse.getDELIVERY().getFirst().getPOSITION().getFirst().getLOGS().getFirst().getMESSAGE()
             );
         }
-        sapDelivery.setSapStatus(status);
+        setSapDeliveryStatus(sapDelivery, status, buchhaltung.getBuchhaltungType());
     }
 
     private Buchhaltung getBusinessPartnerActionBuchhaltung(
@@ -262,6 +265,16 @@ public class SapService {
                 var sapDelivery = new SapDelivery().setSapDeliveryId(deliveryid);
                 sapDeliveryRepository.persistAndFlush(sapDelivery);
                 sapDelivery = sapDeliveryRepository.requireById(sapDelivery.getId());
+                sapMetrics.recordDeliveryAttempt(
+                    businessPartnerActionBuchhaltungType,
+                    sapDeliverys.size() + 1
+                );
+                if (!sapDeliverys.isEmpty()) {
+                    sapMetrics.recordRetry(
+                        businessPartnerActionBuchhaltungType,
+                        SapMetrics.RetryTrigger.ORCHESTRATION
+                    );
+                }
 
                 try {
                     switch (businessPartnerActionBuchhaltungType) {
@@ -357,7 +370,7 @@ public class SapService {
             }
         }
 
-        sapDelivery.setSapStatus(status);
+        setSapDeliveryStatus(sapDelivery, status, buchhaltung.getBuchhaltungType());
 
     }
 
@@ -408,6 +421,13 @@ public class SapService {
                 newSapDelivery.setBuchhaltung(buchhaltung);
                 sapDeliveryRepository.persistAndFlush(newSapDelivery);
                 buchhaltung.getSapDeliverys().add(newSapDelivery);
+                sapMetrics.recordDeliveryAttempt(buchhaltung.getBuchhaltungType(), sapDeliverys.size());
+                if (sapDeliverys.size() > 1) {
+                    sapMetrics.recordRetry(
+                        buchhaltung.getBuchhaltungType(),
+                        SapMetrics.RetryTrigger.ORCHESTRATION
+                    );
+                }
 
                 try {
                     final var vendorPostingCreateResponse =
@@ -568,6 +588,7 @@ public class SapService {
             auszahlungsBetrag = Integer.min(auszahlungsBetrag, lastBuchhaltungEntry.getSaldo());
 
             if (auszahlungsBetrag <= 0) {
+                sapMetrics.recordPayment(AUSZAHLUNG_INITIAL, SapMetrics.PaymentOutcome.SKIPPED_NON_POSITIVE);
                 return;
             }
 
@@ -577,6 +598,7 @@ public class SapService {
                     auszahlungsBetrag,
                     AUSZAHLUNG_INITIAL
                 );
+            sapMetrics.recordPayment(AUSZAHLUNG_INITIAL, SapMetrics.PaymentOutcome.INITIATED);
         } else {
             relevantBuchhaltung = pendingAuszahlungOpt.get();
         }
@@ -622,6 +644,10 @@ public class SapService {
             final var lastBuchhaltungEntry =
                 buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
             if (lastBuchhaltungEntry.getSaldo() <= 0) {
+                sapMetrics.recordPayment(
+                    BuchhaltungType.AUSZAHLUNG_REMAINDER,
+                    SapMetrics.PaymentOutcome.SKIPPED_NON_POSITIVE
+                );
                 return;
             }
             relevantBuchhaltung =
@@ -630,6 +656,10 @@ public class SapService {
                     lastBuchhaltungEntry.getSaldo(),
                     BuchhaltungType.AUSZAHLUNG_REMAINDER
                 );
+            sapMetrics.recordPayment(
+                BuchhaltungType.AUSZAHLUNG_REMAINDER,
+                SapMetrics.PaymentOutcome.INITIATED
+            );
         } else {
             relevantBuchhaltung = pendingAuszahlungOpt.get();
         }
@@ -812,5 +842,25 @@ public class SapService {
                     }
                 }
             );
+    }
+
+    private void setSapDeliveryStatus(
+        final SapDelivery sapDelivery,
+        final SapStatus status,
+        final BuchhaltungType operation
+    ) {
+        final var previousStatus = sapDelivery.getSapStatus();
+        if (previousStatus == status) {
+            return;
+        }
+
+        sapDelivery.setSapStatus(status);
+        final var duration = sapDelivery.getTimestampErstellt() == null
+            ? null
+            : Duration.between(sapDelivery.getTimestampErstellt(), LocalDateTime.now());
+        sapMetrics.recordStatusTransition(operation, previousStatus, status, duration);
+        if (BuchhaltungType.AUSZAHLUNGS.contains(operation) && status != SapStatus.IN_PROGRESS) {
+            sapMetrics.recordPayment(operation, status);
+        }
     }
 }

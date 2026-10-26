@@ -137,7 +137,7 @@ public class SbDashboardQueryBuilder {
         );
     }
 
-    public void onlyCurrentBenutzer(final JPAQuery<? extends AbstractEntity> query, final UUID benutzerId) {
+    public void sachbearbeiter(final JPAQuery<? extends AbstractEntity> query, final UUID benutzerId) {
         final var ausbildung = QAusbildung.ausbildung;
         final var zuordnung = QZuordnung.zuordnung;
 
@@ -192,13 +192,12 @@ public class SbDashboardQueryBuilder {
         query.where(tranche.status.eq(GesuchTrancheStatus.valueOf(status)));
     }
 
-    public void bearbeiter(final JPAQuery<? extends AbstractEntity> query, final String bearbeiter) {
+    public void bearbeiter(final JPAQuery<? extends AbstractEntity> query, final UUID bearbeiterId) {
         joinGesuch(query);
         query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
         query.join(QZuordnung.zuordnung).on(ausbildung.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
         query.where(
-            QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
-                .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter))
+            QZuordnung.zuordnung.sachbearbeiter.id.eq(bearbeiterId)
         );
     }
 
@@ -234,7 +233,7 @@ public class SbDashboardQueryBuilder {
             case BEARBEITER -> {
                 final var fall = QFall.fall;
                 query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
-                query.join(fall).on(ausbildung.id.eq(fall.id));
+                query.join(fall).on(ausbildung.fall.eq(fall));
                 yield fall.sachbearbeiterZuordnung.sachbearbeiter.nachname;
             }
             case LETZTE_AKTIVITAET -> gesuch.timestampMutiert;

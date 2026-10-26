@@ -226,7 +226,7 @@ export interface GesuchServiceGetGesucheSbRequestParams {
     piaVorname?: string;
     piaGeburtsdatum?: string;
     status?: string;
-    bearbeiter?: string;
+    bearbeiterId?: string;
     letzteAktivitaetFrom?: string;
     letzteAktivitaetTo?: string;
     typ: GesuchTrancheTyp;
@@ -3845,7 +3845,7 @@ export class GesuchService {
         const piaVorname = requestParameters.piaVorname;
         const piaGeburtsdatum = requestParameters.piaGeburtsdatum;
         const status = requestParameters.status;
-        const bearbeiter = requestParameters.bearbeiter;
+        const bearbeiterId = requestParameters.bearbeiterId;
         const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
         const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
         const typ = requestParameters.typ;
@@ -3895,8 +3895,8 @@ export class GesuchService {
           queryParams.append('status', status.toString());
         }
 
-        if (bearbeiter !== undefined && bearbeiter !== null) {
-          queryParams.append('bearbeiter', bearbeiter.toString());
+        if (bearbeiterId !== undefined && bearbeiterId !== null) {
+          queryParams.append('bearbeiterId', bearbeiterId.toString());
         }
 
         if (letzteAktivitaetFrom !== undefined && letzteAktivitaetFrom !== null) {
@@ -3954,7 +3954,7 @@ export class GesuchService {
         const piaVorname = requestParameters.piaVorname;
         const piaGeburtsdatum = requestParameters.piaGeburtsdatum;
         const status = requestParameters.status;
-        const bearbeiter = requestParameters.bearbeiter;
+        const bearbeiterId = requestParameters.bearbeiterId;
         const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
         const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
         const typ = requestParameters.typ;
@@ -4001,9 +4001,9 @@ export class GesuchService {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>status, 'status');
         }
-        if (bearbeiter !== undefined && bearbeiter !== null) {
+        if (bearbeiterId !== undefined && bearbeiterId !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>bearbeiter, 'bearbeiter');
+            <any>bearbeiterId, 'bearbeiterId');
         }
         if (letzteAktivitaetFrom !== undefined && letzteAktivitaetFrom !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

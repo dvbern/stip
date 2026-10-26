@@ -172,7 +172,7 @@ paths:
       - $ref: '#/components/parameters/piaVorname'
       - $ref: '#/components/parameters/piaGeburtsdatum'
       - $ref: '#/components/parameters/status'
-      - $ref: '#/components/parameters/bearbeiter'
+      - $ref: '#/components/parameters/bearbeiterId'
       - $ref: '#/components/parameters/letzteAktivitaetFrom'
       - $ref: '#/components/parameters/letzteAktivitaetTo'
       - $ref: '#/components/parameters/page'
@@ -1806,7 +1806,7 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: '#/components/parameters/userErstellt'
+        - $ref: '#/components/parameters/userErstelltId'
         - $ref: '#/components/parameters/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
         - $ref: '#/components/parameters/MassendruckJobTyp'
@@ -1850,6 +1850,10 @@ paths:
         in: path
         required: true
       - $ref: '#/components/parameters/zugewiesen'
+      - name: sachbearbeiterId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: query
     post:
       tags:
         - Massendruck
@@ -4606,7 +4610,7 @@ paths:
         - $ref: '#/components/parameters/piaVorname'
         - $ref: '#/components/parameters/piaGeburtsdatum'
         - $ref: '#/components/parameters/status'
-        - $ref: '#/components/parameters/bearbeiter'
+        - $ref: '#/components/parameters/bearbeiterId'
         - $ref: '#/components/parameters/letzteAktivitaetFrom'
         - $ref: '#/components/parameters/letzteAktivitaetTo'
         - $ref: '#/components/parameters/typ'
@@ -7357,6 +7361,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FreiwilligDarlehenDashboard'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SachbearbeiterForFilter'
     FreiwilligDarlehenDashboard:
       type: object
       required:
@@ -7540,6 +7548,19 @@ components:
         - IN_FREIGABE
         - AKZEPTIERT
         - ABGELEHNT
+    SachbearbeiterForFilter:
+      type: object
+      required:
+        - id
+        - vorname
+        - nachname
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        vorname:
+          type: string
+        nachname:
+          type: string
     Dokument:
       required:
         - id
@@ -9058,6 +9079,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MassendruckJob'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SachbearbeiterForFilter'
     MassendruckJobSortColumn:
       enum:
         - TIMESTAMP_ERSTELLT
@@ -10218,6 +10243,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SbDashboardGesuch'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SachbearbeiterForFilter'
     SbDashboardGesuch:
       type: object
       required:
@@ -12567,11 +12596,11 @@ components:
       name: status
       schema:
         type: string
-    bearbeiter:
+    bearbeiterId:
       in: query
-      name: bearbeiter
+      name: bearbeiterId
       schema:
-        type: string
+        $ref: '#/components/schemas/UUID'
     letzteAktivitaetFrom:
       in: query
       name: letzteAktivitaetFrom
@@ -12659,11 +12688,11 @@ components:
       name: massendruckJobStatus
       schema:
         $ref: '#/components/schemas/MassendruckJobStatus'
-    userErstellt:
+    userErstelltId:
       in: query
       name: userErstellt
       schema:
-        type: string
+        $ref: '#/components/schemas/UUID'
     timestampErstellt:
       in: query
       name: timestampErstellt

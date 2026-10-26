@@ -21,7 +21,7 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: './components/parameters.yaml#/userErstellt'
+        - $ref: './components/parameters.yaml#/userErstelltId'
         - $ref: './components/parameters.yaml#/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
         - $ref: '#/components/parameters/MassendruckJobTyp'
@@ -60,6 +60,10 @@ paths:
         in: path
         required: true
       - $ref: './components/parameters.yaml#/zugewiesen'
+      - name: sachbearbeiterId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: query
     post:
       tags:
         - Massendruck
@@ -372,6 +376,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MassendruckJob'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: './components/common.yaml#/SachbearbeiterForFilter'
     MassendruckJobSortColumn:
       enum:
         - TIMESTAMP_ERSTELLT
