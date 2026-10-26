@@ -77,7 +77,7 @@ public class DummyPaymentProcessingAdapter implements PaymentProcessingPort {
     public void createInitialAuszahlungOrGetStatus(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
-        fall.setFailedBuchhaltungAuszahlungType(null);
+        fall.setFailedBuchhaltungType(null);
         gesuch.setPendingSapAction(null);
 
         final var businesParnterBuchhaltung = buchhaltungService

@@ -336,7 +336,7 @@ public class BuchhaltungService {
     }
 
     public boolean canRetryAuszahlungBuchhaltung(final Fall fall) {
-        return Objects.nonNull(fall.getFailedBuchhaltungAuszahlungType());
+        return Objects.nonNull(fall.getFailedBuchhaltungType());
     }
 
     public boolean canRetryAuszahlungBuchhaltung(final UUID gesuchId) {

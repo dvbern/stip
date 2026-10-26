@@ -78,7 +78,7 @@ public class FallRepository implements BaseRepository<Fall> {
     private JPAQuery<Fall> getFindAllFallsWithFailedPaymentProcessingActionBuchhaltungBaseQuery() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_FALL)
-            .where(Q_FALL.failedBuchhaltungAuszahlungType.isNotNull());
+            .where(Q_FALL.failedBuchhaltungType.isNotNull());
     }
 
     public Integer getFallsWithFailedPaymentProcessingActionBuchhaltungCount() {

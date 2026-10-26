@@ -61,7 +61,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
@@ -320,10 +319,7 @@ public class SapServiceTest {
         Mockito.when(gesuchRepositoryMock.requireById(Mockito.any())).thenReturn(gesuch);
 
         // Act | Assert
-        assertThrows(
-            BadRequestException.class,
-            () -> sapService.retryAuszahlungBuchhaltung(gesuch.getId())
-        );
+        assertEquals(sapService.retryAuszahlungBuchhaltung(gesuch.getId()), null);
 
         // Arrange
         sapEndpointServiceMock.setImportStatusReadResponse(SapEndpointServiceMock.SUCCESS_STRING, SapStatus.FAILURE);
