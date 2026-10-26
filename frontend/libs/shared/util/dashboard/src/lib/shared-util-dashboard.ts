@@ -5,6 +5,7 @@ import {
   GesuchTrancheTyp,
   Gesuchstatus,
   GetGesucheSBQueryType,
+  SachbearbeiterForFilter,
   SbDashboardGesuch,
 } from '@dv/shared/model/gesuch';
 import { AppendFromTo } from '@dv/shared/model/type-util';
@@ -177,4 +178,17 @@ export const getDefaultQueryForRole = (
   }
 
   return SachbearbeiterDefaultQuery;
+};
+
+export const filterMitarbeiter = (
+  bearbeiters: SachbearbeiterForFilter[],
+  searchStr: string | undefined,
+) => {
+  return searchStr
+    ? bearbeiters.filter(
+        (bearbeiter) =>
+          bearbeiter.vorname.toLowerCase().includes(searchStr.toLowerCase()) ||
+          bearbeiter.nachname.toLowerCase().includes(searchStr.toLowerCase()),
+      )
+    : bearbeiters;
 };

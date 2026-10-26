@@ -10,8 +10,10 @@
  * Do not edit the class manually.
  */
 import { MassendruckJob } from './massendruckJob';
+import { SachbearbeiterForFilter } from './sachbearbeiterForFilter';
 
 export interface PaginatedMassendruckJobAllOf { 
     entries?: Array<MassendruckJob>;
+    sachbearbeiters?: Array<SachbearbeiterForFilter>;
 }
 

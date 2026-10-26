@@ -32,7 +32,7 @@
           class="tw:dv-nav-button tw:flex tw:items-center tw:px-2 tw:relative"
           [routerLink]="item.route"
           [queryParams]="item.queryParams"
-          [queryParamsHandling]="'merge'"
+          [queryParamsHandling]="item.queryParamsHandling ?? 'merge'"
           [attr.data-testid]="item.testId"
           [class.isActive]="item.active"
           routerLinkActive="active"

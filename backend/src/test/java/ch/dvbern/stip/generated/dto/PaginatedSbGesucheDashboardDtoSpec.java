@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.SachbearbeiterForFilterDtoSpec;
 import ch.dvbern.stip.generated.dto.SbDashboardGesuchDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,7 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_PAGE,
   PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_PAGE_SIZE,
   PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES,
-  PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_ENTRIES
+  PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_ENTRIES,
+  PaginatedSbGesucheDashboardDtoSpec.JSON_PROPERTY_SACHBEARBEITERS
 })
 @JsonTypeName("PaginatedSbGesucheDashboard")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
@@ -54,6 +56,10 @@ public class PaginatedSbGesucheDashboardDtoSpec {
   public static final String JSON_PROPERTY_ENTRIES = "entries";
   @jakarta.annotation.Nullable
   private List<SbDashboardGesuchDtoSpec> entries;
+
+  public static final String JSON_PROPERTY_SACHBEARBEITERS = "sachbearbeiters";
+  @jakarta.annotation.Nullable
+  private List<SachbearbeiterForFilterDtoSpec> sachbearbeiters;
 
   public PaginatedSbGesucheDashboardDtoSpec() {
   }
@@ -166,6 +172,39 @@ public class PaginatedSbGesucheDashboardDtoSpec {
     this.entries = entries;
   }
 
+  public PaginatedSbGesucheDashboardDtoSpec sachbearbeiters(@jakarta.annotation.Nullable List<SachbearbeiterForFilterDtoSpec> sachbearbeiters) {
+    
+    this.sachbearbeiters = sachbearbeiters;
+    return this;
+  }
+
+  public PaginatedSbGesucheDashboardDtoSpec addSachbearbeitersItem(SachbearbeiterForFilterDtoSpec sachbearbeitersItem) {
+    if (this.sachbearbeiters == null) {
+      this.sachbearbeiters = new ArrayList<>();
+    }
+    this.sachbearbeiters.add(sachbearbeitersItem);
+    return this;
+  }
+
+  /**
+   * Get sachbearbeiters
+   * @return sachbearbeiters
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITERS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<SachbearbeiterForFilterDtoSpec> getSachbearbeiters() {
+    return sachbearbeiters;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITERS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSachbearbeiters(@jakarta.annotation.Nullable List<SachbearbeiterForFilterDtoSpec> sachbearbeiters) {
+    this.sachbearbeiters = sachbearbeiters;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -179,12 +218,13 @@ public class PaginatedSbGesucheDashboardDtoSpec {
     return Objects.equals(this.page, paginatedSbGesucheDashboard.page) &&
         Objects.equals(this.pageSize, paginatedSbGesucheDashboard.pageSize) &&
         Objects.equals(this.totalEntries, paginatedSbGesucheDashboard.totalEntries) &&
-        Objects.equals(this.entries, paginatedSbGesucheDashboard.entries);
+        Objects.equals(this.entries, paginatedSbGesucheDashboard.entries) &&
+        Objects.equals(this.sachbearbeiters, paginatedSbGesucheDashboard.sachbearbeiters);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, pageSize, totalEntries, entries);
+    return Objects.hash(page, pageSize, totalEntries, entries, sachbearbeiters);
   }
 
   @Override
@@ -195,6 +235,7 @@ public class PaginatedSbGesucheDashboardDtoSpec {
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    totalEntries: ").append(toIndentedString(totalEntries)).append("\n");
     sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
+    sb.append("    sachbearbeiters: ").append(toIndentedString(sachbearbeiters)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -255,6 +255,7 @@ export * from './renameAbschluss';
 export * from './renameAusbildungsstaette';
 export * from './sachbearbeiter';
 export * from './sachbearbeiterAllOf';
+export * from './sachbearbeiterForFilter';
 export * from './sachbearbeiterGesuchDokument';
 export * from './sachbearbeiterGesuchDokumentAllOf';
 export * from './sachbearbeiterGesuchDokumentCreate';

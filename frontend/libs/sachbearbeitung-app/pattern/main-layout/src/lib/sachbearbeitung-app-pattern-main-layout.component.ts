@@ -31,6 +31,7 @@ const baseNavItems: (NavItem & {
     icon: 'dashboard',
     route: ['/dashboard', 'antraege'],
     testId: 'dashboard-nav-item',
+    queryParamsHandling: 'replace',
   },
   {
     type: 'link',
@@ -38,6 +39,7 @@ const baseNavItems: (NavItem & {
     label: { key: 'shared.header.massendruck' },
     icon: 'print',
     route: ['/massendruck'],
+    queryParamsHandling: 'replace',
   },
   {
     type: 'link',
@@ -47,6 +49,7 @@ const baseNavItems: (NavItem & {
     route: ['/administration'],
     rolesAllowed: ['V0_Sachbearbeiter-Admin', 'V0_Jurist'],
     testId: 'admin-nav-item',
+    queryParamsHandling: 'replace',
   },
 ];
 

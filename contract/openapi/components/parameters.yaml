@@ -57,11 +57,11 @@ piaGeburtsdatum:
   schema:
     type: string
     format: date
-bearbeiter:
+bearbeiterId:
   in: query
-  name: bearbeiter
+  name: bearbeiterId
   schema:
-    type: string
+    $ref: './common.yaml#/UUID'
 status:
   in: query
   name: status
@@ -84,11 +84,11 @@ sortOrder:
   name: sortOrder
   schema:
     $ref: './common.yaml#/SortOrder'
-userErstellt:
+userErstelltId:
   in: query
   name: userErstellt
   schema:
-    type: string
+    $ref: './common.yaml#/UUID'
 timestampErstellt:
   in: query
   name: timestampErstellt

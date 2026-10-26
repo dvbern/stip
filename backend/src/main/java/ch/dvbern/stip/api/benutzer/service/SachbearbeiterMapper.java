@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.SachbearbeiterDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterForFilterDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterUpdateDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -45,4 +46,5 @@ public interface SachbearbeiterMapper {
         @MappingTarget Sachbearbeiter sachbearbeiter
     );
 
+    SachbearbeiterForFilterDto toFilterDto(final Sachbearbeiter sachbearbeiter);
 }

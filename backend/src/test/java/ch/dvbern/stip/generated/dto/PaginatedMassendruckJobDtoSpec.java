@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.MassendruckJobDtoSpec;
+import ch.dvbern.stip.generated.dto.SachbearbeiterForFilterDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -34,7 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_PAGE,
   PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_PAGE_SIZE,
   PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES,
-  PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_ENTRIES
+  PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_ENTRIES,
+  PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_SACHBEARBEITERS
 })
 @JsonTypeName("PaginatedMassendruckJob")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0")
@@ -54,6 +56,10 @@ public class PaginatedMassendruckJobDtoSpec {
   public static final String JSON_PROPERTY_ENTRIES = "entries";
   @jakarta.annotation.Nullable
   private List<MassendruckJobDtoSpec> entries;
+
+  public static final String JSON_PROPERTY_SACHBEARBEITERS = "sachbearbeiters";
+  @jakarta.annotation.Nullable
+  private List<SachbearbeiterForFilterDtoSpec> sachbearbeiters;
 
   public PaginatedMassendruckJobDtoSpec() {
   }
@@ -166,6 +172,39 @@ public class PaginatedMassendruckJobDtoSpec {
     this.entries = entries;
   }
 
+  public PaginatedMassendruckJobDtoSpec sachbearbeiters(@jakarta.annotation.Nullable List<SachbearbeiterForFilterDtoSpec> sachbearbeiters) {
+    
+    this.sachbearbeiters = sachbearbeiters;
+    return this;
+  }
+
+  public PaginatedMassendruckJobDtoSpec addSachbearbeitersItem(SachbearbeiterForFilterDtoSpec sachbearbeitersItem) {
+    if (this.sachbearbeiters == null) {
+      this.sachbearbeiters = new ArrayList<>();
+    }
+    this.sachbearbeiters.add(sachbearbeitersItem);
+    return this;
+  }
+
+  /**
+   * Get sachbearbeiters
+   * @return sachbearbeiters
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITERS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<SachbearbeiterForFilterDtoSpec> getSachbearbeiters() {
+    return sachbearbeiters;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_SACHBEARBEITERS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSachbearbeiters(@jakarta.annotation.Nullable List<SachbearbeiterForFilterDtoSpec> sachbearbeiters) {
+    this.sachbearbeiters = sachbearbeiters;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -179,12 +218,13 @@ public class PaginatedMassendruckJobDtoSpec {
     return Objects.equals(this.page, paginatedMassendruckJob.page) &&
         Objects.equals(this.pageSize, paginatedMassendruckJob.pageSize) &&
         Objects.equals(this.totalEntries, paginatedMassendruckJob.totalEntries) &&
-        Objects.equals(this.entries, paginatedMassendruckJob.entries);
+        Objects.equals(this.entries, paginatedMassendruckJob.entries) &&
+        Objects.equals(this.sachbearbeiters, paginatedMassendruckJob.sachbearbeiters);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, pageSize, totalEntries, entries);
+    return Objects.hash(page, pageSize, totalEntries, entries, sachbearbeiters);
   }
 
   @Override
@@ -195,6 +235,7 @@ public class PaginatedMassendruckJobDtoSpec {
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    totalEntries: ").append(toIndentedString(totalEntries)).append("\n");
     sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
+    sb.append("    sachbearbeiters: ").append(toIndentedString(sachbearbeiters)).append("\n");
     sb.append("}");
     return sb.toString();
   }

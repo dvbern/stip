@@ -39,6 +39,7 @@ import { Configuration }                                     from '../configurat
 export interface MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams {
     getGesucheSBQueryType: GetGesucheSBQueryType;
     zugewiesen?: boolean;
+    sachbearbeiterId?: string;
 }
 
 export interface MassendruckServiceDeleteMassendruckJobRequestParams {
@@ -151,6 +152,7 @@ export class MassendruckService {
             throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling createMassendruckJobForQueryType$.');
         }
         const zugewiesen = requestParameters.zugewiesen;
+        const sachbearbeiterId = requestParameters.sachbearbeiterId;
         let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}/create`;
 
         // Query Params
@@ -158,6 +160,10 @@ export class MassendruckService {
 
         if (zugewiesen !== undefined && zugewiesen !== null) {
           queryParams.append('zugewiesen', zugewiesen.toString());
+        }
+
+        if (sachbearbeiterId !== undefined && sachbearbeiterId !== null) {
+          queryParams.append('sachbearbeiterId', sachbearbeiterId.toString());
         }
         const queryParamsString = queryParams.toString();
         if (queryParamsString) {
@@ -181,11 +187,16 @@ export class MassendruckService {
             throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling createMassendruckJobForQueryType$.');
         }
         const zugewiesen = requestParameters.zugewiesen;
+        const sachbearbeiterId = requestParameters.sachbearbeiterId;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (zugewiesen !== undefined && zugewiesen !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>zugewiesen, 'zugewiesen');
+        }
+        if (sachbearbeiterId !== undefined && sachbearbeiterId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sachbearbeiterId, 'sachbearbeiterId');
         }
 
         let localVarHeaders = this.defaultHeaders;

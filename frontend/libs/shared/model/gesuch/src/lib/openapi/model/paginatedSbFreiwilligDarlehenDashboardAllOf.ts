@@ -9,9 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SachbearbeiterForFilter } from './sachbearbeiterForFilter';
 import { FreiwilligDarlehenDashboard } from './freiwilligDarlehenDashboard';
 
 export interface PaginatedSbFreiwilligDarlehenDashboardAllOf { 
     entries?: Array<FreiwilligDarlehenDashboard>;
+    sachbearbeiters?: Array<SachbearbeiterForFilter>;
 }
 

@@ -385,6 +385,8 @@
   "sachbearbeitung-app.massendruck.table.timestampErstellt": "Auftragsdatum",
   "sachbearbeitung-app.massendruck.table.status": "Status",
   "sachbearbeitung-app.massendruck.table.status.filter.alle": "Alle",
+  "sachbearbeitung-app.massendruck.table.search": "Suchen",
+  "sachbearbeitung-app.massendruck.table.nothingFound": "Keine Einträge gefunden",
   "sachbearbeitung-app.massendruck.table.status.filter.IN_PROGRESS": "In Generierung",
   "sachbearbeitung-app.massendruck.table.status.filter.SUCCESS": "Versandbereit",
   "sachbearbeitung-app.massendruck.table.status.filter.FAILED": "Fehlerhafte Generierung",
