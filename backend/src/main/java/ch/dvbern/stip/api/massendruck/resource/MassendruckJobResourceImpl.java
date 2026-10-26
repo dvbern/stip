@@ -66,10 +66,12 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckJobDto createMassendruckJobForQueryType(
         GetGesucheSBQueryType getGesucheSBQueryType,
-        Boolean zugewiesen
+        Boolean zugewiesen,
+        UUID sachbearbeiterId
     ) {
         authorizer.canCreateMassendruckJob(getGesucheSBQueryType);
-        return massendruckJobService.createAndCombineMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
+        return massendruckJobService
+            .createAndCombineMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen, sachbearbeiterId);
     }
 
     @Override
@@ -78,7 +80,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
         GetMassendruckJobQueryType getMassendruckJobs,
         Integer page,
         Integer pageSize,
-        String userErstellt,
+        UUID userErstelltId,
         LocalDate timestampErstellt,
         MassendruckJobStatus massendruckJobStatus,
         MassendruckJobTyp massendruckJobTyp,
@@ -90,7 +92,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
             getMassendruckJobs,
             page,
             pageSize,
-            userErstellt,
+            userErstelltId,
             timestampErstellt,
             massendruckJobStatus,
             massendruckJobTyp,

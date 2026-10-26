@@ -20,6 +20,7 @@ package ch.dvbern.stip.api;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
@@ -40,12 +41,14 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class DokumentUploadServiceMock extends DokumentUploadService {
 
     public DokumentUploadServiceMock() {
-        super(null, null, null);
+        super(null, null, null, null);
     }
 
     @Inject
-    public DokumentUploadServiceMock(S3AsyncClient s3, StipConfig config, Antivirus antivirus) {
-        super(s3, config, antivirus);
+    public DokumentUploadServiceMock(
+    DocumentMetrics documentMetrics, S3AsyncClient s3, StipConfig config, Antivirus antivirus
+    ) {
+        super(documentMetrics, s3, config, antivirus);
     }
 
     @Override
@@ -73,6 +76,7 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
     public String executeUploadDocument(
         final byte[] byteArray,
         final String fileName,
+        final DocumentMetrics.DocumentType documentType,
         final String documentPathPrefix
     ) {
         return FileUtil.generateUUIDWithFileExtension(fileName);

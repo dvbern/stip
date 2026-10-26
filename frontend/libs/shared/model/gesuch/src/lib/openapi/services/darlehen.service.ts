@@ -143,7 +143,7 @@ export interface DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams {
     piaVorname?: string;
     piaGeburtsdatum?: string;
     status?: string;
-    bearbeiter?: string;
+    bearbeiterId?: string;
     letzteAktivitaetFrom?: string;
     letzteAktivitaetTo?: string;
     page: number;
@@ -2250,7 +2250,7 @@ export class DarlehenService {
         const piaVorname = requestParameters.piaVorname;
         const piaGeburtsdatum = requestParameters.piaGeburtsdatum;
         const status = requestParameters.status;
-        const bearbeiter = requestParameters.bearbeiter;
+        const bearbeiterId = requestParameters.bearbeiterId;
         const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
         const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
         const page = requestParameters.page;
@@ -2296,8 +2296,8 @@ export class DarlehenService {
           queryParams.append('status', status.toString());
         }
 
-        if (bearbeiter !== undefined && bearbeiter !== null) {
-          queryParams.append('bearbeiter', bearbeiter.toString());
+        if (bearbeiterId !== undefined && bearbeiterId !== null) {
+          queryParams.append('bearbeiterId', bearbeiterId.toString());
         }
 
         if (letzteAktivitaetFrom !== undefined && letzteAktivitaetFrom !== null) {
@@ -2347,7 +2347,7 @@ export class DarlehenService {
         const piaVorname = requestParameters.piaVorname;
         const piaGeburtsdatum = requestParameters.piaGeburtsdatum;
         const status = requestParameters.status;
-        const bearbeiter = requestParameters.bearbeiter;
+        const bearbeiterId = requestParameters.bearbeiterId;
         const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
         const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
         const page = requestParameters.page;
@@ -2390,9 +2390,9 @@ export class DarlehenService {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>status, 'status');
         }
-        if (bearbeiter !== undefined && bearbeiter !== null) {
+        if (bearbeiterId !== undefined && bearbeiterId !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>bearbeiter, 'bearbeiter');
+            <any>bearbeiterId, 'bearbeiterId');
         }
         if (letzteAktivitaetFrom !== undefined && letzteAktivitaetFrom !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

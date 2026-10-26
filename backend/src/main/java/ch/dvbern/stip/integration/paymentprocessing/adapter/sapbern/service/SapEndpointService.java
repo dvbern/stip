@@ -29,6 +29,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import ch.dvbern.stip.api.common.metrics.SapMetrics;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeResponse;
@@ -70,6 +71,7 @@ public class SapEndpointService {
     private final BusinessPartnerReadMapper businessPartnerReadMapper;
     private final BusinessPartnerSearchMapper businessPartnerSearchMapper;
     private final VendorPostingCreateMapper vendorPostingCreateMapper;
+    private final SapMetrics sapMetrics;
 
     private static final int MAX_LENGTH_REF_DOC_NO = 16;
     private static final long MAX_DELIVERY_ID = 0x1FFFFFFFFFFFFL;
@@ -134,7 +136,10 @@ public class SapEndpointService {
         final BusinessPartnerCreateRequest businessPartnerCreateRequest =
             businessPartnerCreateMapper.toBusinessPartnerCreateRequest(getSystemid(), sapDeliveryId, fall);
         businessPartnerCreateRequest.getBUSINESSPARTNER().setHEADER(businessPartnerCreateMapper.getHeader());
-        return port.osBusinessPartnerCreate(businessPartnerCreateRequest);
+        return sapMetrics.recordSoapRequest(
+            SapMetrics.SoapOperation.BUSINESS_PARTNER_CREATE,
+            () -> port.osBusinessPartnerCreate(businessPartnerCreateRequest)
+        );
     }
 
     public BusinessPartnerChangeResponse changeBusinessPartner(
@@ -147,7 +152,10 @@ public class SapEndpointService {
 
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
             businessPartnerChangeMapper.toBusinessPartnerChangeRequest(getSystemid(), sapDeliveryId, fall);
-        return port.osBusinessPartnerChange(businessPartnerChangeRequest);
+        return sapMetrics.recordSoapRequest(
+            SapMetrics.SoapOperation.BUSINESS_PARTNER_CHANGE,
+            () -> port.osBusinessPartnerChange(businessPartnerChangeRequest)
+        );
     }
 
     public BusinessPartnerReadResponse readBusinessPartnerByDeliveryId(
@@ -160,7 +168,10 @@ public class SapEndpointService {
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
             businessPartnerReadMapper.toBusinessPartnerReadRequestDeliveryId(getSystemid(), sapDeliveryId);
-        return port.osBusinessPartnerRead(businessPartnerReadRequest);
+        return sapMetrics.recordSoapRequest(
+            SapMetrics.SoapOperation.BUSINESS_PARTNER_READ,
+            () -> port.osBusinessPartnerRead(businessPartnerReadRequest)
+        );
     }
 
     public BusinessPartnerReadResponse readBusinessPartnerByBusinessPartnerId(
@@ -173,7 +184,10 @@ public class SapEndpointService {
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
             businessPartnerReadMapper.toBusinessPartnerReadRequestBusinessPartnerId(getSystemid(), businessPartnerId);
-        return port.osBusinessPartnerRead(businessPartnerReadRequest);
+        return sapMetrics.recordSoapRequest(
+            SapMetrics.SoapOperation.BUSINESS_PARTNER_READ,
+            () -> port.osBusinessPartnerRead(businessPartnerReadRequest)
+        );
     }
 
     public BusinessPartnerSearchResponse searchBusinessPartner(
@@ -186,7 +200,10 @@ public class SapEndpointService {
 
         final BusinessPartnerSearchRequest businessPartnerSearchRequest =
             businessPartnerSearchMapper.toBusinessPartnerSearchRequest(getSystemid(), sozialversicherungsnummer);
-        return port.osBusinessPartnerSearch(businessPartnerSearchRequest);
+        return sapMetrics.recordSoapRequest(
+            SapMetrics.SoapOperation.BUSINESS_PARTNER_SEARCH,
+            () -> port.osBusinessPartnerSearch(businessPartnerSearchRequest)
+        );
     }
 
     public ImportStatusReadResponse readImportStatus(
@@ -203,7 +220,10 @@ public class SapEndpointService {
         importStatusReadRequest.getFILTERPARMS().setDELIVERYID(deliveryid.setScale(0));
         importStatusReadRequest.getFILTERPARMS().setSHOWDETAILS(true);
 
-        return port.osImportStatusRead(importStatusReadRequest);
+        return sapMetrics.recordSoapRequest(
+            SapMetrics.SoapOperation.IMPORT_STATUS_READ,
+            () -> port.osImportStatusRead(importStatusReadRequest)
+        );
     }
 
     public VendorPostingCreateResponse createVendorPosting(
@@ -238,6 +258,9 @@ public class SapEndpointService {
             .get(0)
             .setHEADER(vendorPostingCreateMapper.toHeader(refDocNo, docDate, pstngDate));
 
-        return port.osVendorPostingCreate(vendorPostingCreateRequest);
+        return sapMetrics.recordSoapRequest(
+            SapMetrics.SoapOperation.VENDOR_POSTING_CREATE,
+            () -> port.osVendorPostingCreate(vendorPostingCreateRequest)
+        );
     }
 }

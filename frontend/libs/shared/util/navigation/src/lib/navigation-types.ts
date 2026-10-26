@@ -38,6 +38,7 @@ export interface NavItemLink extends NavItemBase {
   type: 'link';
   route: (string | undefined)[];
   queryParams?: Record<string, string>;
+  queryParamsHandling?: QueryParamsHandling;
 }
 
 export interface NavItemAction extends NavItemBase {

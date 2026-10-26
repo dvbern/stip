@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
@@ -206,6 +207,7 @@ public class GesuchService {
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
     private final StatisticsdataService statisticsdataService;
     private final DarlehenService darlehenService;
+    private final SachbearbeiterService sachbearbeiterService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -416,7 +418,7 @@ public class GesuchService {
         final String piaNachname,
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final int page,
@@ -424,10 +426,14 @@ public class GesuchService {
         final SbGesucheDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        final var currentBenutzerId = benutzerService.getCurrentBenutzer().getId();
-
+        if (Objects.nonNull(bearbeiterId) && Boolean.TRUE.equals(zugewiesen)) {
+            throw new BadRequestException("Request with both parameters is invalid: bearbeiterId and zugewiesen");
+        }
         if (Boolean.TRUE.equals(zugewiesen)) {
-            sbDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, currentBenutzerId);
+            sbDashboardQueryBuilder.sachbearbeiter(baseQuery, benutzerService.getCurrentBenutzer().getId());
+        }
+        if (Objects.nonNull(bearbeiterId)) {
+            sbDashboardQueryBuilder.sachbearbeiter(baseQuery, bearbeiterId);
         }
 
         if (fallNummer != null) {
@@ -444,10 +450,6 @@ public class GesuchService {
 
         if (piaGeburtsdatum != null) {
             sbDashboardQueryBuilder.piaGeburtsdatum(baseQuery, piaGeburtsdatum);
-        }
-
-        if (bearbeiter != null) {
-            sbDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiter);
         }
 
         if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {
@@ -479,7 +481,7 @@ public class GesuchService {
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
         final String status,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final int page,
@@ -497,7 +499,7 @@ public class GesuchService {
                 piaVorname,
                 piaGeburtsdatum,
                 status,
-                bearbeiter,
+                bearbeiterId,
                 letzteAktivitaetFrom,
                 letzteAktivitaetTo,
                 page,
@@ -513,7 +515,7 @@ public class GesuchService {
                 piaVorname,
                 piaGeburtsdatum,
                 status,
-                bearbeiter,
+                bearbeiterId,
                 letzteAktivitaetFrom,
                 letzteAktivitaetTo,
                 page,
@@ -533,7 +535,7 @@ public class GesuchService {
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
         final String status,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final int page,
@@ -550,7 +552,7 @@ public class GesuchService {
             piaNachname,
             piaVorname,
             piaGeburtsdatum,
-            bearbeiter,
+            bearbeiterId,
             letzteAktivitaetFrom,
             letzteAktivitaetTo,
             page,
@@ -570,12 +572,13 @@ public class GesuchService {
             .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, gesuch.getLatestGesuchTranche()))
             .toList();
 
-        return new PaginatedSbGesucheDashboardDto(
-            page,
-            entries.size(),
-            totalEntries,
-            entries
-        );
+        return PaginatedSbGesucheDashboardDto.builder()
+            .page(page)
+            .pageSize(entries.size())
+            .totalEntries(totalEntries)
+            .entries(entries)
+            .sachbearbeiters(sachbearbeiterService.getSachbearbeitersForFilter())
+            .build();
     }
 
     private PaginatedSbGesucheDashboardDto findAendeurngsSB(
@@ -586,7 +589,7 @@ public class GesuchService {
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
         final String status,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final int page,
@@ -603,7 +606,7 @@ public class GesuchService {
             piaNachname,
             piaVorname,
             piaGeburtsdatum,
-            bearbeiter,
+            bearbeiterId,
             letzteAktivitaetFrom,
             letzteAktivitaetTo,
             page,
@@ -623,12 +626,13 @@ public class GesuchService {
             .map(aenderung -> sbDashboardGesuchMapper.toDto(aenderung.getGesuch(), aenderung))
             .toList();
 
-        return new PaginatedSbGesucheDashboardDto(
-            page,
-            entries.size(),
-            totalEntries,
-            entries
-        );
+        return PaginatedSbGesucheDashboardDto.builder()
+            .page(page)
+            .pageSize(entries.size())
+            .totalEntries(totalEntries)
+            .entries(entries)
+            .sachbearbeiters(sachbearbeiterService.getSachbearbeitersForFilter())
+            .build();
     }
 
     @Transactional

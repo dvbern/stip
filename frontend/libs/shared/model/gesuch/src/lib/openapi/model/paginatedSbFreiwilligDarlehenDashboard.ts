@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SachbearbeiterForFilter } from './sachbearbeiterForFilter';
 import { FreiwilligDarlehenDashboard } from './freiwilligDarlehenDashboard';
 
 export interface PaginatedSbFreiwilligDarlehenDashboard { 
@@ -16,5 +17,6 @@ export interface PaginatedSbFreiwilligDarlehenDashboard {
     pageSize?: number;
     totalEntries?: number;
     entries?: Array<FreiwilligDarlehenDashboard>;
+    sachbearbeiters?: Array<SachbearbeiterForFilter>;
 }
 

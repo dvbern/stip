@@ -136,6 +136,7 @@ public class MassendruckApiSpec {
      *
      * @see #getGesucheSBQueryTypePath  (required)
      * @see #zugewiesenQuery  (optional)
+     * @see #sachbearbeiterIdQuery  (optional)
      * return MassendruckJobDtoSpec
      */
     public static class CreateMassendruckJobForQueryTypeOper implements Oper {
@@ -192,6 +193,17 @@ public class MassendruckApiSpec {
          */
         public CreateMassendruckJobForQueryTypeOper zugewiesenQuery(Object... zugewiesen) {
             reqSpec.addQueryParam(ZUGEWIESEN_QUERY, zugewiesen);
+            return this;
+        }
+
+        public static final String SACHBEARBEITER_ID_QUERY = "sachbearbeiterId";
+
+        /**
+         * @param sachbearbeiterId (UUID)  (optional)
+         * @return operation
+         */
+        public CreateMassendruckJobForQueryTypeOper sachbearbeiterIdQuery(Object... sachbearbeiterId) {
+            reqSpec.addQueryParam(SACHBEARBEITER_ID_QUERY, sachbearbeiterId);
             return this;
         }
 
@@ -414,7 +426,7 @@ public class MassendruckApiSpec {
         public static final String USER_ERSTELLT_QUERY = "userErstellt";
 
         /**
-         * @param userErstellt (String)  (optional)
+         * @param userErstellt (UUID)  (optional)
          * @return operation
          */
         public GetAllMassendruckJobsOper userErstelltQuery(Object... userErstellt) {

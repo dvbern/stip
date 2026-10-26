@@ -19,10 +19,12 @@ package ch.dvbern.stip.api.massendruck.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterService;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
@@ -70,12 +72,13 @@ public class MassendruckJobService {
     private final TenantService tenantService;
     private final StipConfig config;
     private final BenutzerService benutzerService;
+    private final SachbearbeiterService sachbearbeiterService;
 
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
         final GetMassendruckJobQueryType queryTyp,
         final int page,
         final int pageSize,
-        final String userErstellt,
+        final UUID userErstelltId,
         final LocalDate timestampErstellt,
         final MassendruckJobStatus massendruckJobStatus,
         final MassendruckJobTyp massendruckJobTyp,
@@ -93,8 +96,8 @@ public class MassendruckJobService {
             case ALLE_FEHLERHAFTE_GENERIERUNG -> massendruckJobQueryBuilder.getAlleFehlerhaftGenerierung();
         };
 
-        if (userErstellt != null) {
-            massendruckJobQueryBuilder.userErstellt(baseQuery, userErstellt);
+        if (userErstelltId != null) {
+            massendruckJobQueryBuilder.userErstellt(baseQuery, userErstelltId);
         }
 
         if (timestampErstellt != null) {
@@ -126,19 +129,22 @@ public class MassendruckJobService {
         final var entities = baseQuery.stream().toList();
         final var results = entities.stream().map(massendruckJobMapper::toDto).toList();
 
-        return new PaginatedMassendruckJobDto(
-            page,
-            results.size(),
-            Math.toIntExact(countQuery.fetchOne()),
-            results
-        );
+        return PaginatedMassendruckJobDto.builder()
+            .page(page)
+            .pageSize(results.size())
+            .totalEntries(Math.toIntExact(countQuery.fetchOne()))
+            .entries(results)
+            .sachbearbeiters(sachbearbeiterService.getSachbearbeitersForFilter())
+            .build();
     }
 
     public MassendruckJobDto createAndCombineMassendruckJobForQueryType(
         final GetGesucheSBQueryType getGesucheSBQueryType,
-        final Boolean zugewiesen
+        final Boolean zugewiesen,
+        final UUID sachbearbeiterId
     ) {
-        final var massendruckJob = createMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen);
+        final var massendruckJob =
+            createMassendruckJobForQueryType(getGesucheSBQueryType, zugewiesen, sachbearbeiterId);
         combineDocument(massendruckJob.getId());
         return massendruckJob;
     }
@@ -146,12 +152,19 @@ public class MassendruckJobService {
     @Transactional
     public MassendruckJobDto createMassendruckJobForQueryType(
         final GetGesucheSBQueryType getGesucheSBQueryType,
-        final Boolean zugewiesen
+        final Boolean zugewiesen,
+        final UUID sachbearbeiterId
     ) {
         final var gesucheQuery = sbDashboardQueryBuilder.baseGesuchQuery(getGesucheSBQueryType);
 
+        if (Objects.nonNull(sachbearbeiterId) && Boolean.TRUE.equals(zugewiesen)) {
+            throw new BadRequestException("Request with both parameters is invalid: sachbearbeiterId and zugewiesen");
+        }
         if (Boolean.TRUE.equals(zugewiesen)) {
-            sbDashboardQueryBuilder.onlyCurrentBenutzer(gesucheQuery, benutzerService.getCurrentBenutzer().getId());
+            sbDashboardQueryBuilder.sachbearbeiter(gesucheQuery, benutzerService.getCurrentBenutzer().getId());
+        }
+        if (Objects.nonNull(sachbearbeiterId)) {
+            sbDashboardQueryBuilder.sachbearbeiter(gesucheQuery, sachbearbeiterId);
         }
 
         final var gesuche = gesucheQuery.stream().toList();

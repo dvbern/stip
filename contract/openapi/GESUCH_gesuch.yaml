@@ -355,7 +355,7 @@ paths:
         - $ref: './components/parameters.yaml#/piaVorname'
         - $ref: './components/parameters.yaml#/piaGeburtsdatum'
         - $ref: './components/parameters.yaml#/status'
-        - $ref: './components/parameters.yaml#/bearbeiter'
+        - $ref: './components/parameters.yaml#/bearbeiterId'
         - $ref: './components/parameters.yaml#/letzteAktivitaetFrom'
         - $ref: './components/parameters.yaml#/letzteAktivitaetTo'
         - $ref: '#/components/parameters/typ'
@@ -1366,6 +1366,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SbDashboardGesuch'
+        sachbearbeiters:
+          type: array
+          items:
+            $ref: './components/common.yaml#/SachbearbeiterForFilter'
     SbDashboardGesuch:
       type: object
       required:

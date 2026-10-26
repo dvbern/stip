@@ -27,6 +27,8 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
+import ch.dvbern.stip.api.common.metrics.RecordedDocumentGeneration;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -65,6 +67,10 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 public class DatenschutzbriefPdfService {
     private final GesuchRepository gesuchRepository;
 
+    @RecordedDocumentGeneration(
+        value = DocumentMetrics.DocumentType.DATENSCHUTZBRIEF,
+        engine = DocumentMetrics.DocumentEngine.ITEXT
+    )
     public ByteArrayOutputStream createDatenschutzbriefForElternteil(
         final Eltern elternteil,
         final UUID gesuchId

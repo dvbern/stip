@@ -133,7 +133,8 @@ public class SozialdienstSeeding extends Seeder {
             .setAdresse(adresse)
             .setIban("CH3908704016075473007")
             .setVorname("Max")
-            .setNachname("Muster");
+            .setNachname("Muster")
+            .setInstitution(envSozialdienst.getName());
         final var sozialdienst = new Sozialdienst()
             .setName(envSozialdienst.getName())
             .setZahlungsverbindung(zahlungsverbindung);

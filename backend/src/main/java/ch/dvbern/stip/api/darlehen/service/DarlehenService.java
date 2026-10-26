@@ -28,7 +28,9 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.service.SachbearbeiterService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.pdf.DarlehenVerfuegungPdfService;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
@@ -114,6 +116,7 @@ public class DarlehenService {
     private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
     private final MailService mailService;
     private final StatusprotokollService statusprotokollService;
+    private final SachbearbeiterService sachbearbeiterService;
 
     private DarlehenBuchhaltungEntry createDarlehenBuchhaltungEntry(
         final Gesuch gesuch,
@@ -166,6 +169,7 @@ public class DarlehenService {
         final var objectId = dokumentUploadService.executeUploadDocument(
             byteArrayOutputStream.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            DocumentMetrics.DocumentType.DARLEHEN_VERFUEGUNG,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -202,6 +206,7 @@ public class DarlehenService {
         final String objectId = dokumentUploadService.executeUploadDocument(
             out.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            DocumentMetrics.DocumentType.DARLEHEN_VERFUEGUNG,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -406,7 +411,7 @@ public class DarlehenService {
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
         final String status,
-        final String bearbeiter,
+        final UUID bearbeiterId,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
         final SbFreiwilligDarlehenDashboardColumn sortColumn,
@@ -422,8 +427,14 @@ public class DarlehenService {
             darlehenDashboardQueryBuilder.onlyBearbeitbar(baseQuery);
         }
 
+        if (Objects.nonNull(bearbeiterId) && Boolean.TRUE.equals(zugewiesen)) {
+            throw new BadRequestException("Request with both parameters is invalid: bearbeiterId and zugewiesen");
+        }
         if (Boolean.TRUE.equals(zugewiesen)) {
-            darlehenDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, benutzerService.getCurrentBenutzer().getId());
+            darlehenDashboardQueryBuilder.sachbearbeiter(baseQuery, benutzerService.getCurrentBenutzer().getId());
+        }
+        if (Objects.nonNull(bearbeiterId)) {
+            darlehenDashboardQueryBuilder.sachbearbeiter(baseQuery, bearbeiterId);
         }
 
         if (fallNummer != null) {
@@ -446,10 +457,6 @@ public class DarlehenService {
             darlehenDashboardQueryBuilder.status(baseQuery, status);
         }
 
-        if (bearbeiter != null) {
-            darlehenDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiter);
-        }
-
         if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {
             darlehenDashboardQueryBuilder.letzteAktivitaet(baseQuery, letzteAktivitaetFrom, letzteAktivitaetTo);
         }
@@ -470,12 +477,13 @@ public class DarlehenService {
             .map(freiwilligDarlehenMapper::toDashboardDto)
             .toList();
 
-        return new PaginatedSbFreiwilligDarlehenDashboardDto(
-            page,
-            results.size(),
-            Math.toIntExact(countQuery.fetchFirst()),
-            results
-        );
+        return PaginatedSbFreiwilligDarlehenDashboardDto.builder()
+            .page(page)
+            .pageSize(results.size())
+            .totalEntries(Math.toIntExact(countQuery.fetchFirst()))
+            .entries(results)
+            .sachbearbeiters(sachbearbeiterService.getSachbearbeitersForFilter())
+            .build();
     }
 
     @Transactional

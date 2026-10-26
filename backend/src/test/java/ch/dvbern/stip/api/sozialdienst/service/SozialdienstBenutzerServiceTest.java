@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.sozialdienst.service;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
 import ch.dvbern.stip.api.land.service.LandService;
@@ -38,7 +37,6 @@ import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import io.quarkus.mailer.MockMailbox;
-import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.ext.mail.MailMessage;
@@ -52,13 +50,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.Mockito.when;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -80,7 +76,7 @@ class SozialdienstBenutzerServiceTest {
     @Inject
     SozialdienstBenutzerService sozialdienstBenutzerService;
 
-    @InjectMock
+    @Inject
     ZahlungsverbindungService zahlungsverbindungServiceMock;
 
     @Inject
@@ -91,27 +87,6 @@ class SozialdienstBenutzerServiceTest {
 
     private static final String VALID_IBAN_1 = "CH5089144653587876648";
     private static final String SOZIALDIENST_ADMIN_EMAIL = "a@b.ch";
-
-    @Order(1)
-    @TestAsSozialdienstAdmin
-    @Test
-    void init() {
-
-        zahlungsverbindung = new Zahlungsverbindung();
-        zahlungsverbindung.setIban(VALID_IBAN_1);
-        zahlungsverbindung.setNachname("Test");
-        zahlungsverbindung.setVorname("Test");
-        var adresse = new Adresse();
-        adresse.setLand(landService.requireLandById(TestConstants.TEST_LAND_SCHWEIZ_ID));
-        adresse.setStrasse("Musterstrasse");
-        adresse.setHausnummer("1");
-        adresse.setPlz("3000");
-        adresse.setOrt("Bern");
-        zahlungsverbindung.setAdresse(adresse);
-
-        zahlungsverbindungServiceMock = Mockito.mock(ZahlungsverbindungService.class);
-        when(zahlungsverbindungServiceMock.createZahlungsverbindung(Mockito.any())).thenReturn(zahlungsverbindung);
-    }
 
     @Order(2)
     @Transactional

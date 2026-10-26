@@ -1838,7 +1838,7 @@ public class DarlehenApiSpec {
      * @see #piaVornameQuery  (optional)
      * @see #piaGeburtsdatumQuery  (optional)
      * @see #statusQuery  (optional)
-     * @see #bearbeiterQuery  (optional)
+     * @see #bearbeiterIdQuery  (optional)
      * @see #letzteAktivitaetFromQuery  (optional)
      * @see #letzteAktivitaetToQuery  (optional)
      * @see #sortColumnQuery  (optional)
@@ -1957,14 +1957,14 @@ public class DarlehenApiSpec {
             return this;
         }
 
-        public static final String BEARBEITER_QUERY = "bearbeiter";
+        public static final String BEARBEITER_ID_QUERY = "bearbeiterId";
 
         /**
-         * @param bearbeiter (String)  (optional)
+         * @param bearbeiterId (UUID)  (optional)
          * @return operation
          */
-        public GetFreiwilligDarlehenDashboardSbOper bearbeiterQuery(Object... bearbeiter) {
-            reqSpec.addQueryParam(BEARBEITER_QUERY, bearbeiter);
+        public GetFreiwilligDarlehenDashboardSbOper bearbeiterIdQuery(Object... bearbeiterId) {
+            reqSpec.addQueryParam(BEARBEITER_ID_QUERY, bearbeiterId);
             return this;
         }
 

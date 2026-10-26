@@ -29,6 +29,11 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
+import {
+  MatSelectSearchClearDirective,
+  MatSelectSearchComponent,
+} from 'ngx-mat-select-search';
+import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
 
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import {
@@ -53,6 +58,7 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
+import { filterMitarbeiter } from '@dv/shared/util/dashboard';
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
 import {
   getSortAndPageInputs,
@@ -92,6 +98,8 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
     TypeSafeMatRowDefDirective,
     SharedUiIconChipComponent,
     TranslocoDirective,
+    MatSelectSearchComponent,
+    MatSelectSearchClearDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-massendruck.component.html',
   styleUrl: './sachbearbeitung-app-feature-massendruck.component.scss',
@@ -176,6 +184,21 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
     },
   ];
 
+  searchControl = this.formBuilder.control('');
+  searchControlStrSig = toSignal(
+    this.searchControl.valueChanges.pipe(distinctUntilChanged()),
+  );
+
+  bearbeiterOptionsSig = computed(() => {
+    const searchStr = this.searchControlStrSig();
+
+    const erstellers =
+      this.massendruckStore.paginatedMassendruckListViewSig()
+        .paginatedMassendruckJobs?.sachbearbeiters ?? [];
+
+    return filterMitarbeiter(erstellers, searchStr);
+  });
+
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
     'massendruckJobStatus',
     'massendruckJobTyp',
@@ -201,7 +224,6 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
     });
   }
 
-  // loading = computed(() => false);
   totalEntriesSig = computed(() => {
     return (
       this.massendruckStore.paginatedMassendruckListViewSig()

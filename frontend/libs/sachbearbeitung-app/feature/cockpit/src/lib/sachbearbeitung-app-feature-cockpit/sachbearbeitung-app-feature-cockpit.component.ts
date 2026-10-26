@@ -37,7 +37,11 @@ import {
   differenceInDays,
   format,
 } from 'date-fns';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import {
+  MatSelectSearchClearDirective,
+  MatSelectSearchComponent,
+} from 'ngx-mat-select-search';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
@@ -84,6 +88,7 @@ import {
   DashboardQuery,
   DashboardTableEntryFields,
   FilterTabParam,
+  filterMitarbeiter,
   gesucheStatusByTyp,
   getControlVisibility,
   getDefaultQueryForRole,
@@ -139,6 +144,8 @@ import {
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
     TranslocoDirective,
+    MatSelectSearchComponent,
+    MatSelectSearchClearDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
   styleUrls: ['./sachbearbeitung-app-feature-cockpit.component.scss'],
@@ -350,6 +357,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
     'status',
+    'bearbeiter',
   ]);
   filterStartEndFormChangedSig = toSignal(
     this.filterStartEndForm.valueChanges.pipe(
@@ -363,6 +371,26 @@ export class SachbearbeitungAppFeatureCockpitComponent
       debounceTime(INPUT_DELAY),
     ),
   );
+
+  searchControl = this.formBuilder.control('');
+  searchControlStrSig = toSignal(
+    this.searchControl.valueChanges.pipe(distinctUntilChanged()),
+  );
+
+  bearbeiterOptionsSig = computed(() => {
+    const searchStr = this.searchControlStrSig();
+
+    if (this.isDarlehenModeSig()) {
+      const darlehenBearbeiters =
+        this.darlehenStore.dashboardViewSig()?.darlehen?.sachbearbeiters ?? [];
+      return filterMitarbeiter(darlehenBearbeiters, searchStr);
+    }
+
+    const gesuchBearbeiters =
+      this.gesuchStore.cockpitViewSig()?.gesuche?.sachbearbeiters ?? [];
+
+    return filterMitarbeiter(gesuchBearbeiters, searchStr);
+  });
 
   gesucheDataSourceSig = computed(() => {
     const gesuche = this.gesuchStore
@@ -443,7 +471,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     const hasEntries = !isLoading && (this.gesucheTotalEntriesSig() ?? 0) > 0;
     const hasFilters = Object.entries(this.filterForm.getRawValue())
-      .filter(([key]) => key !== 'typ')
+      .filter(([key]) => key !== 'bearbeiter' && key !== 'typ')
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .some(([_, value]) => value);
 
@@ -451,15 +479,24 @@ export class SachbearbeitungAppFeatureCockpitComponent
   });
 
   createMassendruckJobForQueryType$() {
-    const query = this.queryFromInputsSig().query;
+    const { query, zugewiesenConfig } = this.queryFromInputsSig();
+    const formValue = this.filterForm.getRawValue();
+    const sachbearbeiterId = formValue.bearbeiter;
     if (this.isDarlehenModeSig() || !isGesuchQuery(query)) {
       const message =
         'Invalid query type for Massendruck. Massendruck is only available for Gesuche with DRUCKBAR filter tab.';
       console.error(message);
       throw new Error(message);
     }
+
+    const queryType = getGesucheSBQueryType(query);
+
     this.massendruckStore.createMassendruckJobForQueryType$({
-      req: { getGesucheSBQueryType: getGesucheSBQueryType(query) },
+      req: {
+        getGesucheSBQueryType: queryType,
+        zugewiesen: zugewiesenConfig.value,
+        sachbearbeiterId: sachbearbeiterId,
+      },
       onSuccess: () => {
         this.router.navigate(['/massendruck']);
       },
@@ -523,9 +560,20 @@ export class SachbearbeitungAppFeatureCockpitComponent
           : undefined,
       });
 
+      // 'zugewiesen' and 'bearbeiter' are mutually exclusive
+      const bearbeiterSelected = !!formValue.bearbeiter;
+      if (bearbeiterSelected) {
+        this.togglesGroup.controls.zugewiesen.setValue(false, {
+          emitEvent: false,
+        });
+      }
+
       this.router.navigate(['.'], {
         relativeTo: this.route,
-        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParams: {
+          ...makeEmptyStringPropertiesNull(query),
+          ...(bearbeiterSelected ? { zugewiesen: 'FALSE' } : {}),
+        },
         queryParamsHandling: 'merge',
         replaceUrl: true,
       });
@@ -555,7 +603,12 @@ export class SachbearbeitungAppFeatureCockpitComponent
     });
 
     const zugewiesenChangedSig = toSignal(
-      this.togglesGroup.controls.zugewiesen.valueChanges,
+      this.togglesGroup.controls.zugewiesen.valueChanges.pipe(
+        // => signal emits again after silently reset with ({ emitEvent: false })
+        map((value) => ({
+          isZugewiesen: value,
+        })),
+      ),
     );
     const bearbeitbarChangedSig = toSignal(
       this.togglesGroup.controls.bearbeitbar.valueChanges,
@@ -565,16 +618,22 @@ export class SachbearbeitungAppFeatureCockpitComponent
     effect(() => {
       const zugewiesenChanged = zugewiesenChangedSig();
 
-      if (!isDefined(zugewiesenChanged)) {
+      if (!isDefined(zugewiesenChanged?.isZugewiesen)) {
         return;
       }
 
-      const zugewiesen = zugewiesenChanged === true ? 'TRUE' : 'FALSE';
+      const zugewiesen =
+        zugewiesenChanged.isZugewiesen === true ? 'TRUE' : 'FALSE';
+
+      this.filterForm.controls.bearbeiter.reset(undefined, {
+        emitEvent: false,
+      });
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: {
           zugewiesen,
+          bearbeiter: null,
         },
         queryParamsHandling: 'merge',
       });
@@ -617,6 +676,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
         bearbeitbar: bearbeitbarConfig.value,
         zugewiesen: zugewiesenConfig.value,
         ...filter,
+        bearbeiterId: filter.bearbeiter,
         ...getStatusFilterByFilterTab(filterTab),
         ...startEndFilter,
         ...getSortAndPageInputs(this),
@@ -645,6 +705,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
       this.darlehenStore.getDarlehenDashboardSb$({
         ...darlehenFilter,
+        bearbeiterId: filter.bearbeiter,
         bearbeitbar: bearbeitbarConfig.value,
         zugewiesen: zugewiesenConfig.value,
         status: parseDarlehenStatus(this.status()),

@@ -50,6 +50,10 @@
   }
 }
 
+@utility dv-tab-nav-button {
+  @apply tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:[.active]:border-inherit! tw:border!;
+}
+
 @utility dv-nav-button-outline {
   @apply tw:dv-nav-button tw:hover:bg-dv-gray-dark tw:hover:text-white tw:outline tw:border-dv-gray-dark tw:hover:outline-dv-red;
 }

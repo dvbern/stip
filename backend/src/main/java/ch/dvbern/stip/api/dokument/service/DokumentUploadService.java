@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.util.StringUtil;
 import ch.dvbern.stip.api.config.type.StipConfig;
@@ -57,6 +58,8 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 @UnlessBuildProfile("test")
 public class DokumentUploadService {
     protected static final String DOCUMENT_CONTENT_TYPE = "application/pdf";
+
+    private final DocumentMetrics documentMetrics;
 
     private final S3AsyncClient s3;
     private final StipConfig config;
@@ -179,6 +182,19 @@ public class DokumentUploadService {
     }
 
     public String executeUploadDocument(
+        final byte[] byteArray,
+        final String fileName,
+        final DocumentMetrics.DocumentType documentType,
+        final String documentPathPrefix
+    ) {
+        return documentMetrics.recordDocumentStorage(
+            documentType,
+            byteArray.length,
+            () -> executeUploadDocumentInternal(byteArray, fileName, documentPathPrefix)
+        );
+    }
+
+    private String executeUploadDocumentInternal(
         final byte[] byteArray,
         final String fileName,
         final String documentPathPrefix

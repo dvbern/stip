@@ -1135,6 +1135,19 @@ FreiwilligDarlehen:
       type: string
     verfuegung:
       $ref: '#/Dokument'
+SachbearbeiterForFilter:
+  type: object
+  required:
+    - id
+    - vorname
+    - nachname
+  properties:
+    id:
+      $ref: '#/UUID'
+    vorname:
+      type: string
+    nachname:
+      type: string
 DarlehenGrund:
   enum:
     - NICHT_BERECHTIGT

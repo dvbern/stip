@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.metrics.DocumentMetrics;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
@@ -56,6 +57,7 @@ public class MassendruckJobPdfService {
     private final GesuchStatusService gesuchStatusService;
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDownloadService dokumentDownloadService;
+    private final DocumentMetrics documentMetrics;
 
     @Transactional
     public void setFailedStatusOnJob(final UUID massendruckJobId) {
@@ -65,6 +67,11 @@ public class MassendruckJobPdfService {
 
     @Transactional
     public void downloadCombineAndSaveForJob(final UUID massendruckJobId) {
+        final var type = massendruckJobRepository.requireById(massendruckJobId).getMassendruckTyp();
+        documentMetrics.recordMassPrintJob(type, () -> downloadCombineAndSaveForJobInternal(massendruckJobId));
+    }
+
+    private void downloadCombineAndSaveForJobInternal(final UUID massendruckJobId) {
         final var massendruckJob = massendruckJobRepository.requireById(massendruckJobId);
 
         // Download all PDFs from S3 if Verfuegung, otherwise generate the Datenschutzbriefe PDFs
@@ -109,6 +116,7 @@ public class MassendruckJobPdfService {
             objectId,
             MASSENDRUCK_DOKUMENT_PATH
         );
+        documentMetrics.recordMassPrintOutputSize(massendruckJob.getMassendruckTyp(), out.size());
 
         final var dokument = new Dokument()
             .setFilename(fileName)

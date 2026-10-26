@@ -4,7 +4,7 @@
       <button
         type="button"
         (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-        class="tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:border! tw:items-center tw:flex-none"
+        class="tw:dv-tab-nav-button tw:items-center tw:flex-none"
         [attr.data-testid]="'massendruck-quick-filter-' + quickFilter.typ"
         [class.active]="radio.checked"
       >
@@ -108,14 +108,26 @@
               <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw:w-36 tw:whitespace-nowrap">
                 <label for="userErstellt">{{ t('table.userErstellt') }}</label>
                 <div class="tw:relative tw:flex">
-                  <mat-form-field class="tw:w-full">
-                    <input
-                      id="userErstellt"
-                      matInput
-                      formControlName="userErstellt"
-                      (click)="$event.stopPropagation()"
-                      (keydown)="$event.stopPropagation()"
-                    />
+                  <mat-form-field (click)="$event.stopPropagation()">
+                    <mat-select
+                      [formControl]="filterForm.controls.userErstellt"
+                      data-testid="sb-dashboard-massendruck-bearbeiter-filter-select"
+                      [placeholder]="t('table.status.filter.alle')"
+                    >
+                      <mat-option>
+                        <ngx-mat-select-search
+                          [formControl]="searchControl"
+                          [placeholderLabel]="t('table.search')"
+                          [noEntriesFoundLabel]="t('table.nothingFound')"
+                        >
+                          <span ngxMatSelectSearchClear class="material-symbols-rounded tw:flex">clear</span>
+                        </ngx-mat-select-search>
+                      </mat-option>
+
+                      @for (value of bearbeiterOptionsSig(); track value.id) {
+                        <mat-option [value]="value.id"> {{ value.vorname }} {{ value.nachname }} </mat-option>
+                      }
+                    </mat-select>
                   </mat-form-field>
                   <dv-shared-ui-clear-button
                     class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
