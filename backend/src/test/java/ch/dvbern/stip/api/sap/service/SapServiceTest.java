@@ -317,10 +317,12 @@ public class SapServiceTest {
         gesuch.getAusbildung().getFall().setBuchhaltungs(new ArrayList<>());
         gesuch.getAusbildung().getFall().getBuchhaltungs().add(lastEntryStipendiumBuchhaltung);
 
+        Mockito.when(gesuchRepositoryMock.requireById(Mockito.any())).thenReturn(gesuch);
+
         // Act | Assert
         assertThrows(
             BadRequestException.class,
-            () -> sapService.retryAuszahlungBuchhaltung(gesuch.getAusbildung().getFall())
+            () -> sapService.retryAuszahlungBuchhaltung(gesuch.getId())
         );
 
         // Arrange
@@ -379,9 +381,10 @@ public class SapServiceTest {
             .when(buchhaltungRepositorySpy)
             .findStipendiumsEntrysForGesuch(any());
         final var noBuchhaltungBefore = gesuch.getAusbildung().getFall().getBuchhaltungs().size();
+        Mockito.when(gesuchRepositoryMock.requireById(Mockito.any())).thenReturn(gesuch);
 
         // Act
-        sapService.retryAuszahlungBuchhaltung(gesuch.getAusbildung().getFall());
+        sapService.retryAuszahlungBuchhaltung(gesuch.getId());
 
         // Assert
         assertEquals(gesuch.getAusbildung().getFall().getBuchhaltungs().size(), noBuchhaltungBefore + 1);

@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
-import ch.dvbern.stip.api.auszahlung.service.AuszahlungService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.service.IdEncryptionService;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -29,6 +28,7 @@ import ch.dvbern.stip.api.fall.repo.FallNummerSeqRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.FallDto;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPortFactory;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class FallService {
     private final IdEncryptionService idEncryptionService;
     private final FallNummerSeqRepository fallNummerSeqRepository;
     private final TenantService tenantService;
-    private final AuszahlungService auszahlungService;
+    private final PaymentProcessingPortFactory paymentProcessingPortFactory;
 
     public Fall getById(final UUID fallId) {
         return fallRepository.requireById(fallId);
@@ -88,7 +88,7 @@ public class FallService {
         final var fall = fallRepository.findFallForGesuch(gesuchId);
         fall.paymentProcessingSuspended(suspended);
         if (!suspended) {
-            auszahlungService.retryFailedAuszahlungBuchhaltung(fall);
+            paymentProcessingPortFactory.getPaymentProcessingAdapter().retryAuszahlungBuchhaltung(fall);
         }
     }
 }

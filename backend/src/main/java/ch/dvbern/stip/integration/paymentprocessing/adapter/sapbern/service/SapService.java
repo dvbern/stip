@@ -230,6 +230,7 @@ public class SapService {
             throw new IllegalStateException();
         }
         if (gesuch.getAusbildung().getFall().paymentProcessingSuspended()) {
+            gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(businessPartnerActionBuchhaltungType);
             return;
         }
 
@@ -437,15 +438,15 @@ public class SapService {
         }
     }
 
-    public void retryAuszahlungBuchhaltung(final Fall fall) {
-        final var gesuch = fall.getLatestGesuch();
-
-        retryAuszahlungBuchhaltung(gesuch.getId());
-    }
-
     @Transactional
     public BuchhaltungEntryDto retryAuszahlungBuchhaltung(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (
+            gesuch.getAusbildung().getFall().paymentProcessingSuspended()
+            || Objects.isNull(gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType())
+        ) {
+            return null;
+        }
 
         switch (gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()) {
             case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuchId);
@@ -513,13 +514,14 @@ public class SapService {
         final var fall = gesuch.getAusbildung().getFall();
 
         if (fall.paymentProcessingSuspended()) {
+            fall.setFailedBuchhaltungAuszahlungType(BuchhaltungType.AUSZAHLUNG_INITIAL);
             return;
         }
 
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
-            gesuch.setPendingSapAction(AUSZAHLUNG_INITIAL);
+            gesuch.setPendingSapAction(BuchhaltungType.AUSZAHLUNG_INITIAL);
             if (
                 Objects.nonNull(fall.getAuszahlung().getBuchhaltung())
                 && fall.getAuszahlung().getBuchhaltung().getSapStatus() == SapStatus.IN_PROGRESS
@@ -587,6 +589,7 @@ public class SapService {
         final var fall = gesuch.getAusbildung().getFall();
 
         if (fall.paymentProcessingSuspended()) {
+            fall.setFailedBuchhaltungAuszahlungType(BuchhaltungType.AUSZAHLUNG_REMAINDER);
             return;
         }
 
