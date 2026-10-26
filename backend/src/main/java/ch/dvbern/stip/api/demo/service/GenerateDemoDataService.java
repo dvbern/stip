@@ -324,9 +324,10 @@ public class GenerateDemoDataService {
         // <editor-fold desc="Lebenslauf Items..." defaultstate="collapsed">
         final Set<LebenslaufItem> lebenslaufItems = new HashSet<>();
         for (var lebenslaufItemDto : demoDataDto.getLebenslauf().getAusbildung()) {
+            final var abschluss = demoDataAbschlussRepository.requireByAbschlussName(lebenslaufItemDto.getAbschluss());
             final var lebenslauf = LebenslaufItemBuilder.lebenslaufItem()
-                .abschluss(demoDataAbschlussRepository.requireByAbschlussName(lebenslaufItemDto.getAbschluss()))
-                .berufsbefaehigendAbschluss(null)
+                .abschluss(abschluss)
+                .berufsbefaehigendAbschluss(abschluss.isBerufsbefaehigenderAbschluss())
                 .von(lebenslaufItemDto.getVon())
                 .bis(lebenslaufItemDto.getBis())
                 .taetigkeitsart(null)
