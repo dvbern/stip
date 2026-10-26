@@ -35,6 +35,7 @@ import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaet
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
+  LebenslaufItem,
   LebenslaufItemUpdate,
   Taetigkeitsart,
   WohnsitzKanton,
@@ -45,6 +46,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import {
@@ -90,6 +92,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     SharedUiInfoDialogDirective,
     SharedUiSelectSearchComponent,
     SharedUiSearchOptionLabelDirective,
+    SharedUiIfSachbearbeiterDirective,
     TranslatedPropertyPipe,
   ],
   templateUrl: './shared-feature-gesuch-form-lebenslauf-editor.component.html',
@@ -144,6 +147,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
       Validators.required,
     ]),
     ausbildungAbgeschlossen: [<boolean | undefined>undefined],
+    berufsbefaehigend: [<boolean | undefined>undefined],
   });
 
   private abschlussIdSig = toSignal(
@@ -351,7 +355,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
         id: this.itemSig().id,
         ...formValues,
         abschlussId,
-      });
+      } satisfies LebenslaufItem);
       this.form.markAsPristine();
     }
   }

@@ -18,6 +18,7 @@ import {
   AusbildungsstaetteSlim,
   LebenslaufItemUpdate,
 } from '@dv/shared/model/gesuch';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import {
   dateFromMonthYearString,
@@ -39,7 +40,12 @@ import {
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-visual',
-  imports: [CommonModule, TranslocoPipe, TranslatedPropertyPipe],
+  imports: [
+    CommonModule,
+    TranslocoPipe,
+    TranslatedPropertyPipe,
+    SharedUiIfSachbearbeiterDirective,
+  ],
   templateUrl: './two-column-timeline.component.html',
   styleUrls: ['./two-column-timeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -99,6 +105,7 @@ export class TwoColumnTimelineComponent {
           editable: true,
           wohnsitz: lebenslaufItem.wohnsitz,
           ausbildungAbgeschlossen: lebenslaufItem.ausbildungAbgeschlossen,
+          berufsbefaehigend: lebenslaufItem.berufsbefaehigend,
         }) as TimelineRawItem,
     );
 
@@ -137,7 +144,6 @@ export class TwoColumnTimelineComponent {
       },
       invalid: false,
       editable: false,
-      ausbildungAbgeschlossen: false,
     });
     this.cd.markForCheck();
   }

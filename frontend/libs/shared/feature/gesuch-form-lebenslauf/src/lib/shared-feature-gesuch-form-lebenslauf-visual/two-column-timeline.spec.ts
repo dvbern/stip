@@ -15,7 +15,6 @@ describe('TwoColumnTimeline', () => {
       bis: new Date(2017, 11),
       invalid: false,
       editable: true,
-      ausbildungAbgeschlossen: false,
     },
     JobA: {
       id: '12',
@@ -25,7 +24,6 @@ describe('TwoColumnTimeline', () => {
       bis: new Date(2016, 9),
       invalid: false,
       editable: true,
-      ausbildungAbgeschlossen: false,
     },
     JobB: {
       id: '13',
@@ -35,7 +33,6 @@ describe('TwoColumnTimeline', () => {
       bis: new Date(2017, 10),
       invalid: false,
       editable: true,
-      ausbildungAbgeschlossen: false,
     },
     JobC: {
       id: '14',
@@ -45,7 +42,6 @@ describe('TwoColumnTimeline', () => {
       bis: new Date(2017, 8),
       invalid: false,
       editable: true,
-      ausbildungAbgeschlossen: false,
     },
     JobD: {
       id: '15',
@@ -55,7 +51,6 @@ describe('TwoColumnTimeline', () => {
       bis: new Date(2017, 11),
       invalid: false,
       editable: true,
-      ausbildungAbgeschlossen: false,
     },
   } satisfies Record<string, TimelineRawItem>;
   const ausbildungItem: TimelineRawItem = {
@@ -66,7 +61,6 @@ describe('TwoColumnTimeline', () => {
     bis: new Date(2021, 11),
     invalid: false,
     editable: false,
-    ausbildungAbgeschlossen: false,
   };
   const [dummyItems, dummyAusbildung] = createDummyItems();
 
@@ -131,7 +125,6 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 1,
         positionStartCol: 2,
         positionColSpan: 1,
-        ausbildungAbgeschlossen: false,
         children: [testItems.JobA],
       },
     );
@@ -145,7 +138,6 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 5,
         positionStartCol: 1,
         positionColSpan: 1,
-        ausbildungAbgeschlossen: false,
         children: [testItems.EFZ],
       },
     );
@@ -159,7 +151,6 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 2,
         positionStartCol: 2,
         positionColSpan: 1,
-        ausbildungAbgeschlossen: false,
         children: [testItems.JobB, testItems.JobC],
       },
     );
@@ -173,7 +164,6 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 2,
         positionStartCol: 2,
         positionColSpan: 1,
-        ausbildungAbgeschlossen: false,
         children: [testItems.JobD],
       },
     );
@@ -186,7 +176,6 @@ describe('TwoColumnTimeline', () => {
         positionRowSpan: 1,
         positionStartCol: 1,
         positionColSpan: 1,
-        ausbildungAbgeschlossen: false,
         children: [ausbildungItem],
       },
     ];
