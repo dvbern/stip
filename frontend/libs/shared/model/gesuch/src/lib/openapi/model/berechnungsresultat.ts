@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BerechnungsStatus } from './berechnungsStatus';
 import { TranchenBerechnungsresultat } from './tranchenBerechnungsresultat';
 
 /**
@@ -32,6 +33,7 @@ export interface Berechnungsresultat {
      * Die Summe nach der Kürzung der verspäteten Eingabe
      */
     totalNachKuerzungNachEinreichefrist?: number;
+    status?: BerechnungsStatus;
     /**
      * Die Anzahl Monate der verspäteten Eingabe
      */
@@ -65,4 +67,6 @@ export interface Berechnungsresultat {
      */
     monateMitDarlehen: number;
 }
+
+
 

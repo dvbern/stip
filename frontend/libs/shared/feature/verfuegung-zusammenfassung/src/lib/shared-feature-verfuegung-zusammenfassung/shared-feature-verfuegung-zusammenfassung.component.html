@@ -42,7 +42,7 @@
               </div>
             </div>
 
-            @if (hasKuerzungenNachEinreichefrist) {
+            @if (hasKuerzungenNachEinreichefrist && zusammenfassung.berechnungsStatus !== 'DEADLINE_EXCEEDED') {
               <div class="tw:flex tw:justify-between tw:items-center tw:text-sm">
                 <div class="tw:flex tw:items-center">
                   {{ t('shared.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist') }}
@@ -178,16 +178,25 @@
             </div>
           </div>
 
-          @if (zusammenfassung.berechnungStipendium < (zusammenfassung.stammdaten?.stipLimiteMinimalstipendium ?? 0)) {
-            <div class="tw:flex tw:justify-between tw:mb-4">
-              <div>
-                {{
-                  t('shared.verfuegung.zusammenfassung.limit', {
-                    limit: zusammenfassung.stammdaten?.stipLimiteMinimalstipendium,
-                  })
-                }}
+          @switch (zusammenfassung.berechnungsStatus) {
+            @case ('STANDARD') {
+              @if (
+                zusammenfassung.berechnungStipendium < (zusammenfassung.stammdaten?.stipLimiteMinimalstipendium ?? 0)
+              ) {
+                <div class="tw:flex tw:justify-between tw:mb-4">
+                  {{
+                    t('shared.verfuegung.zusammenfassung.limit', {
+                      limit: zusammenfassung.stammdaten?.stipLimiteMinimalstipendium,
+                    })
+                  }}
+                </div>
+              }
+            }
+            @case ('DEADLINE_EXCEEDED') {
+              <div class="tw:flex tw:justify-between tw:mb-4">
+                {{ t(`shared.verfuegung.zusammenfassung.status.${zusammenfassung.berechnungsStatus}`) }}
               </div>
-            </div>
+            }
           }
 
           @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {

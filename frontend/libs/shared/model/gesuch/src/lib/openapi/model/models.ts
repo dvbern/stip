@@ -41,6 +41,7 @@ export * from './benutzerUpdate';
 export * from './benutzereinstellungen';
 export * from './benutzereinstellungenUpdate';
 export * from './berechnungsStammdaten';
+export * from './berechnungsStatus';
 export * from './berechnungsresultat';
 export * from './beschwerdeEntscheid';
 export * from './beschwerdeEntscheidCreate';
