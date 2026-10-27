@@ -274,6 +274,11 @@
                   {{ t(`sachbearbeitung-app.gesuch.status.contract.${lastApply.gesuchStatus}`) }}
                 </dd>
               </dl>
+              @if (lastApply.message) {
+                <span class="tw:rounded tw:bg-dv-warning tw:text-black tw:p-1 tw:overflow-scroll tw:whitespace-pre">{{
+                  lastApply.message
+                }}</span>
+              }
               <div
                 class="tw:mb-3"
                 [innerHTML]="

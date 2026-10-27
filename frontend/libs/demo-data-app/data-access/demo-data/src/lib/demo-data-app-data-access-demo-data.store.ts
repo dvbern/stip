@@ -106,6 +106,9 @@ export class DemoDataStore extends signalStore(
     return {
       gesuchStatus: lastDemoDataRun.gesuchStatus,
       allValid: isResultValid(valid),
+      message: Array.from(
+        new Set(lastDemoDataRun.berechnungResultat.message?.split('\n')),
+      ).join('\n'),
       valid,
       values: {
         ist: istValues,
