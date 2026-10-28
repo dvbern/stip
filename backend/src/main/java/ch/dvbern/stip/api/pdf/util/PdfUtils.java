@@ -505,7 +505,6 @@ public class PdfUtils {
         headerTable.addCell(sachbearbeiter);
 
         final var piaAddress = gesuchFormular.getPersonInAusbildung().getAdresse();
-        final var hausnummer = piaAddress.getHausnummer();
         if (!isDeckblatt && elternteilOptional.isEmpty()) {
             final Cell receiver = PdfUtils.createCell(
                 pdfFont,
@@ -513,13 +512,13 @@ public class PdfUtils {
                 1,
                 1,
                 gesuchFormular.getPersonInAusbildung().getFullName(),
-                Objects.isNull(hausnummer) || hausnummer.isBlank()
+                Objects.isNull(piaAddress.getHausnummer()) || piaAddress.getHausnummer().isBlank()
                     ? piaAddress.getStrasse()
-                    : "%s %s".formatted(piaAddress.getStrasse(), hausnummer),
+                    : "%s %s".formatted(piaAddress.getStrasse(), piaAddress.getHausnummer()),
                 String.format(
                     "%s %s",
-                    gesuchFormular.getPersonInAusbildung().getAdresse().getPlz(),
-                    gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
+                    piaAddress.getPlz(),
+                    piaAddress.getOrt()
                 )
             ).setPaddingTop(SPACING_MEDIUM);
             headerTable.addCell(receiver);
@@ -527,6 +526,7 @@ public class PdfUtils {
 
         if (isDeckblatt && elternteilOptional.isEmpty()) {
             final var sozialdienst = gesuch.getAusbildung().getFall().getCurrentDelegierung().getSozialdienst();
+            final var sozialdienstAddress = sozialdienst.getZahlungsverbindung().getAdresse();
             final Cell receiver = PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_MEDIUM,
@@ -537,12 +537,12 @@ public class PdfUtils {
                     sozialdienst.getZahlungsverbindung().getVorname(),
                     sozialdienst.getZahlungsverbindung().getNachname()
                 ),
-                Objects.isNull(hausnummer) || hausnummer.isBlank()
-                    ? piaAddress.getStrasse()
-                    : "%s %s".formatted(piaAddress.getStrasse(), hausnummer),
+                Objects.isNull(sozialdienstAddress.getHausnummer()) || sozialdienstAddress.getHausnummer().isBlank()
+                    ? sozialdienstAddress.getStrasse()
+                    : "%s %s".formatted(sozialdienstAddress.getStrasse(), sozialdienstAddress.getHausnummer()),
                 "%s %s".formatted(
-                    sozialdienst.getZahlungsverbindung().getAdresse().getPlz(),
-                    sozialdienst.getZahlungsverbindung().getAdresse().getOrt()
+                    sozialdienstAddress.getPlz(),
+                    sozialdienstAddress.getOrt()
                 )
             ).setPaddingTop(SPACING_MEDIUM);
             headerTable.addCell(receiver);
