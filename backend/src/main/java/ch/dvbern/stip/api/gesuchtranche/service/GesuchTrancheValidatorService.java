@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
 import ch.dvbern.stip.api.gesuchformular.validation.AenderungGesuchDokumentsAcceptedValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidationGroup;
@@ -74,6 +75,7 @@ public class GesuchTrancheValidatorService {
                 GesuchEinreichenValidationGroup.class,
                 GesuchNachInBearbeitungSBValidationGroup.class,
                 GesuchNachInFreigabeValidationGroup.class,
+                GesuchDokumentsAcceptedValidationGroup.class,
                 AenderungGesuchDokumentsAcceptedValidationGroup.class
             )
         );
