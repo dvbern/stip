@@ -243,6 +243,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       const gesuchTrancheId = this.gesuchTrancheIdSig();
       this.allDocumentsAcceptedChangedSig();
       if (gesuchTrancheId) {
+        this.einreichenStore.validateSteps$({ gesuchTrancheId });
         this.einreichenStore.validateEinreichen$({ gesuchTrancheId });
         this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
       }

@@ -160,15 +160,6 @@ export class SharedPatternGesuchStepNavComponent {
     }, []);
   });
 
-  private mergeGroupStatus(
-    groupStatus: StepState | undefined,
-    stepStatus: StepState | undefined,
-  ): StepState | undefined {
-    return (['INVALID', 'WARNING', 'VALID'] satisfies StepState[]).find(
-      (status) => [groupStatus, stepStatus].includes(status),
-    );
-  }
-
   constructor() {
     effect(() => {
       const grouped = this.groupedStepsViewSig();
@@ -181,5 +172,14 @@ export class SharedPatternGesuchStepNavComponent {
         }
       }
     });
+  }
+
+  private mergeGroupStatus(
+    groupStatus: StepState | undefined,
+    stepStatus: StepState | undefined,
+  ): StepState | undefined {
+    return (['INVALID', 'WARNING', 'VALID'] satisfies StepState[]).find(
+      (status) => [groupStatus, stepStatus].includes(status),
+    );
   }
 }
