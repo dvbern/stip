@@ -65,12 +65,16 @@
       </dt>
       <dd class="tw:font-normal">
         <div>
-          <span>
-            {{ zv.vorname }}
-          </span>
-          <span>
-            {{ zv.nachname }}
-          </span>
+          @if (zv.institution) {
+            {{ zv.institution }}
+          } @else {
+            <span>
+              {{ zv.vorname }}
+            </span>
+            <span>
+              {{ zv.nachname }}
+            </span>
+          }
         </div>
         <div>{{ zv.adresse.strasse }} {{ zv.adresse.hausnummer }}</div>
         <div>{{ zv.adresse.plz }} {{ zv.adresse.ort }}</div>
