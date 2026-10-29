@@ -160,7 +160,6 @@ export class TwoColumnTimelineComponent {
       .data?.find((abschluss) => abschluss.id === lebenslaufItem.abschlussId);
 
     if (!abschluss) {
-      console.warn(`Abschluss with id ${lebenslaufItem.abschlussId} not found`);
       return { type: 'TEXT', title: '' };
     }
 

@@ -18,7 +18,6 @@ import { LEBENSLAUF } from '@dv/shared/model/gesuch-form';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   dateFromMonthYearString,
@@ -39,7 +38,6 @@ const MIN_EDUCATION_AGE = 16;
     SharedFeatureGesuchFormLebenslaufEditorComponent,
     TranslocoPipe,
     TwoColumnTimelineComponent,
-    SharedUiRdIsPendingPipe,
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
@@ -101,6 +99,7 @@ export class SharedFeatureGesuchFormLebenslaufComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormLebenslauf.init());
     this.ausbildungsstatteStore.loadAusbildungsstaetten$();
+    this.ausbildungsstatteStore.loadAbschluesse$();
   }
 
   public handleAddAusbildung(addCommand: TimelineAddCommand | undefined): void {
