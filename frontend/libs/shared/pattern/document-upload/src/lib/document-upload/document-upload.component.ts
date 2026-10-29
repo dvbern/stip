@@ -122,7 +122,6 @@ export class SharedPatternDocumentUploadComponent {
   @HostBinding('class') klass = 'tw:block tw:self-start tw:relative tw:h-14';
 
   constructor() {
-    console.log('Document upload component initialized');
     // Load the gesuch step validity after the state of uploaded documents changes
     toObservable(this.uploadStore.documentChangedSig)
       .pipe(

@@ -180,15 +180,15 @@ export class TwoColumnTimeline {
       if (current.length) {
         // endDate = das früheste Enddatum aus current
         let endDate = TwoColumnTimeline.getEarliestEnddate(current);
-        let ealiestStartDateInInput = inputSorted.length
-          ? TwoColumnTimeline.getEarliestStartdate(inputSorted)
-          : undefined;
+        let ealiestStartDateInInput =
+          TwoColumnTimeline.getEarliestStartdate(inputSorted);
         let canMoveSomethingToOutput =
           current.length &&
+          endDate &&
           (!ealiestStartDateInInput ||
             isAfter(ealiestStartDateInInput, endDate));
 
-        while (canMoveSomethingToOutput) {
+        while (endDate && canMoveSomethingToOutput) {
           // - die Items aus current mit endDate=endDate bekommen gehen aus current raus in die Outputspalten
           for (const each of [...current]) {
             if (isEqual(each.bis, endDate)) {
@@ -198,8 +198,8 @@ export class TwoColumnTimeline {
           }
 
           // Abstand einfuegen, wenn das letzte Enddatum nicht direkt vorher war
-          if (output.length && current.length) {
-            const latestOutputEnddate = this.getLatestEnddate(output);
+          const latestOutputEnddate = this.getLatestEnddate(output);
+          if (latestOutputEnddate && current.length) {
             const expectedNextStart = addMonths(latestOutputEnddate, 1);
             const gaplessNextBlockFound =
               inputSorted.length && isEqual(startDate, expectedNextStart);
@@ -217,13 +217,13 @@ export class TwoColumnTimeline {
           // endDate = das früheste Enddatum aus current
           if (current.length) {
             endDate = TwoColumnTimeline.getEarliestEnddate(current);
-            ealiestStartDateInInput = inputSorted.length
-              ? TwoColumnTimeline.getEarliestStartdate(inputSorted)
-              : undefined;
+            ealiestStartDateInInput =
+              TwoColumnTimeline.getEarliestStartdate(inputSorted);
           }
 
           canMoveSomethingToOutput =
             current.length &&
+            endDate &&
             (!ealiestStartDateInInput ||
               isAfter(ealiestStartDateInInput, endDate));
         }
@@ -231,8 +231,8 @@ export class TwoColumnTimeline {
 
       //- wenn current leer, Input nicht leer, und kein Item in Input vorhanden mit Startdatum=endDate: Gap erstellen
       // (von-bis)
-      if (!current.length && inputSorted.length) {
-        const latestOutputEnddate = this.getLatestEnddate(output);
+      const latestOutputEnddate = this.getLatestEnddate(output);
+      if (!current.length && inputSorted.length && latestOutputEnddate) {
         const expectedNextStart = addMonths(latestOutputEnddate, 1);
         const gaplessNextBlockFound =
           inputSorted.length && isEqual(inputSorted[0].von, expectedNextStart);
@@ -253,8 +253,9 @@ export class TwoColumnTimeline {
     // nach Startdatum sortieren: dadurch kommen die spaeteren Boxen ueber die frueheren
     output.sort((a, b) => (isBefore(a.von, b.von) ? -1 : 1));
 
-    const endDate = addMonths(this.getLatestEnddate(output), 1);
-    if (isBefore(endDate, plannedAusbildung.von)) {
+    const latestEnddate = this.getLatestEnddate(output);
+    const endDate = latestEnddate && addMonths(latestEnddate, 1);
+    if (endDate && isBefore(endDate, plannedAusbildung.von)) {
       output.push({
         col: 'BOTH',
         von: endDate,
@@ -354,25 +355,27 @@ export class TwoColumnTimeline {
     return output;
   }
 
-  static getEarliestEnddate(list: { bis: Date }[]) {
-    const listSortedByEnddate = [...list].sort((a, b) =>
-      isBefore(a.bis, b.bis) ? -1 : 1,
+  static getEarliestEnddate(list: { bis: Date }[]): Date | undefined {
+    return list.reduce<Date | undefined>(
+      (earliest, { bis }) =>
+        !earliest || isBefore(bis, earliest) ? bis : earliest,
+      undefined,
     );
-    return listSortedByEnddate[0].bis;
   }
 
-  static getLatestEnddate(list: { bis: Date }[]) {
-    const listSortedByEnddate = [...list].sort((a, b) =>
-      isBefore(a.bis, b.bis) ? 1 : -1,
+  static getLatestEnddate(list: { bis: Date }[]): Date | undefined {
+    return list.reduce<Date | undefined>(
+      (latest, { bis }) => (!latest || isAfter(bis, latest) ? bis : latest),
+      undefined,
     );
-    return listSortedByEnddate[0].bis;
   }
 
-  static getEarliestStartdate(list: { von: Date }[]) {
-    const listSortedByEnddate = [...list].sort((a, b) =>
-      isBefore(a.von, b.von) ? -1 : 1,
+  static getEarliestStartdate(list: { von: Date }[]): Date | undefined {
+    return list.reduce<Date | undefined>(
+      (earliest, { von }) =>
+        !earliest || isBefore(von, earliest) ? von : earliest,
+      undefined,
     );
-    return listSortedByEnddate[0].von;
   }
 
   static selectCol(
