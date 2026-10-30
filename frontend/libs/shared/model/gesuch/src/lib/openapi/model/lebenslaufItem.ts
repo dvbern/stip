@@ -38,6 +38,7 @@ export interface LebenslaufItem {
      * Falls es Überschneidungen gibt mit dem Ausbildung Beginn
      */
     invalid?: boolean;
+    berufsbefaehigend?: boolean;
 }
 
 

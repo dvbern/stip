@@ -90,6 +90,42 @@ class LebenslaufItemMapperTest {
         Assertions.assertEquals(ABSCHLUSS_BEZEICHNUNG_DE, lebenslaufItem.getAbschluss().getBezeichnungDe());
     }
 
+    @Test
+    void testLebenslaufMapperMapsBerufsbefaehigendAbschluss() {
+        final var lebenslaufItemUpdateDto = prepareData();
+        lebenslaufItemUpdateDto.setAbschlussId(UUID.randomUUID());
+        lebenslaufItemUpdateDto.setBerufsbefaehigend(true);
+
+        final var lebenslaufItem = lebenslaufItemMapper.toEntity(lebenslaufItemUpdateDto);
+
+        Assertions.assertEquals(Boolean.TRUE, lebenslaufItem.getBerufsbefaehigendAbschluss());
+    }
+
+    @Test
+    void testLebenslaufMapperDoesNotMapNullBerufsbefaehigendAbschlussWithAbschluss() {
+        final var lebenslaufItemUpdateDto = prepareData();
+        lebenslaufItemUpdateDto.setAbschlussId(UUID.randomUUID());
+        final var lebenslaufItem = new LebenslaufItem();
+        lebenslaufItem.setAbschluss(abschlussToMap);
+        lebenslaufItem.setBerufsbefaehigendAbschluss(true);
+
+        lebenslaufItemMapper.partialUpdate(lebenslaufItemUpdateDto, lebenslaufItem);
+
+        Assertions.assertEquals(Boolean.TRUE, lebenslaufItem.getBerufsbefaehigendAbschluss());
+    }
+
+    @Test
+    void testLebenslaufMapperClearsBerufsbefaehigendAbschlussWithoutAbschluss() {
+        final var lebenslaufItemUpdateDto = prepareData();
+        lebenslaufItemUpdateDto.setBerufsbefaehigend(true);
+        final var lebenslaufItem = new LebenslaufItem();
+        lebenslaufItem.setBerufsbefaehigendAbschluss(true);
+
+        lebenslaufItemMapper.partialUpdate(lebenslaufItemUpdateDto, lebenslaufItem);
+
+        Assertions.assertNull(lebenslaufItem.getBerufsbefaehigendAbschluss());
+    }
+
     private LebenslaufItemUpdateDto prepareData() {
         var lebenslaufItem = new LebenslaufItemUpdateDto();
         lebenslaufItem.setBis("02.2022");

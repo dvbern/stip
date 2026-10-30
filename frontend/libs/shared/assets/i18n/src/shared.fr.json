@@ -1091,6 +1091,8 @@
   "shared.form.lebenslauf.item.dateStart": "De",
   "shared.form.lebenslauf.item.dateEnd": "À",
   "shared.form.lebenslauf.item.wohnsitz": "Domicile",
+  "shared.form.lebenslauf.item.berufsbefaehigend": "Diplôme donnant accès à une profession",
+  "shared.form.lebenslauf.item.nicht-berufsbefaehigend": "Diplôme ne donnant pas accès à une profession",
   "shared.form.lebenslauf.item.ausbildungAbgeschlossen": "Formation terminée?",
   "shared.form.lebenslauf.item.abgeschlossen": "Formation terminé",
   "shared.form.lebenslauf.item.nicht-abgeschlossen": "Formation pas terminé",

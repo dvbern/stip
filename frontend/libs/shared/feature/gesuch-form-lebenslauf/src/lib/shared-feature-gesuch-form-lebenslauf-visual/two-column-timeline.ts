@@ -23,7 +23,8 @@ export interface TimelineRawItem {
   invalid: boolean;
   editable: boolean;
   wohnsitz?: string;
-  ausbildungAbgeschlossen: boolean;
+  ausbildungAbgeschlossen?: boolean;
+  berufsbefaehigend?: boolean;
 }
 export interface TimelineMergedRawItem extends TimelineRawItem {
   children: TimelineRawItem[];
@@ -52,7 +53,8 @@ export interface TimelineBusyBlock extends TimelineBlock {
   invalid: boolean;
   editable: boolean;
   wohnsitz?: string;
-  ausbildungAbgeschlossen: boolean;
+  ausbildungAbgeschlossen?: boolean;
+  berufsbefaehigend?: boolean;
   children?: TimelineBusyBlockChild[];
 }
 
@@ -63,7 +65,8 @@ export interface TimelineBusyBlockChild {
   bis: Date;
   editable: boolean;
   wohnsitz?: string;
-  ausbildungAbgeschlossen: boolean;
+  ausbildungAbgeschlossen?: boolean;
+  berufsbefaehigend?: boolean;
 }
 
 export interface TimelineGapBlock extends TimelineBlock {

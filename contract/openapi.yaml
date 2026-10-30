@@ -6452,7 +6452,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /abschluss/slim:
+  /abschluss/slim/gs:
     get:
       tags:
         - Ausbildungsstaette
@@ -6471,7 +6471,31 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllAbschluessForAuswahl
+      operationId: getAllAbschluessForAuswahlGs
+      summary: Returns all AbschlussSlim
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /abschluss/slim/sb:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AbschlussSlim'
+          description: Returns all AbschlussSlim
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllAbschluessForAuswahlSb
       summary: Returns all AbschlussSlim
       security:
         - auth-uat-bern: []
@@ -11426,6 +11450,8 @@ components:
         invalid:
           description: Falls es Überschneidungen gibt mit dem Ausbildung Beginn
           type: boolean
+        berufsbefaehigend:
+          type: boolean
     KindUpdate:
       title: Root Type for Kind
       required:
@@ -12236,6 +12262,7 @@ components:
         - bezeichnungFr
         - ausbildungskategorie
         - bildungsrichtung
+        - berufsbefaehigend
         - aktiv
       properties:
         id:
@@ -12248,6 +12275,8 @@ components:
           $ref: '#/components/schemas/Ausbildungskategorie'
         bildungsrichtung:
           $ref: '#/components/schemas/Bildungsrichtung'
+        berufsbefaehigend:
+          type: boolean
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:

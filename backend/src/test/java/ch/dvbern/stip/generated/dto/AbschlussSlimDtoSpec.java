@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AbschlussSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   AbschlussSlimDtoSpec.JSON_PROPERTY_AUSBILDUNGSKATEGORIE,
   AbschlussSlimDtoSpec.JSON_PROPERTY_BILDUNGSRICHTUNG,
+  AbschlussSlimDtoSpec.JSON_PROPERTY_BERUFSBEFAEHIGEND,
   AbschlussSlimDtoSpec.JSON_PROPERTY_ZUSATZFRAGE,
   AbschlussSlimDtoSpec.JSON_PROPERTY_AKTIV
 })
@@ -61,6 +62,10 @@ public class AbschlussSlimDtoSpec {
   public static final String JSON_PROPERTY_BILDUNGSRICHTUNG = "bildungsrichtung";
   @jakarta.annotation.Nonnull
   private BildungsrichtungDtoSpec bildungsrichtung;
+
+  public static final String JSON_PROPERTY_BERUFSBEFAEHIGEND = "berufsbefaehigend";
+  @jakarta.annotation.Nonnull
+  private Boolean berufsbefaehigend;
 
   public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
   @jakarta.annotation.Nullable
@@ -198,6 +203,31 @@ public class AbschlussSlimDtoSpec {
     this.bildungsrichtung = bildungsrichtung;
   }
 
+  public AbschlussSlimDtoSpec berufsbefaehigend(@jakarta.annotation.Nonnull Boolean berufsbefaehigend) {
+    
+    this.berufsbefaehigend = berufsbefaehigend;
+    return this;
+  }
+
+  /**
+   * Get berufsbefaehigend
+   * @return berufsbefaehigend
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_BERUFSBEFAEHIGEND, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getBerufsbefaehigend() {
+    return berufsbefaehigend;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_BERUFSBEFAEHIGEND, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBerufsbefaehigend(@jakarta.annotation.Nonnull Boolean berufsbefaehigend) {
+    this.berufsbefaehigend = berufsbefaehigend;
+  }
+
   public AbschlussSlimDtoSpec zusatzfrage(@jakarta.annotation.Nullable AbschlussZusatzfrageDtoSpec zusatzfrage) {
     
     this.zusatzfrage = zusatzfrage;
@@ -263,13 +293,14 @@ public class AbschlussSlimDtoSpec {
         Objects.equals(this.bezeichnungFr, abschlussSlim.bezeichnungFr) &&
         Objects.equals(this.ausbildungskategorie, abschlussSlim.ausbildungskategorie) &&
         Objects.equals(this.bildungsrichtung, abschlussSlim.bildungsrichtung) &&
+        Objects.equals(this.berufsbefaehigend, abschlussSlim.berufsbefaehigend) &&
         Objects.equals(this.zusatzfrage, abschlussSlim.zusatzfrage) &&
         Objects.equals(this.aktiv, abschlussSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, bildungsrichtung, zusatzfrage, aktiv);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, bildungsrichtung, berufsbefaehigend, zusatzfrage, aktiv);
   }
 
   @Override
@@ -281,6 +312,7 @@ public class AbschlussSlimDtoSpec {
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
     sb.append("    bildungsrichtung: ").append(toIndentedString(bildungsrichtung)).append("\n");
+    sb.append("    berufsbefaehigend: ").append(toIndentedString(berufsbefaehigend)).append("\n");
     sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");

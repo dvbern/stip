@@ -116,9 +116,16 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
 
     @Override
     @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
-    public List<AbschlussSlimDto> getAllAbschluessForAuswahl() {
+    public List<AbschlussSlimDto> getAllAbschluessForAuswahlGs() {
         ausbildungsstaetteAuthorizer.canRead();
-        return abschlussService.getAllAbschlussForAuswahl();
+        return abschlussService.getAllAbschlussForAuswahlGs();
+    }
+
+    @Override
+    @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
+    public List<AbschlussSlimDto> getAllAbschluessForAuswahlSb() {
+        ausbildungsstaetteAuthorizer.canRead();
+        return abschlussService.getAllAbschlussForAuswahlSb();
     }
 
     @Override

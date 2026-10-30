@@ -8,6 +8,7 @@ import {
   TEST_ABSCHLUESSE,
   getTranslocoModule,
   provideSharedPatternVitestTestAusbildungstaetten,
+  provideSharedPatternVitestTestSetup,
 } from '@dv/shared/pattern/vitest-test-setup';
 
 import { TwoColumnTimelineComponent } from './two-column-timeline.component';
@@ -28,6 +29,7 @@ async function setup(
     imports: [getTranslocoModule(translations)],
     providers: [
       provideMockStore({ initialState: { language: { language: 'de' } } }),
+      provideSharedPatternVitestTestSetup(),
       provideSharedPatternVitestTestAusbildungstaetten(),
       AusbildungsstaetteStore,
     ],

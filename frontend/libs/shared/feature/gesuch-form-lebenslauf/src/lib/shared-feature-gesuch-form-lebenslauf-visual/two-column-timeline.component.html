@@ -69,24 +69,55 @@
                       <small class="tw:text-sm tw:text-dv-gray-dark tw:block">
                         {{ printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis) }}
                       </small>
-                      @if (child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
-                        <small class="tw:text-sm tw:text-dv-gray-dark tw:flex tw:items-center tw:mt-2 tw:gap-1">
-                          <i
-                            [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | transloco"
-                            class="material-symbols-rounded fs-6"
-                            >check_box</i
-                          >
-                          <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | transloco }}</span>
-                        </small>
-                      } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
-                        <small class="tw:text-sm tw:text-dv-gray-dark tw:flex tw:items-center tw:mt-2 tw:gap-1">
-                          <i
-                            [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | transloco"
-                            class="material-symbols-rounded fs-6"
-                            >check_box_outline_blank</i
-                          >
-                          <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | transloco }}</span>
-                        </small>
+                      @if (item.col === 'LEFT' && !last) {
+                        @if (child.ausbildungAbgeschlossen) {
+                          <small class="tw:text-sm tw:text-dv-gray-dark tw:flex tw:items-center tw:mt-2 tw:gap-1">
+                            <i
+                              [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | transloco"
+                              class="material-symbols-rounded"
+                              >check_box</i
+                            >
+                            <span aria-hidden="true">{{
+                              'shared.form.lebenslauf.item.abgeschlossen' | transloco
+                            }}</span>
+                          </small>
+                        } @else {
+                          <small class="tw:text-sm tw:text-dv-gray-dark tw:flex tw:items-center tw:mt-2 tw:gap-1">
+                            <i
+                              [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | transloco"
+                              class="material-symbols-rounded"
+                              >check_box_outline_blank</i
+                            >
+                            <span aria-hidden="true">{{
+                              'shared.form.lebenslauf.item.abgeschlossen' | transloco
+                            }}</span>
+                          </small>
+                        }
+                        <ng-container *dvIfSachbearbeiter>
+                          @if (child.berufsbefaehigend) {
+                            <small class="tw:text-sm tw:text-dv-gray-dark tw:flex tw:items-center tw:mt-2 tw:gap-1">
+                              <i
+                                [attr.aria-label]="'shared.form.lebenslauf.item.berufsbefaehigend' | transloco"
+                                class="material-symbols-rounded"
+                                >check_box</i
+                              >
+                              <span aria-hidden="true">{{
+                                'shared.form.lebenslauf.item.berufsbefaehigend' | transloco
+                              }}</span>
+                            </small>
+                          } @else {
+                            <small class="tw:text-sm tw:text-dv-gray-dark tw:flex tw:items-center tw:mt-2 tw:gap-1">
+                              <i
+                                [attr.aria-label]="'shared.form.lebenslauf.item.nicht-berufsbefaehigend' | transloco"
+                                class="material-symbols-rounded"
+                                >check_box_outline_blank</i
+                              >
+                              <span aria-hidden="true">{{
+                                'shared.form.lebenslauf.item.berufsbefaehigend' | transloco
+                              }}</span>
+                            </small>
+                          }
+                        </ng-container>
                       }
                     </ng-template>
                     @if (child.editable) {

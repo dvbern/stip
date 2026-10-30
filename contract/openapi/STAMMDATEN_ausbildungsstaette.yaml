@@ -242,7 +242,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getAllAusbildungsstaetteForAuswahl
       summary: Returns all AusbildungsstaetteSlim
-  /abschluss/slim:
+  /abschluss/slim/gs:
     get:
       tags:
         - Ausbildungsstaette
@@ -261,7 +261,28 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getAllAbschluessForAuswahl
+      operationId: getAllAbschluessForAuswahlGs
+      summary: Returns all AbschlussSlim
+  /abschluss/slim/sb:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AbschlussSlim'
+          description: Returns all AbschlussSlim
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllAbschluessForAuswahlSb
       summary: Returns all AbschlussSlim
   /ausbildungsgang/slim:
     get:
@@ -627,6 +648,7 @@ components:
         - bezeichnungFr
         - ausbildungskategorie
         - bildungsrichtung
+        - berufsbefaehigend
         - aktiv
       properties:
         id:
@@ -639,6 +661,8 @@ components:
           $ref: './components/common.yaml#/Ausbildungskategorie'
         bildungsrichtung:
           $ref: './components/common.yaml#/Bildungsrichtung'
+        berufsbefaehigend:
+          type: boolean
         zusatzfrage:
           $ref: './components/common.yaml#/AbschlussZusatzfrage'
         aktiv:

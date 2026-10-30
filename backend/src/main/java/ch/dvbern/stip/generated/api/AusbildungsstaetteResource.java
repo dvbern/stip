@@ -52,9 +52,14 @@ public interface AusbildungsstaetteResource {
     AusbildungsstaetteDto createAusbildungsstaette(@Valid @NotNull AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto);
 
     @GET
-    @Path("/abschluss/slim")
+    @Path("/abschluss/slim/gs")
     @Produces({ "application/json", "text/plain" })
-    List<AbschlussSlimDto> getAllAbschluessForAuswahl();
+    List<AbschlussSlimDto> getAllAbschluessForAuswahlGs();
+
+    @GET
+    @Path("/abschluss/slim/sb")
+    @Produces({ "application/json", "text/plain" })
+    List<AbschlussSlimDto> getAllAbschluessForAuswahlSb();
 
     @GET
     @Path("/abschluss")

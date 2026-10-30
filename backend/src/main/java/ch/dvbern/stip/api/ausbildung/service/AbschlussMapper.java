@@ -52,7 +52,11 @@ public abstract class AbschlussMapper {
         };
     }
 
-    abstract AbschlussSlimDto toSlimDto(Abschluss abschluss);
+    @Mapping(target = "berufsbefaehigend", ignore = true)
+    abstract AbschlussSlimDto toSlimDtoGs(Abschluss abschluss);
+
+    @Mapping(source = "berufsbefaehigenderAbschluss", target = "berufsbefaehigend")
+    abstract AbschlussSlimDto toSlimDtoSb(Abschluss abschluss);
 
     abstract void partialUpdate(
         RenameAbschlussDto renameAbschlussDto,

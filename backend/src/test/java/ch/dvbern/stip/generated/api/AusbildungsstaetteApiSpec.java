@@ -81,7 +81,8 @@ public class AusbildungsstaetteApiSpec {
                 createAbschlussBrueckenangebot(),
                 createAusbildungsgang(),
                 createAusbildungsstaette(),
-                getAllAbschluessForAuswahl(),
+                getAllAbschluessForAuswahlGs(),
+                getAllAbschluessForAuswahlSb(),
                 getAllAbschlussForUebersicht(),
                 getAllAusbildungsgaengeForAuswahl(),
                 getAllAusbildungsgangForUebersicht(),
@@ -107,8 +108,12 @@ public class AusbildungsstaetteApiSpec {
         return new CreateAusbildungsstaetteOper(createReqSpec());
     }
 
-    public GetAllAbschluessForAuswahlOper getAllAbschluessForAuswahl() {
-        return new GetAllAbschluessForAuswahlOper(createReqSpec());
+    public GetAllAbschluessForAuswahlGsOper getAllAbschluessForAuswahlGs() {
+        return new GetAllAbschluessForAuswahlGsOper(createReqSpec());
+    }
+
+    public GetAllAbschluessForAuswahlSbOper getAllAbschluessForAuswahlSb() {
+        return new GetAllAbschluessForAuswahlSbOper(createReqSpec());
     }
 
     public GetAllAbschlussForUebersichtOper getAllAbschlussForUebersicht() {
@@ -383,22 +388,22 @@ public class AusbildungsstaetteApiSpec {
      *
      * return List&lt;AbschlussSlimDtoSpec&gt;
      */
-    public static class GetAllAbschluessForAuswahlOper implements Oper {
+    public static class GetAllAbschluessForAuswahlGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/abschluss/slim";
+        public static final String REQ_URI = "/abschluss/slim/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetAllAbschluessForAuswahlOper(RequestSpecBuilder reqSpec) {
+        public GetAllAbschluessForAuswahlGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json,text/plain");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /abschluss/slim
+         * GET /abschluss/slim/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -409,7 +414,7 @@ public class AusbildungsstaetteApiSpec {
         }
 
         /**
-         * GET /abschluss/slim
+         * GET /abschluss/slim/gs
          * @param handler handler
          * @return List&lt;AbschlussSlimDtoSpec&gt;
          */
@@ -423,7 +428,7 @@ public class AusbildungsstaetteApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetAllAbschluessForAuswahlOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetAllAbschluessForAuswahlGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -433,7 +438,68 @@ public class AusbildungsstaetteApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetAllAbschluessForAuswahlOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetAllAbschluessForAuswahlGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns all AbschlussSlim
+     * 
+     *
+     * return List&lt;AbschlussSlimDtoSpec&gt;
+     */
+    public static class GetAllAbschluessForAuswahlSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/abschluss/slim/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllAbschluessForAuswahlSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json,text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /abschluss/slim/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /abschluss/slim/sb
+         * @param handler handler
+         * @return List&lt;AbschlussSlimDtoSpec&gt;
+         */
+        public List<AbschlussSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<AbschlussSlimDtoSpec>> type = new TypeRef<List<AbschlussSlimDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllAbschluessForAuswahlSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllAbschluessForAuswahlSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

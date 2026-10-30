@@ -22,7 +22,6 @@ import {
   GesuchTranche,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 
 export type DeepPartial<T> = T extends object
@@ -156,6 +155,7 @@ export const TEST_ABSCHLUESSE = {
     ausbildungskategorie: 'HOEHERE_FACHSCHULE',
     bildungsrichtung: 'HOEHERE_BERUFSBILDUNG',
     zusatzfrage: 'FACHRICHTUNG',
+    berufsbefaehigend: true,
     aktiv: true,
   }),
   abschlussFachrichtung2: prepareAbschluss({
@@ -165,6 +165,7 @@ export const TEST_ABSCHLUESSE = {
     ausbildungskategorie: 'HOEHERE_FACHSCHULE',
     bildungsrichtung: 'HOEHERE_BERUFSBILDUNG',
     zusatzfrage: 'FACHRICHTUNG',
+    berufsbefaehigend: true,
     aktiv: true,
   }),
   abschlussBerufsbezeichnung1: prepareAbschluss({
@@ -174,6 +175,7 @@ export const TEST_ABSCHLUESSE = {
     ausbildungskategorie: 'BERUFSFACHSCHULEN',
     bildungsrichtung: 'BERUFLICHE_GRUNDBILDUNG',
     zusatzfrage: 'BERUFSBEZEICHNUNG',
+    berufsbefaehigend: true,
     aktiv: true,
   }),
   abschlussBerufsbezeichnung2: prepareAbschluss({
@@ -183,6 +185,7 @@ export const TEST_ABSCHLUESSE = {
     ausbildungskategorie: 'BERUFSFACHSCHULEN',
     bildungsrichtung: 'BERUFLICHE_GRUNDBILDUNG',
     zusatzfrage: 'BERUFSBEZEICHNUNG',
+    berufsbefaehigend: true,
     aktiv: true,
   }),
   abschlussWithoutZusatzfrage1: prepareAbschluss({
@@ -191,6 +194,7 @@ export const TEST_ABSCHLUESSE = {
     bezeichnungFr: 'Abschluss Without Zusatzfrage 1 FR',
     ausbildungskategorie: 'BERUFS_UND_HOEHERE_FACHSCHULE',
     bildungsrichtung: 'HOEHERE_BERUFSBILDUNG',
+    berufsbefaehigend: true,
     aktiv: true,
   }),
 } satisfies Record<string, AbschlussSlim & { matchName: string }>;
@@ -202,7 +206,10 @@ export function provideSharedPatternVitestTestAusbildungstaetten() {
       getAllAusbildungsstaetteForAuswahl$: () => {
         return of(Object.values(TEST_AUSBILDUNGSSTAETTEN));
       },
-      getAllAbschluessForAuswahl$: () => {
+      getAllAbschluessForAuswahlGs$: () => {
+        return of(Object.values(TEST_ABSCHLUESSE));
+      },
+      getAllAbschluessForAuswahlSb$: () => {
         return of(Object.values(TEST_ABSCHLUESSE));
       },
     },

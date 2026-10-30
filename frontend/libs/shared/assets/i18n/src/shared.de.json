@@ -1091,6 +1091,8 @@
   "shared.form.lebenslauf.item.dateStart": "Von",
   "shared.form.lebenslauf.item.dateEnd": "Bis",
   "shared.form.lebenslauf.item.wohnsitz": "Wohnsitzkanton",
+  "shared.form.lebenslauf.item.berufsbefaehigend": "Berufsbefähigender Abschluss",
+  "shared.form.lebenslauf.item.nicht-berufsbefaehigend": "Kein berufsbefähigender Abschluss",
   "shared.form.lebenslauf.item.ausbildungAbgeschlossen": "Ausbildung abgeschlossen?",
   "shared.form.lebenslauf.item.abgeschlossen": "Ausbildung abgeschlossen",
   "shared.form.lebenslauf.item.nicht-abgeschlossen": "Ausbildung nicht abgeschlossen",

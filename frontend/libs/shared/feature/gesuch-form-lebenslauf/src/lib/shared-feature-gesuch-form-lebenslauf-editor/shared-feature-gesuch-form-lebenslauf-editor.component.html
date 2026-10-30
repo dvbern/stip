@@ -178,6 +178,23 @@
 
   <!-- Ausbildung abgeschlossen -->
   @if (itemSig().type === 'AUSBILDUNG') {
+    <div class="tw:dv-form-item" *dvIfSachbearbeiter>
+      <mat-radio-group
+        class="tw:w-full"
+        [formControl]="form.controls.berufsbefaehigend"
+        data-testid="lebenslauf-editor-berufsbefaehigend"
+        dvSharedUiFormField
+      >
+        <div class="tw:flex tw:col-span-12">
+          <mat-label>{{ 'shared.form.lebenslauf.item.berufsbefaehigend' | transloco }}</mat-label>
+        </div>
+        <div class="tw:flex tw:justify-between tw:flex-col">
+          @for (value of [true, false]; track $index) {
+            <mat-radio-button [value]="value">{{ 'shared.ui.' + (value ? 'yes' : 'no') | transloco }}</mat-radio-button>
+          }
+        </div>
+      </mat-radio-group>
+    </div>
     <div class="tw:dv-form-item">
       <mat-radio-group
         class="tw:w-full"
