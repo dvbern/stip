@@ -179,6 +179,11 @@ public class DateUtil {
         return gesuch.getEinreichedatum().isAfter(einreichefrist);
     }
 
+    public boolean wasEingereichtAfterDueDateReduziert(final Gesuch gesuch) {
+        final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristReduziert();
+        return gesuch.getEinreichedatum().isAfter(einreichefrist);
+    }
+
     public static DateRange getGesuchDateRange(Gesuch gesuch) {
         final var startDatum = gesuch.getGesuchGueltigkeitAb();
         final var endDatum = gesuch.getGesuchGueltigkeitBis();

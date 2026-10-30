@@ -36,6 +36,7 @@ import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
 import ch.dvbern.stip.berechnung.domain.port.BerechnungPort;
 import ch.dvbern.stip.berechnung.domain.qualifier.BerechnungQualifier;
 import ch.dvbern.stip.berechnung.domain.service.BerechnungsStammdatenMapper;
+import ch.dvbern.stip.berechnung.domain.type.BerechnungsStatus;
 import ch.dvbern.stip.berechnung.domain.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoBuilder;
@@ -60,6 +61,7 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
         final DateRange gesuchsDateRange = DateUtil.getGesuchDateRange(gesuch);
         final Gesuchsperiode gesuchsperiode = gesuch.getGesuchsperiode();
         final int gesuchsjahr = gesuch.getGesuchGueltigkeitAb().getYear();
+        BerechnungsStatus berechnungsStatus = BerechnungsStatus.STANDARD;
 
         final List<GesuchTranche> gesuchTranchen = gesuch.getTranchenTranchen().toList();
 
@@ -83,9 +85,14 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
         final int ungekuerztStipendien =
             BerechnungUtil.subtractGesezlichesDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
 
-        final int monateUebrigNachEinreichefrist = DateUtil.wasEingereichtAfterDueDate(gesuch)
-            ? DateUtil.getStipendiumDurationRoundDown(gesuch)
-            : 12;
+        int monateUebrigNachEinreichefrist =
+            DateUtil.wasEingereichtAfterDueDate(gesuch)
+                ? DateUtil.getStipendiumDurationRoundDown(gesuch)
+                : 12;
+        if (DateUtil.wasEingereichtAfterDueDateReduziert(gesuch)) {
+            monateUebrigNachEinreichefrist = 0;
+            berechnungsStatus = BerechnungsStatus.DEADLINE_EXCEEDED;
+        }
 
         final Integer totalNachKuerzungNachEinreichefrist =
             monateUebrigNachEinreichefrist < 12
@@ -143,6 +150,7 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
             .ungekuerztStipendien(ungekuerztStipendien)
             .ungekuerztDarlehen(ungekuerztDarlehen)
             .totalNachKuerzungNachEinreichefrist(totalNachKuerzungNachEinreichefrist)
+            .status(berechnungsStatus)
             .anzahlMonateEinreichefrist(12 - monateUebrigNachEinreichefrist)
             .totalNachKuerzungUnterbruch(totalNachKuerzungUnterbruch)
             .anzahlMonateUnterbruch(anzahlMonateUnterbruch)

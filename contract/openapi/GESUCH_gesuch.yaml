@@ -1718,6 +1718,10 @@ components:
         kommentar:
           description: 'Kommentar vom SB über die Statusänderung'
           type: string
+    BerechnungsStatus:
+      enum:
+        - STANDARD
+        - DEADLINE_EXCEEDED
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
@@ -1748,6 +1752,8 @@ components:
         totalNachKuerzungNachEinreichefrist:
           description: 'Die Summe nach der Kürzung der verspäteten Eingabe'
           type: integer
+        status:
+          $ref: '#/components/schemas/BerechnungsStatus'
         anzahlMonateEinreichefrist:
           description: 'Die Anzahl Monate der verspäteten Eingabe'
           type: integer

@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.BerechnungsStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BerechnungsresultatDtoSpec.JSON_PROPERTY_UNGEKUERZT_STIPENDIEN,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_UNGEKUERZT_DARLEHEN,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_STATUS,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH,
@@ -67,6 +69,10 @@ public class BerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST = "totalNachKuerzungNachEinreichefrist";
   @jakarta.annotation.Nullable
   private Integer totalNachKuerzungNachEinreichefrist;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nullable
+  private BerechnungsStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST = "anzahlMonateEinreichefrist";
   @jakarta.annotation.Nullable
@@ -226,6 +232,31 @@ public class BerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTotalNachKuerzungNachEinreichefrist(@jakarta.annotation.Nullable Integer totalNachKuerzungNachEinreichefrist) {
     this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+  }
+
+  public BerechnungsresultatDtoSpec status(@jakarta.annotation.Nullable BerechnungsStatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+  /**
+   * Get status
+   * @return status
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public BerechnungsStatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatus(@jakarta.annotation.Nullable BerechnungsStatusDtoSpec status) {
+    this.status = status;
   }
 
   public BerechnungsresultatDtoSpec anzahlMonateEinreichefrist(@jakarta.annotation.Nullable Integer anzahlMonateEinreichefrist) {
@@ -451,6 +482,7 @@ public class BerechnungsresultatDtoSpec {
         Objects.equals(this.ungekuerztStipendien, berechnungsresultat.ungekuerztStipendien) &&
         Objects.equals(this.ungekuerztDarlehen, berechnungsresultat.ungekuerztDarlehen) &&
         Objects.equals(this.totalNachKuerzungNachEinreichefrist, berechnungsresultat.totalNachKuerzungNachEinreichefrist) &&
+        Objects.equals(this.status, berechnungsresultat.status) &&
         Objects.equals(this.anzahlMonateEinreichefrist, berechnungsresultat.anzahlMonateEinreichefrist) &&
         Objects.equals(this.totalNachKuerzungUnterbruch, berechnungsresultat.totalNachKuerzungUnterbruch) &&
         Objects.equals(this.anzahlMonateUnterbruch, berechnungsresultat.anzahlMonateUnterbruch) &&
@@ -463,7 +495,7 @@ public class BerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungVorKuerzungUndTeilung, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungVorTeilungDarlehen, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate, monateMitDarlehen);
+    return Objects.hash(year, berechnungVorKuerzungUndTeilung, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, status, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungVorTeilungDarlehen, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate, monateMitDarlehen);
   }
 
   @Override
@@ -475,6 +507,7 @@ public class BerechnungsresultatDtoSpec {
     sb.append("    ungekuerztStipendien: ").append(toIndentedString(ungekuerztStipendien)).append("\n");
     sb.append("    ungekuerztDarlehen: ").append(toIndentedString(ungekuerztDarlehen)).append("\n");
     sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
     sb.append("    totalNachKuerzungUnterbruch: ").append(toIndentedString(totalNachKuerzungUnterbruch)).append("\n");
     sb.append("    anzahlMonateUnterbruch: ").append(toIndentedString(anzahlMonateUnterbruch)).append("\n");

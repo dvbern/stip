@@ -571,6 +571,7 @@
   "shared.verfuegung.zusammenfassung.title": "Zusammenfassung",
   "shared.verfuegung.zusammenfassung.total": "Total",
   "shared.verfuegung.zusammenfassung.limit": "Beträge von weniger als {{ limit }} Franken werden nicht gewährt",
+  "shared.verfuegung.zusammenfassung.status.DEADLINE_EXCEEDED": "Gesuch wurde zu spät eingereicht",
   "shared.verfuegung.zusammenfassung.berechnungen": "Berechnungen",
   "shared.verfuegung.zusammenfassung.item.link": "Detail",
   "shared.verfuegung.zusammenfassung.item.title": "Tranche für {anzahlMonate, plural, one {1 Monat} other {# Monate}}",

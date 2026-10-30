@@ -7,6 +7,7 @@ import { EMPTY, exhaustMap, pipe, tap } from 'rxjs';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   BerechnungsStammdaten,
+  BerechnungsStatus,
   Berechnungsresultat,
   GesuchService,
 } from '@dv/shared/model/gesuch';
@@ -58,6 +59,7 @@ export class BerechnungStore extends signalStore(
 
     const value: {
       year: number;
+      berechnungsStatus?: BerechnungsStatus;
       berechnungVorTeilungDarlehen?: number;
       berechnungVorKuerzungUndTeilung: number;
       totalNachKuerzungNachEinreichefrist?: number;
@@ -70,12 +72,13 @@ export class BerechnungStore extends signalStore(
       stammdaten?: BerechnungsStammdaten;
     } = {
       year: berechnungRd.data?.year ?? 0,
+      berechnungsStatus: berechnungRd.data?.status,
       berechnungVorTeilungDarlehen:
         berechnungRd.data?.berechnungVorTeilungDarlehen,
       berechnungVorKuerzungUndTeilung:
         berechnungRd.data?.berechnungVorKuerzungUndTeilung ?? 0,
       totalNachKuerzungNachEinreichefrist:
-        berechnungRd.data?.totalNachKuerzungNachEinreichefrist,
+        berechnungRd.data?.totalNachKuerzungNachEinreichefrist ?? undefined,
       anzahlMonateEinreichefrist: berechnungRd.data?.anzahlMonateEinreichefrist,
       totalNachKuerzungUnterbruch:
         berechnungRd.data?.totalNachKuerzungUnterbruch,

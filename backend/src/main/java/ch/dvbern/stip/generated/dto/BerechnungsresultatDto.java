@@ -34,6 +34,7 @@ public class BerechnungsresultatDto  implements Serializable {
   private Integer ungekuerztStipendien;
   private Integer ungekuerztDarlehen;
   private Integer totalNachKuerzungNachEinreichefrist;
+  private ch.dvbern.stip.berechnung.domain.type.BerechnungsStatus status;
   private Integer anzahlMonateEinreichefrist;
   private Integer totalNachKuerzungUnterbruch;
   private Integer anzahlMonateUnterbruch;
@@ -49,6 +50,7 @@ public class BerechnungsresultatDto  implements Serializable {
     this.ungekuerztStipendien = b.ungekuerztStipendien;
     this.ungekuerztDarlehen = b.ungekuerztDarlehen;
     this.totalNachKuerzungNachEinreichefrist = b.totalNachKuerzungNachEinreichefrist;
+    this.status = b.status;
     this.anzahlMonateEinreichefrist = b.anzahlMonateEinreichefrist;
     this.totalNachKuerzungUnterbruch = b.totalNachKuerzungUnterbruch;
     this.anzahlMonateUnterbruch = b.anzahlMonateUnterbruch;
@@ -245,6 +247,24 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   /**
+   **/
+  public BerechnungsresultatDto status(ch.dvbern.stip.berechnung.domain.type.BerechnungsStatus status) {
+    this.status = status;
+    return this;
+  }
+
+  
+  @JsonProperty("status")
+  public ch.dvbern.stip.berechnung.domain.type.BerechnungsStatus getStatus() {
+    return status;
+  }
+
+  @JsonProperty("status")
+  public void setStatus(ch.dvbern.stip.berechnung.domain.type.BerechnungsStatus status) {
+    this.status = status;
+  }
+
+  /**
    * Die Anzahl Monate der verspäteten Eingabe
    **/
   public BerechnungsresultatDto anzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
@@ -339,6 +359,7 @@ public class BerechnungsresultatDto  implements Serializable {
         Objects.equals(this.ungekuerztStipendien, berechnungsresultat.ungekuerztStipendien) &&
         Objects.equals(this.ungekuerztDarlehen, berechnungsresultat.ungekuerztDarlehen) &&
         Objects.equals(this.totalNachKuerzungNachEinreichefrist, berechnungsresultat.totalNachKuerzungNachEinreichefrist) &&
+        Objects.equals(this.status, berechnungsresultat.status) &&
         Objects.equals(this.anzahlMonateEinreichefrist, berechnungsresultat.anzahlMonateEinreichefrist) &&
         Objects.equals(this.totalNachKuerzungUnterbruch, berechnungsresultat.totalNachKuerzungUnterbruch) &&
         Objects.equals(this.anzahlMonateUnterbruch, berechnungsresultat.anzahlMonateUnterbruch) &&
@@ -347,7 +368,7 @@ public class BerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungVorKuerzungUndTeilung, berechnungVorTeilungDarlehen, berechnungStipendium, tranchenBerechnungsresultate, monateMitDarlehen, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungDarlehen);
+    return Objects.hash(year, berechnungVorKuerzungUndTeilung, berechnungVorTeilungDarlehen, berechnungStipendium, tranchenBerechnungsresultate, monateMitDarlehen, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, status, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungDarlehen);
   }
 
   @Override
@@ -364,6 +385,7 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("    ungekuerztStipendien: ").append(toIndentedString(ungekuerztStipendien)).append("\n");
     sb.append("    ungekuerztDarlehen: ").append(toIndentedString(ungekuerztDarlehen)).append("\n");
     sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
     sb.append("    totalNachKuerzungUnterbruch: ").append(toIndentedString(totalNachKuerzungUnterbruch)).append("\n");
     sb.append("    anzahlMonateUnterbruch: ").append(toIndentedString(anzahlMonateUnterbruch)).append("\n");
@@ -408,6 +430,7 @@ public class BerechnungsresultatDto  implements Serializable {
     private Integer ungekuerztStipendien;
     private Integer ungekuerztDarlehen;
     private Integer totalNachKuerzungNachEinreichefrist;
+    private ch.dvbern.stip.berechnung.domain.type.BerechnungsStatus status;
     private Integer anzahlMonateEinreichefrist;
     private Integer totalNachKuerzungUnterbruch;
     private Integer anzahlMonateUnterbruch;
@@ -450,6 +473,10 @@ public class BerechnungsresultatDto  implements Serializable {
     }
     public B totalNachKuerzungNachEinreichefrist(Integer totalNachKuerzungNachEinreichefrist) {
       this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+      return self();
+    }
+    public B status(ch.dvbern.stip.berechnung.domain.type.BerechnungsStatus status) {
+      this.status = status;
       return self();
     }
     public B anzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
