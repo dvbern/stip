@@ -123,6 +123,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchHeaderDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoBuilder;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
@@ -1608,13 +1609,16 @@ public class GesuchService {
         final var initialGesuch = getInitialGesuchTranches(gesuch);
         final var latestVerfuegung = verfuegungService.getLatestVerfuegungByGesuchId(gesuch.getId());
 
-        return new GesuchHeaderDto()
-            .gesuchInfo(gesuchMapper.toInfoDtoGs(gesuch))
+        return GesuchHeaderDtoBuilder.gesuchHeaderDto()
+            .versions(versions)
+            .aenderungs(null)
             .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+            .paymentProcessingSuspended(gesuch.getAusbildung().getFall().paymentProcessingSuspended())
+            .gesuchInfo(gesuchMapper.toInfoDtoGs(gesuch))
+            .initial(initialGesuch)
             .latestVerfuegungId(latestVerfuegung.map(Verfuegung::getId).orElse(null))
             .latestVerfuegtAt(latestVerfuegung.map(Verfuegung::getTimestampErstellt).orElse(null))
-            .initial(initialGesuch)
-            .versions(versions);
+            .build();
     }
 
     @Transactional

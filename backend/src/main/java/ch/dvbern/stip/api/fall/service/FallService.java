@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.fall.repo.FallNummerSeqRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.FallDto;
+import ch.dvbern.stip.integration.paymentprocessing.domain.port.PaymentProcessingPortFactory;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class FallService {
     private final IdEncryptionService idEncryptionService;
     private final FallNummerSeqRepository fallNummerSeqRepository;
     private final TenantService tenantService;
+    private final PaymentProcessingPortFactory paymentProcessingPortFactory;
 
     public Fall getById(final UUID fallId) {
         return fallRepository.requireById(fallId);
@@ -79,5 +81,14 @@ public class FallService {
         final var encoded = idEncryptionService.encryptLengthSix(nextValue);
 
         return String.format("%s.F.%s", tenant, encoded);
+    }
+
+    @Transactional
+    public void setPaymentProcessingSuspended(UUID gesuchId, Boolean suspended) {
+        final var fall = fallRepository.findFallForGesuch(gesuchId);
+        fall.paymentProcessingSuspended(suspended);
+        if (!suspended) {
+            paymentProcessingPortFactory.getPaymentProcessingAdapter().retryAuszahlungBuchhaltung(fall);
+        }
     }
 }

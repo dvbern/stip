@@ -24,10 +24,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BuchhaltungOverviewDto  implements Serializable {
   private Boolean canRetryAuszahlung;
+  private Boolean paymentProcessingSuspended;
   private @Valid List<@Valid BuchhaltungEntryDto> buchhaltungEntrys = new ArrayList<>();
 
   protected BuchhaltungOverviewDto(BuchhaltungOverviewDtoBuilder<?, ?> b) {
     this.canRetryAuszahlung = b.canRetryAuszahlung;
+    this.paymentProcessingSuspended = b.paymentProcessingSuspended;
     this.buchhaltungEntrys = b.buchhaltungEntrys;
   }
 
@@ -50,6 +52,24 @@ public class BuchhaltungOverviewDto  implements Serializable {
   @JsonProperty(required = true, value = "canRetryAuszahlung")
   public void setCanRetryAuszahlung(Boolean canRetryAuszahlung) {
     this.canRetryAuszahlung = canRetryAuszahlung;
+  }
+
+  /**
+   **/
+  public BuchhaltungOverviewDto paymentProcessingSuspended(Boolean paymentProcessingSuspended) {
+    this.paymentProcessingSuspended = paymentProcessingSuspended;
+    return this;
+  }
+
+  
+  @JsonProperty(required = true, value = "paymentProcessingSuspended")
+  @NotNull public Boolean getPaymentProcessingSuspended() {
+    return paymentProcessingSuspended;
+  }
+
+  @JsonProperty(required = true, value = "paymentProcessingSuspended")
+  public void setPaymentProcessingSuspended(Boolean paymentProcessingSuspended) {
+    this.paymentProcessingSuspended = paymentProcessingSuspended;
   }
 
   /**
@@ -97,12 +117,13 @@ public class BuchhaltungOverviewDto  implements Serializable {
     }
     BuchhaltungOverviewDto buchhaltungOverview = (BuchhaltungOverviewDto) o;
     return Objects.equals(this.canRetryAuszahlung, buchhaltungOverview.canRetryAuszahlung) &&
+        Objects.equals(this.paymentProcessingSuspended, buchhaltungOverview.paymentProcessingSuspended) &&
         Objects.equals(this.buchhaltungEntrys, buchhaltungOverview.buchhaltungEntrys);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(canRetryAuszahlung, buchhaltungEntrys);
+    return Objects.hash(canRetryAuszahlung, paymentProcessingSuspended, buchhaltungEntrys);
   }
 
   @Override
@@ -111,6 +132,7 @@ public class BuchhaltungOverviewDto  implements Serializable {
     sb.append("class BuchhaltungOverviewDto {\n");
     
     sb.append("    canRetryAuszahlung: ").append(toIndentedString(canRetryAuszahlung)).append("\n");
+    sb.append("    paymentProcessingSuspended: ").append(toIndentedString(paymentProcessingSuspended)).append("\n");
     sb.append("    buchhaltungEntrys: ").append(toIndentedString(buchhaltungEntrys)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -144,6 +166,7 @@ public class BuchhaltungOverviewDto  implements Serializable {
 
   public static abstract class BuchhaltungOverviewDtoBuilder<C extends BuchhaltungOverviewDto, B extends BuchhaltungOverviewDtoBuilder<C, B>>  {
     private Boolean canRetryAuszahlung;
+    private Boolean paymentProcessingSuspended;
     private List<BuchhaltungEntryDto> buchhaltungEntrys = new ArrayList<>();
     protected abstract B self();
 
@@ -151,6 +174,10 @@ public class BuchhaltungOverviewDto  implements Serializable {
 
     public B canRetryAuszahlung(Boolean canRetryAuszahlung) {
       this.canRetryAuszahlung = canRetryAuszahlung;
+      return self();
+    }
+    public B paymentProcessingSuspended(Boolean paymentProcessingSuspended) {
+      this.paymentProcessingSuspended = paymentProcessingSuspended;
       return self();
     }
     public B buchhaltungEntrys(List<BuchhaltungEntryDto> buchhaltungEntrys) {

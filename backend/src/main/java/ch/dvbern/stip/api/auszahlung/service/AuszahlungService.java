@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
@@ -65,10 +66,15 @@ public class AuszahlungService {
 
         auszahlungMapper.partialUpdate(auszahlungUpdateDto, fall.getAuszahlung());
 
+        retryFailedAuszahlungBuchhaltung(fall);
+
+        return auszahlungMapper.toDto(fall);
+    }
+
+    @Transactional
+    public void retryFailedAuszahlungBuchhaltung(final Fall fall) {
         if (buchhaltungService.canRetryAuszahlungBuchhaltung(fall)) {
             paymentProcessingPortFactory.getPaymentProcessingAdapter().retryAuszahlungBuchhaltung(fall);
         }
-
-        return auszahlungMapper.toDto(fall);
     }
 }

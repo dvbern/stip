@@ -31,6 +31,7 @@ public class GesuchHeaderDto  implements Serializable {
   private @Valid List<@Valid VerfuegtGesuchDto> versions = new ArrayList<>();
   private GesuchAenderungsDto aenderungs;
   private @Valid List<@Valid GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
+  private Boolean paymentProcessingSuspended;
   private GesuchInfoDto gesuchInfo;
   private InitialGesuchsDto initial;
   private UUID latestVerfuegungId;
@@ -40,6 +41,7 @@ public class GesuchHeaderDto  implements Serializable {
     this.versions = b.versions;
     this.aenderungs = b.aenderungs;
     this.currentTranches = b.currentTranches;
+    this.paymentProcessingSuspended = b.paymentProcessingSuspended;
     this.gesuchInfo = b.gesuchInfo;
     this.initial = b.initial;
     this.latestVerfuegungId = b.latestVerfuegungId;
@@ -137,6 +139,24 @@ public class GesuchHeaderDto  implements Serializable {
   }
   /**
    **/
+  public GesuchHeaderDto paymentProcessingSuspended(Boolean paymentProcessingSuspended) {
+    this.paymentProcessingSuspended = paymentProcessingSuspended;
+    return this;
+  }
+
+  
+  @JsonProperty(required = true, value = "paymentProcessingSuspended")
+  @NotNull public Boolean getPaymentProcessingSuspended() {
+    return paymentProcessingSuspended;
+  }
+
+  @JsonProperty(required = true, value = "paymentProcessingSuspended")
+  public void setPaymentProcessingSuspended(Boolean paymentProcessingSuspended) {
+    this.paymentProcessingSuspended = paymentProcessingSuspended;
+  }
+
+  /**
+   **/
   public GesuchHeaderDto gesuchInfo(GesuchInfoDto gesuchInfo) {
     this.gesuchInfo = gesuchInfo;
     return this;
@@ -220,6 +240,7 @@ public class GesuchHeaderDto  implements Serializable {
     return Objects.equals(this.versions, gesuchHeader.versions) &&
         Objects.equals(this.aenderungs, gesuchHeader.aenderungs) &&
         Objects.equals(this.currentTranches, gesuchHeader.currentTranches) &&
+        Objects.equals(this.paymentProcessingSuspended, gesuchHeader.paymentProcessingSuspended) &&
         Objects.equals(this.gesuchInfo, gesuchHeader.gesuchInfo) &&
         Objects.equals(this.initial, gesuchHeader.initial) &&
         Objects.equals(this.latestVerfuegungId, gesuchHeader.latestVerfuegungId) &&
@@ -228,7 +249,7 @@ public class GesuchHeaderDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(versions, aenderungs, currentTranches, gesuchInfo, initial, latestVerfuegungId, latestVerfuegtAt);
+    return Objects.hash(versions, aenderungs, currentTranches, paymentProcessingSuspended, gesuchInfo, initial, latestVerfuegungId, latestVerfuegtAt);
   }
 
   @Override
@@ -239,6 +260,7 @@ public class GesuchHeaderDto  implements Serializable {
     sb.append("    versions: ").append(toIndentedString(versions)).append("\n");
     sb.append("    aenderungs: ").append(toIndentedString(aenderungs)).append("\n");
     sb.append("    currentTranches: ").append(toIndentedString(currentTranches)).append("\n");
+    sb.append("    paymentProcessingSuspended: ").append(toIndentedString(paymentProcessingSuspended)).append("\n");
     sb.append("    gesuchInfo: ").append(toIndentedString(gesuchInfo)).append("\n");
     sb.append("    initial: ").append(toIndentedString(initial)).append("\n");
     sb.append("    latestVerfuegungId: ").append(toIndentedString(latestVerfuegungId)).append("\n");
@@ -277,6 +299,7 @@ public class GesuchHeaderDto  implements Serializable {
     private List<VerfuegtGesuchDto> versions = new ArrayList<>();
     private GesuchAenderungsDto aenderungs;
     private List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
+    private Boolean paymentProcessingSuspended;
     private GesuchInfoDto gesuchInfo;
     private InitialGesuchsDto initial;
     private UUID latestVerfuegungId;
@@ -295,6 +318,10 @@ public class GesuchHeaderDto  implements Serializable {
     }
     public B currentTranches(List<GesuchTrancheSlimDto> currentTranches) {
       this.currentTranches = currentTranches;
+      return self();
+    }
+    public B paymentProcessingSuspended(Boolean paymentProcessingSuspended) {
+      this.paymentProcessingSuspended = paymentProcessingSuspended;
       return self();
     }
     public B gesuchInfo(GesuchInfoDto gesuchInfo) {

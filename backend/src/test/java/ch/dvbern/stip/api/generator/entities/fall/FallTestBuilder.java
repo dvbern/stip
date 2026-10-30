@@ -41,6 +41,7 @@ public final class FallTestBuilder extends AbstractTestBuilder<Fall, FallTestBui
             .freiwilligDarlehens(new ArrayList<>())
             .historicalDelegierungs(Set.of())
             .auszahlung(null)
+            .paymentProcessingSuspended(false)
             .build();
 
         return new FallTestBuilder(fall, referenceDate);
@@ -54,6 +55,7 @@ public final class FallTestBuilder extends AbstractTestBuilder<Fall, FallTestBui
             .freiwilligDarlehens(new ArrayList<>())
             .historicalDelegierungs(Set.of())
             .auszahlung(AuszahlungTestBuilder.empty(referenceDate).build())
+            .paymentProcessingSuspended(false)
             .build();
 
         return new FallTestBuilder(fall, referenceDate);
@@ -67,6 +69,7 @@ public final class FallTestBuilder extends AbstractTestBuilder<Fall, FallTestBui
             .freiwilligDarlehens(new ArrayList<>())
             .historicalDelegierungs(Set.of())
             .auszahlung(AuszahlungTestBuilder.standardDirectDeps(referenceDate).build())
+            .paymentProcessingSuspended(false)
             .build();
 
         return new FallTestBuilder(fall, referenceDate);

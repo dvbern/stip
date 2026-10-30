@@ -319,6 +319,7 @@ public class BuchhaltungService {
     public BuchhaltungOverviewDto getBuchhaltungOverviewDto(final UUID gesuchId) {
         final BuchhaltungOverviewDto buchhaltungOverviewDto = new BuchhaltungOverviewDto();
         buchhaltungOverviewDto.setBuchhaltungEntrys(getAllDtoForGesuchId(gesuchId).toList());
+        buchhaltungOverviewDto.setPaymentProcessingSuspended(getPaymentProcessingSuspended(gesuchId));
         buchhaltungOverviewDto.setCanRetryAuszahlung(canRetryAuszahlungBuchhaltung(gesuchId));
         return buchhaltungOverviewDto;
     }
@@ -335,7 +336,7 @@ public class BuchhaltungService {
     }
 
     public boolean canRetryAuszahlungBuchhaltung(final Fall fall) {
-        return Objects.nonNull(fall.getFailedBuchhaltungAuszahlungType());
+        return Objects.nonNull(fall.getFailedBuchhaltungType());
     }
 
     public boolean canRetryAuszahlungBuchhaltung(final UUID gesuchId) {
@@ -344,6 +345,11 @@ public class BuchhaltungService {
             gesuch.getAusbildung()
                 .getFall()
         );
+    }
+
+    public boolean getPaymentProcessingSuspended(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return gesuch.getAusbildung().getFall().paymentProcessingSuspended();
     }
 
     @Transactional

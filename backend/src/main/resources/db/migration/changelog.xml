@@ -42,5 +42,6 @@
 
   <!-- <editor-fold desc="v0.80" defaultstate="collapsed"> -->
   <include file="/db/migration/v0.80/KSTIP-4038.xml"/>
+  <include file="/db/migration/v0.80/KSTIP-3952.xml"/>
   <!-- </editor-fold> -->
 </databaseChangeLog>

@@ -57,6 +57,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hibernate.envers.Audited;
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
@@ -126,8 +127,12 @@ public class Fall extends AbstractEntity {
 
     @Nullable
     @Enumerated(EnumType.STRING)
-    @Column(name = "failed_buchhaltung_auszahlung_type", nullable = true)
-    private BuchhaltungType failedBuchhaltungAuszahlungType;
+    @Column(name = "failed_buchhaltung_type", nullable = true)
+    private BuchhaltungType failedBuchhaltungType;
+
+    @Column(name = "payment_processing_suspended", nullable = false)
+    @Accessors(fluent = true)
+    private boolean paymentProcessingSuspended = false;
 
     @Nullable
     public Zahlungsverbindung getRelevantZahlungsverbindung() {

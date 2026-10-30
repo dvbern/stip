@@ -231,6 +231,7 @@ public class GenerateMultipleDemoDataService {
             .freiwilligDarlehens(new ArrayList<>())
             .historicalDelegierungs(new HashSet<>())
             .auszahlung(fakeAuszahlung)
+            .paymentProcessingSuspended(false)
             .fallNummer("%s%s".formatted(fallPrefix, identifier))
             .build();
     }

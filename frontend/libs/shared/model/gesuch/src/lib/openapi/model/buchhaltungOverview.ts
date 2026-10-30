@@ -13,6 +13,7 @@ import { BuchhaltungEntry } from './buchhaltungEntry';
 
 export interface BuchhaltungOverview { 
     canRetryAuszahlung: boolean;
+    paymentProcessingSuspended: boolean;
     buchhaltungEntrys: Array<BuchhaltungEntry>;
 }
 

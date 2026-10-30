@@ -3147,6 +3147,30 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /fall/paymentprocessingsuspended/{gesuchId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+      - name: suspended
+        schema:
+          type: boolean
+        in: query
+        required: true
+    post:
+      tags:
+        - Fall
+      responses:
+        '204':
+          description: Return des neu erstellten Falls für den GS
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: setPaymentProcessingSuspended
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /fall/header/{fallId}:
     get:
       tags:
@@ -9619,9 +9643,12 @@ components:
       type: object
       required:
         - canRetryAuszahlung
+        - paymentProcessingSuspended
         - buchhaltungEntrys
       properties:
         canRetryAuszahlung:
+          type: boolean
+        paymentProcessingSuspended:
           type: boolean
         buchhaltungEntrys:
           type: array
@@ -10483,6 +10510,7 @@ components:
         - versions
         - aenderungs
         - currentTranches
+        - paymentProcessingSuspended
       type: object
       properties:
         initial:
@@ -10497,6 +10525,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        paymentProcessingSuspended:
+          type: boolean
         latestVerfuegungId:
           $ref: '#/components/schemas/UUID'
         latestVerfuegtAt:

@@ -1635,6 +1635,7 @@ components:
         - versions
         - aenderungs
         - currentTranches
+        - paymentProcessingSuspended
       type: object
       properties:
         initial:
@@ -1649,6 +1650,8 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
+        paymentProcessingSuspended:
+          type: boolean
         latestVerfuegungId:
           $ref: './components/common.yaml#/UUID'
         latestVerfuegtAt:
