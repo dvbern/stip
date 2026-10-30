@@ -63,8 +63,6 @@ export class TwoColumnTimelineComponent {
   plannedAusbildungId = 'planned-ausbildung';
 
   constructor() {
-    this.ausbildungsstaetteStore.loadAbschluesse$();
-
     effect(() => {
       const startDate = this.startDate();
       const lebenslaufItems = this.lebenslaufItems();
