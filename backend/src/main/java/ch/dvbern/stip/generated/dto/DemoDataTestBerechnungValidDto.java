@@ -28,10 +28,7 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
   private Boolean elternBudget1;
   private Boolean elternBudget2;
   private Boolean persoenlichesBudget;
-  private Boolean fehlbetrag;
-  private Boolean proKopfteilung;
-  private Boolean anzahlMonateEinreichefrist;
-  private Boolean totalNachKuerzungNachEinreichefrist;
+  private Boolean budgetTranche;
 
   protected DemoDataTestBerechnungValidDto(DemoDataTestBerechnungValidDtoBuilder<?, ?> b) {
     this.status = b.status;
@@ -43,10 +40,7 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
     this.elternBudget1 = b.elternBudget1;
     this.elternBudget2 = b.elternBudget2;
     this.persoenlichesBudget = b.persoenlichesBudget;
-    this.fehlbetrag = b.fehlbetrag;
-    this.proKopfteilung = b.proKopfteilung;
-    this.anzahlMonateEinreichefrist = b.anzahlMonateEinreichefrist;
-    this.totalNachKuerzungNachEinreichefrist = b.totalNachKuerzungNachEinreichefrist;
+    this.budgetTranche = b.budgetTranche;
   }
 
   public DemoDataTestBerechnungValidDto() {
@@ -216,74 +210,20 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
 
   /**
    **/
-  public DemoDataTestBerechnungValidDto fehlbetrag(Boolean fehlbetrag) {
-    this.fehlbetrag = fehlbetrag;
+  public DemoDataTestBerechnungValidDto budgetTranche(Boolean budgetTranche) {
+    this.budgetTranche = budgetTranche;
     return this;
   }
 
   
-  @JsonProperty("fehlbetrag")
-  public Boolean getFehlbetrag() {
-    return fehlbetrag;
+  @JsonProperty("budgetTranche")
+  public Boolean getBudgetTranche() {
+    return budgetTranche;
   }
 
-  @JsonProperty("fehlbetrag")
-  public void setFehlbetrag(Boolean fehlbetrag) {
-    this.fehlbetrag = fehlbetrag;
-  }
-
-  /**
-   **/
-  public DemoDataTestBerechnungValidDto proKopfteilung(Boolean proKopfteilung) {
-    this.proKopfteilung = proKopfteilung;
-    return this;
-  }
-
-  
-  @JsonProperty("proKopfteilung")
-  public Boolean getProKopfteilung() {
-    return proKopfteilung;
-  }
-
-  @JsonProperty("proKopfteilung")
-  public void setProKopfteilung(Boolean proKopfteilung) {
-    this.proKopfteilung = proKopfteilung;
-  }
-
-  /**
-   **/
-  public DemoDataTestBerechnungValidDto anzahlMonateEinreichefrist(Boolean anzahlMonateEinreichefrist) {
-    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
-    return this;
-  }
-
-  
-  @JsonProperty("anzahlMonateEinreichefrist")
-  public Boolean getAnzahlMonateEinreichefrist() {
-    return anzahlMonateEinreichefrist;
-  }
-
-  @JsonProperty("anzahlMonateEinreichefrist")
-  public void setAnzahlMonateEinreichefrist(Boolean anzahlMonateEinreichefrist) {
-    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
-  }
-
-  /**
-   **/
-  public DemoDataTestBerechnungValidDto totalNachKuerzungNachEinreichefrist(Boolean totalNachKuerzungNachEinreichefrist) {
-    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
-    return this;
-  }
-
-  
-  @JsonProperty("totalNachKuerzungNachEinreichefrist")
-  public Boolean getTotalNachKuerzungNachEinreichefrist() {
-    return totalNachKuerzungNachEinreichefrist;
-  }
-
-  @JsonProperty("totalNachKuerzungNachEinreichefrist")
-  public void setTotalNachKuerzungNachEinreichefrist(Boolean totalNachKuerzungNachEinreichefrist) {
-    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+  @JsonProperty("budgetTranche")
+  public void setBudgetTranche(Boolean budgetTranche) {
+    this.budgetTranche = budgetTranche;
   }
 
 
@@ -305,15 +245,12 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
         Objects.equals(this.elternBudget1, demoDataTestBerechnungValid.elternBudget1) &&
         Objects.equals(this.elternBudget2, demoDataTestBerechnungValid.elternBudget2) &&
         Objects.equals(this.persoenlichesBudget, demoDataTestBerechnungValid.persoenlichesBudget) &&
-        Objects.equals(this.fehlbetrag, demoDataTestBerechnungValid.fehlbetrag) &&
-        Objects.equals(this.proKopfteilung, demoDataTestBerechnungValid.proKopfteilung) &&
-        Objects.equals(this.anzahlMonateEinreichefrist, demoDataTestBerechnungValid.anzahlMonateEinreichefrist) &&
-        Objects.equals(this.totalNachKuerzungNachEinreichefrist, demoDataTestBerechnungValid.totalNachKuerzungNachEinreichefrist);
+        Objects.equals(this.budgetTranche, demoDataTestBerechnungValid.budgetTranche);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, ungekuerztStipendien, ungekuerztDarlehen, stipendien, darlehen, budgetArt, elternBudget1, elternBudget2, persoenlichesBudget, fehlbetrag, proKopfteilung, anzahlMonateEinreichefrist, totalNachKuerzungNachEinreichefrist);
+    return Objects.hash(status, ungekuerztStipendien, ungekuerztDarlehen, stipendien, darlehen, budgetArt, elternBudget1, elternBudget2, persoenlichesBudget, budgetTranche);
   }
 
   @Override
@@ -330,10 +267,7 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
     sb.append("    elternBudget1: ").append(toIndentedString(elternBudget1)).append("\n");
     sb.append("    elternBudget2: ").append(toIndentedString(elternBudget2)).append("\n");
     sb.append("    persoenlichesBudget: ").append(toIndentedString(persoenlichesBudget)).append("\n");
-    sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
-    sb.append("    proKopfteilung: ").append(toIndentedString(proKopfteilung)).append("\n");
-    sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
-    sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
+    sb.append("    budgetTranche: ").append(toIndentedString(budgetTranche)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -374,10 +308,7 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
     private Boolean elternBudget1;
     private Boolean elternBudget2;
     private Boolean persoenlichesBudget;
-    private Boolean fehlbetrag;
-    private Boolean proKopfteilung;
-    private Boolean anzahlMonateEinreichefrist;
-    private Boolean totalNachKuerzungNachEinreichefrist;
+    private Boolean budgetTranche;
     protected abstract B self();
 
     public abstract C build();
@@ -418,20 +349,8 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
       this.persoenlichesBudget = persoenlichesBudget;
       return self();
     }
-    public B fehlbetrag(Boolean fehlbetrag) {
-      this.fehlbetrag = fehlbetrag;
-      return self();
-    }
-    public B proKopfteilung(Boolean proKopfteilung) {
-      this.proKopfteilung = proKopfteilung;
-      return self();
-    }
-    public B anzahlMonateEinreichefrist(Boolean anzahlMonateEinreichefrist) {
-      this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
-      return self();
-    }
-    public B totalNachKuerzungNachEinreichefrist(Boolean totalNachKuerzungNachEinreichefrist) {
-      this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+    public B budgetTranche(Boolean budgetTranche) {
+      this.budgetTranche = budgetTranche;
       return self();
     }
   }

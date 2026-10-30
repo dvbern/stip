@@ -18,14 +18,15 @@
 package ch.dvbern.stip.api.demo.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
 import ch.dvbern.stip.api.common.exception.DemoDataImportException;
-import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.service.seeding.GesuchsperiodeSeeding;
 import ch.dvbern.stip.api.common.service.seeding.GesuchsperiodeSeeding.Season;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
@@ -49,10 +50,12 @@ import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
+import ch.dvbern.stip.generated.dto.ValidationMessageDto;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.TransactionManager;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -80,7 +83,7 @@ public class DemoDataService {
     private final ZuordnungService zuordnungService;
     private final TransactionManager transactionManager;
     public static final String DEMODATA_DOKUMENT_PATH = "demo_data/";
-    public static final int DEMODATA_TEST_ALL_YEAR = 2026;
+    public static final int DEMODATA_TEST_ALL_YEAR = 2025;
 
     @Transactional
     public DemoDataListDto createNewDemoDataImport(
@@ -190,10 +193,18 @@ public class DemoDataService {
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
+        final List<String> errorMessages = new ArrayList<>();
         final var preValidation =
             gesuchFormularService.validatePagesSb(gesuch.getLatestGesuchTranche().getGesuchFormular());
         if (!preValidation.getValidationErrors().isEmpty()) {
-            throw new DemoDataApplyException("ValidationError", preValidation.getValidationErrors());
+            errorMessages.addAll(
+                preValidation.getValidationErrors()
+                    .stream()
+                    .map(
+                        ValidationMessageDto::getMessage
+                    )
+                    .toList()
+            );
         }
 
         final var allDokuments =
@@ -204,7 +215,13 @@ public class DemoDataService {
         final var violations =
             validator.validate(gesuchRepository.requireById(gesuchId), GesuchEinreichenValidationGroup.class);
         if (!violations.isEmpty()) {
-            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
+            errorMessages.addAll(
+                violations.stream()
+                    .map(
+                        ConstraintViolation::getMessage
+                    )
+                    .toList()
+            );
         }
 
         DemoDataTestBerechnungResultatDto stipendienanspruchDto;
@@ -217,6 +234,14 @@ public class DemoDataService {
                 .message(e.getMessage());
             LOG.error("Unable to calculate berechnung for{}\n{}", demoData.getTestFall(), e.getMessage());
         }
+        stipendienanspruchDto
+            .message(
+                String.join(
+                    "\n",
+                    Stream.concat(Stream.ofNullable(stipendienanspruchDto.getMessage()), errorMessages.stream())
+                        .toList()
+                )
+            );
 
         return demoDataMapper.toDto(gesuch, stipendienanspruchDto);
     }

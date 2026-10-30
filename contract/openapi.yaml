@@ -8721,13 +8721,7 @@ components:
           type: boolean
         persoenlichesBudget:
           type: boolean
-        fehlbetrag:
-          type: boolean
-        proKopfteilung:
-          type: boolean
-        anzahlMonateEinreichefrist:
-          type: boolean
-        totalNachKuerzungNachEinreichefrist:
+        budgetTranche:
           type: boolean
     DemoDataTestBerechnungValues:
       type: object
@@ -8776,13 +8770,7 @@ components:
           $ref: '#/components/schemas/DemoDataTestElternBudget'
         persoenlichesBudget:
           $ref: '#/components/schemas/DemoDataTestBudget'
-        fehlbetrag:
-          type: integer
-        proKopfteilung:
-          type: integer
-        anzahlMonateEinreichefrist:
-          type: integer
-        totalNachKuerzungNachEinreichefrist:
+        budgetTranche:
           type: integer
     DemoDataTestBerechnungResultat:
       required:

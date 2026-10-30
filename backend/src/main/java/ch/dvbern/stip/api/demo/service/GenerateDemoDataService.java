@@ -786,15 +786,7 @@ public class GenerateDemoDataService {
                         .totalKosten(persoenlichesBudgetresultat.getKosten().getTotal())
                         .build()
                 )
-                .fehlbetrag(-persoenlichesBudgetresultat.getFehlbetrag())
-                .proKopfteilung(Objects.requireNonNullElse(persoenlichesBudgetresultat.getProKopfTeilung(), 1))
-                .anzahlMonateEinreichefrist(12 - berechnungsResultat.getAnzahlMonateEinreichefrist())
-                .totalNachKuerzungNachEinreichefrist(
-                    Objects.requireNonNullElse(
-                        berechnungsResultat.getTotalNachKuerzungNachEinreichefrist(),
-                        berechnungsResultat.getBerechnungStipendium()
-                    )
-                )
+                .budgetTranche(trancheResultat.getTotal())
                 .build();
         } catch (Exception e) {
             message = e.getMessage();
@@ -853,31 +845,10 @@ public class GenerateDemoDataService {
                         berechnungsResultatDetailsSoll.getPersoenlichesBudget()
                             .equals(berechnungsResultatDetailsIst.getPersoenlichesBudget())
                     )
-                    .fehlbetrag(
+                    .budgetTranche(
                         BerechnungUtil.nullableCompare(
-                            berechnungsResultatDetailsSoll.getFehlbetrag(),
-                            berechnungsResultatDetailsIst.getFehlbetrag(),
-                            0
-                        )
-                    )
-                    .proKopfteilung(
-                        BerechnungUtil.nullableCompare(
-                            berechnungsResultatDetailsSoll.getProKopfteilung(),
-                            berechnungsResultatDetailsIst.getProKopfteilung(),
-                            0
-                        )
-                    )
-                    .anzahlMonateEinreichefrist(
-                        BerechnungUtil.nullableCompare(
-                            berechnungsResultatDetailsSoll.getAnzahlMonateEinreichefrist(),
-                            berechnungsResultatDetailsIst.getAnzahlMonateEinreichefrist(),
-                            0
-                        )
-                    )
-                    .totalNachKuerzungNachEinreichefrist(
-                        BerechnungUtil.nullableCompare(
-                            berechnungsResultatDetailsSoll.getTotalNachKuerzungNachEinreichefrist(),
-                            berechnungsResultatDetailsIst.getTotalNachKuerzungNachEinreichefrist(),
+                            berechnungsResultatDetailsSoll.getBudgetTranche(),
+                            berechnungsResultatDetailsIst.getBudgetTranche(),
                             0
                         )
                     )

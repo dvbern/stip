@@ -18,10 +18,7 @@ export interface DemoDataTestBerechnungDetails {
     elternBudget1?: DemoDataTestElternBudget;
     elternBudget2?: DemoDataTestElternBudget;
     persoenlichesBudget?: DemoDataTestBudget;
-    fehlbetrag?: number;
-    proKopfteilung?: number;
-    anzahlMonateEinreichefrist?: number;
-    totalNachKuerzungNachEinreichefrist?: number;
+    budgetTranche?: number;
 }
 
 
