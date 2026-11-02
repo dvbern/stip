@@ -44,7 +44,7 @@ public class MassendruckJobQueryBuilder {
     }
 
     public JPAQuery<MassendruckJob> getAlleAktivQuery() {
-        return addStatusFilter(getAllQuery(), MassendruckJobStatus.SUCCESS);
+        return addStatusFilter(getAllQuery(), MassendruckJobStatus.SUCCESS, MassendruckJobStatus.IN_PROGRESS);
     }
 
     public JPAQuery<MassendruckJob> getAlleArchiviertQuery() {
@@ -57,10 +57,10 @@ public class MassendruckJobQueryBuilder {
 
     public JPAQuery<MassendruckJob> addStatusFilter(
         final JPAQuery<MassendruckJob> query,
-        final MassendruckJobStatus status
+        final MassendruckJobStatus... status
     ) {
         final var massendruckJob = QMassendruckJob.massendruckJob;
-        return query.where(massendruckJob.status.eq(status));
+        return query.where(massendruckJob.status.in(status));
     }
 
     public void userErstellt(final JPAQuery<MassendruckJob> query, final UUID userErstelltId) {
