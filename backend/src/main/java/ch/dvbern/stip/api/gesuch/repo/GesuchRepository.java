@@ -29,12 +29,10 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
-import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
 import ch.dvbern.stip.api.notiz.entity.QGesuchNotiz;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -98,7 +96,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     public Stream<Gesuch> findAllNewestWithPia() {
         final var formular = QGesuchFormular.gesuchFormular;
         final var pia = QPersonInAusbildung.personInAusbildung;
-        final var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_GESUCH)
@@ -108,24 +105,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .on(formular.tranche.id.eq(Q_TRANCHE.id))
             .join(pia)
             .on(formular.personInAusbildung.id.eq(pia.id))
-            .join(gesuchsperiode)
-            .on(Q_GESUCH.gesuchsperiode.id.eq(gesuchsperiode.id))
-            .where(
-                Q_GESUCH.id.in(
-                    JPAExpressions
-                        .select(Q_GESUCH.id)
-                        .from(Q_GESUCH)
-                        .join(Q_TRANCHE)
-                        .on(Q_TRANCHE.gesuch.id.eq(Q_GESUCH.id))
-                        .join(formular)
-                        .on(formular.tranche.id.eq(Q_TRANCHE.id))
-                        .join(pia)
-                        .on(formular.personInAusbildung.id.eq(pia.id))
-                        .join(gesuchsperiode)
-                        .on(Q_GESUCH.gesuchsperiode.id.eq(gesuchsperiode.id))
-                        .limit(1)
-                )
-            )
             .orderBy(Q_TRANCHE.gueltigkeit.gueltigBis.desc())
             .stream();
     }
