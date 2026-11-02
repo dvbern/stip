@@ -15,6 +15,7 @@ import {
   cachedPending,
   handleApiResponse,
   initial,
+  isPendingWithoutCache,
   mapCachedData,
 } from '@dv/shared/util/remote-data';
 
@@ -72,6 +73,12 @@ export class AusbildungsstaetteStore extends signalStore(
           displayValueFr: abschluss.bezeichnungFr,
         })) ?? [],
     ),
+  );
+
+  loadingSig = computed(
+    () =>
+      isPendingWithoutCache(this.ausbildungsstaetten()) ||
+      isPendingWithoutCache(this.abschluesse()),
   );
 
   loadAusbildungsstaetten$ = rxMethod<void>(

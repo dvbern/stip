@@ -69,8 +69,6 @@ export class TwoColumnTimelineComponent {
   plannedAusbildungId = 'planned-ausbildung';
 
   constructor() {
-    this.ausbildungsstaetteStore.loadAbschluesse$();
-
     effect(() => {
       const startDate = this.startDate();
       const lebenslaufItems = this.lebenslaufItems();
@@ -166,7 +164,6 @@ export class TwoColumnTimelineComponent {
       .data?.find((abschluss) => abschluss.id === lebenslaufItem.abschlussId);
 
     if (!abschluss) {
-      console.warn(`Abschluss with id ${lebenslaufItem.abschlussId} not found`);
       return { type: 'TEXT', title: '' };
     }
 

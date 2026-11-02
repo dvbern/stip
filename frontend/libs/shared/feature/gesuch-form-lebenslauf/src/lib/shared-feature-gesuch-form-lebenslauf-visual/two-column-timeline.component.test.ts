@@ -1,4 +1,5 @@
 import { InputSignal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
 
@@ -45,6 +46,9 @@ async function setup(
       ...props,
     },
   });
+  // Loading Abschluesse happens in the Parent component.
+  TestBed.inject(AusbildungsstaetteStore).loadAbschluesse$();
+  ref.detectChanges();
   return ref;
 }
 
